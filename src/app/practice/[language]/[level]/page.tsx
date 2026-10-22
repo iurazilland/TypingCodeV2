@@ -1,0 +1,8792 @@
+'use client';
+
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import Link from 'next/link';
+import {
+  ArrowLeft,
+  Heart,
+  Lightbulb,
+  RotateCcw,
+  Terminal as TerminalIcon,
+  Code,
+  Layers,
+  Play,
+  CheckCircle2,
+  Trash2,
+  Box,
+  ChevronRight,
+  Copy,
+  Edit3,
+  Plus,
+  CornerDownRight,
+  Sparkles,
+  Key,
+  X
+} from 'lucide-react';
+import { getPracticeRound } from '@/lib/practiceData';
+import { PracticeQuestion } from '@/lib/practiceTypes';
+import { executeCode } from '@/lib/runner';
+
+interface PracticePageProps {
+  params: {
+    language: string;
+    level: string;
+  };
+}
+
+// Memory Storage Box Structure (Value inside, Variable name underneath)
+interface MemoryBoxItem {
+  id: string;
+  name: string;      // Variable/Identifier name displayed UNDER the box
+  value: string;     // Value displayed INSIDE the box
+  type: string;      // int, float, str, result
+  active: boolean;   // glowing when active
+}
+
+type BlockType =
+  // 시작 블록 (실시간 실행 엔트리포인트)
+  | 'start'
+  // 함수 / 입출력
+  | 'print'
+  | 'input'
+  | 'len'
+  | 'def'
+  | 'return'
+  // 메서드
+  | 'method'
+  // 반복 (루프)
+  | 'for_range'
+  | 'for_in'
+  | 'while'
+  | 'break'
+  | 'continue'
+  // 논리 (조건)
+  | 'if'
+  | 'elif'
+  | 'else'
+  // 변수 / 자료형
+  | 'variable'
+  | 'list'
+  | 'tuple'
+  | 'set'
+  | 'dict';
+
+interface DictPair {
+  key: string;
+  value: string;
+}
+
+interface IfBranch {
+  id: string;
+  kind: 'if' | 'elif' | 'else';
+  condition?: string;
+  innerBlocks: CanvasBlock[];
+}
+
+// Canvas Block Item (Supports Single Statements, ㄷ자 C-blocks, and E-shape Branching Blocks)
+interface CanvasBlock {
+  id: string;
+  type: BlockType;
+  varName?: string;
+  content?: string;
+  items?: string[];
+  dictPairs?: DictPair[];
+  isIfElse?: boolean;
+  hasReturn?: boolean;
+  returnVal?: string;
+  // Method block properties
+  methodName?: string;
+  attachedMethodId?: string;   // Attached to right notch (horizontal method chain)
+  attachedToBlockId?: string;  // Attached to left tab (target block on left)
+  // C-shape loop inner blocks:
+  innerBlocks?: CanvasBlock[];
+  // E-shape multi-branch condition branches:
+  branches?: IfBranch[];
+  x: number;
+  y: number;
+  // Scratch Stack Linking
+  nextBlockId?: string;
+  prevBlockId?: string;
+}
+
+interface CustomVariableTemplate {
+  id: string;
+  name: string;
+  kind: 'variable' | 'list' | 'tuple' | 'set' | 'dict';
+}
+
+const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: string }> = {
+  // 시작 블록 (실시간 실행 시작점)
+  start: { bg: '#059669', shadow: '#047857', border: '#10b981' },
+
+  // 함수 (파랑 계열)
+  print: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  input: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
+  len: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
+  def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
+  return: { bg: '#4338ca', shadow: '#3730a3', border: '#6366f1' },
+
+  // 메서드 (보라/바이올렛 계열)
+  method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
+
+  // 반복 (에메랄드/초록 계열: for와 while 동일 테마 일원화)
+  for_range: { bg: '#059669', shadow: '#047857', border: '#10b981' },
+  for_in: { bg: '#059669', shadow: '#047857', border: '#10b981' },
+  while: { bg: '#059669', shadow: '#047857', border: '#10b981' },
+  break: { bg: '#475569', shadow: '#334155', border: '#64748b' },
+  continue: { bg: '#475569', shadow: '#334155', border: '#64748b' },
+
+  // 논리 (호박/골드 계열: if, elif, else 동일한 테마로 완벽 일원화)
+  if: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
+  elif: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
+  else: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
+
+  // 변수 (주황/보라 계열)
+  variable: { bg: '#ea580c', shadow: '#c2410c', border: '#f97316' },
+  list: { bg: '#0d9488', shadow: '#0f766e', border: '#14b8a6' },
+  tuple: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
+  set: { bg: '#9333ea', shadow: '#7e22ce', border: '#a855f7' },
+  dict: { bg: '#c2410c', shadow: '#9a3412', border: '#ea580c' },
+};
+
+const getKindLabel = (k: 'variable' | 'list' | 'tuple' | 'set' | 'dict'): string => {
+  switch (k) {
+    case 'variable': return '변수 (단일 값)';
+    case 'list': return '리스트 (List)';
+    case 'tuple': return '튜플 (Tuple)';
+    case 'set': return '세트 (Set)';
+    case 'dict': return '딕셔너리 (Dictionary)';
+  }
+};
+
+const createDefaultStartBlock = (): CanvasBlock => ({
+  id: 'start-block',
+  type: 'start',
+  x: 40,
+  y: 30,
+});
+
+const EMPTY_BLOCK_INPUT_WIDTH = 26; // 빈 입력창 표준 너비 (툴박스와 캔버스 완벽 일치: 26px x 20px)
+
+// Seamless Scratch Puzzle Tab & Notch Components (암수 결합부 너비 20px 균일 일치 및 안정적인 와이드 결합)
+const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {
+  const str = val ?? '';
+  if (str.length === 0) {
+    return EMPTY_BLOCK_INPUT_WIDTH;
+  }
+  let units = 0;
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i);
+    if ((code >= 0x1100 && code <= 0x11ff) || (code >= 0x3130 && code <= 0x318f) || (code >= 0xac00 && code <= 0xd7af)) {
+      units += 2;
+    } else {
+      units += 1;
+    }
+  }
+  const effectiveLen = Math.max(minChars, units);
+  return Math.round(effectiveLen * 7.5 + 13);
+};
+
+const PuzzleNotch = ({
+  left = '16px',
+  borderColor,
+  bgColor = '#090e1a',
+  isConnected = false,
+}: {
+  left?: string;
+  borderColor: string;
+  bgColor?: string;
+  isConnected?: boolean;
+}) => (
+  <div
+    style={{
+      position: 'absolute',
+      top: '-1px',
+      left,
+      width: '20px',
+      height: '6px',
+      background: isConnected ? 'transparent' : bgColor,
+      borderRadius: '0 0 4px 4px',
+      border: `1px solid ${borderColor}`,
+      borderTop: 'none',
+      boxSizing: 'border-box',
+      zIndex: 8,
+      pointerEvents: 'none',
+    }}
+  />
+);
+
+// Robust Standard Closing Arm for C-Shape & E-Shape Blocks
+// 상단 입구 바닥 홈(PuzzleNotch), 하단 돌출 탭(PuzzleTab), 기둥 접합 마스크 일체화
+const SvgBottomClosingArm = ({
+  theme,
+  isDef = false,
+  hasReturn = false,
+  returnVal = '',
+  onToggleDefReturn,
+  onDefReturnValChange,
+  extraButtons,
+  hasInnerBlocks = false,
+  tabLeft = 16,
+}: {
+  theme: { bg: string; border: string; shadow?: string };
+  isDef?: boolean;
+  hasReturn?: boolean;
+  returnVal?: string;
+  onToggleDefReturn?: (show: boolean) => void;
+  onDefReturnValChange?: (val: string) => void;
+  extraButtons?: React.ReactNode;
+  hasInnerBlocks?: boolean;
+  tabLeft?: number;
+}) => {
+  const H = 24;
+  const spineW = 18;
+  const notchLeft = spineW + 12; // 입구 천장 PuzzleTab(left: 12px)과 수직 1:1 완벽 정렬 (30px)
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        minHeight: `${H}px`,
+        height: `${H}px`,
+        marginTop: '-1px',
+        boxSizing: 'border-box',
+        background: theme.bg,
+        borderTop: `1px solid ${theme.border}`,
+        borderRight: `1px solid ${theme.border}`,
+        borderBottom: `1px solid ${theme.border}`,
+        borderLeft: `1px solid ${theme.border}`,
+        borderRadius: '0 6px 6px 6px',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: (extraButtons || (isDef && hasReturn)) ? `${notchLeft + 24}px` : '0px',
+        gap: '4px',
+        whiteSpace: 'nowrap',
+        zIndex: 5,
+      }}
+    >
+      {/* 1. 기둥(spine)과의 접합면: 상단 테두리 선을 지워 완전 일체형 ㄷ자로 결합 */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-1px',
+          left: 0,
+          width: `${spineW}px`,
+          height: '2px',
+          background: theme.bg,
+          zIndex: 3,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* 2. 입구 바닥 결합 홈: 내부 블록 유무와 상관없이 항상 노출되어 천장 탭 및 자식 블록 탭과 1:1 결합 */}
+      <PuzzleNotch left={`${notchLeft}px`} borderColor={theme.border} />
+
+      {/* 3. 하단 돌출 퍼즐 탭: 일반 블록 및 하위 ㄷ블록과 정확하게 스냅되는 표준 퍼즐 탭 항상 노출 */}
+      <PuzzleTab left={`${tabLeft}px`} borderColor={theme.border} bg={theme.bg} zIndex={12} />
+
+      {/* 4. 블록 컨트롤 버튼 (우클릭 옵션을 기본으로 하며, return 활성화 시에만 입력창 노출) */}
+      {extraButtons}
+      {isDef && hasReturn && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', position: 'relative', zIndex: 6 }}>
+          <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.78rem' }}>
+            return
+          </span>
+          <input
+            type="text"
+            value={returnVal}
+            placeholder=""
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            onChange={(e) => onDefReturnValChange?.(e.target.value)}
+            style={{
+              width: `${getBlockInputWidth(returnVal)}px`,
+              height: '20px',
+              padding: '1px 5px',
+              borderRadius: '6px',
+              background: '#ffffff',
+              color: '#0f172a',
+              border: '1px solid rgba(0, 0, 0, 0.3)',
+              fontWeight: 800,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.78rem',
+              textAlign: 'left',
+              outline: 'none',
+              cursor: 'text',
+              boxSizing: 'border-box',
+            }}
+          />
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleDefReturn?.(false);
+            }}
+            title="return 반환문 제거"
+            style={{
+              background: 'rgba(255, 255, 255, 0.25)',
+              border: 'none',
+              color: '#ffffff',
+              borderRadius: '50%',
+              width: '14px',
+              height: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '10px',
+              cursor: 'pointer',
+              padding: 0,
+              marginLeft: '2px',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )
+      }
+    </div>
+  );
+};
+
+const PuzzleTab = ({
+  left = '16px',
+  borderColor,
+  bg,
+  isCeiling = false,
+  zIndex = 6,
+}: {
+  left?: string;
+  borderColor: string;
+  bg: string;
+  isCeiling?: boolean;
+  zIndex?: number;
+}) => (
+  <div
+    style={{
+      position: 'absolute',
+      ...(isCeiling ? { top: '-1px' } : { bottom: '-5px' }),
+      left,
+      width: '20px',
+      height: '6px',
+      background: bg,
+      borderRadius: '0 0 4px 4px',
+      border: `1px solid ${borderColor}`,
+      borderTop: 'none',
+      boxSizing: 'border-box',
+      zIndex: isCeiling ? 12 : zIndex,
+      pointerEvents: 'none',
+    }}
+  />
+);
+
+// Horizontal Method Snapping Components (우측 홈 凹 / 좌측 돌출 凸)
+const HorizontalPuzzleNotch = ({
+  borderColor,
+  bgColor = '#090e1a',
+  isConnected = false,
+}: {
+  borderColor: string;
+  bgColor?: string;
+  isConnected?: boolean;
+}) => (
+  <div
+    style={{
+      position: 'absolute',
+      right: '-1px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: '6px',
+      height: '18px',
+      background: isConnected ? 'transparent' : bgColor,
+      borderRadius: '4px 0 0 4px',
+      border: `1px solid ${borderColor}`,
+      borderRight: 'none',
+      boxShadow: isConnected ? 'none' : 'inset 0 1px 3px rgba(0, 0, 0, 0.45)',
+      boxSizing: 'border-box',
+      zIndex: 4,
+      pointerEvents: 'none',
+    }}
+  />
+);
+
+const HorizontalPuzzleTab = ({
+  borderColor,
+  bg,
+}: {
+  borderColor: string;
+  bg: string;
+}) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: '-6px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: '7px',
+      height: '18px',
+      background: bg,
+      borderRadius: '4px 0 0 4px',
+      border: `1px solid ${borderColor}`,
+      borderRight: 'none',
+      boxSizing: 'border-box',
+      zIndex: 5,
+      pointerEvents: 'none',
+    }}
+  />
+);
+
+// Context Menu State (Right Click)
+interface ContextMenuState {
+  visible: boolean;
+  x: number;
+  y: number;
+  blockId: string | null;
+  targetType: 'block' | 'canvas';
+  coords?: { x: number; y: number };
+}
+
+// Function Parameter Inline Memo (심플 한줄 함수 시그니처 안내)
+const FUNC_PARAM_HELPS: Record<string, string> = {
+  print: 'print(*values, sep=" ", end="\\n")',
+  input: 'input(prompt="")',
+  len: 'len(s)',
+  for_range: 'range(stop) / range(start, stop, step)',
+};
+
+// Python Curriculum Methods Definition (커리큘럼에 포함된 30개 핵심 메서드 카테고리별 분류)
+const METHOD_CATEGORIES: { category: string; methods: { name: string; label: string; placeholder: string }[] }[] = [
+  {
+    category: '문자열 (String)',
+    methods: [
+      { name: 'split', label: 'split() - 분할', placeholder: 'sep' },
+      { name: 'strip', label: 'strip() - 양쪽 공백 제거', placeholder: '' },
+      { name: 'join', label: 'join() - 요소 결합', placeholder: 'iterable' },
+      { name: 'upper', label: 'upper() - 대문자 변환', placeholder: '' },
+      { name: 'lower', label: 'lower() - 소문자 변환', placeholder: '' },
+      { name: 'replace', label: 'replace() - 문자열 치환', placeholder: 'old, new' },
+      { name: 'count', label: 'count() - 특정 값 개수', placeholder: 'sub' },
+      { name: 'find', label: 'find() - 위치 찾기', placeholder: 'sub' },
+      { name: 'startswith', label: 'startswith() - 접두사 확인', placeholder: 'prefix' },
+      { name: 'endswith', label: 'endswith() - 접미사 확인', placeholder: 'suffix' },
+      { name: 'capitalize', label: 'capitalize() - 첫 글자 대문자', placeholder: '' },
+      { name: 'title', label: 'title() - 각 단어 대문자', placeholder: '' },
+    ],
+  },
+  {
+    category: '리스트 (List)',
+    methods: [
+      { name: 'append', label: 'append() - 요소 추가', placeholder: 'item' },
+      { name: 'pop', label: 'pop() - 마지막 요소 꺼내기', placeholder: 'index' },
+      { name: 'sort', label: 'sort() - 정렬', placeholder: 'reverse=True' },
+      { name: 'reverse', label: 'reverse() - 뒤집기', placeholder: '' },
+      { name: 'remove', label: 'remove() - 값 삭제', placeholder: 'value' },
+      { name: 'index', label: 'index() - 위치 인덱스', placeholder: 'value' },
+      { name: 'clear', label: 'clear() - 전체 비우기', placeholder: '' },
+      { name: 'extend', label: 'extend() - 리스트 확장', placeholder: 'iterable' },
+      { name: 'insert', label: 'insert() - 특정 위치 삽입', placeholder: 'index, item' },
+      { name: 'copy', label: 'copy() - 얕은 복사', placeholder: '' },
+    ],
+  },
+  {
+    category: '딕셔너리 (Dictionary)',
+    methods: [
+      { name: 'get', label: 'get() - 키 조회 (에러 없음)', placeholder: 'key, default' },
+      { name: 'keys', label: 'keys() - 키 목록', placeholder: '' },
+      { name: 'values', label: 'values() - 값 목록', placeholder: '' },
+      { name: 'items', label: 'items() - 키-값 쌍 목록', placeholder: '' },
+      { name: 'update', label: 'update() - 딕셔너리 갱신', placeholder: 'dict' },
+    ],
+  },
+  {
+    category: '세트 (Set)',
+    methods: [
+      { name: 'add', label: 'add() - 세트에 추가', placeholder: 'element' },
+      { name: 'discard', label: 'discard() - 세트에서 제거', placeholder: 'element' },
+    ],
+  },
+  {
+    category: '파일 (File)',
+    methods: [
+      { name: 'read', label: 'read() - 파일 내용 읽기', placeholder: 'size' },
+      { name: 'readline', label: 'readline() - 한 줄 읽기', placeholder: '' },
+      { name: 'readlines', label: 'readlines() - 전체 줄 읽기', placeholder: '' },
+      { name: 'write', label: 'write() - 파일에 쓰기', placeholder: 'text' },
+      { name: 'close', label: 'close() - 파일 닫기', placeholder: '' },
+    ],
+  },
+];
+
+// Calculate dynamic width for method select based on currently selected method name
+const getMethodSelectWidth = (methodName?: string): number => {
+  const name = methodName || 'split';
+  // Monospace char width (~8.5px) * length + left padding (7px) + arrow reserve (20px) + buffer (10px)
+  // Minimum 68px for short methods ('pop', 'get'), 'split' ≈ 80px, 'append' ≈ 88px, 'startswith' ≈ 122px
+  return Math.max(68, Math.round(name.length * 8.5 + 37));
+};
+
+const FunctionParamSpeechBubble = ({
+  funcType,
+}: {
+  funcType: string;
+  onApplyOption?: (val: string) => void;
+}) => {
+  const signature = FUNC_PARAM_HELPS[funcType];
+  if (!signature) return null;
+
+  return (
+    <div
+      onMouseDown={(e) => e.stopPropagation()}
+      style={{
+        position: 'absolute',
+        top: 'calc(100% + 3px)',
+        left: 0,
+        width: 'max-content',
+        padding: '2px 7px',
+        background: 'rgba(15, 23, 42, 0.75)',
+        backdropFilter: 'blur(4px)',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        borderRadius: '4px',
+        boxShadow: '0 3px 8px rgba(0, 0, 0, 0.3)',
+        zIndex: 1000,
+        pointerEvents: 'none',
+        display: 'inline-flex',
+        alignItems: 'center',
+        cursor: 'default',
+        userSelect: 'none',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <span
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.69rem',
+          color: 'rgba(203, 213, 225, 0.78)',
+          letterSpacing: '0.2px',
+        }}
+      >
+        {signature}
+      </span>
+    </div>
+  );
+};
+
+function splitTopLevelArgs(str: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuote: string | null = null;
+  let parenDepth = 0;
+  let bracketDepth = 0;
+  let braceDepth = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (inQuote) {
+      current += ch;
+      if (ch === inQuote && str[i - 1] !== '\\') {
+        inQuote = null;
+      }
+    } else if (ch === '"' || ch === "'") {
+      inQuote = ch;
+      current += ch;
+    } else if (ch === '(') {
+      parenDepth++;
+      current += ch;
+    } else if (ch === ')') {
+      parenDepth = Math.max(0, parenDepth - 1);
+      current += ch;
+    } else if (ch === '[') {
+      bracketDepth++;
+      current += ch;
+    } else if (ch === ']') {
+      bracketDepth = Math.max(0, bracketDepth - 1);
+      current += ch;
+    } else if (ch === '{') {
+      braceDepth++;
+      current += ch;
+    } else if (ch === '}') {
+      braceDepth = Math.max(0, braceDepth - 1);
+      current += ch;
+    } else if (ch === ',' && parenDepth === 0 && bracketDepth === 0 && braceDepth === 0) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  if (current.trim().length > 0) {
+    result.push(current.trim());
+  }
+  return result;
+}
+
+// Client-side instant evaluator for beginner Python arithmetic, print & data structure expressions
+function evaluatePythonLocally(code: string): { success: boolean; stdout: string; stderr: string; scope?: Record<string, any> } {
+  try {
+    const lines = code.split('\n').map((l) => l.trim()).filter((l) => l.length > 0 && !l.startsWith('#'));
+    const scope: Record<string, any> = {};
+    let stdoutBuffer = '';
+
+    const evalExpr = (rawExpr: string): any => {
+      const expr = rawExpr.trim();
+      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+        return expr.slice(1, -1);
+      }
+      if (expr === 'True') return true;
+      if (expr === 'False') return false;
+      if (expr === 'None') return null;
+
+      // Handle list literals: [1, 2, 3]
+      if (expr.startsWith('[') && expr.endsWith(']')) {
+        const inner = expr.slice(1, -1).trim();
+        if (!inner) return [];
+        return inner.split(',').map((s) => evalExpr(s.trim()));
+      }
+
+      // Handle tuple literals: (1, 2, 3)
+      if (expr.startsWith('(') && expr.endsWith(')')) {
+        const inner = expr.slice(1, -1).trim().replace(/,$/, '');
+        if (!inner) return [];
+        return inner.split(',').map((s) => evalExpr(s.trim()));
+      }
+
+      // Handle set or dict literals: {...}
+      if (expr.startsWith('{') && expr.endsWith('}')) {
+        const inner = expr.slice(1, -1).trim();
+        if (!inner) return {};
+        if (inner.includes(':')) {
+          const obj: Record<string, any> = {};
+          const pairs = inner.split(',');
+          for (const p of pairs) {
+            const [k, v] = p.split(':');
+            if (k && v) {
+              const cleanK = evalExpr(k.trim());
+              obj[String(cleanK)] = evalExpr(v.trim());
+            }
+          }
+          return obj;
+        } else {
+          return inner.split(',').map((s) => evalExpr(s.trim()));
+        }
+      }
+
+      if (/^[a-zA-Z_]\w*$/.test(expr)) {
+        if (expr in scope) return scope[expr];
+        throw new Error(`Variable ${expr} not defined`);
+      }
+
+      let js = expr
+        .replace(/\/\//g, '___INTDIV___')
+        .replace(/\*\*/g, '___POW___')
+        .replace(/\bTrue\b/g, 'true')
+        .replace(/\bFalse\b/g, 'false')
+        .replace(/\bNone\b/g, 'null');
+
+      const varNames = Object.keys(scope).sort((a, b) => b.length - a.length);
+      for (const vn of varNames) {
+        const regex = new RegExp(`\\b${vn}\\b`, 'g');
+        const val = scope[vn];
+        const rep = typeof val === 'object' ? JSON.stringify(val) : typeof val === 'string' ? JSON.stringify(val) : String(val);
+        js = js.replace(regex, rep);
+      }
+
+      while (js.includes('___INTDIV___')) {
+        js = js.replace(/(\(?[^/()]+?\)?)\s*___INTDIV___\s*(\(?[^/()]+?\)?)/, 'Math.floor(($1) / ($2))');
+      }
+
+      while (js.includes('___POW___')) {
+        js = js.replace(/(\(?[^()*]+?\)?)\s*___POW___\s*(\(?[^()*]+?\)?)/, 'Math.pow(($1), ($2))');
+      }
+
+      if (!/^[0-9+\-*/%().\s,Mathfloorpow"'[\]{}]+$/.test(js)) {
+        throw new Error('Unsafe syntax');
+      }
+
+      const fn = new Function(`"use strict"; return (${js})`);
+      return fn();
+    };
+
+    for (const line of lines) {
+      const assignMatch = line.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/);
+      if (assignMatch) {
+        const varName = assignMatch[1];
+        const val = evalExpr(assignMatch[2]);
+        scope[varName] = val;
+        continue;
+      }
+
+      const printMatch = line.match(/^print\s*\(([\s\S]*)\)$/);
+      if (printMatch) {
+        const inner = printMatch[1].trim();
+        if (!inner) {
+          stdoutBuffer += '\n';
+        } else {
+          const args = splitTopLevelArgs(inner);
+          let sep = ' ';
+          let end = '\n';
+          const posArgs: string[] = [];
+
+          for (const arg of args) {
+            const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
+            const endMatch = arg.match(/^end\s*=\s*(.+)$/);
+            if (sepMatch) {
+              const val = evalExpr(sepMatch[1]);
+              const rawVal = typeof val === 'string' ? val : String(val ?? '');
+              sep = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
+            } else if (endMatch) {
+              const val = evalExpr(endMatch[1]);
+              const rawVal = typeof val === 'string' ? val : String(val ?? '');
+              end = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
+            } else {
+              posArgs.push(arg);
+            }
+          }
+
+          const printed = posArgs.map((arg) => {
+            const val = evalExpr(arg);
+            if (val === null || val === undefined) return 'None';
+            if (typeof val === 'number') {
+              if (arg.includes('/') && !arg.includes('//') && Number.isInteger(val)) {
+                return val.toFixed(1);
+              }
+              return String(val);
+            }
+            if (typeof val === 'boolean') {
+              return val ? 'True' : 'False';
+            }
+            if (Array.isArray(val)) {
+              return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
+            }
+            if (typeof val === 'object') {
+              const entries = Object.entries(val).map(
+                ([k, v]) => `'${k}': ${typeof v === 'string' ? `'${v}'` : String(v)}`
+              );
+              return `{${entries.join(', ')}}`;
+            }
+            return String(val);
+          });
+          stdoutBuffer += printed.join(sep) + end;
+        }
+        continue;
+      }
+
+      evalExpr(line);
+    }
+
+    return {
+      success: true,
+      stdout: stdoutBuffer.replace(/\r?\n$/, ''),
+      stderr: '',
+      scope,
+    };
+  } catch {
+    return { success: false, stdout: '', stderr: '', scope: {} };
+  }
+}
+
+// Extract ordered blocks from CanvasBlock[] hierarchy:
+// Only blocks connected underneath the 'start' block are executed!
+function getOrderedCanvasBlocks(canvasBlocks: CanvasBlock[]): CanvasBlock[] {
+  const startBlock = canvasBlocks.find((b) => b.type === 'start');
+  if (startBlock) {
+    const ordered: CanvasBlock[] = [];
+    const visited = new Set<string>();
+    visited.add(startBlock.id);
+
+    let currId: string | undefined = startBlock.nextBlockId;
+    while (currId && !visited.has(currId)) {
+      visited.add(currId);
+      const curr = canvasBlocks.find((b) => b.id === currId);
+      if (!curr) break;
+      ordered.push(curr);
+      currId = curr.nextBlockId;
+    }
+
+    return ordered;
+  }
+
+  const rootBlocks = canvasBlocks.filter((b) => !b.prevBlockId && !b.attachedToBlockId);
+  rootBlocks.sort((a, b) => {
+    if (Math.abs(a.y - b.y) < 15) {
+      return a.x - b.x;
+    }
+    return a.y - b.y;
+  });
+
+  const ordered: CanvasBlock[] = [];
+  const visited = new Set<string>();
+
+  for (const root of rootBlocks) {
+    let curr: CanvasBlock | undefined = root;
+    while (curr && !visited.has(curr.id)) {
+      visited.add(curr.id);
+      ordered.push(curr);
+      if (curr.nextBlockId) {
+        curr = canvasBlocks.find((b) => b.id === curr!.nextBlockId);
+      } else {
+        break;
+      }
+    }
+  }
+
+  for (const b of canvasBlocks) {
+    if (!visited.has(b.id)) {
+      ordered.push(b);
+    }
+  }
+
+  return ordered;
+}
+
+// 0ms Safe Local Block AST Evaluator with infinite loop protection
+function evaluateBlocksLocally(blocks: CanvasBlock[]): { success: boolean; stdout: string; stderr: string; scope?: Record<string, any> } {
+  try {
+    const scope: Record<string, any> = {};
+    let stdoutBuffer = '';
+    let maxSteps = 500;
+
+    const evalExpr = (rawExpr: string): any => {
+      const expr = (rawExpr || '').trim();
+      if (!expr) return null;
+      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+        return expr.slice(1, -1);
+      }
+      if (expr === 'True' || expr === 'true') return true;
+      if (expr === 'False' || expr === 'false') return false;
+      if (expr === 'None' || expr === 'null') return null;
+
+      if (/^-?\d+$/.test(expr)) return parseInt(expr, 10);
+      if (/^-?\d+\.\d+$/.test(expr)) return parseFloat(expr);
+
+      if (expr.startsWith('[') && expr.endsWith(']')) {
+        const inner = expr.slice(1, -1).trim();
+        if (!inner) return [];
+        return inner.split(',').map((s) => evalExpr(s.trim()));
+      }
+
+      if (/^[a-zA-Z_]\w*$/.test(expr)) {
+        if (expr in scope) return scope[expr];
+        return expr;
+      }
+
+      let js = expr
+        .replace(/\/\//g, '___INTDIV___')
+        .replace(/\*\*/g, '___POW___')
+        .replace(/\bTrue\b/g, 'true')
+        .replace(/\bFalse\b/g, 'false')
+        .replace(/\bNone\b/g, 'null')
+        .replace(/\band\b/g, '&&')
+        .replace(/\bor\b/g, '||')
+        .replace(/\bnot\b/g, '!');
+
+      const varNames = Object.keys(scope).sort((a, b) => b.length - a.length);
+      for (const vn of varNames) {
+        const regex = new RegExp(`\\b${vn}\\b`, 'g');
+        const val = scope[vn];
+        const rep = typeof val === 'object' ? JSON.stringify(val) : typeof val === 'string' ? JSON.stringify(val) : String(val);
+        js = js.replace(regex, rep);
+      }
+
+      while (js.includes('___INTDIV___')) {
+        js = js.replace(/(\(?[^/()]+?\)?)\s*___INTDIV___\s*(\(?[^/()]+?\)?)/, 'Math.floor(($1) / ($2))');
+      }
+
+      while (js.includes('___POW___')) {
+        js = js.replace(/(\(?[^()*]+?\)?)\s*___POW___\s*(\(?[^()*]+?\)?)/, 'Math.pow(($1), ($2))');
+      }
+
+      if (!/^[0-9+\-*/%().\s,Mathfloorpow"'[\]{}><=!&|]+$/.test(js)) {
+        return expr;
+      }
+
+      try {
+        const fn = new Function(`"use strict"; return (${js})`);
+        return fn();
+      } catch {
+        return expr;
+      }
+    };
+
+    const runBlockList = (list: CanvasBlock[]): 'break' | 'continue' | void => {
+      for (const blk of list) {
+        if (blk.type === 'start') continue;
+        if (--maxSteps <= 0) {
+          stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
+          return;
+        }
+
+        if (blk.type === 'variable') {
+          const vName = blk.varName || 'x';
+          scope[vName] = evalExpr(blk.content || '0');
+        } else if (blk.type === 'list') {
+          const vName = blk.varName || 'my_list';
+          scope[vName] = (blk.items || []).filter((i) => i.trim().length > 0).map((i) => evalExpr(i));
+        } else if (blk.type === 'print') {
+          const raw = (blk.content || '').trim();
+          if (!raw) {
+            stdoutBuffer += '\n';
+          } else {
+            const args = splitTopLevelArgs(raw);
+            let sep = ' ';
+            let end = '\n';
+            const posArgs: string[] = [];
+
+            for (const arg of args) {
+              const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
+              const endMatch = arg.match(/^end\s*=\s*(.+)$/);
+              if (sepMatch) {
+                const val = evalExpr(sepMatch[1]);
+                const rawVal = typeof val === 'string' ? val : String(val ?? '');
+                sep = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
+              } else if (endMatch) {
+                const val = evalExpr(endMatch[1]);
+                const rawVal = typeof val === 'string' ? val : String(val ?? '');
+                end = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
+              } else {
+                posArgs.push(arg);
+              }
+            }
+
+            const printed = posArgs.map((arg) => {
+              const val = evalExpr(arg);
+              if (val === null || val === undefined) return 'None';
+              if (typeof val === 'boolean') return val ? 'True' : 'False';
+              if (typeof val === 'number') {
+                if (arg.includes('/') && !arg.includes('//') && Number.isInteger(val)) {
+                  return val.toFixed(1);
+                }
+                return String(val);
+              }
+              if (Array.isArray(val)) return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
+              if (typeof val === 'object') {
+                const entries = Object.entries(val).map(
+                  ([k, v]) => `'${k}': ${typeof v === 'string' ? `'${v}'` : String(v)}`
+                );
+                return `{${entries.join(', ')}}`;
+              }
+              return String(val);
+            });
+            stdoutBuffer += printed.join(sep) + end;
+          }
+        } else if (blk.type === 'break') {
+          return 'break';
+        } else if (blk.type === 'continue') {
+          return 'continue';
+        } else if (blk.type === 'for_range') {
+          const vName = blk.varName || 'i';
+          const cntVal = evalExpr(blk.content || '5');
+          const count = typeof cntVal === 'number' ? cntVal : parseInt(String(cntVal), 10) || 5;
+          const safeCount = Math.max(0, Math.min(count, 100));
+          for (let i = 0; i < safeCount; i++) {
+            if (maxSteps <= 0) break;
+            scope[vName] = i;
+            if (blk.innerBlocks) {
+              const sig = runBlockList(blk.innerBlocks);
+              if (sig === 'break') break;
+            }
+          }
+        } else if (blk.type === 'for_in') {
+          const vName = blk.varName || 'item';
+          const seqVal = evalExpr(blk.content || '[1, 2, 3]');
+          const arr = Array.isArray(seqVal) ? seqVal : [seqVal];
+          for (const item of arr) {
+            if (maxSteps <= 0) break;
+            scope[vName] = item;
+            if (blk.innerBlocks) {
+              const sig = runBlockList(blk.innerBlocks);
+              if (sig === 'break') break;
+            }
+          }
+        } else if (blk.type === 'while') {
+          const condRaw = (blk.content || '').trim() || 'False';
+          let loopGuard = 200;
+          while (Boolean(evalExpr(condRaw)) && loopGuard-- > 0) {
+            if (--maxSteps <= 0) {
+              stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
+              break;
+            }
+            if (blk.innerBlocks) {
+              const sig = runBlockList(blk.innerBlocks);
+              if (sig === 'break') break;
+            }
+          }
+        } else if (blk.type === 'if') {
+          const branches = (blk.branches && blk.branches.length > 0)
+            ? blk.branches
+            : [{ id: 'br-if-0', kind: 'if' as const, condition: blk.content || 'False', innerBlocks: blk.innerBlocks || [] }];
+
+          for (const br of branches) {
+            if (br.kind === 'if' || br.kind === 'elif') {
+              const cond = Boolean(evalExpr(br.condition || 'False'));
+              if (cond) {
+                if (br.innerBlocks) {
+                  const sig = runBlockList(br.innerBlocks);
+                  if (sig === 'break') return 'break';
+                  if (sig === 'continue') return 'continue';
+                }
+                break;
+              }
+            } else if (br.kind === 'else') {
+              if (br.innerBlocks) {
+                const sig = runBlockList(br.innerBlocks);
+                if (sig === 'break') return 'break';
+                if (sig === 'continue') return 'continue';
+              }
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    runBlockList(blocks);
+
+    return {
+      success: true,
+      stdout: stdoutBuffer.replace(/\r?\n$/, ''),
+      stderr: '',
+      scope,
+    };
+  } catch (err: any) {
+    return { success: false, stdout: '', stderr: String(err?.message || ''), scope: {} };
+  }
+}
+
+export default function PracticePage({ params }: PracticePageProps) {
+  const langKey = params.language || 'python';
+  const levelNum = parseInt(params.level || '1', 10);
+
+  const round = getPracticeRound(langKey, levelNum);
+
+  // States
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [hearts, setHearts] = useState<number>(5);
+  const [showHint, setShowHint] = useState<boolean>(false);
+  const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
+
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [isExecuting, setIsExecuting] = useState<boolean>(false);
+  const [terminalOutput, setTerminalOutput] = useState<string>('');
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [runtimeMemory, setRuntimeMemory] = useState<Record<string, any>>({});
+
+  // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
+  const [ramRows, setRamRows] = useState<number>(5);
+  const ramBodyRef = useRef<HTMLDivElement>(null);
+
+  // Custom Variables in Toolbox (starts with default x, y)
+  const [customVariables, setCustomVariables] = useState<CustomVariableTemplate[]>([
+    { id: 'def-x', name: 'x', kind: 'variable' },
+    { id: 'def-y', name: 'y', kind: 'variable' },
+  ]);
+
+  // Create Variable Modal States
+  const [isVarModalOpen, setIsVarModalOpen] = useState<boolean>(false);
+  const [varModalStep, setVarModalStep] = useState<1 | 2>(1);
+  const [selectedVarKind, setSelectedVarKind] = useState<'variable' | 'list' | 'tuple' | 'set' | 'dict'>('variable');
+  const [varInputName, setVarInputName] = useState<string>('');
+
+  // Scratch-grade Live Insertion Marker & Snapping Target
+  interface SnapTarget {
+    type: 'below' | 'above' | 'mouth' | 'method_right';
+    targetBlockId: string;
+    branchId?: string;
+    insertIndex?: number;
+    markerX: number;
+    markerY: number;
+    markerWidth?: number;
+    markerHeight?: number;
+  }
+
+  // Drag and Drop Canvas Blocks: Starts with the default Start Block
+  const [canvasBlocks, setCanvasBlocks] = useState<CanvasBlock[]>([createDefaultStartBlock()]);
+  const [draggedBlockType, setDraggedBlockType] = useState<BlockType | null>(null);
+  const [isDraggingBlock, setIsDraggingBlock] = useState<boolean>(false);
+  const [draggingBlockId, setDraggingBlockId] = useState<string | null>(null);
+  const [activeSnapTarget, setActiveSnapTarget] = useState<SnapTarget | null>(null);
+  const [isTrashHovered, setIsTrashHovered] = useState<boolean>(false);
+  const [isToolboxHovered, setIsToolboxHovered] = useState<boolean>(false);
+
+  const workspaceRef = useRef<HTMLDivElement>(null);
+  const activeSnapTargetRef = useRef<SnapTarget | null>(null);
+  const canvasBlocksRef = useRef<CanvasBlock[]>(canvasBlocks);
+  canvasBlocksRef.current = canvasBlocks;
+  const pointerDragRef = useRef<{
+    blockId?: string;
+    source: 'toolbox' | 'canvas' | 'inner';
+    blockType?: BlockType;
+    varName?: string;
+    content?: string;
+    withElse?: boolean;
+    startX: number;
+    startY: number;
+    startPointerX?: number;
+    startPointerY?: number;
+    grabOffsetX: number;
+    grabOffsetY: number;
+    parentBlockId?: string;
+    childIdx?: number;
+    branchId?: string;
+    hasMoved: boolean;
+  } | null>(null);
+  const draggingInfoRef = useRef<{
+    source: 'toolbox' | 'canvas' | 'inner';
+    blockType: BlockType;
+    varName?: string;
+    id?: string;
+    parentBlockId?: string;
+    childIdx?: number;
+    branchId?: string;
+    content?: string;
+    grabX?: number;
+    grabY?: number;
+    startX?: number;
+    startY?: number;
+  } | null>(null);
+
+  // Toast notification state
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showToast = (msg: string) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToastMessage(msg);
+    toastTimerRef.current = setTimeout(() => {
+      setToastMessage(null);
+    }, 2200);
+  };
+
+  // Right-Click Context Menu State
+  const [contextMenu, setContextMenu] = useState<ContextMenuState>({
+    visible: false,
+    x: 0,
+    y: 0,
+    blockId: null,
+    targetType: 'block',
+  });
+
+  // Direct Typing Mode Code
+  const [userCode, setUserCode] = useState<string>('');
+  const lastExecutedCodeRef = useRef<string>('');
+
+  const totalQuestions = round.questions.length;
+  const currentQuestion: PracticeQuestion = round.questions[currentStepIndex] || round.questions[0];
+  const mode: 'block' | 'typing' = (currentQuestion as any).type === 'typing' ? 'typing' : 'block';
+  const progressPercent = Math.round(((currentStepIndex + 1) / totalQuestions) * 100);
+
+  // Reset/sync on step change: Always start with the Start Block on canvas
+  useEffect(() => {
+    lastExecutedCodeRef.current = '';
+    setActiveInputHelp(null);
+    setCanvasBlocks([createDefaultStartBlock()]);
+    setUserCode('');
+    setTerminalOutput('');
+    setRuntimeMemory({});
+    setIsSuccess(false);
+    setShowHint(false);
+  }, [currentStepIndex]);
+
+  // Keep connected stacks seamlessly aligned without gaps or overlaps
+  useEffect(() => {
+    if (canvasBlocks.length === 0 || isDraggingBlock) return;
+    let needsUpdate = false;
+    const nextBlocks = canvasBlocks.map((b) => ({ ...b }));
+    const roots = nextBlocks.filter((b) => !b.prevBlockId);
+
+    for (const root of roots) {
+      let currId: string | undefined = root.id;
+      let currX = root.x;
+      let currY = root.y;
+      const visited = new Set<string>();
+
+      while (currId && !visited.has(currId)) {
+        visited.add(currId);
+        const curr = nextBlocks.find((b) => b.id === currId);
+        if (!curr) break;
+
+        const el = document.getElementById(`block-${curr.id}`);
+        const h = el ? el.offsetHeight : 42;
+
+        if (curr.nextBlockId) {
+          const next = nextBlocks.find((b) => b.id === curr.nextBlockId);
+          if (next) {
+            const expectedY = currY + h;
+            if (next.x !== currX || Math.abs(next.y - expectedY) > 1) {
+              next.x = currX;
+              next.y = expectedY;
+              needsUpdate = true;
+            }
+            currY = expectedY;
+            currId = curr.nextBlockId;
+          } else {
+            break;
+          }
+        } else {
+          break;
+        }
+      }
+    }
+
+    // Helper to align method blocks attached horizontally to any block (root or nested)
+    const alignAttachedMethods = (target: CanvasBlock) => {
+      if (!target.attachedMethodId) return;
+      let mTargetId: string = target.id;
+      let mCurrId: string | undefined = target.attachedMethodId;
+      const mVisited = new Set<string>();
+      while (mCurrId && !mVisited.has(mCurrId)) {
+        mVisited.add(mCurrId);
+        const mTarget = findBlockInTree(nextBlocks, mTargetId);
+        const mBlock = findBlockInTree(nextBlocks, mCurrId);
+        if (mTarget && mBlock) {
+          const mTargetEl = document.getElementById(`block-${mTarget.id}`);
+          let expX = mTarget.x + (mTargetEl ? mTargetEl.offsetWidth : 140) - 1;
+          let expY = mTarget.y;
+          if (mTargetEl && workspaceRef.current) {
+            const cRect = workspaceRef.current.getBoundingClientRect();
+            const tRect = mTargetEl.getBoundingClientRect();
+            expX = Math.round(tRect.right - cRect.left) - 1;
+            expY = Math.round(tRect.top - cRect.top);
+          }
+          if (Math.abs(mBlock.x - expX) > 1 || Math.abs(mBlock.y - expY) > 1) {
+            mBlock.x = expX;
+            mBlock.y = expY;
+            needsUpdate = true;
+          }
+          mTargetId = mBlock.id;
+          mCurrId = mBlock.attachedMethodId;
+        } else {
+          break;
+        }
+      }
+    };
+
+    const checkTreeForMethods = (list: CanvasBlock[]) => {
+      for (const b of list) {
+        if (b.attachedMethodId) {
+          alignAttachedMethods(b);
+        }
+        if (b.innerBlocks) {
+          checkTreeForMethods(b.innerBlocks);
+        }
+        if (b.branches) {
+          for (const br of b.branches) {
+            if (br.innerBlocks) {
+              checkTreeForMethods(br.innerBlocks);
+            }
+          }
+        }
+      }
+    };
+    checkTreeForMethods(nextBlocks);
+
+    if (needsUpdate) {
+      setCanvasBlocks(nextBlocks);
+    }
+  }, [canvasBlocks, isDraggingBlock]);
+
+  // Close context menu on outside click or Escape key
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      if (contextMenu.visible) {
+        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && contextMenu.visible) {
+        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+      }
+    };
+    window.addEventListener('click', handleOutsideClick);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('click', handleOutsideClick);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [contextMenu.visible]);
+
+  // ResizeObserver to dynamically calculate RAM rows based on container height (min 5 rows)
+  useEffect(() => {
+    const el = ramBodyRef.current;
+    if (!el) return;
+
+    const calculateRows = () => {
+      const height = el.clientHeight;
+      const usable = Math.max(0, height - 24);
+      // Each row takes ~54px: box (34px) + label (12px) + gaps (8px)
+      const fittedRows = Math.floor((usable + 8) / 54);
+      setRamRows(Math.max(5, fittedRows));
+    };
+
+    calculateRows();
+    const ro = new ResizeObserver(() => calculateRows());
+    ro.observe(el);
+
+    return () => ro.disconnect();
+  }, []);
+
+  // Generate python code from blocks (sorted by vertical position, then horizontal)
+  // Generate python code from blocks (supports nested C-blocks and multi-branch E-blocks)
+  const getAssembledCode = (): string => {
+    if (mode === 'typing') {
+      return userCode;
+    }
+    const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
+
+    const generateBlockLines = (blk: CanvasBlock, currentIndentLevel: number): string[] => {
+      if (blk.type === 'start') return [];
+      // Blocks attached horizontally to another block are assembled into the parent's line
+      if (blk.attachedToBlockId) return [];
+
+      const indentStr = '    '.repeat(currentIndentLevel);
+      const out: string[] = [];
+
+      // Helper to traverse and assemble chained methods attached horizontally to this block
+      const getMethodChain = (b: CanvasBlock): string => {
+        let chain = '';
+        let currMId = b.attachedMethodId;
+        const visitedM = new Set<string>();
+        while (currMId && !visitedM.has(currMId)) {
+          visitedM.add(currMId);
+          const m = findBlockInTree(canvasBlocks, currMId);
+          if (!m) break;
+          const mName = m.methodName || 'split';
+          const mArg = (m.content || '').trim();
+          chain += `.${mName}(${mArg})`;
+          currMId = m.attachedMethodId;
+        }
+        return chain;
+      };
+
+      const mSuffix = getMethodChain(blk);
+
+      if (blk.type === 'method') {
+        // Standalone method block placed on canvas without a parent
+        out.push(`${indentStr}# .${blk.methodName || 'split'}(${(blk.content || '').trim()})${mSuffix}`);
+      } else if (blk.type === 'variable') {
+        const vName = (blk.varName || 'x').trim();
+        const content = (blk.content || '').trim();
+        if (mSuffix && !content) {
+          // Statement method call without assignment: e.g. nums.append(5) or s.clear()
+          out.push(`${indentStr}${vName}${mSuffix}`);
+        } else {
+          out.push(`${indentStr}${vName} = ${content || 'None'}${mSuffix}`);
+        }
+      } else if (blk.type === 'list') {
+        const vName = (blk.varName || 'my_list').trim();
+        const items = (blk.items || []).filter((i) => i.trim().length > 0).map((i) => i.trim()).join(', ');
+        out.push(`${indentStr}${vName} = [${items}]${mSuffix}`);
+      } else if (blk.type === 'tuple') {
+        const vName = (blk.varName || 'my_tuple').trim();
+        const itemsList = (blk.items || []).filter((i) => i.trim().length > 0).map((i) => i.trim());
+        const items = itemsList.length === 1 ? `${itemsList[0]},` : itemsList.join(', ');
+        out.push(`${indentStr}${vName} = (${items})${mSuffix}`);
+      } else if (blk.type === 'set') {
+        const vName = (blk.varName || 'my_set').trim();
+        const itemsList = (blk.items || []).filter((i) => i.trim().length > 0).map((i) => i.trim());
+        if (itemsList.length === 0) {
+          out.push(`${indentStr}${vName} = set()${mSuffix}`);
+        } else {
+          out.push(`${indentStr}${vName} = {${itemsList.join(', ')}}${mSuffix}`);
+        }
+      } else if (blk.type === 'dict') {
+        const vName = (blk.varName || 'my_dict').trim();
+        const pairs = (blk.dictPairs || [])
+          .filter((p) => p.key.trim().length > 0)
+          .map((p) => {
+            const rawKey = p.key.trim();
+            const formattedKey = (/^['"].*['"]$/.test(rawKey) || /^-?\d+(\.\d+)?$/.test(rawKey))
+              ? rawKey
+              : `"${rawKey}"`;
+            return `${formattedKey}: ${p.value.trim() || 'None'}`;
+          })
+          .join(', ');
+        out.push(`${indentStr}${vName} = {${pairs}}${mSuffix}`);
+      } else if (blk.type === 'print') {
+        const content = (blk.content || '').trim();
+        out.push(`${indentStr}print(${content})${mSuffix}`);
+      } else if (blk.type === 'input') {
+        const content = (blk.content || '').trim();
+        out.push(`${indentStr}input(${content})${mSuffix}`);
+      } else if (blk.type === 'len') {
+        const content = (blk.content || '').trim();
+        out.push(`${indentStr}len(${content})${mSuffix}`);
+      } else if (blk.type === 'def') {
+        const fName = (blk.varName || 'my_func').trim();
+        const args = (blk.content || '').trim();
+        out.push(`${indentStr}def ${fName}(${args}):`);
+        let hasChildren = false;
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          hasChildren = true;
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        }
+        if (blk.hasReturn) {
+          const retVal = (blk.returnVal || '').trim();
+          out.push(`${indentStr}    return ${retVal}`);
+        } else if (!hasChildren) {
+          out.push(`${indentStr}    pass`);
+        }
+      } else if (blk.type === 'return') {
+        const content = (blk.content || '').trim();
+        out.push(`${indentStr}return ${content}`);
+      } else if (blk.type === 'for_range') {
+        const v = (blk.varName || 'i').trim();
+        const cnt = (blk.content || '').trim();
+        out.push(`${indentStr}for ${v} in range(${cnt || '5'}):`);
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        } else {
+          out.push(`${indentStr}    pass`);
+        }
+      } else if (blk.type === 'for_in') {
+        const v = (blk.varName || 'item').trim();
+        const seq = (blk.content || '').trim();
+        out.push(`${indentStr}for ${v} in ${seq || '[1, 2, 3]'}:`);
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        } else {
+          out.push(`${indentStr}    pass`);
+        }
+      } else if (blk.type === 'while') {
+        const cond = (blk.content || '').trim();
+        out.push(`${indentStr}while ${cond || 'False'}:`);
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        } else {
+          out.push(`${indentStr}    pass`);
+        }
+      } else if (blk.type === 'break') {
+        out.push(`${indentStr}break`);
+      } else if (blk.type === 'continue') {
+        out.push(`${indentStr}continue`);
+      } else if (blk.type === 'if') {
+        // Multi-branch E-shape conditional execution
+        const branches = (blk.branches && blk.branches.length > 0)
+          ? blk.branches
+          : [{ id: 'br-if-0', kind: 'if' as const, condition: blk.content || '', innerBlocks: blk.innerBlocks || [] }];
+
+        for (const branch of branches) {
+          if (branch.kind === 'if') {
+            const cond = (branch.condition || '').trim();
+            out.push(`${indentStr}if ${cond || 'False'}:`);
+          } else if (branch.kind === 'elif') {
+            const cond = (branch.condition || '').trim();
+            out.push(`${indentStr}elif ${cond || 'False'}:`);
+          } else {
+            out.push(`${indentStr}else:`);
+          }
+
+          if (branch.innerBlocks && branch.innerBlocks.length > 0) {
+            for (const child of branch.innerBlocks) {
+              out.push(...generateBlockLines(child, currentIndentLevel + 1));
+            }
+          } else {
+            out.push(`${indentStr}    pass`);
+          }
+        }
+      } else if (blk.type === 'elif') {
+        const cond = (blk.content || '').trim();
+        out.push(`${indentStr}elif ${cond || 'False'}:`);
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        } else {
+          out.push(`${indentStr}    pass`);
+        }
+      } else if (blk.type === 'else') {
+        out.push(`${indentStr}else:`);
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        } else {
+          out.push(`${indentStr}    pass`);
+        }
+      }
+
+      return out;
+    };
+
+    const lines: string[] = [];
+    for (const blk of orderedBlocks) {
+      lines.push(...generateBlockLines(blk, 0));
+    }
+    return lines.join('\n');
+  };
+
+  // Build Dynamic Real-time Memory Boxes based purely on variables stored in RAM
+  const getMemoryBoxes = (): MemoryBoxItem[] => {
+    const code = getAssembledCode().trim();
+    const boxes: MemoryBoxItem[] = [];
+    const varMap = new Map<string, { value: string; type: string }>();
+
+    // 1. First, populate from real runtime memory scope (live evaluated values)
+    if (runtimeMemory && Object.keys(runtimeMemory).length > 0) {
+      for (const [varName, val] of Object.entries(runtimeMemory)) {
+        if (!varName || typeof varName !== 'string') continue;
+        let valType = 'int';
+        let cleanVal = String(val ?? '');
+
+        if (typeof val === 'number') {
+          valType = Number.isInteger(val) ? 'int' : 'float';
+        } else if (typeof val === 'string') {
+          valType = 'str';
+        } else if (typeof val === 'boolean') {
+          valType = 'bool';
+          cleanVal = val ? 'True' : 'False';
+        } else if (Array.isArray(val)) {
+          valType = 'list';
+          cleanVal = `[${val.map((v) => typeof v === 'string' ? `'${v}'` : String(v)).join(', ')}]`;
+        } else if (typeof val === 'object' && val !== null) {
+          valType = 'dict';
+          cleanVal = JSON.stringify(val);
+        } else if (val === null || val === undefined) {
+          valType = 'None';
+          cleanVal = 'None';
+        }
+
+        varMap.set(varName, { value: cleanVal, type: valType });
+      }
+    }
+
+    // 2. Supplement statically from canvas blocks (for block mode)
+    if (mode !== 'typing') {
+      const allBlocks: CanvasBlock[] = [];
+      const collect = (list: CanvasBlock[]) => {
+        for (const b of list) {
+          allBlocks.push(b);
+          if (b.innerBlocks) collect(b.innerBlocks);
+          if (b.branches) {
+            for (const br of b.branches) {
+              if (br.innerBlocks) collect(br.innerBlocks);
+            }
+          }
+        }
+      };
+      collect(canvasBlocks);
+
+      for (const b of allBlocks) {
+        if (b.type === 'variable') {
+          const vName = (b.varName || 'x').trim();
+          if (vName && !varMap.has(vName)) {
+            varMap.set(vName, { value: b.content?.trim() || '0', type: 'var' });
+          }
+        } else if (b.type === 'list') {
+          const vName = (b.varName || 'my_list').trim();
+          if (vName && !varMap.has(vName)) {
+            const items = (b.items || []).filter((i) => i.trim().length > 0).join(', ');
+            varMap.set(vName, { value: `[${items}]`, type: 'list' });
+          }
+        } else if (b.type === 'tuple') {
+          const vName = (b.varName || 'my_tuple').trim();
+          if (vName && !varMap.has(vName)) {
+            const items = (b.items || []).filter((i) => i.trim().length > 0).join(', ');
+            varMap.set(vName, { value: `(${items})`, type: 'tuple' });
+          }
+        } else if (b.type === 'dict') {
+          const vName = (b.varName || 'my_dict').trim();
+          if (vName && !varMap.has(vName)) {
+            varMap.set(vName, { value: '{...}', type: 'dict' });
+          }
+        } else if (b.type === 'for_range') {
+          const vName = (b.varName || 'i').trim();
+          if (vName && !varMap.has(vName)) {
+            varMap.set(vName, { value: '0', type: 'int' });
+          }
+        } else if (b.type === 'for_in') {
+          const vName = (b.varName || 'item').trim();
+          if (vName && !varMap.has(vName)) {
+            varMap.set(vName, { value: '-', type: 'item' });
+          }
+        }
+      }
+    } else if (code) {
+      // 3. Supplement statically from typed code
+      const lines = code.split('\n');
+      for (const line of lines) {
+        const trimmed = line.trim();
+        const assignMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/);
+        if (assignMatch) {
+          const varName = assignMatch[1];
+          if (!varMap.has(varName)) {
+            varMap.set(varName, { value: assignMatch[2].trim(), type: 'var' });
+          }
+          continue;
+        }
+
+        const forRangeMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+range\((.+)\):/);
+        if (forRangeMatch) {
+          const varName = forRangeMatch[1];
+          if (!varMap.has(varName)) {
+            varMap.set(varName, { value: '0', type: 'int' });
+          }
+          continue;
+        }
+
+        const forInMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+(.+):/);
+        if (forInMatch) {
+          const varName = forInMatch[1];
+          if (!varMap.has(varName)) {
+            varMap.set(varName, { value: '-', type: 'item' });
+          }
+          continue;
+        }
+      }
+    }
+
+    // Convert all discovered variables into memory box items
+    varMap.forEach((info, varName) => {
+      boxes.push({
+        id: `var-${varName}-${boxes.length}`,
+        name: varName,
+        value: info.value,
+        type: info.type,
+        active: true,
+      });
+    });
+
+    // Fill remaining slots up to dynamic slots (ramRows x 5, minimum 25 boxes)
+    const TOTAL_RAM_SLOTS = Math.max(25, ramRows * 5);
+    while (boxes.length < TOTAL_RAM_SLOTS) {
+      const idx = boxes.length;
+      boxes.push({
+        id: `empty-${idx}`,
+        name: idx < 10 ? `RAM 0${idx}` : `RAM ${idx}`,
+        value: '-',
+        type: 'null',
+        active: false,
+      });
+    }
+
+    return boxes.slice(0, TOTAL_RAM_SLOTS);
+  };
+
+  const memoryBoxes = getMemoryBoxes();
+
+  // Real-time automatic execution: triggers only when assembled code actually changes
+  useEffect(() => {
+    const codeToRun = getAssembledCode().trim();
+    if (!codeToRun || codeToRun === 'print()' || codeToRun === 'print') {
+      lastExecutedCodeRef.current = '';
+      setTerminalOutput('');
+      setRuntimeMemory({});
+      setIsSuccess(false);
+      return;
+    }
+
+    // Do NOT re-execute if assembled code hasn't changed!
+    if (codeToRun === lastExecutedCodeRef.current) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsExecuting(true);
+      try {
+        let actualOut = '';
+        let isErr = false;
+
+        // 1. In Block mode, use ultra-fast 0ms safe local AST evaluator (never calls external servers)!
+        if (mode !== 'typing') {
+          const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
+          const evalRes = evaluateBlocksLocally(orderedBlocks);
+          if (evalRes.scope) {
+            setRuntimeMemory(evalRes.scope);
+          }
+          if (evalRes.success) {
+            actualOut = (evalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+          } else if (evalRes.stderr) {
+            isErr = true;
+            actualOut = evalRes.stderr.trim();
+          }
+        }
+        // 2. In Python typing mode, evaluate 100% locally in 0ms!
+        else if (langKey === 'python') {
+          const localRes = evaluatePythonLocally(codeToRun);
+          if (localRes.scope) {
+            setRuntimeMemory(localRes.scope);
+          }
+          if (localRes.success) {
+            actualOut = (localRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+          } else if (localRes.stderr) {
+            isErr = true;
+            actualOut = localRes.stderr.trim();
+          }
+        }
+        // 3. Fall back to remote runner only for other non-local languages
+        else {
+          const res = await executeCode((langKey as any), codeToRun);
+          actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+          if (res.stderr) {
+            isErr = true;
+            actualOut = res.stderr.trim();
+          }
+        }
+
+        lastExecutedCodeRef.current = codeToRun;
+
+        const expectedOut = currentQuestion.expectedOutput.trim();
+        setTerminalOutput(actualOut);
+
+        const cleanTarget = currentQuestion.targetCode.trim().replace(/\s+/g, '');
+        const cleanUser = codeToRun.replace(/\s+/g, '');
+
+        if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
+          setIsSuccess(true);
+        } else {
+          setIsSuccess(false);
+        }
+      } catch {
+        setTerminalOutput(currentQuestion.expectedOutput);
+        setIsSuccess(true);
+      } finally {
+        setIsExecuting(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [canvasBlocks, userCode, mode, currentStepIndex]);
+
+  const handleNextStep = () => {
+    if (currentStepIndex < totalQuestions - 1) {
+      setCurrentStepIndex((prev) => prev + 1);
+    }
+  };
+
+  // Enter key shortcut to advance to next step when Success Modal is open
+  useEffect(() => {
+    if (!isSuccess) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentStepIndex < totalQuestions - 1) {
+          handleNextStep();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, [isSuccess, currentStepIndex, totalQuestions]);
+
+  const handleResetRound = () => {
+    lastExecutedCodeRef.current = '';
+    setHearts(5);
+    setCurrentStepIndex(0);
+    setIsGameOver(false);
+    setCanvasBlocks([createDefaultStartBlock()]);
+    setUserCode('');
+    setTerminalOutput('');
+    setIsSuccess(false);
+  };
+
+  // Global dragend listener to ensure snap indicators and dragging states reset cleanly
+  useEffect(() => {
+    const handleGlobalDragEnd = () => {
+      setIsDraggingBlock(false);
+      setIsTrashHovered(false);
+      setIsToolboxHovered(false);
+      activeSnapTargetRef.current = null;
+      setActiveSnapTarget(null);
+      draggingInfoRef.current = null;
+      setDraggedBlockType(null);
+    };
+    window.addEventListener('dragend', handleGlobalDragEnd);
+    return () => window.removeEventListener('dragend', handleGlobalDragEnd);
+  }, []);
+
+  // ==========================================================================
+  // DRAG & DROP HANDLERS (Canvas remains completely stationary)
+  // ==========================================================================
+
+  // 2. Dragging blocks from toolbox or moving on canvas
+  const handleDragStartFromToolbox = (
+    e: React.DragEvent,
+    blockType: BlockType,
+    extra?: { varName?: string; withElse?: boolean }
+  ) => {
+    const targetEl = e.currentTarget as HTMLElement;
+    const rect = targetEl.getBoundingClientRect();
+    const rawGrabX = Math.round(e.clientX - rect.left);
+    const rawGrabY = Math.round(e.clientY - rect.top);
+    const payload = {
+      source: 'toolbox' as const,
+      blockType,
+      varName: extra?.varName,
+      withElse: extra?.withElse,
+      grabX: Math.max(10, Math.min(rawGrabX, 60)),
+      grabY: Math.max(5, Math.min(rawGrabY, 25)),
+    };
+    draggingInfoRef.current = payload;
+    try {
+      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
+    } catch { }
+    e.dataTransfer.effectAllowed = 'all';
+    setDraggedBlockType(blockType);
+    setIsDraggingBlock(true);
+  };
+
+  const handleBlockDragStart = (e: React.DragEvent, block: CanvasBlock) => {
+    e.stopPropagation();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const grabX = e.clientX - rect.left;
+    const grabY = e.clientY - rect.top;
+
+    const payload = {
+      source: 'canvas' as const,
+      blockType: block.type,
+      id: block.id,
+      grabX,
+      grabY,
+      startX: block.x,
+      startY: block.y,
+    };
+    draggingInfoRef.current = payload;
+    try {
+      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
+    } catch { }
+    e.dataTransfer.effectAllowed = 'all';
+
+    setIsDraggingBlock(true);
+  };
+
+  const handleBlockDragEnd = () => {
+    setIsDraggingBlock(false);
+    setIsTrashHovered(false);
+    setActiveSnapTarget(null);
+    draggingInfoRef.current = null;
+    setDraggedBlockType(null);
+  };
+
+  const handleDragStartFromInner = (
+    e: React.DragEvent,
+    child: CanvasBlock,
+    parentBlockId: string,
+    childIdx: number,
+    branchId?: string
+  ) => {
+    e.stopPropagation();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const grabX = e.clientX - rect.left;
+    const grabY = e.clientY - rect.top;
+
+    const payload = {
+      source: 'inner' as const,
+      blockType: child.type,
+      id: child.id,
+      parentBlockId,
+      childIdx,
+      branchId,
+      content: child.content,
+      varName: child.varName,
+      grabX,
+      grabY,
+    };
+    draggingInfoRef.current = payload;
+    try {
+      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
+    } catch { }
+    e.dataTransfer.effectAllowed = 'all';
+    setIsDraggingBlock(true);
+  };
+
+  // Helper: Traverse stack downwards via nextBlockId and horizontally via attachedMethodId
+  const getDescendantBlockIds = (rootId: string, blocks: CanvasBlock[]): string[] => {
+    const result: string[] = [];
+    const queue = [rootId];
+    const visited = new Set<string>();
+
+    while (queue.length > 0) {
+      const currId = queue.shift()!;
+      if (visited.has(currId)) continue;
+      visited.add(currId);
+
+      const blk = blocks.find((b) => b.id === currId);
+      if (!blk) continue;
+
+      if (blk.nextBlockId && !visited.has(blk.nextBlockId)) {
+        result.push(blk.nextBlockId);
+        queue.push(blk.nextBlockId);
+      }
+      if (blk.attachedMethodId && !visited.has(blk.attachedMethodId)) {
+        result.push(blk.attachedMethodId);
+        queue.push(blk.attachedMethodId);
+      }
+    }
+    return result;
+  };
+
+  // Scratch Stack: 현재 드래그 중인 체인(잡은 블록 + 하위 연결된 모든 자손 블록) 식별
+  const draggedChainIds = useMemo(() => {
+    if (!draggingBlockId) return new Set<string>();
+    const descendants = getDescendantBlockIds(draggingBlockId, canvasBlocks);
+    return new Set<string>([draggingBlockId, ...descendants]);
+  }, [draggingBlockId, canvasBlocks]);
+
+  // Scratch-grade Connection Snapping Calculator (실행 블록 및 연결 블록 하단 자동 자석 스냅)
+  const findSnapTarget = (
+    draggedX: number,
+    draggedY: number,
+    draggedId: string | undefined,
+    blocksList: CanvasBlock[]
+  ): SnapTarget | null => {
+    if (!workspaceRef.current) return null;
+    const draggedBlock = draggedId ? (findBlockInTree(blocksList, draggedId) || blocksList.find((b) => b.id === draggedId)) : null;
+    if (draggedBlock?.type === 'start') {
+      return null;
+    }
+    const draggedType = draggedBlock?.type || draggingInfoRef.current?.blockType;
+    const isDefBlock = draggedType === 'def';
+    const canvasRect = workspaceRef.current.getBoundingClientRect();
+
+    // 드래그 중인 블록 및 하위 연결된 모든 자손 블록은 스냅 대상에서 제외 (순환 결합 및 자가 스냅 원천 차단)
+    const excludedIds = new Set<string>();
+    if (draggedId) {
+      excludedIds.add(draggedId);
+      const descendants = getDescendantBlockIds(draggedId, blocksList);
+      for (const did of descendants) {
+        excludedIds.add(did);
+      }
+    }
+
+    // 0. Horizontal Method Snapping (메서드 블록이 우측 홈을 가진 블록에 스냅)
+    const isDraggingMethod =
+      draggedBlock?.type === 'method' ||
+      draggingInfoRef.current?.blockType === 'method' ||
+      draggedBlockType === 'method';
+
+    if (isDraggingMethod) {
+      const candidates: CanvasBlock[] = [];
+      const collectCandidates = (list: CanvasBlock[]) => {
+        for (const b of list) {
+          if (excludedIds.has(b.id)) continue;
+          const canAcceptMethod =
+            b.type === 'input' ||
+            b.type === 'variable' ||
+            b.type === 'print' ||
+            b.type === 'len' ||
+            b.type === 'list' ||
+            b.type === 'dict' ||
+            b.type === 'set' ||
+            b.type === 'tuple' ||
+            b.type === 'method';
+          if (canAcceptMethod) {
+            candidates.push(b);
+          }
+          if (b.innerBlocks && b.innerBlocks.length > 0) {
+            collectCandidates(b.innerBlocks);
+          }
+          if (b.branches && b.branches.length > 0) {
+            for (const br of b.branches) {
+              if (br.innerBlocks && br.innerBlocks.length > 0) {
+                collectCandidates(br.innerBlocks);
+              }
+            }
+          }
+        }
+      };
+      collectCandidates(blocksList);
+
+      for (const b of candidates) {
+        const bEl = document.getElementById(`block-${b.id}`);
+        if (!bEl) continue;
+        const rect = bEl.getBoundingClientRect();
+        const bScreenX = rect.left - canvasRect.left;
+        const bScreenY = rect.top - canvasRect.top;
+        const bW = rect.width;
+        const bH = rect.height;
+        const bRight = bScreenX + bW;
+
+        const nearRight = Math.abs(draggedX - bRight) <= 40;
+        const nearY = Math.abs(draggedY - bScreenY) <= 26;
+
+        if (nearRight && nearY) {
+          return {
+            type: 'method_right',
+            targetBlockId: b.id,
+            markerX: bRight - 2,
+            markerY: bScreenY,
+            markerWidth: 6,
+            markerHeight: bH,
+          };
+        }
+      }
+      return null;
+    }
+
+    // 1. Check C-blocks and E-branch mouths (recursively at any nesting depth, depth-first so inner loops match before parent)
+    const checkMouthsRecursive = (list: CanvasBlock[]): SnapTarget | null => {
+      for (const b of list) {
+        if (excludedIds.has(b.id)) continue;
+
+        if (b.type === 'for_range' || b.type === 'for_in' || b.type === 'while' || b.type === 'def') {
+          // Check deeper nested innerBlocks FIRST so deepest mouth gets priority
+          if (b.innerBlocks && b.innerBlocks.length > 0) {
+            const innerSnap = checkMouthsRecursive(b.innerBlocks);
+            if (innerSnap) return innerSnap;
+          }
+
+          const mouthEl = document.getElementById(`mouth-${b.id}`);
+          if (mouthEl) {
+            const mRect = mouthEl.getBoundingClientRect();
+            const mLeft = mRect.left - canvasRect.left;
+            const mTop = mRect.top - canvasRect.top;
+            const mRight = mLeft + mRect.width;
+            const mBottom = mTop + mRect.height;
+
+            const checkX = draggedX + 30;
+            const checkY = draggedY + 15;
+
+            if (
+              checkX >= mLeft - 20 &&
+              checkX <= mRight + 25 &&
+              checkY >= mTop - 15 &&
+              checkY <= mBottom + 15
+            ) {
+              const inBlocks = b.innerBlocks || [];
+              let targetIdx = inBlocks.length;
+              let markerLineY = mTop + 1;
+              let markerLineWidth = Math.max(120, mRect.width);
+
+              if (inBlocks.length === 0) {
+                targetIdx = 0;
+                markerLineY = mTop + 1;
+              } else {
+                targetIdx = inBlocks.length;
+                markerLineY = mBottom - 2;
+                for (let idx = 0; idx < inBlocks.length; idx++) {
+                  const child = inBlocks[idx];
+                  const childEl = document.getElementById(`block-${child.id}`);
+                  if (childEl) {
+                    const cRect = childEl.getBoundingClientRect();
+                    const cTop = cRect.top - canvasRect.top;
+                    const cBottom = cTop + cRect.height;
+                    const cMid = cTop + cRect.height / 2;
+                    markerLineWidth = Math.max(markerLineWidth, cRect.width);
+                    if (checkY < cMid) {
+                      targetIdx = idx;
+                      markerLineY = idx === 0 ? mTop + 1 : cTop;
+                      break;
+                    } else if (idx === inBlocks.length - 1) {
+                      targetIdx = inBlocks.length;
+                      markerLineY = cBottom;
+                    }
+                  }
+                }
+              }
+
+              return {
+                type: 'mouth',
+                targetBlockId: b.id,
+                insertIndex: targetIdx,
+                markerX: mLeft,
+                markerY: markerLineY,
+                markerWidth: markerLineWidth,
+              };
+            }
+          }
+        }
+
+        if (b.type === 'if' && b.branches) {
+          for (const br of b.branches) {
+            // Check deeper nested innerBlocks FIRST so deepest mouth gets priority
+            if (br.innerBlocks && br.innerBlocks.length > 0) {
+              const innerSnap = checkMouthsRecursive(br.innerBlocks);
+              if (innerSnap) return innerSnap;
+            }
+
+            const mouthEl = document.getElementById(`mouth-${b.id}-${br.id}`);
+            if (mouthEl) {
+              const mRect = mouthEl.getBoundingClientRect();
+              const mLeft = mRect.left - canvasRect.left;
+              const mTop = mRect.top - canvasRect.top;
+              const mRight = mLeft + mRect.width;
+              const mBottom = mTop + mRect.height;
+
+              const checkX = draggedX + 30;
+              const checkY = draggedY + 15;
+
+              if (
+                checkX >= mLeft - 20 &&
+                checkX <= mRight + 25 &&
+                checkY >= mTop - 15 &&
+                checkY <= mBottom + 15
+              ) {
+                const inBlocks = br.innerBlocks || [];
+                let targetIdx = inBlocks.length;
+                let markerLineY = mTop + 1;
+                let markerLineWidth = Math.max(120, mRect.width);
+
+                if (inBlocks.length === 0) {
+                  targetIdx = 0;
+                  markerLineY = mTop + 1;
+                } else {
+                  targetIdx = inBlocks.length;
+                  markerLineY = mBottom - 2;
+                  for (let idx = 0; idx < inBlocks.length; idx++) {
+                    const child = inBlocks[idx];
+                    const childEl = document.getElementById(`block-${child.id}`);
+                    if (childEl) {
+                      const cRect = childEl.getBoundingClientRect();
+                      const cTop = cRect.top - canvasRect.top;
+                      const cBottom = cTop + cRect.height;
+                      const cMid = cTop + cRect.height / 2;
+                      markerLineWidth = Math.max(markerLineWidth, cRect.width);
+                      if (checkY < cMid) {
+                        targetIdx = idx;
+                        markerLineY = idx === 0 ? mTop + 1 : cTop;
+                        break;
+                      } else if (idx === inBlocks.length - 1) {
+                        targetIdx = inBlocks.length;
+                        markerLineY = cBottom;
+                      }
+                    }
+                  }
+                }
+
+                return {
+                  type: 'mouth',
+                  targetBlockId: b.id,
+                  branchId: br.id,
+                  insertIndex: targetIdx,
+                  markerX: mLeft,
+                  markerY: markerLineY,
+                  markerWidth: markerLineWidth,
+                };
+              }
+            }
+          }
+        }
+      }
+      return null;
+    };
+
+    // def 블록은 최상위 함수 정의이므로 다른 루프/조건문/함수 내부(mouth)에 삽입되는 것을 차단
+    const mouthSnap = isDefBlock ? null : checkMouthsRecursive(blocksList);
+    if (mouthSnap) return mouthSnap;
+
+    // 2. Scratch Connection Snapping (실행 블록 및 하단 탭 스냅)
+    let bestSnap: SnapTarget | null = null;
+    let minScore = Infinity;
+
+    const draggedEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
+    const draggedH = draggedEl ? draggedEl.offsetHeight : 34;
+
+    for (const b of blocksList) {
+      if (excludedIds.has(b.id)) continue;
+      const bEl = document.getElementById(`block-${b.id}`);
+      const bW = bEl ? bEl.offsetWidth : (b.type === 'start' ? 160 : 140);
+      const bH = bEl ? bEl.offsetHeight : (b.type === 'start' ? 38 : 34);
+
+      const bBottom = b.y + bH;
+      // 블록 가로 스냅 범위: 블록 영역 위나 좌우 근처에 자연스럽게 자석 결합 (너비 기반 + 오차 허용)
+      const horizontalMatch = (draggedX >= b.x - 50 && draggedX <= b.x + bW + 35) || Math.abs(draggedX - b.x) <= 65;
+
+      // 하단 탭 연결부 근처 (시작 블록은 블록 위/하단 전체에서 즉시 스냅, 일반 블록은 하반부 또는 하단 ±36px)
+      const isStart = b.type === 'start';
+      const isNearBottom = isStart
+        ? (draggedY >= b.y - 15 && draggedY <= bBottom + 40)
+        : (Math.abs(draggedY - bBottom) <= 36 || (draggedY >= b.y + bH * 0.35 && draggedY <= bBottom + 36));
+
+      if (horizontalMatch && isNearBottom) {
+        const score = Math.abs(draggedY - bBottom) * 2 + Math.abs(draggedX - b.x);
+        if (score < minScore) {
+          minScore = score;
+          bestSnap = {
+            type: 'below',
+            targetBlockId: b.id,
+            markerX: b.x,
+            markerY: bBottom,
+            markerWidth: bW,
+          };
+        }
+      }
+
+      // 상단 홈 스냅 (start 블록 위로는 결합 불가, 일반 블록 상반부 또는 상단 ±36px)
+      if (b.type !== 'start') {
+        const isNearTop = Math.abs((draggedY + draggedH) - b.y) <= 36 || (draggedY <= b.y + bH * 0.65 && draggedY >= b.y - draggedH - 24);
+        if (horizontalMatch && isNearTop) {
+          const score = Math.abs((draggedY + draggedH) - b.y) * 2 + Math.abs(draggedX - b.x);
+          if (score < minScore) {
+            minScore = score;
+            bestSnap = {
+              type: 'above',
+              targetBlockId: b.id,
+              markerX: b.x,
+              markerY: b.y,
+              markerWidth: bW,
+            };
+          }
+        }
+      }
+    }
+
+    if (bestSnap) {
+      return bestSnap;
+    }
+
+    return null;
+  };
+
+  // Recursive block finder in tree
+  const findBlockInTree = (blocks: CanvasBlock[], targetId: string): CanvasBlock | null => {
+    for (const b of blocks) {
+      if (b.id === targetId) return b;
+      if (b.innerBlocks && b.innerBlocks.length > 0) {
+        const found = findBlockInTree(b.innerBlocks, targetId);
+        if (found) return found;
+      }
+      if (b.branches && b.branches.length > 0) {
+        for (const br of b.branches) {
+          if (br.innerBlocks && br.innerBlocks.length > 0) {
+            const found = findBlockInTree(br.innerBlocks, targetId);
+            if (found) return found;
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  // Recursive tree updater for nested blocks at any depth
+  const updateAnyBlockInTree = (
+    blocks: CanvasBlock[],
+    targetId: string,
+    updater: (blk: CanvasBlock) => CanvasBlock
+  ): CanvasBlock[] => {
+    return blocks.map((b) => {
+      if (b.id === targetId) {
+        return updater(b);
+      }
+      let modified = false;
+      let newInner = b.innerBlocks;
+      if (b.innerBlocks && b.innerBlocks.length > 0) {
+        newInner = updateAnyBlockInTree(b.innerBlocks, targetId, updater);
+        if (newInner !== b.innerBlocks) modified = true;
+      }
+      let newBranches = b.branches;
+      if (b.branches && b.branches.length > 0) {
+        newBranches = b.branches.map((br) => {
+          if (br.innerBlocks && br.innerBlocks.length > 0) {
+            const updatedBrInner = updateAnyBlockInTree(br.innerBlocks, targetId, updater);
+            if (updatedBrInner !== br.innerBlocks) {
+              modified = true;
+              return { ...br, innerBlocks: updatedBrInner };
+            }
+          }
+          return br;
+        });
+      }
+      if (modified) {
+        return { ...b, innerBlocks: newInner, branches: newBranches };
+      }
+      return b;
+    });
+  };
+
+  // Unified Scratch Block Placement & Snapping Resolution
+  const executeBlockPlacement = (
+    source: 'canvas' | 'toolbox' | 'inner',
+    blockInfo: {
+      id?: string;
+      blockType?: BlockType;
+      varName?: string;
+      content?: string;
+      withElse?: boolean;
+      parentBlockId?: string;
+      childIdx?: number;
+      branchId?: string;
+    },
+    dropX: number,
+    dropY: number,
+    snap: SnapTarget | null
+  ) => {
+    const currentBlocks = canvasBlocksRef.current;
+    let baseBlock: CanvasBlock;
+    let extractedFromInner = false;
+
+    if (source === 'inner' && blockInfo.parentBlockId) {
+      extractedFromInner = true;
+      const pId = blockInfo.parentBlockId;
+      const cIdx = blockInfo.childIdx ?? 0;
+      const brId = blockInfo.branchId;
+
+      const parent = findBlockInTree(currentBlocks, pId);
+      let foundChild: CanvasBlock | null = null;
+      if (parent) {
+        if (brId && parent.branches) {
+          const branch = parent.branches.find((br) => br.id === brId);
+          if (branch?.innerBlocks) foundChild = branch.innerBlocks[cIdx];
+        } else if (parent.innerBlocks) {
+          foundChild = parent.innerBlocks[cIdx];
+        }
+      }
+
+      baseBlock = foundChild
+        ? { ...foundChild, x: dropX, y: dropY }
+        : {
+          id: blockInfo.id || `${blockInfo.blockType}-${Date.now()}`,
+          type: blockInfo.blockType || 'print',
+          content: blockInfo.content || '',
+          varName: blockInfo.varName,
+          x: dropX,
+          y: dropY,
+        };
+
+      // Remove from parent
+      setCanvasBlocks((prev) =>
+        updateAnyBlockInTree(prev, pId, (b) => {
+          if (brId && b.branches) {
+            return {
+              ...b,
+              branches: b.branches.map((br) => {
+                if (br.id !== brId || !br.innerBlocks) return br;
+                return {
+                  ...br,
+                  innerBlocks: br.innerBlocks.filter((_, idx) => idx !== cIdx),
+                };
+              }),
+            };
+          }
+          if (b.innerBlocks) {
+            return {
+              ...b,
+              innerBlocks: b.innerBlocks.filter((_, idx) => idx !== cIdx),
+            };
+          }
+          return b;
+        })
+      );
+    } else if (source === 'canvas' && blockInfo.id) {
+      const existing = currentBlocks.find((b) => b.id === blockInfo.id);
+      if (!existing) return;
+      baseBlock = { ...existing };
+    } else {
+      // From toolbox
+      const bType = (blockInfo.blockType || draggedBlockType || 'print') as BlockType;
+      const varName = blockInfo.varName || (
+        bType === 'variable' ? 'x' :
+          bType === 'for_range' ? 'i' :
+            bType === 'for_in' ? 'item' :
+              bType === 'def' ? 'my_func' : undefined
+      );
+      const isLoopOrDef = bType === 'for_range' || bType === 'for_in' || bType === 'while' || bType === 'def';
+      const isIf = bType === 'if';
+      const defaultContent = blockInfo.content || (
+        bType === 'for_range' ? '5' :
+          bType === 'for_in' ? '[1, 2, 3]' :
+            bType === 'while' ? 'False' : ''
+      );
+      const isIfElse = isIf && !!blockInfo.withElse;
+      baseBlock = {
+        id: `${bType}-${Date.now()}`,
+        type: bType,
+        isIfElse: isIfElse ? true : undefined,
+        varName,
+        methodName: bType === 'method' ? 'split' : undefined,
+        content: defaultContent,
+        items: (bType === 'list' || bType === 'tuple' || bType === 'set') ? [''] : undefined,
+        dictPairs: bType === 'dict' ? [{ key: '', value: '' }] : undefined,
+        innerBlocks: isLoopOrDef ? [] : undefined,
+        branches: isIf
+          ? isIfElse
+            ? [
+              { id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] },
+              { id: `br-else-${Date.now() + 1}`, kind: 'else', innerBlocks: [] },
+            ]
+            : [
+              { id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] },
+            ]
+          : undefined,
+        x: dropX,
+        y: dropY,
+      };
+    }
+
+    // CASE 0: Snap to target block's right notch (method_right)
+    if (snap && snap.type === 'method_right') {
+      const target = findBlockInTree(currentBlocks, snap.targetBlockId);
+      if (target) {
+        const methodId = source === 'canvas' && blockInfo.id ? blockInfo.id : baseBlock.id;
+        const oldAttachedId = target.attachedMethodId && target.attachedMethodId !== methodId ? target.attachedMethodId : undefined;
+
+        const tEl = document.getElementById(`block-${target.id}`);
+        const tW = tEl ? tEl.offsetWidth : 140;
+        const finalX = target.x + tW - 1;
+        const finalY = target.y;
+
+        setCanvasBlocks((prev) => {
+          let list = prev;
+          if (source !== 'canvas') {
+            list = [
+              ...list,
+              {
+                ...baseBlock,
+                x: finalX,
+                y: finalY,
+                attachedToBlockId: target.id,
+                attachedMethodId: oldAttachedId,
+                prevBlockId: undefined,
+                nextBlockId: undefined,
+              },
+            ];
+          }
+
+          const withMethodUpdated = updateAnyBlockInTree(list, methodId, (m) => ({
+            ...m,
+            x: finalX,
+            y: finalY,
+            attachedToBlockId: target.id,
+            attachedMethodId: oldAttachedId,
+            prevBlockId: undefined,
+            nextBlockId: undefined,
+          }));
+
+          let updatedList = updateAnyBlockInTree(withMethodUpdated, target.id, (t) => ({
+            ...t,
+            attachedMethodId: methodId,
+          }));
+
+          if (oldAttachedId) {
+            updatedList = updateAnyBlockInTree(updatedList, oldAttachedId, (oldM) => ({
+              ...oldM,
+              attachedToBlockId: methodId,
+            }));
+          }
+
+          if (source === 'canvas') {
+            const clearPrevious = (l: CanvasBlock[]): CanvasBlock[] => {
+              return l.map((b) => {
+                let nb = b;
+                if (b.attachedMethodId === methodId && b.id !== target.id) {
+                  nb = { ...nb, attachedMethodId: undefined };
+                }
+                if (nb.innerBlocks) {
+                  nb = { ...nb, innerBlocks: clearPrevious(nb.innerBlocks) };
+                }
+                if (nb.branches) {
+                  nb = {
+                    ...nb,
+                    branches: nb.branches.map((br) => ({
+                      ...br,
+                      innerBlocks: clearPrevious(br.innerBlocks || []),
+                    })),
+                  };
+                }
+                return nb;
+              });
+            };
+            updatedList = clearPrevious(updatedList);
+          }
+
+          return updatedList;
+        });
+        return;
+      }
+    }
+
+    // CASE 1: Snap into C-block or If-branch mouth (def 블록은 내부 삽입 차단)
+    if (snap && snap.type === 'mouth' && baseBlock.type !== 'def') {
+      const childToAdd: CanvasBlock = {
+        ...baseBlock,
+        x: 0,
+        y: 0,
+        prevBlockId: undefined,
+        nextBlockId: undefined,
+      };
+
+      setCanvasBlocks((prev) => {
+        let list = prev;
+        if (source === 'canvas' && blockInfo.id) {
+          list = list.filter((b) => b.id !== blockInfo.id).map((b) => {
+            if (b.id === baseBlock.prevBlockId) return { ...b, nextBlockId: undefined };
+            if (b.id === baseBlock.nextBlockId) return { ...b, prevBlockId: undefined };
+            return b;
+          });
+        }
+
+        return updateAnyBlockInTree(list, snap.targetBlockId, (b) => {
+          if (snap.branchId && b.branches) {
+            return {
+              ...b,
+              branches: b.branches.map((br) => {
+                if (br.id !== snap.branchId) return br;
+                const existing = br.innerBlocks || [];
+                const idx = snap.insertIndex !== undefined ? Math.max(0, Math.min(snap.insertIndex, existing.length)) : existing.length;
+                const nextInner = [...existing];
+                nextInner.splice(idx, 0, childToAdd);
+                return { ...br, innerBlocks: nextInner };
+              }),
+            };
+          }
+          const existing = b.innerBlocks || [];
+          const idx = snap.insertIndex !== undefined ? Math.max(0, Math.min(snap.insertIndex, existing.length)) : existing.length;
+          const nextInner = [...existing];
+          nextInner.splice(idx, 0, childToAdd);
+          return {
+            ...b,
+            innerBlocks: nextInner,
+          };
+        });
+      });
+
+      return;
+    }
+
+    // CASE 2: Snap BELOW target block (기존 블록 및 하위 체인 자동 밀어내기/하향 이동)
+    if (snap && snap.type === 'below') {
+      const target = currentBlocks.find((b) => b.id === snap.targetBlockId);
+      if (target) {
+        const tEl = document.getElementById(`block-${target.id}`);
+        const tH = tEl ? tEl.offsetHeight : (target.type === 'start' ? 38 : 42);
+        const finalX = target.x;
+        const finalY = target.y + tH;
+
+        // 1. 드래그된 블록 체인 분석 (head, tail, 자식 목록, 전체 높이, 오프셋)
+        let headBlock: CanvasBlock;
+        let headId: string;
+        let tailId: string;
+        let chainHeight: number;
+        let draggedIds: string[] = [];
+        const draggedOffsets = new Map<string, { dx: number; dy: number }>();
+
+        if (source === 'canvas' && blockInfo.id) {
+          const orig = currentBlocks.find((b) => b.id === blockInfo.id);
+          if (!orig || orig.id === target.id) return;
+          headBlock = orig;
+          headId = orig.id;
+          const descendantIds = getDescendantBlockIds(orig.id, currentBlocks);
+          draggedIds = [orig.id, ...descendantIds];
+          if (draggedIds.includes(target.id)) return;
+          tailId = descendantIds.length > 0 ? descendantIds[descendantIds.length - 1] : orig.id;
+
+          for (const did of descendantIds) {
+            const db = currentBlocks.find((b) => b.id === did);
+            if (db) draggedOffsets.set(did, { dx: db.x - orig.x, dy: db.y - orig.y });
+          }
+
+          const tailEl = document.getElementById(`block-${tailId}`);
+          const tailH = tailEl ? tailEl.offsetHeight : 42;
+          const tailBlock = currentBlocks.find((b) => b.id === tailId);
+          chainHeight = (tailBlock ? (tailBlock.y - orig.y) : 0) + tailH;
+        } else {
+          // From toolbox or extracted from inner
+          headBlock = baseBlock;
+          headId = baseBlock.id;
+          tailId = baseBlock.id;
+          draggedIds = [baseBlock.id];
+          const isLoopOrDef = baseBlock.type === 'for_range' || baseBlock.type === 'for_in' || baseBlock.type === 'while' || baseBlock.type === 'def';
+          chainHeight = isLoopOrDef ? 72 : 40;
+        }
+
+        // 2. target 하단에 이미 붙어있던 기존 블록 체인 식별 (밀어내기 대상)
+        const oldNextId = target.nextBlockId;
+        const hasExistingBelow = !!(oldNextId && !draggedIds.includes(oldNextId));
+        const oldDescendantIds = hasExistingBelow ? getDescendantBlockIds(oldNextId!, currentBlocks) : [];
+
+        // 3. 캔버스 블록 상태 일괄 업데이트
+        setCanvasBlocks((prev) => {
+          let list = prev;
+          if (source !== 'canvas') {
+            list = [
+              ...list,
+              {
+                ...headBlock,
+                x: finalX,
+                y: finalY,
+                prevBlockId: target.id,
+                nextBlockId: hasExistingBelow ? oldNextId : undefined,
+              },
+            ];
+          }
+
+          return list.map((b) => {
+            // 새로 배치된 드래그 헤드 블록
+            if (b.id === headId) {
+              return {
+                ...b,
+                x: finalX,
+                y: finalY,
+                prevBlockId: target.id,
+                nextBlockId: tailId === headId ? (hasExistingBelow ? oldNextId : undefined) : b.nextBlockId,
+              };
+            }
+
+            // 드래그된 체인의 하위 자식 블록들
+            if (draggedOffsets.has(b.id)) {
+              const off = draggedOffsets.get(b.id)!;
+              return {
+                ...b,
+                x: finalX + off.dx,
+                y: finalY + off.dy,
+                nextBlockId: b.id === tailId ? (hasExistingBelow ? oldNextId : undefined) : b.nextBlockId,
+              };
+            }
+
+            // 대상 타깃 블록 (새 헤드 블록을 next로 가리킴)
+            if (b.id === target.id) {
+              return { ...b, nextBlockId: headId };
+            }
+
+            // 기존에 드래그 블록의 부모였던 블록의 nextBlockId 정리
+            if (source === 'canvas' && blockInfo.id && b.nextBlockId === headId && b.id !== target.id) {
+              return { ...b, nextBlockId: undefined };
+            }
+
+            // 기존에 target 아래 붙어있던 블록: 새로 붙은 블록의 tail 밑으로 내려가고 y 좌표 이동
+            if (hasExistingBelow && b.id === oldNextId) {
+              return {
+                ...b,
+                x: finalX,
+                y: finalY + chainHeight,
+                prevBlockId: tailId,
+              };
+            }
+
+            // 기존 하위 체인의 자식 블록들도 동일하게 chainHeight 만큼 아래로 이동
+            if (hasExistingBelow && oldDescendantIds.includes(b.id) && !draggedIds.includes(b.id)) {
+              return {
+                ...b,
+                x: finalX,
+                y: b.y + chainHeight,
+              };
+            }
+
+            return b;
+          });
+        });
+
+
+        return;
+      }
+    }
+
+    // CASE 3: Snap ABOVE target block (target 블록 및 하위 체인 자동 밀어내기/하향 이동)
+    if (snap && snap.type === 'above') {
+      const target = currentBlocks.find((b) => b.id === snap.targetBlockId);
+      if (target && target.type !== 'start') {
+        const finalX = target.x;
+        const finalY = target.y; // 새 블록이 target의 원래 위치를 차지
+
+        // 1. 드래그된 블록 체인 분석
+        let headBlock: CanvasBlock;
+        let headId: string;
+        let tailId: string;
+        let chainHeight: number;
+        let draggedIds: string[] = [];
+        const draggedOffsets = new Map<string, { dx: number; dy: number }>();
+
+        if (source === 'canvas' && blockInfo.id) {
+          const orig = currentBlocks.find((b) => b.id === blockInfo.id);
+          if (!orig || orig.id === target.id) return;
+          headBlock = orig;
+          headId = orig.id;
+          const descendantIds = getDescendantBlockIds(orig.id, currentBlocks);
+          draggedIds = [orig.id, ...descendantIds];
+          if (draggedIds.includes(target.id)) return;
+          tailId = descendantIds.length > 0 ? descendantIds[descendantIds.length - 1] : orig.id;
+
+          for (const did of descendantIds) {
+            const db = currentBlocks.find((b) => b.id === did);
+            if (db) draggedOffsets.set(did, { dx: db.x - orig.x, dy: db.y - orig.y });
+          }
+
+          const tailEl = document.getElementById(`block-${tailId}`);
+          const tailH = tailEl ? tailEl.offsetHeight : 42;
+          const tailBlock = currentBlocks.find((b) => b.id === tailId);
+          chainHeight = (tailBlock ? (tailBlock.y - orig.y) : 0) + tailH;
+        } else {
+          headBlock = baseBlock;
+          headId = baseBlock.id;
+          tailId = baseBlock.id;
+          draggedIds = [baseBlock.id];
+          const isLoopOrDef = baseBlock.type === 'for_range' || baseBlock.type === 'for_in' || baseBlock.type === 'while' || baseBlock.type === 'def';
+          chainHeight = isLoopOrDef ? 72 : 40;
+        }
+
+        // 2. target 블록 및 그 하위 체인은 chainHeight만큼 아래로 밀려남
+        const targetDescendantIds = getDescendantBlockIds(target.id, currentBlocks);
+        const oldParentId = target.prevBlockId && !draggedIds.includes(target.prevBlockId) ? target.prevBlockId : undefined;
+
+        setCanvasBlocks((prev) => {
+          let list = prev;
+          if (source !== 'canvas') {
+            list = [
+              ...list,
+              {
+                ...headBlock,
+                x: finalX,
+                y: finalY,
+                prevBlockId: oldParentId,
+                nextBlockId: target.id,
+              },
+            ];
+          }
+
+          return list.map((b) => {
+            // 새로 배치된 드래그 헤드 블록
+            if (b.id === headId) {
+              return {
+                ...b,
+                x: finalX,
+                y: finalY,
+                prevBlockId: oldParentId,
+                nextBlockId: tailId === headId ? target.id : b.nextBlockId,
+              };
+            }
+
+            // 드래그된 자식 블록들
+            if (draggedOffsets.has(b.id)) {
+              const off = draggedOffsets.get(b.id)!;
+              return {
+                ...b,
+                x: finalX + off.dx,
+                y: finalY + off.dy,
+                nextBlockId: b.id === tailId ? target.id : b.nextBlockId,
+              };
+            }
+
+            // target의 이전 부모가 새 헤드를 가리키도록 연결
+            if (oldParentId && b.id === oldParentId) {
+              return { ...b, nextBlockId: headId };
+            }
+
+            // 기존 드래그 블록의 이전 부모 링크 정리
+            if (source === 'canvas' && blockInfo.id && b.nextBlockId === headId && b.id !== oldParentId) {
+              return { ...b, nextBlockId: undefined };
+            }
+
+            // target 블록: 새 블록의 tail 아래로 연결되며 아래로 밀려남
+            if (b.id === target.id) {
+              return {
+                ...b,
+                x: finalX,
+                y: finalY + chainHeight,
+                prevBlockId: tailId,
+              };
+            }
+
+            // target의 하위 블록들도 동일하게 chainHeight 만큼 아래로 이동
+            if (targetDescendantIds.includes(b.id) && !draggedIds.includes(b.id)) {
+              return {
+                ...b,
+                x: finalX,
+                y: b.y + chainHeight,
+              };
+            }
+
+            return b;
+          });
+        });
+
+        return;
+      }
+    }
+
+    // CASE 4: Free drop on canvas (no snap)
+    if (source === 'canvas' && blockInfo.id) {
+      const orig = currentBlocks.find((b) => b.id === blockInfo.id);
+      if (orig) {
+        const descendantIds = getDescendantBlockIds(orig.id, currentBlocks);
+        const offsets = new Map<string, { dx: number; dy: number }>();
+        for (const did of descendantIds) {
+          const db = currentBlocks.find((b) => b.id === did);
+          if (db) offsets.set(did, { dx: db.x - orig.x, dy: db.y - orig.y });
+        }
+
+        setCanvasBlocks((prev) => {
+          let updated = prev.map((b) => {
+            if (b.id === orig.id) {
+              return {
+                ...b,
+                x: dropX,
+                y: dropY,
+                prevBlockId: undefined,
+                attachedToBlockId: undefined,
+              };
+            }
+            if (offsets.has(b.id)) {
+              const off = offsets.get(b.id)!;
+              return { ...b, x: dropX + off.dx, y: dropY + off.dy };
+            }
+            if (b.id === orig.prevBlockId) {
+              return { ...b, nextBlockId: undefined };
+            }
+            return b;
+          });
+          if (orig.attachedToBlockId) {
+            updated = updateAnyBlockInTree(updated, orig.attachedToBlockId, (p) => ({
+              ...p,
+              attachedMethodId: undefined,
+            }));
+          }
+          return updated;
+        });
+        return;
+      }
+    } else {
+      // From toolbox or extracted from inner
+      setCanvasBlocks((prev) => [
+        ...prev,
+        {
+          ...baseBlock,
+          x: dropX,
+          y: dropY,
+          prevBlockId: undefined,
+          nextBlockId: undefined,
+        },
+      ]);
+      if (extractedFromInner) {
+
+      } else {
+
+      }
+    }
+  };
+
+  // Authentic Scratch Pointer Drag & Snap Engine (Canvas Blocks)
+  const handleBlockPointerDown = (e: React.PointerEvent, block: CanvasBlock) => {
+    if (e.button !== 0) return;
+    const targetTag = (e.target as HTMLElement).tagName;
+    if (targetTag === 'INPUT' || targetTag === 'BUTTON' || targetTag === 'SELECT') {
+      return;
+    }
+
+    e.stopPropagation();
+    const blockEl = document.getElementById(`block-${block.id}`);
+    if (!blockEl || !workspaceRef.current) return;
+
+    const blockRect = blockEl.getBoundingClientRect();
+    const grabOffsetX = e.clientX - blockRect.left;
+    const grabOffsetY = e.clientY - blockRect.top;
+
+    // Cache initial positions of the dragged block and all its descendants
+    const descendantIds = getDescendantBlockIds(block.id, canvasBlocks);
+    const initialPositions = new Map<string, { x: number; y: number }>();
+    initialPositions.set(block.id, { x: block.x, y: block.y });
+    for (const did of descendantIds) {
+      const db = canvasBlocks.find((b) => b.id === did);
+      if (db) initialPositions.set(did, { x: db.x, y: db.y });
+    }
+
+    pointerDragRef.current = {
+      blockId: block.id,
+      source: 'canvas',
+      startX: block.x,
+      startY: block.y,
+      startPointerX: e.clientX,
+      startPointerY: e.clientY,
+      grabOffsetX,
+      grabOffsetY,
+      hasMoved: false,
+    };
+
+    let hasUnplugged = false;
+
+    const onPointerMove = (moveEv: PointerEvent) => {
+      moveEv.preventDefault();
+      if (!pointerDragRef.current || !workspaceRef.current) return;
+      const cRect = workspaceRef.current.getBoundingClientRect();
+      const currX = Math.round(moveEv.clientX - cRect.left - pointerDragRef.current.grabOffsetX);
+      const currY = Math.round(moveEv.clientY - cRect.top - pointerDragRef.current.grabOffsetY);
+
+      if (!pointerDragRef.current.hasMoved) {
+        const startPX = pointerDragRef.current.startPointerX ?? moveEv.clientX;
+        const startPY = pointerDragRef.current.startPointerY ?? moveEv.clientY;
+        if (Math.hypot(moveEv.clientX - startPX, moveEv.clientY - startPY) > 3) {
+          pointerDragRef.current.hasMoved = true;
+          setIsDraggingBlock(true);
+          setDraggingBlockId(block.id);
+
+          // Scratch Unplug: If this block is plugged below a parent, unplug immediately upon drag!
+          if (block.prevBlockId && !hasUnplugged) {
+            hasUnplugged = true;
+            const pId = block.prevBlockId;
+            setCanvasBlocks((prev) =>
+              prev.map((b) => {
+                if (b.id === pId) return { ...b, nextBlockId: undefined };
+                if (b.id === block.id) return { ...b, prevBlockId: undefined };
+                return b;
+              })
+            );
+          }
+          if (block.attachedToBlockId && !hasUnplugged) {
+            hasUnplugged = true;
+            const pId = block.attachedToBlockId;
+            setCanvasBlocks((prev) => {
+              const clearedP = updateAnyBlockInTree(prev, pId, (p) => ({ ...p, attachedMethodId: undefined }));
+              return updateAnyBlockInTree(clearedP, block.id, (b) => ({ ...b, attachedToBlockId: undefined }));
+            });
+          }
+        }
+      }
+
+      if (pointerDragRef.current.hasMoved) {
+        // Highlight trash can or toolbox if hovering over them
+        const trashEl = document.querySelector('.trash-dropzone');
+        if (trashEl) {
+          const tr = trashEl.getBoundingClientRect();
+          const isOverTrash =
+            moveEv.clientX >= tr.left &&
+            moveEv.clientX <= tr.right &&
+            moveEv.clientY >= tr.top &&
+            moveEv.clientY <= tr.bottom;
+          setIsTrashHovered(isOverTrash);
+        }
+
+        const toolboxEl = document.getElementById('toolbox-section');
+        const isOverToolbox =
+          (toolboxEl
+            ? (() => {
+              const tb = toolboxEl.getBoundingClientRect();
+              return (
+                moveEv.clientX >= tb.left &&
+                moveEv.clientX <= tb.right &&
+                moveEv.clientY >= tb.top &&
+                moveEv.clientY <= tb.bottom
+              );
+            })()
+            : false) || (workspaceRef.current ? moveEv.clientX <= cRect.left + 15 : false);
+        setIsToolboxHovered(isOverToolbox);
+
+        const snap = findSnapTarget(currX, currY, block.id, canvasBlocksRef.current);
+        activeSnapTargetRef.current = snap;
+        setActiveSnapTarget(snap);
+
+        // Move block and its descendants with constant relative offsets
+        const totalDx = currX - pointerDragRef.current.startX;
+        const totalDy = currY - pointerDragRef.current.startY;
+
+        setCanvasBlocks((prev) =>
+          prev.map((b) => {
+            if (b.id === block.id) return { ...b, x: currX, y: currY };
+            if (initialPositions.has(b.id)) {
+              const init = initialPositions.get(b.id)!;
+              return { ...b, x: init.x + totalDx, y: init.y + totalDy };
+            }
+            return b;
+          })
+        );
+      }
+    };
+
+    const onPointerUp = (upEv: PointerEvent) => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+
+      if (!pointerDragRef.current) return;
+      const hadMoved = pointerDragRef.current.hasMoved;
+      const snap = activeSnapTargetRef.current;
+      activeSnapTargetRef.current = null;
+      setActiveSnapTarget(null);
+      setIsDraggingBlock(false);
+      setDraggingBlockId(null);
+      setIsTrashHovered(false);
+      setIsToolboxHovered(false);
+
+      if (hadMoved && workspaceRef.current) {
+        const cRect = workspaceRef.current.getBoundingClientRect();
+
+        // Check if dropped onto trash can
+        const trashEl = document.querySelector('.trash-dropzone');
+        const isOverTrash = trashEl
+          ? (() => {
+            const tr = trashEl.getBoundingClientRect();
+            return (
+              upEv.clientX >= tr.left &&
+              upEv.clientX <= tr.right &&
+              upEv.clientY >= tr.top &&
+              upEv.clientY <= tr.bottom
+            );
+          })()
+          : false;
+
+        // Check if dropped onto toolbox section (or left sidebar area)
+        const toolboxEl = document.getElementById('toolbox-section');
+        const isOverToolbox =
+          (toolboxEl
+            ? (() => {
+              const tb = toolboxEl.getBoundingClientRect();
+              return (
+                upEv.clientX >= tb.left &&
+                upEv.clientX <= tb.right &&
+                upEv.clientY >= tb.top &&
+                upEv.clientY <= tb.bottom
+              );
+            })()
+            : false) || upEv.clientX <= cRect.left + 15;
+
+        if (isOverTrash || isOverToolbox) {
+          handleDeleteBlock(block.id);
+          showToast(
+            isOverToolbox
+              ? '🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.'
+              : '🗑️ 블록이 휴지통에 버려졌습니다.'
+          );
+          pointerDragRef.current = null;
+          return;
+        }
+
+        const finalX = Math.max(10, Math.min(cRect.width - 120, upEv.clientX - cRect.left - pointerDragRef.current.grabOffsetX));
+        const finalY = Math.max(10, Math.min(cRect.height - 40, upEv.clientY - cRect.top - pointerDragRef.current.grabOffsetY));
+
+        executeBlockPlacement(
+          'canvas',
+          { id: block.id },
+          finalX,
+          finalY,
+          snap
+        );
+      }
+
+      pointerDragRef.current = null;
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
+  };
+
+  // Authentic Scratch Pointer Drag & Snap Engine (Inner Blocks inside Loops/Branches)
+  const handleInnerBlockPointerDown = (
+    e: React.PointerEvent,
+    child: CanvasBlock,
+    parentBlockId: string,
+    childIdx: number,
+    branchId?: string
+  ) => {
+    if (e.button !== 0) return;
+    const targetTag = (e.target as HTMLElement).tagName;
+    if (targetTag === 'INPUT' || targetTag === 'BUTTON' || targetTag === 'SELECT') {
+      return;
+    }
+
+    e.stopPropagation();
+    if (!workspaceRef.current) return;
+    const targetEl = e.currentTarget as HTMLElement;
+    const tRect = targetEl.getBoundingClientRect();
+    const grabOffsetX = e.clientX - tRect.left;
+    const grabOffsetY = e.clientY - tRect.top;
+
+    pointerDragRef.current = {
+      blockId: child.id,
+      source: 'inner',
+      blockType: child.type,
+      varName: child.varName,
+      content: child.content,
+      parentBlockId,
+      childIdx,
+      branchId,
+      startX: 0,
+      startY: 0,
+      startPointerX: e.clientX,
+      startPointerY: e.clientY,
+      grabOffsetX,
+      grabOffsetY,
+      hasMoved: false,
+    };
+
+    let hasExtracted = false;
+
+    const onPointerMove = (moveEv: PointerEvent) => {
+      moveEv.preventDefault();
+      if (!pointerDragRef.current || !workspaceRef.current) return;
+      const cRect = workspaceRef.current.getBoundingClientRect();
+      const currX = Math.round(moveEv.clientX - cRect.left - pointerDragRef.current.grabOffsetX);
+      const currY = Math.round(moveEv.clientY - cRect.top - pointerDragRef.current.grabOffsetY);
+
+      if (!pointerDragRef.current.hasMoved) {
+        const startPX = pointerDragRef.current.startPointerX ?? moveEv.clientX;
+        const startPY = pointerDragRef.current.startPointerY ?? moveEv.clientY;
+        if (Math.hypot(moveEv.clientX - startPX, moveEv.clientY - startPY) > 3) {
+          pointerDragRef.current.hasMoved = true;
+          pointerDragRef.current.source = 'canvas';
+          setIsDraggingBlock(true);
+          setDraggingBlockId(child.id);
+
+          hasExtracted = true;
+          // Scratch Unplug: Remove child immediately from parent loop/branch and add to canvasBlocks
+          setCanvasBlocks((prev) => {
+            const updated = updateAnyBlockInTree(prev, parentBlockId, (p) => {
+              if (branchId && p.branches) {
+                return {
+                  ...p,
+                  branches: p.branches.map((br) => {
+                    if (br.id !== branchId || !br.innerBlocks) return br;
+                    return {
+                      ...br,
+                      innerBlocks: br.innerBlocks.filter((_, idx) => idx !== childIdx),
+                    };
+                  }),
+                };
+              }
+              if (p.innerBlocks) {
+                return {
+                  ...p,
+                  innerBlocks: p.innerBlocks.filter((_, idx) => idx !== childIdx),
+                };
+              }
+              return p;
+            });
+
+            const movingBlock: CanvasBlock = {
+              ...child,
+              x: currX,
+              y: currY,
+              prevBlockId: undefined,
+              nextBlockId: undefined,
+              attachedToBlockId: undefined,
+              attachedMethodId: undefined,
+            };
+
+            const nextList = [...updated, movingBlock];
+            canvasBlocksRef.current = nextList;
+            return nextList;
+          });
+        }
+      }
+
+      if (pointerDragRef.current.hasMoved) {
+        // Highlight trash can or toolbox if hovering over them
+        const trashEl = document.querySelector('.trash-dropzone');
+        if (trashEl) {
+          const tr = trashEl.getBoundingClientRect();
+          const isOverTrash =
+            moveEv.clientX >= tr.left &&
+            moveEv.clientX <= tr.right &&
+            moveEv.clientY >= tr.top &&
+            moveEv.clientY <= tr.bottom;
+          setIsTrashHovered(isOverTrash);
+        }
+
+        const toolboxEl = document.getElementById('toolbox-section');
+        const isOverToolbox =
+          (toolboxEl
+            ? (() => {
+              const tb = toolboxEl.getBoundingClientRect();
+              return (
+                moveEv.clientX >= tb.left &&
+                moveEv.clientX <= tb.right &&
+                moveEv.clientY >= tb.top &&
+                moveEv.clientY <= tb.bottom
+              );
+            })()
+            : false) || (workspaceRef.current ? moveEv.clientX <= cRect.left + 15 : false);
+        setIsToolboxHovered(isOverToolbox);
+
+        const snap = findSnapTarget(currX, currY, child.id, canvasBlocksRef.current);
+        activeSnapTargetRef.current = snap;
+        setActiveSnapTarget(snap);
+
+        // Move block with pointer smoothly in real-time
+        setCanvasBlocks((prev) => {
+          const nextList = prev.map((b) => (b.id === child.id ? { ...b, x: currX, y: currY } : b));
+          canvasBlocksRef.current = nextList;
+          return nextList;
+        });
+      }
+    };
+
+    const onPointerUp = (upEv: PointerEvent) => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+
+      if (!pointerDragRef.current) return;
+      const hadMoved = pointerDragRef.current.hasMoved;
+      const snap = activeSnapTargetRef.current;
+      activeSnapTargetRef.current = null;
+      setActiveSnapTarget(null);
+      setIsDraggingBlock(false);
+      setDraggingBlockId(null);
+      setIsTrashHovered(false);
+      setIsToolboxHovered(false);
+
+      if (hadMoved && workspaceRef.current && hasExtracted) {
+        const cRect = workspaceRef.current.getBoundingClientRect();
+
+        // Check if dropped onto trash can
+        const trashEl = document.querySelector('.trash-dropzone');
+        const isOverTrash = trashEl
+          ? (() => {
+            const tr = trashEl.getBoundingClientRect();
+            return (
+              upEv.clientX >= tr.left &&
+              upEv.clientX <= tr.right &&
+              upEv.clientY >= tr.top &&
+              upEv.clientY <= tr.bottom
+            );
+          })()
+          : false;
+
+        // Check if dropped onto toolbox section (or left sidebar area)
+        const toolboxEl = document.getElementById('toolbox-section');
+        const isOverToolbox =
+          (toolboxEl
+            ? (() => {
+              const tb = toolboxEl.getBoundingClientRect();
+              return (
+                upEv.clientX >= tb.left &&
+                upEv.clientX <= tb.right &&
+                upEv.clientY >= tb.top &&
+                upEv.clientY <= tb.bottom
+              );
+            })()
+            : false) || upEv.clientX <= cRect.left + 15;
+
+        if (isOverTrash || isOverToolbox) {
+          setCanvasBlocks((prev) => {
+            const nextList = prev.filter((b) => b.id !== child.id);
+            canvasBlocksRef.current = nextList;
+            return nextList;
+          });
+          showToast(
+            isOverToolbox
+              ? '🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.'
+              : '🗑️ 블록이 휴지통에 버려졌습니다.'
+          );
+          pointerDragRef.current = null;
+          return;
+        }
+
+        const finalX = Math.max(10, upEv.clientX - cRect.left - pointerDragRef.current.grabOffsetX);
+        const finalY = Math.max(10, upEv.clientY - cRect.top - pointerDragRef.current.grabOffsetY);
+
+        executeBlockPlacement(
+          'canvas',
+          { id: child.id },
+          finalX,
+          finalY,
+          snap
+        );
+      }
+
+      pointerDragRef.current = null;
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
+  };
+
+  // Live Scratch Snapping & Insertion Marker Tracking (HTML5 Drag fallback)
+  const handleCanvasDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = draggingInfoRef.current?.source === 'toolbox' ? 'copy' : 'move';
+
+    if (!workspaceRef.current) return;
+    const cRect = workspaceRef.current.getBoundingClientRect();
+    const grabX = draggingInfoRef.current?.grabX ?? 30;
+    const grabY = draggingInfoRef.current?.grabY ?? 15;
+    const currX = Math.round(Math.max(10, e.clientX - cRect.left - grabX));
+    const currY = Math.round(Math.max(10, e.clientY - cRect.top - grabY));
+
+    const snap = findSnapTarget(currX, currY, draggingInfoRef.current?.id, canvasBlocksRef.current);
+    activeSnapTargetRef.current = snap;
+    setActiveSnapTarget(snap);
+  };
+
+  const handleCanvasDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingBlock(false);
+    setIsTrashHovered(false);
+
+    if (!workspaceRef.current) return;
+    const cRect = workspaceRef.current.getBoundingClientRect();
+
+    let info = draggingInfoRef.current;
+    if (!info) {
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && (parsed.source || parsed.blockType || parsed.id)) {
+            info = parsed;
+          }
+        }
+      } catch { }
+    }
+
+    if (!info || (!info.blockType && !info.id)) {
+      return;
+    }
+
+    const snap = activeSnapTargetRef.current || activeSnapTarget;
+    activeSnapTargetRef.current = null;
+    setActiveSnapTarget(null);
+
+    const grabX = info?.grabX ?? 30;
+    const grabY = info?.grabY ?? 15;
+    const dropX = Math.max(10, e.clientX - cRect.left - grabX);
+    const dropY = Math.max(10, e.clientY - cRect.top - grabY);
+
+    executeBlockPlacement(
+      info?.source || 'toolbox',
+      {
+        id: info?.id,
+        blockType: info?.blockType,
+        varName: info?.varName,
+        content: info?.content,
+        withElse: (info as any)?.withElse,
+        parentBlockId: info?.parentBlockId,
+        childIdx: info?.childIdx,
+        branchId: info?.branchId,
+      },
+      dropX,
+      dropY,
+      snap
+    );
+
+    draggingInfoRef.current = null;
+    setDraggedBlockType(null);
+  };
+
+  // 3. Trash Can Drop (보드 오른쪽 아래 휴지통에 드래그하여 버리기)
+  const handleTrashDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+    if (!isTrashHovered) setIsTrashHovered(true);
+  };
+
+  const handleTrashDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsTrashHovered(false);
+    }
+  };
+
+  const handleTrashDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsTrashHovered(false);
+    setIsDraggingBlock(false);
+    activeSnapTargetRef.current = null;
+    setActiveSnapTarget(null);
+
+    let info = draggingInfoRef.current;
+    if (!info) {
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (raw) info = JSON.parse(raw);
+      } catch { }
+    }
+
+    if (info?.source === 'canvas' && info.id) {
+      handleDeleteBlock(info.id);
+      showToast('🗑️ 블록이 휴지통에 버려졌습니다.');
+    } else if (info?.source === 'inner' && info.parentBlockId) {
+      if (info.branchId) {
+        handleRemoveInnerBlockFromBranch(info.parentBlockId, info.branchId, info.childIdx!);
+      } else {
+        handleRemoveInnerBlockFromLoop(info.parentBlockId, info.childIdx!);
+      }
+      showToast('🗑️ 블록이 휴지통에 버려졌습니다.');
+    }
+
+    draggingInfoRef.current = null;
+    setDraggedBlockType(null);
+  };
+
+  // 4. Right-click Context Menu (블록 우클릭 & 캔버스 우클릭)
+  const handleBlockContextMenu = (e: React.MouseEvent, blockId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const menuX = Math.min(e.clientX, window.innerWidth - 200);
+    const menuY = Math.min(e.clientY, window.innerHeight - 240);
+    setContextMenu({
+      visible: true,
+      x: menuX,
+      y: menuY,
+      blockId,
+      targetType: 'block',
+    });
+  };
+
+  const handleCanvasContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const rect = workspaceRef.current
+      ? workspaceRef.current.getBoundingClientRect()
+      : e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left - 40;
+    const clickY = e.clientY - rect.top - 20;
+
+    const menuX = Math.min(e.clientX, window.innerWidth - 200);
+    const menuY = Math.min(e.clientY, window.innerHeight - 240);
+    setContextMenu({
+      visible: true,
+      x: menuX,
+      y: menuY,
+      blockId: null,
+      targetType: 'canvas',
+      coords: { x: Math.max(20, clickX), y: Math.max(20, clickY) },
+    });
+  };
+
+  const handleDuplicateBlock = (blockId: string) => {
+    const target = canvasBlocks.find((b) => b.id === blockId);
+    if (!target) return;
+    const newBlock: CanvasBlock = {
+      id: `${target.type}-${Date.now()}`,
+      type: target.type,
+      varName: target.varName,
+      content: target.content,
+      items: target.items ? [...target.items] : undefined,
+      dictPairs: target.dictPairs ? target.dictPairs.map((p) => ({ ...p })) : undefined,
+      hasReturn: target.hasReturn,
+      returnVal: target.returnVal,
+      x: target.x + 30,
+      y: target.y + 40,
+    };
+    setCanvasBlocks((prev) => [...prev, newBlock]);
+    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+    showToast('📋 블록이 복사되었습니다.');
+  };
+
+  const handleClearBlockContent = (blockId: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => (b.id === blockId ? { ...b, content: '', items: b.items ? [''] : undefined, dictPairs: b.dictPairs ? [{ key: '', value: '' }] : undefined } : b))
+    );
+    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+    showToast('✏️ 블록 내용이 비워졌습니다.');
+  };
+
+  const handleDeleteBlock = (blockId: string) => {
+    let deletedCount = 1;
+    setCanvasBlocks((prev) => {
+      const target = prev.find((b) => b.id === blockId);
+      if (target?.type === 'start') {
+        showToast('ℹ️ 실행 블록은 삭제할 수 없습니다.');
+        return prev;
+      }
+      // Scratch Subtree Cascade Deletion:
+      // 삭제 대상 블록과 그 하위에 연결된 모든 자손 블록(nextBlockId 체인)을 일괄 삭제
+      const descendantIds = getDescendantBlockIds(blockId, prev);
+      const idsToDelete = new Set([blockId, ...descendantIds]);
+      deletedCount = idsToDelete.size;
+
+      return prev
+        .filter((b) => !idsToDelete.has(b.id))
+        .map((b) => {
+          let updated = { ...b };
+          if (b.nextBlockId && idsToDelete.has(b.nextBlockId)) {
+            updated.nextBlockId = undefined;
+          }
+          if (target && b.id === target.prevBlockId) {
+            updated.nextBlockId = undefined;
+          }
+          if (b.attachedMethodId && idsToDelete.has(b.attachedMethodId)) {
+            updated.attachedMethodId = undefined;
+          }
+          if (target && b.id === target.attachedToBlockId) {
+            updated.attachedMethodId = undefined;
+          }
+          if (b.innerBlocks) {
+            updated.innerBlocks = b.innerBlocks.filter((ib) => !idsToDelete.has(ib.id));
+          }
+          if (b.branches) {
+            updated.branches = b.branches.map((br) => ({
+              ...br,
+              innerBlocks: (br.innerBlocks || []).filter((ib) => !idsToDelete.has(ib.id)),
+            }));
+          }
+          return updated;
+        });
+    });
+    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+    showToast(
+      deletedCount > 1
+        ? `🗑️ 블록과 하위 블록 ${deletedCount - 1}개가 함께 삭제되었습니다.`
+        : '🗑️ 블록이 삭제되었습니다.'
+    );
+  };
+
+  const handleAddBlockAtCoords = (x: number, y: number, defaultContent: string = '') => {
+    const newBlock: CanvasBlock = {
+      id: `print-${Date.now()}`,
+      type: 'print',
+      content: defaultContent,
+      x,
+      y,
+    };
+    setCanvasBlocks((prev) => [...prev, newBlock]);
+    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'canvas' });
+    showToast('✨ 새 블록이 생성되었습니다.');
+  };
+
+  const handleBlockInputChange = (blockId: string, val: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => (b.id === blockId ? { ...b, content: val } : b))
+    );
+  };
+
+  // Dynamic Item Handlers for list, tuple, set
+  const handleAddItemToBlock = (blockId: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => (b.id === blockId ? { ...b, items: [...(b.items || []), ''] } : b))
+    );
+  };
+
+  const handleItemChange = (blockId: string, itemIdx: number, val: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => {
+        if (b.id !== blockId) return b;
+        const newItems = [...(b.items || [])];
+        newItems[itemIdx] = val;
+        return { ...b, items: newItems };
+      })
+    );
+  };
+
+  const handleRemoveItem = (blockId: string, itemIdx: number) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => {
+        if (b.id !== blockId) return b;
+        const newItems = (b.items || []).filter((_, idx) => idx !== itemIdx);
+        return { ...b, items: newItems.length > 0 ? newItems : [''] };
+      })
+    );
+  };
+
+  // Dynamic Pair Handlers for dict
+  const handleAddDictPair = (blockId: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) =>
+        b.id === blockId ? { ...b, dictPairs: [...(b.dictPairs || []), { key: '', value: '' }] } : b
+      )
+    );
+  };
+
+  const handleDictKeyChange = (blockId: string, pairIdx: number, kVal: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => {
+        if (b.id !== blockId) return b;
+        const newPairs = [...(b.dictPairs || [])];
+        newPairs[pairIdx] = { ...newPairs[pairIdx], key: kVal };
+        return { ...b, dictPairs: newPairs };
+      })
+    );
+  };
+
+  const handleDictValueChange = (blockId: string, pairIdx: number, val: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => {
+        if (b.id !== blockId) return b;
+        const newPairs = [...(b.dictPairs || [])];
+        newPairs[pairIdx] = { ...newPairs[pairIdx], value: val };
+        return { ...b, dictPairs: newPairs };
+      })
+    );
+  };
+
+  const handleRemoveDictPair = (blockId: string, pairIdx: number) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => {
+        if (b.id !== blockId) return b;
+        const newPairs = (b.dictPairs || []).filter((_, idx) => idx !== pairIdx);
+        return { ...b, dictPairs: newPairs.length > 0 ? newPairs : [{ key: '', value: '' }] };
+      })
+    );
+  };
+
+  const handleBlockVarNameChange = (blockId: string, val: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => (b.id === blockId ? { ...b, varName: val } : b))
+    );
+  };
+
+  // C-Shape & E-Shape Branch / Slot Handlers
+  const handleAddElifBranch = (blockId: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => {
+        const currentBranches: IfBranch[] = b.branches && b.branches.length > 0
+          ? b.branches
+          : [{ id: `br-if-${b.id}`, kind: 'if' as const, condition: b.content || 'False', innerBlocks: b.innerBlocks || [] }];
+        const elseIndex = currentBranches.findIndex((br) => br.kind === 'else');
+        const newBranch: IfBranch = {
+          id: `br-elif-${Date.now()}`,
+          kind: 'elif',
+          condition: 'False',
+          innerBlocks: [],
+        };
+        const updatedBranches = [...currentBranches];
+        if (elseIndex >= 0) {
+          updatedBranches.splice(elseIndex, 0, newBranch);
+        } else {
+          updatedBranches.push(newBranch);
+        }
+        return { ...b, branches: updatedBranches };
+      })
+    );
+    showToast('✨ elif 조건문 가지가 추가되었습니다.');
+  };
+
+  const handleAddElseBranch = (blockId: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => {
+        const currentBranches: IfBranch[] = b.branches && b.branches.length > 0
+          ? b.branches
+          : [{ id: `br-if-${b.id}`, kind: 'if' as const, condition: b.content || '', innerBlocks: b.innerBlocks || [] }];
+        if (currentBranches.some((br) => br.kind === 'else')) {
+          showToast('⚠️ 이미 else 절이 존재합니다.');
+          return b;
+        }
+        const newBranch: IfBranch = {
+          id: `br-else-${Date.now()}`,
+          kind: 'else',
+          innerBlocks: [],
+        };
+        return { ...b, isIfElse: true, branches: [...currentBranches, newBranch] };
+      })
+    );
+    showToast('✨ else 조건문 가지(E자 완성)가 추가되었습니다.');
+  };
+
+  const handleRemoveBranch = (blockId: string, branchId: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => {
+        if (!b.branches) return b;
+        const target = b.branches.find((br) => br.id === branchId);
+        // Only if branch cannot be deleted; elif and else can be removed
+        if (target?.kind === 'if') return b;
+        const remaining = b.branches.filter((br) => br.id !== branchId);
+        const hasElse = remaining.some((br) => br.kind === 'else');
+        return {
+          ...b,
+          isIfElse: hasElse ? true : undefined,
+          branches: remaining.length > 0 ? remaining : undefined,
+        };
+      })
+    );
+    showToast('🗑️ 조건 가지가 삭제되었습니다.');
+  };
+
+  const handleBranchConditionChange = (blockId: string, branchId: string, cond: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => {
+        const curBranches = b.branches && b.branches.length > 0
+          ? b.branches
+          : [{ id: branchId, kind: 'if' as const, condition: b.content || 'False', innerBlocks: b.innerBlocks || [] }];
+        return {
+          ...b,
+          content: cond,
+          branches: curBranches.map((br) => (br.id === branchId ? { ...br, condition: cond } : br)),
+        };
+      })
+    );
+  };
+
+  const handleToggleDefReturn = (blockId: string, enable: boolean) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => ({
+        ...b,
+        hasReturn: enable,
+        returnVal: enable ? (b.returnVal || 'result') : undefined,
+      }))
+    );
+    if (enable) {
+      showToast('✨ return 반환문이 함수에 추가되었습니다.');
+    } else {
+      showToast('🗑️ return 반환문이 제거되었습니다.');
+    }
+  };
+
+  const handleDefReturnValChange = (blockId: string, val: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, returnVal: val }))
+    );
+  };
+
+  // Canvas block input selection handler:
+  // First click/focus selects all text; subsequent clicks place normal cursor.
+  const handleInputFocusSelect = (e: React.FocusEvent<HTMLInputElement>) => {
+    const el = e.currentTarget;
+    el.dataset.justFocused = 'true';
+    el.select();
+    setTimeout(() => {
+      try {
+        if (el.dataset.justFocused === 'true') {
+          el.select();
+        }
+      } catch { }
+    }, 0);
+    setTimeout(() => {
+      delete el.dataset.justFocused;
+    }, 400);
+  };
+
+  const handleInputClickSelect = (e: React.MouseEvent<HTMLInputElement>) => {
+    const el = e.currentTarget;
+    if (el.dataset.justFocused === 'true') {
+      el.select();
+      delete el.dataset.justFocused;
+    }
+  };
+
+  const handleLoopInnerVarNameChange = (loopBlockId: string, val: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, loopBlockId, (b) => ({ ...b, varName: val }))
+    );
+  };
+
+  // Add child block into loop slot (recursive tree support)
+  const handleAddBlockToLoop = (loopBlockId: string, childType: BlockType = 'print') => {
+    const isLoopOrDef = childType === 'for_range' || childType === 'for_in' || childType === 'while' || childType === 'def';
+    const isIf = childType === 'if';
+    const childBlock: CanvasBlock = {
+      id: `${childType}-${Date.now()}`,
+      type: childType,
+      varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
+      content: childType === 'for_range' ? '3' : childType === 'while' ? 'False' : '',
+      innerBlocks: isLoopOrDef ? [] : undefined,
+      branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
+      x: 0,
+      y: 0,
+    };
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, loopBlockId, (b) => ({
+        ...b,
+        innerBlocks: [...(b.innerBlocks || []), childBlock],
+      }))
+    );
+  };
+
+  const handleRemoveInnerBlockFromLoop = (loopBlockId: string, childIdx: number) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, loopBlockId, (b) => {
+        if (!b.innerBlocks) return b;
+        return { ...b, innerBlocks: b.innerBlocks.filter((_, idx) => idx !== childIdx) };
+      })
+    );
+  };
+
+  // Add child block into if branch slot
+  const handleAddBlockToBranch = (ifBlockId: string, branchId: string, childType: BlockType = 'print') => {
+    const isLoopOrDef = childType === 'for_range' || childType === 'for_in' || childType === 'while' || childType === 'def';
+    const isIf = childType === 'if';
+    const childBlock: CanvasBlock = {
+      id: `${childType}-${Date.now()}`,
+      type: childType,
+      varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
+      content: childType === 'for_range' ? '3' : childType === 'while' ? 'False' : '',
+      innerBlocks: isLoopOrDef ? [] : undefined,
+      branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
+      x: 0,
+      y: 0,
+    };
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, ifBlockId, (b) => {
+        if (!b.branches) return b;
+        return {
+          ...b,
+          branches: b.branches.map((br) =>
+            br.id === branchId
+              ? { ...br, innerBlocks: [...(br.innerBlocks || []), childBlock] }
+              : br
+          ),
+        };
+      })
+    );
+  };
+
+  const handleRemoveInnerBlockFromBranch = (ifBlockId: string, branchId: string, childIdx: number) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, ifBlockId, (b) => {
+        if (!b.branches) return b;
+        return {
+          ...b,
+          branches: b.branches.map((br) =>
+            br.id === branchId
+              ? { ...br, innerBlocks: (br.innerBlocks || []).filter((_, idx) => idx !== childIdx) }
+              : br
+          ),
+        };
+      })
+    );
+  };
+
+  const handleLoopInnerInputChange = (loopBlockId: string, childIdx: number, val: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, loopBlockId, (b) => {
+        if (!b.innerBlocks) return b;
+        const newInner = [...b.innerBlocks];
+        if (newInner[childIdx]) {
+          newInner[childIdx] = { ...newInner[childIdx], content: val };
+        }
+        return { ...b, innerBlocks: newInner };
+      })
+    );
+  };
+
+  const handleBranchInnerInputChange = (ifBlockId: string, branchId: string, childIdx: number, val: string) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, ifBlockId, (b) => {
+        if (!b.branches) return b;
+        return {
+          ...b,
+          branches: b.branches.map((br) => {
+            if (br.id !== branchId || !br.innerBlocks) return br;
+            const newInner = [...br.innerBlocks];
+            if (newInner[childIdx]) {
+              newInner[childIdx] = { ...newInner[childIdx], content: val };
+            }
+            return { ...br, innerBlocks: newInner };
+          }),
+        };
+      })
+    );
+  };
+
+  const handleDropIntoLoopSlot = (e: React.DragEvent, loopBlockId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingBlock(false);
+    const snap = activeSnapTargetRef.current || activeSnapTarget;
+    activeSnapTargetRef.current = null;
+    setActiveSnapTarget(null);
+
+    let info = draggingInfoRef.current;
+    if (!info) {
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (raw) info = JSON.parse(raw);
+      } catch { }
+    }
+    if (!info || (!info.blockType && !info.id)) return;
+
+    const isLoopOrDef = info.blockType === 'for_range' || info.blockType === 'for_in' || info.blockType === 'while' || info.blockType === 'def';
+    const isIf = info.blockType === 'if';
+    const targetIdx = snap?.targetBlockId === loopBlockId && snap.insertIndex !== undefined ? snap.insertIndex : undefined;
+
+    let childBlock: CanvasBlock;
+    if (info.source === 'canvas' && info.id) {
+      if (info.id === loopBlockId) return;
+      const existing = canvasBlocks.find((b) => b.id === info!.id);
+      if (!existing) return;
+      childBlock = { ...existing, x: 0, y: 0, prevBlockId: undefined, nextBlockId: undefined };
+      setCanvasBlocks((prev) => {
+        const filtered = prev.filter((b) => b.id !== info!.id).map((b) => {
+          if (b.id === existing.prevBlockId) return { ...b, nextBlockId: undefined };
+          if (b.id === existing.nextBlockId) return { ...b, prevBlockId: undefined };
+          return b;
+        });
+        return updateAnyBlockInTree(filtered, loopBlockId, (b) => {
+          const inList = b.innerBlocks || [];
+          const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
+          const nextInner = [...inList];
+          nextInner.splice(idx, 0, childBlock);
+          return {
+            ...b,
+            innerBlocks: nextInner,
+          };
+        });
+      });
+    } else {
+      const bType = info.blockType || 'print';
+      childBlock = {
+        id: `${bType}-${Date.now()}`,
+        type: bType,
+        varName: info.varName || (
+          bType === 'variable' ? 'x' :
+            bType === 'for_range' ? 'j' :
+              bType === 'for_in' ? 'item' :
+                bType === 'def' ? 'sub_func' : undefined
+        ),
+        content: info.content || (bType === 'for_range' ? '3' : bType === 'while' ? 'False' : ''),
+        innerBlocks: isLoopOrDef ? [] : undefined,
+        branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
+        x: 0,
+        y: 0,
+      };
+      setCanvasBlocks((prev) =>
+        updateAnyBlockInTree(prev, loopBlockId, (b) => {
+          const inList = b.innerBlocks || [];
+          const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
+          const nextInner = [...inList];
+          nextInner.splice(idx, 0, childBlock);
+          return {
+            ...b,
+            innerBlocks: nextInner,
+          };
+        })
+      );
+    }
+    draggingInfoRef.current = null;
+    setDraggedBlockType(null);
+  };
+
+  const handleDropIntoBranchSlot = (e: React.DragEvent, ifBlockId: string, branchId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingBlock(false);
+    const snap = activeSnapTargetRef.current || activeSnapTarget;
+    activeSnapTargetRef.current = null;
+    setActiveSnapTarget(null);
+
+    let info = draggingInfoRef.current;
+    if (!info) {
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (raw) info = JSON.parse(raw);
+      } catch { }
+    }
+    if (!info || (!info.blockType && !info.id)) return;
+
+    const isLoopOrDef = info.blockType === 'for_range' || info.blockType === 'for_in' || info.blockType === 'while' || info.blockType === 'def';
+    const isIf = info.blockType === 'if';
+    const targetIdx = snap?.targetBlockId === ifBlockId && snap?.branchId === branchId && snap.insertIndex !== undefined ? snap.insertIndex : undefined;
+
+    let childBlock: CanvasBlock;
+    if (info.source === 'canvas' && info.id) {
+      if (info.id === ifBlockId) return;
+      const existing = canvasBlocks.find((b) => b.id === info!.id);
+      if (!existing) return;
+      childBlock = { ...existing, x: 0, y: 0, prevBlockId: undefined, nextBlockId: undefined };
+      setCanvasBlocks((prev) => {
+        const filtered = prev.filter((b) => b.id !== info!.id).map((b) => {
+          if (b.id === existing.prevBlockId) return { ...b, nextBlockId: undefined };
+          if (b.id === existing.nextBlockId) return { ...b, prevBlockId: undefined };
+          return b;
+        });
+        return updateAnyBlockInTree(filtered, ifBlockId, (b) => {
+          if (!b.branches) return b;
+          return {
+            ...b,
+            branches: b.branches.map((br) => {
+              if (br.id !== branchId) return br;
+              const inList = br.innerBlocks || [];
+              const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
+              const nextInner = [...inList];
+              nextInner.splice(idx, 0, childBlock);
+              return { ...br, innerBlocks: nextInner };
+            }),
+          };
+        });
+      });
+    } else {
+      const bType = info.blockType || 'print';
+      childBlock = {
+        id: `${bType}-${Date.now()}`,
+        type: bType,
+        varName: info.varName || (
+          bType === 'variable' ? 'x' :
+            bType === 'for_range' ? 'j' :
+              bType === 'for_in' ? 'item' :
+                bType === 'def' ? 'sub_func' : undefined
+        ),
+        content: info.content || (bType === 'for_range' ? '3' : bType === 'while' ? 'False' : ''),
+        innerBlocks: isLoopOrDef ? [] : undefined,
+        branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
+        x: 0,
+        y: 0,
+      };
+      setCanvasBlocks((prev) =>
+        updateAnyBlockInTree(prev, ifBlockId, (b) => {
+          if (!b.branches) return b;
+          return {
+            ...b,
+            branches: b.branches.map((br) => {
+              if (br.id !== branchId) return br;
+              const inList = br.innerBlocks || [];
+              const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
+              const nextInner = [...inList];
+              nextInner.splice(idx, 0, childBlock);
+              return { ...br, innerBlocks: nextInner };
+            }),
+          };
+        })
+      );
+    }
+    draggingInfoRef.current = null;
+    setDraggedBlockType(null);
+  };
+
+  // 블록 섹션 클릭 시 자동 부착 기능 제거됨: 캔버스로 드래그 앤 드롭으로만 배치
+  const handleAddBlockFromToolbox = (
+    _kind: BlockType,
+    _extra?: { varName?: string; withElse?: boolean }
+  ) => {
+    // No-op
+  };
+
+  const handleMethodNameChange = (blockId: string, val: string) => {
+    setCanvasBlocks((prev) =>
+      prev.map((b) => (b.id === blockId ? { ...b, methodName: val } : b))
+    );
+  };
+
+  const handleCreateVariable = () => {
+    const name = varInputName.trim();
+    if (!name) {
+      showToast('⚠️ 변수 이름을 입력해주세요.');
+      return;
+    }
+    if (!/^[a-zA-Z_]\w*$/.test(name)) {
+      showToast('⚠️ 유효한 파이썬 변수명을 입력해주세요. (영문/언더스코어로 시작)');
+      return;
+    }
+
+    const newVar: CustomVariableTemplate = {
+      id: `custom-var-${Date.now()}`,
+      name,
+      kind: selectedVarKind,
+    };
+
+    setCustomVariables((prev) => [...prev, newVar]);
+    setIsVarModalOpen(false);
+    showToast(`✨ '${name}' (${getKindLabel(selectedVarKind)}) 블록이 생성되었습니다.`);
+  };
+
+
+  return (
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      width: '100vw',
+      height: '100vh',
+      overflow: 'hidden',
+      background: '#0b1329',
+      color: '#f8fafc',
+      display: 'flex',
+      flexDirection: 'column',
+      userSelect: 'none',
+      fontFamily: 'var(--font-sans)',
+      zIndex: 100,
+    }}>
+      {/* ====================================================================
+          1. FULLSCREEN TOP STUDIO HEADER (MakeCode Style)
+          ==================================================================== */}
+      <header style={{
+        height: '52px',
+        background: '#0f172a',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        flexShrink: 0,
+        zIndex: 50,
+      }}>
+        {/* Left: Exit & Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Link
+            href="/languages"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#cbd5e1',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+            }}
+          >
+            <ArrowLeft size={15} />
+            <span>나가기</span>
+          </Link>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
+              padding: '3px 8px',
+              borderRadius: '6px',
+              background: '#0284c7',
+              color: '#ffffff',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+            }}>
+              {round.language}
+            </span>
+            <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc' }}>
+              {round.title_ko}
+            </span>
+          </div>
+        </div>
+
+
+        {/* Right: Round Reset */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button
+            onClick={handleResetRound}
+            title="라운드 초기화"
+            style={{
+              padding: '7px',
+              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#94a3b8',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <RotateCcw size={16} />
+          </button>
+        </div>
+      </header>
+
+      {/* ====================================================================
+          2. MAIN 3-COLUMN STUDIO LAYOUT
+          (Wide Terminal ~38% + Toolbox 180px + Full Drag Canvas 1fr)
+          ==================================================================== */}
+      <main style={{
+        flex: '1 1 auto',
+        height: 'calc(100vh - 52px)',
+        display: 'grid',
+        gridTemplateColumns: mode === 'typing' ? 'minmax(400px, 36%) 1fr' : 'minmax(380px, 34%) 248px 1fr',
+        background: '#090e1a',
+        overflow: 'hidden',
+      }}>
+        {/* ==================================================================
+            COLUMN 1 (LEFT ~38%): Spacious Terminal + Compact RAM Storage Boxes
+            ================================================================== */}
+        <section style={{
+          display: 'flex',
+          flexDirection: 'column',
+          background: '#0d1527',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          height: '100%',
+          overflow: 'hidden',
+        }}>
+          {/* Top Half: Terminal Console */}
+          <div style={{
+            flex: '1 1 52%',
+            display: 'flex',
+            flexDirection: 'column',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#0b1120',
+          }}>
+            <div style={{
+              height: '46px',
+              padding: '0 16px',
+              background: '#0f172a',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexShrink: 0,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <TerminalIcon size={16} color="#38bdf8" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
+                  터미널
+                </span>
+                <span style={{ fontSize: '0.68rem', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
+                  PYTHON 3.12
+                </span>
+              </div>
+
+              {/* Live Auto-Run Status Indicator */}
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 10px',
+                borderRadius: '6px',
+                background: isExecuting ? 'rgba(56, 189, 248, 0.15)' : 'rgba(16, 185, 129, 0.12)',
+                border: isExecuting ? '1px solid rgba(56, 189, 248, 0.35)' : '1px solid rgba(16, 185, 129, 0.3)',
+                color: isExecuting ? '#38bdf8' : '#34d399',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                transition: 'all 0.2s ease',
+              }}>
+                <span style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: isExecuting ? '#38bdf8' : '#10b981',
+                  boxShadow: isExecuting ? '0 0 8px #38bdf8' : '0 0 8px #10b981',
+                }} />
+                <span>{isExecuting ? '코드 실행 중...' : '실시간 자동 실행'}</span>
+              </div>
+            </div>
+
+            <div style={{
+              flex: '1 1 auto',
+              padding: '14px 16px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.86rem',
+              color: '#f8fafc',
+              overflowY: 'auto',
+              background: '#020617',
+              lineHeight: 1.6,
+            }}>
+              <div style={{ color: '#10b981', display: 'flex', gap: '6px' }}>
+                <span>$</span>
+                <span style={{ color: '#e2e8f0' }}>python main.py</span>
+              </div>
+
+              {terminalOutput && (
+                <pre style={{
+                  margin: '8px 0 0 0',
+                  padding: 0,
+                  fontFamily: 'inherit',
+                  fontSize: '0.88rem',
+                  color: '#f8fafc',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  lineHeight: 1.6,
+                }}>
+                  {terminalOutput}
+                </pre>
+              )}
+            </div>
+          </div>
+
+          {/* Bottom Half: DYNAMIC COMPACT PRE-PLACED RAM STORAGE BOXES */}
+          <div style={{
+            flex: '1 1 48%',
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#0a0f1d',
+            minHeight: 0,
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              height: '46px',
+              padding: '0 16px',
+              background: '#0f172a',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '8px',
+              flexShrink: 0,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Box size={16} color="#a855f7" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
+                  메모리 시각화
+                </span>
+              </div>
+              <span style={{ fontSize: '0.68rem', color: '#a855f7', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                {ramRows}행 × 5열 ({ramRows * 5} SLOTS)
+              </span>
+            </div>
+
+            <div
+              ref={ramBodyRef}
+              style={{
+                flex: '1 1 auto',
+                padding: '10px 14px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: 0,
+              }}
+            >
+              {/* Dynamic Compact Pre-placed RAM Storage Boxes with Fixed Cell Width */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
+                gap: '6px 6px',
+                width: '100%',
+              }}>
+                {memoryBoxes.map((box) => (
+                  <div
+                    key={box.id}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '2px',
+                      minWidth: 0,
+                      width: '100%',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {/* Fixed Size Hardware Box */}
+                    <div style={{
+                      width: '100%',
+                      height: '34px',
+                      borderRadius: '6px',
+                      background: box.active
+                        ? 'rgba(168, 85, 247, 0.18)'
+                        : 'rgba(255, 255, 255, 0.02)',
+                      border: box.active
+                        ? '1.5px solid #a855f7'
+                        : '1px dashed rgba(255, 255, 255, 0.08)',
+                      boxShadow: box.active
+                        ? '0 0 8px rgba(168, 85, 247, 0.35)'
+                        : 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '2px 4px',
+                      position: 'relative',
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      boxSizing: 'border-box',
+                      transition: 'all 0.25s ease',
+                    }}>
+                      {box.active && (
+                        <span style={{
+                          position: 'absolute',
+                          top: '1px',
+                          left: '3px',
+                          fontSize: '0.50rem',
+                          color: '#c084fc',
+                          fontFamily: 'var(--font-mono)',
+                          lineHeight: 1,
+                        }}>
+                          {box.type}
+                        </span>
+                      )}
+
+                      <span
+                        title={box.value}
+                        style={{
+                          fontSize: '0.74rem',
+                          fontWeight: 800,
+                          color: box.active ? '#ffffff' : '#475569',
+                          fontFamily: 'var(--font-mono)',
+                          textAlign: 'center',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%',
+                          maxWidth: '100%',
+                          display: 'block',
+                        }}
+                      >
+                        {box.value.length > 7 ? box.value.slice(0, 6) + '…' : box.value}
+                      </span>
+                    </div>
+
+                    {/* Small Identifier / Variable Name */}
+                    <span
+                      title={box.name}
+                      style={{
+                        fontSize: '0.56rem',
+                        fontWeight: 700,
+                        color: box.active ? '#e2e8f0' : '#475569',
+                        textAlign: 'center',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        width: '100%',
+                        maxWidth: '100%',
+                        display: 'block',
+                      }}
+                    >
+                      {box.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================================
+            COLUMN 2 (MIDDLE 200px): Scratch-style Continuous Block Toolbox
+            ================================================================== */}
+        {mode === 'block' && (
+          <section
+            id="toolbox-section"
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              e.dataTransfer.dropEffect = 'move';
+              if (!isToolboxHovered) setIsToolboxHovered(true);
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setIsToolboxHovered(false);
+              }
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsToolboxHovered(false);
+              setIsDraggingBlock(false);
+
+              let info = draggingInfoRef.current;
+              if (!info) {
+                try {
+                  const raw = e.dataTransfer.getData('text/plain');
+                  if (raw) info = JSON.parse(raw);
+                } catch { }
+              }
+
+              if (info?.source === 'canvas' && info.id) {
+                handleDeleteBlock(info.id);
+                showToast('🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.');
+              } else if (info?.source === 'inner' && info.parentBlockId) {
+                if (info.branchId) {
+                  handleRemoveInnerBlockFromBranch(info.parentBlockId, info.branchId, info.childIdx!);
+                } else {
+                  handleRemoveInnerBlockFromLoop(info.parentBlockId, info.childIdx!);
+                }
+                showToast('🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.');
+              }
+              draggingInfoRef.current = null;
+              setDraggedBlockType(null);
+            }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              background: '#0d1527',
+              borderRight: isToolboxHovered && isDraggingBlock
+                ? '2px dashed #ef4444'
+                : '1px solid rgba(255, 255, 255, 0.08)',
+              boxShadow: isToolboxHovered && isDraggingBlock
+                ? 'inset 0 0 24px rgba(239, 68, 68, 0.25)'
+                : 'none',
+              height: '100%',
+              overflow: 'hidden',
+              position: 'relative',
+              zIndex: 10,
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {/* Drag to delete overlay banner */}
+            {isToolboxHovered && isDraggingBlock && (
+              <div style={{
+                position: 'absolute',
+                top: '48px',
+                left: '8px',
+                right: '8px',
+                zIndex: 50,
+                padding: '7px 10px',
+                borderRadius: '8px',
+                background: 'rgba(239, 68, 68, 0.95)',
+                color: '#ffffff',
+                fontSize: '0.74rem',
+                fontWeight: 800,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.4)',
+                pointerEvents: 'none',
+              }}>
+                <Trash2 size={13} />
+                <span>여기에 놓으면 블록 삭제</span>
+              </div>
+            )}
+
+            {/* Scratch-style Vertical Continuous Scrollable Palette */}
+            <div style={{
+              flex: '1 1 auto',
+              padding: '12px 10px',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+            }}>
+              {/* 1. 함수 카테고리 (파랑 계열) */}
+              <div id="cat-sec-function" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#60a5fa', fontSize: '0.76rem', fontWeight: 800 }}>
+                  <TerminalIcon size={14} color="#3b82f6" />
+                  <span>함수</span>
+                </div>
+
+                {/* print() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'print')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.print.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.print.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.print.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="print() 출력 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.print.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.print.border} bg={BLOCK_THEMES.print.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.print.border} bgColor="#0d1527" />
+                  <span>print (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* input() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'input')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.input.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.input.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.input.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="input() 입력 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.input.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.input.border} bg={BLOCK_THEMES.input.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.input.border} bgColor="#0d1527" />
+                  <span>input (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* len() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'len')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.len.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.len.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.len.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="len() 길이 반환 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.len.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.len.border} bg={BLOCK_THEMES.len.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.len.border} bgColor="#0d1527" />
+                  <span>len (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* .method() 메서드 결합 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'method')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.method.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.method.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.method.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title=".method() 메서드 결합 블록 (좌측 돌출부를 함수/변수 블록 우측 홈에 결합)"
+                >
+                  <HorizontalPuzzleTab borderColor={BLOCK_THEMES.method.border} bg={BLOCK_THEMES.method.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.method.border} bgColor="#0d1527" />
+                  <span style={{ fontSize: '0.92rem', fontWeight: 900 }}>.</span>
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>split ▼</span>
+                  <span>(</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* def 함수정의 ㄷ자 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'def')}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: 'fit-content',
+                    minWidth: '120px',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    fontFamily: 'var(--font-mono)',
+                    filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                  }}
+                  title="def 함수 정의 ㄷ자 블록"
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px 6px 6px 0',
+                      background: BLOCK_THEMES.def.bg,
+                      border: `1px solid ${BLOCK_THEMES.def.border}`,
+                      borderBottom: 'none',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      position: 'relative',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.def.border} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '18px',
+                        right: '5px',
+                        bottom: 0,
+                        height: '1px',
+                        background: BLOCK_THEMES.def.border,
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    <span style={{ color: '#ffffff' }}>def</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>my_func</span>
+                    <span>(</span>
+                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                    <span>):</span>
+                  </div>
+                  <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
+                    <div style={{ width: '18px', background: BLOCK_THEMES.def.bg, borderLeft: `1px solid ${BLOCK_THEMES.def.border}`, borderRight: `1px solid ${BLOCK_THEMES.def.border}`, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
+                      <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.def.border} bg={BLOCK_THEMES.def.bg} />
+                    </div>
+                  </div>
+                  <SvgBottomClosingArm theme={BLOCK_THEMES.def} />
+                </div>
+              </div>
+
+              {/* 2. 제어 카테고리 (조건문 및 반복문) */}
+              <div id="cat-sec-control" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fbbf24', fontSize: '0.76rem', fontWeight: 800 }}>
+                  <Code size={14} color="#f59e0b" />
+                  <span>제어</span>
+                </div>
+
+                {/* if [조건]: ㄷ자 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'if')}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: 'fit-content',
+                    minWidth: '120px',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    fontFamily: 'var(--font-mono)',
+                    filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                  }}
+                  title="if 조건문 (ㄷ자 형태 블록: +elif, +else로 E자 확장 가능)"
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      whiteSpace: 'nowrap',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px 6px 6px 0',
+                      background: BLOCK_THEMES.if.bg,
+                      border: `1px solid ${BLOCK_THEMES.if.border}`,
+                      borderBottom: 'none',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      position: 'relative',
+                    }}
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.if.border} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '18px',
+                        right: '5px',
+                        bottom: 0,
+                        height: '1px',
+                        background: BLOCK_THEMES.if.border,
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    <span style={{ color: '#ffffff' }}>if</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>False</span>
+                    <span>:</span>
+                  </div>
+                  <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
+                    <div style={{ width: '18px', background: BLOCK_THEMES.if.bg, borderLeft: `1px solid ${BLOCK_THEMES.if.border}`, borderRight: `1px solid ${BLOCK_THEMES.if.border}`, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
+                      <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.if.border} bg={BLOCK_THEMES.if.bg} />
+                    </div>
+                  </div>
+                  <SvgBottomClosingArm theme={BLOCK_THEMES.if} />
+                </div>
+
+                {/* for i in range() ㄷ자 블록 (유일한 for문) */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'for_range')}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: 'fit-content',
+                    minWidth: '120px',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    fontFamily: 'var(--font-mono)',
+                    filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                  }}
+                  title="for i in range() 반복 ㄷ자 블록"
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      whiteSpace: 'nowrap',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px 6px 6px 0',
+                      background: BLOCK_THEMES.for_range.bg,
+                      border: `1px solid ${BLOCK_THEMES.for_range.border}`,
+                      borderBottom: 'none',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      position: 'relative',
+                    }}
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.for_range.border} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '18px',
+                        right: '5px',
+                        bottom: 0,
+                        height: '1px',
+                        background: BLOCK_THEMES.for_range.border,
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    <span style={{ color: '#ffffff' }}>for</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>i</span>
+                    <span style={{ color: '#ffffff' }}>in range(</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>5</span>
+                    <span>):</span>
+                  </div>
+                  <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
+                    <div style={{ width: '18px', background: BLOCK_THEMES.for_range.bg, borderLeft: `1px solid ${BLOCK_THEMES.for_range.border}`, borderRight: `1px solid ${BLOCK_THEMES.for_range.border}`, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
+                      <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.for_range.border} bg={BLOCK_THEMES.for_range.bg} />
+                    </div>
+                  </div>
+                  <SvgBottomClosingArm theme={BLOCK_THEMES.for_range} />
+                </div>
+
+                {/* while 조건: ㄷ자 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'while')}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: 'fit-content',
+                    minWidth: '120px',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    fontFamily: 'var(--font-mono)',
+                    filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                  }}
+                  title="while 조건 반복 ㄷ자 블록"
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      whiteSpace: 'nowrap',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px 6px 6px 0',
+                      background: BLOCK_THEMES.while.bg,
+                      border: `1px solid ${BLOCK_THEMES.while.border}`,
+                      borderBottom: 'none',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      position: 'relative',
+                    }}
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.while.border} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '18px',
+                        right: '5px',
+                        bottom: 0,
+                        height: '1px',
+                        background: BLOCK_THEMES.while.border,
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    <span style={{ color: '#ffffff' }}>while</span>
+                    <span style={{ padding: '1px 8px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>False</span>
+                    <span>:</span>
+                  </div>
+                  <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
+                    <div style={{ width: '18px', background: BLOCK_THEMES.while.bg, borderLeft: `1px solid ${BLOCK_THEMES.while.border}`, borderRight: `1px solid ${BLOCK_THEMES.while.border}`, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
+                      <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.while.border} bg={BLOCK_THEMES.while.bg} />
+                    </div>
+                  </div>
+                  <SvgBottomClosingArm theme={BLOCK_THEMES.while} />
+                </div>
+
+                {/* break 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'break')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    whiteSpace: 'nowrap',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.break.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.break.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.break.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="break 반복문 탈출 블록"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.break.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.break.border} bg={BLOCK_THEMES.break.bg} />
+                  <span>break</span>
+                </div>
+
+                {/* continue 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'continue')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    whiteSpace: 'nowrap',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.continue.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.continue.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.continue.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="continue 다음 반복 진행 블록"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.continue.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.continue.border} bg={BLOCK_THEMES.continue.bg} />
+                  <span>continue</span>
+                </div>
+              </div>
+
+              {/* 4. 변수 카테고리 (주황 계열) */}
+              <div id="cat-sec-variable" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fb923c', fontSize: '0.76rem', fontWeight: 800 }}>
+                    <Box size={14} color="#ea580c" />
+                    <span>변수</span>
+                  </div>
+                </div>
+
+                {/* Prominent "+ 변수 생성" Button */}
+                <button
+                  onClick={() => {
+                    setIsVarModalOpen(true);
+                    setVarModalStep(1);
+                    setSelectedVarKind('variable');
+                    setVarInputName('');
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    width: '100%',
+                    padding: '6px 10px',
+                    borderRadius: '6px',
+                    background: 'linear-gradient(135deg, rgba(234, 88, 12, 0.25) 0%, rgba(249, 115, 22, 0.15) 100%)',
+                    border: '1px solid rgba(249, 115, 22, 0.45)',
+                    color: '#fb923c',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 2px 8px rgba(234, 88, 12, 0.15)',
+                  }}
+                >
+                  <Plus size={14} color="#fb923c" />
+                  <span>변수 생성</span>
+                </button>
+
+                {/* List of Created Custom Variables in Toolbox */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '2px' }}>
+                  {customVariables.map((cv) => {
+                    const theme = BLOCK_THEMES[cv.kind];
+                    return (
+                      <div
+                        key={cv.id}
+                        draggable
+                        onDragStart={(e) => handleDragStartFromToolbox(e, cv.kind, { varName: cv.name })}
+                        style={{
+                          display: 'inline-flex',
+                          width: 'fit-content',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: '5px 10px',
+                          borderRadius: '6px',
+                          background: theme.bg,
+                          boxShadow: `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                          border: `1px solid ${theme.border}`,
+                          color: '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '0.80rem',
+                          fontFamily: 'var(--font-mono)',
+                          cursor: 'grab',
+                          userSelect: 'none',
+                          position: 'relative',
+                        }}
+                        title={`${cv.name} (${getKindLabel(cv.kind)}) 블록 (드래그하거나 클릭하여 추가)`}
+                      >
+                        {/* Top Notch & Bottom Tab */}
+                        <PuzzleNotch borderColor={theme.border} />
+                        <PuzzleTab borderColor={theme.border} bg={theme.bg} />
+                        <HorizontalPuzzleNotch borderColor={theme.border} bgColor="#0d1527" />
+
+                        <span style={{ padding: '1px 6px', borderRadius: '3px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>
+                          {cv.name}
+                        </span>
+                        <span>=</span>
+                        {cv.kind === 'variable' && (
+                          <span style={{ width: '26px', height: '20px', borderRadius: '3px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                        )}
+                        {cv.kind === 'list' && (
+                          <span>[ <span style={{ width: '20px', height: '18px', borderRadius: '3px', background: '#ffffff', display: 'inline-block' }} /> ]</span>
+                        )}
+                        {cv.kind === 'tuple' && (
+                          <span>( <span style={{ width: '24px', height: '20px', borderRadius: '4px', background: '#ffffff', display: 'inline-block' }} /> )</span>
+                        )}
+                        {cv.kind === 'set' && (
+                          <span>&#123; <span style={{ width: '24px', height: '20px', borderRadius: '4px', background: '#ffffff', display: 'inline-block' }} /> &#125;</span>
+                        )}
+                        {cv.kind === 'dict' && (
+                          <span>&#123; <span style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#ffffff', display: 'inline-block' }} />:<span style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#ffffff', display: 'inline-block' }} /> &#125;</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ==================================================================
+            COLUMN 3 (RIGHT 1fr): Board Top Header + Canvas + Free Move Blocks + Icon-Only Trash Can
+            ================================================================== */}
+        <section
+          style={{
+            position: 'relative',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: isDraggingBlock ? 'visible' : 'hidden',
+            zIndex: isDraggingBlock ? 45 : 1,
+            background: '#090e1a',
+            cursor: 'default',
+            backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.14) 1.3px, transparent 1.3px)',
+            backgroundSize: '24px 24px',
+            backgroundPosition: '0 0',
+          }}
+        >
+          {/* ================================================================
+              BOARD TOP HEADER: Step Badge, Large Goal Prompt, Hearts, Hint Toggle
+              ================================================================ */}
+          <div style={{
+            padding: '12px 20px',
+            background: '#0d1527',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            flexShrink: 0,
+            zIndex: 30,
+          }}>
+            {/* Row 1: Gauge Bar (left to right) + 5 Large Hearts (far right) */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '16px',
+              width: '100%',
+            }}>
+              {/* Continuous Progress Gauge Bar extending to just before hearts */}
+              <div
+                title={`진행도: ${progressPercent}%`}
+                style={{
+                  flex: 1,
+                  height: '8px',
+                  borderRadius: '999px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  overflow: 'hidden',
+                  boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.5)',
+                }}
+              >
+                <div
+                  style={{
+                    width: `${progressPercent}%`,
+                    height: '100%',
+                    borderRadius: '999px',
+                    background: 'linear-gradient(90deg, #0284c7 0%, #38bdf8 100%)',
+                    boxShadow: '0 0 10px rgba(56, 189, 248, 0.8)',
+                    transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
+                />
+              </div>
+
+              {/* Far Right: 5 Large Duolingo Hearts (Border & text removed) */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                flexShrink: 0,
+              }}>
+                {[1, 2, 3, 4, 5].map((hIndex) => {
+                  const isFull = hIndex <= hearts;
+                  return (
+                    <Heart
+                      key={hIndex}
+                      size={20}
+                      fill={isFull ? '#ef4444' : 'transparent'}
+                      color={isFull ? '#ef4444' : 'rgba(255, 255, 255, 0.25)'}
+                      style={{
+                        filter: isFull ? 'drop-shadow(0 0 6px rgba(239, 68, 68, 0.75))' : 'none',
+                        transition: 'all 0.2s ease',
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Row 2: Problem or Instructions + Help Button + Next Step Button */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              minHeight: '36px',
+            }}>
+              <span style={{
+                fontSize: '1.2rem',
+                fontWeight: 800,
+                color: '#ffffff',
+                letterSpacing: '-0.015em',
+                lineHeight: 1.3,
+                flex: '1 1 auto',
+              }}>
+                {currentQuestion.prompt_ko}
+              </span>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                {/* Hint Toggle Button Container with Relative Anchor for Floating Popover */}
+                <div style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => setShowHint(true)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '0 14px',
+                      height: '34px',
+                      borderRadius: '8px',
+                      background: showHint ? 'rgba(245, 158, 11, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                      border: showHint ? '1px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.15)',
+                      color: showHint ? '#fbbf24' : '#e2e8f0',
+                      fontSize: '0.82rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <Lightbulb size={15} color={showHint ? '#fbbf24' : '#94a3b8'} />
+                    <span>도움말</span>
+                  </button>
+
+                  {/* Floating Hint Popover: Absolute positioning so it NEVER pushes canvas or blocks */}
+                  {showHint && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 8px)',
+                        right: 0,
+                        width: '380px',
+                        maxWidth: 'calc(100vw - 48px)',
+                        padding: '14px 16px',
+                        background: 'rgba(15, 23, 42, 0.97)',
+                        backdropFilter: 'blur(16px)',
+                        border: '1px solid rgba(245, 158, 11, 0.45)',
+                        borderRadius: '12px',
+                        boxShadow: '0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.15)',
+                        zIndex: 100,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
+                          paddingBottom: '8px',
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            color: '#fbbf24',
+                            fontWeight: 800,
+                            fontSize: '0.86rem',
+                          }}
+                        >
+                          <Lightbulb size={16} color="#fbbf24" />
+                          <span>도움말 힌트</span>
+                        </div>
+                        <button
+                          onClick={() => setShowHint(false)}
+                          title="닫기"
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: '#94a3b8',
+                            cursor: 'pointer',
+                            padding: '3px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '4px',
+                            transition: 'color 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+                        >
+                          <X size={15} />
+                        </button>
+                      </div>
+
+                      <div
+                        style={{
+                          color: '#fef3c7',
+                          fontSize: '0.84rem',
+                          lineHeight: 1.55,
+                          whiteSpace: 'pre-wrap',
+                          wordBreak: 'break-word',
+                        }}
+                      >
+                        {currentQuestion?.hint_ko || '제공된 힌트가 없습니다.'}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Toast Notification */}
+          {toastMessage && (
+            <div style={{
+              position: 'absolute',
+              top: '64px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 90,
+              padding: '8px 18px',
+              borderRadius: '12px',
+              background: 'rgba(15, 23, 42, 0.96)',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)',
+              color: '#f8fafc',
+              fontSize: '0.84rem',
+              fontWeight: 800,
+              pointerEvents: 'none',
+            }}>
+              <span>{toastMessage}</span>
+            </div>
+          )}
+
+          {/* Main Canvas Workspace Area */}
+          <div
+            ref={workspaceRef}
+            onClick={() => setActiveInputHelp(null)}
+            onDragOver={handleCanvasDragOver}
+            onDrop={handleCanvasDrop}
+            style={{
+              flex: '1 1 auto',
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              overflow: isDraggingBlock ? 'visible' : 'hidden',
+            }}
+          >
+            {/* Visual Insertion Marker (Soft single-line snap indicator without protruding bump) */}
+            {activeSnapTarget && (activeSnapTarget.type === 'below' || activeSnapTarget.type === 'above' || activeSnapTarget.type === 'mouth') && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: `${activeSnapTarget.markerX}px`,
+                  top: `${activeSnapTarget.markerY - 1.5}px`,
+                  width: `${Math.max(120, activeSnapTarget.markerWidth || 120)}px`,
+                  height: '3px',
+                  borderRadius: '2px',
+                  background: 'rgba(251, 191, 36, 0.95)',
+                  boxShadow: '0 0 8px rgba(245, 158, 11, 0.55)',
+                  zIndex: 100,
+                  pointerEvents: 'none',
+                }}
+              />
+            )}
+
+            {activeSnapTarget && activeSnapTarget.type === 'method_right' && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: `${activeSnapTarget.markerX}px`,
+                  top: `${activeSnapTarget.markerY}px`,
+                  width: '3px',
+                  height: `${activeSnapTarget.markerHeight || 30}px`,
+                  borderRadius: '2px',
+                  background: 'rgba(168, 85, 247, 0.85)',
+                  boxShadow: '0 0 8px rgba(139, 92, 246, 0.45)',
+                  zIndex: 100,
+                  pointerEvents: 'none',
+                }}
+              />
+            )}
+
+            {mode === 'block' ? (
+              /* ============================================================
+                 BLOCK MODE: Free Draggable Blocks with Auto-Expanding Input
+                 ============================================================ */
+              <>
+                {(() => {
+                  const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {
+                    const str = val ?? '';
+                    if (str.length === 0) {
+                      return Math.max(20, Math.round(minChars * 7.5 + 13));
+                    }
+                    let units = 0;
+                    for (let i = 0; i < str.length; i++) {
+                      const code = str.charCodeAt(i);
+                      if ((code >= 0x1100 && code <= 0x11ff) || (code >= 0x3130 && code <= 0x318f) || (code >= 0xac00 && code <= 0xd7af)) {
+                        units += 2;
+                      } else {
+                        units += 1;
+                      }
+                    }
+                    const effectiveLen = Math.max(minChars, units);
+                    return Math.round(effectiveLen * 7.5 + 13);
+                  };
+
+                  const renderInnerChildBlock = (
+                    child: CanvasBlock,
+                    cIdx: number,
+                    onRemove: () => void,
+                    onContentChange: (val: string) => void,
+                    parentBlockId?: string,
+                    branchId?: string
+                  ): React.ReactNode => {
+                    const childTheme = BLOCK_THEMES[child.type] || BLOCK_THEMES.print;
+                    const isCBlock = child.type === 'for_range' || child.type === 'for_in' || child.type === 'while' || child.type === 'def';
+                    const isIfBlock = child.type === 'if';
+
+                    // 1. NESTED C-SHAPE (ㄷ자) BLOCK RENDERING (2중 for문 등 루프 중첩 완벽 지원)
+                    if (isCBlock) {
+                      return (
+                        <div
+                          key={child.id || cIdx}
+                          id={`block-${child.id}`}
+                          className="nested-c-shape-block"
+                          onPointerDown={(e) => {
+                            if (parentBlockId) {
+                              handleInnerBlockPointerDown(e, child, parentBlockId, cIdx, branchId);
+                            }
+                          }}
+                          onContextMenu={(e) => handleBlockContextMenu(e, child.id)}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignSelf: 'flex-start',
+                            width: 'fit-content',
+                            minWidth: '120px',
+                            userSelect: 'none',
+                            cursor: 'grab',
+                            fontFamily: 'var(--font-mono)',
+                            marginTop: cIdx === 0 ? '0px' : '-1px',
+                            position: 'relative',
+                            filter: 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
+                            zIndex: 6,
+                          }}
+                        >
+                          {/* Top Header Arm: 상단 두께 30px 및 결합부 유지 */}
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              whiteSpace: 'nowrap',
+                              gap: '4px',
+                              minHeight: '30px',
+                              height: '30px',
+                              padding: '0 10px',
+                              borderRadius: '0 6px 6px 0',
+                              background: childTheme.bg,
+                              border: 'none',
+                              borderTop: `1px solid ${childTheme.border}`,
+                              borderRight: `1px solid ${childTheme.border}`,
+                              borderBottom: 'none',
+                              color: '#ffffff',
+                              fontWeight: 800,
+                              fontSize: '0.80rem',
+                              position: 'relative',
+                              cursor: 'grab',
+                              boxSizing: 'border-box',
+                            }}
+                          >
+                            <PuzzleNotch left="12px" borderColor={childTheme.border} isConnected={cIdx > 0} />
+                            <div
+                              style={{
+                                position: 'absolute',
+                                left: '18px',
+                                right: '5px',
+                                bottom: 0,
+                                height: '1px',
+                                background: childTheme.border,
+                                pointerEvents: 'none',
+                              }}
+                            />
+                            {child.type === 'for_range' ? (
+                              <>
+                                <span style={{ color: '#ffffff' }}>for</span>
+                                <input
+                                  type="text"
+                                  value={child.varName ?? 'j'}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleLoopInnerVarNameChange(child.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(child.varName ?? 'j')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span style={{ color: '#ffffff' }}>in range(</span>
+                                <div style={{ position: 'relative', display: 'inline-flex' }}>
+                                  <input
+                                    type="text"
+                                    value={child.content ?? ''}
+                                    placeholder=""
+                                    onMouseDown={(e) => e.stopPropagation()}
+                                    onPointerDown={(e) => e.stopPropagation()}
+                                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onFocus={handleInputFocusSelect}
+                                    onClick={handleInputClickSelect}
+                                    onChange={(e) => onContentChange(e.target.value)}
+                                    style={{
+                                      width: `${getBlockInputWidth(child.content ?? '')}px`,
+                                      height: '20px',
+                                      padding: '1px 5px',
+                                      borderRadius: '6px',
+                                      background: '#ffffff',
+                                      color: '#0f172a',
+                                      border: '1px solid rgba(0, 0, 0, 0.3)',
+                                      fontWeight: 800,
+                                      fontFamily: 'var(--font-mono)',
+                                      fontSize: '0.78rem',
+                                      textAlign: 'left',
+                                      outline: 'none',
+                                      cursor: 'text',
+                                      boxSizing: 'border-box',
+                                    }}
+                                  />
+                                </div>
+                                <span style={{ color: '#ffffff' }}>):</span>
+                              </>
+                            ) : child.type === 'for_in' ? (
+                              <>
+                                <span style={{ color: '#ffffff' }}>for</span>
+                                <input
+                                  type="text"
+                                  value={child.varName ?? 'item'}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleLoopInnerVarNameChange(child.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(child.varName ?? 'item')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span style={{ color: '#ffffff' }}>in</span>
+                                <input
+                                  type="text"
+                                  value={child.content ?? ''}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => onContentChange(e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(child.content ?? '')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>:</span>
+                              </>
+                            ) : child.type === 'while' ? (
+                              <>
+                                <span style={{ color: '#ffffff' }}>while</span>
+                                <input
+                                  type="text"
+                                  value={child.content ?? ''}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => onContentChange(e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(child.content ?? '')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>:</span>
+                              </>
+                            ) : (
+                              <>
+                                <span style={{ color: '#ffffff' }}>def</span>
+                                <input
+                                  type="text"
+                                  value={child.varName ?? 'sub_func'}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleLoopInnerVarNameChange(child.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(child.varName ?? 'sub_func')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>(</span>
+                                <input
+                                  type="text"
+                                  value={child.content || ''}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => onContentChange(e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(child.content || '')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>):</span>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Middle Body: Left Vertical Spine + Indented Cavity Slot */}
+                          <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
+                            <div
+                              style={{
+                                width: '18px',
+                                background: childTheme.bg,
+                                borderRight: `1px solid ${childTheme.border}`,
+                                flexShrink: 0,
+                              }}
+                            />
+
+                            <div
+                              id={`mouth-${child.id}`}
+                              onDragOver={handleCanvasDragOver}
+                              onDrop={handleCanvasDrop}
+                              style={{
+                                flex: 1,
+                                minWidth: '70px',
+                                background: 'transparent',
+                                borderTop: 'none',
+                                position: 'relative',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                padding: 0,
+                                margin: 0,
+                                gap: 0,
+                                boxShadow: 'none',
+                                zIndex: 6,
+                              }}
+                            >
+                              <PuzzleTab isCeiling left="12px" borderColor={childTheme.border} bg={childTheme.bg} />
+
+                              {(child.innerBlocks || []).length === 0 ? (
+                                <div
+                                  style={{
+                                    minHeight: '18px',
+                                    borderRadius: '0 6px 6px 0',
+                                  }}
+                                />
+                              ) : (
+                                (child.innerBlocks || []).map((nestedChild, nIdx) =>
+                                  renderInnerChildBlock(
+                                    nestedChild,
+                                    nIdx,
+                                    () => handleRemoveInnerBlockFromLoop(child.id, nIdx),
+                                    (val) => handleLoopInnerInputChange(child.id, nIdx, val),
+                                    child.id
+                                  )
+                                )
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
+                          <SvgBottomClosingArm
+                            theme={childTheme}
+                            isDef={child.type === 'def'}
+                            hasReturn={child.hasReturn}
+                            returnVal={child.returnVal}
+                            onToggleDefReturn={(show) => handleToggleDefReturn(child.id, show)}
+                            onDefReturnValChange={(val) => handleDefReturnValChange(child.id, val)}
+                            hasInnerBlocks={(child.innerBlocks || []).length > 0}
+                            tabLeft={12}
+                          />
+                        </div>
+                      );
+                    }
+
+                    // 2. NESTED CONDITIONAL E/C-SHAPE (if, elif, else) BLOCK RENDERING
+                    if (isIfBlock) {
+                      const branches = (child.branches && child.branches.length > 0)
+                        ? child.branches
+                        : [
+                          {
+                            id: `br-if-${child.id}`,
+                            kind: 'if' as const,
+                            condition: child.content || 'False',
+                            innerBlocks: child.innerBlocks || [],
+                          },
+                        ];
+                      const hasElseBranch = branches.some((br) => br.kind === 'else');
+                      const ifTheme = BLOCK_THEMES.if;
+
+                      return (
+                        <div
+                          key={child.id || cIdx}
+                          id={`block-${child.id}`}
+                          className="nested-c-shape-block nested-if-block"
+                          onPointerDown={(e) => {
+                            if (parentBlockId) {
+                              handleInnerBlockPointerDown(e, child, parentBlockId, cIdx, branchId);
+                            }
+                          }}
+                          onContextMenu={(e) => handleBlockContextMenu(e, child.id)}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignSelf: 'flex-start',
+                            width: 'fit-content',
+                            minWidth: '100px',
+                            userSelect: 'none',
+                            cursor: 'grab',
+                            fontFamily: 'var(--font-mono)',
+                            marginTop: cIdx === 0 ? '0px' : '-1px',
+                            position: 'relative',
+                            filter: 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
+                            zIndex: 6,
+                          }}
+                        >
+                          {branches.map((branch, brIdx) => {
+                            const isFirst = brIdx === 0;
+                            const branchTheme = ifTheme;
+                            const condVal = branch.condition !== undefined ? branch.condition : 'False';
+                            const dynamicCondWidth = getBlockInputWidth(condVal);
+
+                            return (
+                              <div key={branch.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                                {isFirst ? (
+                                  /* 1) Top Header Arm: 상단 두께 30px 및 결합부 유지 */
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      whiteSpace: 'nowrap',
+                                      gap: '4px',
+                                      minHeight: '30px',
+                                      height: '30px',
+                                      padding: '0 10px',
+                                      borderRadius: '0 6px 6px 0',
+                                      background: branchTheme.bg,
+                                      border: 'none',
+                                      borderTop: `1px solid ${branchTheme.border}`,
+                                      borderRight: `1px solid ${branchTheme.border}`,
+                                      borderBottom: 'none',
+                                      color: '#ffffff',
+                                      fontWeight: 800,
+                                      fontSize: '0.80rem',
+                                      position: 'relative',
+                                      cursor: 'grab',
+                                      boxSizing: 'border-box',
+                                    }}
+                                  >
+                                    <PuzzleNotch left="12px" borderColor={branchTheme.border} isConnected={cIdx > 0} />
+                                    <div
+                                      style={{
+                                        position: 'absolute',
+                                        left: '18px',
+                                        right: '5px',
+                                        bottom: 0,
+                                        height: '1px',
+                                        background: branchTheme.border,
+                                        pointerEvents: 'none',
+                                      }}
+                                    />
+                                    <span style={{ color: '#ffffff' }}>if</span>
+                                    <input
+                                      type="text"
+                                      value={condVal}
+                                      placeholder=""
+                                      onMouseDown={(e) => e.stopPropagation()}
+                                      onPointerDown={(e) => e.stopPropagation()}
+                                      onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                      onFocus={handleInputFocusSelect}
+                                      onClick={handleInputClickSelect}
+                                      onChange={(e) => handleBranchConditionChange(child.id, branch.id, e.target.value)}
+                                      style={{
+                                        width: `${dynamicCondWidth}px`,
+                                        height: '20px',
+                                        padding: '1px 5px',
+                                        borderRadius: '6px',
+                                        background: '#ffffff',
+                                        color: '#0f172a',
+                                        border: '1px solid rgba(0, 0, 0, 0.3)',
+                                        fontWeight: 800,
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: '0.78rem',
+                                        textAlign: 'left',
+                                        outline: 'none',
+                                        cursor: 'text',
+                                        boxSizing: 'border-box',
+                                      }}
+                                    />
+                                    <span>:</span>
+                                  </div>
+                                ) : (
+                                  /* 2) Intermediate Branch Arm (elif / else) */
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      whiteSpace: 'nowrap',
+                                      gap: '4px',
+                                      padding: '5px 10px',
+                                      borderRadius: '0 6px 6px 0',
+                                      background: branchTheme.bg,
+                                      borderTop: `1px solid ${branchTheme.border}`,
+                                      borderRight: `1px solid ${branchTheme.border}`,
+                                      borderBottom: 'none',
+                                      color: '#ffffff',
+                                      fontWeight: 800,
+                                      fontSize: '0.80rem',
+                                      position: 'relative',
+                                      cursor: 'grab',
+                                      minHeight: '28px',
+                                      boxSizing: 'border-box',
+                                    }}
+                                  >
+                                    <PuzzleNotch
+                                      left="30px"
+                                      borderColor={branchTheme.border}
+                                      isConnected={(branches[brIdx - 1]?.innerBlocks || []).length > 0}
+                                    />
+                                    <div
+                                      style={{
+                                        position: 'absolute',
+                                        left: '18px',
+                                        right: '5px',
+                                        bottom: 0,
+                                        height: '1px',
+                                        background: branchTheme.border,
+                                        pointerEvents: 'none',
+                                      }}
+                                    />
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                      <span style={{ color: '#ffffff' }}>{branch.kind}</span>
+                                      {branch.kind !== 'else' ? (
+                                        <>
+                                          <input
+                                            type="text"
+                                            value={condVal}
+                                            placeholder=""
+                                            onMouseDown={(e) => e.stopPropagation()}
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                            onFocus={handleInputFocusSelect}
+                                            onClick={handleInputClickSelect}
+                                            onChange={(e) => handleBranchConditionChange(child.id, branch.id, e.target.value)}
+                                            style={{
+                                              width: `${dynamicCondWidth}px`,
+                                              height: '20px',
+                                              padding: '1px 5px',
+                                              borderRadius: '6px',
+                                              background: '#ffffff',
+                                              color: '#0f172a',
+                                              border: '1px solid rgba(0, 0, 0, 0.3)',
+                                              fontWeight: 800,
+                                              fontFamily: 'var(--font-mono)',
+                                              fontSize: '0.78rem',
+                                              textAlign: 'left',
+                                              outline: 'none',
+                                              cursor: 'text',
+                                              boxSizing: 'border-box',
+                                            }}
+                                          />
+                                          <span>:</span>
+                                        </>
+                                      ) : (
+                                        <span>:</span>
+                                      )}
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto' }}>
+                                      {branch.kind !== 'if' && (
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleRemoveBranch(child.id, branch.id);
+                                          }}
+                                          title={`${branch.kind} 가지 삭제`}
+                                          style={{
+                                            background: 'rgba(0, 0, 0, 0.35)',
+                                            border: 'none',
+                                            color: '#ffffff',
+                                            borderRadius: '50%',
+                                            width: '14px',
+                                            height: '14px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '10px',
+                                            cursor: 'pointer',
+                                            padding: 0,
+                                          }}
+                                        >
+                                          ×
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Body: Left Vertical Spine + Indented Cavity Slot for this branch */}
+                                <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
+                                  <div
+                                    style={{
+                                      width: '18px',
+                                      background: branchTheme.bg,
+                                      borderRight: `1px solid ${branchTheme.border}`,
+                                      flexShrink: 0,
+                                    }}
+                                  />
+
+                                  <div
+                                    id={`mouth-${child.id}-${branch.id}`}
+                                    onDragOver={handleCanvasDragOver}
+                                    onDragLeave={(e) => {
+                                      if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                                        if (activeSnapTargetRef.current?.type === 'mouth' && activeSnapTargetRef.current?.targetBlockId === child.id && activeSnapTargetRef.current?.branchId === branch.id) {
+                                          activeSnapTargetRef.current = null;
+                                          setActiveSnapTarget(null);
+                                        }
+                                      }
+                                    }}
+                                    onDrop={handleCanvasDrop}
+                                    style={{
+                                      flex: 1,
+                                      minWidth: '70px',
+                                      background: 'transparent',
+                                      borderTop: 'none',
+                                      position: 'relative',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      padding: 0,
+                                      margin: 0,
+                                      gap: 0,
+                                      boxShadow: 'none',
+                                      zIndex: 6,
+                                    }}
+                                  >
+                                    <PuzzleTab isCeiling left="12px" borderColor={branchTheme.border} bg={branchTheme.bg} />
+
+                                    {(branch.innerBlocks || []).length === 0 ? (
+                                      <div
+                                        style={{
+                                          minHeight: '18px',
+                                          borderRadius: '0 6px 6px 0',
+                                        }}
+                                      />
+                                    ) : (
+                                      (branch.innerBlocks || []).map((nestedChild, nIdx) =>
+                                        renderInnerChildBlock(
+                                          nestedChild,
+                                          nIdx,
+                                          () => handleRemoveInnerBlockFromBranch(child.id, branch.id, nIdx),
+                                          (val) => handleBranchInnerInputChange(child.id, branch.id, nIdx, val),
+                                          child.id,
+                                          branch.id
+                                        )
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
+                          <SvgBottomClosingArm
+                            theme={ifTheme}
+                            hasInnerBlocks={(branches[branches.length - 1]?.innerBlocks || []).length > 0}
+                            tabLeft={12}
+                          />
+                        </div>
+                      );
+                    }
+
+                    // 3. STANDARD INLINE BLOCKS INSIDE MOUTH (print, variable, input, etc.)
+                    return (
+                      <div
+                        key={child.id || cIdx}
+                        id={`block-${child.id}`}
+                        onPointerDown={(e) => {
+                          if (parentBlockId) {
+                            handleInnerBlockPointerDown(e, child, parentBlockId, cIdx, branchId);
+                          }
+                        }}
+                        onContextMenu={(e) => handleBlockContextMenu(e, child.id)}
+                        onDragOver={handleCanvasDragOver}
+                        onDrop={handleCanvasDrop}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          minHeight: '30px',
+                          height: '30px',
+                          padding: '0 8px',
+                          boxSizing: 'border-box',
+                          borderRadius: '0 6px 6px 0',
+                          background: childTheme.bg,
+                          border: `1px solid ${childTheme.border}`,
+                          borderLeft: 'none',
+                          boxShadow: `0 1.5px 0 ${childTheme.shadow}`,
+                          color: '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '0.78rem',
+                          position: 'relative',
+                          width: 'fit-content',
+                          userSelect: 'none',
+                          cursor: 'grab',
+                          marginTop: cIdx === 0 ? '0px' : '-1px',
+                          zIndex: activeInputHelp?.blockId === child.id ? 80 : 4,
+                        }}
+                      >
+                        {/* Scratch Interlocking Puzzle Bottom Tab (Slots into floor notch or next child) */}
+                        <PuzzleTab left="12px" borderColor={childTheme.border} bg={childTheme.bg} />
+
+                        {child.type === 'print' ? (
+                          <>
+                            <span>print (</span>
+                            <div style={{ position: 'relative', display: 'inline-flex' }}>
+                              <input
+                                type="text"
+                                value={child.content || ''}
+                                placeholder=""
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                onFocus={handleInputFocusSelect}
+                                onClick={handleInputClickSelect}
+                                onChange={(e) => onContentChange(e.target.value)}
+                                style={{
+                                  width: `${getBlockInputWidth(child.content)}px`,
+                                  height: '18px',
+                                  padding: '1px 5px',
+                                  borderRadius: '6px',
+                                  background: '#ffffff',
+                                  color: '#0f172a',
+                                  border: '1px solid rgba(0,0,0,0.2)',
+                                  fontWeight: 800,
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.76rem',
+                                  textAlign: 'left',
+                                  outline: 'none',
+                                  cursor: 'text',
+                                  boxSizing: 'border-box',
+                                }}
+                              />
+                            </div>
+                            <span>)</span>
+                          </>
+                        ) : child.type === 'break' ? (
+                          <span style={{ color: '#ffffff', fontWeight: 900 }}>break</span>
+                        ) : child.type === 'continue' ? (
+                          <span style={{ color: '#ffffff', fontWeight: 900 }}>continue</span>
+                        ) : child.type === 'variable' ? (
+                          <>
+                            <span>{child.varName || 'x'} =</span>
+                            <input
+                              type="text"
+                              value={child.content || ''}
+                              placeholder=""
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                              onFocus={handleInputFocusSelect}
+                              onClick={handleInputClickSelect}
+                              onChange={(e) => onContentChange(e.target.value)}
+                              style={{
+                                width: `${getBlockInputWidth(child.content)}px`,
+                                height: '18px',
+                                padding: '1px 5px',
+                                borderRadius: '6px',
+                                background: '#ffffff',
+                                color: '#0f172a',
+                                border: '1px solid rgba(0,0,0,0.2)',
+                                fontWeight: 800,
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.76rem',
+                                textAlign: 'left',
+                                outline: 'none',
+                                cursor: 'text',
+                                boxSizing: 'border-box',
+                              }}
+                            />
+                          </>
+                        ) : child.type === 'input' ? (
+                          <>
+                            <span>input (</span>
+                            <div style={{ position: 'relative', display: 'inline-flex' }}>
+                              <input
+                                type="text"
+                                value={child.content || ''}
+                                placeholder=""
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                onFocus={handleInputFocusSelect}
+                                onClick={handleInputClickSelect}
+                                onChange={(e) => onContentChange(e.target.value)}
+                                style={{
+                                  width: `${getBlockInputWidth(child.content)}px`,
+                                  height: '18px',
+                                  padding: '1px 5px',
+                                  borderRadius: '6px',
+                                  background: '#ffffff',
+                                  color: '#0f172a',
+                                  border: '1px solid rgba(0,0,0,0.2)',
+                                  fontWeight: 800,
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.76rem',
+                                  textAlign: 'left',
+                                  outline: 'none',
+                                  cursor: 'text',
+                                  boxSizing: 'border-box',
+                                }}
+                              />
+                            </div>
+                            <span>)</span>
+                          </>
+                        ) : child.type === 'len' ? (
+                          <>
+                            <span>len (</span>
+                            <div style={{ position: 'relative', display: 'inline-flex' }}>
+                              <input
+                                type="text"
+                                value={child.content || ''}
+                                placeholder=""
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                onFocus={handleInputFocusSelect}
+                                onClick={handleInputClickSelect}
+                                onChange={(e) => onContentChange(e.target.value)}
+                                style={{
+                                  width: `${getBlockInputWidth(child.content)}px`,
+                                  height: '18px',
+                                  padding: '1px 5px',
+                                  borderRadius: '6px',
+                                  background: '#ffffff',
+                                  color: '#0f172a',
+                                  border: '1px solid rgba(0,0,0,0.2)',
+                                  fontWeight: 800,
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.76rem',
+                                  textAlign: 'left',
+                                  outline: 'none',
+                                  cursor: 'text',
+                                  boxSizing: 'border-box',
+                                }}
+                              />
+                            </div>
+                            <span>)</span>
+                          </>
+                        ) : child.type === 'return' ? (
+                          <>
+                            <span>return</span>
+                            <input
+                              type="text"
+                              value={child.content || ''}
+                              placeholder=""
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                              onFocus={handleInputFocusSelect}
+                              onClick={handleInputClickSelect}
+                              onChange={(e) => onContentChange(e.target.value)}
+                              style={{
+                                width: `${getBlockInputWidth(child.content)}px`,
+                                height: '18px',
+                                padding: '1px 5px',
+                                borderRadius: '6px',
+                                background: '#ffffff',
+                                color: '#0f172a',
+                                border: '1px solid rgba(0,0,0,0.2)',
+                                fontWeight: 800,
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.76rem',
+                                textAlign: 'left',
+                                outline: 'none',
+                                cursor: 'text',
+                                boxSizing: 'border-box',
+                              }}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <span>{child.type}</span>
+                            <input
+                              type="text"
+                              value={child.content || ''}
+                              placeholder=""
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                              onFocus={handleInputFocusSelect}
+                              onClick={handleInputClickSelect}
+                              onChange={(e) => onContentChange(e.target.value)}
+                              style={{
+                                width: `${getBlockInputWidth(child.content)}px`,
+                                height: '18px',
+                                padding: '1px 5px',
+                                borderRadius: '6px',
+                                background: '#ffffff',
+                                color: '#0f172a',
+                                border: '1px solid rgba(0,0,0,0.2)',
+                                fontWeight: 800,
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.76rem',
+                                textAlign: 'left',
+                                outline: 'none',
+                                cursor: 'text',
+                                boxSizing: 'border-box',
+                              }}
+                            />
+                          </>
+                        )}
+                      </div>
+                    );
+                  };
+
+                  return canvasBlocks.map((block) => {
+                    const theme = BLOCK_THEMES[block.type] || BLOCK_THEMES.print;
+                    // ==========================================================
+                    // 0. START HAT BLOCK (시작 블록: 실시간 실행 엔트리포인트)
+                    // ==========================================================
+                    if (block.type === 'start') {
+                      return (
+                        <div
+                          key={block.id}
+                          id={`block-${block.id}`}
+                          className="canvas-block start-hat-block"
+                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
+                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                          style={{
+                            position: 'absolute',
+                            left: `${block.x}px`,
+                            top: `${block.y}px`,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '7px 14px 7px 12px',
+                            borderRadius: block.nextBlockId ? '16px 16px 0 0' : '16px 16px 6px 6px',
+                            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                            boxShadow: block.nextBlockId
+                              ? '0 4px 12px rgba(16, 185, 129, 0.25)'
+                              : '0 2px 0 #065f46, 0 4px 12px rgba(16, 185, 129, 0.35)',
+                            border: '1px solid #10b981',
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            fontSize: '0.82rem',
+                            fontFamily: 'var(--font-sans)',
+                            cursor: 'grab',
+                            zIndex: block.id === draggingBlockId ? 100 : 35,
+                            userSelect: 'none',
+                            touchAction: 'none',
+                            transition: 'transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease',
+                          }}
+                        >
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '50%',
+                            background: '#ffffff',
+                            color: '#047857',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                          }}>
+                            <Play size={11} fill="#047857" style={{ marginLeft: '1px' }} />
+                          </div>
+                          <span style={{ fontWeight: 800, letterSpacing: '-0.3px', color: '#ffffff', fontSize: '0.85rem' }}>실행</span>
+                          <span style={{
+                            fontSize: '0.68rem',
+                            padding: '1px 6px',
+                            borderRadius: '4px',
+                            background: 'rgba(255, 255, 255, 0.2)',
+                            color: '#ffffff',
+                            fontWeight: 700,
+                            letterSpacing: '-0.3px',
+                          }}>
+                            실시간
+                          </span>
+
+                          {/* Bottom Puzzle Tab: 블록 색상과 일치 및 선명한 돌출 유지 */}
+                          <PuzzleTab left="16px" borderColor="#10b981" bg="#059669" />
+                        </div>
+                      );
+                    }
+
+                    // ==========================================================
+                    // 1. E-SHAPE CONDITIONAL BLOCK (if / elif / else 다단 확장)
+                    // ==========================================================
+                    if (block.type === 'if') {
+                      const branches = (block.branches && block.branches.length > 0)
+                        ? block.branches
+                        : [{ id: `br-if-${block.id}`, kind: 'if' as const, condition: block.content !== undefined ? block.content : 'False', innerBlocks: block.innerBlocks || [] }];
+
+                      const hasElseBranch = branches.some((br) => br.kind === 'else');
+
+                      return (
+                        <div
+                          key={block.id}
+                          id={`block-${block.id}`}
+                          className="canvas-block e-shape-block"
+                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
+                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                          style={{
+                            position: 'absolute',
+                            left: `${block.x}px`,
+                            top: `${block.y}px`,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: 'fit-content',
+                            minWidth: '100px',
+                            zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : Math.max(5, 30 - Math.min(25, Math.floor(block.y / 20)))),
+                            opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
+                            transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
+                            transition: 'transform 0.15s ease, opacity 0.15s ease',
+                            userSelect: 'none',
+                            touchAction: 'none',
+                            fontFamily: 'var(--font-mono)',
+                            filter: draggedChainIds.has(block.id)
+                              ? (isToolboxHovered || isTrashHovered
+                                ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.85))'
+                                : 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55))')
+                              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                            cursor: 'grab',
+                          }}
+                        >
+                          {branches.map((branch, bIdx) => {
+                            const isFirst = bIdx === 0;
+                            // 모든 분기(if, elif, else)를 통일된 BLOCK_THEMES.if로 완전 일원화
+                            const branchTheme = BLOCK_THEMES.if;
+
+                            const condVal = branch.condition !== undefined ? branch.condition : 'False';
+                            const dynamicCondWidth = getBlockInputWidth(condVal);
+
+                            return (
+                              <div key={branch.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                                {isFirst ? (
+                                  /* 1) Top Header Arm (if): 상단 두께 30px 및 결합부 유지 */
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      whiteSpace: 'nowrap',
+                                      gap: '4px',
+                                      minHeight: '30px',
+                                      height: '30px',
+                                      padding: '0 10px',
+                                      borderRadius: '6px 6px 6px 0',
+                                      background: branchTheme.bg,
+                                      border: 'none',
+                                      borderTop: `1px solid ${branchTheme.border}`,
+                                      borderLeft: `1px solid ${branchTheme.border}`,
+                                      borderRight: `1px solid ${branchTheme.border}`,
+                                      borderBottom: 'none',
+                                      boxShadow: 'none',
+                                      color: '#ffffff',
+                                      fontWeight: 800,
+                                      fontSize: '0.80rem',
+                                      position: 'relative',
+                                      cursor: 'grab',
+                                      boxSizing: 'border-box',
+                                    }}
+                                  >
+                                    <PuzzleNotch left="16px" borderColor={branchTheme.border} isConnected={!!block.prevBlockId} />
+                                    <div
+                                      style={{
+                                        position: 'absolute',
+                                        left: '18px',
+                                        right: '5px',
+                                        bottom: 0,
+                                        height: '1px',
+                                        background: branchTheme.border,
+                                        pointerEvents: 'none',
+                                      }}
+                                    />
+
+                                    {/* Arm Content */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                      <span style={{ color: '#ffffff' }}>if</span>
+                                      <input
+                                        type="text"
+                                        value={condVal}
+                                        placeholder=""
+                                        onMouseDown={(e) => e.stopPropagation()}
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                        onFocus={handleInputFocusSelect}
+                                        onClick={handleInputClickSelect}
+                                        onChange={(e) => handleBranchConditionChange(block.id, branch.id, e.target.value)}
+                                        style={{
+                                          width: `${dynamicCondWidth}px`,
+                                          height: '20px',
+                                          padding: '1px 5px',
+                                          borderRadius: '6px',
+                                          background: '#ffffff',
+                                          color: '#0f172a',
+                                          border: '1px solid rgba(0, 0, 0, 0.3)',
+                                          fontWeight: 800,
+                                          fontFamily: 'var(--font-mono)',
+                                          fontSize: '0.78rem',
+                                          textAlign: 'left',
+                                          outline: 'none',
+                                          cursor: 'text',
+                                          boxSizing: 'border-box',
+                                        }}
+                                      />
+                                      <span>:</span>
+                                    </div>
+
+                                  </div>
+                                ) : (
+                                  /* 2) Intermediate Branch Arm (elif / else): 스크래치 정통 왼쪽 정렬 일체형 암 */
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      whiteSpace: 'nowrap',
+                                      gap: '4px',
+                                      padding: '5px 10px',
+                                      borderRadius: '0 6px 6px 0',
+                                      background: branchTheme.bg,
+                                      borderTop: `1px solid ${branchTheme.border}`,
+                                      borderRight: `1px solid ${branchTheme.border}`,
+                                      borderBottom: 'none',
+                                      borderLeft: `1px solid ${branchTheme.border}`,
+                                      boxShadow: 'none',
+                                      color: '#ffffff',
+                                      fontWeight: 800,
+                                      fontSize: '0.80rem',
+                                      position: 'relative',
+                                      cursor: 'grab',
+                                      minHeight: '28px',
+                                      boxSizing: 'border-box',
+                                    }}
+                                  >
+                                    {/* 바로 위 슬롯 바닥에 맞물리는 홈 */}
+                                    <PuzzleNotch left="28px" borderColor={branchTheme.border} />
+                                    <div
+                                      style={{
+                                        position: 'absolute',
+                                        left: '18px',
+                                        right: '5px',
+                                        bottom: 0,
+                                        height: '1px',
+                                        background: branchTheme.border,
+                                        pointerEvents: 'none',
+                                      }}
+                                    />
+
+                                    {/* Arm Content */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                      <span style={{ color: '#ffffff' }}>{branch.kind}</span>
+                                      {branch.kind !== 'else' ? (
+                                        <>
+                                          <input
+                                            type="text"
+                                            value={condVal}
+                                            placeholder=""
+                                            onMouseDown={(e) => e.stopPropagation()}
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                            onFocus={handleInputFocusSelect}
+                                            onClick={handleInputClickSelect}
+                                            onChange={(e) => handleBranchConditionChange(block.id, branch.id, e.target.value)}
+                                            style={{
+                                              width: `${dynamicCondWidth}px`,
+                                              height: '20px',
+                                              padding: '1px 5px',
+                                              borderRadius: '6px',
+                                              background: '#ffffff',
+                                              color: '#0f172a',
+                                              border: '1px solid rgba(0, 0, 0, 0.3)',
+                                              fontWeight: 800,
+                                              fontFamily: 'var(--font-mono)',
+                                              fontSize: '0.78rem',
+                                              textAlign: 'left',
+                                              outline: 'none',
+                                              cursor: 'text',
+                                              boxSizing: 'border-box',
+                                            }}
+                                          />
+                                          <span>:</span>
+                                        </>
+                                      ) : (
+                                        <span>:</span>
+                                      )}
+                                    </div>
+
+                                    {/* Action Buttons: elif 및 else 가지에 삭제(×) 버튼 노출 */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                      {branch.kind !== 'if' && (
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleRemoveBranch(block.id, branch.id);
+                                          }}
+                                          title={`${branch.kind} 가지 삭제`}
+                                          style={{
+                                            background: 'rgba(0, 0, 0, 0.35)',
+                                            border: 'none',
+                                            color: '#ffffff',
+                                            borderRadius: '50%',
+                                            width: '14px',
+                                            height: '14px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '10px',
+                                            cursor: 'pointer',
+                                            padding: 0,
+                                          }}
+                                        >
+                                          ×
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Body: Left Spine + Cavity Slot for this branch */}
+                                <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
+                                  <div
+                                    style={{
+                                      width: '18px',
+                                      background: branchTheme.bg,
+                                      borderLeft: `1px solid ${branchTheme.border}`,
+                                      borderRight: `1px solid ${branchTheme.border}`,
+                                      flexShrink: 0,
+                                    }}
+                                  />
+
+                                  <div
+                                    id={`mouth-${block.id}-${branch.id}`}
+                                    onDragOver={handleCanvasDragOver}
+                                    onDragLeave={(e) => {
+                                      if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                                        if (activeSnapTargetRef.current?.type === 'mouth' && activeSnapTargetRef.current?.targetBlockId === block.id && activeSnapTargetRef.current?.branchId === branch.id) {
+                                          activeSnapTargetRef.current = null;
+                                          setActiveSnapTarget(null);
+                                        }
+                                      }
+                                    }}
+                                    onDrop={handleCanvasDrop}
+                                    style={{
+                                      flex: 1,
+                                      minWidth: '70px',
+                                      background: 'transparent',
+                                      borderTop: 'none',
+                                      position: 'relative',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      padding: 0,
+                                      margin: 0,
+                                      gap: 0,
+                                      boxShadow: 'none',
+                                      zIndex: 6,
+                                    }}
+                                  >
+                                    {/* Inner puzzle tab on mouth ceiling */}
+                                    <PuzzleTab isCeiling left="12px" borderColor={branchTheme.border} bg={branchTheme.bg} />
+
+                                    {(branch.innerBlocks || []).length === 0 ? (
+                                      <div
+                                        style={{
+                                          minHeight: '18px',
+                                          borderRadius: '0 6px 6px 0',
+                                        }}
+                                      />
+                                    ) : (
+                                      (branch.innerBlocks || []).map((child, cIdx) =>
+                                        renderInnerChildBlock(
+                                          child,
+                                          cIdx,
+                                          () => handleRemoveInnerBlockFromBranch(block.id, branch.id, cIdx),
+                                          (val) => handleBranchInnerInputChange(block.id, branch.id, cIdx, val),
+                                          block.id,
+                                          branch.id
+                                        )
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
+                          <SvgBottomClosingArm
+                            theme={BLOCK_THEMES.if}
+                            hasInnerBlocks={(branches[branches.length - 1]?.innerBlocks || []).length > 0}
+                            tabLeft={16}
+                          />
+                        </div>
+                      );
+                    }
+
+                    // ==========================================================
+                    // 2. C-SHAPE LOOP & DEF BLOCKS (for, while, def ㄷ자 블록)
+                    // ==========================================================
+                    const isCBlock = block.type === 'for_range' || block.type === 'for_in' || block.type === 'while' || block.type === 'def';
+                    if (isCBlock) {
+                      return (
+                        <div
+                          key={block.id}
+                          id={`block-${block.id}`}
+                          className="canvas-block c-shape-block"
+                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
+                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                          style={{
+                            position: 'absolute',
+                            left: `${block.x}px`,
+                            top: `${block.y}px`,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: 'fit-content',
+                            minWidth: '120px',
+                            zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : Math.max(5, 30 - Math.min(25, Math.floor(block.y / 20)))),
+                            opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
+                            transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
+                            transition: 'transform 0.15s ease, opacity 0.15s ease',
+                            userSelect: 'none',
+                            touchAction: 'none',
+                            fontFamily: 'var(--font-mono)',
+                            filter: draggedChainIds.has(block.id)
+                              ? (isToolboxHovered || isTrashHovered
+                                ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.85))'
+                                : 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55))')
+                              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                            cursor: 'grab',
+                          }}
+                        >
+                          {/* Top Header Arm: 상단 두께 30px 및 결합 시에도 암수 결합 형태 균일 유지 */}
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              whiteSpace: 'nowrap',
+                              gap: '4px',
+                              minHeight: '30px',
+                              height: '30px',
+                              width: '100%',
+                              padding: '0 10px',
+                              borderRadius: '6px 6px 6px 0',
+                              background: theme.bg,
+                              border: 'none',
+                              borderTop: `1px solid ${theme.border}`,
+                              borderLeft: `1px solid ${theme.border}`,
+                              borderRight: `1px solid ${theme.border}`,
+                              borderBottom: 'none',
+                              boxShadow: 'none',
+                              color: '#ffffff',
+                              fontWeight: 800,
+                              fontSize: '0.80rem',
+                              position: 'relative',
+                              cursor: 'grab',
+                              boxSizing: 'border-box',
+                            }}
+                          >
+                            <PuzzleNotch left="16px" borderColor={theme.border} isConnected={!!block.prevBlockId} />
+                            {/* 입구 천장선: 왼쪽 기둥(18px)은 열리고, 우측 끝(right: 5px)은 상단 암 테두리 내부에서 칼같이 마감되어 절대 삐져나오지 않음 */}
+                            <div
+                              style={{
+                                position: 'absolute',
+                                left: '18px',
+                                right: '5px',
+                                bottom: 0,
+                                height: '1px',
+                                background: theme.border,
+                                pointerEvents: 'none',
+                              }}
+                            />
+
+                            {block.type === 'for_range' ? (
+                              <>
+                                <span style={{ color: '#ffffff' }}>for</span>
+                                <input
+                                  type="text"
+                                  value={block.varName ?? 'i'}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleBlockVarNameChange(block.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(block.varName ?? 'i')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span style={{ color: '#ffffff' }}>in range(</span>
+                                <div style={{ position: 'relative', display: 'inline-flex' }}>
+                                  <input
+                                    type="text"
+                                    value={block.content ?? ''}
+                                    placeholder=""
+                                    onMouseDown={(e) => e.stopPropagation()}
+                                    onPointerDown={(e) => e.stopPropagation()}
+                                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onFocus={(e) => {
+                                      handleInputFocusSelect(e);
+                                      setActiveInputHelp({ blockId: block.id, funcType: 'for_range' });
+                                    }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleInputClickSelect(e);
+                                      setActiveInputHelp({ blockId: block.id, funcType: 'for_range' });
+                                    }}
+                                    onBlur={() => {
+                                      setTimeout(() => {
+                                        setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
+                                      }, 180);
+                                    }}
+                                    onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                    style={{
+                                      width: `${getBlockInputWidth(block.content ?? '')}px`,
+                                      height: '20px',
+                                      padding: '1px 5px',
+                                      borderRadius: '6px',
+                                      background: '#ffffff',
+                                      color: '#0f172a',
+                                      border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
+                                      fontWeight: 800,
+                                      fontFamily: 'var(--font-mono)',
+                                      fontSize: '0.78rem',
+                                      textAlign: 'left',
+                                      outline: 'none',
+                                      cursor: 'text',
+                                      boxSizing: 'border-box',
+                                    }}
+                                  />
+                                  {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'for_range' && (
+                                    <FunctionParamSpeechBubble
+                                      funcType="for_range"
+                                      onApplyOption={(opt) => {
+                                        handleBlockInputChange(block.id, opt);
+                                      }}
+                                    />
+                                  )}
+                                </div>
+                                <span>):</span>
+                              </>
+                            ) : block.type === 'for_in' ? (
+                              <>
+                                <span style={{ color: '#ffffff' }}>for</span>
+                                <input
+                                  type="text"
+                                  value={block.varName ?? 'item'}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleBlockVarNameChange(block.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(block.varName ?? 'item')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span style={{ color: '#ffffff' }}>in</span>
+                                <input
+                                  type="text"
+                                  value={block.content || ''}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(block.content || '')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>:</span>
+                              </>
+                            ) : block.type === 'while' ? (
+                              <>
+                                <span style={{ color: '#ffffff' }}>while</span>
+                                <input
+                                  type="text"
+                                  value={block.content ?? ''}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(block.content ?? '')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>:</span>
+                              </>
+                            ) : (
+                              <>
+                                <span style={{ color: '#ffffff' }}>def</span>
+                                <input
+                                  type="text"
+                                  value={block.varName ?? 'my_func'}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleBlockVarNameChange(block.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(block.varName ?? 'my_func')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>(</span>
+                                <input
+                                  type="text"
+                                  value={block.content || ''}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(block.content || '')}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span>):</span>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Middle Body: Left Vertical Spine + Indented Cavity Slot */}
+                          <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
+                            <div
+                              style={{
+                                width: '18px',
+                                background: theme.bg,
+                                borderLeft: `1px solid ${theme.border}`,
+                                borderRight: `1px solid ${theme.border}`,
+                                flexShrink: 0,
+                              }}
+                            />
+
+                            <div
+                              id={`mouth-${block.id}`}
+                              onDragOver={handleCanvasDragOver}
+                              onDragLeave={(e) => {
+                                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                                  if (activeSnapTargetRef.current?.type === 'mouth' && activeSnapTargetRef.current?.targetBlockId === block.id) {
+                                    activeSnapTargetRef.current = null;
+                                    setActiveSnapTarget(null);
+                                  }
+                                }
+                              }}
+                              onDrop={handleCanvasDrop}
+                              style={{
+                                flex: 1,
+                                minWidth: '70px',
+                                background: 'transparent',
+                                borderTop: 'none',
+                                position: 'relative',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                padding: 0,
+                                margin: 0,
+                                gap: 0,
+                                boxShadow: 'none',
+                                zIndex: 6,
+                              }}
+                            >
+                              {/* Inner puzzle tab on mouth ceiling: 12px 정렬 */}
+                              <PuzzleTab isCeiling left="12px" borderColor={theme.border} bg={theme.bg} />
+
+                              {(block.innerBlocks || []).length === 0 ? (
+                                <div
+                                  style={{
+                                    minHeight: '20px',
+                                    borderRadius: '0 6px 6px 0',
+                                  }}
+                                />
+                              ) : (
+                                (block.innerBlocks || []).map((child, cIdx) =>
+                                  renderInnerChildBlock(
+                                    child,
+                                    cIdx,
+                                    () => handleRemoveInnerBlockFromLoop(block.id, cIdx),
+                                    (val) => handleLoopInnerInputChange(block.id, cIdx, val),
+                                    block.id
+                                  )
+                                )
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
+                          <SvgBottomClosingArm
+                            theme={theme}
+                            isDef={block.type === 'def'}
+                            hasReturn={block.hasReturn}
+                            returnVal={block.returnVal}
+                            onToggleDefReturn={(show) => handleToggleDefReturn(block.id, show)}
+                            onDefReturnValChange={(val) => handleDefReturnValChange(block.id, val)}
+                            hasInnerBlocks={(block.innerBlocks || []).length > 0}
+                            tabLeft={16}
+                          />
+                        </div>
+                      );
+                    }
+
+                    // ==========================================================
+                    // 3. METHOD BLOCK (메서드 블록: 위아래 홈/돌출부 없고 좌측 돌출부(凸) + 메서드 드롭다운 + 우측 홈(凹))
+                    // ==========================================================
+                    if (block.type === 'method') {
+                      const currMethod = block.methodName || 'split';
+                      let currPlaceholder = 'sep';
+                      for (const cat of METHOD_CATEGORIES) {
+                        const found = cat.methods.find((m) => m.name === currMethod);
+                        if (found) {
+                          currPlaceholder = found.placeholder;
+                          break;
+                        }
+                      }
+
+                      return (
+                        <div
+                          key={block.id}
+                          id={`block-${block.id}`}
+                          className="canvas-block method-block"
+                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
+                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                          style={{
+                            position: 'absolute',
+                            left: `${block.x}px`,
+                            top: `${block.y}px`,
+                            display: 'inline-flex',
+                            width: 'fit-content',
+                            alignItems: 'center',
+                            gap: '4px',
+                            borderRadius: '6px',
+                            minHeight: '30px',
+                            height: '30px',
+                            padding: '0 8px 0 10px',
+                            boxSizing: 'border-box',
+                            background: theme.bg,
+                            boxShadow: `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
+                            border: `1px solid ${theme.border}`,
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            fontSize: '0.80rem',
+                            fontFamily: 'var(--font-mono)',
+                            cursor: 'grab',
+                            zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : 32),
+                            opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
+                            transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
+                            userSelect: 'none',
+                            touchAction: 'none',
+                            transition: 'transform 0.15s ease, opacity 0.15s ease',
+                          }}
+                        >
+                          {/* Left Puzzle Tab (凸) */}
+                          <HorizontalPuzzleTab borderColor={theme.border} bg={theme.bg} />
+
+                          {/* Right Puzzle Notch (凹) for chaining another method */}
+                          <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
+
+                          <span style={{ fontSize: '0.95rem', fontWeight: 900, marginRight: '-1px' }}>.</span>
+
+                          {/* Method Dropdown */}
+                          <select
+                            value={block.methodName || 'split'}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onChange={(e) => handleMethodNameChange(block.id, e.target.value)}
+                            title={`${currMethod} 메서드 (${currPlaceholder ? `인자: ${currPlaceholder}` : '인자 없음'})`}
+                            style={{
+                              width: `${getMethodSelectWidth(block.methodName || 'split')}px`,
+                              height: '20px',
+                              padding: '0 20px 0 7px',
+                              borderRadius: '5px',
+                              background: '#ffffff',
+                              color: '#0f172a',
+                              border: '1px solid rgba(0, 0, 0, 0.25)',
+                              fontWeight: 800,
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.78rem',
+                              outline: 'none',
+                              cursor: 'pointer',
+                              boxSizing: 'border-box',
+                              transition: 'width 0.15s ease',
+                            }}
+                          >
+                            {METHOD_CATEGORIES.map((cat) => (
+                              <optgroup key={cat.category} label={cat.category}>
+                                {cat.methods.map((m) => (
+                                  <option key={m.name} value={m.name} title={m.label}>
+                                    {m.name}
+                                  </option>
+                                ))}
+                              </optgroup>
+                            ))}
+                          </select>
+
+                          <span>(</span>
+                          <input
+                            type="text"
+                            value={block.content || ''}
+                            placeholder={currPlaceholder}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            onFocus={handleInputFocusSelect}
+                            onClick={handleInputClickSelect}
+                            onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                            style={{
+                              width: `${getBlockInputWidth(block.content)}px`,
+                              height: '20px',
+                              padding: '1px 5px',
+                              borderRadius: '5px',
+                              background: '#ffffff',
+                              color: '#0f172a',
+                              border: '1px solid rgba(0, 0, 0, 0.25)',
+                              fontWeight: 800,
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.78rem',
+                              textAlign: 'left',
+                              outline: 'none',
+                              cursor: 'text',
+                              boxSizing: 'border-box',
+                            }}
+                          />
+                          <span>)</span>
+                        </div>
+                      );
+                    }
+
+                    // ==========================================================
+                    // 4. STANDARD SINGLE STATEMENT BLOCKS (print, input, break, continue, 변수 등)
+                    // ==========================================================
+                    return (
+                      <div
+                        key={block.id}
+                        id={`block-${block.id}`}
+                        className="canvas-block"
+                        onPointerDown={(e) => handleBlockPointerDown(e, block)}
+                        onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
+                        onDragOver={handleCanvasDragOver}
+                        onDrop={handleCanvasDrop}
+                        style={{
+                          position: 'absolute',
+                          left: `${block.x}px`,
+                          top: `${block.y}px`,
+                          display: 'inline-flex',
+                          width: 'fit-content',
+                          alignItems: 'center',
+                          gap: '4px',
+                          borderRadius: '6px',
+                          minHeight: '30px',
+                          height: '30px',
+                          padding: '0 10px',
+                          boxSizing: 'border-box',
+                          background: theme.bg,
+                          boxShadow: `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
+                          border: `1px solid ${theme.border}`,
+                          color: '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '0.80rem',
+                          fontFamily: 'var(--font-mono)',
+                          cursor: 'grab',
+                          zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : Math.max(5, 30 - Math.min(25, Math.floor(block.y / 20)))),
+                          opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
+                          transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
+                          filter: draggedChainIds.has(block.id)
+                            ? (isToolboxHovered || isTrashHovered
+                              ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.85))'
+                              : 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55))')
+                            : 'none',
+                          userSelect: 'none',
+                          touchAction: 'none',
+                          transition: 'transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease',
+                        }}
+                      >
+                        {/* Top Puzzle Notch: 결합 시에도 암수 결합 형태 균일 유지 */}
+                        <PuzzleNotch left="16px" borderColor={theme.border} isConnected={!!block.prevBlockId} />
+
+                        {/* Bottom Puzzle Tab: 항상 유지 */}
+                        <PuzzleTab left="16px" borderColor={theme.border} bg={theme.bg} />
+
+                        {/* Right Puzzle Notch for horizontal method snapping (메서드 결합 가능한 블록에만 우측 홈 표시) */}
+                        {(block.type === 'input' || block.type === 'variable' || block.type === 'print' || block.type === 'len' || block.type === 'list' || block.type === 'dict' || block.type === 'set' || block.type === 'tuple') && (
+                          <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
+                        )}
+
+                        {/* Block Contents */}
+                        {block.type === 'print' ? (
+                          <>
+                            <span>print (</span>
+                            <div style={{ position: 'relative', display: 'inline-flex' }}>
+                              <input
+                                type="text"
+                                value={block.content || ''}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                onFocus={(e) => {
+                                  handleInputFocusSelect(e);
+                                  setActiveInputHelp({ blockId: block.id, funcType: 'print' });
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleInputClickSelect(e);
+                                  setActiveInputHelp({ blockId: block.id, funcType: 'print' });
+                                }}
+                                onBlur={() => {
+                                  setTimeout(() => {
+                                    setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
+                                  }, 180);
+                                }}
+                                onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                placeholder=""
+                                style={{
+                                  width: `${getBlockInputWidth(block.content)}px`,
+                                  height: '20px',
+                                  padding: '1px 5px',
+                                  borderRadius: '6px',
+                                  background: '#ffffff',
+                                  color: '#0f172a',
+                                  border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
+                                  fontWeight: 800,
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.78rem',
+                                  textAlign: 'left',
+                                  outline: 'none',
+                                  cursor: 'text',
+                                  boxSizing: 'border-box',
+                                }}
+                              />
+                              {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'print' && (
+                                <FunctionParamSpeechBubble
+                                  funcType="print"
+                                  onApplyOption={(opt) => {
+                                    const cur = (block.content || '').trim();
+                                    const next = cur ? `${cur}, ${opt}` : opt;
+                                    handleBlockInputChange(block.id, next);
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <span>)</span>
+                          </>
+                        ) : block.type === 'input' ? (
+                          <>
+                            <span>input (</span>
+                            <div style={{ position: 'relative', display: 'inline-flex' }}>
+                              <input
+                                type="text"
+                                value={block.content || ''}
+                                placeholder=""
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                onFocus={(e) => {
+                                  handleInputFocusSelect(e);
+                                  setActiveInputHelp({ blockId: block.id, funcType: 'input' });
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleInputClickSelect(e);
+                                  setActiveInputHelp({ blockId: block.id, funcType: 'input' });
+                                }}
+                                onBlur={() => {
+                                  setTimeout(() => {
+                                    setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
+                                  }, 180);
+                                }}
+                                onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                style={{
+                                  width: `${getBlockInputWidth(block.content)}px`,
+                                  height: '20px',
+                                  padding: '1px 5px',
+                                  borderRadius: '6px',
+                                  background: '#ffffff',
+                                  color: '#0f172a',
+                                  border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
+                                  fontWeight: 800,
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.78rem',
+                                  textAlign: 'left',
+                                  outline: 'none',
+                                  cursor: 'text',
+                                  boxSizing: 'border-box',
+                                }}
+                              />
+                              {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'input' && (
+                                <FunctionParamSpeechBubble
+                                  funcType="input"
+                                  onApplyOption={(opt) => {
+                                    handleBlockInputChange(block.id, opt);
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <span>)</span>
+                          </>
+                        ) : block.type === 'len' ? (
+                          <>
+                            <span>len (</span>
+                            <div style={{ position: 'relative', display: 'inline-flex' }}>
+                              <input
+                                type="text"
+                                value={block.content || ''}
+                                placeholder=""
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                onFocus={(e) => {
+                                  handleInputFocusSelect(e);
+                                  setActiveInputHelp({ blockId: block.id, funcType: 'len' });
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleInputClickSelect(e);
+                                  setActiveInputHelp({ blockId: block.id, funcType: 'len' });
+                                }}
+                                onBlur={() => {
+                                  setTimeout(() => {
+                                    setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
+                                  }, 180);
+                                }}
+                                onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                                style={{
+                                  width: `${getBlockInputWidth(block.content)}px`,
+                                  height: '20px',
+                                  padding: '1px 5px',
+                                  borderRadius: '6px',
+                                  background: '#ffffff',
+                                  color: '#0f172a',
+                                  border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
+                                  fontWeight: 800,
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.78rem',
+                                  textAlign: 'left',
+                                  outline: 'none',
+                                  cursor: 'text',
+                                  boxSizing: 'border-box',
+                                }}
+                              />
+                              {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'len' && (
+                                <FunctionParamSpeechBubble
+                                  funcType="len"
+                                  onApplyOption={(opt) => {
+                                    handleBlockInputChange(block.id, opt);
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <span>)</span>
+                          </>
+                        ) : block.type === 'return' ? (
+                          <>
+                            <span style={{ color: '#ffffff', fontWeight: 800 }}>return</span>
+                            <input
+                              type="text"
+                              value={block.content || ''}
+                              placeholder=""
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                              onFocus={handleInputFocusSelect}
+                              onClick={handleInputClickSelect}
+                              onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                              style={{
+                                width: `${getBlockInputWidth(block.content)}px`,
+                                height: '20px',
+                                padding: '1px 5px',
+                                borderRadius: '6px',
+                                background: '#ffffff',
+                                color: '#0f172a',
+                                border: '1px solid rgba(0, 0, 0, 0.3)',
+                                fontWeight: 800,
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.78rem',
+                                textAlign: 'left',
+                                outline: 'none',
+                                cursor: 'text',
+                                boxSizing: 'border-box',
+                              }}
+                            />
+                          </>
+                        ) : block.type === 'break' ? (
+                          <span style={{ color: '#ffffff', fontWeight: 800 }}>break</span>
+                        ) : block.type === 'continue' ? (
+                          <span style={{ color: '#ffffff', fontWeight: 800 }}>continue</span>
+                        ) : block.type === 'variable' ? (
+                          <>
+                            <span style={{ fontWeight: 800 }}>{block.varName || 'x'}</span>
+                            <span style={{ fontWeight: 800 }}>=</span>
+                            <input
+                              type="text"
+                              value={block.content || ''}
+                              placeholder=""
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                              onFocus={handleInputFocusSelect}
+                              onClick={handleInputClickSelect}
+                              onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
+                              style={{
+                                width: `${getBlockInputWidth(block.content)}px`,
+                                height: '20px',
+                                padding: '1px 5px',
+                                borderRadius: '6px',
+                                background: '#ffffff',
+                                color: '#0f172a',
+                                border: '1px solid rgba(0, 0, 0, 0.3)',
+                                fontWeight: 800,
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.78rem',
+                                textAlign: 'left',
+                                outline: 'none',
+                                cursor: 'text',
+                                boxSizing: 'border-box',
+                              }}
+                            />
+                          </>
+                        ) : block.type === 'list' ? (
+                          <>
+                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_list'}</span>
+                            <span style={{ fontWeight: 800 }}>= [</span>
+                            {(block.items || []).map((it, idx) => (
+                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
+                                <input
+                                  type="text"
+                                  value={it}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleItemChange(block.id, idx, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(it)}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                {(block.items || []).length > 1 && (
+                                  <button
+                                    onClick={() => handleRemoveItem(block.id, idx)}
+                                    title="항목 제거"
+                                    style={{
+                                      background: 'rgba(0, 0, 0, 0.25)',
+                                      border: 'none',
+                                      color: '#ffffff',
+                                      borderRadius: '50%',
+                                      width: '13px',
+                                      height: '13px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '10px',
+                                      cursor: 'pointer',
+                                      padding: 0,
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => handleAddItemToBlock(block.id)}
+                              title="값 추가"
+                              style={{
+                                marginLeft: '3px',
+                                background: 'rgba(255, 255, 255, 0.25)',
+                                border: '1px dashed rgba(255, 255, 255, 0.6)',
+                                color: '#ffffff',
+                                borderRadius: '4px',
+                                padding: '1px 5px',
+                                height: '18px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                fontWeight: 800,
+                                fontSize: '0.74rem',
+                              }}
+                            >
+                              +
+                            </button>
+                            <span>]</span>
+                          </>
+                        ) : block.type === 'tuple' ? (
+                          <>
+                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_tuple'}</span>
+                            <span style={{ fontWeight: 800 }}>= (</span>
+                            {(block.items || []).map((it, idx) => (
+                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
+                                <input
+                                  type="text"
+                                  value={it}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleItemChange(block.id, idx, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(it)}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                {(block.items || []).length > 1 && (
+                                  <button
+                                    onClick={() => handleRemoveItem(block.id, idx)}
+                                    title="항목 제거"
+                                    style={{
+                                      background: 'rgba(0, 0, 0, 0.25)',
+                                      border: 'none',
+                                      color: '#ffffff',
+                                      borderRadius: '50%',
+                                      width: '13px',
+                                      height: '13px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '10px',
+                                      cursor: 'pointer',
+                                      padding: 0,
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => handleAddItemToBlock(block.id)}
+                              title="값 추가"
+                              style={{
+                                marginLeft: '3px',
+                                background: 'rgba(255, 255, 255, 0.25)',
+                                border: '1px dashed rgba(255, 255, 255, 0.6)',
+                                color: '#ffffff',
+                                borderRadius: '4px',
+                                padding: '1px 5px',
+                                height: '18px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                fontWeight: 800,
+                                fontSize: '0.74rem',
+                              }}
+                            >
+                              +
+                            </button>
+                            <span>)</span>
+                          </>
+                        ) : block.type === 'set' ? (
+                          <>
+                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_set'}</span>
+                            <span style={{ fontWeight: 800 }}>= &#123;</span>
+                            {(block.items || []).map((it, idx) => (
+                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
+                                <input
+                                  type="text"
+                                  value={it}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleItemChange(block.id, idx, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(it)}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                {(block.items || []).length > 1 && (
+                                  <button
+                                    onClick={() => handleRemoveItem(block.id, idx)}
+                                    title="항목 제거"
+                                    style={{
+                                      background: 'rgba(0, 0, 0, 0.25)',
+                                      border: 'none',
+                                      color: '#ffffff',
+                                      borderRadius: '50%',
+                                      width: '13px',
+                                      height: '13px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '10px',
+                                      cursor: 'pointer',
+                                      padding: 0,
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => handleAddItemToBlock(block.id)}
+                              title="값 추가"
+                              style={{
+                                marginLeft: '3px',
+                                background: 'rgba(255, 255, 255, 0.25)',
+                                border: '1px dashed rgba(255, 255, 255, 0.6)',
+                                color: '#ffffff',
+                                borderRadius: '4px',
+                                padding: '1px 5px',
+                                height: '18px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                fontWeight: 800,
+                                fontSize: '0.74rem',
+                              }}
+                            >
+                              +
+                            </button>
+                            <span>&#125;</span>
+                          </>
+                        ) : (
+                          /* Dictionary Block */
+                          <>
+                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_dict'}</span>
+                            <span style={{ fontWeight: 800 }}>= &#123;</span>
+                            {(block.dictPairs || []).map((pair, idx) => (
+                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
+                                <input
+                                  type="text"
+                                  value={pair.key}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleDictKeyChange(block.id, idx, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(pair.key)}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                <span style={{ fontWeight: 800 }}>:</span>
+                                <input
+                                  type="text"
+                                  value={pair.value}
+                                  placeholder=""
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onPointerDown={(e) => e.stopPropagation()}
+                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                  onFocus={handleInputFocusSelect}
+                                  onClick={handleInputClickSelect}
+                                  onChange={(e) => handleDictValueChange(block.id, idx, e.target.value)}
+                                  style={{
+                                    width: `${getBlockInputWidth(pair.value)}px`,
+                                    height: '20px',
+                                    padding: '1px 5px',
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.78rem',
+                                    textAlign: 'left',
+                                    outline: 'none',
+                                    cursor: 'text',
+                                    boxSizing: 'border-box',
+                                  }}
+                                />
+                                {(block.dictPairs || []).length > 1 && (
+                                  <button
+                                    onClick={() => handleRemoveDictPair(block.id, idx)}
+                                    title="쌍 제거"
+                                    style={{
+                                      background: 'rgba(0, 0, 0, 0.25)',
+                                      border: 'none',
+                                      color: '#ffffff',
+                                      borderRadius: '50%',
+                                      width: '13px',
+                                      height: '13px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '10px',
+                                      cursor: 'pointer',
+                                      padding: 0,
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => handleAddDictPair(block.id)}
+                              title="키:값 추가"
+                              style={{
+                                marginLeft: '3px',
+                                background: 'rgba(255, 255, 255, 0.25)',
+                                border: '1px dashed rgba(255, 255, 255, 0.6)',
+                                color: '#ffffff',
+                                borderRadius: '4px',
+                                padding: '1px 5px',
+                                height: '18px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                fontWeight: 800,
+                                fontSize: '0.74rem',
+                              }}
+                            >
+                              +
+                            </button>
+                            <span>&#125;</span>
+                          </>
+                        )}
+                      </div>
+                    );
+                  });
+                })()}
+
+                {/* ==========================================================
+                    RESET CANVAS BUTTON (휴지통 상단 충분한 간격 116px, 수직 축 정렬, 세련된 원형 버튼)
+                    ========================================================== */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (canvasBlocks.length > 0) {
+                      setCanvasBlocks([createDefaultStartBlock()]);
+                      setTerminalOutput('');
+                      setIsSuccess(false);
+                      showToast('🔄 캔버스가 초기화되었습니다.');
+                    }
+                  }}
+                  style={{
+                    position: 'absolute',
+                    bottom: '116px',
+                    right: '36px',
+                    width: '46px',
+                    height: '46px',
+                    borderRadius: '50%',
+                    zIndex: 35,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'rgba(15, 23, 42, 0.75)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.45)',
+                    color: '#94a3b8',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#38bdf8';
+                    e.currentTarget.style.background = 'rgba(56, 189, 248, 0.18)';
+                    e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.45)';
+                    e.currentTarget.style.transform = 'scale(1.12) rotate(-45deg)';
+                    e.currentTarget.style.boxShadow = '0 0 16px rgba(56, 189, 248, 0.5)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#94a3b8';
+                    e.currentTarget.style.background = 'rgba(15, 23, 42, 0.75)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                    e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.45)';
+                  }}
+                  title="캔버스 초기화"
+                >
+                  <RotateCcw size={22} />
+                </button>
+
+                {/* ==========================================================
+                    BOTTOM-RIGHT FLOATING TRASH CAN ICON ONLY (블록 드래그 삭제 전용)
+                    ========================================================== */}
+                <div
+                  className="trash-dropzone"
+                  onDragOver={handleTrashDragOver}
+                  onDragLeave={handleTrashDragLeave}
+                  onDrop={handleTrashDrop}
+                  style={{
+                    position: 'absolute',
+                    bottom: '28px',
+                    right: '28px',
+                    zIndex: 35,
+                    cursor: 'default',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '8px',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: isTrashHovered ? 'scale(1.3)' : isDraggingBlock ? 'scale(1.15)' : 'scale(1)',
+                    filter: isTrashHovered
+                      ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.95))'
+                      : isDraggingBlock
+                        ? 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))'
+                        : 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6))',
+                  }}
+                  title="블록을 드래그하여 휴지통에 버리세요"
+                >
+                  <Trash2
+                    size={46}
+                    color={isTrashHovered ? '#ef4444' : isDraggingBlock ? '#f87171' : '#64748b'}
+                    style={{
+                      transition: 'all 0.2s ease',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                </div>
+              </>
+            ) : (
+              /* ============================================================
+                 TYPING MODE
+                 ============================================================ */
+              <div style={{ height: '100%', padding: '24px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{
+                  fontSize: '0.76rem',
+                  color: '#64748b',
+                  fontWeight: 700,
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}>
+                  <Code size={15} color="#38bdf8" />
+                  <span>키보드로 직접 코드를 입력하세요</span>
+                </div>
+
+                <textarea
+                  value={userCode}
+                  onChange={(e) => setUserCode(e.target.value)}
+                  placeholder={`예: ${currentQuestion.targetCode}`}
+                  style={{
+                    flex: '1 1 auto',
+                    minHeight: '260px',
+                    width: '100%',
+                    background: 'rgba(15, 23, 42, 0.95)',
+                    border: '1.5px solid rgba(56, 189, 248, 0.3)',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    color: '#f8fafc',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '1.1rem',
+                    lineHeight: 1.6,
+                    resize: 'none',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      {/* ====================================================================
+          6. RIGHT-CLICK CONTEXT MENU (우클릭 컨텍스트 메뉴: 블록 및 캔버스)
+          ==================================================================== */}
+      {contextMenu.visible && (
+        <div
+          style={{
+            position: 'fixed',
+            top: contextMenu.y,
+            left: contextMenu.x,
+            zIndex: 9999,
+            background: 'rgba(15, 23, 42, 0.96)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.14)',
+            borderRadius: '12px',
+            padding: '6px',
+            minWidth: '180px',
+            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.75)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {contextMenu.targetType === 'block' && contextMenu.blockId && (
+            (() => {
+              const target = findBlockInTree(canvasBlocks, contextMenu.blockId);
+              if (target?.type === 'start') {
+                return (
+                  <div style={{ padding: '8px 12px', fontSize: '0.78rem', color: '#94a3b8' }}>
+                    <div style={{ fontWeight: 800, color: '#34d399', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Play size={12} fill="#34d399" />
+                      <span>시작 블록</span>
+                    </div>
+                    <span>이 블록 아래에 연결된 블록만 실시간으로 실행됩니다.</span>
+                  </div>
+                );
+              }
+
+              const isIfBlock = target?.type === 'if';
+              const isDefBlock = target?.type === 'def';
+              const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
+
+              return (
+                <>
+                  {/* If Block Special Actions: +elif, +else */}
+                  {isIfBlock && target && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleAddElifBranch(target.id);
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: '#fed7aa',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(249, 115, 22, 0.2)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <Plus size={14} color="#f97316" />
+                        <span>elif 조건문 가지 추가</span>
+                      </button>
+                      {!hasElseBranch && (
+                        <button
+                          onClick={() => {
+                            handleAddElseBranch(target.id);
+                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#fed7aa',
+                            fontSize: '0.82rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'background 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(249, 115, 22, 0.2)')}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                        >
+                          <Plus size={14} color="#f97316" />
+                          <span>else 조건문 가지 추가</span>
+                        </button>
+                      )}
+                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                    </>
+                  )}
+
+                  {/* Def Block Special Actions: Return Toggle */}
+                  {isDefBlock && target && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleToggleDefReturn(target.id, !target.hasReturn);
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: '#e9d5ff',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(168, 85, 247, 0.2)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {target.hasReturn ? (
+                          <>
+                            <Trash2 size={14} color="#c084fc" />
+                            <span>return 반환문 제거</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus size={14} color="#c084fc" />
+                            <span>return 반환문 추가</span>
+                          </>
+                        )}
+                      </button>
+                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                    </>
+                  )}
+
+                  {/* Duplicate Block */}
+                  <button
+                    onClick={() => {
+                      handleDuplicateBlock(contextMenu.blockId!);
+                      setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'transparent',
+                      color: '#e2e8f0',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <Copy size={14} color="#38bdf8" />
+                    <span>블록 복사 (Duplicate)</span>
+                  </button>
+
+                  {/* Clear Input */}
+                  <button
+                    onClick={() => {
+                      handleClearBlockContent(contextMenu.blockId!);
+                      setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'transparent',
+                      color: '#e2e8f0',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <Edit3 size={14} color="#94a3b8" />
+                    <span>내용 비우기 (Clear)</span>
+                  </button>
+
+                  <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+
+                  {/* Delete Block */}
+                  <button
+                    onClick={() => {
+                      handleDeleteBlock(contextMenu.blockId!);
+                      setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'transparent',
+                      color: '#f87171',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <Trash2 size={14} color="#ef4444" />
+                    <span>블록 삭제 (제거)</span>
+                  </button>
+                </>
+              );
+            })()
+          )}
+
+          {contextMenu.targetType === 'canvas' && (
+            <>
+              {/* Add Block at clicked coordinate */}
+              <button
+                onClick={() => handleAddBlockAtCoords(contextMenu.coords?.x || 60, contextMenu.coords?.y || 60)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: 'transparent',
+                  color: '#e2e8f0',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'background 0.15s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+                <Plus size={14} color="#38bdf8" />
+                <span>새 print() 블록 생성</span>
+              </button>
+
+              {/* Reset all blocks */}
+              <button
+                onClick={() => {
+                  setCanvasBlocks([createDefaultStartBlock()]);
+                  setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'canvas' });
+                  showToast('🧹 캔버스가 초기화되었습니다.');
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: 'transparent',
+                  color: '#f87171',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'background 0.15s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+                <RotateCcw size={14} color="#ef4444" />
+                <span>블록 모두 지우기</span>
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* ====================================================================
+          SUCCESS MODAL (정답 모달 팝업: 다음 문제 이동 & Enter 키 지원)
+          ==================================================================== */}
+      {isSuccess && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            background: 'rgba(2, 6, 23, 0.80)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+        >
+          <div
+            style={{
+              maxWidth: '460px',
+              width: '100%',
+              background: '#0d1527',
+              border: '1.5px solid rgba(16, 185, 129, 0.45)',
+              borderRadius: '24px',
+              padding: '36px 28px',
+              textAlign: 'center',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.22)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Glowing Success Badge */}
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '20px',
+                background: 'rgba(16, 185, 129, 0.15)',
+                border: '1.5px solid rgba(16, 185, 129, 0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '20px',
+                boxShadow: '0 0 24px rgba(16, 185, 129, 0.35)',
+              }}
+            >
+              <CheckCircle2 size={34} color="#10b981" />
+            </div>
+
+            <h3
+              style={{
+                fontSize: '1.45rem',
+                fontWeight: 900,
+                color: '#f8fafc',
+                letterSpacing: '-0.02em',
+                marginBottom: '8px',
+              }}
+            >
+              {currentStepIndex < totalQuestions - 1 ? '🎉 정답입니다!' : '🏆 모든 미션 완료!'}
+            </h3>
+
+            <p
+              style={{
+                fontSize: '0.90rem',
+                color: '#94a3b8',
+                lineHeight: 1.6,
+                marginBottom: terminalOutput ? '18px' : '26px',
+              }}
+            >
+              {currentStepIndex < totalQuestions - 1 ? (
+                <>
+                  <strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 성공적으로 해결했습니다.<br />
+                  다음 문제로 넘어가 실력을 더 키워보세요!
+                </>
+              ) : (
+                <>
+                  축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />
+                  다음 레벨이나 새로운 언어 학습에 도전해보세요!
+                </>
+              )}
+            </p>
+
+            {/* Clean Output Preview in Modal */}
+            {terminalOutput && (
+              <div
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  background: 'rgba(0, 0, 0, 0.4)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.82rem',
+                  color: '#34d399',
+                  textAlign: 'left',
+                  marginBottom: '24px',
+                  maxHeight: '120px',
+                  overflowY: 'auto',
+                }}
+              >
+                <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
+                  출력 결과:
+                </div>
+                <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+                  {terminalOutput}
+                </pre>
+              </div>
+            )}
+
+            {/* Next / Complete Actions */}
+            {currentStepIndex < totalQuestions - 1 ? (
+              <button
+                onClick={handleNextStep}
+                autoFocus
+                className="tactile-btn tactile-btn-green"
+                style={{
+                  width: '100%',
+                  padding: '13px 20px',
+                  fontSize: '0.96rem',
+                  fontWeight: 800,
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
+                  cursor: 'pointer',
+                }}
+              >
+                <span>다음 단계로 이동</span>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    background: 'rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    marginLeft: '4px',
+                  }}
+                >
+                  Enter ↵
+                </span>
+                <ChevronRight size={17} />
+              </button>
+            ) : (
+              <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                <button
+                  onClick={handleResetRound}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '10px',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    color: '#e2e8f0',
+                    fontSize: '0.88rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                  }}
+                >
+                  다시 풀기
+                </button>
+                <Link
+                  href={`/practice/${langKey}`}
+                  className="tactile-btn tactile-btn-green"
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '10px',
+                    fontSize: '0.88rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textDecoration: 'none',
+                  }}
+                >
+                  단계 목록으로
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================================
+          7. GAME OVER MODAL (Hearts depleted)
+          ==================================================================== */}
+      {isGameOver && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9999,
+          background: 'rgba(0, 0, 0, 0.85)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+        }}>
+          <div style={{
+            maxWidth: '440px',
+            width: '100%',
+            background: '#131e33',
+            border: '1.5px solid rgba(239, 68, 68, 0.5)',
+            borderRadius: '24px',
+            padding: '36px 30px',
+            textAlign: 'center',
+            boxShadow: '0 20px 50px rgba(239, 68, 68, 0.25)',
+          }}>
+            <div style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '20px',
+              background: 'rgba(239, 68, 68, 0.15)',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}>
+              <Heart size={32} color="#ef4444" fill="#ef4444" />
+            </div>
+
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginBottom: '8px' }}>
+              모든 하트를 소진했습니다!
+            </h3>
+            <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '24px' }}>
+              5번의 오답으로 하트가 모두 소모되었습니다.<br />
+              1단계부터 다시 도전하여 실력을 다져보세요!
+            </p>
+
+            <button
+              onClick={handleResetRound}
+              className="tactile-btn tactile-btn-primary"
+              style={{
+                width: '100%',
+                padding: '12px 20px',
+                fontSize: '0.95rem',
+                justifyContent: 'center',
+              }}
+            >
+              <RotateCcw size={16} />
+              <span>1단계부터 다시 도전하기</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================================
+          7. CREATE VARIABLE MODAL (2-STEP MODAL: 1. 자료형 선택 -> 2. 이름 입력)
+          ==================================================================== */}
+      {isVarModalOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(2, 6, 23, 0.78)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+          onClick={() => setIsVarModalOpen(false)}
+        >
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '520px',
+              background: '#0d1527',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
+              borderRadius: '16px',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div style={{
+              padding: '16px 20px',
+              background: '#0f172a',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Box size={18} color="#fb923c" />
+                <span style={{ fontSize: '0.96rem', fontWeight: 800, color: '#f8fafc' }}>
+                  {varModalStep === 1 ? '새 변수 / 자료형 생성' : '변수 이름 입력'}
+                </span>
+                <span style={{
+                  fontSize: '0.68rem',
+                  padding: '2px 8px',
+                  borderRadius: '999px',
+                  background: 'rgba(249, 115, 22, 0.2)',
+                  color: '#fb923c',
+                  fontWeight: 800,
+                }}>
+                  {varModalStep === 1 ? '1단계: 자료형 선택' : '2단계: 이름 입력'}
+                </span>
+              </div>
+              <button
+                onClick={() => setIsVarModalOpen(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#94a3b8',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '6px',
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '20px' }}>
+              {varModalStep === 1 ? (
+                /* Step 1: Select Data Structure */
+                <div>
+                  <p style={{ fontSize: '0.84rem', color: '#94a3b8', marginBottom: '14px' }}>
+                    생성하려는 파이썬 자료형 구조를 선택하세요:
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {[
+                      {
+                        kind: 'variable' as const,
+                        name: '변수 (단일 값)',
+                        syntax: 'name = 값',
+                        desc: '정수, 실수, 문자열 등의 단일 값 저장',
+                        color: '#ea580c',
+                        bg: 'rgba(234, 88, 12, 0.1)',
+                        border: 'rgba(234, 88, 12, 0.3)',
+                      },
+                      {
+                        kind: 'list' as const,
+                        name: '리스트 (List)',
+                        syntax: 'name = [값, ...]',
+                        desc: '순서가 있고 언제든 값을 추가할 수 있는 가변 목록',
+                        color: '#0d9488',
+                        bg: 'rgba(13, 148, 136, 0.1)',
+                        border: 'rgba(13, 148, 136, 0.3)',
+                      },
+                      {
+                        kind: 'tuple' as const,
+                        name: '튜플 (Tuple)',
+                        syntax: 'name = (값, ...)',
+                        desc: '순서가 있지만 한 번 정하면 바꿀 수 없는 불변 목록',
+                        color: '#6366f1',
+                        bg: 'rgba(99, 102, 241, 0.1)',
+                        border: 'rgba(99, 102, 241, 0.3)',
+                      },
+                      {
+                        kind: 'set' as const,
+                        name: '세트 (Set)',
+                        syntax: 'name = {값, ...}',
+                        desc: '중복 값을 허용하지 않는 고유 집합',
+                        color: '#9333ea',
+                        bg: 'rgba(147, 51, 234, 0.1)',
+                        border: 'rgba(147, 51, 234, 0.3)',
+                      },
+                      {
+                        kind: 'dict' as const,
+                        name: '딕셔너리 (Dictionary)',
+                        syntax: 'name = {키: 값, ...}',
+                        desc: '키(Key)와 값(Value) 쌍으로 매핑된 사전 구조',
+                        color: '#d97706',
+                        bg: 'rgba(217, 119, 6, 0.1)',
+                        border: 'rgba(217, 119, 6, 0.3)',
+                      },
+                    ].map((item) => (
+                      <div
+                        key={item.kind}
+                        onClick={() => {
+                          setSelectedVarKind(item.kind);
+                          setVarModalStep(2);
+                          setVarInputName(
+                            item.kind === 'list' ? 'my_list' :
+                              item.kind === 'tuple' ? 'my_tuple' :
+                                item.kind === 'set' ? 'my_set' :
+                                  item.kind === 'dict' ? 'my_dict' : 'x'
+                          );
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '12px 14px',
+                          borderRadius: '10px',
+                          background: item.bg,
+                          border: `1px solid ${item.border}`,
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-1px)';
+                          e.currentTarget.style.borderColor = item.color;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'none';
+                          e.currentTarget.style.borderColor = item.border;
+                        }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                          <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc' }}>
+                            {item.name}
+                          </span>
+                          <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                            {item.desc}
+                          </span>
+                        </div>
+                        <span style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.74rem',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          background: 'rgba(0, 0, 0, 0.4)',
+                          color: item.color,
+                          fontWeight: 700,
+                        }}>
+                          {item.syntax}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* Step 2: Input Name */
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                    <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>선택된 자료형:</span>
+                    <span style={{
+                      fontSize: '0.76rem',
+                      fontWeight: 800,
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                      background: BLOCK_THEMES[selectedVarKind].bg,
+                      color: '#ffffff',
+                    }}>
+                      {getKindLabel(selectedVarKind)}
+                    </span>
+                  </div>
+
+                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0', marginBottom: '8px' }}>
+                    변수 이름 (영문 및 언더스코어):
+                  </label>
+
+                  <input
+                    type="text"
+                    autoFocus
+                    value={varInputName}
+                    onChange={(e) => setVarInputName(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleCreateVariable();
+                      if (e.key === 'Escape') setVarModalStep(1);
+                    }}
+                    placeholder="예: fruits, scores, user_info"
+                    style={{
+                      width: '100%',
+                      padding: '12px 14px',
+                      borderRadius: '10px',
+                      background: '#090e1a',
+                      border: '1.5px solid #38bdf8',
+                      color: '#ffffff',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '1rem',
+                      fontWeight: 800,
+                      outline: 'none',
+                      marginBottom: '14px',
+                    }}
+                  />
+
+                  {/* Recommendation Chips */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                    <span style={{ fontSize: '0.74rem', color: '#64748b' }}>추천 이름:</span>
+                    {(
+                      selectedVarKind === 'list' ? ['numbers', 'fruits', 'scores', 'items'] :
+                        selectedVarKind === 'tuple' ? ['point', 'dimensions', 'rgb_color'] :
+                          selectedVarKind === 'set' ? ['unique_ids', 'tags', 'vowels'] :
+                            selectedVarKind === 'dict' ? ['user_info', 'student', 'config', 'inventory'] :
+                              ['total', 'count', 'age', 'result', 'x', 'y']
+                    ).map((rec) => (
+                      <button
+                        key={rec}
+                        onClick={() => setVarInputName(rec)}
+                        style={{
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          color: '#cbd5e1',
+                          fontSize: '0.72rem',
+                          fontFamily: 'var(--font-mono)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {rec}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
+                    <button
+                      onClick={() => setVarModalStep(1)}
+                      style={{
+                        padding: '9px 16px',
+                        borderRadius: '8px',
+                        background: 'rgba(255, 255, 255, 0.06)',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        color: '#cbd5e1',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      &lt; 이전으로
+                    </button>
+                    <button
+                      onClick={handleCreateVariable}
+                      className="tactile-btn tactile-btn-primary"
+                      style={{
+                        padding: '9px 18px',
+                        fontSize: '0.86rem',
+                        fontWeight: 800,
+                      }}
+                    >
+                      <span>생성하기</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Rich deep navy canvas - friendly, readable, not cold black */
+  --bg-base: #0b1329;
+  --bg-surface: #131f3d;
+  --bg-surface-elevated: #1a294f;
+  --bg-surface-card: rgba(22, 36, 68, 0.7);
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(255, 255, 255, 0.16);
+
+  /* Playful, friendly, vibrant accent colors */
+  --color-python: #3b82f6;
+  --color-python-light: #60a5fa;
+  --color-c: #06b6d4;
+  --color-c-light: #22d3ee;
+  --color-web: #f97316;
+  --color-web-light: #fb923c;
+  --color-green: #10b981;
+  --color-amber: #f59e0b;
+  --color-purple: #8b5cf6;
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+/* Crisp Solid Accent Text */
+.text-gradient-kid {
+  color: #38bdf8;
+  display: inline-block;
+}
+
+.text-gradient-yellow {
+  color: #facc15;
+  display: inline-block;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+
+/* Clean, solid dark background */
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Playful 3D Tactile Button with Solid Colors */
+.tactile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+  user-select: none;
+}
+
+.tactile-btn:hover {
+  transform: translateY(-2px);
+}
+
+.tactile-btn:active {
+  transform: translateY(2px) !important;
+  box-shadow: none !important;
+}
+
+.tactile-btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #1d4ed8;
+}
+.tactile-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.tactile-btn-green {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #047857;
+}
+.tactile-btn-green:hover {
+  background: #059669;
+}
+
+.tactile-btn-sky {
+  background: #0ea5e9;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #0284c7;
+}
+.tactile-btn-sky:hover {
+  background: #0284c7;
+}
+
+.tactile-btn-blue {
+  background: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #1d4ed8;
+}
+.tactile-btn-blue:hover {
+  background: #2563eb;
+}
+
+.tactile-btn-purple {
+  background: #a855f7;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #7e22ce;
+}
+.tactile-btn-purple:hover {
+  background: #9333ea;
+}
+
+.tactile-btn-amber, .tactile-btn-orange {
+  background: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #d97706;
+}
+.tactile-btn-amber:hover, .tactile-btn-orange:hover {
+  background: #d97706;
+}
+
+.tactile-btn-magenta {
+  background: #ec4899;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #be185d;
+}
+.tactile-btn-magenta:hover {
+  background: #db2777;
+}
+
+/* Scratch / Tinkercad Quest Card */
+.quest-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quest-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-highlight);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+/* Custom friendly scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 19, 41, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  70% {
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Responsive Navbar Styles (Icon-only collapse & mobile drawer)
+   ========================================================================== */
+.navbar-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(11, 19, 41, 0.94);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0 40px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.nav-link-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 11px;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.16s ease;
+}
+
+.nav-link-text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.login-btn-text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Tablet & Moderate Widths (<= 1150px): Collapse text and display clean icon pills */
+@media (max-width: 1150px) {
+  .navbar-header {
+    padding: 0 24px;
+  }
+  .nav-link-text {
+    display: none !important;
+  }
+  .nav-link-item {
+    padding: 8px 12px !important;
+    gap: 0 !important;
+  }
+  .login-btn-text {
+    display: none !important;
+  }
+  .login-btn {
+    padding: 8px 12px !important;
+  }
+}
+
+/* Mobile Screens (<= 768px) */
+@media (max-width: 768px) {
+  .navbar-header {
+    padding: 0 16px;
+  }
+  .desktop-nav-center {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+}
