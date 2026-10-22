@@ -26,6 +26,15 @@ import {
 import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
+import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
+import { evaluateBlocksLocally, evaluatePythonLocally, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
+import {
+  PuzzleTab,
+  PuzzleNotch,
+  HorizontalPuzzleTab,
+  HorizontalPuzzleNotch,
+  SvgBottomClosingArm,
+} from '@/components/practice/BlockPuzzleShapes';
 
 interface PracticePageProps {
   params: {
@@ -107,6 +116,7 @@ interface CanvasBlock {
   // Scratch Stack Linking
   nextBlockId?: string;
   prevBlockId?: string;
+  zIndex?: number;
 }
 
 interface CustomVariableTemplate {
@@ -164,6 +174,7 @@ const createDefaultStartBlock = (): CanvasBlock => ({
   type: 'start',
   x: 40,
   y: 30,
+  zIndex: 10,
 });
 
 const EMPTY_BLOCK_INPUT_WIDTH = 26; // 빈 입력창 표준 너비 (툴박스와 캔버스 완벽 일치: 26px x 20px)
@@ -187,254 +198,7 @@ const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1
   return Math.round(effectiveLen * 7.5 + 13);
 };
 
-const PuzzleNotch = ({
-  left = '16px',
-  borderColor,
-  bgColor = '#090e1a',
-  isConnected = false,
-}: {
-  left?: string;
-  borderColor: string;
-  bgColor?: string;
-  isConnected?: boolean;
-}) => (
-  <div
-    style={{
-      position: 'absolute',
-      top: '-1px',
-      left,
-      width: '20px',
-      height: '6px',
-      background: isConnected ? 'transparent' : bgColor,
-      borderRadius: '0 0 4px 4px',
-      border: `1px solid ${borderColor}`,
-      borderTop: 'none',
-      boxSizing: 'border-box',
-      zIndex: 8,
-      pointerEvents: 'none',
-    }}
-  />
-);
-
-// Robust Standard Closing Arm for C-Shape & E-Shape Blocks
-// 상단 입구 바닥 홈(PuzzleNotch), 하단 돌출 탭(PuzzleTab), 기둥 접합 마스크 일체화
-const SvgBottomClosingArm = ({
-  theme,
-  isDef = false,
-  hasReturn = false,
-  returnVal = '',
-  onToggleDefReturn,
-  onDefReturnValChange,
-  extraButtons,
-  hasInnerBlocks = false,
-  tabLeft = 16,
-}: {
-  theme: { bg: string; border: string; shadow?: string };
-  isDef?: boolean;
-  hasReturn?: boolean;
-  returnVal?: string;
-  onToggleDefReturn?: (show: boolean) => void;
-  onDefReturnValChange?: (val: string) => void;
-  extraButtons?: React.ReactNode;
-  hasInnerBlocks?: boolean;
-  tabLeft?: number;
-}) => {
-  const H = 24;
-  const spineW = 18;
-  const notchLeft = spineW + 12; // 입구 천장 PuzzleTab(left: 12px)과 수직 1:1 완벽 정렬 (30px)
-
-  return (
-    <div
-      style={{
-        position: 'relative',
-        width: '100%',
-        minHeight: `${H}px`,
-        height: `${H}px`,
-        marginTop: '-1px',
-        boxSizing: 'border-box',
-        background: theme.bg,
-        borderTop: `1px solid ${theme.border}`,
-        borderRight: `1px solid ${theme.border}`,
-        borderBottom: `1px solid ${theme.border}`,
-        borderLeft: `1px solid ${theme.border}`,
-        borderRadius: '0 6px 6px 6px',
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: (extraButtons || (isDef && hasReturn)) ? `${notchLeft + 24}px` : '0px',
-        gap: '4px',
-        whiteSpace: 'nowrap',
-        zIndex: 5,
-      }}
-    >
-      {/* 1. 기둥(spine)과의 접합면: 상단 테두리 선을 지워 완전 일체형 ㄷ자로 결합 */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '-1px',
-          left: 0,
-          width: `${spineW}px`,
-          height: '2px',
-          background: theme.bg,
-          zIndex: 3,
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* 2. 입구 바닥 결합 홈: 내부 블록 유무와 상관없이 항상 노출되어 천장 탭 및 자식 블록 탭과 1:1 결합 */}
-      <PuzzleNotch left={`${notchLeft}px`} borderColor={theme.border} />
-
-      {/* 3. 하단 돌출 퍼즐 탭: 일반 블록 및 하위 ㄷ블록과 정확하게 스냅되는 표준 퍼즐 탭 항상 노출 */}
-      <PuzzleTab left={`${tabLeft}px`} borderColor={theme.border} bg={theme.bg} zIndex={12} />
-
-      {/* 4. 블록 컨트롤 버튼 (우클릭 옵션을 기본으로 하며, return 활성화 시에만 입력창 노출) */}
-      {extraButtons}
-      {isDef && hasReturn && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', position: 'relative', zIndex: 6 }}>
-          <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.78rem' }}>
-            return
-          </span>
-          <input
-            type="text"
-            value={returnVal}
-            placeholder=""
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onChange={(e) => onDefReturnValChange?.(e.target.value)}
-            style={{
-              width: `${getBlockInputWidth(returnVal)}px`,
-              height: '20px',
-              padding: '1px 5px',
-              borderRadius: '6px',
-              background: '#ffffff',
-              color: '#0f172a',
-              border: '1px solid rgba(0, 0, 0, 0.3)',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.78rem',
-              textAlign: 'left',
-              outline: 'none',
-              cursor: 'text',
-              boxSizing: 'border-box',
-            }}
-          />
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleDefReturn?.(false);
-            }}
-            title="return 반환문 제거"
-            style={{
-              background: 'rgba(255, 255, 255, 0.25)',
-              border: 'none',
-              color: '#ffffff',
-              borderRadius: '50%',
-              width: '14px',
-              height: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '10px',
-              cursor: 'pointer',
-              padding: 0,
-              marginLeft: '2px',
-            }}
-          >
-            ✕
-          </button>
-        </div>
-      )
-      }
-    </div>
-  );
-};
-
-const PuzzleTab = ({
-  left = '16px',
-  borderColor,
-  bg,
-  isCeiling = false,
-  zIndex = 6,
-}: {
-  left?: string;
-  borderColor: string;
-  bg: string;
-  isCeiling?: boolean;
-  zIndex?: number;
-}) => (
-  <div
-    style={{
-      position: 'absolute',
-      ...(isCeiling ? { top: '-1px' } : { bottom: '-5px' }),
-      left,
-      width: '20px',
-      height: '6px',
-      background: bg,
-      borderRadius: '0 0 4px 4px',
-      border: `1px solid ${borderColor}`,
-      borderTop: 'none',
-      boxSizing: 'border-box',
-      zIndex: isCeiling ? 12 : zIndex,
-      pointerEvents: 'none',
-    }}
-  />
-);
-
-// Horizontal Method Snapping Components (우측 홈 凹 / 좌측 돌출 凸)
-const HorizontalPuzzleNotch = ({
-  borderColor,
-  bgColor = '#090e1a',
-  isConnected = false,
-}: {
-  borderColor: string;
-  bgColor?: string;
-  isConnected?: boolean;
-}) => (
-  <div
-    style={{
-      position: 'absolute',
-      right: '-1px',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      width: '6px',
-      height: '18px',
-      background: isConnected ? 'transparent' : bgColor,
-      borderRadius: '4px 0 0 4px',
-      border: `1px solid ${borderColor}`,
-      borderRight: 'none',
-      boxShadow: isConnected ? 'none' : 'inset 0 1px 3px rgba(0, 0, 0, 0.45)',
-      boxSizing: 'border-box',
-      zIndex: 4,
-      pointerEvents: 'none',
-    }}
-  />
-);
-
-const HorizontalPuzzleTab = ({
-  borderColor,
-  bg,
-}: {
-  borderColor: string;
-  bg: string;
-}) => (
-  <div
-    style={{
-      position: 'absolute',
-      left: '-6px',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      width: '7px',
-      height: '18px',
-      background: bg,
-      borderRadius: '4px 0 0 4px',
-      border: `1px solid ${borderColor}`,
-      borderRight: 'none',
-      boxSizing: 'border-box',
-      zIndex: 5,
-      pointerEvents: 'none',
-    }}
-  />
-);
+// Puzzle notch & tab components are imported from @/components/practice/BlockPuzzleShapes
 
 // Context Menu State (Right Click)
 interface ContextMenuState {
@@ -442,8 +206,7 @@ interface ContextMenuState {
   x: number;
   y: number;
   blockId: string | null;
-  targetType: 'block' | 'canvas';
-  coords?: { x: number; y: number };
+  targetType?: 'block';
 }
 
 // Function Parameter Inline Memo (심플 한줄 함수 시그니처 안내)
@@ -620,437 +383,7 @@ function splitTopLevelArgs(str: string): string[] {
   return result;
 }
 
-// Client-side instant evaluator for beginner Python arithmetic, print & data structure expressions
-function evaluatePythonLocally(code: string): { success: boolean; stdout: string; stderr: string; scope?: Record<string, any> } {
-  try {
-    const lines = code.split('\n').map((l) => l.trim()).filter((l) => l.length > 0 && !l.startsWith('#'));
-    const scope: Record<string, any> = {};
-    let stdoutBuffer = '';
-
-    const evalExpr = (rawExpr: string): any => {
-      const expr = rawExpr.trim();
-      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
-        return expr.slice(1, -1);
-      }
-      if (expr === 'True') return true;
-      if (expr === 'False') return false;
-      if (expr === 'None') return null;
-
-      // Handle list literals: [1, 2, 3]
-      if (expr.startsWith('[') && expr.endsWith(']')) {
-        const inner = expr.slice(1, -1).trim();
-        if (!inner) return [];
-        return inner.split(',').map((s) => evalExpr(s.trim()));
-      }
-
-      // Handle tuple literals: (1, 2, 3)
-      if (expr.startsWith('(') && expr.endsWith(')')) {
-        const inner = expr.slice(1, -1).trim().replace(/,$/, '');
-        if (!inner) return [];
-        return inner.split(',').map((s) => evalExpr(s.trim()));
-      }
-
-      // Handle set or dict literals: {...}
-      if (expr.startsWith('{') && expr.endsWith('}')) {
-        const inner = expr.slice(1, -1).trim();
-        if (!inner) return {};
-        if (inner.includes(':')) {
-          const obj: Record<string, any> = {};
-          const pairs = inner.split(',');
-          for (const p of pairs) {
-            const [k, v] = p.split(':');
-            if (k && v) {
-              const cleanK = evalExpr(k.trim());
-              obj[String(cleanK)] = evalExpr(v.trim());
-            }
-          }
-          return obj;
-        } else {
-          return inner.split(',').map((s) => evalExpr(s.trim()));
-        }
-      }
-
-      if (/^[a-zA-Z_]\w*$/.test(expr)) {
-        if (expr in scope) return scope[expr];
-        throw new Error(`Variable ${expr} not defined`);
-      }
-
-      let js = expr
-        .replace(/\/\//g, '___INTDIV___')
-        .replace(/\*\*/g, '___POW___')
-        .replace(/\bTrue\b/g, 'true')
-        .replace(/\bFalse\b/g, 'false')
-        .replace(/\bNone\b/g, 'null');
-
-      const varNames = Object.keys(scope).sort((a, b) => b.length - a.length);
-      for (const vn of varNames) {
-        const regex = new RegExp(`\\b${vn}\\b`, 'g');
-        const val = scope[vn];
-        const rep = typeof val === 'object' ? JSON.stringify(val) : typeof val === 'string' ? JSON.stringify(val) : String(val);
-        js = js.replace(regex, rep);
-      }
-
-      while (js.includes('___INTDIV___')) {
-        js = js.replace(/(\(?[^/()]+?\)?)\s*___INTDIV___\s*(\(?[^/()]+?\)?)/, 'Math.floor(($1) / ($2))');
-      }
-
-      while (js.includes('___POW___')) {
-        js = js.replace(/(\(?[^()*]+?\)?)\s*___POW___\s*(\(?[^()*]+?\)?)/, 'Math.pow(($1), ($2))');
-      }
-
-      if (!/^[0-9+\-*/%().\s,Mathfloorpow"'[\]{}]+$/.test(js)) {
-        throw new Error('Unsafe syntax');
-      }
-
-      const fn = new Function(`"use strict"; return (${js})`);
-      return fn();
-    };
-
-    for (const line of lines) {
-      const assignMatch = line.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/);
-      if (assignMatch) {
-        const varName = assignMatch[1];
-        const val = evalExpr(assignMatch[2]);
-        scope[varName] = val;
-        continue;
-      }
-
-      const printMatch = line.match(/^print\s*\(([\s\S]*)\)$/);
-      if (printMatch) {
-        const inner = printMatch[1].trim();
-        if (!inner) {
-          stdoutBuffer += '\n';
-        } else {
-          const args = splitTopLevelArgs(inner);
-          let sep = ' ';
-          let end = '\n';
-          const posArgs: string[] = [];
-
-          for (const arg of args) {
-            const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
-            const endMatch = arg.match(/^end\s*=\s*(.+)$/);
-            if (sepMatch) {
-              const val = evalExpr(sepMatch[1]);
-              const rawVal = typeof val === 'string' ? val : String(val ?? '');
-              sep = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
-            } else if (endMatch) {
-              const val = evalExpr(endMatch[1]);
-              const rawVal = typeof val === 'string' ? val : String(val ?? '');
-              end = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
-            } else {
-              posArgs.push(arg);
-            }
-          }
-
-          const printed = posArgs.map((arg) => {
-            const val = evalExpr(arg);
-            if (val === null || val === undefined) return 'None';
-            if (typeof val === 'number') {
-              if (arg.includes('/') && !arg.includes('//') && Number.isInteger(val)) {
-                return val.toFixed(1);
-              }
-              return String(val);
-            }
-            if (typeof val === 'boolean') {
-              return val ? 'True' : 'False';
-            }
-            if (Array.isArray(val)) {
-              return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
-            }
-            if (typeof val === 'object') {
-              const entries = Object.entries(val).map(
-                ([k, v]) => `'${k}': ${typeof v === 'string' ? `'${v}'` : String(v)}`
-              );
-              return `{${entries.join(', ')}}`;
-            }
-            return String(val);
-          });
-          stdoutBuffer += printed.join(sep) + end;
-        }
-        continue;
-      }
-
-      evalExpr(line);
-    }
-
-    return {
-      success: true,
-      stdout: stdoutBuffer.replace(/\r?\n$/, ''),
-      stderr: '',
-      scope,
-    };
-  } catch {
-    return { success: false, stdout: '', stderr: '', scope: {} };
-  }
-}
-
-// Extract ordered blocks from CanvasBlock[] hierarchy:
-// Only blocks connected underneath the 'start' block are executed!
-function getOrderedCanvasBlocks(canvasBlocks: CanvasBlock[]): CanvasBlock[] {
-  const startBlock = canvasBlocks.find((b) => b.type === 'start');
-  if (startBlock) {
-    const ordered: CanvasBlock[] = [];
-    const visited = new Set<string>();
-    visited.add(startBlock.id);
-
-    let currId: string | undefined = startBlock.nextBlockId;
-    while (currId && !visited.has(currId)) {
-      visited.add(currId);
-      const curr = canvasBlocks.find((b) => b.id === currId);
-      if (!curr) break;
-      ordered.push(curr);
-      currId = curr.nextBlockId;
-    }
-
-    return ordered;
-  }
-
-  const rootBlocks = canvasBlocks.filter((b) => !b.prevBlockId && !b.attachedToBlockId);
-  rootBlocks.sort((a, b) => {
-    if (Math.abs(a.y - b.y) < 15) {
-      return a.x - b.x;
-    }
-    return a.y - b.y;
-  });
-
-  const ordered: CanvasBlock[] = [];
-  const visited = new Set<string>();
-
-  for (const root of rootBlocks) {
-    let curr: CanvasBlock | undefined = root;
-    while (curr && !visited.has(curr.id)) {
-      visited.add(curr.id);
-      ordered.push(curr);
-      if (curr.nextBlockId) {
-        curr = canvasBlocks.find((b) => b.id === curr!.nextBlockId);
-      } else {
-        break;
-      }
-    }
-  }
-
-  for (const b of canvasBlocks) {
-    if (!visited.has(b.id)) {
-      ordered.push(b);
-    }
-  }
-
-  return ordered;
-}
-
-// 0ms Safe Local Block AST Evaluator with infinite loop protection
-function evaluateBlocksLocally(blocks: CanvasBlock[]): { success: boolean; stdout: string; stderr: string; scope?: Record<string, any> } {
-  try {
-    const scope: Record<string, any> = {};
-    let stdoutBuffer = '';
-    let maxSteps = 500;
-
-    const evalExpr = (rawExpr: string): any => {
-      const expr = (rawExpr || '').trim();
-      if (!expr) return null;
-      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
-        return expr.slice(1, -1);
-      }
-      if (expr === 'True' || expr === 'true') return true;
-      if (expr === 'False' || expr === 'false') return false;
-      if (expr === 'None' || expr === 'null') return null;
-
-      if (/^-?\d+$/.test(expr)) return parseInt(expr, 10);
-      if (/^-?\d+\.\d+$/.test(expr)) return parseFloat(expr);
-
-      if (expr.startsWith('[') && expr.endsWith(']')) {
-        const inner = expr.slice(1, -1).trim();
-        if (!inner) return [];
-        return inner.split(',').map((s) => evalExpr(s.trim()));
-      }
-
-      if (/^[a-zA-Z_]\w*$/.test(expr)) {
-        if (expr in scope) return scope[expr];
-        return expr;
-      }
-
-      let js = expr
-        .replace(/\/\//g, '___INTDIV___')
-        .replace(/\*\*/g, '___POW___')
-        .replace(/\bTrue\b/g, 'true')
-        .replace(/\bFalse\b/g, 'false')
-        .replace(/\bNone\b/g, 'null')
-        .replace(/\band\b/g, '&&')
-        .replace(/\bor\b/g, '||')
-        .replace(/\bnot\b/g, '!');
-
-      const varNames = Object.keys(scope).sort((a, b) => b.length - a.length);
-      for (const vn of varNames) {
-        const regex = new RegExp(`\\b${vn}\\b`, 'g');
-        const val = scope[vn];
-        const rep = typeof val === 'object' ? JSON.stringify(val) : typeof val === 'string' ? JSON.stringify(val) : String(val);
-        js = js.replace(regex, rep);
-      }
-
-      while (js.includes('___INTDIV___')) {
-        js = js.replace(/(\(?[^/()]+?\)?)\s*___INTDIV___\s*(\(?[^/()]+?\)?)/, 'Math.floor(($1) / ($2))');
-      }
-
-      while (js.includes('___POW___')) {
-        js = js.replace(/(\(?[^()*]+?\)?)\s*___POW___\s*(\(?[^()*]+?\)?)/, 'Math.pow(($1), ($2))');
-      }
-
-      if (!/^[0-9+\-*/%().\s,Mathfloorpow"'[\]{}><=!&|]+$/.test(js)) {
-        return expr;
-      }
-
-      try {
-        const fn = new Function(`"use strict"; return (${js})`);
-        return fn();
-      } catch {
-        return expr;
-      }
-    };
-
-    const runBlockList = (list: CanvasBlock[]): 'break' | 'continue' | void => {
-      for (const blk of list) {
-        if (blk.type === 'start') continue;
-        if (--maxSteps <= 0) {
-          stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
-          return;
-        }
-
-        if (blk.type === 'variable') {
-          const vName = blk.varName || 'x';
-          scope[vName] = evalExpr(blk.content || '0');
-        } else if (blk.type === 'list') {
-          const vName = blk.varName || 'my_list';
-          scope[vName] = (blk.items || []).filter((i) => i.trim().length > 0).map((i) => evalExpr(i));
-        } else if (blk.type === 'print') {
-          const raw = (blk.content || '').trim();
-          if (!raw) {
-            stdoutBuffer += '\n';
-          } else {
-            const args = splitTopLevelArgs(raw);
-            let sep = ' ';
-            let end = '\n';
-            const posArgs: string[] = [];
-
-            for (const arg of args) {
-              const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
-              const endMatch = arg.match(/^end\s*=\s*(.+)$/);
-              if (sepMatch) {
-                const val = evalExpr(sepMatch[1]);
-                const rawVal = typeof val === 'string' ? val : String(val ?? '');
-                sep = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
-              } else if (endMatch) {
-                const val = evalExpr(endMatch[1]);
-                const rawVal = typeof val === 'string' ? val : String(val ?? '');
-                end = rawVal.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r');
-              } else {
-                posArgs.push(arg);
-              }
-            }
-
-            const printed = posArgs.map((arg) => {
-              const val = evalExpr(arg);
-              if (val === null || val === undefined) return 'None';
-              if (typeof val === 'boolean') return val ? 'True' : 'False';
-              if (typeof val === 'number') {
-                if (arg.includes('/') && !arg.includes('//') && Number.isInteger(val)) {
-                  return val.toFixed(1);
-                }
-                return String(val);
-              }
-              if (Array.isArray(val)) return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
-              if (typeof val === 'object') {
-                const entries = Object.entries(val).map(
-                  ([k, v]) => `'${k}': ${typeof v === 'string' ? `'${v}'` : String(v)}`
-                );
-                return `{${entries.join(', ')}}`;
-              }
-              return String(val);
-            });
-            stdoutBuffer += printed.join(sep) + end;
-          }
-        } else if (blk.type === 'break') {
-          return 'break';
-        } else if (blk.type === 'continue') {
-          return 'continue';
-        } else if (blk.type === 'for_range') {
-          const vName = blk.varName || 'i';
-          const cntVal = evalExpr(blk.content || '5');
-          const count = typeof cntVal === 'number' ? cntVal : parseInt(String(cntVal), 10) || 5;
-          const safeCount = Math.max(0, Math.min(count, 100));
-          for (let i = 0; i < safeCount; i++) {
-            if (maxSteps <= 0) break;
-            scope[vName] = i;
-            if (blk.innerBlocks) {
-              const sig = runBlockList(blk.innerBlocks);
-              if (sig === 'break') break;
-            }
-          }
-        } else if (blk.type === 'for_in') {
-          const vName = blk.varName || 'item';
-          const seqVal = evalExpr(blk.content || '[1, 2, 3]');
-          const arr = Array.isArray(seqVal) ? seqVal : [seqVal];
-          for (const item of arr) {
-            if (maxSteps <= 0) break;
-            scope[vName] = item;
-            if (blk.innerBlocks) {
-              const sig = runBlockList(blk.innerBlocks);
-              if (sig === 'break') break;
-            }
-          }
-        } else if (blk.type === 'while') {
-          const condRaw = (blk.content || '').trim() || 'False';
-          let loopGuard = 200;
-          while (Boolean(evalExpr(condRaw)) && loopGuard-- > 0) {
-            if (--maxSteps <= 0) {
-              stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
-              break;
-            }
-            if (blk.innerBlocks) {
-              const sig = runBlockList(blk.innerBlocks);
-              if (sig === 'break') break;
-            }
-          }
-        } else if (blk.type === 'if') {
-          const branches = (blk.branches && blk.branches.length > 0)
-            ? blk.branches
-            : [{ id: 'br-if-0', kind: 'if' as const, condition: blk.content || 'False', innerBlocks: blk.innerBlocks || [] }];
-
-          for (const br of branches) {
-            if (br.kind === 'if' || br.kind === 'elif') {
-              const cond = Boolean(evalExpr(br.condition || 'False'));
-              if (cond) {
-                if (br.innerBlocks) {
-                  const sig = runBlockList(br.innerBlocks);
-                  if (sig === 'break') return 'break';
-                  if (sig === 'continue') return 'continue';
-                }
-                break;
-              }
-            } else if (br.kind === 'else') {
-              if (br.innerBlocks) {
-                const sig = runBlockList(br.innerBlocks);
-                if (sig === 'break') return 'break';
-                if (sig === 'continue') return 'continue';
-              }
-              break;
-            }
-          }
-        }
-      }
-    };
-
-    runBlockList(blocks);
-
-    return {
-      success: true,
-      stdout: stdoutBuffer.replace(/\r?\n$/, ''),
-      stderr: '',
-      scope,
-    };
-  } catch (err: any) {
-    return { success: false, stdout: '', stderr: String(err?.message || ''), scope: {} };
-  }
-}
+// evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
 export default function PracticePage({ params }: PracticePageProps) {
   const langKey = params.language || 'python';
@@ -1111,6 +444,7 @@ export default function PracticePage({ params }: PracticePageProps) {
   const activeSnapTargetRef = useRef<SnapTarget | null>(null);
   const canvasBlocksRef = useRef<CanvasBlock[]>(canvasBlocks);
   canvasBlocksRef.current = canvasBlocks;
+  const maxCanvasZIndexRef = useRef<number>(30);
   const pointerDragRef = useRef<{
     blockId?: string;
     source: 'toolbox' | 'canvas' | 'inner';
@@ -1283,6 +617,17 @@ export default function PracticePage({ params }: PracticePageProps) {
       setCanvasBlocks(nextBlocks);
     }
   }, [canvasBlocks, isDraggingBlock]);
+
+  // Prevent default browser context menu globally across the practice studio
+  useEffect(() => {
+    const handleGlobalContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener('contextmenu', handleGlobalContextMenu);
+    return () => {
+      window.removeEventListener('contextmenu', handleGlobalContextMenu);
+    };
+  }, []);
 
   // Close context menu on outside click or Escape key
   useEffect(() => {
@@ -1837,30 +1182,6 @@ export default function PracticePage({ params }: PracticePageProps) {
     setIsDraggingBlock(true);
   };
 
-  const handleBlockDragStart = (e: React.DragEvent, block: CanvasBlock) => {
-    e.stopPropagation();
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const grabX = e.clientX - rect.left;
-    const grabY = e.clientY - rect.top;
-
-    const payload = {
-      source: 'canvas' as const,
-      blockType: block.type,
-      id: block.id,
-      grabX,
-      grabY,
-      startX: block.x,
-      startY: block.y,
-    };
-    draggingInfoRef.current = payload;
-    try {
-      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
-    } catch { }
-    e.dataTransfer.effectAllowed = 'all';
-
-    setIsDraggingBlock(true);
-  };
-
   const handleBlockDragEnd = () => {
     setIsDraggingBlock(false);
     setIsTrashHovered(false);
@@ -1925,6 +1246,49 @@ export default function PracticePage({ params }: PracticePageProps) {
       }
     }
     return result;
+  };
+
+  // Bring entire connected stack on canvas to front layer with ordered zIndex (root > downstream)
+  const bringStackToFront = (blockId: string, blocks: CanvasBlock[]): CanvasBlock[] => {
+    let curr: CanvasBlock | undefined = blocks.find((b) => b.id === blockId);
+    if (!curr) return blocks;
+
+    const visitedUp = new Set<string>();
+    while (curr) {
+      visitedUp.add(curr.id);
+      const parentId: string | undefined = curr.prevBlockId || curr.attachedToBlockId;
+      if (!parentId || visitedUp.has(parentId)) break;
+      const parent: CanvasBlock | undefined = blocks.find((b) => b.id === parentId);
+      if (!parent) break;
+      curr = parent;
+    }
+
+    if (!curr) return blocks;
+    const rootBlock: CanvasBlock = curr;
+
+    const newBaseZ = (maxCanvasZIndexRef.current += 20);
+    const queue: { id: string; depth: number }[] = [{ id: rootBlock.id, depth: 0 }];
+    const zMap = new Map<string, number>();
+    const visitedDown = new Set<string>();
+
+    while (queue.length > 0) {
+      const { id, depth } = queue.shift()!;
+      if (visitedDown.has(id)) continue;
+      visitedDown.add(id);
+      zMap.set(id, Math.max(1, newBaseZ - depth));
+
+      const blk = blocks.find((b) => b.id === id);
+      if (!blk) continue;
+
+      if (blk.nextBlockId && !visitedDown.has(blk.nextBlockId)) {
+        queue.push({ id: blk.nextBlockId, depth: depth + 1 });
+      }
+      if (blk.attachedMethodId && !visitedDown.has(blk.attachedMethodId)) {
+        queue.push({ id: blk.attachedMethodId, depth: depth + 1 });
+      }
+    }
+
+    return blocks.map((b) => (zMap.has(b.id) ? { ...b, zIndex: zMap.get(b.id)! } : b));
   };
 
   // Scratch Stack: 현재 드래그 중인 체인(잡은 블록 + 하위 연결된 모든 자손 블록) 식별
@@ -2334,7 +1698,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       }
 
       baseBlock = foundChild
-        ? { ...foundChild, x: dropX, y: dropY }
+        ? { ...foundChild, x: dropX, y: dropY, zIndex: (maxCanvasZIndexRef.current += 20) }
         : {
           id: blockInfo.id || `${blockInfo.blockType}-${Date.now()}`,
           type: blockInfo.blockType || 'print',
@@ -2342,6 +1706,7 @@ export default function PracticePage({ params }: PracticePageProps) {
           varName: blockInfo.varName,
           x: dropX,
           y: dropY,
+          zIndex: (maxCanvasZIndexRef.current += 20),
         };
 
       // Remove from parent
@@ -2411,6 +1776,7 @@ export default function PracticePage({ params }: PracticePageProps) {
           : undefined,
         x: dropX,
         y: dropY,
+        zIndex: (maxCanvasZIndexRef.current += 20),
       };
     }
 
@@ -2870,6 +2236,9 @@ export default function PracticePage({ params }: PracticePageProps) {
     const blockRect = blockEl.getBoundingClientRect();
     const grabOffsetX = e.clientX - blockRect.left;
     const grabOffsetY = e.clientY - blockRect.top;
+
+    // Bring clicked stack to the front layer
+    setCanvasBlocks((prev) => bringStackToFront(block.id, prev));
 
     // Cache initial positions of the dragged block and all its descendants
     const descendantIds = getDescendantBlockIds(block.id, canvasBlocks);
@@ -3403,7 +2772,7 @@ export default function PracticePage({ params }: PracticePageProps) {
     setDraggedBlockType(null);
   };
 
-  // 4. Right-click Context Menu (블록 우클릭 & 캔버스 우클릭)
+  // 4. Right-click Context Menu (블록 우클릭)
   const handleBlockContextMenu = (e: React.MouseEvent, blockId: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -3418,44 +2787,142 @@ export default function PracticePage({ params }: PracticePageProps) {
     });
   };
 
-  const handleCanvasContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const rect = workspaceRef.current
-      ? workspaceRef.current.getBoundingClientRect()
-      : e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left - 40;
-    const clickY = e.clientY - rect.top - 20;
-
-    const menuX = Math.min(e.clientX, window.innerWidth - 200);
-    const menuY = Math.min(e.clientY, window.innerHeight - 240);
-    setContextMenu({
-      visible: true,
-      x: menuX,
-      y: menuY,
-      blockId: null,
-      targetType: 'canvas',
-      coords: { x: Math.max(20, clickX), y: Math.max(20, clickY) },
-    });
-  };
-
   const handleDuplicateBlock = (blockId: string) => {
-    const target = canvasBlocks.find((b) => b.id === blockId);
-    if (!target) return;
-    const newBlock: CanvasBlock = {
-      id: `${target.type}-${Date.now()}`,
-      type: target.type,
-      varName: target.varName,
-      content: target.content,
-      items: target.items ? [...target.items] : undefined,
-      dictPairs: target.dictPairs ? target.dictPairs.map((p) => ({ ...p })) : undefined,
-      hasReturn: target.hasReturn,
-      returnVal: target.returnVal,
-      x: target.x + 30,
-      y: target.y + 40,
+    const target = findBlockInTree(canvasBlocks, blockId);
+    if (!target || target.type === 'start') return;
+
+    // 1. Identify all canvas-level blocks in this connected chain (if target is at root canvas level)
+    const isTargetRootCanvas = canvasBlocks.some((b) => b.id === target.id);
+    let chainBlocks: CanvasBlock[] = [];
+    if (isTargetRootCanvas) {
+      const descendantIds = getDescendantBlockIds(target.id, canvasBlocks);
+      const chainIds = [target.id, ...descendantIds];
+      chainBlocks = chainIds
+        .map((id) => canvasBlocks.find((b) => b.id === id)!)
+        .filter(Boolean);
+    } else {
+      // Nested block being duplicated to root canvas
+      chainBlocks = [target];
+    }
+
+    if (chainBlocks.length === 0) return;
+
+    // 2. Generate new IDs for ALL blocks in this subtree (including nested innerBlocks & branches)
+    const idMap = new Map<string, string>();
+    let idCounter = 0;
+    const collectIds = (blk: CanvasBlock) => {
+      const newId = `${blk.type}-${Date.now()}-${++idCounter}-${Math.random().toString(36).slice(2, 6)}`;
+      idMap.set(blk.id, newId);
+      if (blk.innerBlocks) {
+        for (const child of blk.innerBlocks) {
+          collectIds(child);
+        }
+      }
+      if (blk.branches) {
+        for (const br of blk.branches) {
+          for (const child of br.innerBlocks) {
+            collectIds(child);
+          }
+        }
+      }
     };
-    setCanvasBlocks((prev) => [...prev, newBlock]);
+    for (const cb of chainBlocks) {
+      collectIds(cb);
+    }
+
+    // 3. New highest Z-index for the duplicated group so it renders strictly in front (foreground layer)
+    const newBaseZ = (maxCanvasZIndexRef.current += 20);
+    const OFFSET = 35;
+
+    // Calculate canvas coordinates for cloned target
+    let baseX = target.x;
+    let baseY = target.y;
+    if (!isTargetRootCanvas) {
+      const el = document.getElementById(`block-${target.id}`);
+      if (el && workspaceRef.current) {
+        const wRect = workspaceRef.current.getBoundingClientRect();
+        const bRect = el.getBoundingClientRect();
+        baseX = Math.round(bRect.left - wRect.left);
+        baseY = Math.round(bRect.top - wRect.top);
+      } else {
+        baseX = 80;
+        baseY = 80;
+      }
+    }
+
+    // 4. Recursive cloner function
+    const deepCloneBlock = (
+      blk: CanvasBlock,
+      isRootInChain: boolean,
+      chainDepth: number
+    ): CanvasBlock => {
+      const newId = idMap.get(blk.id) || `${blk.type}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+
+      const newInnerBlocks = blk.innerBlocks
+        ? blk.innerBlocks.map((child, idx) => deepCloneBlock(child, false, idx))
+        : undefined;
+
+      const newBranches = blk.branches
+        ? blk.branches.map((br) => ({
+            id: `br-${br.kind}-${Date.now()}-${++idCounter}-${Math.random().toString(36).slice(2, 6)}`,
+            kind: br.kind,
+            condition: br.condition,
+            innerBlocks: br.innerBlocks.map((child, idx) => deepCloneBlock(child, false, idx)),
+          }))
+        : undefined;
+
+      const newNextBlockId = blk.nextBlockId && idMap.has(blk.nextBlockId)
+        ? idMap.get(blk.nextBlockId)
+        : undefined;
+
+      // The root of the duplicated group must NOT be connected upwards
+      const newPrevBlockId = isRootInChain
+        ? undefined
+        : (blk.prevBlockId && idMap.has(blk.prevBlockId) ? idMap.get(blk.prevBlockId) : undefined);
+
+      const newAttachedMethodId = blk.attachedMethodId && idMap.has(blk.attachedMethodId)
+        ? idMap.get(blk.attachedMethodId)
+        : undefined;
+
+      const newAttachedToBlockId = isRootInChain
+        ? undefined
+        : (blk.attachedToBlockId && idMap.has(blk.attachedToBlockId) ? idMap.get(blk.attachedToBlockId) : undefined);
+
+      return {
+        ...blk,
+        id: newId,
+        items: blk.items ? [...blk.items] : undefined,
+        dictPairs: blk.dictPairs ? blk.dictPairs.map((p) => ({ ...p })) : undefined,
+        innerBlocks: newInnerBlocks,
+        branches: newBranches,
+        nextBlockId: newNextBlockId,
+        prevBlockId: newPrevBlockId,
+        attachedMethodId: newAttachedMethodId,
+        attachedToBlockId: newAttachedToBlockId,
+        zIndex: Math.max(1, newBaseZ - chainDepth),
+      };
+    };
+
+    // 5. Clone all chain blocks with spatial offset in front
+    const clonedBlocks: CanvasBlock[] = chainBlocks.map((cb, idx) => {
+      const isRoot = cb.id === target.id;
+      const cloned = deepCloneBlock(cb, isRoot, idx);
+      const posX = isTargetRootCanvas ? cb.x + OFFSET : baseX + OFFSET + (cb.x - target.x);
+      const posY = isTargetRootCanvas ? cb.y + OFFSET : baseY + OFFSET + (cb.y - target.y);
+      return {
+        ...cloned,
+        x: posX,
+        y: posY,
+      };
+    });
+
+    setCanvasBlocks((prev) => [...prev, ...clonedBlocks]);
     setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-    showToast('📋 블록이 복사되었습니다.');
+    const isCombined =
+      chainBlocks.length > 1 ||
+      (target.innerBlocks && target.innerBlocks.length > 0) ||
+      (target.branches && target.branches.some((br) => br.innerBlocks && br.innerBlocks.length > 0));
+    showToast(isCombined ? '📋 결합된 블록 세트가 복사되었습니다.' : '📋 블록이 복사되었습니다.');
   };
 
   const handleClearBlockContent = (blockId: string) => {
@@ -3514,19 +2981,6 @@ export default function PracticePage({ params }: PracticePageProps) {
         ? `🗑️ 블록과 하위 블록 ${deletedCount - 1}개가 함께 삭제되었습니다.`
         : '🗑️ 블록이 삭제되었습니다.'
     );
-  };
-
-  const handleAddBlockAtCoords = (x: number, y: number, defaultContent: string = '') => {
-    const newBlock: CanvasBlock = {
-      id: `print-${Date.now()}`,
-      type: 'print',
-      content: defaultContent,
-      x,
-      y,
-    };
-    setCanvasBlocks((prev) => [...prev, newBlock]);
-    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'canvas' });
-    showToast('✨ 새 블록이 생성되었습니다.');
   };
 
   const handleBlockInputChange = (blockId: string, val: string) => {
@@ -3852,171 +3306,7 @@ export default function PracticePage({ params }: PracticePageProps) {
     );
   };
 
-  const handleDropIntoLoopSlot = (e: React.DragEvent, loopBlockId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDraggingBlock(false);
-    const snap = activeSnapTargetRef.current || activeSnapTarget;
-    activeSnapTargetRef.current = null;
-    setActiveSnapTarget(null);
-
-    let info = draggingInfoRef.current;
-    if (!info) {
-      try {
-        const raw = e.dataTransfer.getData('text/plain');
-        if (raw) info = JSON.parse(raw);
-      } catch { }
-    }
-    if (!info || (!info.blockType && !info.id)) return;
-
-    const isLoopOrDef = info.blockType === 'for_range' || info.blockType === 'for_in' || info.blockType === 'while' || info.blockType === 'def';
-    const isIf = info.blockType === 'if';
-    const targetIdx = snap?.targetBlockId === loopBlockId && snap.insertIndex !== undefined ? snap.insertIndex : undefined;
-
-    let childBlock: CanvasBlock;
-    if (info.source === 'canvas' && info.id) {
-      if (info.id === loopBlockId) return;
-      const existing = canvasBlocks.find((b) => b.id === info!.id);
-      if (!existing) return;
-      childBlock = { ...existing, x: 0, y: 0, prevBlockId: undefined, nextBlockId: undefined };
-      setCanvasBlocks((prev) => {
-        const filtered = prev.filter((b) => b.id !== info!.id).map((b) => {
-          if (b.id === existing.prevBlockId) return { ...b, nextBlockId: undefined };
-          if (b.id === existing.nextBlockId) return { ...b, prevBlockId: undefined };
-          return b;
-        });
-        return updateAnyBlockInTree(filtered, loopBlockId, (b) => {
-          const inList = b.innerBlocks || [];
-          const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
-          const nextInner = [...inList];
-          nextInner.splice(idx, 0, childBlock);
-          return {
-            ...b,
-            innerBlocks: nextInner,
-          };
-        });
-      });
-    } else {
-      const bType = info.blockType || 'print';
-      childBlock = {
-        id: `${bType}-${Date.now()}`,
-        type: bType,
-        varName: info.varName || (
-          bType === 'variable' ? 'x' :
-            bType === 'for_range' ? 'j' :
-              bType === 'for_in' ? 'item' :
-                bType === 'def' ? 'sub_func' : undefined
-        ),
-        content: info.content || (bType === 'for_range' ? '3' : bType === 'while' ? 'False' : ''),
-        innerBlocks: isLoopOrDef ? [] : undefined,
-        branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
-        x: 0,
-        y: 0,
-      };
-      setCanvasBlocks((prev) =>
-        updateAnyBlockInTree(prev, loopBlockId, (b) => {
-          const inList = b.innerBlocks || [];
-          const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
-          const nextInner = [...inList];
-          nextInner.splice(idx, 0, childBlock);
-          return {
-            ...b,
-            innerBlocks: nextInner,
-          };
-        })
-      );
-    }
-    draggingInfoRef.current = null;
-    setDraggedBlockType(null);
-  };
-
-  const handleDropIntoBranchSlot = (e: React.DragEvent, ifBlockId: string, branchId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDraggingBlock(false);
-    const snap = activeSnapTargetRef.current || activeSnapTarget;
-    activeSnapTargetRef.current = null;
-    setActiveSnapTarget(null);
-
-    let info = draggingInfoRef.current;
-    if (!info) {
-      try {
-        const raw = e.dataTransfer.getData('text/plain');
-        if (raw) info = JSON.parse(raw);
-      } catch { }
-    }
-    if (!info || (!info.blockType && !info.id)) return;
-
-    const isLoopOrDef = info.blockType === 'for_range' || info.blockType === 'for_in' || info.blockType === 'while' || info.blockType === 'def';
-    const isIf = info.blockType === 'if';
-    const targetIdx = snap?.targetBlockId === ifBlockId && snap?.branchId === branchId && snap.insertIndex !== undefined ? snap.insertIndex : undefined;
-
-    let childBlock: CanvasBlock;
-    if (info.source === 'canvas' && info.id) {
-      if (info.id === ifBlockId) return;
-      const existing = canvasBlocks.find((b) => b.id === info!.id);
-      if (!existing) return;
-      childBlock = { ...existing, x: 0, y: 0, prevBlockId: undefined, nextBlockId: undefined };
-      setCanvasBlocks((prev) => {
-        const filtered = prev.filter((b) => b.id !== info!.id).map((b) => {
-          if (b.id === existing.prevBlockId) return { ...b, nextBlockId: undefined };
-          if (b.id === existing.nextBlockId) return { ...b, prevBlockId: undefined };
-          return b;
-        });
-        return updateAnyBlockInTree(filtered, ifBlockId, (b) => {
-          if (!b.branches) return b;
-          return {
-            ...b,
-            branches: b.branches.map((br) => {
-              if (br.id !== branchId) return br;
-              const inList = br.innerBlocks || [];
-              const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
-              const nextInner = [...inList];
-              nextInner.splice(idx, 0, childBlock);
-              return { ...br, innerBlocks: nextInner };
-            }),
-          };
-        });
-      });
-    } else {
-      const bType = info.blockType || 'print';
-      childBlock = {
-        id: `${bType}-${Date.now()}`,
-        type: bType,
-        varName: info.varName || (
-          bType === 'variable' ? 'x' :
-            bType === 'for_range' ? 'j' :
-              bType === 'for_in' ? 'item' :
-                bType === 'def' ? 'sub_func' : undefined
-        ),
-        content: info.content || (bType === 'for_range' ? '3' : bType === 'while' ? 'False' : ''),
-        innerBlocks: isLoopOrDef ? [] : undefined,
-        branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
-        x: 0,
-        y: 0,
-      };
-      setCanvasBlocks((prev) =>
-        updateAnyBlockInTree(prev, ifBlockId, (b) => {
-          if (!b.branches) return b;
-          return {
-            ...b,
-            branches: b.branches.map((br) => {
-              if (br.id !== branchId) return br;
-              const inList = br.innerBlocks || [];
-              const idx = targetIdx !== undefined ? Math.max(0, Math.min(targetIdx, inList.length)) : inList.length;
-              const nextInner = [...inList];
-              nextInner.splice(idx, 0, childBlock);
-              return { ...br, innerBlocks: nextInner };
-            }),
-          };
-        })
-      );
-    }
-    draggingInfoRef.current = null;
-    setDraggedBlockType(null);
-  };
-
-  // 블록 섹션 클릭 시 자동 부착 기능 제거됨: 캔버스로 드래그 앤 드롭으로만 배치
+    // 블록 섹션 클릭 시 자동 부착 기능 제거됨: 캔버스로 드래그 앤 드롭으로만 배치
   const handleAddBlockFromToolbox = (
     _kind: BlockType,
     _extra?: { varName?: string; withElse?: boolean }
@@ -4054,20 +3344,23 @@ export default function PracticePage({ params }: PracticePageProps) {
 
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      width: '100vw',
-      height: '100vh',
-      overflow: 'hidden',
-      background: '#0b1329',
-      color: '#f8fafc',
-      display: 'flex',
-      flexDirection: 'column',
-      userSelect: 'none',
-      fontFamily: 'var(--font-sans)',
-      zIndex: 100,
-    }}>
+    <div
+      onContextMenu={(e) => e.preventDefault()}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        background: '#0b1329',
+        color: '#f8fafc',
+        display: 'flex',
+        flexDirection: 'column',
+        userSelect: 'none',
+        fontFamily: 'var(--font-sans)',
+        zIndex: 100,
+      }}
+    >
       {/* ====================================================================
           1. FULLSCREEN TOP STUDIO HEADER (MakeCode Style)
           ==================================================================== */}
@@ -5283,6 +4576,10 @@ export default function PracticePage({ params }: PracticePageProps) {
             onClick={() => setActiveInputHelp(null)}
             onDragOver={handleCanvasDragOver}
             onDrop={handleCanvasDrop}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
             style={{
               flex: '1 1 auto',
               position: 'relative',
@@ -5331,2534 +4628,74 @@ export default function PracticePage({ params }: PracticePageProps) {
                  BLOCK MODE: Free Draggable Blocks with Auto-Expanding Input
                  ============================================================ */
               <>
-                {(() => {
-                  const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {
-                    const str = val ?? '';
-                    if (str.length === 0) {
-                      return Math.max(20, Math.round(minChars * 7.5 + 13));
-                    }
-                    let units = 0;
-                    for (let i = 0; i < str.length; i++) {
-                      const code = str.charCodeAt(i);
-                      if ((code >= 0x1100 && code <= 0x11ff) || (code >= 0x3130 && code <= 0x318f) || (code >= 0xac00 && code <= 0xd7af)) {
-                        units += 2;
-                      } else {
-                        units += 1;
-                      }
-                    }
-                    const effectiveLen = Math.max(minChars, units);
-                    return Math.round(effectiveLen * 7.5 + 13);
-                  };
-
-                  const renderInnerChildBlock = (
-                    child: CanvasBlock,
-                    cIdx: number,
-                    onRemove: () => void,
-                    onContentChange: (val: string) => void,
-                    parentBlockId?: string,
-                    branchId?: string
-                  ): React.ReactNode => {
-                    const childTheme = BLOCK_THEMES[child.type] || BLOCK_THEMES.print;
-                    const isCBlock = child.type === 'for_range' || child.type === 'for_in' || child.type === 'while' || child.type === 'def';
-                    const isIfBlock = child.type === 'if';
-
-                    // 1. NESTED C-SHAPE (ㄷ자) BLOCK RENDERING (2중 for문 등 루프 중첩 완벽 지원)
-                    if (isCBlock) {
-                      return (
-                        <div
-                          key={child.id || cIdx}
-                          id={`block-${child.id}`}
-                          className="nested-c-shape-block"
-                          onPointerDown={(e) => {
-                            if (parentBlockId) {
-                              handleInnerBlockPointerDown(e, child, parentBlockId, cIdx, branchId);
-                            }
-                          }}
-                          onContextMenu={(e) => handleBlockContextMenu(e, child.id)}
-                          onDragOver={handleCanvasDragOver}
-                          onDrop={handleCanvasDrop}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignSelf: 'flex-start',
-                            width: 'fit-content',
-                            minWidth: '120px',
-                            userSelect: 'none',
-                            cursor: 'grab',
-                            fontFamily: 'var(--font-mono)',
-                            marginTop: cIdx === 0 ? '0px' : '-1px',
-                            position: 'relative',
-                            filter: 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
-                            zIndex: 6,
-                          }}
-                        >
-                          {/* Top Header Arm: 상단 두께 30px 및 결합부 유지 */}
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              whiteSpace: 'nowrap',
-                              gap: '4px',
-                              minHeight: '30px',
-                              height: '30px',
-                              padding: '0 10px',
-                              borderRadius: '0 6px 6px 0',
-                              background: childTheme.bg,
-                              border: 'none',
-                              borderTop: `1px solid ${childTheme.border}`,
-                              borderRight: `1px solid ${childTheme.border}`,
-                              borderBottom: 'none',
-                              color: '#ffffff',
-                              fontWeight: 800,
-                              fontSize: '0.80rem',
-                              position: 'relative',
-                              cursor: 'grab',
-                              boxSizing: 'border-box',
-                            }}
-                          >
-                            <PuzzleNotch left="12px" borderColor={childTheme.border} isConnected={cIdx > 0} />
-                            <div
-                              style={{
-                                position: 'absolute',
-                                left: '18px',
-                                right: '5px',
-                                bottom: 0,
-                                height: '1px',
-                                background: childTheme.border,
-                                pointerEvents: 'none',
-                              }}
-                            />
-                            {child.type === 'for_range' ? (
-                              <>
-                                <span style={{ color: '#ffffff' }}>for</span>
-                                <input
-                                  type="text"
-                                  value={child.varName ?? 'j'}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleLoopInnerVarNameChange(child.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(child.varName ?? 'j')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span style={{ color: '#ffffff' }}>in range(</span>
-                                <div style={{ position: 'relative', display: 'inline-flex' }}>
-                                  <input
-                                    type="text"
-                                    value={child.content ?? ''}
-                                    placeholder=""
-                                    onMouseDown={(e) => e.stopPropagation()}
-                                    onPointerDown={(e) => e.stopPropagation()}
-                                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                    onFocus={handleInputFocusSelect}
-                                    onClick={handleInputClickSelect}
-                                    onChange={(e) => onContentChange(e.target.value)}
-                                    style={{
-                                      width: `${getBlockInputWidth(child.content ?? '')}px`,
-                                      height: '20px',
-                                      padding: '1px 5px',
-                                      borderRadius: '6px',
-                                      background: '#ffffff',
-                                      color: '#0f172a',
-                                      border: '1px solid rgba(0, 0, 0, 0.3)',
-                                      fontWeight: 800,
-                                      fontFamily: 'var(--font-mono)',
-                                      fontSize: '0.78rem',
-                                      textAlign: 'left',
-                                      outline: 'none',
-                                      cursor: 'text',
-                                      boxSizing: 'border-box',
-                                    }}
-                                  />
-                                </div>
-                                <span style={{ color: '#ffffff' }}>):</span>
-                              </>
-                            ) : child.type === 'for_in' ? (
-                              <>
-                                <span style={{ color: '#ffffff' }}>for</span>
-                                <input
-                                  type="text"
-                                  value={child.varName ?? 'item'}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleLoopInnerVarNameChange(child.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(child.varName ?? 'item')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span style={{ color: '#ffffff' }}>in</span>
-                                <input
-                                  type="text"
-                                  value={child.content ?? ''}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => onContentChange(e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(child.content ?? '')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>:</span>
-                              </>
-                            ) : child.type === 'while' ? (
-                              <>
-                                <span style={{ color: '#ffffff' }}>while</span>
-                                <input
-                                  type="text"
-                                  value={child.content ?? ''}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => onContentChange(e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(child.content ?? '')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>:</span>
-                              </>
-                            ) : (
-                              <>
-                                <span style={{ color: '#ffffff' }}>def</span>
-                                <input
-                                  type="text"
-                                  value={child.varName ?? 'sub_func'}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleLoopInnerVarNameChange(child.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(child.varName ?? 'sub_func')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>(</span>
-                                <input
-                                  type="text"
-                                  value={child.content || ''}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => onContentChange(e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(child.content || '')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>):</span>
-                              </>
-                            )}
-                          </div>
-
-                          {/* Middle Body: Left Vertical Spine + Indented Cavity Slot */}
-                          <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
-                            <div
-                              style={{
-                                width: '18px',
-                                background: childTheme.bg,
-                                borderRight: `1px solid ${childTheme.border}`,
-                                flexShrink: 0,
-                              }}
-                            />
-
-                            <div
-                              id={`mouth-${child.id}`}
-                              onDragOver={handleCanvasDragOver}
-                              onDrop={handleCanvasDrop}
-                              style={{
-                                flex: 1,
-                                minWidth: '70px',
-                                background: 'transparent',
-                                borderTop: 'none',
-                                position: 'relative',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: 0,
-                                margin: 0,
-                                gap: 0,
-                                boxShadow: 'none',
-                                zIndex: 6,
-                              }}
-                            >
-                              <PuzzleTab isCeiling left="12px" borderColor={childTheme.border} bg={childTheme.bg} />
-
-                              {(child.innerBlocks || []).length === 0 ? (
-                                <div
-                                  style={{
-                                    minHeight: '18px',
-                                    borderRadius: '0 6px 6px 0',
-                                  }}
-                                />
-                              ) : (
-                                (child.innerBlocks || []).map((nestedChild, nIdx) =>
-                                  renderInnerChildBlock(
-                                    nestedChild,
-                                    nIdx,
-                                    () => handleRemoveInnerBlockFromLoop(child.id, nIdx),
-                                    (val) => handleLoopInnerInputChange(child.id, nIdx, val),
-                                    child.id
-                                  )
-                                )
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
-                          <SvgBottomClosingArm
-                            theme={childTheme}
-                            isDef={child.type === 'def'}
-                            hasReturn={child.hasReturn}
-                            returnVal={child.returnVal}
-                            onToggleDefReturn={(show) => handleToggleDefReturn(child.id, show)}
-                            onDefReturnValChange={(val) => handleDefReturnValChange(child.id, val)}
-                            hasInnerBlocks={(child.innerBlocks || []).length > 0}
-                            tabLeft={12}
-                          />
-                        </div>
-                      );
-                    }
-
-                    // 2. NESTED CONDITIONAL E/C-SHAPE (if, elif, else) BLOCK RENDERING
-                    if (isIfBlock) {
-                      const branches = (child.branches && child.branches.length > 0)
-                        ? child.branches
-                        : [
-                          {
-                            id: `br-if-${child.id}`,
-                            kind: 'if' as const,
-                            condition: child.content || 'False',
-                            innerBlocks: child.innerBlocks || [],
-                          },
-                        ];
-                      const hasElseBranch = branches.some((br) => br.kind === 'else');
-                      const ifTheme = BLOCK_THEMES.if;
-
-                      return (
-                        <div
-                          key={child.id || cIdx}
-                          id={`block-${child.id}`}
-                          className="nested-c-shape-block nested-if-block"
-                          onPointerDown={(e) => {
-                            if (parentBlockId) {
-                              handleInnerBlockPointerDown(e, child, parentBlockId, cIdx, branchId);
-                            }
-                          }}
-                          onContextMenu={(e) => handleBlockContextMenu(e, child.id)}
-                          onDragOver={handleCanvasDragOver}
-                          onDrop={handleCanvasDrop}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignSelf: 'flex-start',
-                            width: 'fit-content',
-                            minWidth: '100px',
-                            userSelect: 'none',
-                            cursor: 'grab',
-                            fontFamily: 'var(--font-mono)',
-                            marginTop: cIdx === 0 ? '0px' : '-1px',
-                            position: 'relative',
-                            filter: 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
-                            zIndex: 6,
-                          }}
-                        >
-                          {branches.map((branch, brIdx) => {
-                            const isFirst = brIdx === 0;
-                            const branchTheme = ifTheme;
-                            const condVal = branch.condition !== undefined ? branch.condition : 'False';
-                            const dynamicCondWidth = getBlockInputWidth(condVal);
-
-                            return (
-                              <div key={branch.id} style={{ display: 'flex', flexDirection: 'column' }}>
-                                {isFirst ? (
-                                  /* 1) Top Header Arm: 상단 두께 30px 및 결합부 유지 */
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      whiteSpace: 'nowrap',
-                                      gap: '4px',
-                                      minHeight: '30px',
-                                      height: '30px',
-                                      padding: '0 10px',
-                                      borderRadius: '0 6px 6px 0',
-                                      background: branchTheme.bg,
-                                      border: 'none',
-                                      borderTop: `1px solid ${branchTheme.border}`,
-                                      borderRight: `1px solid ${branchTheme.border}`,
-                                      borderBottom: 'none',
-                                      color: '#ffffff',
-                                      fontWeight: 800,
-                                      fontSize: '0.80rem',
-                                      position: 'relative',
-                                      cursor: 'grab',
-                                      boxSizing: 'border-box',
-                                    }}
-                                  >
-                                    <PuzzleNotch left="12px" borderColor={branchTheme.border} isConnected={cIdx > 0} />
-                                    <div
-                                      style={{
-                                        position: 'absolute',
-                                        left: '18px',
-                                        right: '5px',
-                                        bottom: 0,
-                                        height: '1px',
-                                        background: branchTheme.border,
-                                        pointerEvents: 'none',
-                                      }}
-                                    />
-                                    <span style={{ color: '#ffffff' }}>if</span>
-                                    <input
-                                      type="text"
-                                      value={condVal}
-                                      placeholder=""
-                                      onMouseDown={(e) => e.stopPropagation()}
-                                      onPointerDown={(e) => e.stopPropagation()}
-                                      onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                      onFocus={handleInputFocusSelect}
-                                      onClick={handleInputClickSelect}
-                                      onChange={(e) => handleBranchConditionChange(child.id, branch.id, e.target.value)}
-                                      style={{
-                                        width: `${dynamicCondWidth}px`,
-                                        height: '20px',
-                                        padding: '1px 5px',
-                                        borderRadius: '6px',
-                                        background: '#ffffff',
-                                        color: '#0f172a',
-                                        border: '1px solid rgba(0, 0, 0, 0.3)',
-                                        fontWeight: 800,
-                                        fontFamily: 'var(--font-mono)',
-                                        fontSize: '0.78rem',
-                                        textAlign: 'left',
-                                        outline: 'none',
-                                        cursor: 'text',
-                                        boxSizing: 'border-box',
-                                      }}
-                                    />
-                                    <span>:</span>
-                                  </div>
-                                ) : (
-                                  /* 2) Intermediate Branch Arm (elif / else) */
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      whiteSpace: 'nowrap',
-                                      gap: '4px',
-                                      padding: '5px 10px',
-                                      borderRadius: '0 6px 6px 0',
-                                      background: branchTheme.bg,
-                                      borderTop: `1px solid ${branchTheme.border}`,
-                                      borderRight: `1px solid ${branchTheme.border}`,
-                                      borderBottom: 'none',
-                                      color: '#ffffff',
-                                      fontWeight: 800,
-                                      fontSize: '0.80rem',
-                                      position: 'relative',
-                                      cursor: 'grab',
-                                      minHeight: '28px',
-                                      boxSizing: 'border-box',
-                                    }}
-                                  >
-                                    <PuzzleNotch
-                                      left="30px"
-                                      borderColor={branchTheme.border}
-                                      isConnected={(branches[brIdx - 1]?.innerBlocks || []).length > 0}
-                                    />
-                                    <div
-                                      style={{
-                                        position: 'absolute',
-                                        left: '18px',
-                                        right: '5px',
-                                        bottom: 0,
-                                        height: '1px',
-                                        background: branchTheme.border,
-                                        pointerEvents: 'none',
-                                      }}
-                                    />
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                      <span style={{ color: '#ffffff' }}>{branch.kind}</span>
-                                      {branch.kind !== 'else' ? (
-                                        <>
-                                          <input
-                                            type="text"
-                                            value={condVal}
-                                            placeholder=""
-                                            onMouseDown={(e) => e.stopPropagation()}
-                                            onPointerDown={(e) => e.stopPropagation()}
-                                            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                            onFocus={handleInputFocusSelect}
-                                            onClick={handleInputClickSelect}
-                                            onChange={(e) => handleBranchConditionChange(child.id, branch.id, e.target.value)}
-                                            style={{
-                                              width: `${dynamicCondWidth}px`,
-                                              height: '20px',
-                                              padding: '1px 5px',
-                                              borderRadius: '6px',
-                                              background: '#ffffff',
-                                              color: '#0f172a',
-                                              border: '1px solid rgba(0, 0, 0, 0.3)',
-                                              fontWeight: 800,
-                                              fontFamily: 'var(--font-mono)',
-                                              fontSize: '0.78rem',
-                                              textAlign: 'left',
-                                              outline: 'none',
-                                              cursor: 'text',
-                                              boxSizing: 'border-box',
-                                            }}
-                                          />
-                                          <span>:</span>
-                                        </>
-                                      ) : (
-                                        <span>:</span>
-                                      )}
-                                    </div>
-
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto' }}>
-                                      {branch.kind !== 'if' && (
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleRemoveBranch(child.id, branch.id);
-                                          }}
-                                          title={`${branch.kind} 가지 삭제`}
-                                          style={{
-                                            background: 'rgba(0, 0, 0, 0.35)',
-                                            border: 'none',
-                                            color: '#ffffff',
-                                            borderRadius: '50%',
-                                            width: '14px',
-                                            height: '14px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '10px',
-                                            cursor: 'pointer',
-                                            padding: 0,
-                                          }}
-                                        >
-                                          ×
-                                        </button>
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Body: Left Vertical Spine + Indented Cavity Slot for this branch */}
-                                <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
-                                  <div
-                                    style={{
-                                      width: '18px',
-                                      background: branchTheme.bg,
-                                      borderRight: `1px solid ${branchTheme.border}`,
-                                      flexShrink: 0,
-                                    }}
-                                  />
-
-                                  <div
-                                    id={`mouth-${child.id}-${branch.id}`}
-                                    onDragOver={handleCanvasDragOver}
-                                    onDragLeave={(e) => {
-                                      if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                                        if (activeSnapTargetRef.current?.type === 'mouth' && activeSnapTargetRef.current?.targetBlockId === child.id && activeSnapTargetRef.current?.branchId === branch.id) {
-                                          activeSnapTargetRef.current = null;
-                                          setActiveSnapTarget(null);
-                                        }
-                                      }
-                                    }}
-                                    onDrop={handleCanvasDrop}
-                                    style={{
-                                      flex: 1,
-                                      minWidth: '70px',
-                                      background: 'transparent',
-                                      borderTop: 'none',
-                                      position: 'relative',
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      padding: 0,
-                                      margin: 0,
-                                      gap: 0,
-                                      boxShadow: 'none',
-                                      zIndex: 6,
-                                    }}
-                                  >
-                                    <PuzzleTab isCeiling left="12px" borderColor={branchTheme.border} bg={branchTheme.bg} />
-
-                                    {(branch.innerBlocks || []).length === 0 ? (
-                                      <div
-                                        style={{
-                                          minHeight: '18px',
-                                          borderRadius: '0 6px 6px 0',
-                                        }}
-                                      />
-                                    ) : (
-                                      (branch.innerBlocks || []).map((nestedChild, nIdx) =>
-                                        renderInnerChildBlock(
-                                          nestedChild,
-                                          nIdx,
-                                          () => handleRemoveInnerBlockFromBranch(child.id, branch.id, nIdx),
-                                          (val) => handleBranchInnerInputChange(child.id, branch.id, nIdx, val),
-                                          child.id,
-                                          branch.id
-                                        )
-                                      )
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-
-                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
-                          <SvgBottomClosingArm
-                            theme={ifTheme}
-                            hasInnerBlocks={(branches[branches.length - 1]?.innerBlocks || []).length > 0}
-                            tabLeft={12}
-                          />
-                        </div>
-                      );
-                    }
-
-                    // 3. STANDARD INLINE BLOCKS INSIDE MOUTH (print, variable, input, etc.)
-                    return (
-                      <div
-                        key={child.id || cIdx}
-                        id={`block-${child.id}`}
-                        onPointerDown={(e) => {
-                          if (parentBlockId) {
-                            handleInnerBlockPointerDown(e, child, parentBlockId, cIdx, branchId);
-                          }
-                        }}
-                        onContextMenu={(e) => handleBlockContextMenu(e, child.id)}
-                        onDragOver={handleCanvasDragOver}
-                        onDrop={handleCanvasDrop}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          minHeight: '30px',
-                          height: '30px',
-                          padding: '0 8px',
-                          boxSizing: 'border-box',
-                          borderRadius: '0 6px 6px 0',
-                          background: childTheme.bg,
-                          border: `1px solid ${childTheme.border}`,
-                          borderLeft: 'none',
-                          boxShadow: `0 1.5px 0 ${childTheme.shadow}`,
-                          color: '#ffffff',
-                          fontWeight: 800,
-                          fontSize: '0.78rem',
-                          position: 'relative',
-                          width: 'fit-content',
-                          userSelect: 'none',
-                          cursor: 'grab',
-                          marginTop: cIdx === 0 ? '0px' : '-1px',
-                          zIndex: activeInputHelp?.blockId === child.id ? 80 : 4,
-                        }}
-                      >
-                        {/* Scratch Interlocking Puzzle Bottom Tab (Slots into floor notch or next child) */}
-                        <PuzzleTab left="12px" borderColor={childTheme.border} bg={childTheme.bg} />
-
-                        {child.type === 'print' ? (
-                          <>
-                            <span>print (</span>
-                            <div style={{ position: 'relative', display: 'inline-flex' }}>
-                              <input
-                                type="text"
-                                value={child.content || ''}
-                                placeholder=""
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                onFocus={handleInputFocusSelect}
-                                onClick={handleInputClickSelect}
-                                onChange={(e) => onContentChange(e.target.value)}
-                                style={{
-                                  width: `${getBlockInputWidth(child.content)}px`,
-                                  height: '18px',
-                                  padding: '1px 5px',
-                                  borderRadius: '6px',
-                                  background: '#ffffff',
-                                  color: '#0f172a',
-                                  border: '1px solid rgba(0,0,0,0.2)',
-                                  fontWeight: 800,
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.76rem',
-                                  textAlign: 'left',
-                                  outline: 'none',
-                                  cursor: 'text',
-                                  boxSizing: 'border-box',
-                                }}
-                              />
-                            </div>
-                            <span>)</span>
-                          </>
-                        ) : child.type === 'break' ? (
-                          <span style={{ color: '#ffffff', fontWeight: 900 }}>break</span>
-                        ) : child.type === 'continue' ? (
-                          <span style={{ color: '#ffffff', fontWeight: 900 }}>continue</span>
-                        ) : child.type === 'variable' ? (
-                          <>
-                            <span>{child.varName || 'x'} =</span>
-                            <input
-                              type="text"
-                              value={child.content || ''}
-                              placeholder=""
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                              onFocus={handleInputFocusSelect}
-                              onClick={handleInputClickSelect}
-                              onChange={(e) => onContentChange(e.target.value)}
-                              style={{
-                                width: `${getBlockInputWidth(child.content)}px`,
-                                height: '18px',
-                                padding: '1px 5px',
-                                borderRadius: '6px',
-                                background: '#ffffff',
-                                color: '#0f172a',
-                                border: '1px solid rgba(0,0,0,0.2)',
-                                fontWeight: 800,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.76rem',
-                                textAlign: 'left',
-                                outline: 'none',
-                                cursor: 'text',
-                                boxSizing: 'border-box',
-                              }}
-                            />
-                          </>
-                        ) : child.type === 'input' ? (
-                          <>
-                            <span>input (</span>
-                            <div style={{ position: 'relative', display: 'inline-flex' }}>
-                              <input
-                                type="text"
-                                value={child.content || ''}
-                                placeholder=""
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                onFocus={handleInputFocusSelect}
-                                onClick={handleInputClickSelect}
-                                onChange={(e) => onContentChange(e.target.value)}
-                                style={{
-                                  width: `${getBlockInputWidth(child.content)}px`,
-                                  height: '18px',
-                                  padding: '1px 5px',
-                                  borderRadius: '6px',
-                                  background: '#ffffff',
-                                  color: '#0f172a',
-                                  border: '1px solid rgba(0,0,0,0.2)',
-                                  fontWeight: 800,
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.76rem',
-                                  textAlign: 'left',
-                                  outline: 'none',
-                                  cursor: 'text',
-                                  boxSizing: 'border-box',
-                                }}
-                              />
-                            </div>
-                            <span>)</span>
-                          </>
-                        ) : child.type === 'len' ? (
-                          <>
-                            <span>len (</span>
-                            <div style={{ position: 'relative', display: 'inline-flex' }}>
-                              <input
-                                type="text"
-                                value={child.content || ''}
-                                placeholder=""
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                onFocus={handleInputFocusSelect}
-                                onClick={handleInputClickSelect}
-                                onChange={(e) => onContentChange(e.target.value)}
-                                style={{
-                                  width: `${getBlockInputWidth(child.content)}px`,
-                                  height: '18px',
-                                  padding: '1px 5px',
-                                  borderRadius: '6px',
-                                  background: '#ffffff',
-                                  color: '#0f172a',
-                                  border: '1px solid rgba(0,0,0,0.2)',
-                                  fontWeight: 800,
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.76rem',
-                                  textAlign: 'left',
-                                  outline: 'none',
-                                  cursor: 'text',
-                                  boxSizing: 'border-box',
-                                }}
-                              />
-                            </div>
-                            <span>)</span>
-                          </>
-                        ) : child.type === 'return' ? (
-                          <>
-                            <span>return</span>
-                            <input
-                              type="text"
-                              value={child.content || ''}
-                              placeholder=""
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                              onFocus={handleInputFocusSelect}
-                              onClick={handleInputClickSelect}
-                              onChange={(e) => onContentChange(e.target.value)}
-                              style={{
-                                width: `${getBlockInputWidth(child.content)}px`,
-                                height: '18px',
-                                padding: '1px 5px',
-                                borderRadius: '6px',
-                                background: '#ffffff',
-                                color: '#0f172a',
-                                border: '1px solid rgba(0,0,0,0.2)',
-                                fontWeight: 800,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.76rem',
-                                textAlign: 'left',
-                                outline: 'none',
-                                cursor: 'text',
-                                boxSizing: 'border-box',
-                              }}
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <span>{child.type}</span>
-                            <input
-                              type="text"
-                              value={child.content || ''}
-                              placeholder=""
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                              onFocus={handleInputFocusSelect}
-                              onClick={handleInputClickSelect}
-                              onChange={(e) => onContentChange(e.target.value)}
-                              style={{
-                                width: `${getBlockInputWidth(child.content)}px`,
-                                height: '18px',
-                                padding: '1px 5px',
-                                borderRadius: '6px',
-                                background: '#ffffff',
-                                color: '#0f172a',
-                                border: '1px solid rgba(0,0,0,0.2)',
-                                fontWeight: 800,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.76rem',
-                                textAlign: 'left',
-                                outline: 'none',
-                                cursor: 'text',
-                                boxSizing: 'border-box',
-                              }}
-                            />
-                          </>
-                        )}
-                      </div>
-                    );
-                  };
-
-                  return canvasBlocks.map((block) => {
-                    const theme = BLOCK_THEMES[block.type] || BLOCK_THEMES.print;
-                    // ==========================================================
-                    // 0. START HAT BLOCK (시작 블록: 실시간 실행 엔트리포인트)
-                    // ==========================================================
-                    if (block.type === 'start') {
-                      return (
-                        <div
-                          key={block.id}
-                          id={`block-${block.id}`}
-                          className="canvas-block start-hat-block"
-                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
-                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
-                          onDragOver={handleCanvasDragOver}
-                          onDrop={handleCanvasDrop}
-                          style={{
-                            position: 'absolute',
-                            left: `${block.x}px`,
-                            top: `${block.y}px`,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '7px 14px 7px 12px',
-                            borderRadius: block.nextBlockId ? '16px 16px 0 0' : '16px 16px 6px 6px',
-                            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-                            boxShadow: block.nextBlockId
-                              ? '0 4px 12px rgba(16, 185, 129, 0.25)'
-                              : '0 2px 0 #065f46, 0 4px 12px rgba(16, 185, 129, 0.35)',
-                            border: '1px solid #10b981',
-                            color: '#ffffff',
-                            fontWeight: 800,
-                            fontSize: '0.82rem',
-                            fontFamily: 'var(--font-sans)',
-                            cursor: 'grab',
-                            zIndex: block.id === draggingBlockId ? 100 : 35,
-                            userSelect: 'none',
-                            touchAction: 'none',
-                            transition: 'transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease',
-                          }}
-                        >
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            background: '#ffffff',
-                            color: '#047857',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
-                          }}>
-                            <Play size={11} fill="#047857" style={{ marginLeft: '1px' }} />
-                          </div>
-                          <span style={{ fontWeight: 800, letterSpacing: '-0.3px', color: '#ffffff', fontSize: '0.85rem' }}>실행</span>
-                          <span style={{
-                            fontSize: '0.68rem',
-                            padding: '1px 6px',
-                            borderRadius: '4px',
-                            background: 'rgba(255, 255, 255, 0.2)',
-                            color: '#ffffff',
-                            fontWeight: 700,
-                            letterSpacing: '-0.3px',
-                          }}>
-                            실시간
-                          </span>
-
-                          {/* Bottom Puzzle Tab: 블록 색상과 일치 및 선명한 돌출 유지 */}
-                          <PuzzleTab left="16px" borderColor="#10b981" bg="#059669" />
-                        </div>
-                      );
-                    }
-
-                    // ==========================================================
-                    // 1. E-SHAPE CONDITIONAL BLOCK (if / elif / else 다단 확장)
-                    // ==========================================================
-                    if (block.type === 'if') {
-                      const branches = (block.branches && block.branches.length > 0)
-                        ? block.branches
-                        : [{ id: `br-if-${block.id}`, kind: 'if' as const, condition: block.content !== undefined ? block.content : 'False', innerBlocks: block.innerBlocks || [] }];
-
-                      const hasElseBranch = branches.some((br) => br.kind === 'else');
-
-                      return (
-                        <div
-                          key={block.id}
-                          id={`block-${block.id}`}
-                          className="canvas-block e-shape-block"
-                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
-                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
-                          onDragOver={handleCanvasDragOver}
-                          onDrop={handleCanvasDrop}
-                          style={{
-                            position: 'absolute',
-                            left: `${block.x}px`,
-                            top: `${block.y}px`,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: 'fit-content',
-                            minWidth: '100px',
-                            zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : Math.max(5, 30 - Math.min(25, Math.floor(block.y / 20)))),
-                            opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
-                            transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
-                            transition: 'transform 0.15s ease, opacity 0.15s ease',
-                            userSelect: 'none',
-                            touchAction: 'none',
-                            fontFamily: 'var(--font-mono)',
-                            filter: draggedChainIds.has(block.id)
-                              ? (isToolboxHovered || isTrashHovered
-                                ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.85))'
-                                : 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55))')
-                              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                            cursor: 'grab',
-                          }}
-                        >
-                          {branches.map((branch, bIdx) => {
-                            const isFirst = bIdx === 0;
-                            // 모든 분기(if, elif, else)를 통일된 BLOCK_THEMES.if로 완전 일원화
-                            const branchTheme = BLOCK_THEMES.if;
-
-                            const condVal = branch.condition !== undefined ? branch.condition : 'False';
-                            const dynamicCondWidth = getBlockInputWidth(condVal);
-
-                            return (
-                              <div key={branch.id} style={{ display: 'flex', flexDirection: 'column' }}>
-                                {isFirst ? (
-                                  /* 1) Top Header Arm (if): 상단 두께 30px 및 결합부 유지 */
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      whiteSpace: 'nowrap',
-                                      gap: '4px',
-                                      minHeight: '30px',
-                                      height: '30px',
-                                      padding: '0 10px',
-                                      borderRadius: '6px 6px 6px 0',
-                                      background: branchTheme.bg,
-                                      border: 'none',
-                                      borderTop: `1px solid ${branchTheme.border}`,
-                                      borderLeft: `1px solid ${branchTheme.border}`,
-                                      borderRight: `1px solid ${branchTheme.border}`,
-                                      borderBottom: 'none',
-                                      boxShadow: 'none',
-                                      color: '#ffffff',
-                                      fontWeight: 800,
-                                      fontSize: '0.80rem',
-                                      position: 'relative',
-                                      cursor: 'grab',
-                                      boxSizing: 'border-box',
-                                    }}
-                                  >
-                                    <PuzzleNotch left="16px" borderColor={branchTheme.border} isConnected={!!block.prevBlockId} />
-                                    <div
-                                      style={{
-                                        position: 'absolute',
-                                        left: '18px',
-                                        right: '5px',
-                                        bottom: 0,
-                                        height: '1px',
-                                        background: branchTheme.border,
-                                        pointerEvents: 'none',
-                                      }}
-                                    />
-
-                                    {/* Arm Content */}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                      <span style={{ color: '#ffffff' }}>if</span>
-                                      <input
-                                        type="text"
-                                        value={condVal}
-                                        placeholder=""
-                                        onMouseDown={(e) => e.stopPropagation()}
-                                        onPointerDown={(e) => e.stopPropagation()}
-                                        onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                        onFocus={handleInputFocusSelect}
-                                        onClick={handleInputClickSelect}
-                                        onChange={(e) => handleBranchConditionChange(block.id, branch.id, e.target.value)}
-                                        style={{
-                                          width: `${dynamicCondWidth}px`,
-                                          height: '20px',
-                                          padding: '1px 5px',
-                                          borderRadius: '6px',
-                                          background: '#ffffff',
-                                          color: '#0f172a',
-                                          border: '1px solid rgba(0, 0, 0, 0.3)',
-                                          fontWeight: 800,
-                                          fontFamily: 'var(--font-mono)',
-                                          fontSize: '0.78rem',
-                                          textAlign: 'left',
-                                          outline: 'none',
-                                          cursor: 'text',
-                                          boxSizing: 'border-box',
-                                        }}
-                                      />
-                                      <span>:</span>
-                                    </div>
-
-                                  </div>
-                                ) : (
-                                  /* 2) Intermediate Branch Arm (elif / else): 스크래치 정통 왼쪽 정렬 일체형 암 */
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      whiteSpace: 'nowrap',
-                                      gap: '4px',
-                                      padding: '5px 10px',
-                                      borderRadius: '0 6px 6px 0',
-                                      background: branchTheme.bg,
-                                      borderTop: `1px solid ${branchTheme.border}`,
-                                      borderRight: `1px solid ${branchTheme.border}`,
-                                      borderBottom: 'none',
-                                      borderLeft: `1px solid ${branchTheme.border}`,
-                                      boxShadow: 'none',
-                                      color: '#ffffff',
-                                      fontWeight: 800,
-                                      fontSize: '0.80rem',
-                                      position: 'relative',
-                                      cursor: 'grab',
-                                      minHeight: '28px',
-                                      boxSizing: 'border-box',
-                                    }}
-                                  >
-                                    {/* 바로 위 슬롯 바닥에 맞물리는 홈 */}
-                                    <PuzzleNotch left="28px" borderColor={branchTheme.border} />
-                                    <div
-                                      style={{
-                                        position: 'absolute',
-                                        left: '18px',
-                                        right: '5px',
-                                        bottom: 0,
-                                        height: '1px',
-                                        background: branchTheme.border,
-                                        pointerEvents: 'none',
-                                      }}
-                                    />
-
-                                    {/* Arm Content */}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                      <span style={{ color: '#ffffff' }}>{branch.kind}</span>
-                                      {branch.kind !== 'else' ? (
-                                        <>
-                                          <input
-                                            type="text"
-                                            value={condVal}
-                                            placeholder=""
-                                            onMouseDown={(e) => e.stopPropagation()}
-                                            onPointerDown={(e) => e.stopPropagation()}
-                                            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                            onFocus={handleInputFocusSelect}
-                                            onClick={handleInputClickSelect}
-                                            onChange={(e) => handleBranchConditionChange(block.id, branch.id, e.target.value)}
-                                            style={{
-                                              width: `${dynamicCondWidth}px`,
-                                              height: '20px',
-                                              padding: '1px 5px',
-                                              borderRadius: '6px',
-                                              background: '#ffffff',
-                                              color: '#0f172a',
-                                              border: '1px solid rgba(0, 0, 0, 0.3)',
-                                              fontWeight: 800,
-                                              fontFamily: 'var(--font-mono)',
-                                              fontSize: '0.78rem',
-                                              textAlign: 'left',
-                                              outline: 'none',
-                                              cursor: 'text',
-                                              boxSizing: 'border-box',
-                                            }}
-                                          />
-                                          <span>:</span>
-                                        </>
-                                      ) : (
-                                        <span>:</span>
-                                      )}
-                                    </div>
-
-                                    {/* Action Buttons: elif 및 else 가지에 삭제(×) 버튼 노출 */}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                                      {branch.kind !== 'if' && (
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleRemoveBranch(block.id, branch.id);
-                                          }}
-                                          title={`${branch.kind} 가지 삭제`}
-                                          style={{
-                                            background: 'rgba(0, 0, 0, 0.35)',
-                                            border: 'none',
-                                            color: '#ffffff',
-                                            borderRadius: '50%',
-                                            width: '14px',
-                                            height: '14px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '10px',
-                                            cursor: 'pointer',
-                                            padding: 0,
-                                          }}
-                                        >
-                                          ×
-                                        </button>
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Body: Left Spine + Cavity Slot for this branch */}
-                                <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
-                                  <div
-                                    style={{
-                                      width: '18px',
-                                      background: branchTheme.bg,
-                                      borderLeft: `1px solid ${branchTheme.border}`,
-                                      borderRight: `1px solid ${branchTheme.border}`,
-                                      flexShrink: 0,
-                                    }}
-                                  />
-
-                                  <div
-                                    id={`mouth-${block.id}-${branch.id}`}
-                                    onDragOver={handleCanvasDragOver}
-                                    onDragLeave={(e) => {
-                                      if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                                        if (activeSnapTargetRef.current?.type === 'mouth' && activeSnapTargetRef.current?.targetBlockId === block.id && activeSnapTargetRef.current?.branchId === branch.id) {
-                                          activeSnapTargetRef.current = null;
-                                          setActiveSnapTarget(null);
-                                        }
-                                      }
-                                    }}
-                                    onDrop={handleCanvasDrop}
-                                    style={{
-                                      flex: 1,
-                                      minWidth: '70px',
-                                      background: 'transparent',
-                                      borderTop: 'none',
-                                      position: 'relative',
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      padding: 0,
-                                      margin: 0,
-                                      gap: 0,
-                                      boxShadow: 'none',
-                                      zIndex: 6,
-                                    }}
-                                  >
-                                    {/* Inner puzzle tab on mouth ceiling */}
-                                    <PuzzleTab isCeiling left="12px" borderColor={branchTheme.border} bg={branchTheme.bg} />
-
-                                    {(branch.innerBlocks || []).length === 0 ? (
-                                      <div
-                                        style={{
-                                          minHeight: '18px',
-                                          borderRadius: '0 6px 6px 0',
-                                        }}
-                                      />
-                                    ) : (
-                                      (branch.innerBlocks || []).map((child, cIdx) =>
-                                        renderInnerChildBlock(
-                                          child,
-                                          cIdx,
-                                          () => handleRemoveInnerBlockFromBranch(block.id, branch.id, cIdx),
-                                          (val) => handleBranchInnerInputChange(block.id, branch.id, cIdx, val),
-                                          block.id,
-                                          branch.id
-                                        )
-                                      )
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-
-                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
-                          <SvgBottomClosingArm
-                            theme={BLOCK_THEMES.if}
-                            hasInnerBlocks={(branches[branches.length - 1]?.innerBlocks || []).length > 0}
-                            tabLeft={16}
-                          />
-                        </div>
-                      );
-                    }
-
-                    // ==========================================================
-                    // 2. C-SHAPE LOOP & DEF BLOCKS (for, while, def ㄷ자 블록)
-                    // ==========================================================
-                    const isCBlock = block.type === 'for_range' || block.type === 'for_in' || block.type === 'while' || block.type === 'def';
-                    if (isCBlock) {
-                      return (
-                        <div
-                          key={block.id}
-                          id={`block-${block.id}`}
-                          className="canvas-block c-shape-block"
-                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
-                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
-                          onDragOver={handleCanvasDragOver}
-                          onDrop={handleCanvasDrop}
-                          style={{
-                            position: 'absolute',
-                            left: `${block.x}px`,
-                            top: `${block.y}px`,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: 'fit-content',
-                            minWidth: '120px',
-                            zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : Math.max(5, 30 - Math.min(25, Math.floor(block.y / 20)))),
-                            opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
-                            transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
-                            transition: 'transform 0.15s ease, opacity 0.15s ease',
-                            userSelect: 'none',
-                            touchAction: 'none',
-                            fontFamily: 'var(--font-mono)',
-                            filter: draggedChainIds.has(block.id)
-                              ? (isToolboxHovered || isTrashHovered
-                                ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.85))'
-                                : 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55))')
-                              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                            cursor: 'grab',
-                          }}
-                        >
-                          {/* Top Header Arm: 상단 두께 30px 및 결합 시에도 암수 결합 형태 균일 유지 */}
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              whiteSpace: 'nowrap',
-                              gap: '4px',
-                              minHeight: '30px',
-                              height: '30px',
-                              width: '100%',
-                              padding: '0 10px',
-                              borderRadius: '6px 6px 6px 0',
-                              background: theme.bg,
-                              border: 'none',
-                              borderTop: `1px solid ${theme.border}`,
-                              borderLeft: `1px solid ${theme.border}`,
-                              borderRight: `1px solid ${theme.border}`,
-                              borderBottom: 'none',
-                              boxShadow: 'none',
-                              color: '#ffffff',
-                              fontWeight: 800,
-                              fontSize: '0.80rem',
-                              position: 'relative',
-                              cursor: 'grab',
-                              boxSizing: 'border-box',
-                            }}
-                          >
-                            <PuzzleNotch left="16px" borderColor={theme.border} isConnected={!!block.prevBlockId} />
-                            {/* 입구 천장선: 왼쪽 기둥(18px)은 열리고, 우측 끝(right: 5px)은 상단 암 테두리 내부에서 칼같이 마감되어 절대 삐져나오지 않음 */}
-                            <div
-                              style={{
-                                position: 'absolute',
-                                left: '18px',
-                                right: '5px',
-                                bottom: 0,
-                                height: '1px',
-                                background: theme.border,
-                                pointerEvents: 'none',
-                              }}
-                            />
-
-                            {block.type === 'for_range' ? (
-                              <>
-                                <span style={{ color: '#ffffff' }}>for</span>
-                                <input
-                                  type="text"
-                                  value={block.varName ?? 'i'}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleBlockVarNameChange(block.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(block.varName ?? 'i')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span style={{ color: '#ffffff' }}>in range(</span>
-                                <div style={{ position: 'relative', display: 'inline-flex' }}>
-                                  <input
-                                    type="text"
-                                    value={block.content ?? ''}
-                                    placeholder=""
-                                    onMouseDown={(e) => e.stopPropagation()}
-                                    onPointerDown={(e) => e.stopPropagation()}
-                                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                    onFocus={(e) => {
-                                      handleInputFocusSelect(e);
-                                      setActiveInputHelp({ blockId: block.id, funcType: 'for_range' });
-                                    }}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleInputClickSelect(e);
-                                      setActiveInputHelp({ blockId: block.id, funcType: 'for_range' });
-                                    }}
-                                    onBlur={() => {
-                                      setTimeout(() => {
-                                        setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
-                                      }, 180);
-                                    }}
-                                    onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                    style={{
-                                      width: `${getBlockInputWidth(block.content ?? '')}px`,
-                                      height: '20px',
-                                      padding: '1px 5px',
-                                      borderRadius: '6px',
-                                      background: '#ffffff',
-                                      color: '#0f172a',
-                                      border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
-                                      fontWeight: 800,
-                                      fontFamily: 'var(--font-mono)',
-                                      fontSize: '0.78rem',
-                                      textAlign: 'left',
-                                      outline: 'none',
-                                      cursor: 'text',
-                                      boxSizing: 'border-box',
-                                    }}
-                                  />
-                                  {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'for_range' && (
-                                    <FunctionParamSpeechBubble
-                                      funcType="for_range"
-                                      onApplyOption={(opt) => {
-                                        handleBlockInputChange(block.id, opt);
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                                <span>):</span>
-                              </>
-                            ) : block.type === 'for_in' ? (
-                              <>
-                                <span style={{ color: '#ffffff' }}>for</span>
-                                <input
-                                  type="text"
-                                  value={block.varName ?? 'item'}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleBlockVarNameChange(block.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(block.varName ?? 'item')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span style={{ color: '#ffffff' }}>in</span>
-                                <input
-                                  type="text"
-                                  value={block.content || ''}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(block.content || '')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>:</span>
-                              </>
-                            ) : block.type === 'while' ? (
-                              <>
-                                <span style={{ color: '#ffffff' }}>while</span>
-                                <input
-                                  type="text"
-                                  value={block.content ?? ''}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(block.content ?? '')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>:</span>
-                              </>
-                            ) : (
-                              <>
-                                <span style={{ color: '#ffffff' }}>def</span>
-                                <input
-                                  type="text"
-                                  value={block.varName ?? 'my_func'}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleBlockVarNameChange(block.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(block.varName ?? 'my_func')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>(</span>
-                                <input
-                                  type="text"
-                                  value={block.content || ''}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(block.content || '')}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span>):</span>
-                              </>
-                            )}
-                          </div>
-
-                          {/* Middle Body: Left Vertical Spine + Indented Cavity Slot */}
-                          <div style={{ display: 'flex', flexDirection: 'row', minHeight: '22px', position: 'relative', marginTop: '-1px' }}>
-                            <div
-                              style={{
-                                width: '18px',
-                                background: theme.bg,
-                                borderLeft: `1px solid ${theme.border}`,
-                                borderRight: `1px solid ${theme.border}`,
-                                flexShrink: 0,
-                              }}
-                            />
-
-                            <div
-                              id={`mouth-${block.id}`}
-                              onDragOver={handleCanvasDragOver}
-                              onDragLeave={(e) => {
-                                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                                  if (activeSnapTargetRef.current?.type === 'mouth' && activeSnapTargetRef.current?.targetBlockId === block.id) {
-                                    activeSnapTargetRef.current = null;
-                                    setActiveSnapTarget(null);
-                                  }
-                                }
-                              }}
-                              onDrop={handleCanvasDrop}
-                              style={{
-                                flex: 1,
-                                minWidth: '70px',
-                                background: 'transparent',
-                                borderTop: 'none',
-                                position: 'relative',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: 0,
-                                margin: 0,
-                                gap: 0,
-                                boxShadow: 'none',
-                                zIndex: 6,
-                              }}
-                            >
-                              {/* Inner puzzle tab on mouth ceiling: 12px 정렬 */}
-                              <PuzzleTab isCeiling left="12px" borderColor={theme.border} bg={theme.bg} />
-
-                              {(block.innerBlocks || []).length === 0 ? (
-                                <div
-                                  style={{
-                                    minHeight: '20px',
-                                    borderRadius: '0 6px 6px 0',
-                                  }}
-                                />
-                              ) : (
-                                (block.innerBlocks || []).map((child, cIdx) =>
-                                  renderInnerChildBlock(
-                                    child,
-                                    cIdx,
-                                    () => handleRemoveInnerBlockFromLoop(block.id, cIdx),
-                                    (val) => handleLoopInnerInputChange(block.id, cIdx, val),
-                                    block.id
-                                  )
-                                )
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Bottom Closing Arm: Scratch/Blockly 규격 단일 SVG 벡터 패스로 일체형 렌더링 */}
-                          <SvgBottomClosingArm
-                            theme={theme}
-                            isDef={block.type === 'def'}
-                            hasReturn={block.hasReturn}
-                            returnVal={block.returnVal}
-                            onToggleDefReturn={(show) => handleToggleDefReturn(block.id, show)}
-                            onDefReturnValChange={(val) => handleDefReturnValChange(block.id, val)}
-                            hasInnerBlocks={(block.innerBlocks || []).length > 0}
-                            tabLeft={16}
-                          />
-                        </div>
-                      );
-                    }
-
-                    // ==========================================================
-                    // 3. METHOD BLOCK (메서드 블록: 위아래 홈/돌출부 없고 좌측 돌출부(凸) + 메서드 드롭다운 + 우측 홈(凹))
-                    // ==========================================================
-                    if (block.type === 'method') {
-                      const currMethod = block.methodName || 'split';
-                      let currPlaceholder = 'sep';
-                      for (const cat of METHOD_CATEGORIES) {
-                        const found = cat.methods.find((m) => m.name === currMethod);
-                        if (found) {
-                          currPlaceholder = found.placeholder;
-                          break;
+                {canvasBlocks.map((block) => (
+                  <CanvasBlockItem
+                    key={block.id}
+                    block={block}
+                    isNested={false}
+                    draggedChainIds={draggedChainIds}
+                    activeInputHelp={activeInputHelp}
+                    onBlockPointerDown={handleBlockPointerDown}
+                    onInnerBlockPointerDown={handleInnerBlockPointerDown}
+                    onContextMenu={handleBlockContextMenu}
+                    onDragOver={handleCanvasDragOver}
+                    onDrop={handleCanvasDrop}
+                    onContentChange={(val, blockId, parentBlockId, cIdx, branchId) => {
+                      if (parentBlockId && cIdx !== undefined) {
+                        if (branchId) {
+                          handleBranchInnerInputChange(parentBlockId, branchId, cIdx, val);
+                        } else {
+                          handleLoopInnerInputChange(parentBlockId, cIdx, val);
                         }
+                      } else {
+                        handleBlockInputChange(blockId, val);
                       }
-
-                      return (
-                        <div
-                          key={block.id}
-                          id={`block-${block.id}`}
-                          className="canvas-block method-block"
-                          onPointerDown={(e) => handleBlockPointerDown(e, block)}
-                          onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
-                          onDragOver={handleCanvasDragOver}
-                          onDrop={handleCanvasDrop}
-                          style={{
-                            position: 'absolute',
-                            left: `${block.x}px`,
-                            top: `${block.y}px`,
-                            display: 'inline-flex',
-                            width: 'fit-content',
-                            alignItems: 'center',
-                            gap: '4px',
-                            borderRadius: '6px',
-                            minHeight: '30px',
-                            height: '30px',
-                            padding: '0 8px 0 10px',
-                            boxSizing: 'border-box',
-                            background: theme.bg,
-                            boxShadow: `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
-                            border: `1px solid ${theme.border}`,
-                            color: '#ffffff',
-                            fontWeight: 800,
-                            fontSize: '0.80rem',
-                            fontFamily: 'var(--font-mono)',
-                            cursor: 'grab',
-                            zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : 32),
-                            opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
-                            transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
-                            userSelect: 'none',
-                            touchAction: 'none',
-                            transition: 'transform 0.15s ease, opacity 0.15s ease',
-                          }}
-                        >
-                          {/* Left Puzzle Tab (凸) */}
-                          <HorizontalPuzzleTab borderColor={theme.border} bg={theme.bg} />
-
-                          {/* Right Puzzle Notch (凹) for chaining another method */}
-                          <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
-
-                          <span style={{ fontSize: '0.95rem', fontWeight: 900, marginRight: '-1px' }}>.</span>
-
-                          {/* Method Dropdown */}
-                          <select
-                            value={block.methodName || 'split'}
-                            onMouseDown={(e) => e.stopPropagation()}
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onChange={(e) => handleMethodNameChange(block.id, e.target.value)}
-                            title={`${currMethod} 메서드 (${currPlaceholder ? `인자: ${currPlaceholder}` : '인자 없음'})`}
-                            style={{
-                              width: `${getMethodSelectWidth(block.methodName || 'split')}px`,
-                              height: '20px',
-                              padding: '0 20px 0 7px',
-                              borderRadius: '5px',
-                              background: '#ffffff',
-                              color: '#0f172a',
-                              border: '1px solid rgba(0, 0, 0, 0.25)',
-                              fontWeight: 800,
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.78rem',
-                              outline: 'none',
-                              cursor: 'pointer',
-                              boxSizing: 'border-box',
-                              transition: 'width 0.15s ease',
-                            }}
-                          >
-                            {METHOD_CATEGORIES.map((cat) => (
-                              <optgroup key={cat.category} label={cat.category}>
-                                {cat.methods.map((m) => (
-                                  <option key={m.name} value={m.name} title={m.label}>
-                                    {m.name}
-                                  </option>
-                                ))}
-                              </optgroup>
-                            ))}
-                          </select>
-
-                          <span>(</span>
-                          <input
-                            type="text"
-                            value={block.content || ''}
-                            placeholder={currPlaceholder}
-                            onMouseDown={(e) => e.stopPropagation()}
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                            onFocus={handleInputFocusSelect}
-                            onClick={handleInputClickSelect}
-                            onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                            style={{
-                              width: `${getBlockInputWidth(block.content)}px`,
-                              height: '20px',
-                              padding: '1px 5px',
-                              borderRadius: '5px',
-                              background: '#ffffff',
-                              color: '#0f172a',
-                              border: '1px solid rgba(0, 0, 0, 0.25)',
-                              fontWeight: 800,
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.78rem',
-                              textAlign: 'left',
-                              outline: 'none',
-                              cursor: 'text',
-                              boxSizing: 'border-box',
-                            }}
-                          />
-                          <span>)</span>
-                        </div>
-                      );
+                    }}
+                    onVarNameChange={(val, blockId) => {
+                      handleLoopInnerVarNameChange(blockId, val);
+                    }}
+                    onBranchConditionChange={handleBranchConditionChange}
+                    onAddBranch={(blockId, kind) => {
+                      if (kind === 'elif') {
+                        handleAddElifBranch(blockId);
+                      } else {
+                        handleAddElseBranch(blockId);
+                      }
+                    }}
+                    onRemoveBranch={handleRemoveBranch}
+                    onToggleDefReturn={handleToggleDefReturn}
+                    onDefReturnValChange={handleDefReturnValChange}
+                    onRemoveInnerBlock={(parentBlockId, cIdx, branchId) => {
+                      if (branchId) {
+                        handleRemoveInnerBlockFromBranch(parentBlockId, branchId, cIdx);
+                      } else {
+                        handleRemoveInnerBlockFromLoop(parentBlockId, cIdx);
+                      }
+                    }}
+                    onMethodNameChange={handleMethodNameChange}
+                    onAddItem={handleAddItemToBlock}
+                    onRemoveItem={handleRemoveItem}
+                    onItemChange={handleItemChange}
+                    onAddDictPair={handleAddDictPair}
+                    onRemoveDictPair={handleRemoveDictPair}
+                    onDictKeyChange={handleDictKeyChange}
+                    onDictValChange={handleDictValueChange}
+                    methodCategories={METHOD_CATEGORIES}
+                    getMethodSelectWidth={getMethodSelectWidth}
+                    renderSpeechBubble={(blockId, funcType) =>
+                      activeInputHelp?.blockId === blockId && activeInputHelp.funcType === funcType ? (
+                        <FunctionParamSpeechBubble
+                          funcType={funcType}
+                          onApplyOption={(opt) => handleBlockInputChange(blockId, opt)}
+                        />
+                      ) : null
                     }
+                    handleInputFocusSelect={handleInputFocusSelect}
+                    handleInputClickSelect={handleInputClickSelect}
+                  />
+                ))}
 
-                    // ==========================================================
-                    // 4. STANDARD SINGLE STATEMENT BLOCKS (print, input, break, continue, 변수 등)
-                    // ==========================================================
-                    return (
-                      <div
-                        key={block.id}
-                        id={`block-${block.id}`}
-                        className="canvas-block"
-                        onPointerDown={(e) => handleBlockPointerDown(e, block)}
-                        onContextMenu={(e) => handleBlockContextMenu(e, block.id)}
-                        onDragOver={handleCanvasDragOver}
-                        onDrop={handleCanvasDrop}
-                        style={{
-                          position: 'absolute',
-                          left: `${block.x}px`,
-                          top: `${block.y}px`,
-                          display: 'inline-flex',
-                          width: 'fit-content',
-                          alignItems: 'center',
-                          gap: '4px',
-                          borderRadius: '6px',
-                          minHeight: '30px',
-                          height: '30px',
-                          padding: '0 10px',
-                          boxSizing: 'border-box',
-                          background: theme.bg,
-                          boxShadow: `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
-                          border: `1px solid ${theme.border}`,
-                          color: '#ffffff',
-                          fontWeight: 800,
-                          fontSize: '0.80rem',
-                          fontFamily: 'var(--font-mono)',
-                          cursor: 'grab',
-                          zIndex: draggedChainIds.has(block.id) ? 100 : (activeInputHelp?.blockId === block.id ? 80 : Math.max(5, 30 - Math.min(25, Math.floor(block.y / 20)))),
-                          opacity: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 0.75 : 1,
-                          transform: draggedChainIds.has(block.id) && (isToolboxHovered || isTrashHovered) ? 'scale(0.96)' : 'none',
-                          filter: draggedChainIds.has(block.id)
-                            ? (isToolboxHovered || isTrashHovered
-                              ? 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.85))'
-                              : 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55))')
-                            : 'none',
-                          userSelect: 'none',
-                          touchAction: 'none',
-                          transition: 'transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease',
-                        }}
-                      >
-                        {/* Top Puzzle Notch: 결합 시에도 암수 결합 형태 균일 유지 */}
-                        <PuzzleNotch left="16px" borderColor={theme.border} isConnected={!!block.prevBlockId} />
 
-                        {/* Bottom Puzzle Tab: 항상 유지 */}
-                        <PuzzleTab left="16px" borderColor={theme.border} bg={theme.bg} />
-
-                        {/* Right Puzzle Notch for horizontal method snapping (메서드 결합 가능한 블록에만 우측 홈 표시) */}
-                        {(block.type === 'input' || block.type === 'variable' || block.type === 'print' || block.type === 'len' || block.type === 'list' || block.type === 'dict' || block.type === 'set' || block.type === 'tuple') && (
-                          <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
-                        )}
-
-                        {/* Block Contents */}
-                        {block.type === 'print' ? (
-                          <>
-                            <span>print (</span>
-                            <div style={{ position: 'relative', display: 'inline-flex' }}>
-                              <input
-                                type="text"
-                                value={block.content || ''}
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                onFocus={(e) => {
-                                  handleInputFocusSelect(e);
-                                  setActiveInputHelp({ blockId: block.id, funcType: 'print' });
-                                }}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleInputClickSelect(e);
-                                  setActiveInputHelp({ blockId: block.id, funcType: 'print' });
-                                }}
-                                onBlur={() => {
-                                  setTimeout(() => {
-                                    setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
-                                  }, 180);
-                                }}
-                                onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                placeholder=""
-                                style={{
-                                  width: `${getBlockInputWidth(block.content)}px`,
-                                  height: '20px',
-                                  padding: '1px 5px',
-                                  borderRadius: '6px',
-                                  background: '#ffffff',
-                                  color: '#0f172a',
-                                  border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
-                                  fontWeight: 800,
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.78rem',
-                                  textAlign: 'left',
-                                  outline: 'none',
-                                  cursor: 'text',
-                                  boxSizing: 'border-box',
-                                }}
-                              />
-                              {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'print' && (
-                                <FunctionParamSpeechBubble
-                                  funcType="print"
-                                  onApplyOption={(opt) => {
-                                    const cur = (block.content || '').trim();
-                                    const next = cur ? `${cur}, ${opt}` : opt;
-                                    handleBlockInputChange(block.id, next);
-                                  }}
-                                />
-                              )}
-                            </div>
-                            <span>)</span>
-                          </>
-                        ) : block.type === 'input' ? (
-                          <>
-                            <span>input (</span>
-                            <div style={{ position: 'relative', display: 'inline-flex' }}>
-                              <input
-                                type="text"
-                                value={block.content || ''}
-                                placeholder=""
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                onFocus={(e) => {
-                                  handleInputFocusSelect(e);
-                                  setActiveInputHelp({ blockId: block.id, funcType: 'input' });
-                                }}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleInputClickSelect(e);
-                                  setActiveInputHelp({ blockId: block.id, funcType: 'input' });
-                                }}
-                                onBlur={() => {
-                                  setTimeout(() => {
-                                    setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
-                                  }, 180);
-                                }}
-                                onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                style={{
-                                  width: `${getBlockInputWidth(block.content)}px`,
-                                  height: '20px',
-                                  padding: '1px 5px',
-                                  borderRadius: '6px',
-                                  background: '#ffffff',
-                                  color: '#0f172a',
-                                  border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
-                                  fontWeight: 800,
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.78rem',
-                                  textAlign: 'left',
-                                  outline: 'none',
-                                  cursor: 'text',
-                                  boxSizing: 'border-box',
-                                }}
-                              />
-                              {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'input' && (
-                                <FunctionParamSpeechBubble
-                                  funcType="input"
-                                  onApplyOption={(opt) => {
-                                    handleBlockInputChange(block.id, opt);
-                                  }}
-                                />
-                              )}
-                            </div>
-                            <span>)</span>
-                          </>
-                        ) : block.type === 'len' ? (
-                          <>
-                            <span>len (</span>
-                            <div style={{ position: 'relative', display: 'inline-flex' }}>
-                              <input
-                                type="text"
-                                value={block.content || ''}
-                                placeholder=""
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                onFocus={(e) => {
-                                  handleInputFocusSelect(e);
-                                  setActiveInputHelp({ blockId: block.id, funcType: 'len' });
-                                }}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleInputClickSelect(e);
-                                  setActiveInputHelp({ blockId: block.id, funcType: 'len' });
-                                }}
-                                onBlur={() => {
-                                  setTimeout(() => {
-                                    setActiveInputHelp((cur) => (cur?.blockId === block.id ? null : cur));
-                                  }, 180);
-                                }}
-                                onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                                style={{
-                                  width: `${getBlockInputWidth(block.content)}px`,
-                                  height: '20px',
-                                  padding: '1px 5px',
-                                  borderRadius: '6px',
-                                  background: '#ffffff',
-                                  color: '#0f172a',
-                                  border: activeInputHelp?.blockId === block.id ? '1.5px solid #94a3b8' : '1px solid rgba(0, 0, 0, 0.3)',
-                                  fontWeight: 800,
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.78rem',
-                                  textAlign: 'left',
-                                  outline: 'none',
-                                  cursor: 'text',
-                                  boxSizing: 'border-box',
-                                }}
-                              />
-                              {activeInputHelp?.blockId === block.id && activeInputHelp.funcType === 'len' && (
-                                <FunctionParamSpeechBubble
-                                  funcType="len"
-                                  onApplyOption={(opt) => {
-                                    handleBlockInputChange(block.id, opt);
-                                  }}
-                                />
-                              )}
-                            </div>
-                            <span>)</span>
-                          </>
-                        ) : block.type === 'return' ? (
-                          <>
-                            <span style={{ color: '#ffffff', fontWeight: 800 }}>return</span>
-                            <input
-                              type="text"
-                              value={block.content || ''}
-                              placeholder=""
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                              onFocus={handleInputFocusSelect}
-                              onClick={handleInputClickSelect}
-                              onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                              style={{
-                                width: `${getBlockInputWidth(block.content)}px`,
-                                height: '20px',
-                                padding: '1px 5px',
-                                borderRadius: '6px',
-                                background: '#ffffff',
-                                color: '#0f172a',
-                                border: '1px solid rgba(0, 0, 0, 0.3)',
-                                fontWeight: 800,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.78rem',
-                                textAlign: 'left',
-                                outline: 'none',
-                                cursor: 'text',
-                                boxSizing: 'border-box',
-                              }}
-                            />
-                          </>
-                        ) : block.type === 'break' ? (
-                          <span style={{ color: '#ffffff', fontWeight: 800 }}>break</span>
-                        ) : block.type === 'continue' ? (
-                          <span style={{ color: '#ffffff', fontWeight: 800 }}>continue</span>
-                        ) : block.type === 'variable' ? (
-                          <>
-                            <span style={{ fontWeight: 800 }}>{block.varName || 'x'}</span>
-                            <span style={{ fontWeight: 800 }}>=</span>
-                            <input
-                              type="text"
-                              value={block.content || ''}
-                              placeholder=""
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                              onFocus={handleInputFocusSelect}
-                              onClick={handleInputClickSelect}
-                              onChange={(e) => handleBlockInputChange(block.id, e.target.value)}
-                              style={{
-                                width: `${getBlockInputWidth(block.content)}px`,
-                                height: '20px',
-                                padding: '1px 5px',
-                                borderRadius: '6px',
-                                background: '#ffffff',
-                                color: '#0f172a',
-                                border: '1px solid rgba(0, 0, 0, 0.3)',
-                                fontWeight: 800,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.78rem',
-                                textAlign: 'left',
-                                outline: 'none',
-                                cursor: 'text',
-                                boxSizing: 'border-box',
-                              }}
-                            />
-                          </>
-                        ) : block.type === 'list' ? (
-                          <>
-                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_list'}</span>
-                            <span style={{ fontWeight: 800 }}>= [</span>
-                            {(block.items || []).map((it, idx) => (
-                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
-                                <input
-                                  type="text"
-                                  value={it}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleItemChange(block.id, idx, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(it)}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                {(block.items || []).length > 1 && (
-                                  <button
-                                    onClick={() => handleRemoveItem(block.id, idx)}
-                                    title="항목 제거"
-                                    style={{
-                                      background: 'rgba(0, 0, 0, 0.25)',
-                                      border: 'none',
-                                      color: '#ffffff',
-                                      borderRadius: '50%',
-                                      width: '13px',
-                                      height: '13px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      fontSize: '10px',
-                                      cursor: 'pointer',
-                                      padding: 0,
-                                    }}
-                                  >
-                                    ×
-                                  </button>
-                                )}
-                              </div>
-                            ))}
-                            <button
-                              onClick={() => handleAddItemToBlock(block.id)}
-                              title="값 추가"
-                              style={{
-                                marginLeft: '3px',
-                                background: 'rgba(255, 255, 255, 0.25)',
-                                border: '1px dashed rgba(255, 255, 255, 0.6)',
-                                color: '#ffffff',
-                                borderRadius: '4px',
-                                padding: '1px 5px',
-                                height: '18px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontWeight: 800,
-                                fontSize: '0.74rem',
-                              }}
-                            >
-                              +
-                            </button>
-                            <span>]</span>
-                          </>
-                        ) : block.type === 'tuple' ? (
-                          <>
-                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_tuple'}</span>
-                            <span style={{ fontWeight: 800 }}>= (</span>
-                            {(block.items || []).map((it, idx) => (
-                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
-                                <input
-                                  type="text"
-                                  value={it}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleItemChange(block.id, idx, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(it)}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                {(block.items || []).length > 1 && (
-                                  <button
-                                    onClick={() => handleRemoveItem(block.id, idx)}
-                                    title="항목 제거"
-                                    style={{
-                                      background: 'rgba(0, 0, 0, 0.25)',
-                                      border: 'none',
-                                      color: '#ffffff',
-                                      borderRadius: '50%',
-                                      width: '13px',
-                                      height: '13px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      fontSize: '10px',
-                                      cursor: 'pointer',
-                                      padding: 0,
-                                    }}
-                                  >
-                                    ×
-                                  </button>
-                                )}
-                              </div>
-                            ))}
-                            <button
-                              onClick={() => handleAddItemToBlock(block.id)}
-                              title="값 추가"
-                              style={{
-                                marginLeft: '3px',
-                                background: 'rgba(255, 255, 255, 0.25)',
-                                border: '1px dashed rgba(255, 255, 255, 0.6)',
-                                color: '#ffffff',
-                                borderRadius: '4px',
-                                padding: '1px 5px',
-                                height: '18px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontWeight: 800,
-                                fontSize: '0.74rem',
-                              }}
-                            >
-                              +
-                            </button>
-                            <span>)</span>
-                          </>
-                        ) : block.type === 'set' ? (
-                          <>
-                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_set'}</span>
-                            <span style={{ fontWeight: 800 }}>= &#123;</span>
-                            {(block.items || []).map((it, idx) => (
-                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
-                                <input
-                                  type="text"
-                                  value={it}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleItemChange(block.id, idx, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(it)}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                {(block.items || []).length > 1 && (
-                                  <button
-                                    onClick={() => handleRemoveItem(block.id, idx)}
-                                    title="항목 제거"
-                                    style={{
-                                      background: 'rgba(0, 0, 0, 0.25)',
-                                      border: 'none',
-                                      color: '#ffffff',
-                                      borderRadius: '50%',
-                                      width: '13px',
-                                      height: '13px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      fontSize: '10px',
-                                      cursor: 'pointer',
-                                      padding: 0,
-                                    }}
-                                  >
-                                    ×
-                                  </button>
-                                )}
-                              </div>
-                            ))}
-                            <button
-                              onClick={() => handleAddItemToBlock(block.id)}
-                              title="값 추가"
-                              style={{
-                                marginLeft: '3px',
-                                background: 'rgba(255, 255, 255, 0.25)',
-                                border: '1px dashed rgba(255, 255, 255, 0.6)',
-                                color: '#ffffff',
-                                borderRadius: '4px',
-                                padding: '1px 5px',
-                                height: '18px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontWeight: 800,
-                                fontSize: '0.74rem',
-                              }}
-                            >
-                              +
-                            </button>
-                            <span>&#125;</span>
-                          </>
-                        ) : (
-                          /* Dictionary Block */
-                          <>
-                            <span style={{ fontWeight: 800 }}>{block.varName || 'my_dict'}</span>
-                            <span style={{ fontWeight: 800 }}>= &#123;</span>
-                            {(block.dictPairs || []).map((pair, idx) => (
-                              <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                                {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
-                                <input
-                                  type="text"
-                                  value={pair.key}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleDictKeyChange(block.id, idx, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(pair.key)}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                <span style={{ fontWeight: 800 }}>:</span>
-                                <input
-                                  type="text"
-                                  value={pair.value}
-                                  placeholder=""
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                  onFocus={handleInputFocusSelect}
-                                  onClick={handleInputClickSelect}
-                                  onChange={(e) => handleDictValueChange(block.id, idx, e.target.value)}
-                                  style={{
-                                    width: `${getBlockInputWidth(pair.value)}px`,
-                                    height: '20px',
-                                    padding: '1px 5px',
-                                    borderRadius: '6px',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    fontWeight: 800,
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.78rem',
-                                    textAlign: 'left',
-                                    outline: 'none',
-                                    cursor: 'text',
-                                    boxSizing: 'border-box',
-                                  }}
-                                />
-                                {(block.dictPairs || []).length > 1 && (
-                                  <button
-                                    onClick={() => handleRemoveDictPair(block.id, idx)}
-                                    title="쌍 제거"
-                                    style={{
-                                      background: 'rgba(0, 0, 0, 0.25)',
-                                      border: 'none',
-                                      color: '#ffffff',
-                                      borderRadius: '50%',
-                                      width: '13px',
-                                      height: '13px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      fontSize: '10px',
-                                      cursor: 'pointer',
-                                      padding: 0,
-                                    }}
-                                  >
-                                    ×
-                                  </button>
-                                )}
-                              </div>
-                            ))}
-                            <button
-                              onClick={() => handleAddDictPair(block.id)}
-                              title="키:값 추가"
-                              style={{
-                                marginLeft: '3px',
-                                background: 'rgba(255, 255, 255, 0.25)',
-                                border: '1px dashed rgba(255, 255, 255, 0.6)',
-                                color: '#ffffff',
-                                borderRadius: '4px',
-                                padding: '1px 5px',
-                                height: '18px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontWeight: 800,
-                                fontSize: '0.74rem',
-                              }}
-                            >
-                              +
-                            </button>
-                            <span>&#125;</span>
-                          </>
-                        )}
-                      </div>
-                    );
-                  });
-                })()}
-
-                {/* ==========================================================
-                    RESET CANVAS BUTTON (휴지통 상단 충분한 간격 116px, 수직 축 정렬, 세련된 원형 버튼)
-                    ========================================================== */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (canvasBlocks.length > 0) {
-                      setCanvasBlocks([createDefaultStartBlock()]);
-                      setTerminalOutput('');
-                      setIsSuccess(false);
-                      showToast('🔄 캔버스가 초기화되었습니다.');
-                    }
-                  }}
-                  style={{
-                    position: 'absolute',
-                    bottom: '116px',
-                    right: '36px',
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
-                    zIndex: 35,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'rgba(15, 23, 42, 0.75)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.45)',
-                    color: '#94a3b8',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#38bdf8';
-                    e.currentTarget.style.background = 'rgba(56, 189, 248, 0.18)';
-                    e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.45)';
-                    e.currentTarget.style.transform = 'scale(1.12) rotate(-45deg)';
-                    e.currentTarget.style.boxShadow = '0 0 16px rgba(56, 189, 248, 0.5)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = '#94a3b8';
-                    e.currentTarget.style.background = 'rgba(15, 23, 42, 0.75)';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                    e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.45)';
-                  }}
-                  title="캔버스 초기화"
-                >
-                  <RotateCcw size={22} />
-                </button>
 
                 {/* ==========================================================
                     BOTTOM-RIGHT FLOATING TRASH CAN ICON ONLY (블록 드래그 삭제 전용)
@@ -7945,7 +4782,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       {/* ====================================================================
           6. RIGHT-CLICK CONTEXT MENU (우클릭 컨텍스트 메뉴: 블록 및 캔버스)
           ==================================================================== */}
-      {contextMenu.visible && (
+      {contextMenu.visible && contextMenu.blockId && (
         <div
           style={{
             position: 'fixed',
@@ -8177,64 +5014,6 @@ export default function PracticePage({ params }: PracticePageProps) {
                 </>
               );
             })()
-          )}
-
-          {contextMenu.targetType === 'canvas' && (
-            <>
-              {/* Add Block at clicked coordinate */}
-              <button
-                onClick={() => handleAddBlockAtCoords(contextMenu.coords?.x || 60, contextMenu.coords?.y || 60)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: 'transparent',
-                  color: '#e2e8f0',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  transition: 'background 0.15s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >
-                <Plus size={14} color="#38bdf8" />
-                <span>새 print() 블록 생성</span>
-              </button>
-
-              {/* Reset all blocks */}
-              <button
-                onClick={() => {
-                  setCanvasBlocks([createDefaultStartBlock()]);
-                  setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'canvas' });
-                  showToast('🧹 캔버스가 초기화되었습니다.');
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: 'transparent',
-                  color: '#f87171',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  transition: 'background 0.15s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >
-                <RotateCcw size={14} color="#ef4444" />
-                <span>블록 모두 지우기</span>
-              </button>
-            </>
           )}
         </div>
       )}
