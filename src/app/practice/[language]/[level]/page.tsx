@@ -1456,6 +1456,13 @@ export default function PracticePage({ params }: PracticePageProps) {
       };
       collectSlotCandidates(blocksList);
 
+      const draggedEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
+      const draggedH = draggedEl ? draggedEl.offsetHeight : 34;
+
+      // 앞머리 (Front Head): 블록의 좌측 시작점(앞머리 팁)과 세로 중심선
+      const headTipX = draggedX;
+      const headCenterY = draggedY + draggedH / 2;
+
       for (const b of slotCandidates) {
         const slotEl = document.getElementById(`arg-slot-${b.id}`);
         if (!slotEl) continue;
@@ -1464,11 +1471,13 @@ export default function PracticePage({ params }: PracticePageProps) {
         const sScreenY = rect.top - canvasRect.top;
         const sW = rect.width;
         const sH = rect.height;
+        const slotCenterY = sScreenY + sH / 2;
 
-        const nearX = draggedX >= sScreenX - 35 && draggedX <= sScreenX + sW + 35;
-        const nearY = Math.abs(draggedY - sScreenY) <= 26;
+        // 스크래치 방식: 블록의 앞머리(headTipX, headCenterY)가 입력창 슬롯 입구 또는 내부에 닿았을 때 정확히 스냅
+        const headNearX = headTipX >= sScreenX - 30 && headTipX <= sScreenX + sW + 15;
+        const headNearY = Math.abs(headCenterY - slotCenterY) <= 22;
 
-        if (nearX && nearY) {
+        if (headNearX && headNearY) {
           return {
             type: 'arg_slot',
             targetBlockId: b.id,
@@ -5012,12 +5021,12 @@ export default function PracticePage({ params }: PracticePageProps) {
                   width: `${activeSnapTarget.markerWidth || 36}px`,
                   height: `${activeSnapTarget.markerHeight || 24}px`,
                   borderRadius: '6px',
-                  border: '2px dashed #38bdf8',
-                  background: 'rgba(56, 189, 248, 0.25)',
-                  boxShadow: '0 0 10px rgba(56, 189, 248, 0.4)',
+                  border: '2.5px solid #facc15',
+                  background: 'rgba(254, 240, 138, 0.25)',
+                  boxShadow: '0 0 0 3px rgba(250, 204, 21, 0.45), 0 0 14px rgba(234, 179, 8, 0.75)',
                   zIndex: 100,
                   pointerEvents: 'none',
-                  transition: 'all 0.15s ease-out',
+                  transition: 'all 0.12s ease-out',
                 }}
               />
             )}
@@ -5043,6 +5052,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                       isNested={false}
                       isSlotArg={false}
                       canvasBlocks={canvasBlocks}
+                      activeSnapTarget={activeSnapTarget}
                       draggedChainIds={draggedChainIds}
                       activeInputHelp={activeInputHelp}
                       onBlockPointerDown={handleBlockPointerDown}

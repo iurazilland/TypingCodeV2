@@ -26,6 +26,7 @@ export interface CanvasBlockItemProps {
   branchId?: string;
   draggedChainIds?: Set<string>;
   activeInputHelp?: { blockId: string; funcType: string } | null;
+  activeSnapTarget?: { type: string; targetBlockId: string } | null;
   canvasBlocks?: CanvasBlock[];
   onBlockPointerDown?: (e: React.PointerEvent, block: CanvasBlock) => void;
   onInnerBlockPointerDown?: (
@@ -72,6 +73,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     branchId,
     draggedChainIds,
     activeInputHelp,
+    activeSnapTarget,
     canvasBlocks = [],
     onBlockPointerDown,
     onInnerBlockPointerDown,
@@ -106,6 +108,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   const isCBlock = block.type === 'for_range' || block.type === 'for_in' || block.type === 'while' || block.type === 'def';
   const isIfBlock = block.type === 'if';
   const isChainDragged = draggedChainIds ? draggedChainIds.has(block.id) : false;
+  const isArgSlotTarget = activeSnapTarget?.type === 'arg_slot' && activeSnapTarget.targetBlockId === block.id;
 
   // Stacking zIndex:
   // 1. Nested blocks inside a mouth MUST have strictly descending z-index (Child 0 > Child 1 > Child 2)
@@ -1076,9 +1079,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             height: '20px',
             padding: '1px 5px',
             borderRadius: '6px',
-            background: '#ffffff',
+            background: isArgSlotTarget ? '#fef9c3' : '#ffffff',
             color: '#0f172a',
-            border: '1px solid rgba(0,0,0,0.2)',
+            border: isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)',
+            boxShadow: isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none',
             fontWeight: 800,
             fontFamily: 'var(--font-mono)',
             fontSize: '0.76rem',
@@ -1086,6 +1090,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             outline: 'none',
             cursor: 'text',
             boxSizing: 'border-box',
+            transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
           }}
         />
         {!isVarValue && renderSpeechBubble?.(block.id, funcType)}
