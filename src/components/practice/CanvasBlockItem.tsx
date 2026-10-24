@@ -1002,40 +1002,59 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
 
         <span style={{ fontSize: '0.95rem', fontWeight: 900, marginRight: '-1px' }}>.</span>
 
-        <select
-          value={block.methodName || 'method'}
+        <div
           onMouseDown={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
-          onChange={(e) => onMethodNameChange?.(block.id, e.target.value)}
           style={{
-            width: `${getMethodSelectWidth ? getMethodSelectWidth(block.methodName || 'method') : 88}px`,
-            height: '20px',
-            padding: '0 16px 0 6px',
-            borderRadius: '5px',
+            position: 'relative',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '3px',
+            height: isSlotArg ? '18px' : '20px',
+            padding: isSlotArg ? '0 5px' : '0 6px',
+            borderRadius: '4px',
             background: '#ffffff',
             color: '#0f172a',
-            border: '1px solid rgba(0, 0, 0, 0.25)',
             fontWeight: 800,
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.78rem',
-            outline: 'none',
+            fontSize: isSlotArg ? '0.72rem' : '0.78rem',
             cursor: 'pointer',
             boxSizing: 'border-box',
+            userSelect: 'none',
+            lineHeight: 1,
           }}
         >
-          {(!block.methodName || block.methodName === 'method') && (
-            <option value="method">method</option>
-          )}
-          {filteredCategories.map((cat) => (
-            <optgroup key={cat.category} label={cat.category}>
-              {cat.methods.map((m) => (
-                <option key={m.name} value={m.name} title={m.label}>
-                  {m.name}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
+          <span>{block.methodName || 'method'}</span>
+          <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
+          <select
+            value={block.methodName || 'method'}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => onMethodNameChange?.(block.id, e.target.value)}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              opacity: 0,
+              cursor: 'pointer',
+              fontSize: '0.85rem',
+            }}
+          >
+            {(!block.methodName || block.methodName === 'method') && (
+              <option value="method">method</option>
+            )}
+            {filteredCategories.map((cat) => (
+              <optgroup key={cat.category} label={cat.category}>
+                {cat.methods.map((m) => (
+                  <option key={m.name} value={m.name} title={m.label}>
+                    {m.name}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
 
         <span>(</span>
         <input
@@ -1257,66 +1276,104 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         </>
       ) : ['int', 'float', 'str', 'type'].includes(block.type) ? (
         <>
-          <select
-            value={block.type}
+          <div
             onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
-            onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
             style={{
-              width: `${Math.max(54, block.type.length * 8.5 + 26)}px`,
-              height: '20px',
-              padding: '0 16px 0 6px',
-              borderRadius: '5px',
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '3px',
+              height: isSlotArg ? '18px' : '20px',
+              padding: isSlotArg ? '0 5px' : '0 6px',
+              borderRadius: '4px',
               background: '#ffffff',
               color: '#0f172a',
-              border: '1px solid rgba(0, 0, 0, 0.25)',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.78rem',
-              outline: 'none',
+              fontSize: isSlotArg ? '0.72rem' : '0.78rem',
               cursor: 'pointer',
               boxSizing: 'border-box',
+              userSelect: 'none',
+              lineHeight: 1,
             }}
           >
-            <option value="int">int</option>
-            <option value="float">float</option>
-            <option value="str">str</option>
-            <option value="type">type</option>
-          </select>
+            <span>{block.type}</span>
+            <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
+            <select
+              value={block.type}
+              onMouseDown={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0,
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+              }}
+            >
+              <option value="int">int</option>
+              <option value="float">float</option>
+              <option value="str">str</option>
+              <option value="type">type</option>
+            </select>
+          </div>
           <span>(</span>
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
       ) : ['len', 'round', 'abs', 'sum', 'min', 'max'].includes(block.type) ? (
         <>
-          <select
-            value={block.type}
+          <div
             onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
-            onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
             style={{
-              width: `${Math.max(54, block.type.length * 8.5 + 26)}px`,
-              height: '20px',
-              padding: '0 16px 0 6px',
-              borderRadius: '5px',
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '3px',
+              height: isSlotArg ? '18px' : '20px',
+              padding: isSlotArg ? '0 5px' : '0 6px',
+              borderRadius: '4px',
               background: '#ffffff',
               color: '#0f172a',
-              border: '1px solid rgba(0, 0, 0, 0.25)',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.78rem',
-              outline: 'none',
+              fontSize: isSlotArg ? '0.72rem' : '0.78rem',
               cursor: 'pointer',
               boxSizing: 'border-box',
+              userSelect: 'none',
+              lineHeight: 1,
             }}
           >
-            <option value="len">len</option>
-            <option value="round">round</option>
-            <option value="abs">abs</option>
-            <option value="sum">sum</option>
-            <option value="min">min</option>
-            <option value="max">max</option>
-          </select>
+            <span>{block.type}</span>
+            <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
+            <select
+              value={block.type}
+              onMouseDown={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0,
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+              }}
+            >
+              <option value="len">len</option>
+              <option value="round">round</option>
+              <option value="abs">abs</option>
+              <option value="sum">sum</option>
+              <option value="min">min</option>
+              <option value="max">max</option>
+            </select>
+          </div>
           <span>(</span>
           {renderArgSlot(block.type)}
           <span>)</span>
