@@ -315,56 +315,71 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               />
               <span style={{ color: '#ffffff' }}>in</span>
               <div
+                id={`arg-slot-${block.id}`}
+                className="arg-slot-filled"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '3px',
-                  height: '24px',
-                  padding: '0 8px',
-                  borderRadius: '6px',
-                  background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)',
-                  border: '1px solid #60a5fa',
-                  boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-                  color: '#ffffff',
-                  fontWeight: 800,
-                  fontSize: '0.78rem',
-                  boxSizing: 'border-box',
-                  margin: '0 1px',
+                  margin: '0 3px',
+                  padding: '1px 2px',
+                  borderRadius: '7px',
+                  background: 'rgba(0, 0, 0, 0.22)',
+                  boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.35)',
                 }}
               >
-                <span>range(</span>
-                <div style={{ position: 'relative', display: 'inline-flex' }}>
-                  <input
-                    type="text"
-                    value={block.content ?? '5'}
-                    placeholder=""
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onFocus={handleInputFocusSelect}
-                    onClick={handleInputClickSelect}
-                    onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                    style={{
-                      width: `${getBlockInputWidth(block.content ?? '5')}px`,
-                      height: '18px',
-                      padding: '0 5px',
-                      borderRadius: '4px',
-                      background: '#ffffff',
-                      color: '#0f172a',
-                      border: '1px solid rgba(0, 0, 0, 0.2)',
-                      boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.12)',
-                      fontWeight: 800,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      outline: 'none',
-                      cursor: 'text',
-                      boxSizing: 'border-box',
-                    }}
-                  />
-                  {renderSpeechBubble?.(block.id, 'for_range')}
+                <div
+                  className="slot-arg-block"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    height: '24px',
+                    padding: '0 8px',
+                    borderRadius: '6px',
+                    background: '#2563eb',
+                    border: '1px solid #3b82f6',
+                    boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.76rem',
+                    fontFamily: 'var(--font-mono)',
+                    boxSizing: 'border-box',
+                    userSelect: 'none',
+                  }}
+                >
+                  <span>range (</span>
+                  <div style={{ position: 'relative', display: 'inline-flex', borderRadius: '5px' }}>
+                    <input
+                      type="text"
+                      value={block.content ?? '5'}
+                      placeholder=""
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onFocus={handleInputFocusSelect}
+                      onClick={handleInputClickSelect}
+                      onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+                      style={{
+                        width: `${getBlockInputWidth(block.content ?? '5')}px`,
+                        height: '20px',
+                        padding: '1px 5px',
+                        borderRadius: '5px',
+                        background: '#ffffff',
+                        color: '#0f172a',
+                        border: '1px solid rgba(0, 0, 0, 0.25)',
+                        fontWeight: 800,
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.78rem',
+                        textAlign: 'left',
+                        outline: 'none',
+                        cursor: 'text',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                    {renderSpeechBubble?.(block.id, 'for_range')}
+                  </div>
+                  <span>)</span>
                 </div>
-                <span>)</span>
               </div>
               <span style={{ color: '#ffffff' }}>:</span>
             </>
@@ -897,6 +912,54 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   // 3. HORIZONTAL METHOD BLOCK (.split(), .append(), etc.)
   // ============================================================================
   if (block.type === 'method') {
+    // Find target block this method is attached to (on its left)
+    const targetBlockId = block.attachedToBlockId || parentBlockId;
+    const findBlockInCanvasTree = (list?: CanvasBlock[], tId?: string): CanvasBlock | null => {
+      if (!list || !tId) return null;
+      for (const b of list) {
+        if (b.id === tId) return b;
+        if (b.argBlock) {
+          const found = findBlockInCanvasTree([b.argBlock], tId);
+          if (found) return found;
+        }
+        if (b.innerBlocks) {
+          const found = findBlockInCanvasTree(b.innerBlocks, tId);
+          if (found) return found;
+        }
+        if (b.branches) {
+          for (const br of b.branches) {
+            const found = findBlockInCanvasTree(br.innerBlocks, tId);
+            if (found) return found;
+          }
+        }
+      }
+      return null;
+    };
+    const targetBlock = findBlockInCanvasTree(canvasBlocks, targetBlockId);
+
+    // Filter method categories based on the target block's data type
+    let filteredCategories = methodCategories || [];
+    if (targetBlock) {
+      if (targetBlock.type === 'input' || targetBlock.type === 'str') {
+        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('문자열') || c.category.includes('String'));
+      } else if (targetBlock.type === 'list') {
+        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('리스트') || c.category.includes('List'));
+      } else if (targetBlock.type === 'dict') {
+        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('딕셔너리') || c.category.includes('Dictionary'));
+      } else if (targetBlock.type === 'set') {
+        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('세트') || c.category.includes('Set'));
+      } else if (targetBlock.type === 'open') {
+        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('파일') || c.category.includes('File'));
+      } else if (targetBlock.type === 'method') {
+        const prevM = targetBlock.methodName;
+        if (prevM === 'split' || prevM === 'splitlines') {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('리스트') || c.category.includes('List'));
+        } else if (['strip', 'lstrip', 'rstrip', 'join', 'upper', 'lower', 'replace', 'capitalize', 'title', 'swapcase', 'zfill', 'format'].includes(prevM || '')) {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('문자열') || c.category.includes('String'));
+        }
+      }
+    }
+
     return (
       <div
         id={`block-${block.id}`}
@@ -938,12 +1001,12 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         <span style={{ fontSize: '0.95rem', fontWeight: 900, marginRight: '-1px' }}>.</span>
 
         <select
-          value={block.methodName || 'split'}
+          value={block.methodName || 'method'}
           onMouseDown={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
           onChange={(e) => onMethodNameChange?.(block.id, e.target.value)}
           style={{
-            width: `${getMethodSelectWidth(block.methodName || 'split')}px`,
+            width: `${getMethodSelectWidth ? getMethodSelectWidth(block.methodName || 'method') : 88}px`,
             height: '20px',
             padding: '0 16px 0 6px',
             borderRadius: '5px',
@@ -958,7 +1021,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             boxSizing: 'border-box',
           }}
         >
-          {methodCategories.map((cat) => (
+          {(!block.methodName || block.methodName === 'method') && (
+            <option value="method">method</option>
+          )}
+          {filteredCategories.map((cat) => (
             <optgroup key={cat.category} label={cat.category}>
               {cat.methods.map((m) => (
                 <option key={m.name} value={m.name} title={m.label}>
@@ -1169,10 +1235,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Horizontal notch for method chaining on functions, variables, collections */}
-      {(block.type === 'print' ||
-        block.type === 'input' ||
-        block.type === 'len' ||
-        block.type === 'int' ||
+      {(['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(block.type) ||
         block.type === 'variable' ||
         block.type === 'list' ||
         block.type === 'tuple' ||
@@ -1182,28 +1245,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Block Body Content */}
-      {block.type === 'print' ? (
+      {['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(block.type) ? (
         <>
-          <span>print (</span>
-          {renderArgSlot('print')}
-          <span>)</span>
-        </>
-      ) : block.type === 'input' ? (
-        <>
-          <span>input (</span>
-          {renderArgSlot('input')}
-          <span>)</span>
-        </>
-      ) : block.type === 'len' ? (
-        <>
-          <span>len (</span>
-          {renderArgSlot('len')}
-          <span>)</span>
-        </>
-      ) : block.type === 'int' ? (
-        <>
-          <span>int (</span>
-          {renderArgSlot('int')}
+          <span>{block.type} (</span>
+          {renderArgSlot(block.type)}
           <span>)</span>
         </>
       ) : block.type === 'variable' ? (

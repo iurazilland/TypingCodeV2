@@ -249,6 +249,39 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
         const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0');
         const parsed = parseInt(String(inner), 10);
         val = isNaN(parsed) ? 0 : parsed;
+      } else if (b.type === 'float') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0.0');
+        const parsed = parseFloat(String(inner));
+        val = isNaN(parsed) ? 0.0 : parsed;
+      } else if (b.type === 'str') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
+        val = String(inner ?? '');
+      } else if (b.type === 'type') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
+        if (Array.isArray(inner)) val = "<class 'list'>";
+        else if (inner !== null && typeof inner === 'object') val = "<class 'dict'>";
+        else if (typeof inner === 'number') val = Number.isInteger(inner) ? "<class 'int'>" : "<class 'float'>";
+        else if (typeof inner === 'string') val = "<class 'str'>";
+        else if (typeof inner === 'boolean') val = "<class 'bool'>";
+        else val = `<class '${typeof inner}'>`;
+      } else if (b.type === 'round') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0');
+        val = Math.round(Number(inner) || 0);
+      } else if (b.type === 'abs') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0');
+        val = Math.abs(Number(inner) || 0);
+      } else if (b.type === 'sum') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        if (Array.isArray(inner)) val = inner.reduce((acc: number, cur: any) => acc + (Number(cur) || 0), 0);
+        else val = Number(inner) || 0;
+      } else if (b.type === 'min') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        if (Array.isArray(inner) && inner.length > 0) val = Math.min(...inner.map(Number));
+        else val = Number(inner) || 0;
+      } else if (b.type === 'max') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        if (Array.isArray(inner) && inner.length > 0) val = Math.max(...inner.map(Number));
+        else val = Number(inner) || 0;
       } else if (b.type === 'input') {
         val = b.argBlock ? evalBlockAsExpr(b.argBlock) : (b.content || '');
       } else if (b.type === 'len') {
@@ -267,11 +300,20 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
       if (b.attachedMethodId) {
         const m = blocks.find((item: any) => item.id === b.attachedMethodId);
         if (m && m.type === 'method') {
-          const mName = m.methodName || 'split';
+          const mName = m.methodName || 'method';
           if (mName === 'split') {
             const strVal = String(val ?? '');
             const sep = (m.content || '').trim();
             val = sep ? strVal.split(sep.replace(/^['"]|['"]$/g, '')) : strVal.split(/\s+/).filter(Boolean);
+          } else if (mName === 'strip') {
+            val = String(val ?? '').trim();
+          } else if (mName === 'upper') {
+            val = String(val ?? '').toUpperCase();
+          } else if (mName === 'lower') {
+            val = String(val ?? '').toLowerCase();
+          } else if (mName === 'replace') {
+            const parts = (m.content || '').split(',').map((s: string) => s.trim().replace(/^['"]|['"]$/g, ''));
+            val = String(val ?? '').replaceAll(parts[0] || '', parts[1] || '');
           }
         }
       }

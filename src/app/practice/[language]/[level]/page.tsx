@@ -60,6 +60,15 @@ type BlockType =
   | 'input'
   | 'len'
   | 'int'
+  | 'float'
+  | 'str'
+  | 'type'
+  | 'round'
+  | 'abs'
+  | 'sum'
+  | 'min'
+  | 'max'
+  | 'open'
   | 'def'
   | 'return'
   // 메서드
@@ -136,6 +145,15 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   input: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
   len: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
   int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
+  float: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
+  str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  type: { bg: '#4f46e5', shadow: '#4338ca', border: '#818cf8' },
+  round: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
+  abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  sum: { bg: '#0d9488', shadow: '#0f766e', border: '#14b8a6' },
+  min: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
+  max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
+  open: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#4338ca', shadow: '#3730a3', border: '#6366f1' },
 
@@ -217,16 +235,28 @@ const FUNC_PARAM_HELPS: Record<string, string> = {
   print: 'print(*values, sep=" ", end="\\n")',
   input: 'input(prompt="")',
   len: 'len(s)',
+  int: 'int(x=0, base=10)',
+  float: 'float(x=0.0)',
+  str: 'str(object="")',
+  type: 'type(object)',
+  round: 'round(number, ndigits=None)',
+  abs: 'abs(x)',
+  sum: 'sum(iterable, start=0)',
+  min: 'min(iterable) / min(arg1, arg2, ...)',
+  max: 'max(iterable) / max(arg1, arg2, ...)',
+  open: 'open(file, mode="r")',
   for_range: 'range(stop) / range(start, stop, step)',
 };
 
-// Python Curriculum Methods Definition (커리큘럼에 포함된 30개 핵심 메서드 카테고리별 분류)
+// Python Curriculum Methods Definition (커리큘럼에 포함된 핵심 메서드 카테고리별 분류)
 const METHOD_CATEGORIES: { category: string; methods: { name: string; label: string; placeholder: string }[] }[] = [
   {
     category: '문자열 (String)',
     methods: [
       { name: 'split', label: 'split() - 분할', placeholder: 'sep' },
       { name: 'strip', label: 'strip() - 양쪽 공백 제거', placeholder: '' },
+      { name: 'lstrip', label: 'lstrip() - 왼쪽 공백 제거', placeholder: '' },
+      { name: 'rstrip', label: 'rstrip() - 오른쪽 공백 제거', placeholder: '' },
       { name: 'join', label: 'join() - 요소 결합', placeholder: 'iterable' },
       { name: 'upper', label: 'upper() - 대문자 변환', placeholder: '' },
       { name: 'lower', label: 'lower() - 소문자 변환', placeholder: '' },
@@ -237,6 +267,12 @@ const METHOD_CATEGORIES: { category: string; methods: { name: string; label: str
       { name: 'endswith', label: 'endswith() - 접미사 확인', placeholder: 'suffix' },
       { name: 'capitalize', label: 'capitalize() - 첫 글자 대문자', placeholder: '' },
       { name: 'title', label: 'title() - 각 단어 대문자', placeholder: '' },
+      { name: 'swapcase', label: 'swapcase() - 대소문자 반전', placeholder: '' },
+      { name: 'isdigit', label: 'isdigit() - 숫자 여부 판정', placeholder: '' },
+      { name: 'isalpha', label: 'isalpha() - 알파벳 여부 판정', placeholder: '' },
+      { name: 'isalnum', label: 'isalnum() - 영숫자 여부 판정', placeholder: '' },
+      { name: 'zfill', label: 'zfill() - 앞자리 0 채우기', placeholder: 'width' },
+      { name: 'format', label: 'format() - 서식 지정', placeholder: '*args' },
     ],
   },
   {
@@ -248,6 +284,7 @@ const METHOD_CATEGORIES: { category: string; methods: { name: string; label: str
       { name: 'reverse', label: 'reverse() - 뒤집기', placeholder: '' },
       { name: 'remove', label: 'remove() - 값 삭제', placeholder: 'value' },
       { name: 'index', label: 'index() - 위치 인덱스', placeholder: 'value' },
+      { name: 'count', label: 'count() - 요소 개수', placeholder: 'value' },
       { name: 'clear', label: 'clear() - 전체 비우기', placeholder: '' },
       { name: 'extend', label: 'extend() - 리스트 확장', placeholder: 'iterable' },
       { name: 'insert', label: 'insert() - 특정 위치 삽입', placeholder: 'index, item' },
@@ -261,14 +298,20 @@ const METHOD_CATEGORIES: { category: string; methods: { name: string; label: str
       { name: 'keys', label: 'keys() - 키 목록', placeholder: '' },
       { name: 'values', label: 'values() - 값 목록', placeholder: '' },
       { name: 'items', label: 'items() - 키-값 쌍 목록', placeholder: '' },
+      { name: 'pop', label: 'pop() - 키 제거 및 값 반환', placeholder: 'key' },
       { name: 'update', label: 'update() - 딕셔너리 갱신', placeholder: 'dict' },
+      { name: 'clear', label: 'clear() - 전체 비우기', placeholder: '' },
+      { name: 'copy', label: 'copy() - 얕은 복사', placeholder: '' },
     ],
   },
   {
     category: '세트 (Set)',
     methods: [
       { name: 'add', label: 'add() - 세트에 추가', placeholder: 'element' },
-      { name: 'discard', label: 'discard() - 세트에서 제거', placeholder: 'element' },
+      { name: 'remove', label: 'remove() - 세트에서 제거', placeholder: 'element' },
+      { name: 'discard', label: 'discard() - 세트에서 제거 (에러 무시)', placeholder: 'element' },
+      { name: 'pop', label: 'pop() - 임의의 요소 꺼내기', placeholder: '' },
+      { name: 'clear', label: 'clear() - 전체 비우기', placeholder: '' },
     ],
   },
   {
@@ -285,10 +328,10 @@ const METHOD_CATEGORIES: { category: string; methods: { name: string; label: str
 
 // Calculate dynamic width for method select based on currently selected method name
 const getMethodSelectWidth = (methodName?: string): number => {
-  const name = methodName || 'split';
+  const name = methodName || 'method';
   // Monospace char width (~8.5px) * length + left padding (7px) + arrow reserve (20px) + buffer (10px)
-  // Minimum 68px for short methods ('pop', 'get'), 'split' ≈ 80px, 'append' ≈ 88px, 'startswith' ≈ 122px
-  return Math.max(68, Math.round(name.length * 8.5 + 37));
+  // 'method' ≈ 88px, 'split' ≈ 80px, 'append' ≈ 88px, 'startswith' ≈ 122px
+  return Math.max(76, Math.round(name.length * 8.5 + 37));
 };
 
 const FunctionParamSpeechBubble = ({
@@ -697,7 +740,7 @@ export default function PracticePage({ params }: PracticePageProps) {
           visitedM.add(currMId);
           const m = findBlockInTree(canvasBlocks, currMId);
           if (!m) break;
-          const mName = m.methodName || 'split';
+          const mName = m.methodName || 'method';
           const mArg = (m.content || '').trim();
           chain += `.${mName}(${mArg})`;
           currMId = m.attachedMethodId;
@@ -708,21 +751,10 @@ export default function PracticePage({ params }: PracticePageProps) {
       // Helper to evaluate expressions recursively when blocks are nested as arguments
       const generateExpression = (b: CanvasBlock): string => {
         const chain = getMethodChain(b);
-        if (b.type === 'int') {
+        const funcTypes = ['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'];
+        if (funcTypes.includes(b.type)) {
           const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
-          return `int(${inner})${chain}`;
-        }
-        if (b.type === 'input') {
-          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
-          return `input(${inner})${chain}`;
-        }
-        if (b.type === 'len') {
-          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
-          return `len(${inner})${chain}`;
-        }
-        if (b.type === 'print') {
-          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
-          return `print(${inner})${chain}`;
+          return `${b.type}(${inner})${chain}`;
         }
         if (b.type === 'variable') {
           const vName = (b.varName || 'x').trim();
@@ -735,7 +767,7 @@ export default function PracticePage({ params }: PracticePageProps) {
 
       if (blk.type === 'method') {
         // Standalone method block placed on canvas without a parent
-        out.push(`${indentStr}# .${blk.methodName || 'split'}(${(blk.content || '').trim()})${mSuffix}`);
+        out.push(`${indentStr}# .${blk.methodName || 'method'}(${(blk.content || '').trim()})${mSuffix}`);
       } else if (blk.type === 'variable') {
         const vName = (blk.varName || 'x').trim();
         const content = (blk.content || '').trim();
@@ -776,18 +808,9 @@ export default function PracticePage({ params }: PracticePageProps) {
           })
           .join(', ');
         out.push(`${indentStr}${vName} = {${pairs}}${mSuffix}`);
-      } else if (blk.type === 'print') {
+      } else if (['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(blk.type)) {
         const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
-        out.push(`${indentStr}print(${content})${mSuffix}`);
-      } else if (blk.type === 'input') {
-        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
-        out.push(`${indentStr}input(${content})${mSuffix}`);
-      } else if (blk.type === 'len') {
-        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
-        out.push(`${indentStr}len(${content})${mSuffix}`);
-      } else if (blk.type === 'int') {
-        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
-        out.push(`${indentStr}int(${content})${mSuffix}`);
+        out.push(`${indentStr}${blk.type}(${content})${mSuffix}`);
       } else if (blk.type === 'def') {
         const fName = (blk.varName || 'my_func').trim();
         const args = (blk.content || '').trim();
@@ -1874,7 +1897,7 @@ export default function PracticePage({ params }: PracticePageProps) {
         type: bType,
         isIfElse: isIfElse ? true : undefined,
         varName,
-        methodName: bType === 'method' ? 'split' : undefined,
+        methodName: bType === 'method' ? 'method' : undefined,
         content: defaultContent,
         items: (bType === 'list' || bType === 'tuple' || bType === 'set') ? [''] : undefined,
         dictPairs: bType === 'dict' ? [{ key: '', value: '' }] : undefined,
@@ -3697,7 +3720,7 @@ export default function PracticePage({ params }: PracticePageProps) {
 
   const handleMethodNameChange = (blockId: string, val: string) => {
     setCanvasBlocks((prev) =>
-      prev.map((b) => (b.id === blockId ? { ...b, methodName: val } : b))
+      updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, methodName: val }))
     );
   };
 
@@ -4306,6 +4329,294 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <span>)</span>
                 </div>
 
+                {/* float() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'float')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.float.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.float.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.float.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="float() 실수 변환 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.float.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.float.border} bg={BLOCK_THEMES.float.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.float.border} bgColor="#0d1527" />
+                  <span>float (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* str() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'str')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.str.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.str.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.str.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="str() 문자열 변환 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.str.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.str.border} bg={BLOCK_THEMES.str.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.str.border} bgColor="#0d1527" />
+                  <span>str (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* type() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'type')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.type.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.type.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.type.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="type() 자료형 확인 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.type.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.type.border} bg={BLOCK_THEMES.type.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.type.border} bgColor="#0d1527" />
+                  <span>type (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* round() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'round')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.round.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.round.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.round.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="round() 반올림 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.round.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.round.border} bg={BLOCK_THEMES.round.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.round.border} bgColor="#0d1527" />
+                  <span>round (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* abs() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'abs')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.abs.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.abs.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.abs.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="abs() 절댓값 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.abs.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.abs.border} bg={BLOCK_THEMES.abs.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.abs.border} bgColor="#0d1527" />
+                  <span>abs (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* sum() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'sum')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.sum.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.sum.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.sum.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="sum() 합계 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.sum.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.sum.border} bg={BLOCK_THEMES.sum.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.sum.border} bgColor="#0d1527" />
+                  <span>sum (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* min() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'min')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.min.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.min.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.min.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="min() 최솟값 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.min.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.min.border} bg={BLOCK_THEMES.min.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.min.border} bgColor="#0d1527" />
+                  <span>min (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* max() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'max')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.max.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.max.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.max.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="max() 최댓값 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.max.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.max.border} bg={BLOCK_THEMES.max.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.max.border} bgColor="#0d1527" />
+                  <span>max (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* open() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'open')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.open.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.open.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.open.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="open() 파일 열기 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.open.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.open.border} bg={BLOCK_THEMES.open.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.open.border} bgColor="#0d1527" />
+                  <span>open (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
                 {/* .method() 메서드 결합 블록 */}
                 <div
                   draggable
@@ -4333,7 +4644,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <HorizontalPuzzleTab borderColor={BLOCK_THEMES.method.border} bg={BLOCK_THEMES.method.bg} />
                   <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.method.border} bgColor="#0d1527" />
                   <span style={{ fontSize: '0.92rem', fontWeight: 900 }}>.</span>
-                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>split ▼</span>
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>method ▼</span>
                   <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
@@ -4514,26 +4825,40 @@ export default function PracticePage({ params }: PracticePageProps) {
                     <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>i</span>
                     <span style={{ color: '#ffffff' }}>in</span>
                     <div
+                      className="arg-slot-filled"
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '3px',
-                        height: '24px',
-                        padding: '0 8px',
-                        borderRadius: '6px',
-                        background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)',
-                        border: '1px solid #60a5fa',
-                        boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.78rem',
-                        boxSizing: 'border-box',
-                        margin: '0 1px',
+                        margin: '0 2px',
+                        padding: '1px 2px',
+                        borderRadius: '7px',
+                        background: 'rgba(0, 0, 0, 0.22)',
+                        boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.35)',
                       }}
                     >
-                      <span>range(</span>
-                      <span style={{ padding: '0 5px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem', boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.12)' }}>5</span>
-                      <span>)</span>
+                      <div
+                        className="slot-arg-block"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          height: '24px',
+                          padding: '0 8px',
+                          borderRadius: '6px',
+                          background: '#2563eb',
+                          border: '1px solid #3b82f6',
+                          boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                          color: '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '0.76rem',
+                          fontFamily: 'var(--font-mono)',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        <span>range (</span>
+                        <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem', boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.12)' }}>5</span>
+                        <span>)</span>
+                      </div>
                     </div>
                     <span>:</span>
                   </div>

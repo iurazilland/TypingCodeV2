@@ -6,6 +6,15 @@ export type BlockType =
   | 'input'
   | 'len'
   | 'int'
+  | 'float'
+  | 'str'
+  | 'type'
+  | 'round'
+  | 'abs'
+  | 'sum'
+  | 'min'
+  | 'max'
+  | 'open'
   | 'def'
   | 'return'
   // 메서드
@@ -86,6 +95,15 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   input: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
   len: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
   int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
+  float: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
+  str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  type: { bg: '#4f46e5', shadow: '#4338ca', border: '#818cf8' },
+  round: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
+  abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  sum: { bg: '#0d9488', shadow: '#0f766e', border: '#14b8a6' },
+  min: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
+  max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
+  open: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#4338ca', shadow: '#3730a3', border: '#6366f1' },
   method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
