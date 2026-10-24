@@ -15,6 +15,7 @@ import {
   HorizontalPuzzleTab,
   HorizontalPuzzleNotch,
   SvgBottomClosingArm,
+  GhostSnapBlock,
 } from './BlockPuzzleShapes';
 
 export interface CanvasBlockItemProps {
@@ -26,7 +27,14 @@ export interface CanvasBlockItemProps {
   branchId?: string;
   draggedChainIds?: Set<string>;
   activeInputHelp?: { blockId: string; funcType: string } | null;
-  activeSnapTarget?: { type: string; targetBlockId: string } | null;
+  activeSnapTarget?: {
+    type: string;
+    targetBlockId: string;
+    branchId?: string;
+    insertIndex?: number;
+    markerWidth?: number;
+    markerHeight?: number;
+  } | null;
   canvasBlocks?: CanvasBlock[];
   onBlockPointerDown?: (e: React.PointerEvent, block: CanvasBlock) => void;
   onInnerBlockPointerDown?: (
@@ -221,6 +229,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     const tabLeft = isNested ? BLOCK_GEOMETRY.TAB_LEFT_INNER : BLOCK_GEOMETRY.TAB_LEFT_ROOT;
     const spineW = BLOCK_GEOMETRY.SPINE_WIDTH;
     const innerBlocks = block.innerBlocks || [];
+    const isMouthSnapTarget =
+      activeSnapTarget?.type === 'mouth' &&
+      activeSnapTarget.targetBlockId === block.id &&
+      !activeSnapTarget.branchId;
+    const ghostWidth = Math.max(120, (activeSnapTarget?.markerWidth || 140) - 20);
 
     return (
       <div
@@ -576,19 +589,35 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             <PuzzleTab isCeiling left={BLOCK_GEOMETRY.TAB_LEFT_INNER} borderColor={theme.border} bg={theme.bg} />
 
             {innerBlocks.length === 0 ? (
-              <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
+              isMouthSnapTarget ? (
+                <GhostSnapBlock isNested={true} width={ghostWidth} />
+              ) : (
+                <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
+              )
             ) : (
-              innerBlocks.map((child, nIdx) => (
-                <CanvasBlockItem
-                  key={child.id || nIdx}
-                  {...props}
-                  block={child}
-                  isNested={true}
-                  cIdx={nIdx}
-                  parentBlockId={block.id}
-                  branchId={undefined}
-                />
-              ))
+              <>
+                {innerBlocks.map((child, nIdx) => {
+                  const showGhostBefore = isMouthSnapTarget && activeSnapTarget?.insertIndex === nIdx;
+                  return (
+                    <React.Fragment key={child.id || nIdx}>
+                      {showGhostBefore && (
+                        <GhostSnapBlock isNested={true} width={ghostWidth} />
+                      )}
+                      <CanvasBlockItem
+                        {...props}
+                        block={child}
+                        isNested={true}
+                        cIdx={nIdx}
+                        parentBlockId={block.id}
+                        branchId={undefined}
+                      />
+                    </React.Fragment>
+                  );
+                })}
+                {isMouthSnapTarget && activeSnapTarget?.insertIndex === innerBlocks.length && (
+                  <GhostSnapBlock isNested={true} width={ghostWidth} />
+                )}
+              </>
             )}
           </div>
         </div>
@@ -601,7 +630,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           returnVal={block.returnVal}
           onToggleDefReturn={(show) => onToggleDefReturn?.(block.id, show)}
           onDefReturnValChange={(val) => onDefReturnValChange?.(block.id, val)}
-          hasInnerBlocks={innerBlocks.length > 0}
+          hasInnerBlocks={innerBlocks.length > 0 || isMouthSnapTarget}
           tabLeft={tabLeft}
           isNested={isNested}
         />
@@ -763,7 +792,12 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   <PuzzleNotch
                     left={spineW + BLOCK_GEOMETRY.TAB_LEFT_INNER}
                     borderColor={branchTheme.border}
-                    isConnected={(branches[brIdx - 1]?.innerBlocks || []).length > 0}
+                    isConnected={
+                      (branches[brIdx - 1]?.innerBlocks || []).length > 0 ||
+                      (activeSnapTarget?.type === 'mouth' &&
+                       activeSnapTarget.targetBlockId === block.id &&
+                       activeSnapTarget.branchId === branches[brIdx - 1]?.id)
+                    }
                   />
                   <div
                     style={{
@@ -878,21 +912,47 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 >
                   <PuzzleTab isCeiling left={BLOCK_GEOMETRY.TAB_LEFT_INNER} borderColor={branchTheme.border} bg={branchTheme.bg} />
 
-                  {branchInnerBlocks.length === 0 ? (
-                    <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
-                  ) : (
-                    branchInnerBlocks.map((child, nIdx) => (
-                      <CanvasBlockItem
-                        key={child.id || nIdx}
-                        {...props}
-                        block={child}
-                        isNested={true}
-                        cIdx={nIdx}
-                        parentBlockId={block.id}
-                        branchId={branch.id}
-                      />
-                    ))
-                  )}
+                  {(() => {
+                    const isBranchMouthSnapTarget =
+                      activeSnapTarget?.type === 'mouth' &&
+                      activeSnapTarget.targetBlockId === block.id &&
+                      activeSnapTarget.branchId === branch.id;
+                    const branchGhostWidth = Math.max(120, (activeSnapTarget?.markerWidth || 140) - 20);
+
+                    if (branchInnerBlocks.length === 0) {
+                      return isBranchMouthSnapTarget ? (
+                        <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                      ) : (
+                        <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
+                      );
+                    }
+
+                    return (
+                      <>
+                        {branchInnerBlocks.map((child, nIdx) => {
+                          const showGhostBefore = isBranchMouthSnapTarget && activeSnapTarget?.insertIndex === nIdx;
+                          return (
+                            <React.Fragment key={child.id || nIdx}>
+                              {showGhostBefore && (
+                                <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                              )}
+                              <CanvasBlockItem
+                                {...props}
+                                block={child}
+                                isNested={true}
+                                cIdx={nIdx}
+                                parentBlockId={block.id}
+                                branchId={branch.id}
+                              />
+                            </React.Fragment>
+                          );
+                        })}
+                        {isBranchMouthSnapTarget && activeSnapTarget?.insertIndex === branchInnerBlocks.length && (
+                          <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
@@ -902,7 +962,12 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         {/* Bottom Closing Arm */}
         <SvgBottomClosingArm
           theme={theme}
-          hasInnerBlocks={(branches[branches.length - 1]?.innerBlocks || []).length > 0}
+          hasInnerBlocks={
+            (branches[branches.length - 1]?.innerBlocks || []).length > 0 ||
+            (activeSnapTarget?.type === 'mouth' &&
+             activeSnapTarget.targetBlockId === block.id &&
+             activeSnapTarget.branchId === branches[branches.length - 1]?.id)
+          }
           tabLeft={tabLeft}
           isNested={isNested}
         />

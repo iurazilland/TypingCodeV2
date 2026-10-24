@@ -23,6 +23,7 @@ export interface BlockPiece {
 export interface PracticeQuestion {
   id: number;
   step: number; // 1 ~ 10
+  type?: 'block' | 'typing'; // 'block' for steps 1-5, 'typing' for steps 6-10
   title: string;
   prompt_ko: string;
   prompt_en?: string;
@@ -31,7 +32,7 @@ export interface PracticeQuestion {
   hint_ko: string;
   hint_en?: string;
   starterCode?: string;
-  availableBlocks: BlockPiece[];
+  availableBlocks?: BlockPiece[];
 }
 
 export interface PracticeRound {

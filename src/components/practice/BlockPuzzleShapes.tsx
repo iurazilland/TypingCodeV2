@@ -246,3 +246,57 @@ export const SvgBottomClosingArm: React.FC<{
     </div>
   );
 };
+
+// 5. Scratch-Style Ghost / Shadow Snap Block (스냅 위치를 미리 보여주는 회색 그림자 블록)
+export const GhostSnapBlock: React.FC<{
+  left?: number | string;
+  top?: number | string;
+  width?: number | string;
+  height?: number | string;
+  isNested?: boolean;
+  style?: React.CSSProperties;
+}> = ({
+  left,
+  top,
+  width = 140,
+  height = 34,
+  isNested = false,
+  style,
+}) => {
+  const tabLeft = isNested ? BLOCK_GEOMETRY.TAB_LEFT_INNER : BLOCK_GEOMETRY.TAB_LEFT_ROOT;
+  const isAbsolute = left !== undefined || top !== undefined;
+
+  return (
+    <div
+      className={isNested ? 'nested-ghost-snap-block' : 'canvas-ghost-snap-block'}
+      style={{
+        position: isAbsolute ? 'absolute' : 'relative',
+        ...(left !== undefined ? { left: typeof left === 'number' ? `${left}px` : left } : {}),
+        ...(top !== undefined ? { top: typeof top === 'number' ? `${top}px` : top } : {}),
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height,
+        minHeight: typeof height === 'number' ? `${height}px` : height,
+        boxSizing: 'border-box',
+        borderRadius: isNested ? '0 6px 0 0' : '6px',
+        background: 'rgba(148, 163, 184, 0.45)', // Scratch neutral slate grey
+        border: '1.5px solid #94a3b8',
+        ...(isNested ? { borderLeft: 'none', marginTop: '-1px' } : {}),
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+        zIndex: 60,
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        flexShrink: 0,
+        transition: 'height 0.1s ease, width 0.1s ease',
+        ...style,
+      }}
+    >
+      {/* Top Notch (상단 홈) */}
+      <PuzzleNotch left={tabLeft} borderColor="#94a3b8" bgColor="#090e1a" isConnected={false} />
+
+      {/* Bottom Puzzle Tab (하단 탭) */}
+      <PuzzleTab left={tabLeft} borderColor="#94a3b8" bg="rgba(148, 163, 184, 0.45)" zIndex={65} />
+    </div>
+  );
+};
+

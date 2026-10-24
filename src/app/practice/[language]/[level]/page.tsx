@@ -34,6 +34,7 @@ import {
   HorizontalPuzzleTab,
   HorizontalPuzzleNotch,
   SvgBottomClosingArm,
+  GhostSnapBlock,
 } from '@/components/practice/BlockPuzzleShapes';
 
 interface PracticePageProps {
@@ -678,6 +679,22 @@ export default function PracticePage({ params }: PracticePageProps) {
   const currentQuestion: PracticeQuestion = round.questions[currentStepIndex] || round.questions[0];
   const mode: 'block' | 'typing' = (currentQuestion as any).type === 'typing' ? 'typing' : 'block';
   const progressPercent = Math.round(((currentStepIndex + 1) / totalQuestions) * 100);
+
+  // Scratch-style downstream shifted blocks to open up preview space for ghost block
+  const shiftedBlockIds = useMemo(() => {
+    if (!activeSnapTarget) return new Set<string>();
+    if (activeSnapTarget.type === 'below') {
+      const target = canvasBlocks.find((b) => b.id === activeSnapTarget.targetBlockId);
+      if (!target || !target.nextBlockId) return new Set<string>();
+      return new Set<string>([target.nextBlockId, ...getDescendantBlockIds(target.nextBlockId, canvasBlocks)]);
+    }
+    if (activeSnapTarget.type === 'above') {
+      const target = canvasBlocks.find((b) => b.id === activeSnapTarget.targetBlockId);
+      if (!target) return new Set<string>();
+      return new Set<string>([target.id, ...getDescendantBlockIds(target.id, canvasBlocks)]);
+    }
+    return new Set<string>();
+  }, [activeSnapTarget, canvasBlocks]);
 
   // Reset/sync on step change: Always start with the Start Block on canvas
   useEffect(() => {
@@ -1645,6 +1662,9 @@ export default function PracticePage({ params }: PracticePageProps) {
 
     // 1. Check C-blocks and E-branch mouths (recursively at any nesting depth, depth-first so inner loops match before parent)
     const checkMouthsRecursive = (list: CanvasBlock[]): SnapTarget | null => {
+      const draggedEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
+      const draggedW = draggedEl ? draggedEl.offsetWidth : 140;
+
       for (const b of list) {
         if (excludedIds.has(b.id)) continue;
 
@@ -1675,7 +1695,7 @@ export default function PracticePage({ params }: PracticePageProps) {
               const inBlocks = b.innerBlocks || [];
               let targetIdx = inBlocks.length;
               let markerLineY = mTop + 1;
-              let markerLineWidth = Math.max(120, mRect.width);
+              let markerLineWidth = Math.max(130, draggedW);
 
               if (inBlocks.length === 0) {
                 targetIdx = 0;
@@ -1744,7 +1764,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                 const inBlocks = br.innerBlocks || [];
                 let targetIdx = inBlocks.length;
                 let markerLineY = mTop + 1;
-                let markerLineWidth = Math.max(120, mRect.width);
+                let markerLineWidth = Math.max(130, draggedW);
 
                 if (inBlocks.length === 0) {
                   targetIdx = 0;
@@ -5344,21 +5364,13 @@ export default function PracticePage({ params }: PracticePageProps) {
               overflow: isDraggingBlock ? 'visible' : 'hidden',
             }}
           >
-            {/* Visual Insertion Marker (Soft single-line snap indicator without protruding bump) */}
-            {activeSnapTarget && (activeSnapTarget.type === 'below' || activeSnapTarget.type === 'above' || activeSnapTarget.type === 'mouth') && (
-              <div
-                style={{
-                  position: 'absolute',
-                  left: `${activeSnapTarget.markerX}px`,
-                  top: `${activeSnapTarget.markerY - 1.5}px`,
-                  width: `${Math.max(120, activeSnapTarget.markerWidth || 120)}px`,
-                  height: '3px',
-                  borderRadius: '2px',
-                  background: 'rgba(251, 191, 36, 0.95)',
-                  boxShadow: '0 0 8px rgba(245, 158, 11, 0.55)',
-                  zIndex: 100,
-                  pointerEvents: 'none',
-                }}
+            {/* Scratch-style Ghost / Shadow Snap Block (for below and above snaps) */}
+            {activeSnapTarget && (activeSnapTarget.type === 'below' || activeSnapTarget.type === 'above') && (
+              <GhostSnapBlock
+                left={activeSnapTarget.markerX}
+                top={activeSnapTarget.type === 'below' ? activeSnapTarget.markerY - 1 : activeSnapTarget.markerY - 33}
+                width={Math.max(120, activeSnapTarget.markerWidth || 130)}
+                isNested={false}
               />
             )}
 
@@ -5415,7 +5427,11 @@ export default function PracticePage({ params }: PracticePageProps) {
                   .map((block) => (
                     <CanvasBlockItem
                       key={block.id}
-                      block={block}
+                      block={
+                        shiftedBlockIds.has(block.id)
+                          ? { ...block, y: block.y + 34 }
+                          : block
+                      }
                       isNested={false}
                       isSlotArg={false}
                       canvasBlocks={canvasBlocks}
