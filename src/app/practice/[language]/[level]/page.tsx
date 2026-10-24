@@ -2832,6 +2832,30 @@ export default function PracticePage({ params }: PracticePageProps) {
       hasMoved: false,
     };
 
+    // Cache relative offsets of any chained methods attached horizontally to this child
+    const descendantIds = getDescendantBlockIds(child.id, canvasBlocksRef.current);
+    const relativeOffsets = new Map<string, { dx: number; dy: number }>();
+    const childRect = targetEl.getBoundingClientRect();
+    for (const did of descendantIds) {
+      const dEl = document.getElementById(`block-${did}`);
+      if (dEl) {
+        const dRect = dEl.getBoundingClientRect();
+        relativeOffsets.set(did, {
+          dx: Math.round(dRect.left - childRect.left),
+          dy: Math.round(dRect.top - childRect.top),
+        });
+      }
+    }
+    const childW = targetEl.offsetWidth || 120;
+    let fallbackDx = childW - 1;
+    for (const did of descendantIds) {
+      if (!relativeOffsets.has(did)) {
+        relativeOffsets.set(did, { dx: fallbackDx, dy: 0 });
+        const dEl = document.getElementById(`block-${did}`);
+        fallbackDx += (dEl ? dEl.offsetWidth : 120) - 1;
+      }
+    }
+
     let hasExtracted = false;
 
     const onPointerMove = (moveEv: PointerEvent) => {
@@ -2852,7 +2876,7 @@ export default function PracticePage({ params }: PracticePageProps) {
           hasExtracted = true;
           // Unplug child from parent block's argBlock or attachedMethodId
           setCanvasBlocks((prev) => {
-            const updated = updateAnyBlockInTree(prev, parentBlockId, (p) => {
+            let updated = updateAnyBlockInTree(prev, parentBlockId, (p) => {
               if (p.argBlock?.id === child.id) {
                 return { ...p, argBlock: undefined };
               }
@@ -2870,6 +2894,15 @@ export default function PracticePage({ params }: PracticePageProps) {
               nextBlockId: undefined,
               attachedToBlockId: undefined,
             };
+
+            // Update attached method positions immediately to follow currX, currY
+            updated = updated.map((b) => {
+              if (relativeOffsets.has(b.id)) {
+                const off = relativeOffsets.get(b.id)!;
+                return { ...b, x: currX + off.dx, y: currY + off.dy };
+              }
+              return b;
+            });
 
             const nextList = [...updated, movingBlock];
             canvasBlocksRef.current = nextList;
@@ -2910,9 +2943,16 @@ export default function PracticePage({ params }: PracticePageProps) {
         activeSnapTargetRef.current = snap;
         setActiveSnapTarget(snap);
 
-        // Move block with pointer smoothly in real-time
+        // Move block AND all attached chained methods with pointer smoothly in real-time
         setCanvasBlocks((prev) => {
-          const nextList = prev.map((b) => (b.id === child.id ? { ...b, x: currX, y: currY } : b));
+          const nextList = prev.map((b) => {
+            if (b.id === child.id) return { ...b, x: currX, y: currY };
+            if (relativeOffsets.has(b.id)) {
+              const off = relativeOffsets.get(b.id)!;
+              return { ...b, x: currX + off.dx, y: currY + off.dy };
+            }
+            return b;
+          });
           canvasBlocksRef.current = nextList;
           return nextList;
         });
@@ -2966,7 +3006,8 @@ export default function PracticePage({ params }: PracticePageProps) {
 
         if (isOverTrash || isOverToolbox) {
           setCanvasBlocks((prev) => {
-            const nextList = prev.filter((b) => b.id !== child.id);
+            const toDelete = new Set([child.id, ...descendantIds]);
+            const nextList = prev.filter((b) => !toDelete.has(b.id));
             canvasBlocksRef.current = nextList;
             return nextList;
           });
