@@ -553,6 +553,30 @@ function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] 
       result.push(blk.attachedMethodId);
       queue.push(blk.attachedMethodId);
     }
+    if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+      for (const ib of blk.innerBlocks) {
+        if (!visited.has(ib.id)) {
+          result.push(ib.id);
+          queue.push(ib.id);
+        }
+      }
+    }
+    if (blk.branches && blk.branches.length > 0) {
+      for (const br of blk.branches) {
+        if (br.innerBlocks && br.innerBlocks.length > 0) {
+          for (const bib of br.innerBlocks) {
+            if (!visited.has(bib.id)) {
+              result.push(bib.id);
+              queue.push(bib.id);
+            }
+          }
+        }
+      }
+    }
+    if (blk.argBlock && !visited.has(blk.argBlock.id)) {
+      result.push(blk.argBlock.id);
+      queue.push(blk.argBlock.id);
+    }
   }
   return result;
 }
@@ -1919,7 +1943,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       draggedType === 'if' ||
       draggedType === 'def';
     const draggedH = isDraggingC ? draggedDim.totalHeight : draggedDim.height;
-    const snapMarkerWidth = isDraggingC ? draggedDim.headerWidth : draggedDim.width;
+    const snapMarkerWidth = isDraggingC ? Math.max(draggedDim.headerWidth, draggedDim.width) : draggedDim.width;
     const snapMarkerHeight = draggedH;
 
     for (const b of blocksList) {
@@ -1931,14 +1955,14 @@ export default function PracticePage({ params }: PracticePageProps) {
       const bH = bEl ? bEl.offsetHeight : (b.type === 'start' ? 38 : 34);
 
       const bBottom = b.y + bH;
-      // 블록 가로 스냅 범위: 블록 영역 위나 좌우 근처에 자연스럽게 자석 결합 (너비 기반 + 오차 허용)
-      const horizontalMatch = (draggedX >= b.x - 50 && draggedX <= b.x + bW + 35) || Math.abs(draggedX - b.x) <= 65;
+      // 블록 가로 스냅 범위: 블록 좌측 정렬 기준 오차 허용 (±36px 이내로 정렬될 때만 스냅)
+      const horizontalMatch = Math.abs(draggedX - b.x) <= 36;
 
-      // 하단 탭 연결부 근처 (시작 블록은 블록 위/하단 전체에서 즉시 스냅, 일반 블록은 하반부 또는 하단 ±36px)
+      // 하단 탭 연결부 근처 (상단 모서리가 하단 탭 근처 ±26px 이내)
       const isStart = b.type === 'start';
       const isNearBottom = isStart
-        ? (draggedY >= b.y - 15 && draggedY <= bBottom + 40)
-        : (Math.abs(draggedY - bBottom) <= 36 || (draggedY >= b.y + bH * 0.35 && draggedY <= bBottom + 36));
+        ? (draggedY >= b.y - 10 && draggedY <= bBottom + 26)
+        : (Math.abs(draggedY - bBottom) <= 26);
 
       if (horizontalMatch && isNearBottom) {
         const score = Math.abs(draggedY - bBottom) * 2 + Math.abs(draggedX - b.x);
@@ -1956,9 +1980,9 @@ export default function PracticePage({ params }: PracticePageProps) {
         }
       }
 
-      // 상단 홈 스냅 (start 블록 위로는 결합 불가, 일반 블록 상반부 또는 상단 ±36px)
+      // 상단 홈 스냅 (start 블록 위로는 결합 불가, 하단 모서리가 상단 홈 근처 ±26px 이내)
       if (b.type !== 'start') {
-        const isNearTop = Math.abs((draggedY + draggedH) - b.y) <= 36 || (draggedY <= b.y + bH * 0.65 && draggedY >= b.y - draggedH - 24);
+        const isNearTop = Math.abs((draggedY + draggedH) - b.y) <= 26;
         if (horizontalMatch && isNearTop) {
           const score = Math.abs((draggedY + draggedH) - b.y) * 2 + Math.abs(draggedX - b.x);
           if (score < minScore) {

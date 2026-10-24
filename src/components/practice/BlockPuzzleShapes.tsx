@@ -362,7 +362,7 @@ export const GhostCShapeBlock: React.FC<{
   const closingArmH = BLOCK_GEOMETRY.CLOSING_ARM_HEIGHT;
   const headerArmH = BLOCK_GEOMETRY.ARM_HEIGHT;
   const numWidth = typeof width === 'number' ? width : 150;
-  const closingArmW = Math.max(90, Math.round(numWidth * 0.72));
+  const closingArmW = numWidth;
 
   return (
     <div
