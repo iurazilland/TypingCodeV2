@@ -140,22 +140,22 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   // 시작 블록 (실시간 실행 시작점)
   start: { bg: '#059669', shadow: '#047857', border: '#10b981' },
 
-  // 함수 (파랑 계열)
+  // 함수 (파랑 계열 통일)
   print: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  input: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
-  len: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
-  int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
-  float: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
-  str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
-  type: { bg: '#4f46e5', shadow: '#4338ca', border: '#818cf8' },
-  round: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
-  abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
-  sum: { bg: '#0d9488', shadow: '#0f766e', border: '#14b8a6' },
-  min: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
-  max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
-  open: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
+  input: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  len: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  float: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  type: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  round: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  sum: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  min: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
-  return: { bg: '#4338ca', shadow: '#3730a3', border: '#6366f1' },
+  return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
 
   // 메서드 (보라/바이올렛 계열)
   method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
@@ -3724,6 +3724,12 @@ export default function PracticePage({ params }: PracticePageProps) {
     );
   };
 
+  const handleBlockTypeChange = (blockId: string, newType: BlockType) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, type: newType }))
+    );
+  };
+
   const handleCreateVariable = () => {
     const name = varInputName.trim();
     if (!name) {
@@ -4265,39 +4271,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <span>)</span>
                 </div>
 
-                {/* len() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'len')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.len.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.len.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.len.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="len() 길이 반환 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.len.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.len.border} bg={BLOCK_THEMES.len.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.len.border} bgColor="#0d1527" />
-                  <span>len (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* int() 블록 */}
+                {/* [int ▾] () 형변환 통합 블록 */}
                 <div
                   draggable
                   onDragStart={(e) => handleDragStartFromToolbox(e, 'int')}
@@ -4319,20 +4293,21 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="int() 정수 변환 블록 (캔버스로 드래그하여 배치)"
+                  title="형변환 함수 블록 (int, float, str, type 드롭다운 선택 가능)"
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.int.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.int.border} bg={BLOCK_THEMES.int.bg} />
                   <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.int.border} bgColor="#0d1527" />
-                  <span>int (</span>
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>int ▼</span>
+                  <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
 
-                {/* float() 블록 */}
+                {/* [len ▾] () 수학·집계 통합 블록 */}
                 <div
                   draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'float')}
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'len')}
                   style={{
                     display: 'inline-flex',
                     width: 'fit-content',
@@ -4340,9 +4315,9 @@ export default function PracticePage({ params }: PracticePageProps) {
                     gap: '4px',
                     padding: '5px 10px',
                     borderRadius: '6px',
-                    background: BLOCK_THEMES.float.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.float.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.float.border}`,
+                    background: BLOCK_THEMES.len.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.len.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.len.border}`,
                     color: '#ffffff',
                     fontWeight: 800,
                     fontSize: '0.80rem',
@@ -4351,268 +4326,13 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="float() 실수 변환 블록 (캔버스로 드래그하여 배치)"
+                  title="수학/집계 함수 블록 (len, round, abs, sum, min, max 드롭다운 선택 가능)"
                 >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.float.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.float.border} bg={BLOCK_THEMES.float.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.float.border} bgColor="#0d1527" />
-                  <span>float (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* str() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'str')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.str.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.str.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.str.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="str() 문자열 변환 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.str.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.str.border} bg={BLOCK_THEMES.str.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.str.border} bgColor="#0d1527" />
-                  <span>str (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* type() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'type')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.type.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.type.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.type.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="type() 자료형 확인 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.type.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.type.border} bg={BLOCK_THEMES.type.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.type.border} bgColor="#0d1527" />
-                  <span>type (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* round() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'round')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.round.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.round.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.round.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="round() 반올림 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.round.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.round.border} bg={BLOCK_THEMES.round.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.round.border} bgColor="#0d1527" />
-                  <span>round (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* abs() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'abs')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.abs.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.abs.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.abs.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="abs() 절댓값 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.abs.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.abs.border} bg={BLOCK_THEMES.abs.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.abs.border} bgColor="#0d1527" />
-                  <span>abs (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* sum() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'sum')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.sum.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.sum.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.sum.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="sum() 합계 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.sum.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.sum.border} bg={BLOCK_THEMES.sum.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.sum.border} bgColor="#0d1527" />
-                  <span>sum (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* min() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'min')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.min.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.min.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.min.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="min() 최솟값 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.min.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.min.border} bg={BLOCK_THEMES.min.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.min.border} bgColor="#0d1527" />
-                  <span>min (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* max() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'max')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.max.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.max.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.max.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="max() 최댓값 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.max.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.max.border} bg={BLOCK_THEMES.max.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.max.border} bgColor="#0d1527" />
-                  <span>max (</span>
-                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  <span>)</span>
-                </div>
-
-                {/* open() 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'open')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.open.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.open.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.open.border}`,
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title="open() 파일 열기 블록 (캔버스로 드래그하여 배치)"
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.open.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.open.border} bg={BLOCK_THEMES.open.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.open.border} bgColor="#0d1527" />
-                  <span>open (</span>
+                  <PuzzleNotch borderColor={BLOCK_THEMES.len.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.len.border} bg={BLOCK_THEMES.len.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.len.border} bgColor="#0d1527" />
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>len ▼</span>
+                  <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -5524,6 +5244,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                       }
                     }}
                     onMethodNameChange={handleMethodNameChange}
+                    onBlockTypeChange={handleBlockTypeChange}
                     onAddItem={handleAddItemToBlock}
                     onRemoveItem={handleRemoveItem}
                     onItemChange={handleItemChange}

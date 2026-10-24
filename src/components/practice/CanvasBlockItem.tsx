@@ -49,6 +49,7 @@ export interface CanvasBlockItemProps {
   onDefReturnValChange?: (blockId: string, val: string) => void;
   onRemoveInnerBlock?: (parentBlockId: string, cIdx: number, branchId?: string) => void;
   onMethodNameChange?: (blockId: string, methodName: string) => void;
+  onBlockTypeChange?: (blockId: string, newType: BlockType) => void;
   onAddItem?: (blockId: string) => void;
   onRemoveItem?: (blockId: string, idx: number) => void;
   onItemChange?: (blockId: string, idx: number, val: string) => void;
@@ -90,6 +91,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     onDefReturnValChange,
     onRemoveInnerBlock,
     onMethodNameChange,
+    onBlockTypeChange,
     onAddItem,
     onRemoveItem,
     onItemChange,
@@ -1115,6 +1117,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             onContentChange={onContentChange}
             onVarNameChange={onVarNameChange}
             onMethodNameChange={onMethodNameChange}
+            onBlockTypeChange={onBlockTypeChange}
             methodCategories={methodCategories}
             getMethodSelectWidth={getMethodSelectWidth}
           />
@@ -1135,6 +1138,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               onContentChange={onContentChange}
               onVarNameChange={onVarNameChange}
               onMethodNameChange={onMethodNameChange}
+              onBlockTypeChange={onBlockTypeChange}
               methodCategories={methodCategories}
               getMethodSelectWidth={getMethodSelectWidth}
             />
@@ -1245,10 +1249,82 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Block Body Content */}
-      {['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(block.type) ? (
+      {block.type === 'print' || block.type === 'input' ? (
         <>
           <span>{block.type} (</span>
           {renderArgSlot(block.type)}
+          <span>)</span>
+        </>
+      ) : ['int', 'float', 'str', 'type'].includes(block.type) ? (
+        <>
+          <select
+            value={block.type}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
+            style={{
+              width: `${Math.max(54, block.type.length * 8.5 + 26)}px`,
+              height: '20px',
+              padding: '0 16px 0 6px',
+              borderRadius: '5px',
+              background: '#ffffff',
+              color: '#0f172a',
+              border: '1px solid rgba(0, 0, 0, 0.25)',
+              fontWeight: 800,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.78rem',
+              outline: 'none',
+              cursor: 'pointer',
+              boxSizing: 'border-box',
+            }}
+          >
+            <option value="int">int</option>
+            <option value="float">float</option>
+            <option value="str">str</option>
+            <option value="type">type</option>
+          </select>
+          <span>(</span>
+          {renderArgSlot(block.type)}
+          <span>)</span>
+        </>
+      ) : ['len', 'round', 'abs', 'sum', 'min', 'max'].includes(block.type) ? (
+        <>
+          <select
+            value={block.type}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
+            style={{
+              width: `${Math.max(54, block.type.length * 8.5 + 26)}px`,
+              height: '20px',
+              padding: '0 16px 0 6px',
+              borderRadius: '5px',
+              background: '#ffffff',
+              color: '#0f172a',
+              border: '1px solid rgba(0, 0, 0, 0.25)',
+              fontWeight: 800,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.78rem',
+              outline: 'none',
+              cursor: 'pointer',
+              boxSizing: 'border-box',
+            }}
+          >
+            <option value="len">len</option>
+            <option value="round">round</option>
+            <option value="abs">abs</option>
+            <option value="sum">sum</option>
+            <option value="min">min</option>
+            <option value="max">max</option>
+          </select>
+          <span>(</span>
+          {renderArgSlot(block.type)}
+          <span>)</span>
+        </>
+      ) : block.type === 'open' ? (
+        <>
+          <span>open (</span>
+          {renderArgSlot('open')}
           <span>)</span>
         </>
       ) : block.type === 'variable' ? (
