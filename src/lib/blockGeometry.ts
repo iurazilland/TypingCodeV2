@@ -16,6 +16,16 @@ export type BlockType =
   | 'max'
   | 'open'
   | 'math'
+  | 'range'
+  | 'map'
+  | 'sorted'
+  | 'bool'
+  | 'iter'
+  | 'enumerate'
+  | 'zip'
+  | 'all'
+  | 'any'
+  | 'reversed'
   | 'def'
   | 'return'
   // 메서드
@@ -106,6 +116,16 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   min: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   math: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  range: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  map: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  sorted: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  bool: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  iter: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  enumerate: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  zip: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  all: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  any: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  reversed: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },

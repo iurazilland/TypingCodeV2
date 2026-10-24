@@ -941,24 +941,54 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
 
     // Filter method categories based on the target block's data type
     let filteredCategories = methodCategories || [];
+    let noMethodNotice: string | null = null;
+
     if (targetBlock) {
       if (targetBlock.type === 'input' || targetBlock.type === 'str') {
         filteredCategories = (methodCategories || []).filter((c) => c.category.includes('문자열') || c.category.includes('String'));
-      } else if (targetBlock.type === 'list') {
+      } else if (targetBlock.type === 'open') {
+        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('파일') || c.category.includes('File'));
+      } else if (targetBlock.type === 'list' || targetBlock.type === 'sorted') {
         filteredCategories = (methodCategories || []).filter((c) => c.category.includes('리스트') || c.category.includes('List'));
       } else if (targetBlock.type === 'dict') {
         filteredCategories = (methodCategories || []).filter((c) => c.category.includes('딕셔너리') || c.category.includes('Dictionary'));
       } else if (targetBlock.type === 'set') {
         filteredCategories = (methodCategories || []).filter((c) => c.category.includes('세트') || c.category.includes('Set'));
-      } else if (targetBlock.type === 'open') {
-        filteredCategories = (methodCategories || []).filter((c) => c.category.includes('파일') || c.category.includes('File'));
+      } else if (targetBlock.type === 'tuple') {
+        filteredCategories = (methodCategories || [])
+          .filter((c) => c.category.includes('리스트') || c.category.includes('List'))
+          .map((cat) => ({
+            ...cat,
+            category: '튜플 (Tuple)',
+            methods: cat.methods.filter((m) => m.name === 'count' || m.name === 'index'),
+          }));
+      } else if (targetBlock.type === 'variable') {
+        const vContent = (targetBlock.content || '').trim();
+        const vName = (targetBlock.varName || '').toLowerCase();
+        if (/^['"]/.test(vContent) || vName.includes('str') || vName.includes('text') || vName.includes('line') || vName.includes('msg') || vName.includes('word') || vName.includes('name')) {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('문자열') || c.category.includes('String'));
+        } else if (/^\[/.test(vContent) || vName.includes('list') || vName.includes('items') || vName.includes('nums') || vName.includes('arr') || vName.includes('scores')) {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('리스트') || c.category.includes('List'));
+        } else if (/^\{.*:/.test(vContent) || vName.includes('dict') || vName.includes('map') || vName.includes('info')) {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('딕셔너리') || c.category.includes('Dictionary'));
+        } else if (/^\{/.test(vContent) || vName.includes('set')) {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('세트') || c.category.includes('Set'));
+        } else if (vContent.includes('open(') || vName.includes('file') || vName === 'f') {
+          filteredCategories = (methodCategories || []).filter((c) => c.category.includes('파일') || c.category.includes('File'));
+        }
       } else if (targetBlock.type === 'method') {
         const prevM = targetBlock.methodName;
-        if (prevM === 'split' || prevM === 'splitlines') {
+        if (['split', 'splitlines', 'keys', 'values', 'items', 'readlines'].includes(prevM || '')) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('리스트') || c.category.includes('List'));
-        } else if (['strip', 'lstrip', 'rstrip', 'join', 'upper', 'lower', 'replace', 'capitalize', 'title', 'swapcase', 'zfill', 'format'].includes(prevM || '')) {
+        } else if (['strip', 'lstrip', 'rstrip', 'join', 'upper', 'lower', 'replace', 'capitalize', 'title', 'swapcase', 'zfill', 'format', 'read', 'readline'].includes(prevM || '')) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('문자열') || c.category.includes('String'));
+        } else if (['append', 'sort', 'reverse', 'remove', 'clear', 'insert', 'extend', 'add', 'discard', 'write', 'close'].includes(prevM || '')) {
+          filteredCategories = [];
+          noMethodNotice = `.${prevM}()은 반환값이 없어 메서드를 연결할 수 없습니다`;
         }
+      } else {
+        filteredCategories = [];
+        noMethodNotice = `${targetBlock.type}()은(는) 메서드를 지원하지 않습니다`;
       }
     }
 
@@ -1041,18 +1071,24 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               fontSize: '0.85rem',
             }}
           >
-            {(!block.methodName || block.methodName === 'method') && (
-              <option value="method">method</option>
-            )}
-            {filteredCategories.map((cat) => (
-              <optgroup key={cat.category} label={cat.category}>
-                {cat.methods.map((m) => (
-                  <option key={m.name} value={m.name} title={m.label}>
-                    {m.name}
-                  </option>
+            {noMethodNotice ? (
+              <option value="method" disabled>{noMethodNotice}</option>
+            ) : (
+              <>
+                {(!block.methodName || block.methodName === 'method') && (
+                  <option value="method">method</option>
+                )}
+                {filteredCategories.map((cat) => (
+                  <optgroup key={cat.category} label={cat.category}>
+                    {cat.methods.map((m) => (
+                      <option key={m.name} value={m.name} title={m.label}>
+                        {m.name}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
-              </optgroup>
-            ))}
+              </>
+            )}
           </select>
         </div>
 
@@ -1258,23 +1294,24 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Horizontal notch for method chaining on functions, variables, collections */}
-      {(['print', 'input', 'len', 'int', 'float', 'str', 'type', 'math', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(block.type) ||
-        block.type === 'variable' ||
-        block.type === 'list' ||
-        block.type === 'tuple' ||
-        block.type === 'set' ||
-        block.type === 'dict') && (
+      {(['input', 'str', 'open', 'list', 'dict', 'set', 'tuple', 'sorted'].includes(block.type) ||
+        block.type === 'variable') && (
         <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
       )}
 
       {/* Block Body Content */}
-      {block.type === 'print' || block.type === 'input' ? (
+      {block.type === 'print' ||
+      block.type === 'input' ||
+      block.type === 'open' ||
+      block.type === 'range' ||
+      block.type === 'map' ||
+      block.type === 'sorted' ? (
         <>
           <span>{block.type} (</span>
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
-      ) : ['type', 'int', 'float', 'str'].includes(block.type) ? (
+      ) : ['type', 'int', 'float', 'str', 'bool'].includes(block.type) ? (
         <>
           <div
             onMouseDown={(e) => e.stopPropagation()}
@@ -1319,6 +1356,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               <option value="int">int</option>
               <option value="float">float</option>
               <option value="str">str</option>
+              <option value="bool">bool</option>
             </select>
           </div>
           <span>(</span>
@@ -1379,10 +1417,57 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
-      ) : block.type === 'open' ? (
+      ) : ['iter', 'enumerate', 'zip', 'all', 'any', 'reversed'].includes(block.type) ? (
         <>
-          <span>open (</span>
-          {renderArgSlot('open')}
+          <div
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '3px',
+              height: isSlotArg ? '18px' : '20px',
+              padding: isSlotArg ? '0 5px' : '0 6px',
+              borderRadius: '4px',
+              background: '#ffffff',
+              color: '#0f172a',
+              fontWeight: 800,
+              fontFamily: 'var(--font-mono)',
+              fontSize: isSlotArg ? '0.72rem' : '0.78rem',
+              cursor: 'pointer',
+              boxSizing: 'border-box',
+              userSelect: 'none',
+              lineHeight: 1,
+            }}
+          >
+            <span>{block.type}</span>
+            <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
+            <select
+              value={block.type}
+              onMouseDown={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onChange={(e) => onBlockTypeChange?.(block.id, e.target.value as BlockType)}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0,
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+              }}
+            >
+              <option value="iter">iter</option>
+              <option value="enumerate">enumerate</option>
+              <option value="zip">zip</option>
+              <option value="all">all</option>
+              <option value="any">any</option>
+              <option value="reversed">reversed</option>
+            </select>
+          </div>
+          <span>(</span>
+          {renderArgSlot(block.type)}
           <span>)</span>
         </>
       ) : block.type === 'variable' ? (

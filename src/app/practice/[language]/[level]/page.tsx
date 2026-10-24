@@ -70,6 +70,16 @@ type BlockType =
   | 'max'
   | 'open'
   | 'math'
+  | 'range'
+  | 'map'
+  | 'sorted'
+  | 'bool'
+  | 'iter'
+  | 'enumerate'
+  | 'zip'
+  | 'all'
+  | 'any'
+  | 'reversed'
   | 'def'
   | 'return'
   // 메서드
@@ -156,6 +166,16 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   math: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  range: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  map: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  sorted: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  bool: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  iter: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  enumerate: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  zip: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  all: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  any: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  reversed: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
 
@@ -248,6 +268,16 @@ const FUNC_PARAM_HELPS: Record<string, string> = {
   min: 'min(iterable) / min(arg1, arg2, ...)',
   max: 'max(iterable) / max(arg1, arg2, ...)',
   open: 'open(file, mode="r")',
+  range: 'range(stop) / range(start, stop, step)',
+  map: 'map(function, iterable, ...)',
+  sorted: 'sorted(iterable, key=None, reverse=False)',
+  bool: 'bool(x=False)',
+  iter: 'iter(iterable) / iter(callable, sentinel)',
+  enumerate: 'enumerate(iterable, start=0)',
+  zip: 'zip(*iterables, strict=False)',
+  all: 'all(iterable)',
+  any: 'any(iterable)',
+  reversed: 'reversed(seq)',
   for_range: 'range(stop) / range(start, stop, step)',
 };
 
@@ -758,7 +788,11 @@ export default function PracticePage({ params }: PracticePageProps) {
           const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
           return `None # math(${inner})${chain}`;
         }
-        const funcTypes = ['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'];
+        const funcTypes = [
+          'print', 'input', 'len', 'int', 'float', 'str', 'bool', 'type',
+          'round', 'abs', 'sum', 'min', 'max', 'open',
+          'range', 'map', 'sorted', 'enumerate', 'zip', 'all', 'any', 'reversed'
+        ];
         if (funcTypes.includes(b.type)) {
           const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
           return `${b.type}(${inner})${chain}`;
@@ -818,7 +852,14 @@ export default function PracticePage({ params }: PracticePageProps) {
       } else if (blk.type === 'math') {
         const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
         out.push(`${indentStr}# math(${content})${mSuffix}  # len, round, abs, sum, min, max 중 함수를 선택하세요`);
-      } else if (['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(blk.type)) {
+      } else if (blk.type === 'iter') {
+        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
+        out.push(`${indentStr}iter(${content})${mSuffix}`);
+      } else if ([
+        'print', 'input', 'len', 'int', 'float', 'str', 'bool', 'type',
+        'round', 'abs', 'sum', 'min', 'max', 'open',
+        'range', 'map', 'sorted', 'enumerate', 'zip', 'all', 'any', 'reversed'
+      ].includes(blk.type)) {
         const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
         out.push(`${indentStr}${blk.type}(${content})${mSuffix}`);
       } else if (blk.type === 'def') {
@@ -1471,26 +1512,20 @@ export default function PracticePage({ params }: PracticePageProps) {
           if (excludedIds.has(b.id)) continue;
           const canAcceptMethod =
             b.type === 'input' ||
-            b.type === 'variable' ||
-            b.type === 'print' ||
-            b.type === 'len' ||
-            b.type === 'int' ||
-            b.type === 'float' ||
             b.type === 'str' ||
-            b.type === 'type' ||
-            b.type === 'math' ||
-            b.type === 'round' ||
-            b.type === 'abs' ||
-            b.type === 'sum' ||
-            b.type === 'min' ||
-            b.type === 'max' ||
+            b.type === 'open' ||
             b.type === 'list' ||
             b.type === 'dict' ||
             b.type === 'set' ||
             b.type === 'tuple' ||
+            b.type === 'sorted' ||
+            b.type === 'variable' ||
             b.type === 'method';
           if (canAcceptMethod) {
             candidates.push(b);
+          }
+          if (b.argBlock) {
+            collectCandidates([b.argBlock]);
           }
           if (b.innerBlocks && b.innerBlocks.length > 0) {
             collectCandidates(b.innerBlocks);
@@ -1534,7 +1569,11 @@ export default function PracticePage({ params }: PracticePageProps) {
     }
 
     // 0.5. Argument Slot Snapping (함수/변수 인자 슬롯에 다른 함수/변수 블록 스냅)
-    const ALL_FUNC_TYPES = ['print', 'input', 'len', 'int', 'float', 'str', 'type', 'math', 'round', 'abs', 'sum', 'min', 'max', 'open'];
+    const ALL_FUNC_TYPES = [
+      'print', 'input', 'len', 'int', 'float', 'str', 'bool', 'type',
+      'math', 'round', 'abs', 'sum', 'min', 'max', 'open',
+      'range', 'map', 'sorted', 'iter', 'enumerate', 'zip', 'all', 'any', 'reversed'
+    ];
     const canBeArg =
       (!!draggedType && ALL_FUNC_TYPES.includes(draggedType)) ||
       draggedType === 'variable';
@@ -1549,6 +1588,9 @@ export default function PracticePage({ params }: PracticePageProps) {
             !b.argBlock
           ) {
             slotCandidates.push(b);
+          }
+          if (b.argBlock) {
+            collectSlotCandidates([b.argBlock]);
           }
           if (b.innerBlocks && b.innerBlocks.length > 0) {
             collectSlotCandidates(b.innerBlocks);
@@ -4246,17 +4288,16 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="print() 출력 블록 (캔버스로 드래그하여 배치)"
+                  title="print() 출력 함수 블록 (캔버스로 드래그하여 배치)"
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.print.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.print.border} bg={BLOCK_THEMES.print.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.print.border} bgColor="#0d1527" />
                   <span>print (</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
 
-                {/* input() 블록 */}
+                {/* input() 블록 (문자열 반환 -> 메서드 결합 가능) */}
                 <div
                   draggable
                   onDragStart={(e) => handleDragStartFromToolbox(e, 'input')}
@@ -4278,12 +4319,106 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="input() 입력 블록 (캔버스로 드래그하여 배치)"
+                  title="input() 입력 함수 블록 (우측 홈에 문자열 메서드 결합 가능)"
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.input.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.input.border} bg={BLOCK_THEMES.input.bg} />
                   <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.input.border} bgColor="#0d1527" />
                   <span>input (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* range() 개별 함수 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'range')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.range.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.range.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.range.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="range() 수열 생성 함수 블록 (range(5), range(1, 10))"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.range.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.range.border} bg={BLOCK_THEMES.range.bg} />
+                  <span>range (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* map() 고차 함수 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'map')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.map.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.map.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.map.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="map() 함수 블록 (map(int, input().split()) 등)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.map.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.map.border} bg={BLOCK_THEMES.map.bg} />
+                  <span>map (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* sorted() 정렬 함수 블록 (정렬 리스트 반환 -> 리스트 메서드 결합 가능) */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'sorted')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.sorted.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.sorted.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.sorted.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="sorted() 정렬 함수 블록 (정렬된 리스트 반환, 리스트 메서드 결합 가능)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.sorted.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.sorted.border} bg={BLOCK_THEMES.sorted.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.sorted.border} bgColor="#0d1527" />
+                  <span>sorted (</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4310,11 +4445,10 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="자료형/형변환 함수 블록 (기본값: type, 드롭다운에서 type, int, float, str 선택 가능)"
+                  title="자료형/형변환 함수 블록 (기본값: type, 드롭다운에서 type, int, float, str, bool 선택 가능)"
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.type.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.type.border} bg={BLOCK_THEMES.type.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.type.border} bgColor="#0d1527" />
                   <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>type ▼</span>
                   <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
@@ -4347,8 +4481,39 @@ export default function PracticePage({ params }: PracticePageProps) {
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.math.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.math.border} bg={BLOCK_THEMES.math.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.math.border} bgColor="#0d1527" />
                   <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>math ▼</span>
+                  <span>(</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* [iter ▾] () 반복자/순회 통합 블록 (기본값: iter) */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'iter')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.iter.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.iter.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.iter.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="반복/순회 유틸리티 블록 (기본값: iter, 드롭다운에서 iter, enumerate, zip, all, any, reversed 선택 가능)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.iter.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.iter.border} bg={BLOCK_THEMES.iter.bg} />
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>iter ▼</span>
                   <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
@@ -4383,6 +4548,38 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <span style={{ fontSize: '0.92rem', fontWeight: 900 }}>.</span>
                   <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>method ▼</span>
                   <span>(</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
+                {/* open() 파일 열기 함수 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'open')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.open.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.open.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.open.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="open() 파일 열기 함수 블록 (우측 홈에 파일 메서드 결합 가능)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.open.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.open.border} bg={BLOCK_THEMES.open.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.open.border} bgColor="#0d1527" />
+                  <span>open (</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
