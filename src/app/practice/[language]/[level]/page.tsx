@@ -4487,7 +4487,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                       alignItems: 'center',
                       whiteSpace: 'nowrap',
                       gap: '4px',
-                      padding: '5px 10px',
+                      padding: '4px 10px',
                       borderRadius: '6px 6px 6px 0',
                       background: BLOCK_THEMES.for_range.bg,
                       border: `1px solid ${BLOCK_THEMES.for_range.border}`,
@@ -4517,18 +4517,22 @@ export default function PracticePage({ params }: PracticePageProps) {
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '2px',
-                        padding: '1px 5px',
-                        borderRadius: '4px',
-                        background: BLOCK_THEMES.int.bg,
-                        border: `1px solid ${BLOCK_THEMES.int.border}`,
+                        gap: '3px',
+                        height: '24px',
+                        padding: '0 8px',
+                        borderRadius: '6px',
+                        background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)',
+                        border: '1px solid #60a5fa',
+                        boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
                         color: '#ffffff',
                         fontWeight: 800,
-                        fontSize: '0.76rem',
+                        fontSize: '0.78rem',
+                        boxSizing: 'border-box',
+                        margin: '0 1px',
                       }}
                     >
                       <span>range(</span>
-                      <span style={{ padding: '0 4px', borderRadius: '3px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem' }}>5</span>
+                      <span style={{ padding: '0 5px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem', boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.12)' }}>5</span>
                       <span>)</span>
                     </div>
                     <span>:</span>
