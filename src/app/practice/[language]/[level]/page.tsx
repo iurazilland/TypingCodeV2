@@ -1255,6 +1255,74 @@ export default function PracticePage({ params }: PracticePageProps) {
     setIsDraggingBlock(true);
   };
 
+  // Recursive block finder in tree
+  const findBlockInTree = (blocks: CanvasBlock[], targetId: string): CanvasBlock | null => {
+    for (const b of blocks) {
+      if (b.id === targetId) return b;
+      if (b.argBlock) {
+        const found = findBlockInTree([b.argBlock], targetId);
+        if (found) return found;
+      }
+      if (b.innerBlocks && b.innerBlocks.length > 0) {
+        const found = findBlockInTree(b.innerBlocks, targetId);
+        if (found) return found;
+      }
+      if (b.branches && b.branches.length > 0) {
+        for (const br of b.branches) {
+          if (br.innerBlocks && br.innerBlocks.length > 0) {
+            const found = findBlockInTree(br.innerBlocks, targetId);
+            if (found) return found;
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  // Recursive tree updater for nested blocks at any depth
+  const updateAnyBlockInTree = (
+    blocks: CanvasBlock[],
+    targetId: string,
+    updater: (blk: CanvasBlock) => CanvasBlock
+  ): CanvasBlock[] => {
+    return blocks.map((b) => {
+      if (b.id === targetId) {
+        return updater(b);
+      }
+      let modified = false;
+      let newArg = b.argBlock;
+      if (b.argBlock) {
+        const updatedArg = updateAnyBlockInTree([b.argBlock], targetId, updater);
+        if (updatedArg[0] !== b.argBlock) {
+          newArg = updatedArg[0];
+          modified = true;
+        }
+      }
+      let newInner = b.innerBlocks;
+      if (b.innerBlocks && b.innerBlocks.length > 0) {
+        newInner = updateAnyBlockInTree(b.innerBlocks, targetId, updater);
+        if (newInner !== b.innerBlocks) modified = true;
+      }
+      let newBranches = b.branches;
+      if (b.branches && b.branches.length > 0) {
+        newBranches = b.branches.map((br) => {
+          if (br.innerBlocks && br.innerBlocks.length > 0) {
+            const updatedBrInner = updateAnyBlockInTree(br.innerBlocks, targetId, updater);
+            if (updatedBrInner !== br.innerBlocks) {
+              modified = true;
+              return { ...br, innerBlocks: updatedBrInner };
+            }
+          }
+          return br;
+        });
+      }
+      if (modified) {
+        return { ...b, argBlock: newArg, innerBlocks: newInner, branches: newBranches };
+      }
+      return b;
+    });
+  };
+
   // Helper: Traverse stack downwards via nextBlockId and horizontally via attachedMethodId
   const getDescendantBlockIds = (rootId: string, blocks: CanvasBlock[]): string[] => {
     const result: string[] = [];
@@ -1266,7 +1334,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       if (visited.has(currId)) continue;
       visited.add(currId);
 
-      const blk = blocks.find((b) => b.id === currId);
+      const blk = findBlockInTree(blocks, currId);
       if (!blk) continue;
 
       if (blk.nextBlockId && !visited.has(blk.nextBlockId)) {
@@ -1283,7 +1351,7 @@ export default function PracticePage({ params }: PracticePageProps) {
 
   // Bring entire connected stack on canvas to front layer with ordered zIndex (root > downstream)
   const bringStackToFront = (blockId: string, blocks: CanvasBlock[]): CanvasBlock[] => {
-    let curr: CanvasBlock | undefined = blocks.find((b) => b.id === blockId);
+    let curr: CanvasBlock | undefined = findBlockInTree(blocks, blockId) || undefined;
     if (!curr) return blocks;
 
     const visitedUp = new Set<string>();
@@ -1291,7 +1359,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       visitedUp.add(curr.id);
       const parentId: string | undefined = curr.prevBlockId || curr.attachedToBlockId;
       if (!parentId || visitedUp.has(parentId)) break;
-      const parent: CanvasBlock | undefined = blocks.find((b) => b.id === parentId);
+      const parent: CanvasBlock | undefined = findBlockInTree(blocks, parentId) || undefined;
       if (!parent) break;
       curr = parent;
     }
@@ -1310,7 +1378,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       visitedDown.add(id);
       zMap.set(id, Math.max(1, newBaseZ - depth));
 
-      const blk = blocks.find((b) => b.id === id);
+      const blk = findBlockInTree(blocks, id);
       if (!blk) continue;
 
       if (blk.nextBlockId && !visitedDown.has(blk.nextBlockId)) {
@@ -1704,73 +1772,7 @@ export default function PracticePage({ params }: PracticePageProps) {
     return null;
   };
 
-  // Recursive block finder in tree
-  const findBlockInTree = (blocks: CanvasBlock[], targetId: string): CanvasBlock | null => {
-    for (const b of blocks) {
-      if (b.id === targetId) return b;
-      if (b.argBlock) {
-        const found = findBlockInTree([b.argBlock], targetId);
-        if (found) return found;
-      }
-      if (b.innerBlocks && b.innerBlocks.length > 0) {
-        const found = findBlockInTree(b.innerBlocks, targetId);
-        if (found) return found;
-      }
-      if (b.branches && b.branches.length > 0) {
-        for (const br of b.branches) {
-          if (br.innerBlocks && br.innerBlocks.length > 0) {
-            const found = findBlockInTree(br.innerBlocks, targetId);
-            if (found) return found;
-          }
-        }
-      }
-    }
-    return null;
-  };
 
-  // Recursive tree updater for nested blocks at any depth
-  const updateAnyBlockInTree = (
-    blocks: CanvasBlock[],
-    targetId: string,
-    updater: (blk: CanvasBlock) => CanvasBlock
-  ): CanvasBlock[] => {
-    return blocks.map((b) => {
-      if (b.id === targetId) {
-        return updater(b);
-      }
-      let modified = false;
-      let newArg = b.argBlock;
-      if (b.argBlock) {
-        const updatedArg = updateAnyBlockInTree([b.argBlock], targetId, updater);
-        if (updatedArg[0] !== b.argBlock) {
-          newArg = updatedArg[0];
-          modified = true;
-        }
-      }
-      let newInner = b.innerBlocks;
-      if (b.innerBlocks && b.innerBlocks.length > 0) {
-        newInner = updateAnyBlockInTree(b.innerBlocks, targetId, updater);
-        if (newInner !== b.innerBlocks) modified = true;
-      }
-      let newBranches = b.branches;
-      if (b.branches && b.branches.length > 0) {
-        newBranches = b.branches.map((br) => {
-          if (br.innerBlocks && br.innerBlocks.length > 0) {
-            const updatedBrInner = updateAnyBlockInTree(br.innerBlocks, targetId, updater);
-            if (updatedBrInner !== br.innerBlocks) {
-              modified = true;
-              return { ...br, innerBlocks: updatedBrInner };
-            }
-          }
-          return br;
-        });
-      }
-      if (modified) {
-        return { ...b, argBlock: newArg, innerBlocks: newInner, branches: newBranches };
-      }
-      return b;
-    });
-  };
 
   // Unified Scratch Block Placement & Snapping Resolution
   const executeBlockPlacement = (
@@ -2832,30 +2834,8 @@ export default function PracticePage({ params }: PracticePageProps) {
       hasMoved: false,
     };
 
-    // Cache relative offsets of any chained methods attached horizontally to this child
+    // Cache descendant method block IDs (e.g. .split() attached to input())
     const descendantIds = getDescendantBlockIds(child.id, canvasBlocksRef.current);
-    const relativeOffsets = new Map<string, { dx: number; dy: number }>();
-    const childRect = targetEl.getBoundingClientRect();
-    for (const did of descendantIds) {
-      const dEl = document.getElementById(`block-${did}`);
-      if (dEl) {
-        const dRect = dEl.getBoundingClientRect();
-        relativeOffsets.set(did, {
-          dx: Math.round(dRect.left - childRect.left),
-          dy: Math.round(dRect.top - childRect.top),
-        });
-      }
-    }
-    const childW = targetEl.offsetWidth || 120;
-    let fallbackDx = childW - 1;
-    for (const did of descendantIds) {
-      if (!relativeOffsets.has(did)) {
-        relativeOffsets.set(did, { dx: fallbackDx, dy: 0 });
-        const dEl = document.getElementById(`block-${did}`);
-        fallbackDx += (dEl ? dEl.offsetWidth : 120) - 1;
-      }
-    }
-
     let hasExtracted = false;
 
     const onPointerMove = (moveEv: PointerEvent) => {
@@ -2872,42 +2852,7 @@ export default function PracticePage({ params }: PracticePageProps) {
           pointerDragRef.current.hasMoved = true;
           setIsDraggingBlock(true);
           setDraggingBlockId(child.id);
-
           hasExtracted = true;
-          // Unplug child from parent block's argBlock or attachedMethodId
-          setCanvasBlocks((prev) => {
-            let updated = updateAnyBlockInTree(prev, parentBlockId, (p) => {
-              if (p.argBlock?.id === child.id) {
-                return { ...p, argBlock: undefined };
-              }
-              if (p.attachedMethodId === child.id) {
-                return { ...p, attachedMethodId: undefined };
-              }
-              return p;
-            });
-
-            const movingBlock: CanvasBlock = {
-              ...child,
-              x: currX,
-              y: currY,
-              prevBlockId: undefined,
-              nextBlockId: undefined,
-              attachedToBlockId: undefined,
-            };
-
-            // Update attached method positions immediately to follow currX, currY
-            updated = updated.map((b) => {
-              if (relativeOffsets.has(b.id)) {
-                const off = relativeOffsets.get(b.id)!;
-                return { ...b, x: currX + off.dx, y: currY + off.dy };
-              }
-              return b;
-            });
-
-            const nextList = [...updated, movingBlock];
-            canvasBlocksRef.current = nextList;
-            return nextList;
-          });
         }
       }
 
@@ -2943,13 +2888,51 @@ export default function PracticePage({ params }: PracticePageProps) {
         activeSnapTargetRef.current = snap;
         setActiveSnapTarget(snap);
 
+        // Dynamically compute exact horizontal positions for all attached chained methods
+        let runningX = currX;
+        const childEl = document.getElementById(`block-${child.id}`);
+        const childW = (childEl && !childEl.closest('.arg-slot-filled')) ? childEl.offsetWidth : 130;
+        runningX += childW - 1;
+
+        const methodPositions = new Map<string, { x: number; y: number }>();
+        for (const did of descendantIds) {
+          methodPositions.set(did, { x: runningX, y: currY });
+          const dEl = document.getElementById(`block-${did}`);
+          const dW = (dEl && !dEl.closest('.arg-slot-filled')) ? dEl.offsetWidth : 115;
+          runningX += dW - 1;
+        }
+
         // Move block AND all attached chained methods with pointer smoothly in real-time
         setCanvasBlocks((prev) => {
-          const nextList = prev.map((b) => {
+          let list = prev;
+          const isAtRoot = list.some((b) => b.id === child.id);
+          if (!isAtRoot) {
+            list = updateAnyBlockInTree(list, parentBlockId, (p) => {
+              if (p.argBlock?.id === child.id) {
+                return { ...p, argBlock: undefined };
+              }
+              if (p.attachedMethodId === child.id) {
+                return { ...p, attachedMethodId: undefined };
+              }
+              return p;
+            });
+            const movingBlock: CanvasBlock = {
+              ...child,
+              x: currX,
+              y: currY,
+              prevBlockId: undefined,
+              nextBlockId: undefined,
+              attachedToBlockId: undefined,
+              zIndex: (maxCanvasZIndexRef.current += 20),
+            };
+            list = [...list, movingBlock];
+          }
+
+          const nextList = list.map((b) => {
             if (b.id === child.id) return { ...b, x: currX, y: currY };
-            if (relativeOffsets.has(b.id)) {
-              const off = relativeOffsets.get(b.id)!;
-              return { ...b, x: currX + off.dx, y: currY + off.dy };
+            if (methodPositions.has(b.id)) {
+              const pos = methodPositions.get(b.id)!;
+              return { ...b, x: pos.x, y: pos.y };
             }
             return b;
           });
