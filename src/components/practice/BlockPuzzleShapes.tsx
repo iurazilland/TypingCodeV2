@@ -340,4 +340,150 @@ export const GhostMethodBlock: React.FC<{
   );
 };
 
+// 7. Scratch-Style Ghost C-Shape Snap Block (ㄷ자 블록 결합 시 나타나는 회색 그림자 블록)
+export const GhostCShapeBlock: React.FC<{
+  left?: number | string;
+  top?: number | string;
+  width?: number | string;
+  mouthHeight?: number;
+  isNested?: boolean;
+  style?: React.CSSProperties;
+}> = ({
+  left,
+  top,
+  width = 150,
+  mouthHeight = 28,
+  isNested = false,
+  style,
+}) => {
+  const isAbsolute = left !== undefined || top !== undefined;
+  const tabLeft = isNested ? BLOCK_GEOMETRY.TAB_LEFT_INNER : BLOCK_GEOMETRY.TAB_LEFT_ROOT;
+  const spineW = BLOCK_GEOMETRY.SPINE_WIDTH;
+  const closingArmH = BLOCK_GEOMETRY.CLOSING_ARM_HEIGHT;
+  const headerArmH = BLOCK_GEOMETRY.ARM_HEIGHT;
+  const numWidth = typeof width === 'number' ? width : 150;
+  const closingArmW = Math.max(90, Math.round(numWidth * 0.72));
+
+  return (
+    <div
+      className={isNested ? 'nested-ghost-c-block' : 'canvas-ghost-c-block'}
+      style={{
+        position: isAbsolute ? 'absolute' : 'relative',
+        ...(left !== undefined ? { left: typeof left === 'number' ? `${left}px` : left } : {}),
+        ...(top !== undefined ? { top: typeof top === 'number' ? `${top}px` : top } : {}),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        width: 'fit-content',
+        zIndex: 60,
+        pointerEvents: 'none',
+        boxSizing: 'border-box',
+        ...(isNested ? { marginTop: '-1px' } : {}),
+        ...style,
+      }}
+    >
+      {/* 1) Top Header Arm (34px) */}
+      <div
+        style={{
+          position: 'relative',
+          width: `${numWidth}px`,
+          height: `${headerArmH}px`,
+          minHeight: `${headerArmH}px`,
+          background: 'rgba(148, 163, 184, 0.45)', // Scratch slate grey
+          border: '1.5px solid #94a3b8',
+          borderBottom: 'none',
+          borderRadius: isNested ? '0 6px 6px 0' : '6px 6px 6px 0',
+          boxSizing: 'border-box',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
+        }}
+      >
+        {/* Top Notch */}
+        <PuzzleNotch left={tabLeft} borderColor="#94a3b8" bgColor="#090e1a" isConnected={false} />
+
+        {/* Junction line between top arm and mouth */}
+        <div
+          style={{
+            position: 'absolute',
+            left: `${spineW}px`,
+            right: 0,
+            bottom: '-1px',
+            height: '1.5px',
+            background: '#94a3b8',
+          }}
+        />
+      </div>
+
+      {/* 2) Middle Mouth Section (Left Spine + Transparent Mouth Opening) */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          position: 'relative',
+          height: `${mouthHeight}px`,
+          minHeight: `${mouthHeight}px`,
+          boxSizing: 'border-box',
+        }}
+      >
+        {/* Left Spine (14px) */}
+        <div
+          style={{
+            width: `${spineW}px`,
+            height: '100%',
+            background: 'rgba(148, 163, 184, 0.45)',
+            borderLeft: isNested ? 'none' : '1.5px solid #94a3b8',
+            borderRight: '1.5px solid #94a3b8',
+            boxSizing: 'border-box',
+            flexShrink: 0,
+          }}
+        />
+
+        {/* Mouth Interior with Ceiling Tab */}
+        <div
+          style={{
+            position: 'relative',
+            width: `${numWidth - spineW}px`,
+            height: '100%',
+            background: 'transparent',
+            boxSizing: 'border-box',
+          }}
+        >
+          {/* Ceiling Tab inside the mouth */}
+          <PuzzleTab isCeiling left={BLOCK_GEOMETRY.TAB_LEFT_INNER} borderColor="#94a3b8" bg="rgba(148, 163, 184, 0.45)" />
+        </div>
+      </div>
+
+      {/* 3) Bottom Closing Arm (16px) */}
+      <div
+        style={{
+          position: 'relative',
+          width: `${closingArmW}px`,
+          height: `${closingArmH}px`,
+          minHeight: `${closingArmH}px`,
+          background: 'rgba(148, 163, 184, 0.45)',
+          border: '1.5px solid #94a3b8',
+          borderTop: 'none',
+          borderRadius: isNested ? '0 6px 6px 0' : '0 6px 6px 6px',
+          boxSizing: 'border-box',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
+        }}
+      >
+        {/* Junction line between mouth and bottom arm */}
+        <div
+          style={{
+            position: 'absolute',
+            left: `${spineW}px`,
+            right: 0,
+            top: '-1px',
+            height: '1.5px',
+            background: '#94a3b8',
+          }}
+        />
+
+        {/* Bottom Tab */}
+        <PuzzleTab left={tabLeft} borderColor="#94a3b8" bg="rgba(148, 163, 184, 0.45)" zIndex={65} />
+      </div>
+    </div>
+  );
+};
+
 

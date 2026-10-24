@@ -36,6 +36,7 @@ import {
   SvgBottomClosingArm,
   GhostSnapBlock,
   GhostMethodBlock,
+  GhostCShapeBlock,
 } from '@/components/practice/BlockPuzzleShapes';
 
 interface PracticePageProps {
@@ -3858,6 +3859,23 @@ export default function PracticePage({ params }: PracticePageProps) {
     showToast(`✨ '${name}' (${getKindLabel(selectedVarKind)}) 블록이 생성되었습니다.`);
   };
 
+  const currentDraggedType =
+    draggedBlockType ||
+    draggingInfoRef.current?.blockType ||
+    (draggingBlockId ? findBlockInTree(canvasBlocks, draggingBlockId)?.type : null) ||
+    (pointerDragRef.current?.blockId ? findBlockInTree(canvasBlocks, pointerDragRef.current.blockId)?.type : null);
+
+  const isDraggingCBlock =
+    currentDraggedType === 'for_range' ||
+    currentDraggedType === 'for_in' ||
+    currentDraggedType === 'while' ||
+    currentDraggedType === 'if' ||
+    currentDraggedType === 'def';
+
+  const draggedBlockId = draggingBlockId || pointerDragRef.current?.blockId || draggingInfoRef.current?.id;
+  const draggedEl = draggedBlockId ? document.getElementById(`block-${draggedBlockId}`) : null;
+  const cBlockMouthHeight = draggedEl ? Math.max(28, draggedEl.offsetHeight - 50) : 28;
+  const cBlockTotalHeight = 34 + cBlockMouthHeight + 16;
 
   return (
     <div
@@ -5390,12 +5408,22 @@ export default function PracticePage({ params }: PracticePageProps) {
           >
             {/* Scratch-style Ghost / Shadow Snap Block (for below and above snaps) */}
             {activeSnapTarget && (activeSnapTarget.type === 'below' || activeSnapTarget.type === 'above') && (
-              <GhostSnapBlock
-                left={activeSnapTarget.markerX}
-                top={activeSnapTarget.type === 'below' ? activeSnapTarget.markerY - 1 : activeSnapTarget.markerY - 33}
-                width={Math.max(120, activeSnapTarget.markerWidth || 130)}
-                isNested={false}
-              />
+              isDraggingCBlock ? (
+                <GhostCShapeBlock
+                  left={activeSnapTarget.markerX}
+                  top={activeSnapTarget.type === 'below' ? activeSnapTarget.markerY - 1 : activeSnapTarget.markerY - (cBlockTotalHeight - 1)}
+                  width={Math.max(140, activeSnapTarget.markerWidth || 150)}
+                  mouthHeight={cBlockMouthHeight}
+                  isNested={false}
+                />
+              ) : (
+                <GhostSnapBlock
+                  left={activeSnapTarget.markerX}
+                  top={activeSnapTarget.type === 'below' ? activeSnapTarget.markerY - 1 : activeSnapTarget.markerY - 33}
+                  width={Math.max(120, activeSnapTarget.markerWidth || 130)}
+                  isNested={false}
+                />
+              )
             )}
 
             {activeSnapTarget && activeSnapTarget.type === 'method_right' && (
@@ -5445,11 +5473,12 @@ export default function PracticePage({ params }: PracticePageProps) {
                       key={block.id}
                       block={
                         shiftedBlockIds.has(block.id)
-                          ? { ...block, y: block.y + 34 }
+                          ? { ...block, y: block.y + (isDraggingCBlock ? cBlockTotalHeight : 34) }
                           : block
                       }
                       isNested={false}
                       isSlotArg={false}
+                      isDraggingCBlock={isDraggingCBlock}
                       canvasBlocks={canvasBlocks}
                       activeSnapTarget={activeSnapTarget}
                       draggedChainIds={draggedChainIds}

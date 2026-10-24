@@ -16,6 +16,7 @@ import {
   HorizontalPuzzleNotch,
   SvgBottomClosingArm,
   GhostSnapBlock,
+  GhostCShapeBlock,
 } from './BlockPuzzleShapes';
 
 export interface CanvasBlockItemProps {
@@ -36,6 +37,7 @@ export interface CanvasBlockItemProps {
     markerHeight?: number;
   } | null;
   canvasBlocks?: CanvasBlock[];
+  isDraggingCBlock?: boolean;
   onBlockPointerDown?: (e: React.PointerEvent, block: CanvasBlock) => void;
   onInnerBlockPointerDown?: (
     e: React.PointerEvent,
@@ -84,6 +86,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     activeInputHelp,
     activeSnapTarget,
     canvasBlocks = [],
+    isDraggingCBlock = false,
     onBlockPointerDown,
     onInnerBlockPointerDown,
     onArgBlockPointerDown,
@@ -592,7 +595,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
 
             {innerBlocks.length === 0 ? (
               isMouthSnapTarget ? (
-                <GhostSnapBlock isNested={true} width={ghostWidth} />
+                isDraggingCBlock ? (
+                  <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={28} />
+                ) : (
+                  <GhostSnapBlock isNested={true} width={ghostWidth} />
+                )
               ) : (
                 <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
               )
@@ -616,7 +623,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   return (
                     <React.Fragment key={child.id || nIdx}>
                       {showGhostBefore && (
-                        <GhostSnapBlock isNested={true} width={ghostWidth} />
+                        isDraggingCBlock ? (
+                          <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={28} />
+                        ) : (
+                          <GhostSnapBlock isNested={true} width={ghostWidth} />
+                        )
                       )}
                       <div
                         style={{
@@ -648,7 +659,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   );
                 })}
                 {isMouthSnapTarget && activeSnapTarget?.insertIndex === innerBlocks.length && (
-                  <GhostSnapBlock isNested={true} width={ghostWidth} />
+                  isDraggingCBlock ? (
+                    <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={28} />
+                  ) : (
+                    <GhostSnapBlock isNested={true} width={ghostWidth} />
+                  )
                 )}
               </>
             )}
@@ -954,7 +969,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
 
                     if (branchInnerBlocks.length === 0) {
                       return isBranchMouthSnapTarget ? (
-                        <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                        isDraggingCBlock ? (
+                          <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={28} />
+                        ) : (
+                          <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                        )
                       ) : (
                         <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
                       );
@@ -980,7 +999,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                           return (
                             <React.Fragment key={child.id || nIdx}>
                               {showGhostBefore && (
-                                <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                                isDraggingCBlock ? (
+                                  <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={28} />
+                                ) : (
+                                  <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                                )
                               )}
                               <div
                                 style={{
@@ -1012,7 +1035,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                           );
                         })}
                         {isBranchMouthSnapTarget && activeSnapTarget?.insertIndex === branchInnerBlocks.length && (
-                          <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                          isDraggingCBlock ? (
+                            <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={28} />
+                          ) : (
+                            <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                          )
                         )}
                       </>
                     );
