@@ -313,38 +313,56 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   boxSizing: 'border-box',
                 }}
               />
-              <span style={{ color: '#ffffff' }}>in range(</span>
-              <div style={{ position: 'relative', display: 'inline-flex' }}>
-                <input
-                  type="text"
-                  value={block.content ?? '5'}
-                  placeholder=""
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onPointerDown={(e) => e.stopPropagation()}
-                  onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  onFocus={handleInputFocusSelect}
-                  onClick={handleInputClickSelect}
-                  onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                  style={{
-                    width: `${getBlockInputWidth(block.content ?? '5')}px`,
-                    height: '20px',
-                    padding: '1px 5px',
-                    borderRadius: '6px',
-                    background: '#ffffff',
-                    color: '#0f172a',
-                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                    fontWeight: 800,
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.78rem',
-                    textAlign: 'left',
-                    outline: 'none',
-                    cursor: 'text',
-                    boxSizing: 'border-box',
-                  }}
-                />
-                {renderSpeechBubble?.(block.id, 'for_range')}
+              <span style={{ color: '#ffffff' }}>in</span>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '3px',
+                  padding: '1px 6px',
+                  borderRadius: '5px',
+                  background: BLOCK_THEMES.int.bg,
+                  border: `1px solid ${BLOCK_THEMES.int.border}`,
+                  boxShadow: `0 1px 0 ${BLOCK_THEMES.int.shadow}, 0 2px 4px rgba(0, 0, 0, 0.2)`,
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                }}
+              >
+                <span>range(</span>
+                <div style={{ position: 'relative', display: 'inline-flex' }}>
+                  <input
+                    type="text"
+                    value={block.content ?? '5'}
+                    placeholder=""
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onFocus={handleInputFocusSelect}
+                    onClick={handleInputClickSelect}
+                    onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+                    style={{
+                      width: `${getBlockInputWidth(block.content ?? '5')}px`,
+                      height: '18px',
+                      padding: '0 4px',
+                      borderRadius: '4px',
+                      background: '#ffffff',
+                      color: '#0f172a',
+                      border: '1px solid rgba(0, 0, 0, 0.3)',
+                      fontWeight: 800,
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.78rem',
+                      textAlign: 'left',
+                      outline: 'none',
+                      cursor: 'text',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                  {renderSpeechBubble?.(block.id, 'for_range')}
+                </div>
+                <span>)</span>
               </div>
-              <span style={{ color: '#ffffff' }}>):</span>
+              <span style={{ color: '#ffffff' }}>:</span>
             </>
           ) : block.type === 'for_in' ? (
             <>
@@ -379,7 +397,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               <span style={{ color: '#ffffff' }}>in</span>
               <input
                 type="text"
-                value={block.content ?? ''}
+                value={block.content ?? 'items'}
                 placeholder=""
                 onMouseDown={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
@@ -388,7 +406,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 onClick={handleInputClickSelect}
                 onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
                 style={{
-                  width: `${getBlockInputWidth(block.content ?? '')}px`,
+                  width: `${getBlockInputWidth(block.content ?? 'items')}px`,
                   height: '20px',
                   padding: '1px 5px',
                   borderRadius: '6px',

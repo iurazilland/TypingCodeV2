@@ -822,7 +822,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       } else if (blk.type === 'for_in') {
         const v = (blk.varName || 'item').trim();
         const seq = (blk.content || '').trim();
-        out.push(`${indentStr}for ${v} in ${seq || '[1, 2, 3]'}:`);
+        out.push(`${indentStr}for ${v} in ${seq || 'items'}:`);
         if (blk.innerBlocks && blk.innerBlocks.length > 0) {
           for (const child of blk.innerBlocks) {
             out.push(...generateBlockLines(child, currentIndentLevel + 1));
@@ -1865,7 +1865,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       const isIf = bType === 'if';
       const defaultContent = blockInfo.content || (
         bType === 'for_range' ? '5' :
-          bType === 'for_in' ? '[1, 2, 3]' :
+          bType === 'for_in' ? 'items' :
             bType === 'while' ? 'False' : ''
       );
       const isIfElse = isIf && !!blockInfo.withElse;
@@ -3587,7 +3587,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       id: `${childType}-${Date.now()}`,
       type: childType,
       varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
-      content: childType === 'for_range' ? '3' : childType === 'while' ? 'False' : '',
+      content: childType === 'for_range' ? '3' : childType === 'for_in' ? 'items' : childType === 'while' ? 'False' : '',
       innerBlocks: isLoopOrDef ? [] : undefined,
       branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
       x: 0,
@@ -3618,7 +3618,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       id: `${childType}-${Date.now()}`,
       type: childType,
       varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
-      content: childType === 'for_range' ? '3' : childType === 'while' ? 'False' : '',
+      content: childType === 'for_range' ? '3' : childType === 'for_in' ? 'items' : childType === 'while' ? 'False' : '',
       innerBlocks: isLoopOrDef ? [] : undefined,
       branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
       x: 0,
@@ -4465,7 +4465,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <SvgBottomClosingArm theme={BLOCK_THEMES.if} />
                 </div>
 
-                {/* for i in range() ㄷ자 블록 (유일한 for문) */}
+                {/* for i in range() ㄷ자 블록 */}
                 <div
                   draggable
                   onDragStart={(e) => handleDragStartFromToolbox(e, 'for_range')}
@@ -4479,7 +4479,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                     fontFamily: 'var(--font-mono)',
                     filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
                   }}
-                  title="for i in range() 반복 ㄷ자 블록"
+                  title="for i in range() 횟수 반복 ㄷ자 블록"
                 >
                   <div
                     style={{
@@ -4512,9 +4512,26 @@ export default function PracticePage({ params }: PracticePageProps) {
                     />
                     <span style={{ color: '#ffffff' }}>for</span>
                     <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>i</span>
-                    <span style={{ color: '#ffffff' }}>in range(</span>
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>5</span>
-                    <span>):</span>
+                    <span style={{ color: '#ffffff' }}>in</span>
+                    <div
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '2px',
+                        padding: '1px 5px',
+                        borderRadius: '4px',
+                        background: BLOCK_THEMES.int.bg,
+                        border: `1px solid ${BLOCK_THEMES.int.border}`,
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        fontSize: '0.76rem',
+                      }}
+                    >
+                      <span>range(</span>
+                      <span style={{ padding: '0 4px', borderRadius: '3px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem' }}>5</span>
+                      <span>)</span>
+                    </div>
+                    <span>:</span>
                   </div>
                   <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
                     <div style={{ width: '18px', background: BLOCK_THEMES.for_range.bg, borderLeft: `1px solid ${BLOCK_THEMES.for_range.border}`, borderRight: `1px solid ${BLOCK_THEMES.for_range.border}`, flexShrink: 0 }} />
@@ -4523,6 +4540,66 @@ export default function PracticePage({ params }: PracticePageProps) {
                     </div>
                   </div>
                   <SvgBottomClosingArm theme={BLOCK_THEMES.for_range} />
+                </div>
+
+                {/* for item in items: ㄷ자 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'for_in')}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: 'fit-content',
+                    minWidth: '120px',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    fontFamily: 'var(--font-mono)',
+                    filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                  }}
+                  title="for item in items 순회 반복 ㄷ자 블록"
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      whiteSpace: 'nowrap',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px 6px 6px 0',
+                      background: BLOCK_THEMES.for_in.bg,
+                      border: `1px solid ${BLOCK_THEMES.for_in.border}`,
+                      borderBottom: 'none',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      position: 'relative',
+                    }}
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.for_in.border} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '18px',
+                        right: '5px',
+                        bottom: 0,
+                        height: '1px',
+                        background: BLOCK_THEMES.for_in.border,
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    <span style={{ color: '#ffffff' }}>for</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>item</span>
+                    <span style={{ color: '#ffffff' }}>in</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>items</span>
+                    <span>:</span>
+                  </div>
+                  <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
+                    <div style={{ width: '18px', background: BLOCK_THEMES.for_in.bg, borderLeft: `1px solid ${BLOCK_THEMES.for_in.border}`, borderRight: `1px solid ${BLOCK_THEMES.for_in.border}`, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
+                      <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.for_in.border} bg={BLOCK_THEMES.for_in.bg} />
+                    </div>
+                  </div>
+                  <SvgBottomClosingArm theme={BLOCK_THEMES.for_in} />
                 </div>
 
                 {/* while 조건: ㄷ자 블록 */}
