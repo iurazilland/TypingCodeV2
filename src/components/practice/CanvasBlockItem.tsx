@@ -1133,7 +1133,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           position: (isNested || isSlotArg) ? 'relative' : 'absolute',
           ...(isSlotArg
             ? { margin: '0 1px' }
-            : (isNested || block.attachedToBlockId)
+            : isNested
             ? { margin: '0 0 0 -1px' }
             : { left: `${block.x}px`, top: `${block.y}px` }),
           display: 'inline-flex',

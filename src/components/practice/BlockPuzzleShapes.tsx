@@ -311,7 +311,7 @@ export const GhostMethodBlock: React.FC<{
   left,
   top,
   height = 34,
-  width = 110,
+  width = 160,
   style,
 }) => {
   return (
@@ -335,6 +335,7 @@ export const GhostMethodBlock: React.FC<{
       }}
     >
       <HorizontalPuzzleTab borderColor="#94a3b8" bg="rgba(148, 163, 184, 0.45)" />
+      <HorizontalPuzzleNotch borderColor="#94a3b8" bgColor="#090e1a" />
     </div>
   );
 };

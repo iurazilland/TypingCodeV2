@@ -1567,6 +1567,9 @@ export default function PracticePage({ params }: PracticePageProps) {
       const cursorX = draggedX + grabX;
       const cursorY = draggedY + grabY;
 
+      const draggedMethodEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
+      const methodBlockWidth = draggedMethodEl ? draggedMethodEl.offsetWidth : 160;
+
       for (const b of candidates) {
         const bEl = document.getElementById(`block-${b.id}`);
         if (!bEl) continue;
@@ -1593,7 +1596,7 @@ export default function PracticePage({ params }: PracticePageProps) {
             targetBlockId: b.id,
             markerX: bRight - 1,
             markerY: bScreenY,
-            markerWidth: 100,
+            markerWidth: methodBlockWidth,
             markerHeight: bH,
           };
         }
@@ -5400,7 +5403,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                 left={activeSnapTarget.markerX}
                 top={activeSnapTarget.markerY}
                 height={activeSnapTarget.markerHeight || 34}
-                width={activeSnapTarget.markerWidth || 110}
+                width={activeSnapTarget.markerWidth || 160}
               />
             )}
 
