@@ -300,3 +300,47 @@ export const GhostSnapBlock: React.FC<{
   );
 };
 
+// 6. Scratch-Style Ghost Method Snap Block (메서드 결합 위치를 미리 보여주는 보라색 그림자 블록)
+export const GhostMethodBlock: React.FC<{
+  left: number | string;
+  top: number | string;
+  height?: number | string;
+  style?: React.CSSProperties;
+}> = ({
+  left,
+  top,
+  height = 30,
+  style,
+}) => {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: typeof left === 'number' ? `${left}px` : left,
+        top: typeof top === 'number' ? `${top}px` : top,
+        width: '100px',
+        height: typeof height === 'number' ? `${height}px` : height,
+        boxSizing: 'border-box',
+        borderRadius: '0 6px 6px 0',
+        background: 'rgba(168, 85, 247, 0.35)',
+        border: '1.5px solid #a855f7',
+        boxShadow: '0 0 10px rgba(168, 85, 247, 0.55)',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: '8px',
+        color: 'rgba(255, 255, 255, 0.75)',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '0.78rem',
+        fontWeight: 800,
+        zIndex: 100,
+        pointerEvents: 'none',
+        ...style,
+      }}
+    >
+      <HorizontalPuzzleTab borderColor="#a855f7" bg="rgba(168, 85, 247, 0.45)" />
+      <span>.method()</span>
+    </div>
+  );
+};
+
+

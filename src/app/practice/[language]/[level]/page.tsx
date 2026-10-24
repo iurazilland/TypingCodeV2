@@ -35,6 +35,7 @@ import {
   HorizontalPuzzleNotch,
   SvgBottomClosingArm,
   GhostSnapBlock,
+  GhostMethodBlock,
 } from '@/components/practice/BlockPuzzleShapes';
 
 interface PracticePageProps {
@@ -1561,6 +1562,11 @@ export default function PracticePage({ params }: PracticePageProps) {
       };
       collectCandidates(blocksList);
 
+      const grabX = draggingInfoRef.current?.grabX ?? (pointerDragRef.current?.grabOffsetX ?? 30);
+      const grabY = draggingInfoRef.current?.grabY ?? (pointerDragRef.current?.grabOffsetY ?? 15);
+      const cursorX = draggedX + grabX;
+      const cursorY = draggedY + grabY;
+
       for (const b of candidates) {
         const bEl = document.getElementById(`block-${b.id}`);
         if (!bEl) continue;
@@ -1571,16 +1577,23 @@ export default function PracticePage({ params }: PracticePageProps) {
         const bH = rect.height;
         const bRight = bScreenX + bW;
 
-        const nearRight = Math.abs(draggedX - bRight) <= 40;
-        const nearY = Math.abs(draggedY - bScreenY) <= 26;
+        const nearRight =
+          Math.abs(draggedX - bRight) <= 60 ||
+          Math.abs(cursorX - bRight) <= 60 ||
+          (cursorX >= bScreenX + Math.max(10, bW * 0.3) && cursorX <= bRight + 75);
+
+        const nearY =
+          (cursorY >= bScreenY - 18 && cursorY <= bScreenY + bH + 18) ||
+          (draggedY >= bScreenY - 20 && draggedY <= bScreenY + bH + 20) ||
+          Math.abs(draggedY - bScreenY) <= 32;
 
         if (nearRight && nearY) {
           return {
             type: 'method_right',
             targetBlockId: b.id,
-            markerX: bRight - 2,
+            markerX: bRight - 1,
             markerY: bScreenY,
-            markerWidth: 6,
+            markerWidth: 100,
             markerHeight: bH,
           };
         }
@@ -2008,9 +2021,14 @@ export default function PracticePage({ params }: PracticePageProps) {
         const oldAttachedId = target.attachedMethodId && target.attachedMethodId !== methodId ? target.attachedMethodId : undefined;
 
         const tEl = document.getElementById(`block-${target.id}`);
-        const tW = tEl ? tEl.offsetWidth : 140;
-        const finalX = target.x + tW - 1;
-        const finalY = target.y;
+        const cRect = workspaceRef.current?.getBoundingClientRect();
+        let finalX = target.x + (tEl ? tEl.offsetWidth : 140) - 1;
+        let finalY = target.y;
+        if (tEl && cRect) {
+          const tRect = tEl.getBoundingClientRect();
+          finalX = Math.round(tRect.right - cRect.left) - 1;
+          finalY = Math.round(tRect.top - cRect.top);
+        }
 
         setCanvasBlocks((prev) => {
           let list = prev;
@@ -2076,6 +2094,7 @@ export default function PracticePage({ params }: PracticePageProps) {
             updatedList = clearPrevious(updatedList);
           }
 
+          canvasBlocksRef.current = updatedList;
           return updatedList;
         });
         return;
@@ -5375,19 +5394,10 @@ export default function PracticePage({ params }: PracticePageProps) {
             )}
 
             {activeSnapTarget && activeSnapTarget.type === 'method_right' && (
-              <div
-                style={{
-                  position: 'absolute',
-                  left: `${activeSnapTarget.markerX}px`,
-                  top: `${activeSnapTarget.markerY}px`,
-                  width: '3px',
-                  height: `${activeSnapTarget.markerHeight || 30}px`,
-                  borderRadius: '2px',
-                  background: 'rgba(168, 85, 247, 0.85)',
-                  boxShadow: '0 0 8px rgba(139, 92, 246, 0.45)',
-                  zIndex: 100,
-                  pointerEvents: 'none',
-                }}
+              <GhostMethodBlock
+                left={activeSnapTarget.markerX}
+                top={activeSnapTarget.markerY}
+                height={activeSnapTarget.markerHeight || 30}
               />
             )}
 
