@@ -1836,6 +1836,8 @@ export default function PracticePage({ params }: PracticePageProps) {
 
     for (const b of blocksList) {
       if (excludedIds.has(b.id)) continue;
+      // 메서드 블록 및 가로 결합 블록은 상하(below/above) 수직 스냅 대상에서 원천 제외
+      if (b.type === 'method' || b.attachedToBlockId) continue;
       const bEl = document.getElementById(`block-${b.id}`);
       const bW = bEl ? bEl.offsetWidth : (b.type === 'start' ? 160 : 140);
       const bH = bEl ? bEl.offsetHeight : (b.type === 'start' ? 38 : 34);
@@ -2790,7 +2792,7 @@ export default function PracticePage({ params }: PracticePageProps) {
               prevBlockId: undefined,
               nextBlockId: undefined,
               attachedToBlockId: undefined,
-              attachedMethodId: undefined,
+              attachedMethodId: child.attachedMethodId,
             };
 
             const nextList = [...updated, movingBlock];
@@ -5397,7 +5399,8 @@ export default function PracticePage({ params }: PracticePageProps) {
               <GhostMethodBlock
                 left={activeSnapTarget.markerX}
                 top={activeSnapTarget.markerY}
-                height={activeSnapTarget.markerHeight || 30}
+                height={activeSnapTarget.markerHeight || 34}
+                width={activeSnapTarget.markerWidth || 110}
               />
             )}
 

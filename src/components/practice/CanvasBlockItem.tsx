@@ -136,7 +136,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     : baseZ;
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (isSlotArg && parentBlockId) {
+    if (block.type === 'method') {
+      onBlockPointerDown?.(e, block);
+    } else if (isSlotArg && parentBlockId) {
       onArgBlockPointerDown?.(e, block, parentBlockId);
     } else if (isNested && parentBlockId) {
       onInnerBlockPointerDown?.(e, block, parentBlockId, cIdx, branchId);
@@ -598,19 +600,50 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               <>
                 {innerBlocks.map((child, nIdx) => {
                   const showGhostBefore = isMouthSnapTarget && activeSnapTarget?.insertIndex === nIdx;
+                  const chainedMethods: CanvasBlock[] = [];
+                  if (canvasBlocks && child.attachedMethodId) {
+                    let currMId: string | undefined = child.attachedMethodId;
+                    const visited = new Set<string>();
+                    while (currMId && !visited.has(currMId)) {
+                      visited.add(currMId);
+                      const m = canvasBlocks.find((cb) => cb.id === currMId);
+                      if (!m) break;
+                      chainedMethods.push(m);
+                      currMId = m.attachedMethodId;
+                    }
+                  }
+
                   return (
                     <React.Fragment key={child.id || nIdx}>
                       {showGhostBefore && (
                         <GhostSnapBlock isNested={true} width={ghostWidth} />
                       )}
-                      <CanvasBlockItem
-                        {...props}
-                        block={child}
-                        isNested={true}
-                        cIdx={nIdx}
-                        parentBlockId={block.id}
-                        branchId={undefined}
-                      />
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <CanvasBlockItem
+                          {...props}
+                          block={child}
+                          isNested={true}
+                          cIdx={nIdx}
+                          parentBlockId={block.id}
+                          branchId={undefined}
+                        />
+                        {chainedMethods.map((m) => (
+                          <CanvasBlockItem
+                            {...props}
+                            key={m.id}
+                            block={m}
+                            isNested={true}
+                            isSlotArg={false}
+                            parentBlockId={m.attachedToBlockId || child.id}
+                            branchId={undefined}
+                          />
+                        ))}
+                      </div>
                     </React.Fragment>
                   );
                 })}
@@ -931,19 +964,50 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                       <>
                         {branchInnerBlocks.map((child, nIdx) => {
                           const showGhostBefore = isBranchMouthSnapTarget && activeSnapTarget?.insertIndex === nIdx;
+                          const chainedMethods: CanvasBlock[] = [];
+                          if (canvasBlocks && child.attachedMethodId) {
+                            let currMId: string | undefined = child.attachedMethodId;
+                            const visited = new Set<string>();
+                            while (currMId && !visited.has(currMId)) {
+                              visited.add(currMId);
+                              const m = canvasBlocks.find((cb) => cb.id === currMId);
+                              if (!m) break;
+                              chainedMethods.push(m);
+                              currMId = m.attachedMethodId;
+                            }
+                          }
+
                           return (
                             <React.Fragment key={child.id || nIdx}>
                               {showGhostBefore && (
                                 <GhostSnapBlock isNested={true} width={branchGhostWidth} />
                               )}
-                              <CanvasBlockItem
-                                {...props}
-                                block={child}
-                                isNested={true}
-                                cIdx={nIdx}
-                                parentBlockId={block.id}
-                                branchId={branch.id}
-                              />
+                              <div
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <CanvasBlockItem
+                                  {...props}
+                                  block={child}
+                                  isNested={true}
+                                  cIdx={nIdx}
+                                  parentBlockId={block.id}
+                                  branchId={branch.id}
+                                />
+                                {chainedMethods.map((m) => (
+                                  <CanvasBlockItem
+                                    {...props}
+                                    key={m.id}
+                                    block={m}
+                                    isNested={true}
+                                    isSlotArg={false}
+                                    parentBlockId={m.attachedToBlockId || child.id}
+                                    branchId={branch.id}
+                                  />
+                                ))}
+                              </div>
                             </React.Fragment>
                           );
                         })}
@@ -1069,8 +1133,8 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           position: (isNested || isSlotArg) ? 'relative' : 'absolute',
           ...(isSlotArg
             ? { margin: '0 1px' }
-            : isNested
-            ? { marginTop: cIdx === 0 ? '0px' : '-1px' }
+            : (isNested || block.attachedToBlockId)
+            ? { margin: '0 0 0 -1px' }
             : { left: `${block.x}px`, top: `${block.y}px` }),
           display: 'inline-flex',
           alignItems: 'center',
@@ -1081,7 +1145,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           background: theme.bg,
           boxShadow: (isNested || isSlotArg) ? 'none' : `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
           border: `1px solid ${theme.border}`,
-          borderRadius: isSlotArg ? '0 6px 6px 0' : '6px',
+          borderRadius: (isSlotArg || isNested || block.attachedToBlockId) ? '0 6px 6px 0' : '6px',
           color: '#ffffff',
           fontWeight: 800,
           fontSize: isSlotArg ? '0.74rem' : '0.80rem',
