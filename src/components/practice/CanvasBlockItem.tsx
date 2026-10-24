@@ -1258,7 +1258,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Horizontal notch for method chaining on functions, variables, collections */}
-      {(['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(block.type) ||
+      {(['print', 'input', 'len', 'int', 'float', 'str', 'type', 'math', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(block.type) ||
         block.type === 'variable' ||
         block.type === 'list' ||
         block.type === 'tuple' ||
@@ -1274,7 +1274,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
-      ) : ['int', 'float', 'str', 'type'].includes(block.type) ? (
+      ) : ['type', 'int', 'float', 'str'].includes(block.type) ? (
         <>
           <div
             onMouseDown={(e) => e.stopPropagation()}
@@ -1315,17 +1315,17 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 fontSize: '0.85rem',
               }}
             >
+              <option value="type">type</option>
               <option value="int">int</option>
               <option value="float">float</option>
               <option value="str">str</option>
-              <option value="type">type</option>
             </select>
           </div>
           <span>(</span>
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
-      ) : ['len', 'round', 'abs', 'sum', 'min', 'max'].includes(block.type) ? (
+      ) : ['math', 'len', 'round', 'abs', 'sum', 'min', 'max'].includes(block.type) ? (
         <>
           <div
             onMouseDown={(e) => e.stopPropagation()}
@@ -1366,6 +1366,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 fontSize: '0.85rem',
               }}
             >
+              <option value="math">math</option>
               <option value="len">len</option>
               <option value="round">round</option>
               <option value="abs">abs</option>

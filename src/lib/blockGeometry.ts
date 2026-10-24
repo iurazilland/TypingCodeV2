@@ -15,6 +15,7 @@ export type BlockType =
   | 'min'
   | 'max'
   | 'open'
+  | 'math'
   | 'def'
   | 'return'
   // 메서드
@@ -104,6 +105,7 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   sum: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   min: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  math: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },

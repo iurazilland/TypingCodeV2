@@ -69,6 +69,7 @@ type BlockType =
   | 'min'
   | 'max'
   | 'open'
+  | 'math'
   | 'def'
   | 'return'
   // 메서드
@@ -154,6 +155,7 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   min: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  math: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
 
@@ -234,11 +236,12 @@ interface ContextMenuState {
 const FUNC_PARAM_HELPS: Record<string, string> = {
   print: 'print(*values, sep=" ", end="\\n")',
   input: 'input(prompt="")',
-  len: 'len(s)',
+  type: 'type(object)',
   int: 'int(x=0, base=10)',
   float: 'float(x=0.0)',
   str: 'str(object="")',
-  type: 'type(object)',
+  math: 'math: len, round, abs, sum, min, max 중 함수를 선택하세요',
+  len: 'len(s)',
   round: 'round(number, ndigits=None)',
   abs: 'abs(x)',
   sum: 'sum(iterable, start=0)',
@@ -751,6 +754,10 @@ export default function PracticePage({ params }: PracticePageProps) {
       // Helper to evaluate expressions recursively when blocks are nested as arguments
       const generateExpression = (b: CanvasBlock): string => {
         const chain = getMethodChain(b);
+        if (b.type === 'math') {
+          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
+          return `None # math(${inner})${chain}`;
+        }
         const funcTypes = ['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'];
         if (funcTypes.includes(b.type)) {
           const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
@@ -808,6 +815,9 @@ export default function PracticePage({ params }: PracticePageProps) {
           })
           .join(', ');
         out.push(`${indentStr}${vName} = {${pairs}}${mSuffix}`);
+      } else if (blk.type === 'math') {
+        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
+        out.push(`${indentStr}# math(${content})${mSuffix}  # len, round, abs, sum, min, max 중 함수를 선택하세요`);
       } else if (['print', 'input', 'len', 'int', 'float', 'str', 'type', 'round', 'abs', 'sum', 'min', 'max', 'open'].includes(blk.type)) {
         const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
         out.push(`${indentStr}${blk.type}(${content})${mSuffix}`);
@@ -1465,6 +1475,15 @@ export default function PracticePage({ params }: PracticePageProps) {
             b.type === 'print' ||
             b.type === 'len' ||
             b.type === 'int' ||
+            b.type === 'float' ||
+            b.type === 'str' ||
+            b.type === 'type' ||
+            b.type === 'math' ||
+            b.type === 'round' ||
+            b.type === 'abs' ||
+            b.type === 'sum' ||
+            b.type === 'min' ||
+            b.type === 'max' ||
             b.type === 'list' ||
             b.type === 'dict' ||
             b.type === 'set' ||
@@ -1515,11 +1534,9 @@ export default function PracticePage({ params }: PracticePageProps) {
     }
 
     // 0.5. Argument Slot Snapping (함수/변수 인자 슬롯에 다른 함수/변수 블록 스냅)
+    const ALL_FUNC_TYPES = ['print', 'input', 'len', 'int', 'float', 'str', 'type', 'math', 'round', 'abs', 'sum', 'min', 'max', 'open'];
     const canBeArg =
-      draggedType === 'input' ||
-      draggedType === 'len' ||
-      draggedType === 'int' ||
-      draggedType === 'print' ||
+      (!!draggedType && ALL_FUNC_TYPES.includes(draggedType)) ||
       draggedType === 'variable';
 
     if (canBeArg) {
@@ -1528,7 +1545,7 @@ export default function PracticePage({ params }: PracticePageProps) {
         for (const b of list) {
           if (excludedIds.has(b.id)) continue;
           if (
-            (b.type === 'print' || b.type === 'input' || b.type === 'len' || b.type === 'int' || b.type === 'variable') &&
+            (ALL_FUNC_TYPES.includes(b.type) || b.type === 'variable') &&
             !b.argBlock
           ) {
             slotCandidates.push(b);
@@ -4271,10 +4288,10 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <span>)</span>
                 </div>
 
-                {/* [int ▾] () 형변환 통합 블록 */}
+                {/* [type ▾] () 자료형/형변환 통합 블록 (기본값: type) */}
                 <div
                   draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'int')}
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'type')}
                   style={{
                     display: 'inline-flex',
                     width: 'fit-content',
@@ -4282,9 +4299,9 @@ export default function PracticePage({ params }: PracticePageProps) {
                     gap: '4px',
                     padding: '5px 10px',
                     borderRadius: '6px',
-                    background: BLOCK_THEMES.int.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.int.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.int.border}`,
+                    background: BLOCK_THEMES.type.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.type.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.type.border}`,
                     color: '#ffffff',
                     fontWeight: 800,
                     fontSize: '0.80rem',
@@ -4293,21 +4310,21 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="형변환 함수 블록 (int, float, str, type 드롭다운 선택 가능)"
+                  title="자료형/형변환 함수 블록 (기본값: type, 드롭다운에서 type, int, float, str 선택 가능)"
                 >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.int.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.int.border} bg={BLOCK_THEMES.int.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.int.border} bgColor="#0d1527" />
-                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>int ▼</span>
+                  <PuzzleNotch borderColor={BLOCK_THEMES.type.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.type.border} bg={BLOCK_THEMES.type.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.type.border} bgColor="#0d1527" />
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>type ▼</span>
                   <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
 
-                {/* [len ▾] () 수학·집계 통합 블록 */}
+                {/* [math ▾] () 수학·집계 통합 블록 (기본값: math) */}
                 <div
                   draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'len')}
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'math')}
                   style={{
                     display: 'inline-flex',
                     width: 'fit-content',
@@ -4315,9 +4332,9 @@ export default function PracticePage({ params }: PracticePageProps) {
                     gap: '4px',
                     padding: '5px 10px',
                     borderRadius: '6px',
-                    background: BLOCK_THEMES.len.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.len.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.len.border}`,
+                    background: BLOCK_THEMES.math.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.math.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.math.border}`,
                     color: '#ffffff',
                     fontWeight: 800,
                     fontSize: '0.80rem',
@@ -4326,12 +4343,12 @@ export default function PracticePage({ params }: PracticePageProps) {
                     userSelect: 'none',
                     position: 'relative',
                   }}
-                  title="수학/집계 함수 블록 (len, round, abs, sum, min, max 드롭다운 선택 가능)"
+                  title="수학/집계 함수 블록 (기본값: math, 드롭다운에서 len, round, abs, sum, min, max 선택 가능)"
                 >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.len.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.len.border} bg={BLOCK_THEMES.len.bg} />
-                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.len.border} bgColor="#0d1527" />
-                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>len ▼</span>
+                  <PuzzleNotch borderColor={BLOCK_THEMES.math.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.math.border} bg={BLOCK_THEMES.math.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.math.border} bgColor="#0d1527" />
+                  <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>math ▼</span>
                   <span>(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
