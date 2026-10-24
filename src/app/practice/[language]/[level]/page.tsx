@@ -59,6 +59,7 @@ type BlockType =
   | 'print'
   | 'input'
   | 'len'
+  | 'int'
   | 'def'
   | 'return'
   // 메서드
@@ -107,6 +108,7 @@ interface CanvasBlock {
   methodName?: string;
   attachedMethodId?: string;   // Attached to right notch (horizontal method chain)
   attachedToBlockId?: string;  // Attached to left tab (target block on left)
+  argBlock?: CanvasBlock;      // Inline argument block (nested in function parentheses)
   // C-shape loop inner blocks:
   innerBlocks?: CanvasBlock[];
   // E-shape multi-branch condition branches:
@@ -133,6 +135,7 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   print: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   input: { bg: '#0284c7', shadow: '#0369a1', border: '#38bdf8' },
   len: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
+  int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#38bdf8' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#4338ca', shadow: '#3730a3', border: '#6366f1' },
 
@@ -421,7 +424,7 @@ export default function PracticePage({ params }: PracticePageProps) {
 
   // Scratch-grade Live Insertion Marker & Snapping Target
   interface SnapTarget {
-    type: 'below' | 'above' | 'mouth' | 'method_right';
+    type: 'below' | 'above' | 'mouth' | 'method_right' | 'arg_slot';
     targetBlockId: string;
     branchId?: string;
     insertIndex?: number;
@@ -702,6 +705,32 @@ export default function PracticePage({ params }: PracticePageProps) {
         return chain;
       };
 
+      // Helper to evaluate expressions recursively when blocks are nested as arguments
+      const generateExpression = (b: CanvasBlock): string => {
+        const chain = getMethodChain(b);
+        if (b.type === 'int') {
+          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
+          return `int(${inner})${chain}`;
+        }
+        if (b.type === 'input') {
+          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
+          return `input(${inner})${chain}`;
+        }
+        if (b.type === 'len') {
+          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
+          return `len(${inner})${chain}`;
+        }
+        if (b.type === 'print') {
+          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
+          return `print(${inner})${chain}`;
+        }
+        if (b.type === 'variable') {
+          const vName = (b.varName || 'x').trim();
+          return `${vName}${chain}`;
+        }
+        return `${(b.content || '').trim()}${chain}`;
+      };
+
       const mSuffix = getMethodChain(blk);
 
       if (blk.type === 'method') {
@@ -710,11 +739,12 @@ export default function PracticePage({ params }: PracticePageProps) {
       } else if (blk.type === 'variable') {
         const vName = (blk.varName || 'x').trim();
         const content = (blk.content || '').trim();
-        if (mSuffix && !content) {
+        const expr = blk.argBlock ? generateExpression(blk.argBlock) : content;
+        if (mSuffix && !expr) {
           // Statement method call without assignment: e.g. nums.append(5) or s.clear()
           out.push(`${indentStr}${vName}${mSuffix}`);
         } else {
-          out.push(`${indentStr}${vName} = ${content || 'None'}${mSuffix}`);
+          out.push(`${indentStr}${vName} = ${expr || 'None'}${mSuffix}`);
         }
       } else if (blk.type === 'list') {
         const vName = (blk.varName || 'my_list').trim();
@@ -747,14 +777,17 @@ export default function PracticePage({ params }: PracticePageProps) {
           .join(', ');
         out.push(`${indentStr}${vName} = {${pairs}}${mSuffix}`);
       } else if (blk.type === 'print') {
-        const content = (blk.content || '').trim();
+        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
         out.push(`${indentStr}print(${content})${mSuffix}`);
       } else if (blk.type === 'input') {
-        const content = (blk.content || '').trim();
+        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
         out.push(`${indentStr}input(${content})${mSuffix}`);
       } else if (blk.type === 'len') {
-        const content = (blk.content || '').trim();
+        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
         out.push(`${indentStr}len(${content})${mSuffix}`);
+      } else if (blk.type === 'int') {
+        const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
+        out.push(`${indentStr}int(${content})${mSuffix}`);
       } else if (blk.type === 'def') {
         const fName = (blk.varName || 'my_func').trim();
         const args = (blk.content || '').trim();
@@ -1340,6 +1373,7 @@ export default function PracticePage({ params }: PracticePageProps) {
             b.type === 'variable' ||
             b.type === 'print' ||
             b.type === 'len' ||
+            b.type === 'int' ||
             b.type === 'list' ||
             b.type === 'dict' ||
             b.type === 'set' ||
@@ -1387,6 +1421,64 @@ export default function PracticePage({ params }: PracticePageProps) {
         }
       }
       return null;
+    }
+
+    // 0.5. Argument Slot Snapping (함수/변수 인자 슬롯에 다른 함수/변수 블록 스냅)
+    const canBeArg =
+      draggedType === 'input' ||
+      draggedType === 'len' ||
+      draggedType === 'int' ||
+      draggedType === 'print' ||
+      draggedType === 'variable';
+
+    if (canBeArg) {
+      const slotCandidates: CanvasBlock[] = [];
+      const collectSlotCandidates = (list: CanvasBlock[]) => {
+        for (const b of list) {
+          if (excludedIds.has(b.id)) continue;
+          if (
+            (b.type === 'print' || b.type === 'input' || b.type === 'len' || b.type === 'int' || b.type === 'variable') &&
+            !b.argBlock
+          ) {
+            slotCandidates.push(b);
+          }
+          if (b.innerBlocks && b.innerBlocks.length > 0) {
+            collectSlotCandidates(b.innerBlocks);
+          }
+          if (b.branches && b.branches.length > 0) {
+            for (const br of b.branches) {
+              if (br.innerBlocks && br.innerBlocks.length > 0) {
+                collectSlotCandidates(br.innerBlocks);
+              }
+            }
+          }
+        }
+      };
+      collectSlotCandidates(blocksList);
+
+      for (const b of slotCandidates) {
+        const slotEl = document.getElementById(`arg-slot-${b.id}`);
+        if (!slotEl) continue;
+        const rect = slotEl.getBoundingClientRect();
+        const sScreenX = rect.left - canvasRect.left;
+        const sScreenY = rect.top - canvasRect.top;
+        const sW = rect.width;
+        const sH = rect.height;
+
+        const nearX = draggedX >= sScreenX - 35 && draggedX <= sScreenX + sW + 35;
+        const nearY = Math.abs(draggedY - sScreenY) <= 26;
+
+        if (nearX && nearY) {
+          return {
+            type: 'arg_slot',
+            targetBlockId: b.id,
+            markerX: sScreenX - 2,
+            markerY: sScreenY - 2,
+            markerWidth: sW + 4,
+            markerHeight: sH + 4,
+          };
+        }
+      }
     }
 
     // 1. Check C-blocks and E-branch mouths (recursively at any nesting depth, depth-first so inner loops match before parent)
@@ -1607,6 +1699,10 @@ export default function PracticePage({ params }: PracticePageProps) {
   const findBlockInTree = (blocks: CanvasBlock[], targetId: string): CanvasBlock | null => {
     for (const b of blocks) {
       if (b.id === targetId) return b;
+      if (b.argBlock) {
+        const found = findBlockInTree([b.argBlock], targetId);
+        if (found) return found;
+      }
       if (b.innerBlocks && b.innerBlocks.length > 0) {
         const found = findBlockInTree(b.innerBlocks, targetId);
         if (found) return found;
@@ -1634,6 +1730,14 @@ export default function PracticePage({ params }: PracticePageProps) {
         return updater(b);
       }
       let modified = false;
+      let newArg = b.argBlock;
+      if (b.argBlock) {
+        const updatedArg = updateAnyBlockInTree([b.argBlock], targetId, updater);
+        if (updatedArg[0] !== b.argBlock) {
+          newArg = updatedArg[0];
+          modified = true;
+        }
+      }
       let newInner = b.innerBlocks;
       if (b.innerBlocks && b.innerBlocks.length > 0) {
         newInner = updateAnyBlockInTree(b.innerBlocks, targetId, updater);
@@ -1653,7 +1757,7 @@ export default function PracticePage({ params }: PracticePageProps) {
         });
       }
       if (modified) {
-        return { ...b, innerBlocks: newInner, branches: newBranches };
+        return { ...b, argBlock: newArg, innerBlocks: newInner, branches: newBranches };
       }
       return b;
     });
@@ -1857,6 +1961,40 @@ export default function PracticePage({ params }: PracticePageProps) {
           }
 
           return updatedList;
+        });
+        return;
+      }
+    }
+
+    // CASE 0.5: Snap into function or variable argument slot (arg_slot)
+    if (snap && snap.type === 'arg_slot') {
+      const target = findBlockInTree(currentBlocks, snap.targetBlockId);
+      if (target) {
+        const slottedBlock: CanvasBlock = {
+          ...baseBlock,
+          x: 0,
+          y: 0,
+          prevBlockId: undefined,
+          nextBlockId: undefined,
+          attachedToBlockId: undefined,
+        };
+
+        setCanvasBlocks((prev) => {
+          let list = prev;
+          if (source === 'canvas' && blockInfo.id) {
+            list = list
+              .filter((b) => b.id !== blockInfo.id)
+              .map((b) => {
+                if (b.id === baseBlock.prevBlockId) return { ...b, nextBlockId: undefined };
+                if (b.id === baseBlock.nextBlockId) return { ...b, prevBlockId: undefined };
+                return b;
+              });
+          }
+
+          return updateAnyBlockInTree(list, snap.targetBlockId, (b) => ({
+            ...b,
+            argBlock: slottedBlock,
+          }));
         });
         return;
       }
@@ -2650,6 +2788,208 @@ export default function PracticePage({ params }: PracticePageProps) {
     window.addEventListener('pointercancel', onPointerUp);
   };
 
+  // Authentic Scratch Pointer Drag & Snap Engine (Nested Argument Blocks inside Functions/Variables)
+  const handleArgBlockPointerDown = (
+    e: React.PointerEvent,
+    child: CanvasBlock,
+    parentBlockId: string
+  ) => {
+    if (e.button !== 0) return;
+    const targetTag = (e.target as HTMLElement).tagName;
+    if (targetTag === 'INPUT' || targetTag === 'BUTTON' || targetTag === 'SELECT') {
+      return;
+    }
+
+    e.stopPropagation();
+    if (!workspaceRef.current) return;
+    const targetEl = e.currentTarget as HTMLElement;
+    const tRect = targetEl.getBoundingClientRect();
+    const grabOffsetX = e.clientX - tRect.left;
+    const grabOffsetY = e.clientY - tRect.top;
+
+    pointerDragRef.current = {
+      blockId: child.id,
+      source: 'canvas',
+      blockType: child.type,
+      varName: child.varName,
+      content: child.content,
+      parentBlockId,
+      startX: 0,
+      startY: 0,
+      startPointerX: e.clientX,
+      startPointerY: e.clientY,
+      grabOffsetX,
+      grabOffsetY,
+      hasMoved: false,
+    };
+
+    let hasExtracted = false;
+
+    const onPointerMove = (moveEv: PointerEvent) => {
+      moveEv.preventDefault();
+      if (!pointerDragRef.current || !workspaceRef.current) return;
+      const cRect = workspaceRef.current.getBoundingClientRect();
+      const currX = Math.round(moveEv.clientX - cRect.left - pointerDragRef.current.grabOffsetX);
+      const currY = Math.round(moveEv.clientY - cRect.top - pointerDragRef.current.grabOffsetY);
+
+      if (!pointerDragRef.current.hasMoved) {
+        const startPX = pointerDragRef.current.startPointerX ?? moveEv.clientX;
+        const startPY = pointerDragRef.current.startPointerY ?? moveEv.clientY;
+        if (Math.hypot(moveEv.clientX - startPX, moveEv.clientY - startPY) > 3) {
+          pointerDragRef.current.hasMoved = true;
+          setIsDraggingBlock(true);
+          setDraggingBlockId(child.id);
+
+          hasExtracted = true;
+          // Unplug child from parent block's argBlock or attachedMethodId
+          setCanvasBlocks((prev) => {
+            const updated = updateAnyBlockInTree(prev, parentBlockId, (p) => {
+              if (p.argBlock?.id === child.id) {
+                return { ...p, argBlock: undefined };
+              }
+              if (p.attachedMethodId === child.id) {
+                return { ...p, attachedMethodId: undefined };
+              }
+              return p;
+            });
+
+            const movingBlock: CanvasBlock = {
+              ...child,
+              x: currX,
+              y: currY,
+              prevBlockId: undefined,
+              nextBlockId: undefined,
+              attachedToBlockId: undefined,
+            };
+
+            const nextList = [...updated, movingBlock];
+            canvasBlocksRef.current = nextList;
+            return nextList;
+          });
+        }
+      }
+
+      if (pointerDragRef.current.hasMoved) {
+        // Highlight trash can or toolbox if hovering over them
+        const trashEl = document.querySelector('.trash-dropzone');
+        if (trashEl) {
+          const tr = trashEl.getBoundingClientRect();
+          const isOverTrash =
+            moveEv.clientX >= tr.left &&
+            moveEv.clientX <= tr.right &&
+            moveEv.clientY >= tr.top &&
+            moveEv.clientY <= tr.bottom;
+          setIsTrashHovered(isOverTrash);
+        }
+
+        const toolboxEl = document.getElementById('toolbox-section');
+        const isOverToolbox =
+          (toolboxEl
+            ? (() => {
+              const tb = toolboxEl.getBoundingClientRect();
+              return (
+                moveEv.clientX >= tb.left &&
+                moveEv.clientX <= tb.right &&
+                moveEv.clientY >= tb.top &&
+                moveEv.clientY <= tb.bottom
+              );
+            })()
+            : false) || (workspaceRef.current ? moveEv.clientX <= cRect.left + 15 : false);
+        setIsToolboxHovered(isOverToolbox);
+
+        const snap = findSnapTarget(currX, currY, child.id, canvasBlocksRef.current);
+        activeSnapTargetRef.current = snap;
+        setActiveSnapTarget(snap);
+
+        // Move block with pointer smoothly in real-time
+        setCanvasBlocks((prev) => {
+          const nextList = prev.map((b) => (b.id === child.id ? { ...b, x: currX, y: currY } : b));
+          canvasBlocksRef.current = nextList;
+          return nextList;
+        });
+      }
+    };
+
+    const onPointerUp = (upEv: PointerEvent) => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+
+      if (!pointerDragRef.current) return;
+      const hadMoved = pointerDragRef.current.hasMoved;
+      const snap = activeSnapTargetRef.current;
+      activeSnapTargetRef.current = null;
+      setActiveSnapTarget(null);
+      setIsDraggingBlock(false);
+      setDraggingBlockId(null);
+      setIsTrashHovered(false);
+      setIsToolboxHovered(false);
+
+      if (hadMoved && workspaceRef.current && hasExtracted) {
+        const cRect = workspaceRef.current.getBoundingClientRect();
+
+        const trashEl = document.querySelector('.trash-dropzone');
+        const isOverTrash = trashEl
+          ? (() => {
+            const tr = trashEl.getBoundingClientRect();
+            return (
+              upEv.clientX >= tr.left &&
+              upEv.clientX <= tr.right &&
+              upEv.clientY >= tr.top &&
+              upEv.clientY <= tr.bottom
+            );
+          })()
+          : false;
+
+        const toolboxEl = document.getElementById('toolbox-section');
+        const isOverToolbox =
+          (toolboxEl
+            ? (() => {
+              const tb = toolboxEl.getBoundingClientRect();
+              return (
+                upEv.clientX >= tb.left &&
+                upEv.clientX <= tb.right &&
+                upEv.clientY >= tb.top &&
+                upEv.clientY <= tb.bottom
+              );
+            })()
+            : false) || upEv.clientX <= cRect.left + 15;
+
+        if (isOverTrash || isOverToolbox) {
+          setCanvasBlocks((prev) => {
+            const nextList = prev.filter((b) => b.id !== child.id);
+            canvasBlocksRef.current = nextList;
+            return nextList;
+          });
+          showToast(
+            isOverToolbox
+              ? '🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.'
+              : '🗑️ 블록이 휴지통에 버려졌습니다.'
+          );
+          pointerDragRef.current = null;
+          return;
+        }
+
+        const finalX = Math.max(10, upEv.clientX - cRect.left - pointerDragRef.current.grabOffsetX);
+        const finalY = Math.max(10, upEv.clientY - cRect.top - pointerDragRef.current.grabOffsetY);
+
+        executeBlockPlacement(
+          'canvas',
+          { id: child.id },
+          finalX,
+          finalY,
+          snap
+        );
+      }
+
+      pointerDragRef.current = null;
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
+  };
+
   // Live Scratch Snapping & Insertion Marker Tracking (HTML5 Drag fallback)
   const handleCanvasDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -2813,6 +3153,9 @@ export default function PracticePage({ params }: PracticePageProps) {
     const collectIds = (blk: CanvasBlock) => {
       const newId = `${blk.type}-${Date.now()}-${++idCounter}-${Math.random().toString(36).slice(2, 6)}`;
       idMap.set(blk.id, newId);
+      if (blk.argBlock) {
+        collectIds(blk.argBlock);
+      }
       if (blk.innerBlocks) {
         for (const child of blk.innerBlocks) {
           collectIds(child);
@@ -2858,6 +3201,10 @@ export default function PracticePage({ params }: PracticePageProps) {
     ): CanvasBlock => {
       const newId = idMap.get(blk.id) || `${blk.type}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
 
+      const newArgBlock = blk.argBlock
+        ? deepCloneBlock(blk.argBlock, false, 0)
+        : undefined;
+
       const newInnerBlocks = blk.innerBlocks
         ? blk.innerBlocks.map((child, idx) => deepCloneBlock(child, false, idx))
         : undefined;
@@ -2891,6 +3238,7 @@ export default function PracticePage({ params }: PracticePageProps) {
       return {
         ...blk,
         id: newId,
+        argBlock: newArgBlock,
         items: blk.items ? [...blk.items] : undefined,
         dictPairs: blk.dictPairs ? blk.dictPairs.map((p) => ({ ...p })) : undefined,
         innerBlocks: newInnerBlocks,
@@ -3893,6 +4241,38 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <span>)</span>
                 </div>
 
+                {/* int() 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'int')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.int.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.int.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.int.border}`,
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title="int() 정수 변환 블록 (캔버스로 드래그하여 배치)"
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.int.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.int.border} bg={BLOCK_THEMES.int.bg} />
+                  <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.int.border} bgColor="#0d1527" />
+                  <span>int (</span>
+                  <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  <span>)</span>
+                </div>
+
                 {/* .method() 메서드 결합 블록 */}
                 <div
                   draggable
@@ -4623,21 +5003,52 @@ export default function PracticePage({ params }: PracticePageProps) {
               />
             )}
 
+            {activeSnapTarget && activeSnapTarget.type === 'arg_slot' && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: `${activeSnapTarget.markerX}px`,
+                  top: `${activeSnapTarget.markerY}px`,
+                  width: `${activeSnapTarget.markerWidth || 36}px`,
+                  height: `${activeSnapTarget.markerHeight || 24}px`,
+                  borderRadius: '6px',
+                  border: '2px dashed #38bdf8',
+                  background: 'rgba(56, 189, 248, 0.25)',
+                  boxShadow: '0 0 10px rgba(56, 189, 248, 0.4)',
+                  zIndex: 100,
+                  pointerEvents: 'none',
+                  transition: 'all 0.15s ease-out',
+                }}
+              />
+            )}
+
             {mode === 'block' ? (
               /* ============================================================
                  BLOCK MODE: Free Draggable Blocks with Auto-Expanding Input
                  ============================================================ */
               <>
-                {canvasBlocks.map((block) => (
-                  <CanvasBlockItem
-                    key={block.id}
-                    block={block}
-                    isNested={false}
-                    draggedChainIds={draggedChainIds}
-                    activeInputHelp={activeInputHelp}
-                    onBlockPointerDown={handleBlockPointerDown}
-                    onInnerBlockPointerDown={handleInnerBlockPointerDown}
-                    onContextMenu={handleBlockContextMenu}
+                {canvasBlocks
+                  .filter((block) => {
+                    // Do not render blocks that are attached horizontally to an argBlock (they render inside the arg slot)
+                    if (block.attachedToBlockId) {
+                      const isRootCanvasBlock = canvasBlocks.some((b) => b.id === block.attachedToBlockId);
+                      if (!isRootCanvasBlock) return false;
+                    }
+                    return true;
+                  })
+                  .map((block) => (
+                    <CanvasBlockItem
+                      key={block.id}
+                      block={block}
+                      isNested={false}
+                      isSlotArg={false}
+                      canvasBlocks={canvasBlocks}
+                      draggedChainIds={draggedChainIds}
+                      activeInputHelp={activeInputHelp}
+                      onBlockPointerDown={handleBlockPointerDown}
+                      onInnerBlockPointerDown={handleInnerBlockPointerDown}
+                      onArgBlockPointerDown={handleArgBlockPointerDown}
+                      onContextMenu={handleBlockContextMenu}
                     onDragOver={handleCanvasDragOver}
                     onDrop={handleCanvasDrop}
                     onContentChange={(val, blockId, parentBlockId, cIdx, branchId) => {

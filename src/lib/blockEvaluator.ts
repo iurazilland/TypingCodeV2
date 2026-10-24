@@ -129,6 +129,14 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
           if (target && typeof target === 'object') return Object.keys(target).length;
           return 0;
         }
+        if (fnName === 'int') {
+          const target = fnArgs[0];
+          const parsed = parseInt(String(target), 10);
+          return isNaN(parsed) ? 0 : parsed;
+        }
+        if (fnName === 'input') {
+          return fnArgs[0] !== undefined ? String(fnArgs[0]) : '';
+        }
         if (fnName === 'range') {
           const count = typeof fnArgs[0] === 'number' ? fnArgs[0] : parseInt(String(fnArgs[0]), 10) || 0;
           return Array.from({ length: Math.max(0, count) }, (_, i) => i);
@@ -234,6 +242,42 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
       return null;
     };
 
+    const evalBlockAsExpr = (b: any): any => {
+      if (!b) return null;
+      let val: any = null;
+      if (b.type === 'int') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0');
+        const parsed = parseInt(String(inner), 10);
+        val = isNaN(parsed) ? 0 : parsed;
+      } else if (b.type === 'input') {
+        val = b.argBlock ? evalBlockAsExpr(b.argBlock) : (b.content || '');
+      } else if (b.type === 'len') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
+        if (typeof inner === 'string' || Array.isArray(inner)) val = inner.length;
+        else if (inner && typeof inner === 'object') val = Object.keys(inner).length;
+        else val = 0;
+      } else if (b.type === 'print') {
+        val = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
+      } else if (b.type === 'variable') {
+        val = b.varName in scope ? scope[b.varName] : evalExpr(b.content || '0');
+      } else {
+        val = evalExpr(b.content || '');
+      }
+
+      if (b.attachedMethodId) {
+        const m = blocks.find((item: any) => item.id === b.attachedMethodId);
+        if (m && m.type === 'method') {
+          const mName = m.methodName || 'split';
+          if (mName === 'split') {
+            const strVal = String(val ?? '');
+            const sep = (m.content || '').trim();
+            val = sep ? strVal.split(sep.replace(/^['"]|['"]$/g, '')) : strVal.split(/\s+/).filter(Boolean);
+          }
+        }
+      }
+      return val;
+    };
+
     const runBlockList = (list: any[]): 'break' | 'continue' | void => {
       for (const blk of list) {
         if (!blk || blk.type === 'start') continue;
@@ -244,7 +288,17 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
 
         if (blk.type === 'variable') {
           const vName = blk.varName || 'x';
-          scope[vName] = evalExpr(blk.content || '0');
+          if (blk.argBlock) {
+            scope[vName] = evalBlockAsExpr(blk.argBlock);
+          } else {
+            scope[vName] = evalExpr(blk.content || '0');
+          }
+        } else if (blk.type === 'int') {
+          evalBlockAsExpr(blk);
+        } else if (blk.type === 'input') {
+          evalBlockAsExpr(blk);
+        } else if (blk.type === 'len') {
+          evalBlockAsExpr(blk);
         } else if (blk.type === 'list') {
           const vName = blk.varName || 'my_list';
           scope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i));
@@ -270,7 +324,14 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             returnVal: blk.returnVal,
           };
         } else if (blk.type === 'print') {
-          const raw = (blk.content || '').trim();
+          if (blk.argBlock) {
+            const val = evalBlockAsExpr(blk.argBlock);
+            if (val === null || val === undefined) stdoutBuffer += 'None\n';
+            else if (typeof val === 'boolean') stdoutBuffer += (val ? 'True' : 'False') + '\n';
+            else if (Array.isArray(val)) stdoutBuffer += `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]\n`;
+            else stdoutBuffer += String(val) + '\n';
+          } else {
+            const raw = (blk.content || '').trim();
           if (!raw) {
             stdoutBuffer += '\n';
           } else {
@@ -313,7 +374,8 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             });
             stdoutBuffer += printed.join(sep) + end;
           }
-        } else if (blk.type === 'break') {
+        }
+      } else if (blk.type === 'break') {
           return 'break';
         } else if (blk.type === 'continue') {
           return 'continue';
