@@ -277,7 +277,7 @@ export const GhostSnapBlock: React.FC<{
         height: typeof height === 'number' ? `${height}px` : height,
         minHeight: typeof height === 'number' ? `${height}px` : height,
         boxSizing: 'border-box',
-        borderRadius: isNested ? '0 6px 0 0' : '6px',
+        borderRadius: isNested ? '0 6px 6px 0' : '6px',
         background: 'rgba(148, 163, 184, 0.45)', // Scratch neutral slate grey
         border: '1.5px solid #94a3b8',
         ...(isNested ? { borderLeft: 'none', marginTop: '-1px' } : {}),

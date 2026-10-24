@@ -35,6 +35,7 @@ export interface CanvasBlockItemProps {
     insertIndex?: number;
     markerWidth?: number;
     markerHeight?: number;
+    markerMouthHeight?: number;
   } | null;
   canvasBlocks?: CanvasBlock[];
   isDraggingCBlock?: boolean;
@@ -238,7 +239,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       activeSnapTarget?.type === 'mouth' &&
       activeSnapTarget.targetBlockId === block.id &&
       !activeSnapTarget.branchId;
-    const ghostWidth = Math.max(120, (activeSnapTarget?.markerWidth || 140) - 20);
+    const ghostWidth = activeSnapTarget?.markerWidth || 140;
+    const ghostHeight = activeSnapTarget?.markerHeight || 34;
+    const ghostMouthHeight = activeSnapTarget?.markerMouthHeight || 28;
 
     return (
       <div
@@ -596,9 +599,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             {innerBlocks.length === 0 ? (
               isMouthSnapTarget ? (
                 isDraggingCBlock ? (
-                  <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={28} />
+                  <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={ghostMouthHeight} />
                 ) : (
-                  <GhostSnapBlock isNested={true} width={ghostWidth} />
+                  <GhostSnapBlock isNested={true} width={ghostWidth} height={ghostHeight} />
                 )
               ) : (
                 <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
@@ -624,9 +627,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                     <React.Fragment key={child.id || nIdx}>
                       {showGhostBefore && (
                         isDraggingCBlock ? (
-                          <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={28} />
+                          <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={ghostMouthHeight} />
                         ) : (
-                          <GhostSnapBlock isNested={true} width={ghostWidth} />
+                          <GhostSnapBlock isNested={true} width={ghostWidth} height={ghostHeight} />
                         )
                       )}
                       <div
@@ -660,9 +663,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 })}
                 {isMouthSnapTarget && activeSnapTarget?.insertIndex === innerBlocks.length && (
                   isDraggingCBlock ? (
-                    <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={28} />
+                    <GhostCShapeBlock isNested={true} width={ghostWidth} mouthHeight={ghostMouthHeight} />
                   ) : (
-                    <GhostSnapBlock isNested={true} width={ghostWidth} />
+                    <GhostSnapBlock isNested={true} width={ghostWidth} height={ghostHeight} />
                   )
                 )}
               </>
@@ -965,14 +968,16 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                       activeSnapTarget?.type === 'mouth' &&
                       activeSnapTarget.targetBlockId === block.id &&
                       activeSnapTarget.branchId === branch.id;
-                    const branchGhostWidth = Math.max(120, (activeSnapTarget?.markerWidth || 140) - 20);
+                    const branchGhostWidth = activeSnapTarget?.markerWidth || 140;
+                    const branchGhostHeight = activeSnapTarget?.markerHeight || 34;
+                    const branchGhostMouthHeight = activeSnapTarget?.markerMouthHeight || 28;
 
                     if (branchInnerBlocks.length === 0) {
                       return isBranchMouthSnapTarget ? (
                         isDraggingCBlock ? (
-                          <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={28} />
+                          <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={branchGhostMouthHeight} />
                         ) : (
-                          <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                          <GhostSnapBlock isNested={true} width={branchGhostWidth} height={branchGhostHeight} />
                         )
                       ) : (
                         <div style={{ minHeight: '18px', borderRadius: '0 6px 6px 0' }} />
@@ -1000,9 +1005,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                             <React.Fragment key={child.id || nIdx}>
                               {showGhostBefore && (
                                 isDraggingCBlock ? (
-                                  <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={28} />
+                                  <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={branchGhostMouthHeight} />
                                 ) : (
-                                  <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                                  <GhostSnapBlock isNested={true} width={branchGhostWidth} height={branchGhostHeight} />
                                 )
                               )}
                               <div
@@ -1036,9 +1041,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                         })}
                         {isBranchMouthSnapTarget && activeSnapTarget?.insertIndex === branchInnerBlocks.length && (
                           isDraggingCBlock ? (
-                            <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={28} />
+                            <GhostCShapeBlock isNested={true} width={branchGhostWidth} mouthHeight={branchGhostMouthHeight} />
                           ) : (
-                            <GhostSnapBlock isNested={true} width={branchGhostWidth} />
+                            <GhostSnapBlock isNested={true} width={branchGhostWidth} height={branchGhostHeight} />
                           )
                         )}
                       </>

@@ -603,6 +603,7 @@ export default function PracticePage({ params }: PracticePageProps) {
     markerY: number;
     markerWidth?: number;
     markerHeight?: number;
+    markerMouthHeight?: number;
   }
 
   // Drag and Drop Canvas Blocks: Starts with the default Start Block
@@ -635,6 +636,8 @@ export default function PracticePage({ params }: PracticePageProps) {
     parentBlockId?: string;
     childIdx?: number;
     branchId?: string;
+    initialWidth?: number;
+    initialHeight?: number;
     hasMoved: boolean;
   } | null>(null);
   const draggingInfoRef = useRef<{
@@ -646,6 +649,9 @@ export default function PracticePage({ params }: PracticePageProps) {
     childIdx?: number;
     branchId?: string;
     content?: string;
+    withElse?: boolean;
+    initialWidth?: number;
+    initialHeight?: number;
     grabX?: number;
     grabY?: number;
     startX?: number;
@@ -1393,6 +1399,8 @@ export default function PracticePage({ params }: PracticePageProps) {
       withElse: extra?.withElse,
       grabX: Math.max(10, Math.min(rawGrabX, 60)),
       grabY: Math.max(5, Math.min(rawGrabY, 25)),
+      initialWidth: Math.round(rect.width),
+      initialHeight: Math.round(rect.height),
     };
     draggingInfoRef.current = payload;
     try {
@@ -1419,7 +1427,8 @@ export default function PracticePage({ params }: PracticePageProps) {
     branchId?: string
   ) => {
     e.stopPropagation();
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const targetEl = e.currentTarget as HTMLElement;
+    const rect = targetEl.getBoundingClientRect();
     const grabX = e.clientX - rect.left;
     const grabY = e.clientY - rect.top;
 
@@ -1434,6 +1443,8 @@ export default function PracticePage({ params }: PracticePageProps) {
       varName: child.varName,
       grabX,
       grabY,
+      initialWidth: Math.round(rect.width),
+      initialHeight: Math.round(rect.height),
     };
     draggingInfoRef.current = payload;
     try {
@@ -1441,6 +1452,7 @@ export default function PracticePage({ params }: PracticePageProps) {
     } catch { }
     e.dataTransfer.effectAllowed = 'all';
     setIsDraggingBlock(true);
+    setDraggingBlockId(child.id);
   };
 
 
@@ -1494,6 +1506,64 @@ export default function PracticePage({ params }: PracticePageProps) {
     const descendants = getDescendantBlockIds(draggingBlockId, canvasBlocks);
     return new Set<string>([draggingBlockId, ...descendants]);
   }, [draggingBlockId, canvasBlocks]);
+
+  // Helper to dynamically calculate the exact rendered dimensions of whatever block is currently being dragged
+  const getDraggedBlockDimensions = (draggedId?: string, type?: BlockType | null) => {
+    const effectiveId =
+      draggedId ||
+      draggingBlockId ||
+      pointerDragRef.current?.blockId ||
+      draggingInfoRef.current?.id;
+
+    if (effectiveId) {
+      const el = document.getElementById(`block-${effectiveId}`);
+      if (el) {
+        const mouthEl = el.querySelector(`[id^="mouth-"]`) as HTMLElement | null;
+        const headerArmEl = el.firstElementChild as HTMLElement | null;
+        const headerWidth = headerArmEl && headerArmEl.offsetHeight <= 40 ? headerArmEl.offsetWidth : el.offsetWidth;
+        const mouthHeight = mouthEl ? Math.max(28, mouthEl.offsetHeight) : Math.max(28, el.offsetHeight - 50);
+
+        return {
+          width: el.offsetWidth,
+          height: el.offsetHeight,
+          headerWidth,
+          mouthHeight,
+          totalHeight: el.offsetHeight,
+        };
+      }
+    }
+
+    const info = draggingInfoRef.current;
+    const ptr = pointerDragRef.current;
+    const toolboxWidth = (info as any)?.initialWidth || (ptr as any)?.initialWidth;
+    const toolboxHeight = (info as any)?.initialHeight || (ptr as any)?.initialHeight;
+    const bType =
+      type ||
+      draggedBlockType ||
+      info?.blockType ||
+      ptr?.blockType ||
+      (effectiveId ? findBlockInTree(canvasBlocksRef.current || canvasBlocks, effectiveId)?.type : null);
+
+    const isC =
+      bType === 'for_range' ||
+      bType === 'for_in' ||
+      bType === 'while' ||
+      bType === 'if' ||
+      bType === 'def';
+
+    const defaultWidth = isC ? 170 : (bType === 'method' ? 160 : 140);
+    const width = toolboxWidth || defaultWidth;
+    const mouthHeight = 28;
+    const totalHeight = isC ? 34 + mouthHeight + 16 : (toolboxHeight || 34);
+
+    return {
+      width,
+      height: toolboxHeight || (isC ? totalHeight : 34),
+      headerWidth: width,
+      mouthHeight,
+      totalHeight,
+    };
+  };
 
   // Scratch-grade Connection Snapping Calculator (실행 블록 및 연결 블록 하단 자동 자석 스냅)
   const findSnapTarget = (
@@ -1568,8 +1638,9 @@ export default function PracticePage({ params }: PracticePageProps) {
       const cursorX = draggedX + grabX;
       const cursorY = draggedY + grabY;
 
-      const draggedMethodEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
-      const methodBlockWidth = draggedMethodEl ? draggedMethodEl.offsetWidth : 160;
+      const draggedDim = getDraggedBlockDimensions(draggedId, 'method');
+      const methodBlockWidth = draggedDim.width || 160;
+      const methodBlockHeight = draggedDim.height || 34;
 
       for (const b of candidates) {
         const bEl = document.getElementById(`block-${b.id}`);
@@ -1598,7 +1669,7 @@ export default function PracticePage({ params }: PracticePageProps) {
             markerX: bRight - 1,
             markerY: bScreenY,
             markerWidth: methodBlockWidth,
-            markerHeight: bH,
+            markerHeight: methodBlockHeight,
           };
         }
       }
@@ -1679,8 +1750,13 @@ export default function PracticePage({ params }: PracticePageProps) {
 
     // 1. Check C-blocks and E-branch mouths (recursively at any nesting depth, depth-first so inner loops match before parent)
     const checkMouthsRecursive = (list: CanvasBlock[]): SnapTarget | null => {
-      const draggedEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
-      const draggedW = draggedEl ? draggedEl.offsetWidth : 140;
+      const draggedDim = getDraggedBlockDimensions(draggedId, draggedType);
+      const isC =
+        draggedType === 'for_range' ||
+        draggedType === 'for_in' ||
+        draggedType === 'while' ||
+        draggedType === 'if' ||
+        draggedType === 'def';
 
       for (const b of list) {
         if (excludedIds.has(b.id)) continue;
@@ -1712,7 +1788,6 @@ export default function PracticePage({ params }: PracticePageProps) {
               const inBlocks = b.innerBlocks || [];
               let targetIdx = inBlocks.length;
               let markerLineY = mTop + 1;
-              let markerLineWidth = Math.max(130, draggedW);
 
               if (inBlocks.length === 0) {
                 targetIdx = 0;
@@ -1728,7 +1803,6 @@ export default function PracticePage({ params }: PracticePageProps) {
                     const cTop = cRect.top - canvasRect.top;
                     const cBottom = cTop + cRect.height;
                     const cMid = cTop + cRect.height / 2;
-                    markerLineWidth = Math.max(markerLineWidth, cRect.width);
                     if (checkY < cMid) {
                       targetIdx = idx;
                       markerLineY = idx === 0 ? mTop + 1 : cTop;
@@ -1747,7 +1821,9 @@ export default function PracticePage({ params }: PracticePageProps) {
                 insertIndex: targetIdx,
                 markerX: mLeft,
                 markerY: markerLineY,
-                markerWidth: markerLineWidth,
+                markerWidth: isC ? draggedDim.headerWidth : draggedDim.width,
+                markerHeight: isC ? draggedDim.totalHeight : draggedDim.height,
+                markerMouthHeight: draggedDim.mouthHeight,
               };
             }
           }
@@ -1781,7 +1857,6 @@ export default function PracticePage({ params }: PracticePageProps) {
                 const inBlocks = br.innerBlocks || [];
                 let targetIdx = inBlocks.length;
                 let markerLineY = mTop + 1;
-                let markerLineWidth = Math.max(130, draggedW);
 
                 if (inBlocks.length === 0) {
                   targetIdx = 0;
@@ -1797,7 +1872,6 @@ export default function PracticePage({ params }: PracticePageProps) {
                       const cTop = cRect.top - canvasRect.top;
                       const cBottom = cTop + cRect.height;
                       const cMid = cTop + cRect.height / 2;
-                      markerLineWidth = Math.max(markerLineWidth, cRect.width);
                       if (checkY < cMid) {
                         targetIdx = idx;
                         markerLineY = idx === 0 ? mTop + 1 : cTop;
@@ -1817,7 +1891,9 @@ export default function PracticePage({ params }: PracticePageProps) {
                   insertIndex: targetIdx,
                   markerX: mLeft,
                   markerY: markerLineY,
-                  markerWidth: markerLineWidth,
+                  markerWidth: isC ? draggedDim.headerWidth : draggedDim.width,
+                  markerHeight: isC ? draggedDim.totalHeight : draggedDim.height,
+                  markerMouthHeight: draggedDim.mouthHeight,
                 };
               }
             }
@@ -1835,8 +1911,16 @@ export default function PracticePage({ params }: PracticePageProps) {
     let bestSnap: SnapTarget | null = null;
     let minScore = Infinity;
 
-    const draggedEl = draggedId ? document.getElementById(`block-${draggedId}`) : null;
-    const draggedH = draggedEl ? draggedEl.offsetHeight : 34;
+    const draggedDim = getDraggedBlockDimensions(draggedId, draggedType);
+    const isDraggingC =
+      draggedType === 'for_range' ||
+      draggedType === 'for_in' ||
+      draggedType === 'while' ||
+      draggedType === 'if' ||
+      draggedType === 'def';
+    const draggedH = isDraggingC ? draggedDim.totalHeight : draggedDim.height;
+    const snapMarkerWidth = isDraggingC ? draggedDim.headerWidth : draggedDim.width;
+    const snapMarkerHeight = draggedH;
 
     for (const b of blocksList) {
       if (excludedIds.has(b.id)) continue;
@@ -1865,7 +1949,9 @@ export default function PracticePage({ params }: PracticePageProps) {
             targetBlockId: b.id,
             markerX: b.x,
             markerY: bBottom,
-            markerWidth: bW,
+            markerWidth: snapMarkerWidth,
+            markerHeight: snapMarkerHeight,
+            markerMouthHeight: draggedDim.mouthHeight,
           };
         }
       }
@@ -1882,7 +1968,9 @@ export default function PracticePage({ params }: PracticePageProps) {
               targetBlockId: b.id,
               markerX: b.x,
               markerY: b.y,
-              markerWidth: bW,
+              markerWidth: snapMarkerWidth,
+              markerHeight: snapMarkerHeight,
+              markerMouthHeight: draggedDim.mouthHeight,
             };
           }
         }
@@ -2531,12 +2619,15 @@ export default function PracticePage({ params }: PracticePageProps) {
     pointerDragRef.current = {
       blockId: block.id,
       source: 'canvas',
+      blockType: block.type,
       startX: block.x,
       startY: block.y,
       startPointerX: e.clientX,
       startPointerY: e.clientY,
       grabOffsetX,
       grabOffsetY,
+      initialWidth: blockEl.offsetWidth,
+      initialHeight: blockEl.offsetHeight,
       hasMoved: false,
     };
 
@@ -2743,6 +2834,8 @@ export default function PracticePage({ params }: PracticePageProps) {
       startPointerY: e.clientY,
       grabOffsetX,
       grabOffsetY,
+      initialWidth: Math.round(tRect.width),
+      initialHeight: Math.round(tRect.height),
       hasMoved: false,
     };
 
@@ -2961,6 +3054,8 @@ export default function PracticePage({ params }: PracticePageProps) {
       startPointerY: e.clientY,
       grabOffsetX,
       grabOffsetY,
+      initialWidth: Math.round(tRect.width),
+      initialHeight: Math.round(tRect.height),
       hasMoved: false,
     };
 
@@ -3872,10 +3967,9 @@ export default function PracticePage({ params }: PracticePageProps) {
     currentDraggedType === 'if' ||
     currentDraggedType === 'def';
 
-  const draggedBlockId = draggingBlockId || pointerDragRef.current?.blockId || draggingInfoRef.current?.id;
-  const draggedEl = draggedBlockId ? document.getElementById(`block-${draggedBlockId}`) : null;
-  const cBlockMouthHeight = draggedEl ? Math.max(28, draggedEl.offsetHeight - 50) : 28;
-  const cBlockTotalHeight = 34 + cBlockMouthHeight + 16;
+  const draggedDim = getDraggedBlockDimensions(undefined, currentDraggedType);
+  const cBlockMouthHeight = draggedDim.mouthHeight;
+  const cBlockTotalHeight = draggedDim.totalHeight;
 
   return (
     <div
@@ -5411,16 +5505,25 @@ export default function PracticePage({ params }: PracticePageProps) {
               isDraggingCBlock ? (
                 <GhostCShapeBlock
                   left={activeSnapTarget.markerX}
-                  top={activeSnapTarget.type === 'below' ? activeSnapTarget.markerY - 1 : activeSnapTarget.markerY - (cBlockTotalHeight - 1)}
-                  width={Math.max(140, activeSnapTarget.markerWidth || 150)}
-                  mouthHeight={cBlockMouthHeight}
+                  top={
+                    activeSnapTarget.type === 'below'
+                      ? activeSnapTarget.markerY - 1
+                      : activeSnapTarget.markerY - ((activeSnapTarget.markerHeight || cBlockTotalHeight) - 1)
+                  }
+                  width={activeSnapTarget.markerWidth || draggedDim.headerWidth || 150}
+                  mouthHeight={activeSnapTarget.markerMouthHeight || cBlockMouthHeight}
                   isNested={false}
                 />
               ) : (
                 <GhostSnapBlock
                   left={activeSnapTarget.markerX}
-                  top={activeSnapTarget.type === 'below' ? activeSnapTarget.markerY - 1 : activeSnapTarget.markerY - 33}
-                  width={Math.max(120, activeSnapTarget.markerWidth || 130)}
+                  top={
+                    activeSnapTarget.type === 'below'
+                      ? activeSnapTarget.markerY - 1
+                      : activeSnapTarget.markerY - ((activeSnapTarget.markerHeight || draggedDim.height || 34) - 1)
+                  }
+                  width={activeSnapTarget.markerWidth || draggedDim.width || 140}
+                  height={activeSnapTarget.markerHeight || draggedDim.height || 34}
                   isNested={false}
                 />
               )
@@ -5430,8 +5533,8 @@ export default function PracticePage({ params }: PracticePageProps) {
               <GhostMethodBlock
                 left={activeSnapTarget.markerX}
                 top={activeSnapTarget.markerY}
-                height={activeSnapTarget.markerHeight || 34}
-                width={activeSnapTarget.markerWidth || 160}
+                height={activeSnapTarget.markerHeight || draggedDim.height || 34}
+                width={activeSnapTarget.markerWidth || draggedDim.width || 160}
               />
             )}
 
@@ -5473,7 +5576,13 @@ export default function PracticePage({ params }: PracticePageProps) {
                       key={block.id}
                       block={
                         shiftedBlockIds.has(block.id)
-                          ? { ...block, y: block.y + (isDraggingCBlock ? cBlockTotalHeight : 34) }
+                          ? {
+                              ...block,
+                              y:
+                                block.y +
+                                (activeSnapTarget?.markerHeight ||
+                                  (isDraggingCBlock ? cBlockTotalHeight : draggedDim.height || 34)),
+                            }
                           : block
                       }
                       isNested={false}

@@ -172,5 +172,6 @@ export interface SnapTarget {
   markerY: number;
   markerWidth?: number;
   markerHeight?: number;
+  markerMouthHeight?: number;
 }
 
