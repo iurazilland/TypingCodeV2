@@ -293,6 +293,47 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
         val = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
       } else if (b.type === 'variable') {
         val = b.varName in scope ? scope[b.varName] : evalExpr(b.content || '0');
+      } else if (b.type === 'bool') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || 'False');
+        val = Boolean(inner && inner !== '0' && inner !== 'False' && inner !== '[]');
+      } else if (b.type === 'range') {
+        const raw = b.argBlock ? evalBlockAsExpr(b.argBlock) : (b.content || '0');
+        const parts = String(raw).split(',').map((s) => parseInt(s.trim(), 10)).filter((n) => !isNaN(n));
+        let start = 0, stop = 0, step = 1;
+        if (parts.length === 1) stop = parts[0];
+        else if (parts.length === 2) { start = parts[0]; stop = parts[1]; }
+        else if (parts.length >= 3) { start = parts[0]; stop = parts[1]; step = parts[2]; }
+        const rList: number[] = [];
+        if (step > 0) {
+          for (let i = start; i < stop; i += step) rList.push(i);
+        } else if (step < 0) {
+          for (let i = start; i > stop; i += step) rList.push(i);
+        }
+        val = rList;
+      } else if (b.type === 'sorted') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        if (Array.isArray(inner)) {
+          val = [...inner].sort((a, b) => (typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b))));
+        } else {
+          val = [];
+        }
+      } else if (b.type === 'reversed') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        val = Array.isArray(inner) ? [...inner].reverse() : [];
+      } else if (b.type === 'all') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        val = Array.isArray(inner) ? inner.every(Boolean) : Boolean(inner);
+      } else if (b.type === 'any') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        val = Array.isArray(inner) ? inner.some(Boolean) : Boolean(inner);
+      } else if (b.type === 'enumerate') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        val = Array.isArray(inner) ? inner.map((item, idx) => [idx, item]) : [];
+      } else if (b.type === 'zip') {
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        val = Array.isArray(inner) ? inner : [];
+      } else if (b.type === 'map') {
+        val = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
       } else if (b.type === 'math') {
         val = null;
       } else {
@@ -316,6 +357,30 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
           } else if (mName === 'replace') {
             const parts = (m.content || '').split(',').map((s: string) => s.trim().replace(/^['"]|['"]$/g, ''));
             val = String(val ?? '').replaceAll(parts[0] || '', parts[1] || '');
+          } else if (mName === 'join') {
+            const sep = String(val ?? '');
+            const arg = (m.content || '').trim();
+            const listVal = scope[arg] || evalExpr(arg);
+            val = Array.isArray(listVal) ? listVal.join(sep) : '';
+          } else if (mName === 'count') {
+            const sub = (m.content || '').trim().replace(/^['"]|['"]$/g, '');
+            if (typeof val === 'string') val = (val.match(new RegExp(sub, 'g')) || []).length;
+            else if (Array.isArray(val)) val = val.filter((x) => String(x) === sub).length;
+          } else if (mName === 'append') {
+            const item = evalExpr(m.content || '0');
+            if (Array.isArray(val)) val.push(item);
+          } else if (mName === 'pop') {
+            if (Array.isArray(val)) val = val.pop();
+          } else if (mName === 'reverse') {
+            if (Array.isArray(val)) val.reverse();
+          } else if (mName === 'sort') {
+            if (Array.isArray(val)) val.sort((a, b) => (typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b))));
+          } else if (mName === 'keys') {
+            if (val && typeof val === 'object') val = Object.keys(val);
+          } else if (mName === 'values') {
+            if (val && typeof val === 'object') val = Object.values(val);
+          } else if (mName === 'items') {
+            if (val && typeof val === 'object') val = Object.entries(val);
           }
         }
       }
@@ -337,12 +402,14 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
           } else {
             scope[vName] = evalExpr(blk.content || '0');
           }
-        } else if (blk.type === 'int') {
+        } else if ([
+          'int', 'float', 'str', 'bool', 'type', 'input', 'len', 'round', 'abs',
+          'sum', 'min', 'max', 'range', 'map', 'sorted', 'iter', 'enumerate',
+          'zip', 'all', 'any', 'reversed', 'open'
+        ].includes(blk.type)) {
           evalBlockAsExpr(blk);
-        } else if (blk.type === 'input') {
-          evalBlockAsExpr(blk);
-        } else if (blk.type === 'len') {
-          evalBlockAsExpr(blk);
+        } else if (blk.type === 'math') {
+          // math pseudo-block placed directly in statement list: safe no-op
         } else if (blk.type === 'list') {
           const vName = blk.varName || 'my_list';
           scope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i));

@@ -770,6 +770,9 @@ export default function PracticePage({ params }: PracticePageProps) {
         if (b.attachedMethodId) {
           alignAttachedMethods(b);
         }
+        if (b.argBlock) {
+          checkTreeForMethods([b.argBlock]);
+        }
         if (b.innerBlocks) {
           checkTreeForMethods(b.innerBlocks);
         }
