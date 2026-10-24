@@ -462,6 +462,98 @@ function splitTopLevelArgs(str: string): string[] {
   return result;
 }
 
+// Pure tree utility functions hoisted to module scope to prevent TDZ ReferenceError
+function findBlockInTree(blocks: CanvasBlock[], targetId: string): CanvasBlock | null {
+  for (const b of blocks) {
+    if (b.id === targetId) return b;
+    if (b.argBlock) {
+      const found = findBlockInTree([b.argBlock], targetId);
+      if (found) return found;
+    }
+    if (b.innerBlocks && b.innerBlocks.length > 0) {
+      const found = findBlockInTree(b.innerBlocks, targetId);
+      if (found) return found;
+    }
+    if (b.branches && b.branches.length > 0) {
+      for (const br of b.branches) {
+        if (br.innerBlocks && br.innerBlocks.length > 0) {
+          const found = findBlockInTree(br.innerBlocks, targetId);
+          if (found) return found;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function updateAnyBlockInTree(
+  blocks: CanvasBlock[],
+  targetId: string,
+  updater: (blk: CanvasBlock) => CanvasBlock
+): CanvasBlock[] {
+  return blocks.map((b) => {
+    if (b.id === targetId) {
+      return updater(b);
+    }
+    let modified = false;
+    let newArg = b.argBlock;
+    if (b.argBlock) {
+      const updatedArg = updateAnyBlockInTree([b.argBlock], targetId, updater);
+      if (updatedArg[0] !== b.argBlock) {
+        newArg = updatedArg[0];
+        modified = true;
+      }
+    }
+    let newInner = b.innerBlocks;
+    if (b.innerBlocks && b.innerBlocks.length > 0) {
+      newInner = updateAnyBlockInTree(b.innerBlocks, targetId, updater);
+      if (newInner !== b.innerBlocks) modified = true;
+    }
+    let newBranches = b.branches;
+    if (b.branches && b.branches.length > 0) {
+      newBranches = b.branches.map((br) => {
+        if (br.innerBlocks && br.innerBlocks.length > 0) {
+          const updatedBrInner = updateAnyBlockInTree(br.innerBlocks, targetId, updater);
+          if (updatedBrInner !== br.innerBlocks) {
+            modified = true;
+            return { ...br, innerBlocks: updatedBrInner };
+          }
+        }
+        return br;
+      });
+    }
+    if (modified) {
+      return { ...b, argBlock: newArg, innerBlocks: newInner, branches: newBranches };
+    }
+    return b;
+  });
+}
+
+function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] {
+  const result: string[] = [];
+  const queue = [rootId];
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const currId = queue.shift()!;
+    if (visited.has(currId)) continue;
+    visited.add(currId);
+
+    const blk = findBlockInTree(blocks, currId);
+    if (!blk) continue;
+
+    if (blk.nextBlockId && !visited.has(blk.nextBlockId)) {
+      result.push(blk.nextBlockId);
+      queue.push(blk.nextBlockId);
+    }
+    if (blk.attachedMethodId && !visited.has(blk.attachedMethodId)) {
+      result.push(blk.attachedMethodId);
+      queue.push(blk.attachedMethodId);
+    }
+  }
+  return result;
+}
+
 // evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
 export default function PracticePage({ params }: PracticePageProps) {
@@ -1329,99 +1421,7 @@ export default function PracticePage({ params }: PracticePageProps) {
     setIsDraggingBlock(true);
   };
 
-  // Recursive block finder in tree
-  const findBlockInTree = (blocks: CanvasBlock[], targetId: string): CanvasBlock | null => {
-    for (const b of blocks) {
-      if (b.id === targetId) return b;
-      if (b.argBlock) {
-        const found = findBlockInTree([b.argBlock], targetId);
-        if (found) return found;
-      }
-      if (b.innerBlocks && b.innerBlocks.length > 0) {
-        const found = findBlockInTree(b.innerBlocks, targetId);
-        if (found) return found;
-      }
-      if (b.branches && b.branches.length > 0) {
-        for (const br of b.branches) {
-          if (br.innerBlocks && br.innerBlocks.length > 0) {
-            const found = findBlockInTree(br.innerBlocks, targetId);
-            if (found) return found;
-          }
-        }
-      }
-    }
-    return null;
-  };
 
-  // Recursive tree updater for nested blocks at any depth
-  const updateAnyBlockInTree = (
-    blocks: CanvasBlock[],
-    targetId: string,
-    updater: (blk: CanvasBlock) => CanvasBlock
-  ): CanvasBlock[] => {
-    return blocks.map((b) => {
-      if (b.id === targetId) {
-        return updater(b);
-      }
-      let modified = false;
-      let newArg = b.argBlock;
-      if (b.argBlock) {
-        const updatedArg = updateAnyBlockInTree([b.argBlock], targetId, updater);
-        if (updatedArg[0] !== b.argBlock) {
-          newArg = updatedArg[0];
-          modified = true;
-        }
-      }
-      let newInner = b.innerBlocks;
-      if (b.innerBlocks && b.innerBlocks.length > 0) {
-        newInner = updateAnyBlockInTree(b.innerBlocks, targetId, updater);
-        if (newInner !== b.innerBlocks) modified = true;
-      }
-      let newBranches = b.branches;
-      if (b.branches && b.branches.length > 0) {
-        newBranches = b.branches.map((br) => {
-          if (br.innerBlocks && br.innerBlocks.length > 0) {
-            const updatedBrInner = updateAnyBlockInTree(br.innerBlocks, targetId, updater);
-            if (updatedBrInner !== br.innerBlocks) {
-              modified = true;
-              return { ...br, innerBlocks: updatedBrInner };
-            }
-          }
-          return br;
-        });
-      }
-      if (modified) {
-        return { ...b, argBlock: newArg, innerBlocks: newInner, branches: newBranches };
-      }
-      return b;
-    });
-  };
-
-  // Helper: Traverse stack downwards via nextBlockId and horizontally via attachedMethodId
-  const getDescendantBlockIds = (rootId: string, blocks: CanvasBlock[]): string[] => {
-    const result: string[] = [];
-    const queue = [rootId];
-    const visited = new Set<string>();
-
-    while (queue.length > 0) {
-      const currId = queue.shift()!;
-      if (visited.has(currId)) continue;
-      visited.add(currId);
-
-      const blk = findBlockInTree(blocks, currId);
-      if (!blk) continue;
-
-      if (blk.nextBlockId && !visited.has(blk.nextBlockId)) {
-        result.push(blk.nextBlockId);
-        queue.push(blk.nextBlockId);
-      }
-      if (blk.attachedMethodId && !visited.has(blk.attachedMethodId)) {
-        result.push(blk.attachedMethodId);
-        queue.push(blk.attachedMethodId);
-      }
-    }
-    return result;
-  };
 
   // Bring entire connected stack on canvas to front layer with ordered zIndex (root > downstream)
   const bringStackToFront = (blockId: string, blocks: CanvasBlock[]): CanvasBlock[] => {

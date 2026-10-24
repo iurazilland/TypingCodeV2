@@ -293,6 +293,8 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
         val = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
       } else if (b.type === 'variable') {
         val = b.varName in scope ? scope[b.varName] : evalExpr(b.content || '0');
+      } else if (b.type === 'math') {
+        val = null;
       } else {
         val = evalExpr(b.content || '');
       }

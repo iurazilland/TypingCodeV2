@@ -1075,9 +1075,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               <option value="method" disabled>{noMethodNotice}</option>
             ) : (
               <>
-                {(!block.methodName || block.methodName === 'method') && (
-                  <option value="method">method</option>
-                )}
+                <option value="method" hidden disabled style={{ display: 'none' }}>method</option>
                 {filteredCategories.map((cat) => (
                   <optgroup key={cat.category} label={cat.category}>
                     {cat.methods.map((m) => (
@@ -1404,7 +1402,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 fontSize: '0.85rem',
               }}
             >
-              <option value="math">math</option>
+              <option value="math" hidden disabled style={{ display: 'none' }}>math</option>
               <option value="len">len</option>
               <option value="round">round</option>
               <option value="abs">abs</option>
