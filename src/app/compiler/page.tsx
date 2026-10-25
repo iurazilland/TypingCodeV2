@@ -145,6 +145,30 @@ done
 ls -la sample_*.txt
 cat sample_1.txt
 `,
+  vb: `' 🔷 Visual Basic (VB.NET & VBA 기초) Playground
+Imports System
+
+Module Program
+    Sub Main()
+        Console.WriteLine("=== Visual Basic 콘솔 플레이그라운드 ===")
+        
+        ' 1. 변수 선언 (Dim)
+        Dim title As String = "엑셀 VBA로 이어지는 비주얼 베이직"
+        Dim level As Integer = 1
+        Dim isReady As Boolean = True
+        
+        Console.WriteLine($"학습 과정: {title}")
+        Console.WriteLine($"시작 레벨: {level}, 준비 상태: {isReady}")
+        
+        ' 2. 반복문 (For...Next)
+        Console.WriteLine()
+        Console.WriteLine("[1부터 5까지 단계별 출력]")
+        For i As Integer = 1 To 5
+            Console.WriteLine($"  - Step {i}: 비주얼 베이직 코딩 실습")
+        Next
+    End Sub
+End Module
+`,
 };
 
 export default function CompilerPage() {
@@ -256,6 +280,7 @@ export default function CompilerPage() {
               { id: 'sql', label: '🗄️ SQL' },
               { id: 'web', label: '🌐 Web' },
               { id: 'linux', label: '🐧 Linux' },
+              { id: 'vb', label: '🔷 VB' },
             ] as const).map(({ id, label }) => (
               <button
                 key={id}
@@ -329,7 +354,7 @@ export default function CompilerPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Code2 size={16} color="#38bdf8" />
               <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
-                main.{selectedLang === 'python' ? 'py' : selectedLang === 'c' ? 'c' : 'html'}
+                main.{selectedLang === 'python' ? 'py' : selectedLang === 'c' ? 'c' : selectedLang === 'vb' ? 'vb' : selectedLang === 'linux' ? 'sh' : 'txt'}
               </span>
               <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
                 (자유롭게 편집 가능)

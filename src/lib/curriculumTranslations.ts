@@ -15,9 +15,13 @@ export const TRACK_NAME_EN_MAP: Record<string, string> = {
   csharp: 'C# & Unity',
   swift: 'Swift & iOS',
   linux: 'Linux CLI',
+  vb: 'Visual Basic (VB & VBA)',
 };
 
 export const CATEGORY_EN_MAP: Record<string, string> = {
+  '기초 문법': 'Basic Syntax',
+  '제어문 & 반복': 'Control Flow & Loops',
+  '프로시저 & 함수': 'Procedures & Functions',
   '베이직': 'Basics',
   '어드밴스': 'Advanced',
   '빅데이터': 'Big Data',
@@ -46,6 +50,20 @@ export const CATEGORY_EN_MAP: Record<string, string> = {
 };
 
 export const SKILLS_EN_MAP: Record<string, string> = {
+  // Visual Basic & VBA
+  '변수 선언 Dim & 자료형': 'Variable Declaration (Dim & Types)',
+  '표준 출력 Console.WriteLine': 'Standard Output (Console.WriteLine)',
+  '문자열 결합 & 산술 연산': 'String Concatenation & Arithmetic',
+  '상수 Const 정의': 'Constant Definition (Const)',
+  '조건 분기 If...Then...Else': 'Conditional Branching (If...Then...Else)',
+  '다중 조건 Select Case': 'Multi-branching (Select Case)',
+  '카운트 반복 For...Next': 'Count Iteration (For...Next)',
+  '조건 반복 Do While / Loop': 'Conditional Loops (Do While / Loop)',
+  '실행 프로시저 Sub': 'Execution Procedures (Sub)',
+  '값 반환 함수 Function': 'Return Value Functions (Function)',
+  '매개변수 전달 ByVal / ByRef': 'Parameter Passing (ByVal / ByRef)',
+  '1차원 배열 Array 선언': 'One-dimensional Arrays (Array)',
+
   // Linux CLI
   '디렉토리 탐색 pwd/ls/cd': 'Directory Navigation (pwd/ls/cd)',
   '파일 생성/복사 touch/cp/mv': 'File Creation & Copy (touch/cp/mv)',

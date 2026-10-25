@@ -10,7 +10,8 @@ export type SupportedLanguage =
   | 'cpp' 
   | 'csharp' 
   | 'swift'
-  | 'linux';
+  | 'linux'
+  | 'vb';
 
 export interface CodeStep {
   step: number;
