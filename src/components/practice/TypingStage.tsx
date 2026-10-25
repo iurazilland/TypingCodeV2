@@ -404,7 +404,7 @@ export default function TypingStage({
       <div
         style={{
           flex: '0 0 auto',
-          padding: '6px 14px 10px',
+          padding: '8px 20px 14px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -412,7 +412,7 @@ export default function TypingStage({
           borderTop: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
-        <div style={{ width: '100%', maxWidth: '780px' }}>
+        <div style={{ width: '100%', maxWidth: 'clamp(720px, 68vw, 980px)' }}>
           <VirtualKeyboard nextChar={nextChar} />
         </div>
       </div>

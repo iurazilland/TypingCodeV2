@@ -70,21 +70,21 @@ export default function VirtualKeyboard({ nextChar }: VirtualKeyboardProps) {
     <div
       style={{
         width: '100%',
-        padding: '8px 10px',
+        padding: 'clamp(8px, 1.2vh, 12px) clamp(10px, 1.2vw, 16px)',
         background: 'rgba(15, 23, 42, 0.75)',
         border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '12px',
+        borderRadius: '14px',
         backdropFilter: 'blur(8px)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '4px',
+        gap: 'clamp(4px, 0.5vh, 6px)',
         userSelect: 'none',
         boxSizing: 'border-box',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(4px, 0.5vh, 6px)', width: '100%' }}>
         {KEYBOARD_ROWS.map((row, rIdx) => (
-          <div key={rIdx} style={{ display: 'flex', gap: '4px', width: '100%' }}>
+          <div key={rIdx} style={{ display: 'flex', gap: 'clamp(4px, 0.4vw, 6px)', width: '100%' }}>
             {row.map((item, kIdx) => {
               if (item.isSpacer) {
                 return (
@@ -114,23 +114,23 @@ export default function VirtualKeyboard({ nextChar }: VirtualKeyboardProps) {
                   style={{
                     flex: item.flex || 1,
                     minWidth: 0,
-                    height: 'clamp(28px, 3.4vh, 36px)',
+                    height: 'clamp(32px, 4.4vh, 44px)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: '6px',
-                    fontSize: 'clamp(0.70rem, 0.9vw, 0.82rem)',
+                    borderRadius: '7px',
+                    fontSize: 'clamp(0.74rem, 1vw, 0.90rem)',
                     fontFamily: 'var(--font-mono)',
-                    fontWeight: isMatch ? 800 : 500,
+                    fontWeight: isMatch ? 800 : 600,
                     background: isMatch
                       ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
                       : 'rgba(30, 41, 59, 0.65)',
                     color: isMatch ? '#ffffff' : '#94a3b8',
                     border: isMatch
                       ? '1px solid #34d399'
-                      : '1px solid rgba(255, 255, 255, 0.05)',
+                      : '1px solid rgba(255, 255, 255, 0.06)',
                     boxShadow: isMatch
-                      ? '0 0 16px rgba(16, 185, 129, 0.65)'
+                      ? '0 0 18px rgba(16, 185, 129, 0.7)'
                       : 'none',
                     transform: isMatch ? 'scale(1.03)' : 'scale(1)',
                     transition: 'all 0.12s ease',
