@@ -203,6 +203,7 @@ export default function LanguagesPage() {
           {(() => {
             const isSelected = selectedTrackId === 'all';
             const isHovered = hoveredTrackId === 'all';
+            const isExpanded = isSelected || isHovered;
             return (
               <button
                 onClick={() => setSelectedTrackId('all')}
@@ -210,7 +211,7 @@ export default function LanguagesPage() {
                 onMouseLeave={() => setHoveredTrackId(null)}
                 style={{
                   height: '52px',
-                  padding: isHovered ? '0 16px 0 10px' : '0 10px',
+                  padding: isExpanded ? '0 16px 0 10px' : '0 10px',
                   borderRadius: '16px',
                   flexShrink: 0,
                   background: isSelected 
@@ -228,15 +229,15 @@ export default function LanguagesPage() {
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: isHovered ? '8px' : '0px',
+                  gap: isExpanded ? '8px' : '0px',
                   cursor: 'pointer',
                   overflow: 'hidden',
                 }}
               >
                 <LanguageIcon language="all" size={32} />
                 <div style={{
-                  maxWidth: isHovered ? '100px' : '0px',
-                  opacity: isHovered ? 1 : 0,
+                  maxWidth: isExpanded ? '100px' : '0px',
+                  opacity: isExpanded ? 1 : 0,
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -263,19 +264,49 @@ export default function LanguagesPage() {
             );
           })()}
 
-          {/* Each Language Track Button: Expands smoothly on hover, pushing adjacent items right */}
+          {/* Each Language Track Button: Selected stays expanded, click again deselects to 'all' */}
           {CURRICULUM_TRACKS.map((track) => {
             const isSelected = selectedTrackId === track.id;
             const isHovered = hoveredTrackId === track.id;
+            const isExpanded = isSelected || isHovered;
+
+            const pillLabel = track.id === 'vb'
+              ? 'Visual Basic'
+              : track.id === 'linux'
+              ? 'Linux'
+              : track.id === 'csharp'
+              ? 'C#'
+              : track.id === 'swift'
+              ? 'Swift'
+              : track.id === 'javascript'
+              ? 'JavaScript'
+              : track.id === 'c'
+              ? (isEn ? 'C' : 'C언어')
+              : track.id === 'cpp'
+              ? 'C++'
+              : track.id === 'python'
+              ? 'Python'
+              : track.id === 'java'
+              ? 'Java'
+              : track.id === 'sql'
+              ? 'SQL'
+              : track.id === 'go'
+              ? 'Go'
+              : track.id === 'rust'
+              ? 'Rust'
+              : track.id === 'web'
+              ? 'Web'
+              : (isEn ? getTrackName(track, true) : track.name.split(' ')[0]);
+
             return (
               <button
                 key={track.id}
-                onClick={() => setSelectedTrackId(track.id)}
+                onClick={() => setSelectedTrackId(selectedTrackId === track.id ? 'all' : track.id)}
                 onMouseEnter={() => setHoveredTrackId(track.id)}
                 onMouseLeave={() => setHoveredTrackId(null)}
                 style={{
                   height: '52px',
-                  padding: isHovered ? '0 16px 0 11px' : '0 11px',
+                  padding: isExpanded ? '0 16px 0 11px' : '0 11px',
                   borderRadius: '16px',
                   flexShrink: 0,
                   background: isSelected 
@@ -293,15 +324,15 @@ export default function LanguagesPage() {
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: isHovered ? '8px' : '0px',
+                  gap: isExpanded ? '8px' : '0px',
                   cursor: 'pointer',
                   overflow: 'hidden',
                 }}
               >
                 <LanguageIcon language={track.id} size={30} />
                 <div style={{
-                  maxWidth: isHovered ? '130px' : '0px',
-                  opacity: isHovered ? 1 : 0,
+                  maxWidth: isExpanded ? '150px' : '0px',
+                  opacity: isExpanded ? 1 : 0,
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -311,7 +342,7 @@ export default function LanguagesPage() {
                   pointerEvents: 'none',
                 }}>
                   <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
-                    {isEn ? getTrackName(track, true) : track.name.split(' ')[0]}
+                    {pillLabel}
                   </span>
                   <span style={{
                     fontSize: '0.72rem',
