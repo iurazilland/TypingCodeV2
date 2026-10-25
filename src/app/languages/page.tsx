@@ -129,9 +129,10 @@ export default function LanguagesPage() {
         <p style={{ 
           color: '#94a3b8', 
           fontSize: 'clamp(1rem, 2vw, 1.15rem)', 
-          maxWidth: '680px', 
+          maxWidth: '820px', 
           margin: '0 auto 24px',
-          lineHeight: 1.6
+          lineHeight: 1.6,
+          wordBreak: 'keep-all',
         }}>
           {isEn ? (
             <>
