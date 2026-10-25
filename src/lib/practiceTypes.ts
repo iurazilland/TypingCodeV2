@@ -58,6 +58,7 @@ export interface PracticeRound {
   title_ko: string;
   title_en: string;
   totalQuestions: number;
+  unlockedBlocks?: string[]; // 블록 도구함(팔레트)에 노출할 블록 식별자 목록 (예: ['print', 'for_range'])
   questions: PracticeQuestion[];
 }
 

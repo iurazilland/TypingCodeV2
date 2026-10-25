@@ -18,6 +18,7 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
   title_ko: '2레벨: 쉼표(,)와 여러 수식의 동시 출력',
   title_en: 'Level 2: Commas & Multiple Expressions',
   totalQuestions: 10,
+  unlockedBlocks: ['print'],
   questions: [
     // Step 1: print(10, 20)
     {

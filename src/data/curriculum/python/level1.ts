@@ -17,6 +17,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
   title_ko: '1레벨: print() 함수와 숫자 출력',
   title_en: 'Level 1: print() & Numbers',
   totalQuestions: 10,
+  unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
     // [블록 모드] 1~5단계: 블록 조립으로 개념 잡기
