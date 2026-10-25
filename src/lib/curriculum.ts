@@ -62,7 +62,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '표준 입출력 print/input, 기본 연산, 조건문 if-else, 반복문 for/while 등 프로그래밍의 뼈대를 손끝으로 타자 치며 완성합니다.',
         description_en: 'Master foundational syntax, I/O, operators, conditionals, and loops through interactive typing.',
         skills: ['print/input 표준 입출력', '기본 연산자 & 변수', 'if/elif/else 분기', 'for/while 반복문'],
-        practiceUrl: '/practice/python_basic/1',
+        practiceUrl: '/practice/python_basic',
         isPopular: true,
       },
       {
@@ -77,7 +77,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '클래스와 객체, 상속, 데코레이터, 제너레이터, 람다 표현식, 예외 처리(try-except) 등 실무급 파이썬 고급 패턴을 체득합니다.',
         description_en: 'Delve into classes, inheritance, decorators, generators, lambdas, and exception handling.',
         skills: ['Class & 상속 객체지향', '람다식 & 리스트 컴프리헨션', '데코레이터 & 제너레이터', 'try-except 예외처리'],
-        practiceUrl: '/practice/python/1',
+        practiceUrl: '/practice/python',
       },
       {
         id: 'py-bigdata',
@@ -134,7 +134,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'main 진입점 함수, 정수형/실수형 데이터 타입, 서식 지정자 printf/scanf, 분기문과 반복문으로 C언어의 탄탄한 기본기를 세웁니다.',
         description_en: 'Build strong fundamentals with main function, data types, format specifiers, and control logic.',
         skills: ['main 함수 & 표준 라이브러리', '정밀 입출력 printf/scanf', '기본 연산 & 형변환', '반복 제어 for/while'],
-        practiceUrl: '/practice/c/1',
+        practiceUrl: '/practice/c',
         isPopular: true,
       },
       {
@@ -163,7 +163,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'C언어의 꽃이자 핵심! 메모리 주소 체계, 단일/이중 포인터, 구조체(struct), 힙 메모리 malloc/free를 완벽히 정복합니다.',
         description_en: 'Conquer the crown jewel of C: memory address systems, pointers, structs, and dynamic memory allocation.',
         skills: ['메모리 주소 & 포인터 연산', '동적 메모리 malloc/free', '구조체(struct) 설계', '함수 포인터 & 콜백'],
-        practiceUrl: '/practice/c/1',
+        practiceUrl: '/practice/c',
       },
       {
         id: 'c-datastruct',
@@ -205,7 +205,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '웹 페이지의 표준 규격! 시맨틱 태그(header, nav, main, article), 사용자 폼(form/input), 표(table), 멀티미디어 태그를 다룹니다.',
         description_en: 'Learn web standards: semantic tags, accessible forms, inputs, tables, and multimedia embeds.',
         skills: ['시맨틱 구조 태그(header, section)', '사용자 입력 Form & Input', '표(Table) & 리스트 마크업', '웹 표준 & 접근성 원칙'],
-        practiceUrl: '/practice/web/1',
+        practiceUrl: '/practice/web',
         isPopular: true,
       },
       {
@@ -220,7 +220,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '웹에 생명을 불어넣는 디자인! Flexbox 1차원 정렬, CSS Grid 2차원 바둑판 레이아웃, 트랜지션 및 반응형 미디어쿼리를 마스터합니다.',
         description_en: 'Master Flexbox alignment, CSS Grid layouts, interactive keyframe animations, and responsive media queries.',
         skills: ['Flexbox 주축/교차축 정렬', 'CSS Grid 2차원 레이아웃', '트랜지션 & 키프레임 애니메이션', '모바일 반응형 미디어쿼리'],
-        practiceUrl: '/practice/web/1',
+        practiceUrl: '/practice/web',
         isPopular: true,
       },
       {
@@ -235,7 +235,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '스마트폰, 태블릿, 데스크톱 어디서나 완벽한 반응형 뷰포트 구성과 부드러운 인터랙티브 애니메이션 효과를 구현합니다.',
         description_en: 'Design flexible layouts for mobile, tablet, and desktop with smooth UI motion.',
         skills: ['모바일 우선(Mobile-First) 디자인', 'CSS 변수(Custom Properties)', '다크모드 지원 테마 시스템', 'SVG 그래픽 & 키프레임 이펙트'],
-        practiceUrl: '/practice/web/1',
+        practiceUrl: '/practice/web',
       },
     ],
   },

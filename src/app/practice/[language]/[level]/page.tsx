@@ -4753,7 +4753,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         {/* Left: Exit & Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Link
-            href="/languages"
+            href={`/practice/${rawLang}`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
