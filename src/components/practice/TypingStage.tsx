@@ -17,23 +17,38 @@ interface TypingStageProps {
 
 // ============================================================================
 // Lightweight Python Syntax Highlighter (VSCode Dark+ Theme)
-// Zero external dependencies, O(1) character-level color lookup
 // ============================================================================
-const SYNTAX_COLORS = {
-  keyword: '#c084fc',     // Purple: def, return, if, for, while, in, True, False, etc.
-  builtin: '#facc15',     // Yellow: print, range, len, int, str, sum, etc.
-  string: '#fb923c',      // Orange: "hello", 'world'
-  number: '#4ade80',      // Mint Green: 123, 3.14
-  comment: '#64748b',     // Slate Gray: # comment
-  operator: '#38bdf8',    // Sky Blue: +, -, *, /, =, :, etc.
-  identifier: '#93c5fd',  // Light Blue: variable names
-  default: '#f8fafc',     // Default White
+// Standard VS Code Dark+ Python Syntax Color Palette (Global Developer Standard)
+// ============================================================================
+export const VSCODE_DARK_PLUS = {
+  keyword: '#c586c0',     // Soft Purple: def, return, if, elif, else, for, while, in, etc.
+  constant: '#569cd6',    // Control Blue: True, False, None
+  builtin: '#dcdcaa',     // Soft Yellow: print, range, len, int, str, sum, input, etc.
+  string: '#ce9178',      // Warm Terracotta/Coral: string literals & inner content
+  number: '#b5cea8',      // Sage Mint Green: numbers (10, 3.14)
+  comment: '#6a9955',     // Python Green: # comments
+  operator: '#d4d4d4',    // Light Gray: operators (+, -, *, /, =, :, etc.)
+  bracket: '#ffd700',     // VS Code Gold Bracket: (), [], {}
+  identifier: '#9cdcfe',  // Light Blue: variable names & parameters
+  default: '#f8fafc',     // Crisp White: default text & incomplete typing tokens
+  error: '#ef4444',       // Vivid Red: mismatched/error characters
 };
+
+export interface PythonToken {
+  start: number;
+  end: number;
+  type: 'keyword' | 'constant' | 'builtin' | 'string' | 'number' | 'comment' | 'operator' | 'bracket' | 'identifier' | 'default';
+  text: string;
+}
 
 const PYTHON_KEYWORDS = new Set([
   'def', 'return', 'if', 'elif', 'else', 'for', 'while', 'in', 'is', 'not', 'and', 'or',
-  'True', 'False', 'None', 'import', 'from', 'as', 'class', 'try', 'except', 'finally',
-  'raise', 'break', 'continue', 'pass', 'lambda', 'yield', 'with', 'global', 'assert'
+  'import', 'from', 'as', 'class', 'try', 'except', 'finally', 'raise', 'break', 'continue',
+  'pass', 'lambda', 'yield', 'with', 'global', 'assert'
+]);
+
+const PYTHON_CONSTANTS = new Set([
+  'True', 'False', 'None'
 ]);
 
 const PYTHON_BUILTINS = new Set([
@@ -42,22 +57,63 @@ const PYTHON_BUILTINS = new Set([
   'sorted', 'reversed', 'format', 'append', 'pop', 'insert', 'remove'
 ]);
 
-function getPythonLineCharColors(line: string): string[] {
-  const colors: string[] = new Array(line.length).fill(SYNTAX_COLORS.default);
+/**
+ * Tokenizes a single line of Python code into discrete tokens with exact start/end indices.
+ * Strings (like "print" inside print("print")) are parsed as continuous string literals,
+ * ensuring inner words are not mistakenly highlighted as functions or keywords.
+ */
+function tokenizePythonLine(line: string): PythonToken[] {
+  const tokens: PythonToken[] = [];
   let i = 0;
 
   while (i < line.length) {
     const ch = line[i];
 
-    // Comment: # to end of line
+    // 1. Skip whitespace
+    if (/\s/.test(ch)) {
+      i++;
+      continue;
+    }
+
+    // 2. Comments: # to end of line
     if (ch === '#') {
-      for (let j = i; j < line.length; j++) {
-        colors[j] = SYNTAX_COLORS.comment;
-      }
+      tokens.push({
+        start: i,
+        end: line.length,
+        type: 'comment',
+        text: line.slice(i),
+      });
       break;
     }
 
-    // Strings: single or double quotes
+    // 3. Triple Quotes: """ or '''
+    if (
+      (ch === '"' && line.slice(i, i + 3) === '"""') ||
+      (ch === "'" && line.slice(i, i + 3) === "'''")
+    ) {
+      const delimiter = line.slice(i, i + 3);
+      const start = i;
+      i += 3;
+      while (i < line.length && line.slice(i, i + 3) !== delimiter) {
+        if (line[i] === '\\' && i + 1 < line.length) {
+          i += 2;
+        } else {
+          i++;
+        }
+      }
+      if (i < line.length && line.slice(i, i + 3) === delimiter) {
+        i += 3;
+      }
+      tokens.push({
+        start,
+        end: i,
+        type: 'string',
+        text: line.slice(start, i),
+      });
+      continue;
+    }
+
+    // 4. Strings: "..." or '...'
     if (ch === '"' || ch === "'") {
       const quote = ch;
       const start = i;
@@ -72,25 +128,31 @@ function getPythonLineCharColors(line: string): string[] {
       if (i < line.length && line[i] === quote) {
         i++;
       }
-      for (let j = start; j < i; j++) {
-        colors[j] = SYNTAX_COLORS.string;
-      }
+      tokens.push({
+        start,
+        end: i,
+        type: 'string',
+        text: line.slice(start, i),
+      });
       continue;
     }
 
-    // Numbers
+    // 5. Numbers
     if (/\d/.test(ch)) {
       const start = i;
       while (i < line.length && /[\d.]/.test(line[i])) {
         i++;
       }
-      for (let j = start; j < i; j++) {
-        colors[j] = SYNTAX_COLORS.number;
-      }
+      tokens.push({
+        start,
+        end: i,
+        type: 'number',
+        text: line.slice(start, i),
+      });
       continue;
     }
 
-    // Identifiers, keywords, builtins
+    // 6. Words: Keywords, Builtins, Constants, Identifiers
     if (/[a-zA-Z_]/.test(ch)) {
       const start = i;
       while (i < line.length && /[a-zA-Z0-9_]/.test(line[i])) {
@@ -98,37 +160,67 @@ function getPythonLineCharColors(line: string): string[] {
       }
       const word = line.slice(start, i);
 
-      // f-string prefix check (e.g. f"...")
+      // Check for f-string prefix (e.g. f"...")
       if (word === 'f' && i < line.length && (line[i] === '"' || line[i] === "'")) {
-        colors[start] = SYNTAX_COLORS.keyword;
+        tokens.push({
+          start,
+          end: start + 1,
+          type: 'keyword',
+          text: 'f',
+        });
         continue;
       }
 
-      let color = SYNTAX_COLORS.identifier;
+      let type: PythonToken['type'] = 'identifier';
       if (PYTHON_KEYWORDS.has(word)) {
-        color = SYNTAX_COLORS.keyword;
+        type = 'keyword';
+      } else if (PYTHON_CONSTANTS.has(word)) {
+        type = 'constant';
       } else if (PYTHON_BUILTINS.has(word)) {
-        color = SYNTAX_COLORS.builtin;
+        type = 'builtin';
       }
 
-      for (let j = start; j < i; j++) {
-        colors[j] = color;
-      }
+      tokens.push({
+        start,
+        end: i,
+        type,
+        text: word,
+      });
       continue;
     }
 
-    // Operators and punctuation
-    if (/[:=+\-*/%<>&|^~!,()[\]{}]/.test(ch)) {
-      colors[i] = SYNTAX_COLORS.operator;
+    // 7. Brackets
+    if (/[()[\]{}]/.test(ch)) {
+      tokens.push({
+        start: i,
+        end: i + 1,
+        type: 'bracket',
+        text: ch,
+      });
       i++;
       continue;
     }
 
-    // Default whitespace or punctuation
+    // 8. Operators and punctuation
+    if (/[:=+\-*/%<>&|^~!,.]/.test(ch)) {
+      const start = i;
+      while (i < line.length && /[:=+\-*/%<>&|^~!,.]/.test(line[i])) {
+        i++;
+      }
+      tokens.push({
+        start,
+        end: i,
+        type: 'operator',
+        text: line.slice(start, i),
+      });
+      continue;
+    }
+
+    // Fallback
     i++;
   }
 
-  return colors;
+  return tokens;
 }
 
 export default function TypingStage({
@@ -209,9 +301,9 @@ export default function TypingStage({
   const maxLineCount = Math.max(targetLines.length, userLines.length);
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
 
-  // Precompute Python syntax highlighting colors per character for target lines
-  const targetLinesColors = useMemo(() => {
-    return targetLines.map((line) => getPythonLineCharColors(line));
+  // Precompute tokens for each line of the target code
+  const targetLinesTokens = useMemo(() => {
+    return targetLines.map((line) => tokenizePythonLine(line));
   }, [targetLines]);
 
   const activeLineRef = useRef<HTMLDivElement>(null);
@@ -597,106 +689,118 @@ export default function TypingStage({
                       덮어쓰인 1겹 (상단 레이어): 사용자 실시간 입력 오버레이
                       - 바닥 레이어 바로 위에 정확한 폰트와 위치로 겹쳐서 렌더링
                       ========================================================== */}
-                  {userLineText !== null && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: '20px',
-                        bottom: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'pre',
-                        fontFamily: 'inherit',
-                        fontSize: 'inherit',
-                        lineHeight: 'inherit',
-                        letterSpacing: 'inherit',
-                        userSelect: 'none',
-                      }}
-                    >
-                      {/* 입력된 각 문자별 오버레이 및 마우스 클릭 커서 이동 지원 */}
-                      {userLineText.split('').map((userChar, colIdx) => {
-                        const hasTargetChar = colIdx < targetLineText.length;
-                        const targetChar = targetLineText[colIdx];
-                        const isMatch = hasTargetChar && userChar === targetChar;
-                        const isCursorHere = isCursorOnThisLine && cursorCol === colIdx;
-                        const syntaxColor = targetLinesColors[lineIdx]?.[colIdx] || '#93c5fd';
+                  {userLineText !== null && (() => {
+                    const lineTokens = targetLinesTokens[lineIdx] || [];
+                    const completedTokens = lineTokens.filter(
+                      (t) => userLineText.length >= t.end && userLineText.slice(t.start, t.end) === t.text
+                    );
 
-                        return (
-                          <React.Fragment key={colIdx}>
-                            {/* 커서 바 (Blinking Caret): 현재 컬럼 위치에 표시 */}
-                            {isCursorHere && (
+                    return (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: '20px',
+                          bottom: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                          whiteSpace: 'pre',
+                          fontFamily: 'inherit',
+                          fontSize: 'inherit',
+                          lineHeight: 'inherit',
+                          letterSpacing: 'inherit',
+                          userSelect: 'none',
+                        }}
+                      >
+                        {/* 입력된 각 문자별 오버레이 및 마우스 클릭 커서 이동 지원 */}
+                        {userLineText.split('').map((userChar, colIdx) => {
+                          const hasTargetChar = colIdx < targetLineText.length;
+                          const targetChar = targetLineText[colIdx];
+                          const isMatch = hasTargetChar && userChar === targetChar;
+                          const isCursorHere = isCursorOnThisLine && cursorCol === colIdx;
+
+                          // Token syntax color: crisp white while typing; switches to VS Code Dark+ color once the token is fully completed
+                          const token = completedTokens.find((t) => colIdx >= t.start && colIdx < t.end);
+                          const syntaxColor = token
+                            ? (VSCODE_DARK_PLUS[token.type] || VSCODE_DARK_PLUS.default)
+                            : VSCODE_DARK_PLUS.default;
+
+                          return (
+                            <React.Fragment key={colIdx}>
+                              {/* 커서 바 (Blinking Caret): 현재 컬럼 위치에 표시 */}
+                              {isCursorHere && (
+                                <span
+                                  style={{
+                                    display: 'inline-block',
+                                    width: '2.5px',
+                                    height: '1.25em',
+                                    background: '#38bdf8',
+                                    boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
+                                    animation: 'pulse 1s infinite',
+                                    verticalAlign: 'middle',
+                                    margin: '0 -1.25px',
+                                    position: 'relative',
+                                    zIndex: 10,
+                                  }}
+                                />
+                              )}
                               <span
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCursorIndex(getIndexFromLineAndCol(lineIdx, colIdx));
+                                  hiddenInputRef.current?.focus();
+                                }}
                                 style={{
                                   display: 'inline-block',
-                                  width: '2.5px',
-                                  height: '1.25em',
-                                  background: '#38bdf8',
-                                  boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
-                                  animation: 'pulse 1s infinite',
-                                  verticalAlign: 'middle',
-                                  margin: '0 -1.25px',
-                                  position: 'relative',
-                                  zIndex: 10,
+                                  color: isMatch ? syntaxColor : VSCODE_DARK_PLUS.error,
+                                  background: 'transparent',
+                                  fontWeight: isMatch && token && (token.type === 'keyword' || token.type === 'builtin') ? 700 : 500,
+                                  borderRadius: '2px',
+                                  boxShadow: 'none',
+                                  cursor: 'text',
                                 }}
-                              />
-                            )}
-                            <span
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setCursorIndex(getIndexFromLineAndCol(lineIdx, colIdx));
-                                hiddenInputRef.current?.focus();
-                              }}
-                              style={{
-                                display: 'inline-block',
-                                color: isMatch ? syntaxColor : '#ef4444',
-                                background: isMatch ? 'transparent' : 'rgba(239, 68, 68, 0.22)',
-                                fontWeight: isMatch ? 700 : 800,
-                                borderRadius: '2px',
-                                boxShadow: !isMatch ? '0 0 6px rgba(239, 68, 68, 0.6)' : 'none',
-                                cursor: 'text',
-                              }}
-                            >
-                              {userChar}
-                            </span>
-                          </React.Fragment>
-                        );
-                      })}
+                              >
+                                {userChar}
+                              </span>
+                            </React.Fragment>
+                          );
+                        })}
 
-                      {/* 줄 끝 커서 (Blinking Caret) */}
-                      {isCursorOnThisLine && cursorCol >= userLineText.length && (
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            width: '2.5px',
-                            height: '1.25em',
-                            background: '#38bdf8',
-                            boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
-                            animation: 'pulse 1s infinite',
-                            verticalAlign: 'middle',
-                            marginLeft: userLineText.length === 0 ? '0px' : '-1px',
-                            position: 'relative',
-                            zIndex: 10,
-                          }}
-                        />
-                      )}
+                        {/* 줄 끝 커서 (Blinking Caret) */}
+                        {isCursorOnThisLine && cursorCol >= userLineText.length && (
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              width: '2.5px',
+                              height: '1.25em',
+                              background: '#38bdf8',
+                              boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
+                              animation: 'pulse 1s infinite',
+                              verticalAlign: 'middle',
+                              marginLeft: userLineText.length === 0 ? '0px' : '-1px',
+                              position: 'relative',
+                              zIndex: 10,
+                            }}
+                          />
+                        )}
 
-                      {/* 멀티라인 줄 끝 도달 시 줄바꿈(↵) 가이드 아이콘 */}
-                      {isCursorOnThisLine && lineIdx < targetLines.length - 1 && userLineText.length >= targetLineText.length && (
-                        <span
-                          style={{
-                            color: 'rgba(56, 189, 248, 0.75)',
-                            fontSize: '0.85em',
-                            marginLeft: '4px',
-                            userSelect: 'none',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ↵
-                        </span>
-                      )}
-                    </div>
-                  )}
+                        {/* 멀티라인 줄 끝 도달 시 줄바꿈(↵) 가이드 아이콘 */}
+                        {isCursorOnThisLine && lineIdx < targetLines.length - 1 && userLineText.length >= targetLineText.length && (
+                          <span
+                            style={{
+                              color: 'rgba(56, 189, 248, 0.75)',
+                              fontSize: '0.85em',
+                              marginLeft: '4px',
+                              userSelect: 'none',
+                              fontWeight: 700,
+                            }}
+                          >
+                            ↵
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             );
