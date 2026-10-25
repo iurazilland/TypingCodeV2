@@ -300,6 +300,7 @@ export default function TypingStage({
 
   // Split guideCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
   const targetLines = useMemo(() => guideCode.split('\n'), [guideCode]);
+  const targetCodeLines = useMemo(() => targetCode.split('\n'), [targetCode]);
   const userLines = useMemo(() => typedCode.split('\n'), [typedCode]);
   const maxLineCount = Math.max(targetLines.length, userLines.length);
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
@@ -810,8 +811,8 @@ export default function TypingStage({
                               }
                             }
                           } else if (question.kind === 'fix_bug') {
-                            // 오타 수정: 사용자가 올바른 정답 코드(targetCode)를 입력하도록 안내
-                            const correctChar = (targetLines[lineIdx] || '')[colIdx];
+                            // 오타 수정: 정답 코드(targetCode)와 비교하여 올바른 수정 문자는 정상(흰색) 표시
+                            const correctChar = (targetCodeLines[lineIdx] || '')[colIdx];
                             if (correctChar && userChar !== correctChar) {
                               isCharError = true;
                             }
@@ -851,7 +852,7 @@ export default function TypingStage({
                                 style={{
                                   display: 'inline-block',
                                   color: isCharError ? VSCODE_DARK_PLUS.error : syntaxColor,
-                                  background: 'transparent',
+                                  background: isCharError ? 'rgba(239, 68, 68, 0.2)' : '#090e1a',
                                   fontWeight: token && (token.type === 'keyword' || token.type === 'builtin') ? 700 : 500,
                                   borderRadius: '2px',
                                   boxShadow: 'none',
