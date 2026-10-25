@@ -166,7 +166,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
   };
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>
+    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '36px 24px 100px' }}>
       {/* Top Back Navigation Link (Left-aligned) */}
       <div style={{ marginBottom: '28px' }}>
         <Link
@@ -202,10 +202,10 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '20px',
+          gap: '24px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flex: 1, minWidth: 0 }}>
           <div
             style={{
               width: '70px',
@@ -223,7 +223,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
             <LanguageIcon language={matchedTrack.id} size={42} />
           </div>
 
-          <div>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: 'clamp(1.4rem, 2.3vw, 1.9rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
                 {isEn ? matchedModule.title_en : matchedModule.title_ko}
@@ -256,7 +256,13 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 {matchedModule.difficulty}
               </span>
             </div>
-            <p style={{ color: '#cbd5e1', fontSize: '0.94rem', maxWidth: '720px', lineHeight: 1.55, margin: 0 }}>
+            <p style={{
+              color: '#cbd5e1',
+              fontSize: '0.94rem',
+              lineHeight: 1.55,
+              margin: 0,
+              wordBreak: 'keep-all',
+            }}>
               {isEn ? matchedModule.description_en : matchedModule.description_ko}
             </p>
           </div>
@@ -272,6 +278,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
             padding: '14px 22px',
             borderRadius: '14px',
             border: '1px solid rgba(255, 255, 255, 0.08)',
+            flexShrink: 0,
           }}
         >
           <Trophy size={28} color="#f59e0b" />
