@@ -4,20 +4,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
-  Play, 
-  Sparkles, 
-  Trophy, 
-  ArrowRight,
-  CheckCircle2,
-  Lock,
-  Layers,
-  RotateCcw,
+  CheckCircle2, 
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
 import LanguageIcon from '@/components/LanguageIcon';
 import { getCategoryName } from '@/lib/curriculumTranslations';
-import { getCourseSections, LevelSection, LevelItem } from '@/lib/curriculumSections';
+import { getCourseSections, LevelSection } from '@/lib/curriculumSections';
 
 interface StageSelectPageProps {
   params: {
@@ -90,10 +83,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
   // User learning DB progress loaded from localStorage
   const [userProgress, setUserProgress] = useState<{
-    highestUnlockedLevel: number;
     clearedLevels: Set<number>;
   }>({
-    highestUnlockedLevel: 1,
     clearedLevels: new Set(),
   });
 
@@ -101,41 +92,22 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     if (typeof window === 'undefined') return;
     try {
       const cleared = new Set<number>();
-      let maxUnlocked = 1;
 
-      // 1. Direct saved checkpoint
-      const directUnlocked = parseInt(localStorage.getItem(`unlocked_level_${rawLang}`) || '1', 10);
-      maxUnlocked = Math.max(maxUnlocked, directUnlocked);
-
-      // 2. Scan per-level steps (each level has 10 steps; if >= 10, marked as cleared)
+      // Scan per-level steps (each level has 10 steps; if >= 10, marked as cleared)
       for (let lvl = 1; lvl <= 50; lvl++) {
         const stepVal = parseInt(localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`) || '0', 10);
         if (stepVal >= 10) {
           cleared.add(lvl);
-          maxUnlocked = Math.max(maxUnlocked, lvl + 1);
         }
       }
 
       setUserProgress({
-        highestUnlockedLevel: maxUnlocked,
         clearedLevels: cleared,
       });
     } catch (e) {
       console.error(e);
     }
   }, [rawLang]);
-
-  // Current active level to resume
-  const currentResumeLevel = useMemo(() => {
-    for (const sec of sections) {
-      for (const lvl of sec.levels) {
-        if (!userProgress.clearedLevels.has(lvl.levelNumber) && lvl.levelNumber <= userProgress.highestUnlockedLevel) {
-          return lvl.levelNumber;
-        }
-      }
-    }
-    return 1;
-  }, [sections, userProgress]);
 
   const clearedCount = userProgress.clearedLevels.size;
   const progressPercent = totalLevelsCount > 0 ? Math.min(100, Math.round((clearedCount / totalLevelsCount) * 100)) : 0;
@@ -164,7 +136,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         </Link>
       </div>
 
-      {/* Course Overview Banner with User Progress Summary & Resume Button */}
+      {/* Course Overview Banner with User Learning Progress Summary */}
       <div
         style={{
           padding: '24px 30px',
@@ -244,65 +216,45 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           </div>
         </div>
 
-        {/* Right: User Learning Progress & Quick Resume CTA */}
+        {/* Right: User Learning Progress (Progress bar only) */}
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
-            gap: '18px',
+            flexDirection: 'column',
+            justifyContent: 'center',
             background: 'rgba(11, 19, 41, 0.7)',
-            padding: '14px 22px',
+            padding: '16px 22px',
             borderRadius: '16px',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             flexShrink: 0,
+            minWidth: '220px',
           }}
         >
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '6px' }}>
-              <span style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600 }}>
-                {isEn ? 'CURRICULUM PROGRESS' : '학습 달성률'}
-              </span>
-              <span style={{ fontSize: '0.86rem', color: '#f8fafc', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
-                {clearedCount} / {totalLevelsCount} ({progressPercent}%)
-              </span>
-            </div>
-            {/* Progress Bar */}
-            <div style={{ width: '160px', height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-              <div
-                style={{
-                  width: `${progressPercent}%`,
-                  height: '100%',
-                  background: progressPercent === 100 ? '#10b981' : matchedTrack.color,
-                  borderRadius: '4px',
-                  transition: 'width 0.3s ease',
-                }}
-              />
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 600 }}>
+              {isEn ? 'CURRICULUM PROGRESS' : '학습 달성률'}
+            </span>
+            <span style={{ fontSize: '0.88rem', color: '#f8fafc', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
+              {clearedCount} / {totalLevelsCount} ({progressPercent}%)
+            </span>
           </div>
-
-          <Link
-            href={`/practice/${rawLang}/${currentResumeLevel}`}
-            className="tactile-btn tactile-btn-primary"
-            style={{
-              padding: '10px 18px',
-              fontSize: '0.86rem',
-              fontWeight: 800,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              textDecoration: 'none',
-              borderRadius: '12px',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <Play size={14} fill="currentColor" />
-            <span>{isEn ? `Resume Level ${currentResumeLevel}` : `${currentResumeLevel}레벨 이어하기`}</span>
-          </Link>
+          {/* Progress Bar */}
+          <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+            <div
+              style={{
+                width: `${progressPercent}%`,
+                height: '100%',
+                background: progressPercent === 100 ? '#10b981' : matchedTrack.color,
+                borderRadius: '4px',
+                transition: 'width 0.3s ease',
+              }}
+            />
+          </div>
         </div>
       </div>
 
       {/* Sections and Level Cards Grid */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '38px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
         {sections.map((section) => {
           const sectionClearedCount = section.levels.filter((l) => userProgress.clearedLevels.has(l.levelNumber)).length;
           const isSectionComplete = sectionClearedCount === section.levels.length && section.levels.length > 0;
@@ -357,7 +309,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 </div>
               </div>
 
-              {/* Level Cards Responsive Grid (3~4 columns, each card is 1 Level) */}
+              {/* Ultra-Simple Level Cards Grid: Only Level & Title */}
               <div
                 style={{
                   display: 'grid',
@@ -367,170 +319,84 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
               >
                 {section.levels.map((level) => {
                   const isCleared = userProgress.clearedLevels.has(level.levelNumber);
-                  const isUnlocked = level.levelNumber <= userProgress.highestUnlockedLevel;
-                  const isCurrent = !isCleared && isUnlocked;
-                  const isLocked = !isUnlocked;
                   const isHovered = hoveredLevelNum === level.levelNumber;
 
                   return (
                     <Link
                       key={level.levelNumber}
-                      href={isLocked ? '#' : `/practice/${rawLang}/${level.levelNumber}`}
-                      onClick={(e) => {
-                        if (isLocked) {
-                          e.preventDefault();
-                        }
-                      }}
+                      href={`/practice/${rawLang}/${level.levelNumber}`}
                       onMouseEnter={() => setHoveredLevelNum(level.levelNumber)}
                       onMouseLeave={() => setHoveredLevelNum(null)}
                       style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        minHeight: '142px',
-                        padding: '20px',
+                        justifyContent: 'center',
+                        minHeight: '108px',
+                        padding: '20px 24px',
                         borderRadius: '16px',
                         textDecoration: 'none',
-                        background: isLocked
-                          ? 'rgba(15, 23, 42, 0.4)'
-                          : isCurrent
-                          ? 'rgba(30, 41, 59, 0.95)'
+                        background: isCleared
+                          ? 'rgba(16, 185, 129, 0.05)'
                           : 'var(--bg-surface, #1e293b)',
-                        border: isLocked
-                          ? '1px solid rgba(255, 255, 255, 0.04)'
-                          : isHovered
+                        border: isHovered
                           ? `1.5px solid ${matchedTrack.color}`
-                          : isCurrent
-                          ? `1.5px solid ${matchedTrack.color}70`
+                          : isCleared
+                          ? '1px solid rgba(16, 185, 129, 0.35)'
                           : '1px solid rgba(255, 255, 255, 0.08)',
-                        boxShadow: isHovered && !isLocked
+                        boxShadow: isHovered
                           ? `0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px ${matchedTrack.color}35`
-                          : isCurrent
-                          ? `0 4px 16px ${matchedTrack.color}20`
+                          : isCleared
+                          ? '0 4px 14px rgba(16, 185, 129, 0.12)'
                           : '0 4px 12px rgba(0, 0, 0, 0.2)',
-                        transform: isHovered && !isLocked ? 'translateY(-4px)' : 'translateY(0)',
-                        cursor: isLocked ? 'not-allowed' : 'pointer',
-                        opacity: isLocked ? 0.45 : 1,
-                        transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transform: isHovered ? 'translateY(-3px)' : 'translateY(0)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                       }}
                     >
-                      {/* Top Row: Level Number + Status Badge */}
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.82rem',
-                              fontWeight: 800,
-                              color: isLocked ? '#64748b' : matchedTrack.color,
-                              letterSpacing: '0.04em',
-                            }}
-                          >
-                            LEVEL {level.levelNumber.toString().padStart(2, '0')}
-                          </span>
-
-                          {/* Status Badge */}
-                          {isCleared ? (
-                            <span
-                              style={{
-                                padding: '2px 8px',
-                                borderRadius: '6px',
-                                background: 'rgba(16, 185, 129, 0.16)',
-                                color: '#34d399',
-                                border: '1px solid rgba(16, 185, 129, 0.35)',
-                                fontSize: '0.72rem',
-                                fontWeight: 800,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                              }}
-                            >
-                              <CheckCircle2 size={12} />
-                              <span>{isEn ? 'Cleared' : '완료'}</span>
-                            </span>
-                          ) : isCurrent ? (
-                            <span
-                              style={{
-                                padding: '2px 8px',
-                                borderRadius: '6px',
-                                background: `${matchedTrack.color}22`,
-                                color: matchedTrack.color,
-                                border: `1px solid ${matchedTrack.color}50`,
-                                fontSize: '0.72rem',
-                                fontWeight: 800,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                              }}
-                            >
-                              <Play size={10} fill="currentColor" />
-                              <span>{isEn ? 'Current' : '도전 가능'}</span>
-                            </span>
-                          ) : (
-                            <span
-                              style={{
-                                padding: '2px 8px',
-                                borderRadius: '6px',
-                                background: 'rgba(255, 255, 255, 0.04)',
-                                color: '#64748b',
-                                border: '1px solid rgba(255, 255, 255, 0.08)',
-                                fontSize: '0.72rem',
-                                fontWeight: 700,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                              }}
-                            >
-                              <Lock size={11} />
-                              <span>{isEn ? 'Locked' : '잠김'}</span>
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Level Title */}
-                        <h3
+                      {/* Top Row: Level Number + Optional Clear Checkmark */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span
                           style={{
-                            fontSize: '1.02rem',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.82rem',
                             fontWeight: 800,
-                            color: isLocked ? '#94a3b8' : '#f8fafc',
-                            lineHeight: 1.4,
-                            margin: 0,
-                            wordBreak: 'keep-all',
+                            color: isCleared ? '#34d399' : matchedTrack.color,
+                            letterSpacing: '0.04em',
                           }}
                         >
-                          {isEn ? level.title_en : level.title_ko}
-                        </h3>
-                      </div>
-
-                      {/* Bottom Row: 10 Steps Notice + Subtle Arrow */}
-                      <div
-                        style={{
-                          marginTop: '16px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                          paddingTop: '10px',
-                        }}
-                      >
-                        <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
-                          {isEn ? '10 Stages inside' : '10개 실전 단계'}
+                          LEVEL {level.levelNumber.toString().padStart(2, '0')}
                         </span>
 
-                        {!isLocked && (
+                        {isCleared && (
                           <span
                             style={{
-                              color: isHovered ? matchedTrack.color : '#94a3b8',
-                              transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
-                              transition: 'all 0.15s ease',
                               display: 'inline-flex',
                               alignItems: 'center',
+                              gap: '4px',
+                              color: '#34d399',
+                              fontSize: '0.74rem',
+                              fontWeight: 800,
                             }}
                           >
-                            <ArrowRight size={14} />
+                            <CheckCircle2 size={13} />
+                            <span>{isEn ? 'Cleared' : '완료'}</span>
                           </span>
                         )}
                       </div>
+
+                      {/* Level Title Only */}
+                      <h3
+                        style={{
+                          fontSize: '1.05rem',
+                          fontWeight: 800,
+                          color: '#f8fafc',
+                          lineHeight: 1.4,
+                          margin: 0,
+                          wordBreak: 'keep-all',
+                        }}
+                      >
+                        {isEn ? level.title_en : level.title_ko}
+                      </h3>
                     </Link>
                   );
                 })}
