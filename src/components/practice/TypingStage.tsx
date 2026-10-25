@@ -29,8 +29,8 @@ export const VSCODE_DARK_PLUS = {
   comment: '#6a9955',     // Python Green: # comments
   operator: '#d4d4d4',    // Light Gray: operators (+, -, *, /, =, :, etc.)
   bracket: '#ffd700',     // VS Code Gold Bracket: (), [], {}
-  identifier: '#9cdcfe',  // Light Blue: variable names & parameters
-  default: '#f8fafc',     // Crisp White: default text & incomplete typing tokens
+  identifier: '#ffffff',  // Pure Crisp White: variable names & parameters
+  default: '#ffffff',     // Pure Crisp White: default text & typing characters
   error: '#ef4444',       // Vivid Red: mismatched/error characters
 };
 
