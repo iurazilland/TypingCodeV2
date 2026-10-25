@@ -35,8 +35,6 @@ export interface PracticeQuestion {
   step: number; // 1 ~ 10
   type?: 'block' | 'typing'; // 'block' for steps 1-5, 'typing' for steps 6-10
   kind?: ChallengeKind; // 'fill_blank' | 'fix_bug' | 'one_line' | 'standard'
-  title: string;
-  title_en?: string;
   prompt_ko: string;
   prompt_en?: string;
   hint_ko: string;

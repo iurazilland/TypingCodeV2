@@ -23,7 +23,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 1,
       step: 1,
-      title: '두 숫자 나란히 출력하기',
       prompt_ko: '쉼표(,)를 사용해 숫자 10과 20을 나란히 출력해보세요.',
       prompt_en: 'Print two numbers 10 and 20 separated by comma.',
       targetCode: 'print(10, 20)',
@@ -43,7 +42,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 2,
       step: 2,
-      title: '세 개 이상의 숫자 출력하기',
       prompt_ko: '쉼표로 연결하여 숫자 1, 2, 3을 한 번에 출력해보세요.',
       prompt_en: 'Print three numbers 1, 2, 3 in a single print call.',
       targetCode: 'print(1, 2, 3)',
@@ -65,7 +63,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 3,
       step: 3,
-      title: '숫자와 덧셈식 함께 출력하기',
       prompt_ko: '숫자 10과 덧셈식 10 + 5의 결과를 쉼표로 구분하여 출력해보세요.',
       prompt_en: 'Print number 10 and calculation 10 + 5 separated by comma.',
       targetCode: 'print(10, 10 + 5)',
@@ -87,7 +84,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 4,
       step: 4,
-      title: '숫자와 뺄셈식 함께 출력하기',
       prompt_ko: '숫자 100과 뺄셈식 100 - 25의 결과를 함께 출력해보세요.',
       prompt_en: 'Print 100 and 100 - 25 separated by comma.',
       targetCode: 'print(100, 100 - 25)',
@@ -109,7 +105,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 5,
       step: 5,
-      title: '덧셈식과 곱셈식 동시 출력',
       prompt_ko: '10 + 2와 20 * 2의 두 가지 연산 결과를 한 번에 출력해보세요.',
       prompt_en: 'Print two expressions 10 + 2 and 20 * 2.',
       targetCode: 'print(10 + 2, 20 * 2)',
@@ -133,7 +128,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 6,
       step: 6,
-      title: '나눗셈과 몫 비교 출력하기',
       prompt_ko: '20 / 4의 실수 나눗셈과 50 // 6의 정수 몫을 쉼표로 출력해보세요.',
       prompt_en: 'Print division 20 / 4 and integer division 50 // 6.',
       targetCode: 'print(20 / 4, 50 // 6)',
@@ -157,7 +151,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 7,
       step: 7,
-      title: '두 가지 나머지(%) 연산 비교',
       prompt_ko: '10 % 3과 20 % 7의 나머지 연산 결과를 한 줄에 출력해보세요.',
       prompt_en: 'Print remainders of 10 % 3 and 20 % 7.',
       targetCode: 'print(10 % 3, 20 % 7)',
@@ -181,7 +174,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 8,
       step: 8,
-      title: '세 가지 사칙연산 동시 출력',
       prompt_ko: '1 + 2, 3 * 4, 10 - 5 세 가지 사칙연산 식을 쉼표로 연결해 출력해보세요.',
       prompt_en: 'Print three operations: 1 + 2, 3 * 4, and 10 - 5.',
       targetCode: 'print(1 + 2, 3 * 4, 10 - 5)',
@@ -209,7 +201,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 9,
       step: 9,
-      title: '괄호가 들어간 두 수식 비교',
       prompt_ko: '(2 + 3) * 4와 100 / (2 + 3)의 계산 결과를 한 줄에 출력해보세요.',
       prompt_en: 'Print (2 + 3) * 4 and 100 / (2 + 3).',
       targetCode: 'print((2 + 3) * 4, 100 / (2 + 3))',
@@ -241,7 +232,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
     {
       id: 10,
       step: 10,
-      title: '2레벨 마스터: 다중 숫자 & 복합 연산 마스터',
       prompt_ko: '10, 20 + 30, 40 * 2, 100 - 10의 네 가지 숫자 및 연산식을 한 번에 출력해보세요.',
       prompt_en: 'Print 10, 20 + 30, 40 * 2, and 100 - 10 in one line.',
       targetCode: 'print(10, 20 + 30, 40 * 2, 100 - 10)',
