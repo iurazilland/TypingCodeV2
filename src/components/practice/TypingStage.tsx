@@ -466,103 +466,56 @@ export default function TypingStage({
     }
   };
 
-  // Helper: Renders the background guide line without taking extra space or shifting character columns
+  // Helper: Renders the background guide line, transforming contiguous § into sleek [] bracket boxes
   const renderGuideLine = (lineText: string) => {
     if (!lineText) return ' ';
 
-    // 1. If blankToken is present in this line, render an exact-width dashed underline slot (zero displacement)
-    if (question.blankToken && lineText.includes(question.blankToken)) {
-      const token = question.blankToken;
-      const tokenIdx = lineText.indexOf(token);
-      const before = lineText.slice(0, tokenIdx);
-      const after = lineText.slice(tokenIdx + token.length);
-
-      return (
-        <>
-          {before}
-          <span
-            style={{
-              display: 'inline-block',
-              borderBottom: '2px dashed #38bdf8',
-              background: 'rgba(56, 189, 248, 0.08)',
-              boxShadow: '0 0 6px rgba(56, 189, 248, 0.2)',
-              borderRadius: '2px',
-              color: 'transparent',
-              userSelect: 'none',
-              verticalAlign: 'baseline',
-            }}
-          >
-            {'\u00A0'.repeat(token.length)}
-          </span>
-          {after}
-        </>
-      );
-    }
-
-    // 2. If it is a fix_bug question with a known typo (e.g. pritn), highlight with red wavy underline
-    if (question.kind === 'fix_bug') {
-      const bugTokens = ['pritn', 'pirnt', 'prnt'];
-      for (const bug of bugTokens) {
-        if (lineText.includes(bug)) {
-          const bugIdx = lineText.indexOf(bug);
-          const before = lineText.slice(0, bugIdx);
-          const after = lineText.slice(bugIdx + bug.length);
-          return (
-            <>
-              {before}
-              <span
-                style={{
-                  display: 'inline-block',
-                  borderBottom: '2px wavy #f87171',
-                  color: '#f87171',
-                  background: 'rgba(239, 68, 68, 0.08)',
-                  borderRadius: '2px',
-                  userSelect: 'none',
-                  verticalAlign: 'baseline',
-                }}
-              >
-                {bug}
-              </span>
-              {after}
-            </>
-          );
-        }
-      }
-    }
-
-    // 3. Fallback: if line has legacy [   ] brackets, convert to exact 3-space dashed underline slot (no brackets, no "빈칸" text)
-    const blankRegex = /\[\s*(?:|\?|___|빈칸)\s*\]/g;
-    if (blankRegex.test(lineText)) {
-      blankRegex.lastIndex = 0;
+    // Match contiguous blank markers: §§...
+    const blankSectionRegex = /§+/g;
+    if (blankSectionRegex.test(lineText)) {
+      blankSectionRegex.lastIndex = 0;
       const parts: React.ReactNode[] = [];
       let lastIndex = 0;
       let match: RegExpExecArray | null;
-      while ((match = blankRegex.exec(lineText)) !== null) {
+
+      while ((match = blankSectionRegex.exec(lineText)) !== null) {
         if (match.index > lastIndex) {
           parts.push(lineText.slice(lastIndex, match.index));
         }
+        const blankLen = match[0].length;
         parts.push(
           <span
             key={match.index}
             style={{
-              display: 'inline-block',
-              borderBottom: '2px dashed #38bdf8',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '1.35em',
+              margin: '0 2px',
+              padding: '0 3px',
+              borderLeft: '2.5px solid #38bdf8', // [ bracket side
+              borderRight: '2.5px solid #38bdf8', // ] bracket side
+              borderTop: '1px dashed rgba(56, 189, 248, 0.45)',
+              borderBottom: '1px dashed rgba(56, 189, 248, 0.45)',
               background: 'rgba(56, 189, 248, 0.08)',
-              boxShadow: '0 0 6px rgba(56, 189, 248, 0.2)',
-              borderRadius: '2px',
-              color: 'transparent',
+              borderRadius: '3px',
+              verticalAlign: 'middle',
+              boxSizing: 'border-box',
               userSelect: 'none',
-              verticalAlign: 'baseline',
             }}
           >
-            {'\u00A0\u00A0\u00A0'}
+            <span style={{ opacity: 0, userSelect: 'none' }}>
+              {'\u00A0'.repeat(blankLen)}
+            </span>
           </span>
         );
         lastIndex = match.index + match[0].length;
       }
+
       if (lastIndex < lineText.length) {
         parts.push(lineText.slice(lastIndex));
       }
+
       return <>{parts}</>;
     }
 
@@ -802,13 +755,10 @@ export default function TypingStage({
                       (t) => userLineText.length >= t.end
                     );
 
-                    const blankStart = question.blankToken
-                      ? targetLineText.indexOf(question.blankToken)
-                      : targetLineText.indexOf('[');
-                    const blankEnd = question.blankToken && blankStart !== -1
-                      ? blankStart + question.blankToken.length
-                      : targetLineText.indexOf(']');
-                    const hasBlank = blankStart !== -1 && (question.blankToken ? true : blankEnd !== -1);
+                    const isLineAllBlank = targetLineText.length > 0 && targetLineText.split('').every((c) => c === '§' || c === ' ');
+                    const blankStartIdx = targetLineText.indexOf('§');
+                    const blankLastIdx = targetLineText.lastIndexOf('§');
+                    const hasBlankInLine = blankStartIdx !== -1;
 
                     return (
                       <div
@@ -829,8 +779,6 @@ export default function TypingStage({
                       >
                         {/* 입력된 각 문자별 오버레이 및 마우스 클릭 커서 이동 지원 */}
                         {userLineText.split('').map((userChar, colIdx) => {
-                          const hasTargetChar = colIdx < targetLineText.length;
-                          const targetChar = targetLineText[colIdx];
                           const isCursorHere = isCursorOnThisLine && cursorCol === colIdx;
 
                           // Token syntax color: crisp white while typing; switches to VS Code Dark+ color once the token is fully completed
@@ -840,12 +788,41 @@ export default function TypingStage({
                             : VSCODE_DARK_PLUS.default;
 
                           let isCharError = false;
-                          if (question.kind === 'fix_bug') {
-                            if (colIdx < templateCode.length && userChar === templateCode[colIdx] && userChar !== targetCode[colIdx]) {
+
+                          if (isLineAllBlank) {
+                            // 한 줄 전체가 빈칸(§§§...)인 경우: 글자 수가 적든 넘치든 절대 오타 처리하지 않음
+                            isCharError = false;
+                          } else if (hasBlankInLine) {
+                            // 줄 내부에 빈칸 슬롯(print(§§))이 있는 경우
+                            if (colIdx >= blankStartIdx && colIdx <= blankLastIdx) {
+                              // 빈칸 내부: 사용자가 무엇을 적든 오타 처리하지 않음
+                              isCharError = false;
+                            } else if (colIdx < blankStartIdx) {
+                              // 빈칸 이전 고정 코드: 이미 표시된 글자와 다르면 빨간색 오타 처리
+                              const targetChar = targetLineText[colIdx];
+                              if (userChar !== targetChar) {
+                                isCharError = true;
+                              }
+                            } else {
+                              // 빈칸 이후 닫는 괄호 등: suffix가 존재할 때 비교
+                              const suffix = targetLineText.slice(blankLastIdx + 1);
+                              const suffixOffset = colIdx - (userLineText.length - suffix.length);
+                              if (suffixOffset >= 0 && suffixOffset < suffix.length) {
+                                if (userChar !== suffix[suffixOffset]) {
+                                  isCharError = true;
+                                }
+                              }
+                            }
+                          } else if (question.kind === 'fix_bug') {
+                            // 오타 수정: 사용자가 올바른 정답 코드(targetCode)를 입력하도록 안내
+                            const correctChar = (targetLines[lineIdx] || '')[colIdx];
+                            if (correctChar && userChar !== correctChar) {
                               isCharError = true;
                             }
-                          } else if (hasBlank) {
-                            if (colIdx < blankStart && userChar !== targetChar) {
+                          } else {
+                            // 일반 고정 코드: 표시된 글자와 다르면 오타 처리
+                            const targetChar = targetLineText[colIdx];
+                            if (targetChar && userChar !== targetChar) {
                               isCharError = true;
                             }
                           }

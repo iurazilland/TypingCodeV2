@@ -4,6 +4,7 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // 파이썬 기초 1레벨: print() 함수와 숫자의 기초 (10단계)
 // - 1~5단계: 코드블록 모드 (Block Mode) - 블록으로 개념 체득
 // - 6~10단계: 타이핑 모드 (Typing Mode) - 빈칸 채우기, 틀린곳 수정, 한줄 작성
+// - 빈칸 기호: 언어 문법과 충돌하지 않는 특수문자 '§' 사용 (연속된 '§'는 하나의 [] 테두리 박스로 렌더링)
 // ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
@@ -13,7 +14,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
   roundNumber: 1,
   title_ko: '1레벨: print() 함수와 숫자 출력',
   title_en: 'Level 1: print() & Numbers',
-  description_ko: 'print() 함수를 사용해 숫자를 화면에 출력하는 기본기를 완성합니다. 블록으로 먼저 개념을 잡고 직접 타이핑하며 체득합니다.',
   totalQuestions: 10,
   questions: [
     // ------------------------------------------------------------------------
@@ -35,8 +35,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '10',
-          description_ko: '숫자 10 출력 기본 검증',
-          description_en: 'Verify print number 10',
         },
       ],
       hint_ko: '도구 상자에서 print() 블록을 드래그하여 실행 블록 하단에 붙인 뒤 10을 적어보세요.',
@@ -58,8 +56,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '5',
-          description_ko: '한 자리 숫자 5 출력 검증',
-          description_en: 'Verify print single-digit 5',
         },
       ],
       hint_ko: 'print() 블록의 입력창에 숫자 5를 입력하면 터미널에 5가 나타납니다.',
@@ -81,8 +77,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '100',
-          description_ko: '세 자리 숫자 100 출력 검증',
-          description_en: 'Verify print 3-digit number 100',
         },
       ],
       hint_ko: '숫자는 따옴표("") 없이 100을 그대로 적어줍니다.',
@@ -104,8 +98,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '0',
-          description_ko: '숫자 0 출력 검증',
-          description_en: 'Verify print number 0',
         },
       ],
       hint_ko: '0 역시 파이썬에서 매우 중요한 정수 숫자입니다. print(0)을 만들어보세요.',
@@ -127,8 +119,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '7',
-          description_ko: '숫자 7 출력 검증',
-          description_en: 'Verify print lucky 7',
         },
       ],
       hint_ko: 'print() 블록을 붙이고 7을 입력하면 1~5단계 블록 모드가 완성됩니다!',
@@ -137,6 +127,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
 
     // ------------------------------------------------------------------------
     // [타이핑 모드] 6~10단계: V1 챌린지 모드 (빈칸, 틀린곳 수정, 한줄 작성)
+    // - 빈칸은 § 기호로 지정 (예: §§은 2글자 빈칸 박스)
     // ------------------------------------------------------------------------
     {
       id: 6,
@@ -145,22 +136,20 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'fill_blank',
       title: '빈칸 채우기: 숫자 10 출력',
       title_en: 'Fill in the Blank: Print 10',
-      prompt_ko: '괄호 안 빈칸 위치에 숫자 10을 입력하여 화면에 10을 출력해보세요.',
-      prompt_en: 'Type 10 into the blank slot to output 10 on the screen.',
+      prompt_ko: '괄호 안 빈칸 박스에 숫자 10을 입력하여 화면에 10을 출력해보세요.',
+      prompt_en: 'Type 10 into the blank box to output 10 on the screen.',
+      templateCode: 'print(§§)',
       targetCode: 'print(10)',
-      blankToken: '10',
       expectedOutput: '10',
       testCases: [
         {
           id: 1,
           input: '',
           expectedOutput: '10',
-          description_ko: '빈칸 10 입력 후 출력 검증',
-          description_en: 'Verify blank filled with 10',
         },
       ],
-      hint_ko: '밑줄 친 빈칸 위치에 숫자 10을 적어 print(10)을 완성하세요.',
-      hint_en: 'Type 10 into the dashed blank to complete print(10).',
+      hint_ko: '괄호 안 빈칸 위치에 숫자 10을 적어 print(10)을 완성하세요.',
+      hint_en: 'Type 10 into the blank to complete print(10).',
     },
     {
       id: 7,
@@ -169,22 +158,20 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'fill_blank',
       title: '빈칸 채우기: 숫자 5 출력',
       title_en: 'Fill in the Blank: Print 5',
-      prompt_ko: '괄호 안 빈칸 위치에 숫자 5를 입력하여 실행해보세요.',
-      prompt_en: 'Type 5 into the blank slot and run.',
+      prompt_ko: '괄호 안 빈칸 박스에 숫자 5를 입력하여 실행해보세요.',
+      prompt_en: 'Type 5 into the blank box and run.',
+      templateCode: 'print(§)',
       targetCode: 'print(5)',
-      blankToken: '5',
       expectedOutput: '5',
       testCases: [
         {
           id: 1,
           input: '',
           expectedOutput: '5',
-          description_ko: '빈칸 5 입력 후 출력 검증',
-          description_en: 'Verify blank filled with 5',
         },
       ],
-      hint_ko: '괄호 안의 밑줄 친 빈칸에 5를 입력하고 실행 버튼을 누르세요.',
-      hint_en: 'Enter 5 into the dashed blank and click Run.',
+      hint_ko: '괄호 안의 빈칸에 5를 입력하고 실행 버튼을 누르세요.',
+      hint_en: 'Enter 5 into the blank and click Run.',
     },
     {
       id: 8,
@@ -203,8 +190,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '100',
-          description_ko: '오타 pritn -> print 수정 후 100 출력 검증',
-          description_en: 'Verify typo fixed to print and outputs 100',
         },
       ],
       hint_ko: 'pritn의 t와 n의 순서를 print로 바르게 고쳐줍니다.',
@@ -217,22 +202,20 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'fill_blank',
       title: '빈칸 채우기: 숫자 0 출력',
       title_en: 'Fill in the Blank: Print 0',
-      prompt_ko: '괄호 안 빈칸 위치에 숫자 0을 입력하여 숫자 0을 출력해보세요.',
-      prompt_en: 'Type 0 into the blank slot to output 0.',
+      prompt_ko: '괄호 안 빈칸 박스에 숫자 0을 입력하여 숫자 0을 출력해보세요.',
+      prompt_en: 'Type 0 into the blank box to output 0.',
+      templateCode: 'print(§)',
       targetCode: 'print(0)',
-      blankToken: '0',
       expectedOutput: '0',
       testCases: [
         {
           id: 1,
           input: '',
           expectedOutput: '0',
-          description_ko: '빈칸 0 입력 후 출력 검증',
-          description_en: 'Verify blank filled with 0',
         },
       ],
-      hint_ko: '괄호 안 밑줄 친 빈칸에 0을 입력합니다: print(0)',
-      hint_en: 'Type 0 into the dashed blank: print(0)',
+      hint_ko: '괄호 안 빈칸에 0을 입력합니다: print(0)',
+      hint_en: 'Type 0 into the blank: print(0)',
     },
     {
       id: 10,
@@ -243,7 +226,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       title_en: 'Write One Line: Print 77',
       prompt_ko: '1레벨 마스터 미션! 숫자 77을 화면에 출력하는 한 줄 코드를 직접 작성해보세요.',
       prompt_en: 'Level 1 Master! Write a single line of code to print the number 77.',
-      templateCode: '# 여기에 print() 코드를 작성하세요',
+      templateCode: '§§§§§§§§§',
       targetCode: 'print(77)',
       expectedOutput: '77',
       testCases: [
@@ -251,8 +234,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '77',
-          description_ko: '한 줄 코드 작성 및 숫자 77 출력 검증',
-          description_en: 'Verify one-line code outputs 77',
         },
       ],
       hint_ko: '소문자 print를 입력하고 괄호 안에 77을 적어줍니다: print(77)',

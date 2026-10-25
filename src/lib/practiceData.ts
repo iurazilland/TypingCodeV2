@@ -17,7 +17,6 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
   roundNumber: 2,
   title_ko: '2레벨: 쉼표(,)와 여러 수식의 동시 출력',
   title_en: 'Level 2: Commas & Multiple Expressions',
-  description_ko: '하나의 print()문 안에서 쉼표(,)를 활용해 여러 숫자와 다양한 사칙연산 수식을 동시에 출력하는 법을 배웁니다.',
   totalQuestions: 10,
   questions: [
     // Step 1: print(10, 20)
@@ -274,9 +273,15 @@ export const PYTHON_BASIC_ROUND_2: PracticeRound = {
 export const PRACTICE_ROUNDS: Record<string, PracticeRound> = {
   'py-basic-r1': PYTHON_BASIC_ROUND_1,
   'py-basic-r2': PYTHON_BASIC_ROUND_2,
+  'python_basic-1': PYTHON_BASIC_ROUND_1,
+  'python_basic-2': PYTHON_BASIC_ROUND_2,
 };
 
 export function getPracticeRound(language: string, roundNumber: number = 1): PracticeRound {
+  const norm = language.toLowerCase().replace(/[-]/g, '_');
+  if (norm === 'python' || norm === 'python_basic' || norm === 'py_basic') {
+    return PRACTICE_ROUNDS[`py-basic-r${roundNumber}`] || PYTHON_BASIC_ROUND_1;
+  }
   const key = `${language}-basic-r${roundNumber}`;
   return PRACTICE_ROUNDS[key] || PRACTICE_ROUNDS['py-basic-r1'] || PYTHON_BASIC_ROUND_1;
 }

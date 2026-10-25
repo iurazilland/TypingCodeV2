@@ -62,7 +62,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '표준 입출력 print/input, 기본 연산, 조건문 if-else, 반복문 for/while 등 프로그래밍의 뼈대를 손끝으로 타자 치며 완성합니다.',
         description_en: 'Master foundational syntax, I/O, operators, conditionals, and loops through interactive typing.',
         skills: ['print/input 표준 입출력', '기본 연산자 & 변수', 'if/elif/else 분기', 'for/while 반복문'],
-        practiceUrl: '/practice/python/1',
+        practiceUrl: '/practice/python_basic/1',
         isPopular: true,
       },
       {

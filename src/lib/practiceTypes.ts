@@ -24,11 +24,9 @@ export type ChallengeKind = 'fill_blank' | 'fix_bug' | 'one_line' | 'standard';
 
 export interface TestCase {
   id?: string | number;
-  input?: string; // Standard input (stdin) for interactive executions
+  input?: string; // Standard input (stdin) for input() execution
   expectedOutput: string; // Expected terminal stdout
   expectedVariables?: Record<string, any>; // Expected variable state in memory
-  description_ko?: string;
-  description_en?: string;
   isHidden?: boolean; // Hidden test case flag for grading mode
 }
 
@@ -41,12 +39,12 @@ export interface PracticeQuestion {
   title_en?: string;
   prompt_ko: string;
   prompt_en?: string;
-  templateCode?: string; // Code template shown in background guide layer
+  templateCode?: string; // Code template shown in background guide layer (uses § for blanks)
   targetCode: string; // Canonical / reference answer code
-  blankToken?: string; // Specific token/substring to render as zero-displacement underline slot
+  blankToken?: string; // Legacy / optional blank token
   expectedOutput: string; // Primary ground truth expected terminal output
   expectedVariables?: Record<string, any>; // Expected runtime memory variables (e.g. { x: 10, total: 55 })
-  testCases?: TestCase[]; // Test cases with inputs, expected outputs, and variable assertions
+  testCases?: TestCase[]; // Test cases for input/output verification
   hint_ko: string;
   hint_en?: string;
   starterCode?: string;
@@ -61,7 +59,6 @@ export interface PracticeRound {
   roundNumber: number;
   title_ko: string;
   title_en: string;
-  description_ko: string;
   totalQuestions: number;
   questions: PracticeQuestion[];
 }

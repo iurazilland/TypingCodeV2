@@ -685,10 +685,11 @@ function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] 
 // evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
 export default function PracticePage({ params, searchParams }: PracticePageProps) {
-  const langKey = params.language || 'python';
+  const rawLang = params.language || 'python_basic';
+  const langKey = rawLang.startsWith('python') ? 'python' : rawLang;
   const levelNum = parseInt(params.level || '1', 10);
 
-  const round = getPracticeRound(langKey, levelNum);
+  const round = getPracticeRound(rawLang, levelNum);
 
   const rawStep = searchParams?.step ? parseInt(searchParams.step, 10) - 1 : 0;
   const initialStep = !isNaN(rawStep) && rawStep >= 0 && rawStep < round.questions.length ? rawStep : 0;
@@ -1660,8 +1661,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     const trimmedUser = userCodeStr.trim();
     if (!trimmedUser) return false;
 
-    // 3. Unfilled blank placeholder check: [   ], [ ? ], [___], [빈칸]
-    if (/\[\s*(?:|\?|___|빈칸)\s*\]/.test(trimmedUser)) {
+    // 3. Unfilled blank placeholder check: § or legacy brackets
+    if (trimmedUser.includes('§') || /\[\s*(?:|\?|___|빈칸)\s*\]/.test(trimmedUser)) {
       return false;
     }
 
@@ -1673,48 +1674,27 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       }
     }
 
-    // 5. Typo count check for fill-in-the-blank questions
-    if (question.kind === 'fill_blank') {
-      if (question.blankToken && question.targetCode.includes(question.blankToken)) {
-        const tokenIdx = question.targetCode.indexOf(question.blankToken);
-        const prefix = question.targetCode.slice(0, tokenIdx).trim();
-        const suffix = question.targetCode.slice(tokenIdx + question.blankToken.length).trim();
+    // 5. Typo check for fill-in-the-blank questions (§ marker)
+    if (question.kind === 'fill_blank' && question.templateCode && question.templateCode.includes('§')) {
+      const firstSection = question.templateCode.indexOf('§');
+      const lastSection = question.templateCode.lastIndexOf('§');
+      const prefix = question.templateCode.slice(0, firstSection).trim();
+      const suffix = question.templateCode.slice(lastSection + 1).trim();
 
-        if (prefix && !trimmedUser.startsWith(prefix)) {
-          let prefixMismatches = 0;
-          for (let i = 0; i < prefix.length; i++) {
-            if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
-          }
-          if (prefixMismatches > 2) return false;
+      if (prefix && !trimmedUser.startsWith(prefix)) {
+        let prefixMismatches = 0;
+        for (let i = 0; i < prefix.length; i++) {
+          if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
         }
-        if (suffix && !trimmedUser.endsWith(suffix)) {
-          let suffixMismatches = 0;
-          for (let i = 0; i < suffix.length; i++) {
-            const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
-            if (userChar !== suffix[i]) suffixMismatches++;
-          }
-          if (suffixMismatches > 2) return false;
+        if (prefixMismatches > 2) return false;
+      }
+      if (suffix && !trimmedUser.endsWith(suffix)) {
+        let suffixMismatches = 0;
+        for (let i = 0; i < suffix.length; i++) {
+          const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
+          if (userChar !== suffix[i]) suffixMismatches++;
         }
-      } else if (question.templateCode) {
-        const match = question.templateCode.match(/^(.*?)\[\s*(?:|\?|___|빈칸)\s*\](.*)$/);
-        if (match) {
-          const [, prefix, suffix] = match;
-          if (prefix && !trimmedUser.startsWith(prefix.trimEnd())) {
-            let prefixMismatches = 0;
-            for (let i = 0; i < prefix.length; i++) {
-              if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
-            }
-            if (prefixMismatches > 2) return false;
-          }
-          if (suffix && !trimmedUser.endsWith(suffix.trimStart())) {
-            let suffixMismatches = 0;
-            for (let i = 0; i < suffix.length; i++) {
-              const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
-              if (userChar !== suffix[i]) suffixMismatches++;
-            }
-            if (suffixMismatches > 2) return false;
-          }
-        }
+        if (suffixMismatches > 2) return false;
       }
     }
 
