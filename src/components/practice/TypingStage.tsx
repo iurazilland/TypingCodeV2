@@ -62,8 +62,15 @@ export default function TypingStage({
     return 'Enter';
   }, [typedCode, targetCode]);
 
+  // Split targetCode and typedCode into lines for 2-layer rendering
+  const targetLines = useMemo(() => targetCode.split('\n'), [targetCode]);
+  const userLines = useMemo(() => typedCode.split('\n'), [typedCode]);
+  const currentLineIdx = userLines.length - 1;
+
   // Handle typing input
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (isExecuting) return;
+
     if (e.key === 'Tab') {
       e.preventDefault();
       // Indentation support: check if next target chars are spaces
@@ -80,22 +87,47 @@ export default function TypingStage({
 
     if (e.key === 'Enter') {
       e.preventDefault();
-      // If code typing is complete or matches targetCode, Enter executes!
+
+      // 1. If completed or typed matches target: execute!
       if (typedCode.trim() === targetCode.trim() || typedCode.length >= targetCode.length) {
         onSubmit();
         return;
       }
-      // If the next expected character in targetCode is newline '\n', advance line!
+
+      // 2. Single-line target (no newline in targetCode):
+      // Enter runs the code if user typed anything. NEVER append '\n'!
+      if (!targetCode.includes('\n')) {
+        if (typedCode.trim().length > 0) {
+          onSubmit();
+        }
+        return;
+      }
+
+      // 3. Multi-line target:
+      // If the next expected character in targetCode is '\n', advance to next line!
       if (targetCode[typedCode.length] === '\n') {
         setTypedCode((prev) => prev + '\n');
         return;
       }
-      // Otherwise allow newline as typo or submit if close
-      if (typedCode.length >= targetCode.length - 1) {
-        onSubmit();
-      } else {
-        setTypedCode((prev) => prev + '\n');
+
+      // If user is on the last line of a multi-line target:
+      // Pressing Enter runs the code
+      if (currentLineIdx >= targetLines.length - 1) {
+        if (typedCode.trim().length > 0) {
+          onSubmit();
+        }
+        return;
       }
+
+      // If user has reached or exceeded current intermediate line length:
+      const currentTargetLine = targetLines[currentLineIdx] || '';
+      if (userLines[currentLineIdx].length >= currentTargetLine.length) {
+        setTypedCode((prev) => prev + '\n');
+        return;
+      }
+
+      // If user pressed Enter prematurely in the middle of an intermediate line:
+      // Do nothing to avoid breaking line alignment and destroying example code!
       return;
     }
 
@@ -114,25 +146,6 @@ export default function TypingStage({
       }
     }
   };
-
-  // Compute multi-line metadata for the IDE layout
-  const lineData = useMemo(() => {
-    const rawLines = targetCode.split('\n');
-    let charAcc = 0;
-    return rawLines.map((lineText, idx) => {
-      const start = charAcc;
-      const end = charAcc + lineText.length;
-      const hasNewline = idx < rawLines.length - 1;
-      charAcc = end + (hasNewline ? 1 : 0);
-      return {
-        idx,
-        lineText,
-        start,
-        end,
-        hasNewline,
-      };
-    });
-  }, [targetCode]);
 
   return (
     <div
@@ -169,7 +182,7 @@ export default function TypingStage({
 
       {/* ==================================================================
           UPPER AREA: Authentic IDE Editor Workspace
-          (Distraction-free: Line Gutter + 2-Layer Code Overlay)
+          (Distraction-free: Line Gutter + True 2-Layer Code Overlay)
           ================================================================== */}
       <div
         style={{
@@ -200,15 +213,20 @@ export default function TypingStage({
               padding: '5px 14px',
               background: '#090e1a',
               borderRadius: '6px 6px 0 0',
-              borderTop: '2px solid #38bdf8',
+              borderTop: isSuccess ? '2px solid #10b981' : '2px solid #38bdf8',
               fontSize: '0.78rem',
               color: '#f8fafc',
               fontWeight: 700,
               fontFamily: 'var(--font-mono)',
             }}
           >
-            <Code2 size={13} color="#38bdf8" />
+            <Code2 size={13} color={isSuccess ? '#10b981' : '#38bdf8'} />
             <span>main.py</span>
+            {isSuccess && (
+              <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 800, marginLeft: '6px' }}>
+                ✓ 성공
+              </span>
+            )}
           </div>
         </div>
 
@@ -218,47 +236,45 @@ export default function TypingStage({
             flex: '1 1 auto',
             overflowY: 'auto',
             padding: '20px 0',
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono), monospace',
             fontSize: '1.25rem',
             lineHeight: 1.85,
             color: '#f8fafc',
           }}
         >
-          {lineData.map((line) => {
+          {targetLines.map((targetLineText, lineIdx) => {
             const isThisLineExecuting = Boolean(
-              isDebugging && executingLineIndex !== null && executingLineIndex !== undefined && executingLineIndex === line.idx
+              isDebugging && executingLineIndex !== null && executingLineIndex !== undefined && executingLineIndex === lineIdx
             );
             const isAnyLineExecuting = Boolean(
               isDebugging && executingLineIndex !== null && executingLineIndex !== undefined
             );
             const isThisLineDimmed = Boolean(isAnyLineExecuting && !isThisLineExecuting);
 
-            // Is cursor on this line?
-            const isCursorOnThisLine =
-              typedCode.length >= line.start &&
-              (line.hasNewline ? typedCode.length <= line.end : typedCode.length >= line.start);
+            const isUserOnThisLine = currentLineIdx === lineIdx;
+            const userLineText = userLines[lineIdx] !== undefined ? userLines[lineIdx] : null;
 
             return (
               <div
-                key={line.idx}
+                key={lineIdx}
                 style={{
                   display: 'flex',
-                  alignItems: 'stretch',
+                  alignItems: 'center',
                   background: isThisLineExecuting
                     ? 'linear-gradient(90deg, rgba(56, 189, 248, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%)'
                     : isThisLineDimmed
                     ? 'rgba(15, 23, 42, 0.35)'
-                    : isCursorOnThisLine && !isDebugging
+                    : isUserOnThisLine && !isDebugging
                     ? 'rgba(255, 255, 255, 0.025)'
                     : 'transparent',
                   borderLeft: isThisLineExecuting
                     ? '3px solid #38bdf8'
-                    : isCursorOnThisLine && !isDebugging
+                    : isUserOnThisLine && !isDebugging
                     ? '3px solid rgba(56, 189, 248, 0.4)'
                     : '3px solid transparent',
                   opacity: isThisLineDimmed ? 0.35 : 1,
                   transition: 'all 0.15s ease',
-                  minHeight: '34px',
+                  minHeight: '38px',
                 }}
               >
                 {/* Gutter: Line Number */}
@@ -281,115 +297,135 @@ export default function TypingStage({
                   {isThisLineExecuting && (
                     <span style={{ color: '#38bdf8', fontSize: '0.78rem', animation: 'pulse 1s infinite' }}>▶</span>
                   )}
-                  <span>{String(line.idx + 1).padStart(2, '0')}</span>
+                  <span>{String(lineIdx + 1).padStart(2, '0')}</span>
                 </div>
 
-                {/* 2-Layer Code Line Surface */}
+                {/* 2-Layer Code Surface */}
                 <div
                   style={{
+                    position: 'relative',
                     flex: 1,
                     padding: '0 20px',
+                    fontFamily: 'inherit',
+                    fontSize: 'inherit',
+                    lineHeight: 'inherit',
+                    letterSpacing: '0.5px',
                     display: 'flex',
                     alignItems: 'center',
-                    flexWrap: 'wrap',
                     whiteSpace: 'pre',
-                    wordBreak: 'break-all',
-                    letterSpacing: '0.5px',
                   }}
                 >
-                  {/* Render character by character on this line */}
-                  {line.lineText.split('').map((targetChar, col) => {
-                    const charIndex = line.start + col;
-                    const isTyped = charIndex < typedCode.length;
-                    const isCursor = charIndex === typedCode.length;
-                    const userChar = isTyped ? typedCode[charIndex] : null;
-                    const isCorrect = isTyped && userChar === targetChar;
+                  {/* ==========================================================
+                      1겹 (바닥 레이어): 예제 코드 원본
+                      - 항상 100% 온전히 유지되며 절대 사라지지 않는 고스트 텍스트
+                      ========================================================== */}
+                  <div
+                    style={{
+                      color: 'rgba(255, 255, 255, 0.32)',
+                      userSelect: 'none',
+                      whiteSpace: 'pre',
+                      fontFamily: 'inherit',
+                      fontSize: 'inherit',
+                      lineHeight: 'inherit',
+                      letterSpacing: 'inherit',
+                    }}
+                  >
+                    {targetLineText || ' '}
+                  </div>
 
-                    return (
-                      <span
-                        key={col}
-                        style={{
-                          position: 'relative',
-                          display: 'inline-block',
-                          color: !isTyped
-                            ? 'rgba(255, 255, 255, 0.28)' // Layer 1: Dimmed ghost text
-                            : isCorrect
-                            ? '#34d399' // Layer 2: Correct match
-                            : '#ef4444', // Layer 2: Typo mismatch
-                          background: isTyped && !isCorrect ? 'rgba(239, 68, 68, 0.25)' : 'transparent',
-                          borderRadius: '2px',
-                          fontWeight: isTyped ? 800 : 500,
-                        }}
-                      >
-                        {/* Caret Blinking Cursor Bar */}
-                        {isCursor && (
-                          <span
-                            style={{
-                              position: 'absolute',
-                              left: '-1px',
-                              top: '12%',
-                              bottom: '12%',
-                              width: '2px',
-                              background: '#38bdf8',
-                              boxShadow: '0 0 8px #38bdf8',
-                              animation: 'pulse 1s infinite',
-                              zIndex: 10,
-                            }}
-                          />
-                        )}
-                        {/* The displayed character */}
-                        {isTyped ? userChar : targetChar}
-                      </span>
-                    );
-                  })}
-
-                  {/* Cursor at the end of the line (waiting for Enter or end of code) */}
-                  {typedCode.length === line.end && (
-                    <span
+                  {/* ==========================================================
+                      덮어쓰인 1겹 (상단 레이어): 사용자 실시간 입력 오버레이
+                      - 바닥 레이어 바로 위에 정확한 폰트와 위치로 겹쳐서 렌더링
+                      ========================================================== */}
+                  {userLineText !== null && (
+                    <div
                       style={{
-                        position: 'relative',
-                        display: 'inline-flex',
+                        position: 'absolute',
+                        top: 0,
+                        left: '20px',
+                        bottom: 0,
+                        display: 'flex',
                         alignItems: 'center',
-                        color: line.hasNewline ? 'rgba(56, 189, 248, 0.6)' : 'rgba(255, 255, 255, 0.3)',
-                        fontSize: line.hasNewline ? '0.80em' : '1em',
-                        marginLeft: '1px',
-                        userSelect: 'none',
+                        whiteSpace: 'pre',
+                        pointerEvents: 'none',
+                        fontFamily: 'inherit',
+                        fontSize: 'inherit',
+                        lineHeight: 'inherit',
+                        letterSpacing: 'inherit',
                       }}
                     >
-                      {/* Caret */}
-                      <span
-                        style={{
-                          position: 'absolute',
-                          left: '-1px',
-                          top: '12%',
-                          bottom: '12%',
-                          width: '2px',
-                          background: '#38bdf8',
-                          boxShadow: '0 0 8px #38bdf8',
-                          animation: 'pulse 1s infinite',
-                          zIndex: 10,
-                        }}
-                      />
-                      {line.hasNewline ? '↵' : ''}
-                    </span>
-                  )}
+                      {/* 입력된 각 문자별 오버레이 */}
+                      {userLineText.split('').map((userChar, colIdx) => {
+                        const targetChar = targetLineText[colIdx];
+                        const isMatch = userChar === targetChar;
 
-                  {/* Extra typo characters typed beyond this line's length */}
-                  {typedCode.length > line.end && !line.hasNewline &&
-                    typedCode.slice(line.end).split('').map((extraChar, extraIdx) => (
-                      <span
-                        key={`extra-${extraIdx}`}
-                        style={{
-                          color: '#ef4444',
-                          background: 'rgba(239, 68, 68, 0.3)',
-                          borderRadius: '2px',
-                          fontWeight: 800,
-                          textDecoration: 'underline wavy #ef4444',
-                        }}
-                      >
-                        {extraChar}
-                      </span>
-                    ))}
+                        return (
+                          <span
+                            key={colIdx}
+                            style={{
+                              display: 'inline-block',
+                              color: isMatch ? '#34d399' : '#ef4444',
+                              background: isMatch ? '#090e1a' : '#3b1820',
+                              fontWeight: 800,
+                              borderRadius: '2px',
+                              boxShadow: !isMatch ? '0 0 6px rgba(239, 68, 68, 0.5)' : 'none',
+                            }}
+                          >
+                            {userChar}
+                          </span>
+                        );
+                      })}
+
+                      {/* 커서 (Blinking Caret): 현재 입력 중인 라인에만 표시 */}
+                      {isUserOnThisLine && !isDebugging && (
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            width: '2.5px',
+                            height: '1.25em',
+                            background: '#38bdf8',
+                            boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
+                            animation: 'pulse 1s infinite',
+                            verticalAlign: 'middle',
+                            marginLeft: userLineText.length === 0 ? '0px' : '-1px',
+                          }}
+                        />
+                      )}
+
+                      {/* 멀티라인 줄 끝 도달 시 줄바꿈(↵) 가이드 아이콘 */}
+                      {isUserOnThisLine && lineIdx < targetLines.length - 1 && userLineText.length >= targetLineText.length && (
+                        <span
+                          style={{
+                            color: 'rgba(56, 189, 248, 0.75)',
+                            fontSize: '0.85em',
+                            marginLeft: '4px',
+                            userSelect: 'none',
+                            fontWeight: 700,
+                          }}
+                        >
+                          ↵
+                        </span>
+                      )}
+
+                      {/* 모든 코드 입력 완료 시 Enter 실행 안내 */}
+                      {isUserOnThisLine &&
+                        lineIdx === targetLines.length - 1 &&
+                        userLineText.length >= targetLineText.length && (
+                          <span
+                            style={{
+                              color: '#34d399',
+                              fontSize: '0.78em',
+                              marginLeft: '8px',
+                              userSelect: 'none',
+                              fontWeight: 700,
+                              opacity: 0.9,
+                            }}
+                          >
+                            ↵ Enter로 실행
+                          </span>
+                        )}
+                    </div>
+                  )}
                 </div>
               </div>
             );
