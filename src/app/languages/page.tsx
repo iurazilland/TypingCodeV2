@@ -19,8 +19,12 @@ import {
 } from 'lucide-react';
 import { CURRICULUM_TRACKS, LanguageTrack, CourseModule, DIFFICULTY_COLORS, DIFFICULTY_ORDER } from '@/lib/curriculum';
 import LanguageIcon from '@/components/LanguageIcon';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function LanguagesPage() {
+  const { language } = useLanguage();
+  const isEn = language === 'en';
+
   const [selectedTrackId, setSelectedTrackId] = useState<string>('all');
   const [hoveredTrackId, setHoveredTrackId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -80,6 +84,13 @@ export default function LanguagesPage() {
   }, [selectedTrackId, searchQuery, selectedDifficulty]);
 
   const difficultyOptions = ['all', '입문', '중급', '심화'];
+  const getDifficultyLabel = (diff: string) => {
+    if (diff === 'all') return isEn ? 'All Levels' : '전체 난이도';
+    if (diff === '입문') return isEn ? 'Beginner' : '입문';
+    if (diff === '중급') return isEn ? 'Intermediate' : '중급';
+    if (diff === '심화') return isEn ? 'Advanced' : '심화';
+    return diff;
+  };
 
   return (
     <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '40px 24px 100px' }}>
@@ -111,7 +122,7 @@ export default function LanguagesPage() {
           letterSpacing: '-0.02em',
           lineHeight: 1.2
         }}>
-          언어별 정규 학습과정
+          {isEn ? 'Official Curriculum & Learning Tracks' : '언어별 정규 학습과정'}
         </h1>
 
         <p style={{ 
@@ -121,8 +132,17 @@ export default function LanguagesPage() {
           margin: '0 auto 24px',
           lineHeight: 1.6
         }}>
-          파이썬, C언어, 웹(HTML/CSS), 자바스크립트, 자바, SQL까지 —<br />
-          지루한 이론 주입 대신 <strong>직접 코드를 타이핑하며 실행하는</strong> 단계별 실전 커리큘럼입니다.
+          {isEn ? (
+            <>
+              From Python, C, Web (HTML/CSS), JavaScript, Java, to SQL —<br />
+              An interactive, hands-on curriculum where code <strong>comes alive as you type and execute</strong>.
+            </>
+          ) : (
+            <>
+              파이썬, C언어, 웹(HTML/CSS), 자바스크립트, 자바, SQL까지 —<br />
+              지루한 이론 주입 대신 <strong>직접 코드를 타이핑하며 실행하는</strong> 단계별 실전 커리큘럼입니다.
+            </>
+          )}
         </p>
 
         {/* Aggregate Stats Badges */}
@@ -142,17 +162,17 @@ export default function LanguagesPage() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Layers size={16} color="#38bdf8" />
-            <span><strong>{stats.totalTracks}개</strong> 언어 트랙</span>
+            <span><strong>{stats.totalTracks}</strong> {isEn ? 'Tracks' : '개 언어 트랙'}</span>
           </div>
           <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>•</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <BookOpen size={16} color="#10b981" />
-            <span><strong>{stats.totalModules}개</strong> 전문 코스</span>
+            <span><strong>{stats.totalModules}</strong> {isEn ? 'Courses' : '개 전문 코스'}</span>
           </div>
           <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>•</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Sparkles size={16} color="#f59e0b" />
-            <span><strong>{stats.totalLevels}+개</strong> 실전 타자 단계</span>
+            <span><strong>{stats.totalLevels}+</strong> {isEn ? 'Stages' : '개 실전 타자 단계'}</span>
           </div>
         </div>
       </div>
@@ -224,7 +244,7 @@ export default function LanguagesPage() {
                   pointerEvents: 'none',
                 }}>
                   <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
-                    전체
+                    {isEn ? 'All' : '전체'}
                   </span>
                   <span style={{
                     fontSize: '0.72rem',
@@ -289,7 +309,7 @@ export default function LanguagesPage() {
                   pointerEvents: 'none',
                 }}>
                   <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
-                    {track.name.split(' ')[0]}
+                    {isEn ? track.id.toUpperCase() : track.name.split(' ')[0]}
                   </span>
                   <span style={{
                     fontSize: '0.72rem',
@@ -333,7 +353,7 @@ export default function LanguagesPage() {
             />
             <input
               type="text"
-              placeholder="코스명, 세부 주제, 기술 키워드 검색 (예: 포인터, Flexbox, 머신러닝, SQL...)"
+              placeholder={isEn ? "Search courses, topics, keywords (e.g. pointer, Flexbox, machine learning, SQL...)" : "코스명, 세부 주제, 기술 키워드 검색 (예: 포인터, Flexbox, 머신러닝, SQL...)"}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -366,7 +386,9 @@ export default function LanguagesPage() {
 
           {/* Difficulty Filter Pills */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.82rem', color: '#64748b', marginRight: '4px', fontWeight: 600 }}>난이도:</span>
+            <span style={{ fontSize: '0.82rem', color: '#64748b', marginRight: '4px', fontWeight: 600 }}>
+              {isEn ? 'Difficulty:' : '난이도:'}
+            </span>
             {difficultyOptions.map((diff) => (
               <button
                 key={diff}
@@ -382,7 +404,7 @@ export default function LanguagesPage() {
                   transition: 'all 0.15s ease',
                 }}
               >
-                {diff === 'all' ? '전체 난이도' : diff}
+                {getDifficultyLabel(diff)}
               </button>
             ))}
           </div>
@@ -399,10 +421,10 @@ export default function LanguagesPage() {
           border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
         }}>
           <p style={{ fontSize: '1.2rem', color: '#f8fafc', marginBottom: '8px', fontWeight: 700 }}>
-            검색 결과와 일치하는 코스가 없습니다.
+            {isEn ? 'No matching courses found.' : '검색 결과와 일치하는 코스가 없습니다.'}
           </p>
           <p style={{ fontSize: '0.95rem', color: '#94a3b8', marginBottom: '20px' }}>
-            다른 검색어를 입력하시거나 필터를 초기화해 보세요.
+            {isEn ? 'Try searching with different keywords or reset your filters.' : '다른 검색어를 입력하시거나 필터를 초기화해 보세요.'}
           </p>
           <button
             onClick={() => {
@@ -413,7 +435,7 @@ export default function LanguagesPage() {
             className="tactile-btn tactile-btn-primary"
             style={{ padding: '10px 20px', fontSize: '0.9rem' }}
           >
-            <span>모든 과정 전체보기</span>
+            <span>{isEn ? 'View All Courses' : '모든 과정 전체보기'}</span>
           </button>
         </div>
       ) : (
@@ -466,7 +488,7 @@ export default function LanguagesPage() {
                       </span>
                     </div>
                     <p style={{ color: '#cbd5e1', fontSize: '0.92rem', marginTop: '4px' }}>
-                      {track.tagline_ko}
+                      {isEn ? track.tagline_en : track.tagline_ko}
                     </p>
                   </div>
                 </div>
@@ -482,7 +504,7 @@ export default function LanguagesPage() {
                   fontSize: '0.85rem',
                   color: '#cbd5e1',
                 }}>
-                  <span>총 <strong>{track.modules.length}개</strong> 과정 개설</span>
+                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong>{track.modules.length}개</strong> 과정 개설</>}</span>
                 </div>
               </div>
 
@@ -548,7 +570,7 @@ export default function LanguagesPage() {
                             gap: '4px',
                             whiteSpace: 'nowrap',
                           }}>
-                            <span>🔥 학습 진행 중</span>
+                            <span>🔥 {isEn ? 'In Progress' : '학습 진행 중'}</span>
                           </div>
                         )}
 
@@ -589,7 +611,7 @@ export default function LanguagesPage() {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                               }}>
-                                {module.difficulty}
+                                {getDifficultyLabel(module.difficulty)}
                               </span>
                             </div>
 
@@ -609,7 +631,7 @@ export default function LanguagesPage() {
                                   border: '1px solid rgba(239, 68, 68, 0.3)',
                                 }}>
                                   <Flame size={12} />
-                                  인기
+                                  {isEn ? 'Popular' : '인기'}
                                 </span>
                               )}
                               <span style={{
@@ -617,7 +639,7 @@ export default function LanguagesPage() {
                                 color: '#94a3b8',
                                 fontWeight: 600,
                               }}>
-                                {module.totalLevels}단계
+                                {module.totalLevels}{isEn ? ' Stages' : '단계'}
                               </span>
                             </div>
                           </div>
@@ -630,7 +652,7 @@ export default function LanguagesPage() {
                             marginBottom: '4px',
                             lineHeight: 1.35,
                           }}>
-                            {module.title_ko}
+                            {isEn ? module.title_en : module.title_ko}
                           </h3>
                           <div style={{
                             fontSize: '0.78rem',
@@ -638,7 +660,7 @@ export default function LanguagesPage() {
                             fontWeight: 600,
                             marginBottom: '12px',
                           }}>
-                            {module.title_en}
+                            {isEn ? module.title_ko : module.title_en}
                           </div>
 
                           {/* Description */}
@@ -649,7 +671,7 @@ export default function LanguagesPage() {
                             marginBottom: '16px',
                             minHeight: '44px',
                           }}>
-                            {module.description_ko}
+                            {isEn ? module.description_en : module.description_ko}
                           </p>
 
                           {/* Key Skills Pills */}
@@ -664,7 +686,7 @@ export default function LanguagesPage() {
                             border: '1px solid rgba(255, 255, 255, 0.04)',
                           }}>
                             <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, marginBottom: '2px' }}>
-                              핵심 습득 기술:
+                              {isEn ? 'Key Skills:' : '핵심 습득 기술:'}
                             </div>
                             {module.skills.map((skill, idx) => (
                               <div
@@ -706,7 +728,9 @@ export default function LanguagesPage() {
                                 color: isStarted ? '#38bdf8' : '#64748b',
                                 fontWeight: 700,
                               }}>
-                                {isStarted ? `진행도 ${progressPercent}%` : '학습 대기'}
+                                {isStarted 
+                                  ? (isEn ? `Progress ${progressPercent}%` : `진행도 ${progressPercent}%`) 
+                                  : (isEn ? 'Not Started' : '학습 대기')}
                               </span>
                               <span style={{
                                 fontSize: '0.72rem',
@@ -714,7 +738,7 @@ export default function LanguagesPage() {
                                 fontWeight: 600,
                                 fontFamily: 'var(--font-mono)',
                               }}>
-                                {completedLevels} / {module.totalLevels}단계
+                                {completedLevels} / {module.totalLevels}{isEn ? ' Stages' : '단계'}
                               </span>
                             </div>
 
@@ -748,7 +772,7 @@ export default function LanguagesPage() {
                               flexShrink: 0,
                             }}
                           >
-                            <span>{isStarted ? '이어하기' : '학습 시작'}</span>
+                            <span>{isStarted ? (isEn ? 'Continue' : '이어하기') : (isEn ? 'Start' : '학습 시작')}</span>
                             <ArrowRight size={15} />
                           </Link>
                         </div>
