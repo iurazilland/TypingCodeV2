@@ -2022,7 +2022,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     }
     if (stepIdx === 0) return true;
     if (typeof window !== 'undefined') {
-      const key = `unlocked_step_${langKey}_${levelNum}`;
+      const key = `unlocked_step_${rawLang}_${levelNum}`;
       const maxUnlocked = parseInt(localStorage.getItem(key) || '0', 10);
       return stepIdx <= maxUnlocked;
     }
@@ -2052,13 +2052,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   // Persist completed step progress in production
   useEffect(() => {
     if (isSuccess && typeof window !== 'undefined') {
-      const key = `unlocked_step_${langKey}_${levelNum}`;
+      const key = `unlocked_step_${rawLang}_${levelNum}`;
       const currentMax = parseInt(localStorage.getItem(key) || '0', 10);
       if (currentStepIndex + 1 > currentMax) {
         localStorage.setItem(key, String(currentStepIndex + 1));
       }
     }
-  }, [isSuccess, currentStepIndex, langKey, levelNum]);
+  }, [isSuccess, currentStepIndex, rawLang, levelNum]);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {
@@ -7172,7 +7172,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   다시 풀기
                 </button>
                 <Link
-                  href={`/practice/${langKey}`}
+                  href={`/practice/${rawLang}`}
                   className="tactile-btn tactile-btn-green"
                   style={{
                     flex: 1,

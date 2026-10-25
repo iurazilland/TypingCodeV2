@@ -10,69 +10,99 @@
 
 ## 1. V2 콘텐츠 관리 아키텍처 (Content Architecture)
 
-TypingCode V2는 별도의 DB 서버나 동기화 스크립트 없이, 타입 안정성(Type Safety)과 즉각적인 핫 리로딩(HMR)을 보장하는 **TypeScript 모듈 기반 구조**를 채택하고 있습니다.
+TypingCode V2는 각 언어별로 독립된 모듈 파일(`src/data/curriculum/[language]/level[N].ts`)을 통해 커리큘럼을 작성하고 관리합니다.
 
 | 대상 | 파일 경로 | 설명 |
 | :--- | :--- | :--- |
-| **언어 트랙 & 모듈** | `src/lib/curriculum.ts` | 11개 지원 언어의 트랙 정보, 코스 모듈(입문/중급/심화), 난이도, 스킬셋 메타데이터 |
-| **블록 & 듀얼 연습 데이터** | `src/lib/practiceData.ts` | 레벨/라운드별 세부 문항, 사용 가능 블록 조각(`availableBlocks`), 정답 코드, 기대 출력 |
-| **기본 텍스트 레벨** | `src/lib/content.ts` | 타이핑 연습용 기본 레벨 데이터 (`LevelData`, `CodeStep`) |
+| **언어별 레벨 파일** | `src/data/curriculum/[language]/level[N].ts` | 각 레벨별 10단계 문항, `unlockedBlocks`, 테스트 케이스 정의 (SSOT) |
+| **언어 트랙 & 모듈** | `src/lib/curriculum.ts` | 13개 지원 언어의 트랙 정보, 코스 모듈, 스킬셋 메타데이터 |
+| **챕터 & 문법 태그** | `src/lib/curriculumSections.ts` | 챕터(섹션) 그룹화 및 레벨 카드 문법 태그(`syntaxTags`) 정의 |
+| **연습 라운드 등록소** | `src/lib/practiceData.ts` | 각 언어 및 레벨 라운드 연결 및 `getPracticeRound` 제공 |
 
 ---
 
-## 2. 블록 코딩 & 듀얼 연습 문항 작성 규격 (`practiceData.ts`)
+## 2. V2 커리큘럼 작성 규격 (Curriculum Level Specification)
 
-새로운 연습 라운드를 추가할 때는 `PracticeRound` 인터페이스에 맞춰 작성합니다.
+각 레벨은 **10개 단계(Step 1 ~ Step 10)**로 구성되며, **5단계 블록 모드 + 5단계 타이핑 모드**의 듀얼 모드 표준을 준수합니다.
 
-### 2.1 라운드 기본 구조
+### 2.1 라운드 기본 구조 (`PracticeRound`)
 ```typescript
-export const PYTHON_BASIC_ROUND_1: PracticeRound = {
+import { PracticeRound } from '@/lib/practiceTypes';
+
+export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
   language: 'python',
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 1,
-  title_ko: '1레벨: print() 함수와 사칙연산의 기초',
-  title_en: 'Level 1: print() & Basic Arithmetic',
-  description_ko: '가장 단순한 숫자 출력부터 시작하여 사칙연산을 단계별로 정복합니다.',
+  title_ko: '1레벨: print() 함수와 숫자 출력',
+  title_en: 'Level 1: print() & Numbers',
   totalQuestions: 10,
+  unlockedBlocks: ['print'], // 도구함에 노출할 블록 키 목록
   questions: [
-    /* 10개 문항 정의 */
+    // 1~5단계: 블록 모드
+    // 6~10단계: 타이핑 모드 (빈칸 채우기 / 오타 수정)
   ],
 };
 ```
 
-### 2.2 단일 문항(Question) 스펙
-각 문항은 **10단계 스텝(Step 1 ~ Step 10)**으로 점진적 난이도를 구성합니다:
+### 2.2 도구함 해금 블록 키 (`unlockedBlocks`)
+커리큘럼 진행도에 맞춰 해당 레벨에서 다룰 블록만 배열에 선언합니다. 미선언된 블록은 도구함에서 완전히 숨겨져 여백 없이 밀착 배치됩니다.
+
+| 분류 | 블록 키 (`unlockedBlocks`에 지정할 문자열) |
+| :--- | :--- |
+| **함수 계열** | `'print'`, `'input'`, `'range'`, `'map'`, `'sorted'`, `'type'`, `'math'`, `'iter'`, `'method'`, `'open'`, `'def'` |
+| **제어 계열** | `'if'`, `'for_range'`, `'for_in'`, `'while'`, `'break'`, `'continue'` |
+| **변수 계열** | `'variable'` (사용자 정의 변수 생성기 및 변수 블록) |
+
+### 2.3 단계별 문항 스펙
+
+#### [1~5단계] 블록 모드 (Block Mode)
 ```typescript
 {
   id: 1,
   step: 1,
-  title: '숫자 10 출력하기',
-  prompt_ko: 'print() 함수를 사용해 숫자 10을 출력해보세요.',
-  prompt_en: 'Print the number 10 using print().',
+  type: 'block',
+  kind: 'standard',
+  prompt_ko: '숫자 10을 화면에 출력해보세요.',
+  prompt_en: 'Output the number 10 on the screen.',
+  hint_ko: '도구 상자의 함수 카테고리에서 출력 블록을 찾아 시작 블록 밑에 홈을 맞춰 끼워보세요.',
+  hint_en: 'Find the output block in the toolbox and snap it beneath the start block.',
   targetCode: 'print(10)',
-  expectedOutput: '10',
-  hint_ko: '숫자는 따옴표("") 없이 괄호 안에 10을 그대로 적어줍니다.',
-  starterCode: '', // 선택 사항: 미리 주어질 시작 코드
-  availableBlocks: [
-    { id: 'b1-1', label: 'print', codeSnippet: 'print', category: 'keyword' },
-    { id: 'b1-2', label: '(', codeSnippet: '(', category: 'syntax' },
-    { id: 'b1-3', label: '10', codeSnippet: '10', category: 'number' },
-    { id: 'b1-4', label: ')', codeSnippet: ')', category: 'syntax' },
+  testCases: [
+    {
+      id: 1,
+      input: '',
+      expectedOutput: '10',
+    },
   ],
 }
 ```
 
-### 2.3 블록 조각(BlockPiece) 카테고리 정의
-블록 툴박스에서 렌더링될 때 색상과 형태를 결정하는 카테고리입니다:
-- `'keyword'`: 제어문 및 핵심 키워드 (`print`, `if`, `for`, `while`, `def`)
-- `'function'`: 내장 함수 (`input`, `range`, `len`, `sum`)
-- `'string'`: 따옴표로 감싸진 문자열 리터럴 (`"hello"`, `'python'`)
-- `'number'`: 정수/실수 숫자 리터럴 (`10`, `42`, `3.14`)
-- `'operator'`: 연산자 (`=`, `+`, `-`, `*`, `/`, `//`, `%`)
-- `'variable'`: 변수 식별자 (`x`, `name`, `score`, `item`)
-- `'syntax'`: 괄호, 쉼표, 콜론 등 문법 기호 (`(`, `)`, `,`, `:`, `f""`)
+#### [6~10단계] 타이핑 모드 (Typing Mode - 빈칸 채우기 & 오타 수정)
+- 빈칸은 `templateCode` 내에 `§` 기호로 표기합니다.
+- `§`의 개수가 사용자가 입력해야 하는 글자 수(Width)와 1:1 일치하여 흔들림 없는 캡슐 박스를 렌더링합니다.
+```typescript
+{
+  id: 6,
+  step: 6,
+  type: 'typing',
+  kind: 'fill_blank', // 또는 'fix_bug'
+  prompt_ko: '빈칸을 채워 숫자 10을 출력해보세요.',
+  prompt_en: 'Fill in the blank to output the number 10.',
+  hint_ko: '함수 괄호 () 안에는 화면에 보여주고 싶은 전달값(인자)이 들어갑니다.',
+  hint_en: 'The argument you want to display goes inside the function parentheses ().',
+  templateCode: 'print(§§)', // 2글자 빈칸 박스
+  targetCode: 'print(10)',
+  testCases: [
+    {
+      id: 1,
+      input: '',
+      expectedOutput: '10',
+    },
+  ],
+}
+```
 
 ---
 

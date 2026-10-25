@@ -9,10 +9,10 @@
 - **Core Tech**: Next.js 14 (App Router), React 18, TypeScript, Zustand, Wandbox API (Multi-language Sandbox), Vanilla CSS (High Performance).
 - **Key Features**:
   - **Dual Practice Mode**: 
-    - **Visual Block Mode**: Scratch/Blockly 스타일의 블록 조립형 코딩 (C-shape, E-shape, Statement, Method 체이닝 블록 지원, 자석 스냅 & 체인 드래그).
-    - **Typing Code Mode**: 실시간 WPM, 정확도, 오타 감지 및 가상 키보드 가이드를 결합한 고성능 타이핑 연습.
-  - **Multi-Language Sandbox**: Python, C, C++, JavaScript, Java, Go, Rust, C#, Swift, SQL, Web(HTML/CSS) 등 **총 11개 언어**의 실시간 컴파일/실행 지원.
-  - **Insight & Curriculum**: 체계적인 언어 트랙(11개 언어, 입문/중급/심화) 및 단계별 인사이트 팁 제공.
+    - **Visual Block Mode**: Scratch/Blockly 스타일의 블록 조립형 코딩 (C-shape, E-shape, Statement, Method 체이닝 블록 지원, 자석 스냅 & 체인 드래그, 커리큘럼별 `unlockedBlocks` 기반 동적 도구함 노출).
+    - **Typing Code Mode**: 실시간 WPM, 정확도, 오타 감지, `§` 빈칸 박스(zero-displacement) 및 가상 키보드 가이드를 결합한 고성능 타이핑 연습.
+  - **Multi-Language Sandbox**: Python, C, C++, JavaScript, Java, Go, Rust, C#, Swift, SQL, Web(HTML/CSS), Linux CLI, Visual Basic & VBA 등 **총 13개 언어/트랙**의 실시간 컴파일/실행 지원.
+  - **Concept Syllabus & Curriculum**: 챕터별 섹션 그룹화, Exercism 스타일 벤토 그리드 레벨 선택 카드, 학습 DB 진도율 표시.
 
 ---
 
@@ -26,13 +26,14 @@
 - **State Management**: Zustand 4.5.2
   - `useTypingStore` (`src/lib/store.ts`): 타이핑 진행률, WPM, 오타수, 정확도, 스텝 전환, 인사이트 락 관리.
   - React Context: `LanguageContext` (`src/lib/LanguageContext.tsx`): 전역 언어 설정 및 다국어 지원.
-  - LocalStorage: 브라우저 로컬 저장소를 활용한 클라이언트 사이드 진도율 및 세션 영속화.
+  - LocalStorage / DB: 학습 진도율(`unlocked_step_${lang}_${lvl}`) 영속화 (추후 백엔드 DB 연동).
 
 ### 2.2 Execution Runtime (Code Sandbox)
 - **Multi-language Cloud Sandbox**: Wandbox API (`https://wandbox.org/api/compile.json`)
-  - `src/lib/runner.ts`의 `executeCode` 함수를 통해 11개 언어의 코드를 컴파일하고 `stdout`, `stderr`, `exitCode`, 실행 시간을 반환.
+  - `src/lib/runner.ts`의 `executeCode` 함수를 통해 다국어 코드를 컴파일하고 `stdout`, `stderr`, `exitCode`, 실행 시간을 반환.
 - **Web Execution**: `WebPreview.tsx`
   - HTML/CSS/JS 코드를 `iframe`의 `srcdoc` 샌드박스로 실시간 렌더링.
+- **Linux Execution**: Client-side Linux Bash emulator runner.
 
 ---
 
@@ -46,9 +47,7 @@ TypingCode_V2/
 │   ├── SYSTEM_DESIGN.md            # 시스템 상세 설계 및 블록/스냅 엔진 규격
 │   ├── visualizer-system.md        # 블록 코딩 및 UI 비주얼 인터랙션 사양서
 │   ├── CONTENT_AUTHORING.md        # 커리큘럼 및 연습 데이터 작성 가이드
-│   ├── LANGUAGE_ROADMAP.md         # 11개 지원 언어 및 런타임 로드맵
-│   ├── LEVEL_VERIFICATION_REPORT.md# 레벨/커리큘럼 검증 보고서
-│   ├── html-css-js-course-design.md# 웹(HTML/CSS/JS) 코스 설계서
+│   ├── LANGUAGE_ROADMAP.md         # 13개 지원 언어 및 런타임 로드맵
 │   └── content/                    # [보존] 기획/레벨 참고용 원천 데이터
 ├── public/                 # 정적 에셋 (아이콘, 폰트, 파비콘)
 ├── src/
@@ -57,32 +56,22 @@ TypingCode_V2/
 │   │   ├── page.tsx                # 메인 랜딩 페이지 (통합 히어로, 샌드박스, 코스 카드)
 │   │   ├── practice/
 │   │   │   └── [language]/
-│   │   │       └── [level]/        # 블록 코딩 & 타이핑 코딩 핵심 연습 페이지 (page.tsx)
-│   │   ├── challenges/             # 챌린지 문제 모드
-│   │   ├── compiler/               # 11개 언어 통합 온라인 컴파일러/샌드박스
-│   │   ├── languages/              # 언어별 트랙 탐색 페이지
-│   │   ├── learn/                  # 코스 학습 대시보드
-│   │   ├── problems/               # 문제 풀이 모음
-│   │   └── ranking/                # 랭킹/대시보드
+│   │   │       ├── page.tsx        # 챕터별 섹션 그룹화 레벨 선택 페이지 (Bento Syllabus Grid)
+│   │   │       └── [level]/        # 블록 코딩 & 타이핑 코딩 실전 연습실 (page.tsx)
+│   │   ├── compiler/               # 13개 언어/트랙 온라인 컴파일러/샌드박스
+│   │   └── languages/              # 언어별 트랙 탐색 페이지
+│   ├── data/
+│   │   └── curriculum/             # 언어별 독립 모듈화 커리큘럼 파일 (예: python/level1.ts)
 │   ├── components/                 # 공용 UI 컴포넌트
-│   │   ├── AuthModal.tsx           # 인증 모달
-│   │   ├── HeroPlayground.tsx      # 메인 히어로 인터랙티브 코드/터미널 플레이그라운드
-│   │   ├── InsightCard.tsx         # 단계별 학습 인사이트 팁 카드
 │   │   ├── LanguageIcon.tsx        # 언어별 SVG/뱃지 아이콘
 │   │   ├── Navbar.tsx              # 상단 네비게이션 바
-│   │   ├── Terminal.tsx            # 터미널 콘솔 출력 컴포넌트
-│   │   ├── UnifiedHeroCard.tsx     # 메인 배너 카드
-│   │   ├── VirtualKeyboard.tsx     # 타이핑 모드 가상 키보드 가이드
-│   │   └── WebPreview.tsx          # 실시간 웹 iframe 뷰포트
+│   │   └── VirtualKeyboard.tsx     # 타이핑 모드 가상 키보드 가이드
 │   ├── lib/                        # 비즈니스 로직, 데이터, 런타임
-│   │   ├── content.ts              # 기본 레벨 콘텐츠
-│   │   ├── curriculum.ts           # 11개 언어 전체 커리큘럼 트랙 및 모듈 정의
-│   │   ├── LanguageContext.tsx     # 언어 선택 컨텍스트
-│   │   ├── practiceData.ts         # 연습 라운드/블록/문항 데이터 (Duolingo/MakeCode 스타일)
-│   │   ├── practiceTypes.ts        # 블록/연습 전용 타입 정의
-│   │   ├── runner.ts               # Wandbox 기반 11개 언어 실시간 코드 실행기
-│   │   ├── store.ts                # Zustand 타이핑 스토어
-│   │   └── types.ts                # 공통 타입 (SupportedLanguage, LevelData 등)
+│   │   ├── curriculum.ts           # 13개 언어 트랙 및 모듈 메타데이터 정의
+│   │   ├── curriculumSections.ts   # 코스별 챕터/섹션 및 레벨 문법 태그 구조
+│   │   ├── practiceData.ts         # 연습 라운드 로더 및 등록소
+│   │   ├── practiceTypes.ts        # 블록/연습/스텝 전용 타입 정의 (unlockedBlocks 포함)
+│   │   └── runner.ts               # Wandbox 및 클라이언트 런타임 실행기
 │   └── styles/
 │       └── globals.css             # 전역 스타일 및 디자인 토큰
 ├── package.json
@@ -113,8 +102,17 @@ TypingCode_V2/
 - **가상 키보드 가이드**: `VirtualKeyboard.tsx`와 연동하여 다음에 눌러야 할 키를 시각적으로 하이라이트.
 
 ### 4.3 멀티 언어 클라우드 샌드박스 (`runner.ts`)
-Wandbox 오픈 컴파일러 API와 직접 통신하여 서버 구축 비용 없이 11개 언어 샌드박스 런타임 제공:
-- Python (`cpython-3.10.15`), C (`gcc-13.2.0-c`), C++ (`gcc-13.2.0`), JavaScript (`nodejs-20.12.2`), Java (`openjdk-jdk-22+36`), Go (`go-1.23.2`), Rust (`rust-1.82.0`), C# (`mono-6.12.0.199`), Swift (`swift-6.0.1`), SQL (`sqlite-3.46.1`), Web (`iframe WebPreview`).
+Wandbox 오픈 컴파일러 API 및 클라이언트 에뮬레이터 기반 13개 환경 실시간 코드 실행:
+- Python (`cpython-3.10.15`), C (`gcc-13.2.0-c`), C++ (`gcc-13.2.0`), JavaScript (`nodejs-20.12.2`), Java (`openjdk-jdk-22+36`), Go (`go-1.23.2`), Rust (`rust-1.82.0`), C# (`mono-6.12.0.199`), Swift (`swift-6.0.1`), SQL (`sqlite-3.46.1`), Web (`iframe WebPreview`), Linux CLI (Client-side Bash), Visual Basic & VBA.
+
+### 4.4 커리큘럼 기반 도구함 동적 노출 (`unlockedBlocks`)
+`PracticeRound`의 `unlockedBlocks?: string[]` 속성을 기반으로 학습 완료 및 허용된 블록만 도구함(팔레트)에 동적 노출:
+- **자동 간격 압축 (Zero Empty Space)**: Flex Column 레이아웃으로 미해금 블록은 DOM에서 제외되어 빈 슬롯 없이 다음 블록이 바로 밀착 렌더링.
+- **카테고리 자동 접힘**: 해당 카테고리에 속한 블록이 하나도 없을 경우 카테고리 헤더(함수, 제어, 변수) 자체도 자동 숨김.
+
+### 4.5 챕터별 섹션 그룹화 & 실전 레벨 선택 페이지 (`/practice/[language]`)
+- **Exercism 스타일 Concept Syllabus**: 챕터별 섹션 그룹화, 문법 키워드 태그(Tag), 카드 자체 원클릭 인터랙션, 호버 시 입체 모션.
+- **상태 배지**: 완료(Green), 도전(Track Brand Color), 잠김(Muted Gray) 상태를 실시간 진도율 DB 기반으로 자동 부여.
 
 ---
 
