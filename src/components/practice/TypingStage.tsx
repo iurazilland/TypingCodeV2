@@ -830,13 +830,13 @@ export default function TypingStage({
                                 <span
                                   style={{
                                     display: 'inline-block',
-                                    width: '2.5px',
+                                    width: '2px',
                                     height: '1.25em',
-                                    background: '#38bdf8',
-                                    boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
-                                    animation: 'pulse 1s infinite',
+                                    background: '#ffffff',
+                                    boxShadow: '0 0 6px rgba(255, 255, 255, 0.9), 0 0 1px #ffffff',
+                                    animation: 'ideCursorBlink 1s step-end infinite',
                                     verticalAlign: 'middle',
-                                    margin: '0 -1.25px',
+                                    margin: '0 -1px',
                                     position: 'relative',
                                     zIndex: 10,
                                   }}
@@ -869,11 +869,11 @@ export default function TypingStage({
                           <span
                             style={{
                               display: 'inline-block',
-                              width: '2.5px',
+                              width: '2px',
                               height: '1.25em',
-                              background: '#38bdf8',
-                              boxShadow: '0 0 8px #38bdf8, 0 0 2px #fff',
-                              animation: 'pulse 1s infinite',
+                              background: '#ffffff',
+                              boxShadow: '0 0 6px rgba(255, 255, 255, 0.9), 0 0 1px #ffffff',
+                              animation: 'ideCursorBlink 1s step-end infinite',
                               verticalAlign: 'middle',
                               marginLeft: userLineText.length === 0 ? '0px' : '-1px',
                               position: 'relative',

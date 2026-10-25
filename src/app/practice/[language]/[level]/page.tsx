@@ -5084,19 +5084,52 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 <span style={{ color: '#e2e8f0' }}>{execMode === 'debug' ? 'python -m pdb main.py' : 'python main.py'}</span>
               </div>
 
-              {terminalOutput && (
-                <pre style={{
-                  margin: '8px 0 0 0',
-                  padding: 0,
-                  fontFamily: 'inherit',
-                  fontSize: '0.88rem',
-                  color: '#f8fafc',
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word',
-                  lineHeight: 1.6,
-                }}>
-                  {terminalOutput}
-                </pre>
+              {terminalOutput ? (
+                <div style={{ margin: '8px 0 0 0', display: 'inline' }}>
+                  <pre style={{
+                    margin: 0,
+                    padding: 0,
+                    fontFamily: 'inherit',
+                    fontSize: '0.88rem',
+                    color: '#f8fafc',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    lineHeight: 1.6,
+                    display: 'inline',
+                  }}>
+                    {terminalOutput}
+                  </pre>
+                  {/* 터미널 깜박이는 블록 커서 (실행 중 / 입력 대기 중 상태 표시) */}
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '8px',
+                      height: '1.15em',
+                      background: (isExecuting || isDebugging) ? '#38bdf8' : '#94a3b8',
+                      boxShadow: (isExecuting || isDebugging) ? '0 0 8px rgba(56, 189, 248, 0.8)' : 'none',
+                      marginLeft: '3px',
+                      verticalAlign: 'text-bottom',
+                      animation: 'terminalCursorBlink 1s step-end infinite',
+                    }}
+                    title={isExecuting || isDebugging ? '프로그램 실행 및 입력 대기 중...' : '터미널 준비 완료'}
+                  />
+                </div>
+              ) : (
+                <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center' }}>
+                  {/* 출력 전 터미널 대기 블록 커서 */}
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '8px',
+                      height: '1.15em',
+                      background: (isExecuting || isDebugging) ? '#38bdf8' : '#94a3b8',
+                      boxShadow: (isExecuting || isDebugging) ? '0 0 8px rgba(56, 189, 248, 0.8)' : 'none',
+                      verticalAlign: 'text-bottom',
+                      animation: 'terminalCursorBlink 1s step-end infinite',
+                    }}
+                    title={isExecuting || isDebugging ? '프로그램 실행 및 입력 대기 중...' : '터미널 준비 완료'}
+                  />
+                </div>
               )}
               <div ref={terminalEndRef} />
             </div>
