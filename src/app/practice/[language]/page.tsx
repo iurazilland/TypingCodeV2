@@ -88,15 +88,20 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     clearedLevels: Set<number>;
     highestUnlockedLevel: number;
   }>({
-    clearedLevels: new Set(),
-    highestUnlockedLevel: 1,
+    clearedLevels: new Set([1]), // 1레벨 기본 완료 처리
+    highestUnlockedLevel: 2,
   });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      const cleared = new Set<number>();
-      let maxUnlocked = 1;
+      const cleared = new Set<number>([1]); // 1레벨 기본 완료 처리
+      let maxUnlocked = 2;
+
+      // 1레벨이 localStorage에 없다면 완료 상태(10단계 완료)로 기록
+      if (!localStorage.getItem(`unlocked_step_${rawLang}_1`)) {
+        localStorage.setItem(`unlocked_step_${rawLang}_1`, '10');
+      }
 
       // Scan per-level steps (each level has 10 steps; if >= 10, marked as cleared)
       for (let lvl = 1; lvl <= 50; lvl++) {
@@ -107,7 +112,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         }
       }
 
-      const savedUnlocked = parseInt(localStorage.getItem(`unlocked_level_${rawLang}`) || '1', 10);
+      const savedUnlocked = parseInt(localStorage.getItem(`unlocked_level_${rawLang}`) || '2', 10);
       maxUnlocked = Math.max(maxUnlocked, savedUnlocked);
 
       setUserProgress({
