@@ -69,6 +69,13 @@ export default function TypingStage({
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
   const currentLineIdx = userLines.length - 1;
 
+  const activeLineRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll editor container to keep active typing line in view
+  useEffect(() => {
+    activeLineRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [currentLineIdx]);
+
   // Handle typing input
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (isExecuting) return;
@@ -213,6 +220,7 @@ export default function TypingStage({
             return (
               <div
                 key={lineIdx}
+                ref={isUserOnThisLine ? activeLineRef : null}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

@@ -638,6 +638,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
   const [ramRows, setRamRows] = useState<number>(5);
   const ramBodyRef = useRef<HTMLDivElement>(null);
+  const terminalEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (terminalOutput || isDebugging) {
+      terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [terminalOutput, isDebugging]);
 
   // Custom Variables in Toolbox (starts with default x, y)
   const [customVariables, setCustomVariables] = useState<CustomVariableTemplate[]>([
@@ -4699,6 +4706,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   {terminalOutput}
                 </pre>
               )}
+              <div ref={terminalEndRef} />
             </div>
           </div>
 
