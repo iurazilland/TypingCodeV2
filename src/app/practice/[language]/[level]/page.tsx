@@ -4916,27 +4916,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             userSelect: mode === 'typing' ? 'none' : 'auto',
           }}
         >
-          {/* Typing Mode Reference Hint Banner */}
-          {mode === 'typing' && (
-            <div style={{
-              padding: '9px 12px',
-              background: 'rgba(56, 189, 248, 0.08)',
-              borderBottom: '1px solid rgba(56, 189, 248, 0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              color: '#38bdf8',
-              fontSize: '0.72rem',
-              fontWeight: 800,
-              textAlign: 'center',
-              flexShrink: 0,
-              zIndex: 20,
-            }}>
-              <span>💡 힌트 참고용 (드래그 잠금)</span>
-            </div>
-          )}
-
           {/* Drag to delete overlay banner */}
           {isToolboxHovered && isDraggingBlock && (
               <div style={{
