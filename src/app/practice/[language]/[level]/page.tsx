@@ -500,6 +500,72 @@ function evaluateRangeString(argStr: string, scope?: Record<string, any>): numbe
   return arr;
 }
 
+/**
+ * Compares two debug scope snapshots and returns the set of memory keys
+ * (e.g. 'x', 'lst[1]', 'range(5)') that were newly created or mutated in the current step.
+ */
+function getChangedMemoryKeys(prevScope: Record<string, any>, currScope: Record<string, any>): Set<string> {
+  const changed = new Set<string>();
+
+  for (const [k, currVal] of Object.entries(currScope)) {
+    const prevVal = prevScope[k];
+
+    const isGeneratedSeq =
+      k.startsWith('range') ||
+      k.startsWith('enumerate') ||
+      k.startsWith('zip') ||
+      k.startsWith('reversed') ||
+      k.startsWith('sorted');
+
+    // 1. Newly created key in this step
+    if (!(k in prevScope)) {
+      if (Array.isArray(currVal) && !isGeneratedSeq) {
+        if (currVal.length === 0) {
+          changed.add(k);
+        } else {
+          currVal.forEach((_, idx) => changed.add(`${k}[${idx}]`));
+        }
+      } else {
+        changed.add(k);
+      }
+      continue;
+    }
+
+    // 2. Existing key: check if value or elements changed
+    if (Array.isArray(currVal)) {
+      if (isGeneratedSeq) {
+        if (!Array.isArray(prevVal) || JSON.stringify(prevVal) !== JSON.stringify(currVal)) {
+          changed.add(k);
+        }
+      } else {
+        if (!Array.isArray(prevVal)) {
+          currVal.forEach((_, idx) => changed.add(`${k}[${idx}]`));
+        } else {
+          const maxLen = Math.max(prevVal.length, currVal.length);
+          if (currVal.length === 0 && prevVal.length > 0) {
+            changed.add(k);
+          }
+          for (let idx = 0; idx < maxLen; idx++) {
+            if (prevVal[idx] !== currVal[idx]) {
+              changed.add(`${k}[${idx}]`);
+            }
+          }
+        }
+      }
+    } else if (typeof currVal === 'object' && currVal !== null) {
+      if (JSON.stringify(prevVal) !== JSON.stringify(currVal)) {
+        changed.add(k);
+      }
+    } else {
+      if (prevVal !== currVal) {
+        changed.add(k);
+      }
+    }
+  }
+
+  return changed;
+}
+
 // Pure tree utility functions hoisted to module scope to prevent TDZ ReferenceError
 function findBlockInTree(blocks: CanvasBlock[], targetId: string): CanvasBlock | null {
   for (const b of blocks) {
@@ -658,6 +724,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const [debugStepInfo, setDebugStepInfo] = useState<{ current: number; total: number } | null>(null);
   const [executingBlockId, setExecutingBlockId] = useState<string | null>(null);
   const [executingLineIndex, setExecutingLineIndex] = useState<number | null>(null);
+  const [highlightedMemoryKeys, setHighlightedMemoryKeys] = useState<Set<string>>(new Set());
   const debugAbortRef = useRef<boolean>(false);
 
   // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
@@ -805,6 +872,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setUserCode('');
     setTerminalOutput('');
     setRuntimeMemory({});
+    setHighlightedMemoryKeys(new Set());
     setIsSuccess(false);
     setShowHint(false);
   }, [currentStepIndex]);
@@ -1562,6 +1630,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       setExecutingBlockId(null);
       setExecutingLineIndex(null);
       setDebugStepInfo(null);
+      setHighlightedMemoryKeys(new Set());
       return;
     }
 
@@ -1570,6 +1639,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       lastExecutedCodeRef.current = '';
       setTerminalOutput('');
       setRuntimeMemory({});
+      setHighlightedMemoryKeys(new Set());
       setIsSuccess(false);
       setDebugStepInfo(null);
       return;
@@ -1580,6 +1650,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     // Always clear terminal, memory, and success state cleanly before new execution
     setTerminalOutput('');
     setRuntimeMemory({});
+    setHighlightedMemoryKeys(new Set());
     setIsSuccess(false);
 
     // Yield briefly so React flushes the cleared terminal state to the DOM
@@ -1657,6 +1728,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       setIsDebugging(true);
       setExecutingBlockId(null);
       setExecutingLineIndex(null);
+      setHighlightedMemoryKeys(new Set());
 
       try {
         let actualOut = '';
@@ -1677,11 +1749,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
             setTerminalOutput(actualOut);
           } else {
+            let prevScope: Record<string, any> = {};
             for (let i = 0; i < steps.length; i++) {
               if (debugAbortRef.current) break;
               const step = steps[i];
               setDebugStepInfo({ current: i + 1, total: totalSteps });
               if (step.blockId) setExecutingBlockId(step.blockId);
+
+              const changedKeys = getChangedMemoryKeys(prevScope, step.scope);
+              setHighlightedMemoryKeys(changedKeys);
+              prevScope = { ...step.scope };
+
               setRuntimeMemory({ ...step.scope });
               setTerminalOutput(step.stdout);
               if (step.stderr) {
@@ -1707,11 +1785,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
             setTerminalOutput(actualOut);
           } else {
+            let prevScope: Record<string, any> = {};
             for (let i = 0; i < steps.length; i++) {
               if (debugAbortRef.current) break;
               const step = steps[i];
               setDebugStepInfo({ current: i + 1, total: totalSteps });
               if (step.lineIndex !== undefined) setExecutingLineIndex(step.lineIndex);
+
+              const changedKeys = getChangedMemoryKeys(prevScope, step.scope);
+              setHighlightedMemoryKeys(changedKeys);
+              prevScope = { ...step.scope };
+
               setRuntimeMemory({ ...step.scope });
               setTerminalOutput(step.stdout);
               if (step.stderr) {
@@ -1732,6 +1816,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         // Clean visual execution indicator once trace finishes
         setExecutingBlockId(null);
         setExecutingLineIndex(null);
+        setHighlightedMemoryKeys(new Set());
 
         if (!debugAbortRef.current) {
           lastExecutedCodeRef.current = codeToRun;
@@ -1765,6 +1850,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         setExecutingBlockId(null);
         setExecutingLineIndex(null);
         setDebugStepInfo(null);
+        setHighlightedMemoryKeys(new Set());
       }
     }
   };
@@ -4959,6 +5045,28 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               }}>
                 {memoryBoxes.map((box) => {
                   const tooltipText = box.active ? (box.fullValue || box.value) : undefined;
+                  const isHighlighted = isDebugging && highlightedMemoryKeys.has(box.name);
+
+                  // 1. Highlighted during debug (newly created or modified): vibrant purple!
+                  // 2. Normal Active: crisp white border!
+                  // 3. Inactive: subtle dashed gray
+                  let boxBorder = '1px dashed rgba(255, 255, 255, 0.08)';
+                  let boxBg = 'rgba(255, 255, 255, 0.02)';
+                  let boxGlow = 'none';
+                  let typeColor = '#94a3b8';
+
+                  if (isHighlighted) {
+                    boxBorder = '1.5px solid #a855f7';
+                    boxBg = 'rgba(168, 85, 247, 0.22)';
+                    boxGlow = '0 0 10px rgba(168, 85, 247, 0.6)';
+                    typeColor = '#c084fc';
+                  } else if (box.active) {
+                    boxBorder = '1.5px solid rgba(255, 255, 255, 0.85)';
+                    boxBg = 'rgba(255, 255, 255, 0.06)';
+                    boxGlow = '0 0 6px rgba(255, 255, 255, 0.15)';
+                    typeColor = '#cbd5e1';
+                  }
+
                   return (
                     <div
                       key={box.id}
@@ -4981,15 +5089,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           width: '100%',
                           height: '34px',
                           borderRadius: '6px',
-                          background: box.active
-                            ? 'rgba(168, 85, 247, 0.18)'
-                            : 'rgba(255, 255, 255, 0.02)',
-                          border: box.active
-                            ? '1.5px solid #a855f7'
-                            : '1px dashed rgba(255, 255, 255, 0.08)',
-                          boxShadow: box.active
-                            ? '0 0 8px rgba(168, 85, 247, 0.35)'
-                            : 'none',
+                          background: boxBg,
+                          border: boxBorder,
+                          boxShadow: boxGlow,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -5007,10 +5109,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                             top: '1px',
                             left: '3px',
                             fontSize: '0.50rem',
-                            color: '#c084fc',
+                            color: typeColor,
                             fontFamily: 'var(--font-mono)',
                             lineHeight: 1,
                             pointerEvents: 'none',
+                            fontWeight: isHighlighted ? 800 : 600,
                           }}>
                             {box.type}
                           </span>
@@ -5042,7 +5145,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                         style={{
                           fontSize: '0.56rem',
                           fontWeight: 700,
-                          color: box.active ? '#e2e8f0' : '#475569',
+                          color: isHighlighted ? '#c084fc' : box.active ? '#e2e8f0' : '#475569',
                           textAlign: 'center',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
@@ -5050,6 +5153,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           width: '100%',
                           maxWidth: '100%',
                           display: 'block',
+                          transition: 'color 0.2s ease',
                         }}
                       >
                         {box.name}
