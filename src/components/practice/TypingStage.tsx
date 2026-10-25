@@ -234,7 +234,7 @@ export default function TypingStage({
 }: TypingStageProps) {
   const targetCode = (question.targetCode || '').replace(/\r\n/g, '\n');
   const templateCode = (question.templateCode || '').replace(/\r\n/g, '\n');
-  const guideCode = (question.kind === 'fill_blank' || !templateCode) ? targetCode : templateCode;
+  const guideCode = templateCode || targetCode;
 
   // User's typed code text and cursor position
   const [typedCode, setTypedCode] = useState<string>('');
@@ -290,6 +290,7 @@ export default function TypingStage({
   const nextChar = useMemo(() => {
     if (cursorIndex < targetCode.length) {
       const ch = targetCode[cursorIndex];
+      if (ch === '§') return '';
       if (ch === '\n') return 'Enter';
       if (ch === ' ') return 'Space';
       return ch;
