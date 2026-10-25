@@ -1621,6 +1621,68 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     });
   };
 
+  // Helper to validate code execution result
+  // - Output comparison: actualOut must match expectedOut (trimmed) and cannot be empty
+  // - Block mode: Purely output-based (for conceptual learning)
+  // - Typing mode: Disallows unresolved blanks, residual bug tokens, or excessive typos outside the blank
+  const checkSubmissionPass = (
+    userCodeStr: string,
+    actualOut: string,
+    expectedOut: string,
+    isErr: boolean,
+    question: PracticeQuestion,
+    isTyping: boolean
+  ): boolean => {
+    if (isErr) return false;
+    const cleanActual = actualOut.trim();
+    const cleanExpected = expectedOut.trim();
+    if (!cleanActual || cleanActual !== cleanExpected) return false;
+
+    // Block mode is lenient (conceptual explanation stage)
+    if (!isTyping) return true;
+
+    const trimmedUser = userCodeStr.trim();
+    if (!trimmedUser) return false;
+
+    // 1. Unfilled blank placeholder check: [   ], [ ? ], [___], [빈칸]
+    if (/\[\s*(?:|\?|___|빈칸)\s*\]/.test(trimmedUser)) {
+      return false;
+    }
+
+    // 2. In bug fix mode, template bug should not persist
+    if (question.kind === 'fix_bug' && question.templateCode) {
+      const bugTokens = ['pritn', 'pirnt'];
+      if (bugTokens.some((b) => question.templateCode?.includes(b) && trimmedUser.includes(b))) {
+        return false;
+      }
+    }
+
+    // 3. Typo count check for fill-in-the-blank questions
+    if (question.kind === 'fill_blank' && question.templateCode) {
+      const match = question.templateCode.match(/^(.*?)\[\s*(?:|\?|___|빈칸)\s*\](.*)$/);
+      if (match) {
+        const [, prefix, suffix] = match;
+        if (prefix && !trimmedUser.startsWith(prefix.trimEnd())) {
+          let prefixMismatches = 0;
+          for (let i = 0; i < prefix.length; i++) {
+            if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
+          }
+          if (prefixMismatches > 2) return false;
+        }
+        if (suffix && !trimmedUser.endsWith(suffix.trimStart())) {
+          let suffixMismatches = 0;
+          for (let i = 0; i < suffix.length; i++) {
+            const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
+            if (userChar !== suffix[i]) suffixMismatches++;
+          }
+          if (suffixMismatches > 2) return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
   // Manual Code Execution (Normal Run or Progressive Step Debugging)
   const handleExecuteManual = async () => {
     if (isExecuting || isDebugging) {
@@ -1704,10 +1766,16 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         const expectedOut = currentQuestion.expectedOutput.trim();
         setTerminalOutput(actualOut);
 
-        const cleanTarget = currentQuestion.targetCode.trim().replace(/\s+/g, '');
-        const cleanUser = codeToRun.replace(/\s+/g, '');
+        const passed = checkSubmissionPass(
+          codeToRun,
+          actualOut,
+          expectedOut,
+          isErr,
+          currentQuestion,
+          mode === 'typing'
+        );
 
-        if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
+        if (passed) {
           setIsSuccess(true);
         } else {
           setIsSuccess(false);
@@ -1821,14 +1889,21 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         if (!debugAbortRef.current) {
           lastExecutedCodeRef.current = codeToRun;
           const expectedOut = currentQuestion.expectedOutput.trim();
-          const cleanTarget = currentQuestion.targetCode.trim().replace(/\s+/g, '');
-          const cleanUser = codeToRun.replace(/\s+/g, '');
 
           // Pause after execution completes so the user can inspect output and memory before success modal
           await sleepInterruptible(900);
 
           if (!debugAbortRef.current) {
-            if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
+            const passed = checkSubmissionPass(
+              codeToRun,
+              actualOut,
+              expectedOut,
+              isErr,
+              currentQuestion,
+              mode === 'typing'
+            );
+
+            if (passed) {
               setIsSuccess(true);
             } else {
               setIsSuccess(false);

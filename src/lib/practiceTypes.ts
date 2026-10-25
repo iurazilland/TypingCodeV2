@@ -20,20 +20,25 @@ export interface BlockPiece {
   category: BlockCategory;
 }
 
+export type ChallengeKind = 'fill_blank' | 'fix_bug' | 'one_line' | 'standard';
+
 export interface PracticeQuestion {
   id: number;
   step: number; // 1 ~ 10
   type?: 'block' | 'typing'; // 'block' for steps 1-5, 'typing' for steps 6-10
+  kind?: ChallengeKind; // 'fill_blank' | 'fix_bug' | 'one_line' | 'standard'
   title: string;
+  title_en?: string;
   prompt_ko: string;
   prompt_en?: string;
-  targetCode: string;
-  expectedOutput: string;
+  templateCode?: string; // Code template shown in background guide layer (supports [   ] blanks)
+  targetCode: string; // Canonical / reference answer code
+  expectedOutput: string; // Ground truth expected terminal output
   hint_ko: string;
   hint_en?: string;
   starterCode?: string;
-  blankToken?: string; // Optional token in targetCode to be rendered as an interactive fill-in blank block
-  availableBlocks?: BlockPiece[];
+  blankToken?: string; // Legacy fill-in blank token
+  availableBlocks?: BlockPiece[]; // Legacy block pieces
 }
 
 export interface PracticeRound {

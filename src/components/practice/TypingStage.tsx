@@ -233,6 +233,8 @@ export default function TypingStage({
   executingLineIndex = null,
 }: TypingStageProps) {
   const targetCode = (question.targetCode || '').replace(/\r\n/g, '\n');
+  const templateCode = (question.templateCode || '').replace(/\r\n/g, '\n');
+  const guideCode = templateCode || targetCode;
 
   // User's typed code text and cursor position
   const [typedCode, setTypedCode] = useState<string>('');
@@ -249,7 +251,7 @@ export default function TypingStage({
     setTimeout(() => {
       hiddenInputRef.current?.focus();
     }, 50);
-  }, [question.id, question.targetCode, onCodeChange]);
+  }, [question.id, question.targetCode, question.templateCode, onCodeChange]);
 
   // Sync typed code upward
   useEffect(() => {
@@ -295,8 +297,8 @@ export default function TypingStage({
     return '';
   }, [cursorIndex, targetCode]);
 
-  // Split targetCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
-  const targetLines = useMemo(() => targetCode.split('\n'), [targetCode]);
+  // Split guideCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
+  const targetLines = useMemo(() => guideCode.split('\n'), [guideCode]);
   const userLines = useMemo(() => typedCode.split('\n'), [typedCode]);
   const maxLineCount = Math.max(targetLines.length, userLines.length);
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
@@ -462,6 +464,60 @@ export default function TypingStage({
       });
       setCursorIndex((prev) => prev + 1);
     }
+  };
+
+  // Helper: Renders the background guide line, transforming [   ] blanks into stylish cyan dotted capsule badges
+  const renderGuideLine = (lineText: string) => {
+    if (!lineText) return ' ';
+
+    // Match blank patterns: [   ], [?], [빈칸], [___]
+    const blankRegex = /\[\s*(?:|\?|___|빈칸)\s*\]/g;
+    if (!blankRegex.test(lineText)) {
+      return lineText;
+    }
+
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    blankRegex.lastIndex = 0;
+
+    while ((match = blankRegex.exec(lineText)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(lineText.slice(lastIndex, match.index));
+      }
+      parts.push(
+        <span
+          key={match.index}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0 8px',
+            height: '24px',
+            borderRadius: '5px',
+            border: '1.5px dashed rgba(56, 189, 248, 0.75)',
+            background: 'rgba(56, 189, 248, 0.12)',
+            boxShadow: '0 0 10px rgba(56, 189, 248, 0.25)',
+            color: '#38bdf8',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.78rem',
+            fontWeight: 800,
+            verticalAlign: 'middle',
+            margin: '0 2px',
+            userSelect: 'none',
+          }}
+        >
+          빈칸
+        </span>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < lineText.length) {
+      parts.push(lineText.slice(lastIndex));
+    }
+
+    return <>{parts}</>;
   };
 
   return (
@@ -680,9 +736,11 @@ export default function TypingStage({
                       lineHeight: 'inherit',
                       letterSpacing: 'inherit',
                       cursor: 'text',
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
                   >
-                    {targetLineText || ' '}
+                    {renderGuideLine(targetLineText)}
                   </div>
 
                   {/* ==========================================================
@@ -690,10 +748,14 @@ export default function TypingStage({
                       - 바닥 레이어 바로 위에 정확한 폰트와 위치로 겹쳐서 렌더링
                       ========================================================== */}
                   {userLineText !== null && (() => {
-                    const lineTokens = targetLinesTokens[lineIdx] || [];
+                    const lineTokens = tokenizePythonLine(userLineText);
                     const completedTokens = lineTokens.filter(
-                      (t) => userLineText.length >= t.end && userLineText.slice(t.start, t.end) === t.text
+                      (t) => userLineText.length >= t.end
                     );
+
+                    const blankStart = targetLineText.indexOf('[');
+                    const blankEnd = targetLineText.indexOf(']');
+                    const hasBlank = blankStart !== -1 && blankEnd !== -1;
 
                     return (
                       <div
@@ -716,7 +778,6 @@ export default function TypingStage({
                         {userLineText.split('').map((userChar, colIdx) => {
                           const hasTargetChar = colIdx < targetLineText.length;
                           const targetChar = targetLineText[colIdx];
-                          const isMatch = hasTargetChar && userChar === targetChar;
                           const isCursorHere = isCursorOnThisLine && cursorCol === colIdx;
 
                           // Token syntax color: crisp white while typing; switches to VS Code Dark+ color once the token is fully completed
@@ -724,6 +785,17 @@ export default function TypingStage({
                           const syntaxColor = token
                             ? (VSCODE_DARK_PLUS[token.type] || VSCODE_DARK_PLUS.default)
                             : VSCODE_DARK_PLUS.default;
+
+                          let isCharError = false;
+                          if (question.kind === 'fix_bug') {
+                            if (colIdx < templateCode.length && userChar === templateCode[colIdx] && userChar !== targetCode[colIdx]) {
+                              isCharError = true;
+                            }
+                          } else if (hasBlank) {
+                            if (colIdx < blankStart && userChar !== targetChar) {
+                              isCharError = true;
+                            }
+                          }
 
                           return (
                             <React.Fragment key={colIdx}>
@@ -752,9 +824,9 @@ export default function TypingStage({
                                 }}
                                 style={{
                                   display: 'inline-block',
-                                  color: isMatch ? syntaxColor : VSCODE_DARK_PLUS.error,
+                                  color: isCharError ? VSCODE_DARK_PLUS.error : syntaxColor,
                                   background: 'transparent',
-                                  fontWeight: isMatch && token && (token.type === 'keyword' || token.type === 'builtin') ? 700 : 500,
+                                  fontWeight: token && (token.type === 'keyword' || token.type === 'builtin') ? 700 : 500,
                                   borderRadius: '2px',
                                   boxShadow: 'none',
                                   cursor: 'text',
