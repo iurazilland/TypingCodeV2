@@ -10,6 +10,22 @@ export interface EvaluationResult {
   requiresRemote?: boolean;
 }
 
+export interface ExecutionStep {
+  blockId?: string;
+  lineIndex?: number;
+  scope: Record<string, any>;
+  stdout: string;
+  stderr?: string;
+}
+
+export interface TraceEvaluationResult {
+  success: boolean;
+  stdout: string;
+  stderr: string;
+  scope: Record<string, any>;
+  steps: ExecutionStep[];
+}
+
 export function splitTopLevelArgs(str: string): string[] {
   const result: string[] = [];
   let current = '';
@@ -59,13 +75,35 @@ export function splitTopLevelArgs(str: string): string[] {
   return result;
 }
 
-// 0ms Safe Local Block AST Evaluator with infinite loop protection
-export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
+// 0ms Safe Local Block AST Evaluator with trace generation and loop cycling support
+export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
   try {
     const scope: Record<string, any> = {};
     const functions: Record<string, any> = {};
     let stdoutBuffer = '';
     let maxSteps = 500;
+    const steps: ExecutionStep[] = [];
+
+    const cloneScope = (s: Record<string, any>) => {
+      const res: Record<string, any> = {};
+      for (const k of Object.keys(s)) {
+        const val = s[k];
+        if (Array.isArray(val)) res[k] = [...val];
+        else if (val instanceof Set) res[k] = new Set(val);
+        else if (val !== null && typeof val === 'object') res[k] = { ...val };
+        else res[k] = val;
+      }
+      return res;
+    };
+
+    const recordStep = (b: any) => {
+      steps.push({
+        blockId: b.id,
+        lineIndex: b.lineIndex,
+        scope: cloneScope(scope),
+        stdout: stdoutBuffer.replace(/\r?\n$/, ''),
+      });
+    };
 
     const evalExpr = (rawExpr: string): any => {
       const expr = (rawExpr || '').trim();
@@ -424,23 +462,28 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
           } else {
             scope[vName] = evalExpr(blk.content || '0');
           }
+          recordStep(blk);
         } else if ([
           'int', 'float', 'str', 'bool', 'type', 'input', 'len', 'round', 'abs',
           'sum', 'min', 'max', 'range', 'map', 'sorted', 'iter', 'enumerate',
           'zip', 'all', 'any', 'reversed', 'open'
         ].includes(blk.type)) {
           evalBlockAsExpr(blk);
+          recordStep(blk);
         } else if (blk.type === 'math') {
           // math pseudo-block placed directly in statement list: safe no-op
         } else if (blk.type === 'list') {
           const vName = blk.varName || 'my_list';
           scope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i));
+          recordStep(blk);
         } else if (blk.type === 'tuple') {
           const vName = blk.varName || 'my_tuple';
           scope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i));
+          recordStep(blk);
         } else if (blk.type === 'set') {
           const vName = blk.varName || 'my_set';
           scope[vName] = new Set((blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i)));
+          recordStep(blk);
         } else if (blk.type === 'dict') {
           const vName = blk.varName || 'my_dict';
           const dictObj: Record<string, any> = {};
@@ -448,6 +491,7 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             if (p.key.trim()) dictObj[p.key.trim()] = evalExpr(p.value.trim() || 'None');
           });
           scope[vName] = dictObj;
+          recordStep(blk);
         } else if (blk.type === 'def') {
           const fName = blk.varName || 'my_func';
           functions[fName] = {
@@ -456,6 +500,7 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             hasReturn: blk.hasReturn,
             returnVal: blk.returnVal,
           };
+          recordStep(blk);
         } else if (blk.type === 'print') {
           if (blk.argBlock) {
             const val = evalBlockAsExpr(blk.argBlock);
@@ -465,52 +510,55 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             else stdoutBuffer += String(val) + '\n';
           } else {
             const raw = (blk.content || '').trim();
-          if (!raw) {
-            stdoutBuffer += '\n';
-          } else {
-            const args = splitTopLevelArgs(raw);
-            let sep = ' ';
-            let end = '\n';
-            const posArgs: string[] = [];
+            if (!raw) {
+              stdoutBuffer += '\n';
+            } else {
+              const args = splitTopLevelArgs(raw);
+              let sep = ' ';
+              let end = '\n';
+              const posArgs: string[] = [];
 
-            for (const arg of args) {
-              const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
-              const endMatch = arg.match(/^end\s*=\s*(.+)$/);
-              if (sepMatch) {
-                const val = evalExpr(sepMatch[1]);
-                sep = String(val ?? '').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
-              } else if (endMatch) {
-                const val = evalExpr(endMatch[1]);
-                end = String(val ?? '').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
-              } else {
-                posArgs.push(arg);
+              for (const arg of args) {
+                const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
+                const endMatch = arg.match(/^end\s*=\s*(.+)$/);
+                if (sepMatch) {
+                  const val = evalExpr(sepMatch[1]);
+                  sep = String(val ?? '').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+                } else if (endMatch) {
+                  const val = evalExpr(endMatch[1]);
+                  end = String(val ?? '').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+                } else {
+                  posArgs.push(arg);
+                }
               }
-            }
 
-            const printed = posArgs.map((arg) => {
-              const val = evalExpr(arg);
-              if (val === null || val === undefined) return 'None';
-              if (typeof val === 'boolean') return val ? 'True' : 'False';
-              if (typeof val === 'number') {
-                if (arg.includes('/') && !arg.includes('//') && Number.isInteger(val)) {
-                  return val.toFixed(1);
+              const printed = posArgs.map((arg) => {
+                const val = evalExpr(arg);
+                if (val === null || val === undefined) return 'None';
+                if (typeof val === 'boolean') return val ? 'True' : 'False';
+                if (typeof val === 'number') {
+                  if (arg.includes('/') && !arg.includes('//') && Number.isInteger(val)) {
+                    return val.toFixed(1);
+                  }
+                  return String(val);
+                }
+                if (Array.isArray(val)) return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
+                if (val instanceof Set) return `{${Array.from(val).map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}}`;
+                if (typeof val === 'object') {
+                  const entries = Object.entries(val).map(([k, v]) => `'${k}': ${typeof v === 'string' ? `'${v}'` : String(v)}`);
+                  return `{${entries.join(', ')}}`;
                 }
                 return String(val);
-              }
-              if (Array.isArray(val)) return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
-              if (val instanceof Set) return `{${Array.from(val).map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}}`;
-              if (typeof val === 'object') {
-                const entries = Object.entries(val).map(([k, v]) => `'${k}': ${typeof v === 'string' ? `'${v}'` : String(v)}`);
-                return `{${entries.join(', ')}}`;
-              }
-              return String(val);
-            });
-            stdoutBuffer += printed.join(sep) + end;
+              });
+              stdoutBuffer += printed.join(sep) + end;
+            }
           }
-        }
-      } else if (blk.type === 'break') {
+          recordStep(blk);
+        } else if (blk.type === 'break') {
+          recordStep(blk);
           return 'break';
         } else if (blk.type === 'continue') {
+          recordStep(blk);
           return 'continue';
         } else if (blk.type === 'for_range' || blk.type === 'for_in') {
           const vName = blk.varName || (blk.type === 'for_range' ? 'i' : 'item');
@@ -529,23 +577,28 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             : typeof seqVal === 'string'
             ? seqVal.split('')
             : [seqVal];
+
           for (const item of arr) {
             if (maxSteps <= 0) break;
             scope[vName] = item;
-            if (blk.innerBlocks) {
+            // Record step for loop header cycling on every iteration!
+            recordStep(blk);
+            if (blk.innerBlocks && blk.innerBlocks.length > 0) {
               const sig = runBlockList(blk.innerBlocks);
               if (sig === 'break') break;
             }
           }
         } else if (blk.type === 'while') {
           const condRaw = (blk.content || '').trim() || 'False';
-          let loopGuard = 200;
+          let loopGuard = 100;
           while (Boolean(evalExpr(condRaw)) && loopGuard-- > 0) {
             if (--maxSteps <= 0) {
               stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
               break;
             }
-            if (blk.innerBlocks) {
+            // Record step for while header cycling on every iteration!
+            recordStep(blk);
+            if (blk.innerBlocks && blk.innerBlocks.length > 0) {
               const sig = runBlockList(blk.innerBlocks);
               if (sig === 'break') break;
             }
@@ -559,6 +612,7 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
             if (br.kind === 'if' || br.kind === 'elif') {
               const cond = Boolean(evalExpr(br.condition || 'False'));
               if (cond) {
+                recordStep(blk);
                 if (br.innerBlocks) {
                   const sig = runBlockList(br.innerBlocks);
                   if (sig === 'break') return 'break';
@@ -567,6 +621,7 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
                 break;
               }
             } else if (br.kind === 'else') {
+              recordStep(blk);
               if (br.innerBlocks) {
                 const sig = runBlockList(br.innerBlocks);
                 if (sig === 'break') return 'break';
@@ -586,39 +641,155 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
       stdout: stdoutBuffer.replace(/\r?\n$/, ''),
       stderr: '',
       scope,
+      steps,
     };
   } catch (err: any) {
-    return { success: false, stdout: '', stderr: String(err?.message || ''), scope: {} };
+    return {
+      success: false,
+      stdout: '',
+      stderr: String(err?.message || ''),
+      scope: {},
+      steps: [],
+    };
   }
 }
 
-// Local python evaluator for simple typing mode lines (falls back to remote runner for complex code)
+// Synchronous 0ms wrapper for standard evaluation
+export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
+  const res = evaluateBlocksWithTrace(blocks);
+  return {
+    success: res.success,
+    stdout: res.stdout,
+    stderr: res.stderr,
+    scope: res.scope,
+  };
+}
+
+// Lightweight AST parser for Python code in Typing Mode (preserves lineIndex and handles loops)
+export function parsePythonCodeToBlocks(code: string): any[] {
+  const rawLines = code.split('\n');
+  let i = 0;
+
+  const getIndent = (str: string) => {
+    const match = str.match(/^(\s*)/);
+    return match ? match[1].length : 0;
+  };
+
+  const parseBlock = (minIndent: number): any[] => {
+    const list: any[] = [];
+
+    while (i < rawLines.length) {
+      const line = rawLines[i];
+      const trimmed = line.trim();
+
+      // Skip blank lines and pure comments
+      if (!trimmed || trimmed.startsWith('#')) {
+        i++;
+        continue;
+      }
+
+      const indent = getIndent(line);
+      if (indent < minIndent) {
+        break; // Return back to parent indentation level
+      }
+
+      const lineIndex = i;
+      i++;
+
+      // 1. for loop: for <var> in <range/seq>:
+      const forMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+([\s\S]+?)\s*:$/);
+      if (forMatch) {
+        const inner = parseBlock(indent + 1);
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'for_in',
+          varName: forMatch[1],
+          content: forMatch[2],
+          lineIndex,
+          innerBlocks: inner,
+        });
+        continue;
+      }
+
+      // 2. while loop: while <condition>:
+      const whileMatch = trimmed.match(/^while\s+([\s\S]+?)\s*:$/);
+      if (whileMatch) {
+        const inner = parseBlock(indent + 1);
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'while',
+          content: whileMatch[1],
+          lineIndex,
+          innerBlocks: inner,
+        });
+        continue;
+      }
+
+      // 3. if condition: if <condition>:
+      const ifMatch = trimmed.match(/^if\s+([\s\S]+?)\s*:$/);
+      if (ifMatch) {
+        const inner = parseBlock(indent + 1);
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'if',
+          content: ifMatch[1],
+          lineIndex,
+          innerBlocks: inner,
+        });
+        continue;
+      }
+
+      // 4. print function: print(...)
+      const printMatch = trimmed.match(/^print\s*\(([\s\S]*)\)$/);
+      if (printMatch) {
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'print',
+          content: printMatch[1],
+          lineIndex,
+        });
+        continue;
+      }
+
+      // 5. assignment: variable = expression
+      const assignMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*=\s*([\s\S]+)$/);
+      if (assignMatch) {
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'variable',
+          varName: assignMatch[1],
+          content: assignMatch[2],
+          lineIndex,
+        });
+        continue;
+      }
+
+      // 6. Generic statement / method call (e.g. my_list.append(10))
+      list.push({
+        id: `py-line-${lineIndex}`,
+        type: 'variable',
+        varName: '_',
+        content: trimmed,
+        lineIndex,
+      });
+    }
+
+    return list;
+  };
+
+  return parseBlock(0);
+}
+
+// Local python evaluator for simple & loop typing mode lines
 export function evaluatePythonLocally(code: string): EvaluationResult {
-  const trimmed = code.trim();
-  // Complex control flows should be delegated to remote Wandbox runner for 100% exact output
-  if (/(\bfor\b|\bwhile\b|\bif\b|\bdef\b|\bclass\b)/.test(trimmed)) {
-    return { success: false, stdout: '', stderr: '', requiresRemote: true };
-  }
-
-  const lines = trimmed.split('\n').map((l) => l.trim()).filter(Boolean);
-  const blocks: any[] = [];
-
-  for (const line of lines) {
-    const printMatch = line.match(/^print\s*\(([\s\S]*)\)$/);
-    if (printMatch) {
-      blocks.push({ type: 'print', content: printMatch[1] });
-      continue;
-    }
-    const assignMatch = line.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/);
-    if (assignMatch) {
-      blocks.push({ type: 'variable', varName: assignMatch[1], content: assignMatch[2] });
-      continue;
-    }
-    // Default fallback: variable or expression
-    blocks.push({ type: 'variable', varName: '_', content: line });
-  }
-
+  const blocks = parsePythonCodeToBlocks(code);
   return evaluateBlocksLocally(blocks);
+}
+
+// Local python trace evaluator with step-by-step loop cycling
+export function evaluatePythonWithTrace(code: string): TraceEvaluationResult {
+  const blocks = parsePythonCodeToBlocks(code);
+  return evaluateBlocksWithTrace(blocks);
 }
 
 // Scratch execution chain order: traverses starting only from 'start' hat block

@@ -57,6 +57,8 @@ export interface CanvasBlockItemProps {
   onAddBranch?: (blockId: string, kind: 'elif' | 'else') => void;
   onRemoveBranch?: (blockId: string, branchId: string) => void;
   onToggleDefReturn?: (blockId: string, show: boolean) => void;
+  executingBlockId?: string | null;
+  isDebugging?: boolean;
   onDefReturnValChange?: (blockId: string, val: string) => void;
   onRemoveInnerBlock?: (parentBlockId: string, cIdx: number, branchId?: string) => void;
   onMethodNameChange?: (blockId: string, methodName: string) => void;
@@ -75,6 +77,27 @@ export interface CanvasBlockItemProps {
   handleInputClickSelect?: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
+function hasDescendant(b: CanvasBlock, targetId: string): boolean {
+  if (b.argBlock) {
+    if (b.argBlock.id === targetId || hasDescendant(b.argBlock, targetId)) return true;
+  }
+  if (b.innerBlocks) {
+    for (const child of b.innerBlocks) {
+      if (child.id === targetId || hasDescendant(child, targetId)) return true;
+    }
+  }
+  if (b.branches) {
+    for (const br of b.branches) {
+      if (br.innerBlocks) {
+        for (const child of br.innerBlocks) {
+          if (child.id === targetId || hasDescendant(child, targetId)) return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
 export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   const {
     block,
@@ -88,6 +111,8 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     activeSnapTarget,
     canvasBlocks = [],
     isDraggingCBlock = false,
+    executingBlockId = null,
+    isDebugging = false,
     onBlockPointerDown,
     onInnerBlockPointerDown,
     onArgBlockPointerDown,
@@ -123,6 +148,37 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   const isIfBlock = block.type === 'if';
   const isChainDragged = draggedChainIds ? draggedChainIds.has(block.id) : false;
   const isArgSlotTarget = activeSnapTarget?.type === 'arg_slot' && activeSnapTarget.targetBlockId === block.id;
+
+  // Visual debugging mode styling:
+  // Non-executing blocks are dimmed (opacity 0.35, brightness 0.65)
+  // Currently executing block glows bright cyan (brightness 1.35, drop-shadow glow)
+  // C-Block container remains visible when its descendant child block is executing
+  const isExecutingThisBlock = Boolean(isDebugging && executingBlockId && executingBlockId === block.id);
+  const isDescendantExecuting = Boolean(
+    !isExecutingThisBlock && isDebugging && executingBlockId && hasDescendant(block, executingBlockId)
+  );
+  const isDimmed = Boolean(isDebugging && executingBlockId && !isExecutingThisBlock && !isDescendantExecuting);
+
+  const debugStyle: React.CSSProperties = !isDebugging || !executingBlockId
+    ? { transition: 'opacity 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease' }
+    : isExecutingThisBlock
+    ? {
+        opacity: 1,
+        filter: 'brightness(1.35) saturate(1.3) drop-shadow(0 0 5px #38bdf8) drop-shadow(0 0 14px rgba(56, 189, 248, 0.85))',
+        zIndex: (block.zIndex ?? 10) + 200,
+        transition: 'all 0.15s ease-out',
+      }
+    : isDescendantExecuting
+    ? {
+        opacity: 0.95,
+        filter: 'none',
+        transition: 'all 0.15s ease-out',
+      }
+    : {
+        opacity: 0.35,
+        filter: 'brightness(0.65) saturate(0.65)',
+        transition: 'all 0.15s ease-out',
+      };
 
   // Stacking zIndex:
   // 1. Nested blocks inside a mouth MUST have strictly descending z-index (Child 0 > Child 1 > Child 2)
@@ -190,7 +246,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           zIndex: effectiveZIndex,
           userSelect: 'none',
           touchAction: 'none',
-          transition: 'transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease',
+          ...debugStyle,
         }}
       >
         <div
@@ -254,44 +310,20 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           }}
         >
           <CanvasBlockItem
+            {...props}
             block={block.argBlock}
             isSlotArg={true}
             parentBlockId={block.id}
             isNested={false}
-            draggedChainIds={draggedChainIds}
-            activeInputHelp={activeInputHelp}
-            canvasBlocks={canvasBlocks}
-            onBlockPointerDown={onBlockPointerDown}
-            onInnerBlockPointerDown={onInnerBlockPointerDown}
-            onArgBlockPointerDown={onArgBlockPointerDown}
-            onContextMenu={onContextMenu}
-            onContentChange={onContentChange}
-            onVarNameChange={onVarNameChange}
-            onMethodNameChange={onMethodNameChange}
-            onBlockTypeChange={onBlockTypeChange}
-            methodCategories={methodCategories}
-            getMethodSelectWidth={getMethodSelectWidth}
           />
           {chainedMethods.map((m) => (
             <CanvasBlockItem
+              {...props}
               key={m.id}
               block={m}
               isSlotArg={true}
               parentBlockId={m.attachedToBlockId || block.argBlock!.id}
               isNested={false}
-              draggedChainIds={draggedChainIds}
-              activeInputHelp={activeInputHelp}
-              canvasBlocks={canvasBlocks}
-              onBlockPointerDown={onBlockPointerDown}
-              onInnerBlockPointerDown={onInnerBlockPointerDown}
-              onArgBlockPointerDown={onArgBlockPointerDown}
-              onContextMenu={onContextMenu}
-              onContentChange={onContentChange}
-              onVarNameChange={onVarNameChange}
-              onMethodNameChange={onMethodNameChange}
-              onBlockTypeChange={onBlockTypeChange}
-              methodCategories={methodCategories}
-              getMethodSelectWidth={getMethodSelectWidth}
             />
           ))}
         </div>
@@ -379,6 +411,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           filter: isNested ? 'none' : 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
           zIndex: effectiveZIndex,
           touchAction: isNested ? undefined : 'none',
+          ...debugStyle,
         }}
       >
         {/* 1) Top Header Arm: 상단 두께 30px 및 결합부 유지 */}
@@ -718,6 +751,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           filter: isNested ? 'none' : 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
           zIndex: effectiveZIndex,
           touchAction: isNested ? undefined : 'none',
+          ...debugStyle,
         }}
       >
         {branches.map((branch, brIdx) => {
@@ -1174,6 +1208,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           zIndex: effectiveZIndex,
           userSelect: 'none',
           touchAction: (isNested || isSlotArg) ? undefined : 'none',
+          ...debugStyle,
         }}
       >
         <HorizontalPuzzleTab borderColor={theme.border} bg={theme.bg} />
@@ -1316,6 +1351,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           : { left: `${block.x}px`, top: `${block.y}px` }),
         zIndex: effectiveZIndex,
         touchAction: (isNested || isSlotArg) ? undefined : 'none',
+        ...debugStyle,
       }}
     >
       {/* Top Notch: null if connected or inside slot */}

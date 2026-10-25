@@ -31,7 +31,7 @@ import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
 import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
-import { evaluateBlocksLocally, evaluatePythonLocally, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
+import { evaluateBlocksLocally, evaluatePythonLocally, evaluateBlocksWithTrace, evaluatePythonWithTrace, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
 import TypingStage from '@/components/practice/TypingStage';
 import {
   PuzzleTab,
@@ -627,6 +627,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const [debugSpeed, setDebugSpeed] = useState<number>(1); // 0.5 | 1 | 2 | 3
   const [isDebugging, setIsDebugging] = useState<boolean>(false);
   const [debugStepInfo, setDebugStepInfo] = useState<{ current: number; total: number } | null>(null);
+  const [executingBlockId, setExecutingBlockId] = useState<string | null>(null);
+  const [executingLineIndex, setExecutingLineIndex] = useState<number | null>(null);
   const debugAbortRef = useRef<boolean>(false);
 
   // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
@@ -1307,6 +1309,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       debugAbortRef.current = true;
       setIsDebugging(false);
       setIsExecuting(false);
+      setExecutingBlockId(null);
+      setExecutingLineIndex(null);
       setDebugStepInfo(null);
       return;
     }
@@ -1401,6 +1405,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     } else {
       // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (0.6s base step delay)
       setIsDebugging(true);
+      setExecutingBlockId(null);
+      setExecutingLineIndex(null);
 
       const baseStepTime = 600; // 0.6초 기준 (1x = 600ms, 0.5x = 1200ms, 2x = 300ms, 3x = 200ms)
       const stepDelay = Math.round(baseStepTime / debugSpeed);
@@ -1415,78 +1421,70 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         if (mode !== 'typing') {
           const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
           const activeBlocks = orderedBlocks.filter((b) => b.type !== 'start');
-          const totalSteps = Math.max(1, activeBlocks.length);
+          const trace = evaluateBlocksWithTrace(activeBlocks);
+          const steps = trace.steps;
+          const totalSteps = Math.max(1, steps.length);
           setDebugStepInfo({ current: 0, total: totalSteps });
 
-          let cumulativeScope: Record<string, any> = {};
-          let cumulativeStdout = '';
-
-          for (let i = 0; i < activeBlocks.length; i++) {
-            if (debugAbortRef.current) break;
-            setDebugStepInfo({ current: i + 1, total: totalSteps });
-            const blockSlice = activeBlocks.slice(0, i + 1);
-            const evalRes = evaluateBlocksLocally(blockSlice);
-            if (evalRes.scope) {
-              cumulativeScope = { ...evalRes.scope };
-              setRuntimeMemory({ ...cumulativeScope });
-            }
-            if (evalRes.stdout !== undefined) {
-              cumulativeStdout = evalRes.stdout.replace(/^\r?\n+|\r?\n+$/g, '');
-              setTerminalOutput(cumulativeStdout);
-            }
-            if (evalRes.stderr) {
-              isErr = true;
-              actualOut = evalRes.stderr.trim();
-              setTerminalOutput(actualOut);
-              break;
-            }
-            await sleepInterruptible(stepDelay);
-          }
-
-          if (!debugAbortRef.current && !isErr) {
-            const finalRes = evaluateBlocksLocally(orderedBlocks);
-            actualOut = (finalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+          if (steps.length === 0) {
+            actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
             setTerminalOutput(actualOut);
+          } else {
+            for (let i = 0; i < steps.length; i++) {
+              if (debugAbortRef.current) break;
+              const step = steps[i];
+              setDebugStepInfo({ current: i + 1, total: totalSteps });
+              if (step.blockId) setExecutingBlockId(step.blockId);
+              setRuntimeMemory({ ...step.scope });
+              setTerminalOutput(step.stdout);
+              if (step.stderr) {
+                isErr = true;
+                actualOut = step.stderr.trim();
+                setTerminalOutput(actualOut);
+                break;
+              }
+              await sleepInterruptible(stepDelay);
+            }
+            if (!isErr) {
+              actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              setTerminalOutput(actualOut);
+            }
           }
         } else {
-          const lines = codeToRun.split('\n').filter((l) => l.trim().length > 0);
-          const totalSteps = Math.max(1, lines.length);
+          const trace = evaluatePythonWithTrace(codeToRun);
+          const steps = trace.steps;
+          const totalSteps = Math.max(1, steps.length);
           setDebugStepInfo({ current: 0, total: totalSteps });
 
-          // Initial pause on execution start so the user sees the start of debug
-          await sleepInterruptible(stepDelay);
-
-          let cumulativeScope: Record<string, any> = {};
-          let cumulativeStdout = '';
-
-          for (let i = 0; i < lines.length; i++) {
-            if (debugAbortRef.current) break;
-            setDebugStepInfo({ current: i + 1, total: totalSteps });
-            const subCode = lines.slice(0, i + 1).join('\n');
-            const localRes = evaluatePythonLocally(subCode);
-            if (localRes.scope) {
-              cumulativeScope = { ...cumulativeScope, ...localRes.scope };
-              setRuntimeMemory({ ...cumulativeScope });
-            }
-            if (localRes.stdout) {
-              cumulativeStdout = localRes.stdout.replace(/^\r?\n+|\r?\n+$/g, '');
-              setTerminalOutput(cumulativeStdout);
-            }
-            if (localRes.stderr) {
-              isErr = true;
-              actualOut = localRes.stderr.trim();
-              setTerminalOutput(actualOut);
-              break;
-            }
-            await sleepInterruptible(stepDelay);
-          }
-
-          if (!debugAbortRef.current && !isErr) {
-            const finalRes = evaluatePythonLocally(codeToRun);
-            actualOut = (finalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+          if (steps.length === 0) {
+            actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
             setTerminalOutput(actualOut);
+          } else {
+            for (let i = 0; i < steps.length; i++) {
+              if (debugAbortRef.current) break;
+              const step = steps[i];
+              setDebugStepInfo({ current: i + 1, total: totalSteps });
+              if (step.lineIndex !== undefined) setExecutingLineIndex(step.lineIndex);
+              setRuntimeMemory({ ...step.scope });
+              setTerminalOutput(step.stdout);
+              if (step.stderr) {
+                isErr = true;
+                actualOut = step.stderr.trim();
+                setTerminalOutput(actualOut);
+                break;
+              }
+              await sleepInterruptible(stepDelay);
+            }
+            if (!isErr) {
+              actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              setTerminalOutput(actualOut);
+            }
           }
         }
+
+        // Clean visual execution indicator once trace finishes
+        setExecutingBlockId(null);
+        setExecutingLineIndex(null);
 
         if (!debugAbortRef.current) {
           lastExecutedCodeRef.current = codeToRun;
@@ -1517,6 +1515,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         }
       } finally {
         setIsDebugging(false);
+        setExecutingBlockId(null);
+        setExecutingLineIndex(null);
         setDebugStepInfo(null);
       }
     }
@@ -6016,6 +6016,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       activeSnapTarget={activeSnapTarget}
                       draggedChainIds={draggedChainIds}
                       activeInputHelp={activeInputHelp}
+                      isDebugging={isDebugging}
+                      executingBlockId={executingBlockId}
                       onBlockPointerDown={handleBlockPointerDown}
                       onInnerBlockPointerDown={handleInnerBlockPointerDown}
                       onArgBlockPointerDown={handleArgBlockPointerDown}
@@ -6128,6 +6130,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 onSubmit={handleExecuteManual}
                 isSuccess={isSuccess}
                 isExecuting={isExecuting || isDebugging}
+                isDebugging={isDebugging}
+                executingLineIndex={executingLineIndex}
               />
             )}
           </div>

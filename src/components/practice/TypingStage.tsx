@@ -11,6 +11,8 @@ interface TypingStageProps {
   onSubmit: () => void;
   isSuccess: boolean;
   isExecuting: boolean;
+  isDebugging?: boolean;
+  executingLineIndex?: number | null;
 }
 
 export default function TypingStage({
@@ -19,25 +21,61 @@ export default function TypingStage({
   onSubmit,
   isSuccess,
   isExecuting,
+  isDebugging = false,
+  executingLineIndex = null,
 }: TypingStageProps) {
   const targetCode = question.targetCode || '';
   const blankToken = question.blankToken;
 
-  // Split targetCode into prefix, blankTarget, suffix
-  const { prefix, blankTarget, suffix } = useMemo(() => {
+  // Split targetCode into multi-line info and locate which line holds the blankToken
+  const { lineInfos, blankLineIdx, blankTarget } = useMemo(() => {
+    const rawLines = targetCode.split('\n');
     if (!blankToken || !targetCode.includes(blankToken)) {
       return {
-        prefix: '',
+        lineInfos: rawLines.map((lineText, idx) => ({
+          idx,
+          text: lineText,
+          isBlank: idx === 0,
+          prefixPart: '',
+          suffixPart: '',
+        })),
+        blankLineIdx: 0,
         blankTarget: targetCode,
-        suffix: '',
       };
     }
-    const idx = targetCode.indexOf(blankToken);
-    return {
-      prefix: targetCode.slice(0, idx),
-      blankTarget: blankToken,
-      suffix: targetCode.slice(idx + blankToken.length),
-    };
+
+    const bStart = targetCode.indexOf(blankToken);
+    let charCount = 0;
+    let foundLineIdx = 0;
+
+    const infos = rawLines.map((lineText, idx) => {
+      const lineLen = lineText.length + 1; // accounting for \n
+      const start = charCount;
+      const end = charCount + lineText.length;
+      charCount += lineLen;
+
+      if (bStart >= start && bStart <= end) {
+        foundLineIdx = idx;
+        const offset = bStart - start;
+        return {
+          idx,
+          text: lineText,
+          isBlank: true,
+          prefixPart: lineText.slice(0, offset),
+          suffixPart: lineText.slice(offset + blankToken.length),
+        };
+      }
+
+      return {
+        idx,
+        text: lineText,
+        isBlank: false,
+        prefixPart: lineText,
+        suffixPart: '',
+      };
+    });
+
+    return { lineInfos: infos, blankLineIdx: foundLineIdx, blankTarget: blankToken };
   }, [targetCode, blankToken]);
 
   const [typedBlank, setTypedBlank] = useState<string>('');
@@ -48,22 +86,29 @@ export default function TypingStage({
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
 
+  // Helper to reassemble full code
+  const assembleCode = (currentTyped: string) => {
+    return lineInfos
+      .map((l, i) => (i === blankLineIdx ? l.prefixPart + currentTyped + l.suffixPart : l.text))
+      .join('\n');
+  };
+
   // Reset when question changes
   useEffect(() => {
     setTypedBlank('');
     setTotalKeyStrokes(0);
     setTypoCount(0);
     setStartTime(null);
-    onCodeChange(prefix + suffix);
+    onCodeChange(assembleCode(''));
     setTimeout(() => {
       hiddenInputRef.current?.focus();
     }, 50);
-  }, [question.id, prefix, suffix]);
+  }, [question.id, lineInfos, blankLineIdx]);
 
   // Keep full code synced upwards
   useEffect(() => {
-    onCodeChange(prefix + typedBlank + suffix);
-  }, [typedBlank, prefix, suffix, onCodeChange]);
+    onCodeChange(assembleCode(typedBlank));
+  }, [typedBlank, lineInfos, blankLineIdx, onCodeChange]);
 
   // Focus hidden input on click anywhere in stage
   const handleStageClick = () => {
@@ -215,11 +260,11 @@ export default function TypingStage({
           </p>
         </div>
 
-        {/* Center Stage: Interactive Blank-Fill Code Line */}
+        {/* Center Stage: Interactive Blank-Fill Code Editor Box */}
         <div
           style={{
             margin: 'auto 0',
-            padding: '24px 28px',
+            padding: '16px 20px',
             background: 'rgba(15, 23, 42, 0.85)',
             border: isCompleted
               ? '2px solid rgba(16, 185, 129, 0.6)'
@@ -229,123 +274,185 @@ export default function TypingStage({
               ? '0 8px 30px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
               : '0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
             display: 'flex',
-            alignItems: 'center',
-            gap: '14px',
+            flexDirection: 'column',
+            gap: '8px',
             fontFamily: 'var(--font-mono)',
-            fontSize: '1.45rem',
-            lineHeight: 1,
+            fontSize: '1.35rem',
+            lineHeight: 1.25,
             transition: 'all 0.25s ease',
           }}
         >
-          {/* Line Number */}
-          <span style={{ fontSize: '0.95rem', color: '#475569', fontWeight: 700, userSelect: 'none' }}>
-            01
-          </span>
+          {lineInfos.map((line) => {
+            const isThisLineExecuting = Boolean(
+              isDebugging && executingLineIndex !== null && executingLineIndex !== undefined && executingLineIndex === line.idx
+            );
+            const isAnyLineExecuting = Boolean(
+              isDebugging && executingLineIndex !== null && executingLineIndex !== undefined
+            );
+            const isThisLineDimmed = Boolean(isAnyLineExecuting && !isThisLineExecuting);
 
-          <div style={{ display: 'inline-flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-            {/* Pre-filled Prefix (e.g. "print(") */}
-            {prefix && (
-              <span style={{ color: '#38bdf8', fontWeight: 800, letterSpacing: '0.5px' }}>
-                {prefix}
-              </span>
-            )}
-
-            {/* Interactive Blank Slot */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '6px 12px',
-                borderRadius: '8px',
-                background: isCompleted
-                  ? 'rgba(16, 185, 129, 0.18)'
-                  : 'rgba(59, 130, 246, 0.15)',
-                border: isCompleted
-                  ? '2px solid #10b981'
-                  : '2px dashed #3b82f6',
-                boxShadow: isCompleted
-                  ? '0 0 16px rgba(16, 185, 129, 0.4)'
-                  : '0 0 14px rgba(59, 130, 246, 0.35)',
-                minWidth: '50px',
-                position: 'relative',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {/* Character by character render inside slot */}
-              {blankTarget.split('').map((targetChar, idx) => {
-                const userChar = typedBlank[idx];
-                const isTyped = idx < typedBlank.length;
-                const isCurrent = idx === typedBlank.length;
-                const isMatch = isTyped && userChar === targetChar;
-
-                return (
+            return (
+              <div
+                key={line.idx}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  background: isThisLineExecuting
+                    ? 'linear-gradient(90deg, rgba(56, 189, 248, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%)'
+                    : isThisLineDimmed
+                    ? 'rgba(15, 23, 42, 0.3)'
+                    : 'transparent',
+                  border: isThisLineExecuting
+                    ? '2px solid #38bdf8'
+                    : '1px solid transparent',
+                  boxShadow: isThisLineExecuting
+                    ? '0 0 24px rgba(56, 189, 248, 0.45), inset 0 0 14px rgba(56, 189, 248, 0.15)'
+                    : 'none',
+                  opacity: isThisLineDimmed ? 0.32 : 1,
+                  transform: isThisLineExecuting ? 'scale(1.012)' : 'scale(1)',
+                  transition: 'all 0.15s ease-out',
+                }}
+              >
+                {/* Line Number & Execution Pointer */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', minWidth: '38px', flexShrink: 0 }}>
+                  {isThisLineExecuting ? (
+                    <span style={{ color: '#38bdf8', fontSize: '0.82rem', fontWeight: 900 }}>▶</span>
+                  ) : (
+                    <span style={{ width: '8px' }} />
+                  )}
                   <span
-                    key={idx}
                     style={{
-                      position: 'relative',
-                      display: 'inline-block',
-                      color: !isTyped
-                        ? 'rgba(255, 255, 255, 0.25)' // Dim ghost text
-                        : isMatch
-                        ? '#34d399' // Vibrant green
-                        : '#ef4444', // Red for typo!
-                      fontWeight: 900,
-                      background: isTyped && !isMatch ? 'rgba(239, 68, 68, 0.25)' : 'transparent',
-                      borderRadius: '3px',
-                      padding: '0 1px',
+                      fontSize: '0.90rem',
+                      color: isThisLineExecuting ? '#38bdf8' : '#475569',
+                      fontWeight: isThisLineExecuting ? 900 : 700,
+                      userSelect: 'none',
                     }}
                   >
-                    {isTyped ? userChar : targetChar}
+                    {String(line.idx + 1).padStart(2, '0')}
+                  </span>
+                </div>
 
-                    {/* Blinking Cursor Bar on current character */}
-                    {isCurrent && (
-                      <span
+                {/* Line Code Content */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px', flex: 1 }}>
+                  {line.isBlank ? (
+                    <>
+                      {line.prefixPart && (
+                        <span style={{ color: '#38bdf8', fontWeight: 800, letterSpacing: '0.5px', whiteSpace: 'pre' }}>
+                          {line.prefixPart}
+                        </span>
+                      )}
+
+                      {/* Interactive Blank Slot */}
+                      <div
                         style={{
-                          position: 'absolute',
-                          left: '-2px',
-                          top: '10%',
-                          bottom: '10%',
-                          width: '2.5px',
-                          background: '#38bdf8',
-                          boxShadow: '0 0 8px #38bdf8',
-                          animation: 'pulse 1s infinite',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          background: isCompleted
+                            ? 'rgba(16, 185, 129, 0.18)'
+                            : 'rgba(59, 130, 246, 0.15)',
+                          border: isCompleted
+                            ? '2px solid #10b981'
+                            : '2px dashed #3b82f6',
+                          boxShadow: isCompleted
+                            ? '0 0 16px rgba(16, 185, 129, 0.4)'
+                            : '0 0 14px rgba(59, 130, 246, 0.35)',
+                          minWidth: '50px',
+                          position: 'relative',
+                          transition: 'all 0.2s ease',
                         }}
-                      />
-                    )}
-                  </span>
-                );
-              })}
+                      >
+                        {blankTarget.split('').map((targetChar, idx) => {
+                          const userChar = typedBlank[idx];
+                          const isTyped = idx < typedBlank.length;
+                          const isCurrent = idx === typedBlank.length;
+                          const isMatch = isTyped && userChar === targetChar;
 
-              {/* Extra overflow typos if user typed more characters */}
-              {typedBlank.length > blankTarget.length &&
-                typedBlank.slice(blankTarget.length).split('').map((extraChar, extraIdx) => (
-                  <span
-                    key={`extra-${extraIdx}`}
-                    style={{
-                      color: '#ef4444',
-                      fontWeight: 900,
-                      background: 'rgba(239, 68, 68, 0.3)',
-                      borderRadius: '3px',
-                      padding: '0 1px',
-                      textDecoration: 'underline wavy #ef4444',
-                    }}
-                  >
-                    {extraChar}
-                  </span>
-                ))}
-            </div>
+                          return (
+                            <span
+                              key={idx}
+                              style={{
+                                position: 'relative',
+                                display: 'inline-block',
+                                color: !isTyped
+                                  ? 'rgba(255, 255, 255, 0.25)'
+                                  : isMatch
+                                  ? '#34d399'
+                                  : '#ef4444',
+                                fontWeight: 900,
+                                background: isTyped && !isMatch ? 'rgba(239, 68, 68, 0.25)' : 'transparent',
+                                borderRadius: '3px',
+                                padding: '0 1px',
+                              }}
+                            >
+                              {isTyped ? userChar : targetChar}
 
-            {/* Pre-filled Suffix (e.g. ")") */}
-            {suffix && (
-              <span style={{ color: '#e2e8f0', fontWeight: 800 }}>
-                {suffix}
-              </span>
-            )}
-          </div>
+                              {isCurrent && (
+                                <span
+                                  style={{
+                                    position: 'absolute',
+                                    left: '-2px',
+                                    top: '10%',
+                                    bottom: '10%',
+                                    width: '2.5px',
+                                    background: '#38bdf8',
+                                    boxShadow: '0 0 8px #38bdf8',
+                                    animation: 'pulse 1s infinite',
+                                  }}
+                                />
+                              )}
+                            </span>
+                          );
+                        })}
+
+                        {typedBlank.length > blankTarget.length &&
+                          typedBlank.slice(blankTarget.length).split('').map((extraChar, extraIdx) => (
+                            <span
+                              key={`extra-${extraIdx}`}
+                              style={{
+                                color: '#ef4444',
+                                fontWeight: 900,
+                                background: 'rgba(239, 68, 68, 0.3)',
+                                borderRadius: '3px',
+                                padding: '0 1px',
+                                textDecoration: 'underline wavy #ef4444',
+                              }}
+                            >
+                              {extraChar}
+                            </span>
+                          ))}
+                      </div>
+
+                      {line.suffixPart && (
+                        <span style={{ color: '#38bdf8', fontWeight: 800, letterSpacing: '0.5px', whiteSpace: 'pre' }}>
+                          {line.suffixPart}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span
+                      style={{
+                        color: isThisLineExecuting ? '#f8fafc' : '#cbd5e1',
+                        fontWeight: 700,
+                        whiteSpace: 'pre',
+                        letterSpacing: '0.5px',
+                      }}
+                    >
+                      {line.text}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
 
           {/* Completion checkmark */}
           {isCompleted && (
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontSize: '0.88rem', fontWeight: 800 }}>
+            <div style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontSize: '0.88rem', fontWeight: 800 }}>
               <CheckCircle2 size={18} />
               <span>완성! Enter를 눌러 실행하세요</span>
             </div>
