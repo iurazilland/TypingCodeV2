@@ -24,7 +24,8 @@ import {
   X,
   Zap,
   Bug,
-  Loader2
+  Loader2,
+  Square
 } from 'lucide-react';
 import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
@@ -623,8 +624,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   // Execution Mode & Step Debugging States
   const [execMode, setExecMode] = useState<'normal' | 'debug'>('normal');
-  const [debugSpeed, setDebugSpeed] = useState<number>(1); // 0.5 | 1 | 2
+  const [debugSpeed, setDebugSpeed] = useState<number>(1); // 0.5 | 1 | 2 | 3
   const [isDebugging, setIsDebugging] = useState<boolean>(false);
+  const [debugStepInfo, setDebugStepInfo] = useState<{ current: number; total: number } | null>(null);
   const debugAbortRef = useRef<boolean>(false);
 
   // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
@@ -1286,25 +1288,48 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   const memoryBoxes = getMemoryBoxes();
 
+  // Helper for interruptible sleep during debugging
+  const sleepInterruptible = (ms: number) => {
+    return new Promise<void>((resolve) => {
+      const start = Date.now();
+      const interval = setInterval(() => {
+        if (debugAbortRef.current || Date.now() - start >= ms) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 25);
+    });
+  };
+
   // Manual Code Execution (Normal Run or Progressive Step Debugging)
   const handleExecuteManual = async () => {
     if (isExecuting || isDebugging) {
       debugAbortRef.current = true;
       setIsDebugging(false);
       setIsExecuting(false);
+      setDebugStepInfo(null);
       return;
     }
 
     const codeToRun = getAssembledCode().trim();
-    if (!codeToRun || codeToRun === 'print()' || codeToRun === 'print') {
+    if (!codeToRun) {
       lastExecutedCodeRef.current = '';
       setTerminalOutput('');
       setRuntimeMemory({});
       setIsSuccess(false);
+      setDebugStepInfo(null);
       return;
     }
 
     debugAbortRef.current = false;
+
+    // Always clear terminal, memory, and success state cleanly before new execution
+    setTerminalOutput('');
+    setRuntimeMemory({});
+    setIsSuccess(false);
+
+    // Yield briefly so React flushes the cleared terminal state to the DOM
+    await new Promise((r) => setTimeout(r, 60));
 
     // 1. NORMAL EXECUTION MODE (Instant 0ms Local Evaluation)
     if (execMode === 'normal') {
@@ -1374,27 +1399,31 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         setIsExecuting(false);
       }
     } else {
-      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution
+      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (0.6s base step delay)
       setIsDebugging(true);
-      setTerminalOutput('');
-      setRuntimeMemory({});
-      setIsSuccess(false);
 
-      const stepDelay = Math.round(750 / debugSpeed);
+      const baseStepTime = 600; // 0.6초 기준 (1x = 600ms, 0.5x = 1200ms, 2x = 300ms, 3x = 200ms)
+      const stepDelay = Math.round(baseStepTime / debugSpeed);
 
       try {
         let actualOut = '';
         let isErr = false;
 
+        // Step 1: Initial pause on execution start so the user sees the start of debug
+        await sleepInterruptible(stepDelay);
+
         if (mode !== 'typing') {
           const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
           const activeBlocks = orderedBlocks.filter((b) => b.type !== 'start');
+          const totalSteps = Math.max(1, activeBlocks.length);
+          setDebugStepInfo({ current: 0, total: totalSteps });
 
           let cumulativeScope: Record<string, any> = {};
           let cumulativeStdout = '';
 
           for (let i = 0; i < activeBlocks.length; i++) {
             if (debugAbortRef.current) break;
+            setDebugStepInfo({ current: i + 1, total: totalSteps });
             const blockSlice = activeBlocks.slice(0, i + 1);
             const evalRes = evaluateBlocksLocally(blockSlice);
             if (evalRes.scope) {
@@ -1411,7 +1440,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               setTerminalOutput(actualOut);
               break;
             }
-            await new Promise((r) => setTimeout(r, stepDelay));
+            await sleepInterruptible(stepDelay);
           }
 
           if (!debugAbortRef.current && !isErr) {
@@ -1421,16 +1450,18 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           }
         } else {
           const lines = codeToRun.split('\n').filter((l) => l.trim().length > 0);
+          const totalSteps = Math.max(1, lines.length);
+          setDebugStepInfo({ current: 0, total: totalSteps });
+
+          // Initial pause on execution start so the user sees the start of debug
+          await sleepInterruptible(stepDelay);
+
           let cumulativeScope: Record<string, any> = {};
           let cumulativeStdout = '';
 
-          // For single line code, show evaluation step before outputting
-          if (lines.length === 1) {
-            await new Promise((r) => setTimeout(r, Math.round(stepDelay * 0.6)));
-          }
-
           for (let i = 0; i < lines.length; i++) {
             if (debugAbortRef.current) break;
+            setDebugStepInfo({ current: i + 1, total: totalSteps });
             const subCode = lines.slice(0, i + 1).join('\n');
             const localRes = evaluatePythonLocally(subCode);
             if (localRes.scope) {
@@ -1447,7 +1478,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               setTerminalOutput(actualOut);
               break;
             }
-            await new Promise((r) => setTimeout(r, stepDelay));
+            await sleepInterruptible(stepDelay);
           }
 
           if (!debugAbortRef.current && !isErr) {
@@ -1463,22 +1494,30 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           const cleanTarget = currentQuestion.targetCode.trim().replace(/\s+/g, '');
           const cleanUser = codeToRun.replace(/\s+/g, '');
 
-          if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
-            setIsSuccess(true);
-          } else {
-            setIsSuccess(false);
-            setHearts((prev) => {
-              const next = Math.max(0, prev - 1);
-              if (next === 0) setIsGameOver(true);
-              return next;
-            });
+          // Pause after execution completes so the user can inspect output and memory before success modal
+          await sleepInterruptible(Math.max(900, stepDelay * 1.5));
+
+          if (!debugAbortRef.current) {
+            if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
+              setIsSuccess(true);
+            } else {
+              setIsSuccess(false);
+              setHearts((prev) => {
+                const next = Math.max(0, prev - 1);
+                if (next === 0) setIsGameOver(true);
+                return next;
+              });
+            }
           }
         }
       } catch {
-        setTerminalOutput(currentQuestion.expectedOutput);
-        setIsSuccess(true);
+        if (!debugAbortRef.current) {
+          setTerminalOutput(currentQuestion.expectedOutput);
+          setIsSuccess(true);
+        }
       } finally {
         setIsDebugging(false);
+        setDebugStepInfo(null);
       }
     }
   };
@@ -4316,9 +4355,26 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
                   터미널
                 </span>
+                {isDebugging && debugStepInfo && (
+                  <span style={{
+                    fontSize: '0.68rem',
+                    padding: '2px 7px',
+                    borderRadius: '5px',
+                    background: 'rgba(239, 68, 68, 0.18)',
+                    border: '1px solid rgba(239, 68, 68, 0.4)',
+                    color: '#f87171',
+                    fontWeight: 800,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+                    디버깅 ({debugStepInfo.current}/{debugStepInfo.total}스텝)
+                  </span>
+                )}
               </div>
 
-              {/* Execution Controls: [0.5x | 1x | 2x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 코드 실행] */}
+              {/* Execution Controls: [0.5x | 1x | 2x | 3x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 실행 / ■ 정지] */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 {/* Debug Speed Selector (Placed to the left of the toggle switch) */}
                 {execMode === 'debug' && (
@@ -4330,7 +4386,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     borderRadius: '7px',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                   }}>
-                    {[0.5, 1, 2].map((spd) => (
+                    {[0.5, 1, 2, 3].map((spd) => (
                       <button
                         key={spd}
                         type="button"
@@ -4347,7 +4403,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           fontFamily: 'var(--font-mono)',
                           transition: 'all 0.15s ease',
                         }}
-                        title={`디버깅 실행 속도: ${spd}배속`}
+                        title={`디버깅 실행 속도: ${spd}배속 (기준: 0.6초)`}
                       >
                         {spd}x
                       </button>
@@ -4411,42 +4467,48 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   </button>
                 </div>
 
-                {/* Manual Run / Stop Button */}
+                {/* Manual Run / Stop Button (Fixed 68px width: no size jumping!) */}
                 <button
                   type="button"
                   onClick={handleExecuteManual}
-                  title="코드 실행 (단축키: Ctrl+Enter)"
+                  title={isExecuting || isDebugging ? '실행 정지' : '실행 (단축키: Ctrl+Enter)'}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '5px',
-                    padding: '4px 10px',
+                    width: '68px',
+                    minWidth: '68px',
+                    maxWidth: '68px',
+                    height: '28px',
+                    padding: '0',
                     borderRadius: '6px',
-                    border: isDebugging
+                    boxSizing: 'border-box',
+                    border: isExecuting || isDebugging
                       ? '1px solid rgba(239, 68, 68, 0.5)'
                       : '1px solid rgba(16, 185, 129, 0.5)',
-                    background: isDebugging
+                    background: isExecuting || isDebugging
                       ? 'rgba(239, 68, 68, 0.25)'
                       : 'linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.38) 100%)',
-                    color: isDebugging ? '#f87171' : '#34d399',
+                    color: isExecuting || isDebugging ? '#f87171' : '#34d399',
                     fontSize: '0.74rem',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: isDebugging
+                    boxShadow: isExecuting || isDebugging
                       ? '0 0 10px rgba(239, 68, 68, 0.35)'
                       : '0 0 10px rgba(16, 185, 129, 0.25)',
-                    transition: 'all 0.15s ease',
+                    transition: 'border-color 0.15s ease, background 0.15s ease, color 0.15s ease',
                   }}
                 >
                   {isExecuting || isDebugging ? (
                     <>
-                      <Loader2 size={12} className="animate-spin" />
-                      <span>{isDebugging ? '중단' : '실행 중...'}</span>
+                      <Square size={11} fill="currentColor" />
+                      <span>정지</span>
                     </>
                   ) : (
                     <>
                       <Play size={12} fill="currentColor" />
-                      <span>코드 실행</span>
+                      <span>실행</span>
                     </>
                   )}
                 </button>
@@ -4463,10 +4525,36 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               background: '#020617',
               lineHeight: 1.6,
             }}>
-              <div style={{ color: '#10b981', display: 'flex', gap: '6px' }}>
-                <span>$</span>
-                <span style={{ color: '#e2e8f0' }}>python main.py</span>
+              <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <span>$</span>
+                  <span style={{ color: '#e2e8f0' }}>{execMode === 'debug' ? 'python -m pdb main.py' : 'python main.py'}</span>
+                </div>
+                {isDebugging && (
+                  <span style={{
+                    fontSize: '0.68rem',
+                    color: '#94a3b8',
+                    fontFamily: 'var(--font-mono)',
+                  }}>
+                    {debugSpeed}x (스텝당 {(0.6 / debugSpeed).toFixed(2).replace(/\.?0+$/, '')}초)
+                  </span>
+                )}
               </div>
+
+              {/* Debug execution active indicator when terminal output is not yet printed */}
+              {isDebugging && !terminalOutput && (
+                <div style={{
+                  marginTop: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#94a3b8',
+                  fontSize: '0.80rem',
+                }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', display: 'inline-block', animation: 'pulse 1s infinite' }} />
+                  <span>스텝별 코드 실행 중... {debugStepInfo ? `(${debugStepInfo.current}/${debugStepInfo.total})` : ''}</span>
+                </div>
+              )}
 
               {terminalOutput && (
                 <pre style={{
