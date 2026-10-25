@@ -490,23 +490,23 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
           return 'break';
         } else if (blk.type === 'continue') {
           return 'continue';
-        } else if (blk.type === 'for_range') {
-          const vName = blk.varName || 'i';
-          const cntVal = evalExpr(blk.content || '5');
-          const count = typeof cntVal === 'number' ? cntVal : parseInt(String(cntVal), 10) || 5;
-          const safeCount = Math.max(0, Math.min(count, 100));
-          for (let i = 0; i < safeCount; i++) {
-            if (maxSteps <= 0) break;
-            scope[vName] = i;
-            if (blk.innerBlocks) {
-              const sig = runBlockList(blk.innerBlocks);
-              if (sig === 'break') break;
-            }
+        } else if (blk.type === 'for_range' || blk.type === 'for_in') {
+          const vName = blk.varName || (blk.type === 'for_range' ? 'i' : 'item');
+          let seqVal: any = null;
+          if (blk.argBlock) {
+            seqVal = evalBlockAsExpr(blk.argBlock);
+          } else if (blk.content) {
+            seqVal = evalExpr(blk.content);
+          } else {
+            seqVal = blk.type === 'for_range' ? [0, 1, 2, 3, 4] : [];
           }
-        } else if (blk.type === 'for_in') {
-          const vName = blk.varName || 'item';
-          const seqVal = evalExpr(blk.content || '[1, 2, 3]');
-          const arr = Array.isArray(seqVal) ? seqVal : [seqVal];
+          const arr = Array.isArray(seqVal)
+            ? seqVal
+            : typeof seqVal === 'number'
+            ? Array.from({ length: Math.max(0, Math.min(seqVal, 100)) }, (_, i) => i)
+            : typeof seqVal === 'string'
+            ? seqVal.split('')
+            : [seqVal];
           for (const item of arr) {
             if (maxSteps <= 0) break;
             scope[vName] = item;

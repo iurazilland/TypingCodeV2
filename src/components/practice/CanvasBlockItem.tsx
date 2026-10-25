@@ -227,6 +227,120 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     );
   }
 
+  const renderArgSlot = (funcType: string, isVarValue: boolean = false) => {
+    if (block.argBlock) {
+      const chainedMethods: CanvasBlock[] = [];
+      if (canvasBlocks) {
+        let currMId = block.argBlock.attachedMethodId;
+        const visited = new Set<string>();
+        while (currMId && !visited.has(currMId)) {
+          visited.add(currMId);
+          const m = canvasBlocks.find((cb) => cb.id === currMId);
+          if (!m) break;
+          chainedMethods.push(m);
+          currMId = m.attachedMethodId;
+        }
+      }
+
+      return (
+        <div
+          id={`arg-slot-${block.id}`}
+          className="arg-slot-filled"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '2px',
+            margin: '0 2px',
+          }}
+        >
+          <CanvasBlockItem
+            block={block.argBlock}
+            isSlotArg={true}
+            parentBlockId={block.id}
+            isNested={false}
+            draggedChainIds={draggedChainIds}
+            activeInputHelp={activeInputHelp}
+            canvasBlocks={canvasBlocks}
+            onBlockPointerDown={onBlockPointerDown}
+            onInnerBlockPointerDown={onInnerBlockPointerDown}
+            onArgBlockPointerDown={onArgBlockPointerDown}
+            onContextMenu={onContextMenu}
+            onContentChange={onContentChange}
+            onVarNameChange={onVarNameChange}
+            onMethodNameChange={onMethodNameChange}
+            onBlockTypeChange={onBlockTypeChange}
+            methodCategories={methodCategories}
+            getMethodSelectWidth={getMethodSelectWidth}
+          />
+          {chainedMethods.map((m) => (
+            <CanvasBlockItem
+              key={m.id}
+              block={m}
+              isSlotArg={true}
+              parentBlockId={m.attachedToBlockId || block.argBlock!.id}
+              isNested={false}
+              draggedChainIds={draggedChainIds}
+              activeInputHelp={activeInputHelp}
+              canvasBlocks={canvasBlocks}
+              onBlockPointerDown={onBlockPointerDown}
+              onInnerBlockPointerDown={onInnerBlockPointerDown}
+              onArgBlockPointerDown={onArgBlockPointerDown}
+              onContextMenu={onContextMenu}
+              onContentChange={onContentChange}
+              onVarNameChange={onVarNameChange}
+              onMethodNameChange={onMethodNameChange}
+              onBlockTypeChange={onBlockTypeChange}
+              methodCategories={methodCategories}
+              getMethodSelectWidth={getMethodSelectWidth}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div
+        id={`arg-slot-${block.id}`}
+        style={{
+          position: 'relative',
+          display: 'inline-flex',
+          borderRadius: '6px',
+        }}
+      >
+        <input
+          type="text"
+          value={block.content || ''}
+          placeholder=""
+          onMouseDown={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          onFocus={handleInputFocusSelect}
+          onClick={handleInputClickSelect}
+          onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+          style={{
+            width: `${getBlockInputWidth(block.content)}px`,
+            height: '20px',
+            padding: '1px 5px',
+            borderRadius: '6px',
+            background: isArgSlotTarget ? '#fef9c3' : '#ffffff',
+            color: '#0f172a',
+            border: isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)',
+            boxShadow: isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none',
+            fontWeight: 800,
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.76rem',
+            textAlign: 'left',
+            outline: 'none',
+            cursor: 'text',
+            boxSizing: 'border-box',
+            transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
+          }}
+        />
+        {!isVarValue && renderSpeechBubble?.(block.id, funcType)}
+      </div>
+    );
+  };
+
   // ============================================================================
   // 1. C-SHAPE LOOP & DEF BLOCKS (for, while, def ㄷ자 블록)
   // ============================================================================
@@ -306,12 +420,12 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             }}
           />
 
-          {block.type === 'for_range' ? (
+          {block.type === 'for_range' || block.type === 'for_in' ? (
             <>
               <span style={{ color: '#ffffff' }}>for</span>
               <input
                 type="text"
-                value={block.varName ?? 'i'}
+                value={block.varName ?? (block.type === 'for_range' ? 'i' : 'item')}
                 placeholder=""
                 onMouseDown={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
@@ -320,7 +434,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 onClick={handleInputClickSelect}
                 onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
                 style={{
-                  width: `${getBlockInputWidth(block.varName ?? 'i')}px`,
+                  width: `${getBlockInputWidth(block.varName ?? (block.type === 'for_range' ? 'i' : 'item'))}px`,
                   height: '20px',
                   padding: '1px 5px',
                   borderRadius: '6px',
@@ -337,134 +451,8 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 }}
               />
               <span style={{ color: '#ffffff' }}>in</span>
-              <div
-                id={`arg-slot-${block.id}`}
-                className="arg-slot-filled"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  margin: '0 3px',
-                  padding: '1px 2px',
-                  borderRadius: '7px',
-                  background: 'rgba(0, 0, 0, 0.22)',
-                  boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.35)',
-                }}
-              >
-                <div
-                  className="slot-arg-block"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    height: '24px',
-                    padding: '0 8px',
-                    borderRadius: '6px',
-                    background: '#2563eb',
-                    border: '1px solid #3b82f6',
-                    boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.76rem',
-                    fontFamily: 'var(--font-mono)',
-                    boxSizing: 'border-box',
-                    userSelect: 'none',
-                  }}
-                >
-                  <span>range (</span>
-                  <div style={{ position: 'relative', display: 'inline-flex', borderRadius: '5px' }}>
-                    <input
-                      type="text"
-                      value={block.content ?? '5'}
-                      placeholder=""
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onPointerDown={(e) => e.stopPropagation()}
-                      onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                      onFocus={handleInputFocusSelect}
-                      onClick={handleInputClickSelect}
-                      onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                      style={{
-                        width: `${getBlockInputWidth(block.content ?? '5')}px`,
-                        height: '20px',
-                        padding: '1px 5px',
-                        borderRadius: '5px',
-                        background: '#ffffff',
-                        color: '#0f172a',
-                        border: '1px solid rgba(0, 0, 0, 0.25)',
-                        fontWeight: 800,
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.78rem',
-                        textAlign: 'left',
-                        outline: 'none',
-                        cursor: 'text',
-                        boxSizing: 'border-box',
-                      }}
-                    />
-                    {renderSpeechBubble?.(block.id, 'for_range')}
-                  </div>
-                  <span>)</span>
-                </div>
-              </div>
+              {renderArgSlot(block.type)}
               <span style={{ color: '#ffffff' }}>:</span>
-            </>
-          ) : block.type === 'for_in' ? (
-            <>
-              <span style={{ color: '#ffffff' }}>for</span>
-              <input
-                type="text"
-                value={block.varName ?? 'item'}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.varName ?? 'item')}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
-              />
-              <span style={{ color: '#ffffff' }}>in</span>
-              <input
-                type="text"
-                value={block.content ?? 'items'}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.content ?? 'items')}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
-              />
-              <span>:</span>
             </>
           ) : block.type === 'while' ? (
             <>
@@ -1290,119 +1278,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   const isTopConnected = (isNested || isSlotArg) ? true : !!block.prevBlockId;
   const tabLeft = isNested ? BLOCK_GEOMETRY.TAB_LEFT_INNER : BLOCK_GEOMETRY.TAB_LEFT_ROOT;
 
-  const renderArgSlot = (funcType: string, isVarValue: boolean = false) => {
-    if (block.argBlock) {
-      const chainedMethods: CanvasBlock[] = [];
-      if (canvasBlocks) {
-        let currMId = block.argBlock.attachedMethodId;
-        const visited = new Set<string>();
-        while (currMId && !visited.has(currMId)) {
-          visited.add(currMId);
-          const m = canvasBlocks.find((cb) => cb.id === currMId);
-          if (!m) break;
-          chainedMethods.push(m);
-          currMId = m.attachedMethodId;
-        }
-      }
 
-      return (
-        <div
-          id={`arg-slot-${block.id}`}
-          className="arg-slot-filled"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '2px',
-            margin: '0 2px',
-          }}
-        >
-          <CanvasBlockItem
-            block={block.argBlock}
-            isSlotArg={true}
-            parentBlockId={block.id}
-            isNested={false}
-            draggedChainIds={draggedChainIds}
-            activeInputHelp={activeInputHelp}
-            canvasBlocks={canvasBlocks}
-            onBlockPointerDown={onBlockPointerDown}
-            onInnerBlockPointerDown={onInnerBlockPointerDown}
-            onArgBlockPointerDown={onArgBlockPointerDown}
-            onContextMenu={onContextMenu}
-            onContentChange={onContentChange}
-            onVarNameChange={onVarNameChange}
-            onMethodNameChange={onMethodNameChange}
-            onBlockTypeChange={onBlockTypeChange}
-            methodCategories={methodCategories}
-            getMethodSelectWidth={getMethodSelectWidth}
-          />
-          {chainedMethods.map((m) => (
-            <CanvasBlockItem
-              key={m.id}
-              block={m}
-              isSlotArg={true}
-              parentBlockId={m.attachedToBlockId || block.argBlock!.id}
-              isNested={false}
-              draggedChainIds={draggedChainIds}
-              activeInputHelp={activeInputHelp}
-              canvasBlocks={canvasBlocks}
-              onBlockPointerDown={onBlockPointerDown}
-              onInnerBlockPointerDown={onInnerBlockPointerDown}
-              onArgBlockPointerDown={onArgBlockPointerDown}
-              onContextMenu={onContextMenu}
-              onContentChange={onContentChange}
-              onVarNameChange={onVarNameChange}
-              onMethodNameChange={onMethodNameChange}
-              onBlockTypeChange={onBlockTypeChange}
-              methodCategories={methodCategories}
-              getMethodSelectWidth={getMethodSelectWidth}
-            />
-          ))}
-        </div>
-      );
-    }
-
-    return (
-      <div
-        id={`arg-slot-${block.id}`}
-        style={{
-          position: 'relative',
-          display: 'inline-flex',
-          borderRadius: '6px',
-        }}
-      >
-        <input
-          type="text"
-          value={block.content || ''}
-          placeholder=""
-          onMouseDown={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
-          onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          onFocus={handleInputFocusSelect}
-          onClick={handleInputClickSelect}
-          onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-          style={{
-            width: `${getBlockInputWidth(block.content)}px`,
-            height: '20px',
-            padding: '1px 5px',
-            borderRadius: '6px',
-            background: isArgSlotTarget ? '#fef9c3' : '#ffffff',
-            color: '#0f172a',
-            border: isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)',
-            boxShadow: isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none',
-            fontWeight: 800,
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.76rem',
-            textAlign: 'left',
-            outline: 'none',
-            cursor: 'text',
-            boxSizing: 'border-box',
-            transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
-          }}
-        />
-        {!isVarValue && renderSpeechBubble?.(block.id, funcType)}
-      </div>
-    );
-  };
 
   return (
     <div
@@ -1466,7 +1342,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       block.type === 'map' ||
       block.type === 'sorted' ? (
         <>
-          <span>{block.type} (</span>
+          <span>{block.type}(</span>
           {renderArgSlot(block.type)}
           <span>)</span>
         </>

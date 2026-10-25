@@ -1026,21 +1026,11 @@ export default function PracticePage({ params }: PracticePageProps) {
       } else if (blk.type === 'return') {
         const content = (blk.content || '').trim();
         out.push(`${indentStr}return ${content}`);
-      } else if (blk.type === 'for_range') {
-        const v = (blk.varName || 'i').trim();
-        const cnt = (blk.content || '').trim();
-        out.push(`${indentStr}for ${v} in range(${cnt || '5'}):`);
-        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
-          for (const child of blk.innerBlocks) {
-            out.push(...generateBlockLines(child, currentIndentLevel + 1));
-          }
-        } else {
-          out.push(`${indentStr}    pass`);
-        }
-      } else if (blk.type === 'for_in') {
-        const v = (blk.varName || 'item').trim();
-        const seq = (blk.content || '').trim();
-        out.push(`${indentStr}for ${v} in ${seq || 'items'}:`);
+      } else if (blk.type === 'for_range' || blk.type === 'for_in') {
+        const v = (blk.varName || (blk.type === 'for_range' ? 'i' : 'item')).trim();
+        const defaultSeq = blk.type === 'for_range' ? 'range(5)' : 'items';
+        const seq = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || defaultSeq).trim();
+        out.push(`${indentStr}for ${v} in ${seq}:`);
         if (blk.innerBlocks && blk.innerBlocks.length > 0) {
           for (const child of blk.innerBlocks) {
             out.push(...generateBlockLines(child, currentIndentLevel + 1));
@@ -1716,7 +1706,7 @@ export default function PracticePage({ params }: PracticePageProps) {
         for (const b of list) {
           if (excludedIds.has(b.id)) continue;
           if (
-            (ALL_FUNC_TYPES.includes(b.type) || b.type === 'variable') &&
+            (ALL_FUNC_TYPES.includes(b.type) || b.type === 'variable' || b.type === 'for_range' || b.type === 'for_in') &&
             !b.argBlock
           ) {
             slotCandidates.push(b);
@@ -2112,6 +2102,13 @@ export default function PracticePage({ params }: PracticePageProps) {
         varName,
         methodName: bType === 'method' ? 'method' : undefined,
         content: defaultContent,
+        argBlock: bType === 'for_range' ? {
+          id: `range-${Date.now() + 1}`,
+          type: 'range',
+          content: defaultContent || '5',
+          x: 0,
+          y: 0,
+        } : undefined,
         items: (bType === 'list' || bType === 'tuple' || bType === 'set') ? [''] : undefined,
         dictPairs: bType === 'dict' ? [{ key: '', value: '' }] : undefined,
         innerBlocks: isLoopOrDef ? [] : undefined,
@@ -3615,7 +3612,7 @@ export default function PracticePage({ params }: PracticePageProps) {
 
   const handleBlockInputChange = (blockId: string, val: string) => {
     setCanvasBlocks((prev) =>
-      prev.map((b) => (b.id === blockId ? { ...b, content: val } : b))
+      updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, content: val }))
     );
   };
 
@@ -3837,6 +3834,13 @@ export default function PracticePage({ params }: PracticePageProps) {
       type: childType,
       varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
       content: childType === 'for_range' ? '3' : childType === 'for_in' ? 'items' : childType === 'while' ? 'False' : '',
+      argBlock: childType === 'for_range' ? {
+        id: `range-${Date.now() + 1}`,
+        type: 'range',
+        content: '3',
+        x: 0,
+        y: 0,
+      } : undefined,
       innerBlocks: isLoopOrDef ? [] : undefined,
       branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
       x: 0,
@@ -3868,6 +3872,13 @@ export default function PracticePage({ params }: PracticePageProps) {
       type: childType,
       varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
       content: childType === 'for_range' ? '3' : childType === 'for_in' ? 'items' : childType === 'while' ? 'False' : '',
+      argBlock: childType === 'for_range' ? {
+        id: `range-${Date.now() + 1}`,
+        type: 'range',
+        content: '3',
+        x: 0,
+        y: 0,
+      } : undefined,
       innerBlocks: isLoopOrDef ? [] : undefined,
       branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
       x: 0,
@@ -4475,7 +4486,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.print.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.print.border} bg={BLOCK_THEMES.print.bg} />
-                  <span>print (</span>
+                  <span>print(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4507,7 +4518,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <PuzzleNotch borderColor={BLOCK_THEMES.input.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.input.border} bg={BLOCK_THEMES.input.bg} />
                   <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.input.border} bgColor="#0d1527" />
-                  <span>input (</span>
+                  <span>input(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4538,7 +4549,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.range.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.range.border} bg={BLOCK_THEMES.range.bg} />
-                  <span>range (</span>
+                  <span>range(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4569,7 +4580,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                 >
                   <PuzzleNotch borderColor={BLOCK_THEMES.map.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.map.border} bg={BLOCK_THEMES.map.bg} />
-                  <span>map (</span>
+                  <span>map(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4601,7 +4612,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <PuzzleNotch borderColor={BLOCK_THEMES.sorted.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.sorted.border} bg={BLOCK_THEMES.sorted.bg} />
                   <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.sorted.border} bgColor="#0d1527" />
-                  <span>sorted (</span>
+                  <span>sorted(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4762,7 +4773,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                   <PuzzleNotch borderColor={BLOCK_THEMES.open.border} />
                   <PuzzleTab borderColor={BLOCK_THEMES.open.border} bg={BLOCK_THEMES.open.bg} />
                   <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.open.border} bgColor="#0d1527" />
-                  <span>open (</span>
+                  <span>open(</span>
                   <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   <span>)</span>
                 </div>
@@ -4972,7 +4983,7 @@ export default function PracticePage({ params }: PracticePageProps) {
                           boxSizing: 'border-box',
                         }}
                       >
-                        <span>range (</span>
+                        <span>range(</span>
                         <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem', boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.12)' }}>5</span>
                         <span>)</span>
                       </div>
