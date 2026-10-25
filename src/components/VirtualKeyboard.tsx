@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 interface VirtualKeyboardProps {
   nextChar: string;
@@ -8,7 +9,7 @@ interface VirtualKeyboardProps {
 
 interface KeyConfig {
   key: string;
-  label?: string;
+  label?: React.ReactNode;
   flex?: number;
   isSpacer?: boolean;
 }
@@ -26,7 +27,7 @@ const KEYBOARD_ROWS: KeyConfig[][] = [
     { key: '`' }, { key: '1' }, { key: '2' }, { key: '3' }, { key: '4' },
     { key: '5' }, { key: '6' }, { key: '7' }, { key: '8' }, { key: '9' },
     { key: '0' }, { key: '-' }, { key: '=' },
-    { key: 'Backspace', label: 'Backspace', flex: 1.8 },
+    { key: 'Backspace', label: <ArrowLeft size={16} strokeWidth={2.4} />, flex: 1.8 },
   ],
   // Row 1: Tab flex 1.4 + 12 keys flex 1 + \ flex 1.4 = 14.8
   [
@@ -138,8 +139,9 @@ export default function VirtualKeyboard({ nextChar }: VirtualKeyboardProps) {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}
+                  title={key}
                 >
-                  {item.label || key}
+                  {item.label !== undefined ? item.label : key}
                 </div>
               );
             })}

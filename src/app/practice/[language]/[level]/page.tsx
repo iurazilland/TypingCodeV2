@@ -15,6 +15,8 @@ import {
   Trash2,
   Box,
   ChevronRight,
+  ChevronLeft,
+  Lock,
   Copy,
   Edit3,
   Plus,
@@ -1534,11 +1536,50 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   });
 
+  // Check whether a step is unlocked (free navigation in local dev, locked via DB/storage in production)
+  const isStepUnlocked = (stepIdx: number): boolean => {
+    if (process.env.NODE_ENV !== 'production') {
+      return true;
+    }
+    if (stepIdx === 0) return true;
+    if (typeof window !== 'undefined') {
+      const key = `unlocked_step_${langKey}_${levelNum}`;
+      const maxUnlocked = parseInt(localStorage.getItem(key) || '0', 10);
+      return stepIdx <= maxUnlocked;
+    }
+    return false;
+  };
+
   const handleNextStep = () => {
-    if (currentStepIndex < totalQuestions - 1) {
-      setCurrentStepIndex((prev) => prev + 1);
+    if (currentStepIndex < totalQuestions - 1 && isStepUnlocked(currentStepIndex + 1)) {
+      const nextIdx = currentStepIndex + 1;
+      setCurrentStepIndex(nextIdx);
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', `?step=${nextIdx + 1}`);
+      }
     }
   };
+
+  const handlePrevStep = () => {
+    if (currentStepIndex > 0) {
+      const prevIdx = currentStepIndex - 1;
+      setCurrentStepIndex(prevIdx);
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', `?step=${prevIdx + 1}`);
+      }
+    }
+  };
+
+  // Persist completed step progress in production
+  useEffect(() => {
+    if (isSuccess && typeof window !== 'undefined') {
+      const key = `unlocked_step_${langKey}_${levelNum}`;
+      const currentMax = parseInt(localStorage.getItem(key) || '0', 10);
+      if (currentStepIndex + 1 > currentMax) {
+        localStorage.setItem(key, String(currentStepIndex + 1));
+      }
+    }
+  }, [isSuccess, currentStepIndex, langKey, levelNum]);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {
@@ -4286,25 +4327,104 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         </div>
 
 
-        {/* Right: Round Reset */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-            onClick={handleResetRound}
-            title="라운드 초기화"
+        {/* Right: Level Step Navigator */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div
             style={{
-              padding: '7px',
-              borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              padding: '3px 6px',
+              borderRadius: '8px',
+              background: 'rgba(15, 23, 42, 0.75)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
+              gap: '6px',
             }}
           >
-            <RotateCcw size={16} />
-          </button>
+            {/* Prev Step Button */}
+            <button
+              onClick={handlePrevStep}
+              disabled={currentStepIndex <= 0}
+              title={currentStepIndex > 0 ? '이전 문제' : '첫 번째 문제입니다'}
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: currentStepIndex > 0 ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
+                border: 'none',
+                color: currentStepIndex > 0 ? '#cbd5e1' : 'rgba(255, 255, 255, 0.2)',
+                cursor: currentStepIndex > 0 ? 'pointer' : 'not-allowed',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            {/* Current Step / Total Count */}
+            <div
+              style={{
+                padding: '0 8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: '0.84rem',
+                userSelect: 'none',
+              }}
+            >
+              <span style={{ fontWeight: 800, color: '#38bdf8' }}>
+                {String(currentStepIndex + 1).padStart(2, '0')}
+              </span>
+              <span style={{ color: '#475569', fontWeight: 600 }}>/</span>
+              <span style={{ color: '#94a3b8', fontWeight: 600 }}>
+                {String(totalQuestions).padStart(2, '0')}
+              </span>
+            </div>
+
+            {/* Next Step Button */}
+            <button
+              onClick={handleNextStep}
+              disabled={currentStepIndex >= totalQuestions - 1 || !isStepUnlocked(currentStepIndex + 1)}
+              title={
+                currentStepIndex >= totalQuestions - 1
+                  ? '마지막 문제입니다'
+                  : !isStepUnlocked(currentStepIndex + 1)
+                  ? '이전 문제를 완료해야 이동할 수 있습니다 (배포 잠금)'
+                  : '다음 문제'
+              }
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background:
+                  currentStepIndex < totalQuestions - 1 && isStepUnlocked(currentStepIndex + 1)
+                    ? 'rgba(255, 255, 255, 0.06)'
+                    : 'transparent',
+                border: 'none',
+                color:
+                  currentStepIndex < totalQuestions - 1 && isStepUnlocked(currentStepIndex + 1)
+                    ? '#cbd5e1'
+                    : 'rgba(255, 255, 255, 0.2)',
+                cursor:
+                  currentStepIndex < totalQuestions - 1 && isStepUnlocked(currentStepIndex + 1)
+                    ? 'pointer'
+                    : 'not-allowed',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {currentStepIndex < totalQuestions - 1 && !isStepUnlocked(currentStepIndex + 1) ? (
+                <Lock size={13} color="#f43f5e" />
+              ) : (
+                <ChevronRight size={16} />
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
