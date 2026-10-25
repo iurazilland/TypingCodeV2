@@ -39,14 +39,14 @@ export interface PracticeQuestion {
   title_en?: string;
   prompt_ko: string;
   prompt_en?: string;
+  hint_ko: string;
+  hint_en?: string;
   templateCode?: string; // Code template shown in background guide layer (uses § for blanks)
   targetCode: string; // Canonical / reference answer code
   blankToken?: string; // Legacy / optional blank token
   expectedOutput?: string; // Optional ground truth expected terminal output (prefer testCases[0].expectedOutput)
   expectedVariables?: Record<string, any>; // Expected runtime memory variables (e.g. { x: 10, total: 55 })
   testCases?: TestCase[]; // Test cases for input/output verification
-  hint_ko: string;
-  hint_en?: string;
   starterCode?: string;
   availableBlocks?: BlockPiece[]; // Legacy block pieces
 }
