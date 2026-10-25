@@ -708,6 +708,18 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   }, [searchParams?.step, round.questions.length]);
   const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
+  const hintContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showHint) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (hintContainerRef.current && !hintContainerRef.current.contains(e.target as Node)) {
+        setShowHint(false);
+      }
+    };
+    window.addEventListener('mousedown', handleOutsideClick);
+    return () => window.removeEventListener('mousedown', handleOutsideClick);
+  }, [showHint]);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
 
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -6355,9 +6367,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                 {/* Hint Toggle Button Container with Relative Anchor for Floating Popover */}
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative' }} ref={hintContainerRef}>
                   <button
-                    onClick={() => setShowHint(true)}
+                    onClick={() => setShowHint((prev) => !prev)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -6403,44 +6415,16 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
+                          gap: '6px',
+                          color: '#fbbf24',
+                          fontWeight: 800,
+                          fontSize: '0.86rem',
                           borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
                           paddingBottom: '8px',
                         }}
                       >
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            color: '#fbbf24',
-                            fontWeight: 800,
-                            fontSize: '0.86rem',
-                          }}
-                        >
-                          <Lightbulb size={16} color="#fbbf24" />
-                          <span>도움말</span>
-                        </div>
-                        <button
-                          onClick={() => setShowHint(false)}
-                          title="닫기"
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: '#94a3b8',
-                            cursor: 'pointer',
-                            padding: '3px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: '4px',
-                            transition: 'color 0.15s ease',
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
-                          onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
-                        >
-                          <X size={15} />
-                        </button>
+                        <Lightbulb size={16} color="#fbbf24" />
+                        <span>도움말</span>
                       </div>
 
                       <div
