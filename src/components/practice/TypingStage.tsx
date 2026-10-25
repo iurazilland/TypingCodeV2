@@ -488,27 +488,22 @@ export default function TypingStage({
           <span
             key={match.index}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '1.35em',
-              margin: '0 2px',
-              padding: '0 4px',
+              display: 'inline-block',
+              width: `${blankLen}ch`,
+              height: '1.3em',
+              margin: 0,
+              padding: 0,
               border: '1.5px solid rgba(56, 189, 248, 0.75)',
-              borderLeft: '2.5px solid #38bdf8', // [ bracket side
-              borderRight: '2.5px solid #38bdf8', // ] bracket side
+              borderLeft: '2px solid #38bdf8', // [ bracket side
+              borderRight: '2px solid #38bdf8', // ] bracket side
               background: 'rgba(56, 189, 248, 0.1)',
-              boxShadow: 'inset 0 0 6px rgba(56, 189, 248, 0.15)',
-              borderRadius: '4px',
+              boxShadow: 'inset 0 0 4px rgba(56, 189, 248, 0.15)',
+              borderRadius: '3px',
               verticalAlign: 'middle',
               boxSizing: 'border-box',
               userSelect: 'none',
             }}
-          >
-            <span style={{ opacity: 0, userSelect: 'none' }}>
-              {'\u00A0'.repeat(blankLen)}
-            </span>
-          </span>
+          />
         );
         lastIndex = match.index + match[0].length;
       }
@@ -713,7 +708,7 @@ export default function TypingStage({
                     fontFamily: 'inherit',
                     fontSize: 'inherit',
                     lineHeight: 'inherit',
-                    letterSpacing: '0.5px',
+                    letterSpacing: 'normal',
                     display: 'flex',
                     alignItems: 'center',
                     whiteSpace: 'pre',
