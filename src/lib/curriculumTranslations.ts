@@ -14,6 +14,7 @@ export const TRACK_NAME_EN_MAP: Record<string, string> = {
   cpp: 'C++',
   csharp: 'C# & Unity',
   swift: 'Swift & iOS',
+  linux: 'Linux CLI',
 };
 
 export const CATEGORY_EN_MAP: Record<string, string> = {
@@ -23,6 +24,9 @@ export const CATEGORY_EN_MAP: Record<string, string> = {
   '인공지능': 'AI & ML',
   '아두이노': 'Arduino',
   '자료구조': 'Data Structures',
+  '기초 CLI': 'CLI Basics',
+  '쉘 스크립트': 'Shell Scripting',
+  '시스템 관리': 'System Admin',
   'HTML': 'HTML',
   'CSS': 'CSS',
   '반응형 UI': 'Responsive UI',
@@ -42,6 +46,20 @@ export const CATEGORY_EN_MAP: Record<string, string> = {
 };
 
 export const SKILLS_EN_MAP: Record<string, string> = {
+  // Linux CLI
+  '디렉토리 탐색 pwd/ls/cd': 'Directory Navigation (pwd/ls/cd)',
+  '파일 생성/복사 touch/cp/mv': 'File Creation & Copy (touch/cp/mv)',
+  '파일 삭제 & 안전 옵션 rm': 'File Deletion & Safety (rm)',
+  '터미널 단축키 & 자동완성': 'CLI Shortcuts & Tab Autocomplete',
+  '텍스트 검색 & 필터링 grep': 'Text Search & Filtering (grep)',
+  '입출력 리다이렉션 (> / >>)': 'I/O Redirections (> / >>)',
+  '명령어 연결 파이프라인 (|)': 'Command Pipeline Piping (|)',
+  '정렬 및 중복 제거 sort/uniq': 'Sorting & Deduplication (sort/uniq)',
+  '파일 권한 & 소유권 chmod/chown': 'File Permissions & Ownership (chmod/chown)',
+  '프로세스 감시 & 종료 ps/kill': 'Process Monitoring & Termination (ps/kill)',
+  '환경 변수 export & PATH': 'Environment Variables (export & PATH)',
+  '네트워크 통신 curl/ping': 'Network Diagnostics (curl/ping)',
+
   // Python
   'print/input 표준 입출력': 'print/input Standard I/O',
   '기본 연산자 & 변수': 'Basic Operators & Variables',

@@ -15,6 +15,7 @@ const COMPILER_MAP: Record<SupportedLanguage, string> = {
   sql: 'sqlite-3.46.1',
   javascript: 'nodejs-20.12.2',
   web: 'web',
+  linux: 'bash',
 };
 
 export async function executeCode(

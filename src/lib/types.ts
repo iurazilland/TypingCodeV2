@@ -9,7 +9,8 @@ export type SupportedLanguage =
   | 'rust' 
   | 'cpp' 
   | 'csharp' 
-  | 'swift';
+  | 'swift'
+  | 'linux';
 
 export interface CodeStep {
   step: number;

@@ -129,6 +129,22 @@ SELECT name, score FROM students WHERE score >= 90 ORDER BY score DESC;
   }
 </script>
 `,
+  linux: `#!/bin/bash
+# 🐧 Linux CLI & Bash Shell Scripting Playground
+echo "=== Linux CLI & Shell Script Playground ==="
+echo "Current Date: $(date)"
+echo "Current User: $(whoami)"
+echo "Kernel Release: $(uname -r)"
+
+echo ""
+echo "Creating demo files and listing them..."
+for i in {1..3}; do
+  echo "Log entry $i generated at $(date +%H:%M:%S)" > "sample_$i.txt"
+done
+
+ls -la sample_*.txt
+cat sample_1.txt
+`,
 };
 
 export default function CompilerPage() {
@@ -239,6 +255,7 @@ export default function CompilerPage() {
               { id: 'javascript', label: '✨ JS' },
               { id: 'sql', label: '🗄️ SQL' },
               { id: 'web', label: '🌐 Web' },
+              { id: 'linux', label: '🐧 Linux' },
             ] as const).map(({ id, label }) => (
               <button
                 key={id}
