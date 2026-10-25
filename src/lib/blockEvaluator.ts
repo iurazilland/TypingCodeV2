@@ -585,13 +585,32 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
         } else if (blk.type === 'for_range' || blk.type === 'for_in') {
           const vName = blk.varName || (blk.type === 'for_range' ? 'i' : 'item');
           let seqVal: any = null;
+          let seqLabel = 'range(5)';
+
           if (blk.argBlock) {
             seqVal = evalBlockAsExpr(blk.argBlock);
+            seqLabel = blk.argBlock.type || 'seq';
           } else if (blk.content) {
             seqVal = evalExpr(blk.content);
+            const contentTrimmed = (blk.content || '').trim();
+            if (
+              contentTrimmed.startsWith('range(') ||
+              contentTrimmed.startsWith('enumerate(') ||
+              contentTrimmed.startsWith('zip(') ||
+              contentTrimmed.startsWith('reversed(') ||
+              contentTrimmed.startsWith('sorted(')
+            ) {
+              seqLabel = contentTrimmed;
+            } else if (blk.type === 'for_range') {
+              seqLabel = `range(${contentTrimmed})`;
+            } else {
+              seqLabel = contentTrimmed;
+            }
           } else {
             seqVal = blk.type === 'for_range' ? [0, 1, 2, 3, 4] : [];
+            seqLabel = 'range(5)';
           }
+
           const arr = Array.isArray(seqVal)
             ? seqVal
             : typeof seqVal === 'number'
@@ -599,6 +618,11 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
             : typeof seqVal === 'string'
             ? seqVal.split('')
             : [seqVal];
+
+          // 1. Expose generated sequence in memory scope
+          if (!(seqLabel in scope)) {
+            scope[seqLabel] = arr;
+          }
 
           for (const item of arr) {
             if (maxSteps <= 0) break;

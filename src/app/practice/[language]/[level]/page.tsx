@@ -1173,7 +1173,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           valType = 'bool';
           cleanVal = val ? 'True' : 'False';
         } else if (Array.isArray(val)) {
-          valType = 'list';
+          if (varName.startsWith('range')) valType = 'range';
+          else if (varName.startsWith('enumerate')) valType = 'enum';
+          else if (varName.startsWith('zip')) valType = 'zip';
+          else if (varName.startsWith('reversed')) valType = 'reversed';
+          else if (varName.startsWith('sorted')) valType = 'sorted';
+          else valType = 'list';
           cleanVal = `[${val.map((v) => typeof v === 'string' ? `'${v}'` : String(v)).join(', ')}]`;
         } else if (typeof val === 'object' && val !== null) {
           valType = 'dict';
@@ -1228,6 +1233,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           }
         } else if (b.type === 'for_range') {
           const vName = (b.varName || 'i').trim();
+          const countNum = parseInt((b.content || '5').trim(), 10);
+          const rangeLabel = `range(${(b.content || '5').trim()})`;
+          const rangePreview = !isNaN(countNum) && countNum > 0 && countNum <= 10
+            ? `[${Array.from({ length: countNum }, (_, idx) => idx).join(', ')}]`
+            : '[0, 1, 2, 3, 4]';
+          if (!varMap.has(rangeLabel)) {
+            varMap.set(rangeLabel, { value: rangePreview, type: 'range' });
+          }
           if (vName && !varMap.has(vName)) {
             varMap.set(vName, { value: '0', type: 'int' });
           }
@@ -1255,15 +1268,31 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         const forRangeMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+range\((.+)\):/);
         if (forRangeMatch) {
           const varName = forRangeMatch[1];
+          const rangeArg = forRangeMatch[2].trim();
+          const rangeLabel = `range(${rangeArg})`;
+          const parsedNum = parseInt(rangeArg, 10);
+          const rangePreview = !isNaN(parsedNum) && parsedNum > 0 && parsedNum <= 10
+            ? `[${Array.from({ length: parsedNum }, (_, idx) => idx).join(', ')}]`
+            : '[0, 1, 2, …]';
+          if (!varMap.has(rangeLabel)) {
+            varMap.set(rangeLabel, { value: rangePreview, type: 'range' });
+          }
           if (!varMap.has(varName)) {
             varMap.set(varName, { value: '0', type: 'int' });
           }
           continue;
         }
 
-        const forInMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+(.+):/);
+        const forInMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+([\s\S]+?):/);
         if (forInMatch) {
           const varName = forInMatch[1];
+          const seqExpr = forInMatch[2].trim();
+          if (/^(enumerate|zip|reversed|sorted)\(/.test(seqExpr)) {
+            const funcName = seqExpr.match(/^([a-zA-Z_]\w*)/)?.[1] || 'seq';
+            if (!varMap.has(funcName)) {
+              varMap.set(funcName, { value: '[...]', type: funcName });
+            }
+          }
           if (!varMap.has(varName)) {
             varMap.set(varName, { value: '-', type: 'item' });
           }
