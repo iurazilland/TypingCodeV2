@@ -3,8 +3,9 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // ============================================================================
 // 파이썬 기초 1레벨: print() 함수와 숫자의 기초 (10단계)
 // - 1~5단계: 코드블록 모드 (Block Mode) - 블록으로 개념 체득
-// - 6~10단계: 타이핑 모드 (Typing Mode) - 빈칸 채우기, 틀린곳 수정, 한줄 작성
+// - 6~10단계: 타이핑 모드 (Typing Mode) - 빈칸 채우기 및 오타 수정
 // - 빈칸 기호: 언어 문법과 충돌하지 않는 특수문자 '§' 사용 (연속된 '§'는 하나의 [] 테두리 박스로 렌더링)
+// - 채점 기준: testCases 배열 내의 expectedOutput을 기준으로 자동 검증
 // ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
@@ -29,7 +30,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_ko: 'print() 블록을 시작 블록 아래에 연결하고, 숫자 10을 입력하여 화면에 10을 출력해보세요.',
       prompt_en: 'Attach the print() block below start and enter 10 to output 10 on the screen.',
       targetCode: 'print(10)',
-      expectedOutput: '10',
       testCases: [
         {
           id: 1,
@@ -50,7 +50,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_ko: 'print() 블록을 사용해 숫자 5를 출력해보세요.',
       prompt_en: 'Use the print() block to output the number 5.',
       targetCode: 'print(5)',
-      expectedOutput: '5',
       testCases: [
         {
           id: 1,
@@ -71,7 +70,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_ko: 'print() 블록을 사용해 세 자리 숫자 100을 출력해보세요.',
       prompt_en: 'Output the 3-digit number 100 using print().',
       targetCode: 'print(100)',
-      expectedOutput: '100',
       testCases: [
         {
           id: 1,
@@ -92,7 +90,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_ko: 'print() 블록을 사용해 숫자 0을 출력해보세요.',
       prompt_en: 'Print the number 0 using the print() block.',
       targetCode: 'print(0)',
-      expectedOutput: '0',
       testCases: [
         {
           id: 1,
@@ -113,7 +110,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_ko: '앞서 배운 방식을 복습하며, print() 블록으로 숫자 7을 출력해보세요.',
       prompt_en: 'Review what you learned and print the number 7.',
       targetCode: 'print(7)',
-      expectedOutput: '7',
       testCases: [
         {
           id: 1,
@@ -126,7 +122,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // [타이핑 모드] 6~10단계: V1 챌린지 모드 (빈칸, 틀린곳 수정, 한줄 작성)
+    // [타이핑 모드] 6~10단계: V1 챌린지 모드 (빈칸 채우기, 오타 수정)
     // - 빈칸은 § 기호로 지정 (예: §§은 2글자 빈칸 박스)
     // ------------------------------------------------------------------------
     {
@@ -140,7 +136,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: 'Type 10 into the blank box to output 10 on the screen.',
       templateCode: 'print(§§)',
       targetCode: 'print(10)',
-      expectedOutput: '10',
       testCases: [
         {
           id: 1,
@@ -162,7 +157,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: 'Type 5 into the blank box and run.',
       templateCode: 'print(§)',
       targetCode: 'print(5)',
-      expectedOutput: '5',
       testCases: [
         {
           id: 1,
@@ -184,7 +178,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: 'There is a typo (pritn) in the code. Correct it to print to output 100.',
       templateCode: 'pritn(100)',
       targetCode: 'print(100)',
-      expectedOutput: '100',
       testCases: [
         {
           id: 1,
@@ -206,7 +199,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: 'Type 0 into the blank box to output 0.',
       templateCode: 'print(§)',
       targetCode: 'print(0)',
-      expectedOutput: '0',
       testCases: [
         {
           id: 1,
@@ -221,14 +213,13 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       id: 10,
       step: 10,
       type: 'typing',
-      kind: 'one_line',
-      title: '한 줄 코드 작성: 숫자 77 출력하기',
-      title_en: 'Write One Line: Print 77',
-      prompt_ko: '1레벨 마스터 미션! 숫자 77을 화면에 출력하는 한 줄 코드를 직접 작성해보세요.',
-      prompt_en: 'Level 1 Master! Write a single line of code to print the number 77.',
-      templateCode: '§§§§§§§§§',
+      kind: 'fill_blank',
+      title: '빈칸 채우기: 숫자 77 출력',
+      title_en: 'Fill in the Blank: Print 77',
+      prompt_ko: '괄호 안 빈칸 박스에 숫자 77을 입력하여 1레벨을 마스터해보세요.',
+      prompt_en: 'Type 77 into the blank box to complete Level 1.',
+      templateCode: 'print(§§)',
       targetCode: 'print(77)',
-      expectedOutput: '77',
       testCases: [
         {
           id: 1,
@@ -236,8 +227,8 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           expectedOutput: '77',
         },
       ],
-      hint_ko: '소문자 print를 입력하고 괄호 안에 77을 적어줍니다: print(77)',
-      hint_en: 'Type print(77) to complete the 1st level!',
+      hint_ko: '괄호 안 빈칸에 77을 적어줍니다: print(77)',
+      hint_en: 'Type 77 in the blank: print(77)',
     },
   ],
 };

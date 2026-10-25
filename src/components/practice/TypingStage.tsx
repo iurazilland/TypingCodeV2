@@ -492,13 +492,13 @@ export default function TypingStage({
               justifyContent: 'center',
               height: '1.35em',
               margin: '0 2px',
-              padding: '0 3px',
+              padding: '0 4px',
+              border: '1.5px solid rgba(56, 189, 248, 0.75)',
               borderLeft: '2.5px solid #38bdf8', // [ bracket side
               borderRight: '2.5px solid #38bdf8', // ] bracket side
-              borderTop: '1px dashed rgba(56, 189, 248, 0.45)',
-              borderBottom: '1px dashed rgba(56, 189, 248, 0.45)',
-              background: 'rgba(56, 189, 248, 0.08)',
-              borderRadius: '3px',
+              background: 'rgba(56, 189, 248, 0.1)',
+              boxShadow: 'inset 0 0 6px rgba(56, 189, 248, 0.15)',
+              borderRadius: '4px',
               verticalAlign: 'middle',
               boxSizing: 'border-box',
               userSelect: 'none',

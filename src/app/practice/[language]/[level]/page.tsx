@@ -1674,27 +1674,33 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       }
     }
 
-    // 5. Typo check for fill-in-the-blank questions (§ marker)
+    // 5. Code modification ratio check for fill_blank questions
+    // If more than 30% of the fixed skeleton code is corrupted/modified, reject as incorrect
     if (question.kind === 'fill_blank' && question.templateCode && question.templateCode.includes('§')) {
       const firstSection = question.templateCode.indexOf('§');
       const lastSection = question.templateCode.lastIndexOf('§');
       const prefix = question.templateCode.slice(0, firstSection).trim();
       const suffix = question.templateCode.slice(lastSection + 1).trim();
+      const fixedSkeleton = prefix + suffix;
 
-      if (prefix && !trimmedUser.startsWith(prefix)) {
-        let prefixMismatches = 0;
-        for (let i = 0; i < prefix.length; i++) {
-          if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
+      if (fixedSkeleton.length > 0) {
+        let mismatches = 0;
+        if (prefix && !trimmedUser.startsWith(prefix)) {
+          for (let i = 0; i < prefix.length; i++) {
+            if (trimmedUser[i] !== prefix[i]) mismatches++;
+          }
         }
-        if (prefixMismatches > 2) return false;
-      }
-      if (suffix && !trimmedUser.endsWith(suffix)) {
-        let suffixMismatches = 0;
-        for (let i = 0; i < suffix.length; i++) {
-          const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
-          if (userChar !== suffix[i]) suffixMismatches++;
+        if (suffix && !trimmedUser.endsWith(suffix)) {
+          for (let i = 0; i < suffix.length; i++) {
+            const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
+            if (userChar !== suffix[i]) mismatches++;
+          }
         }
-        if (suffixMismatches > 2) return false;
+        // If more than 30% of the fixed skeleton code was altered, disqualify
+        const corruptionRate = mismatches / fixedSkeleton.length;
+        if (corruptionRate > 0.3) {
+          return false;
+        }
       }
     }
 
@@ -1788,7 +1794,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         }
 
         lastExecutedCodeRef.current = codeToRun;
-        const expectedOut = currentQuestion.expectedOutput.trim();
+        const expectedOut = (currentQuestion.testCases?.[0]?.expectedOutput || currentQuestion.expectedOutput || '').trim();
         setTerminalOutput(actualOut);
 
         const passed = checkSubmissionPass(
@@ -1914,7 +1920,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
         if (!debugAbortRef.current) {
           lastExecutedCodeRef.current = codeToRun;
-          const expectedOut = currentQuestion.expectedOutput.trim();
+          const expectedOut = (currentQuestion.testCases?.[0]?.expectedOutput || currentQuestion.expectedOutput || '').trim();
 
           // Pause after execution completes so the user can inspect output and memory before success modal
           await sleepInterruptible(900);
