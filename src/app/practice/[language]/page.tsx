@@ -1,29 +1,22 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
   Play, 
   Sparkles, 
   Trophy, 
-  BookOpen, 
-  Code2, 
-  CheckCircle2, 
-  Layers,
   ArrowRight,
   Puzzle,
   Keyboard,
   Wrench,
-  Compass,
-  ChevronRight,
-  Flame,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
 import { PYTHON_LEVEL_1 } from '@/data/curriculum/python/level1';
 import LanguageIcon from '@/components/LanguageIcon';
-import { getCategoryName, getTrackName, getSkillName } from '@/lib/curriculumTranslations';
+import { getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
 
 interface StageSelectPageProps {
   params: {
@@ -36,46 +29,48 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
   const isEn = language === 'en';
   const rawLang = params.language.toLowerCase();
 
-  // Find matching track
-  const matchedTrack = useMemo(() => {
-    const cleanLang = rawLang.replace(/_basic$/, '').replace(/_adv$/, '').replace(/_advanced$/, '');
-    const found = CURRICULUM_TRACKS.find((t) => 
-      t.id === rawLang ||
-      t.id === cleanLang ||
-      (cleanLang === 'py' && t.id === 'python') ||
-      (cleanLang === 'js' && t.id === 'javascript') ||
-      (cleanLang === 'html' && t.id === 'web')
-    );
-    return found || CURRICULUM_TRACKS[0];
+  // Find matching track and module from CURRICULUM_TRACKS
+  const { matchedTrack, matchedModule } = useMemo(() => {
+    let tFound: LanguageTrack | undefined;
+    let mFound: CourseModule | undefined;
+
+    for (const track of CURRICULUM_TRACKS) {
+      for (const mod of track.modules) {
+        if (
+          mod.practiceUrl === `/practice/${rawLang}` ||
+          mod.id.toLowerCase() === rawLang ||
+          (rawLang === 'python_basic' && mod.id === 'py-basic') ||
+          (rawLang === 'python' && mod.id === 'py-basic') ||
+          (rawLang === 'c' && mod.id === 'c-basic') ||
+          (rawLang === 'web' && mod.id === 'web-html')
+        ) {
+          tFound = track;
+          mFound = mod;
+          break;
+        }
+      }
+      if (mFound) break;
+    }
+
+    if (!tFound) {
+      const cleanLang = rawLang.replace(/_basic$/, '').replace(/_adv$/, '').replace(/_advanced$/, '');
+      tFound = CURRICULUM_TRACKS.find((t) => 
+        t.id === rawLang ||
+        t.id === cleanLang ||
+        (cleanLang === 'py' && t.id === 'python') ||
+        (cleanLang === 'js' && t.id === 'javascript') ||
+        (cleanLang === 'html' && t.id === 'web')
+      ) || CURRICULUM_TRACKS[0];
+      mFound = tFound.modules[0];
+    } else if (!mFound) {
+      mFound = tFound.modules[0];
+    }
+
+    return { matchedTrack: tFound, matchedModule: mFound };
   }, [rawLang]);
 
-  // Track hover state for language pill bar
-  const [hoveredTrackId, setHoveredTrackId] = useState<string | null>(null);
-
-  // Active module within track
-  const [selectedModuleId, setSelectedModuleId] = useState<string>(() => {
-    if (rawLang === 'python_basic') return 'py-basic';
-    return matchedTrack.modules[0].id;
-  });
-
-  // Sync selectedModuleId when switching language tracks
-  useEffect(() => {
-    if (!matchedTrack.modules.some((m) => m.id === selectedModuleId)) {
-      setSelectedModuleId(matchedTrack.modules[0].id);
-    }
-  }, [matchedTrack, selectedModuleId]);
-
-  const activeModule = useMemo(() => {
-    return matchedTrack.modules.find((m) => m.id === selectedModuleId) || matchedTrack.modules[0];
-  }, [matchedTrack, selectedModuleId]);
-
-  // Compute total levels for this track
-  const totalTrackLevels = useMemo(() => {
-    return matchedTrack.modules.reduce((sum, mod) => sum + mod.totalLevels, 0);
-  }, [matchedTrack]);
-
-  // Generate Stage Cards for the active module
-  const isPythonBasic = (rawLang === 'python_basic' || activeModule.id === 'py-basic') && matchedTrack.id === 'python';
+  // Generate Stage Cards for the module
+  const isPythonBasic = (rawLang === 'python_basic' || matchedModule.id === 'py-basic') && matchedTrack.id === 'python';
 
   const stages = useMemo(() => {
     if (isPythonBasic) {
@@ -98,7 +93,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       });
     }
 
-    const totalStages = Math.min(activeModule.totalLevels || 10, 10);
+    const totalStages = Math.min(matchedModule.totalLevels || 10, 10);
     return Array.from({ length: totalStages }, (_, i) => {
       const stepNum = i + 1;
       const isBlock = stepNum <= 4;
@@ -112,8 +107,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         ? 'block'
         : 'blank';
 
-      const skillIndex = i % (activeModule.skills.length || 1);
-      const skillName = activeModule.skills[skillIndex] || `${matchedTrack.name} 핵심 문법`;
+      const skillIndex = i % (matchedModule.skills.length || 1);
+      const skillName = matchedModule.skills[skillIndex] || `${matchedTrack.name} 핵심 문법`;
 
       return {
         step: stepNum,
@@ -126,7 +121,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         isAvailable: true,
       };
     });
-  }, [isPythonBasic, activeModule, matchedTrack, rawLang, isEn]);
+  }, [isPythonBasic, matchedModule, matchedTrack, rawLang, isEn]);
 
   const getBadgeInfo = (type: 'block' | 'blank' | 'bug' | 'challenge') => {
     switch (type) {
@@ -170,54 +165,10 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     }
   };
 
-  const getPillLabel = (track: LanguageTrack) => {
-    if (track.id === 'vb') return 'Visual Basic';
-    if (track.id === 'linux') return 'Linux';
-    if (track.id === 'csharp') return 'C#';
-    if (track.id === 'swift') return 'Swift';
-    if (track.id === 'javascript') return 'JavaScript';
-    if (track.id === 'c') return isEn ? 'C' : 'C언어';
-    if (track.id === 'cpp') return 'C++';
-    if (track.id === 'python') return 'Python';
-    if (track.id === 'java') return 'Java';
-    if (track.id === 'sql') return 'SQL';
-    if (track.id === 'go') return 'Go';
-    if (track.id === 'rust') return 'Rust';
-    if (track.id === 'web') return 'Web';
-    return isEn ? getTrackName(track, true) : track.name.split(' ')[0];
-  };
-
   return (
-    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '36px 24px 100px' }}>
-      {/* Top Breadcrumb Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.88rem', color: '#94a3b8' }}>
-          <Link
-            href="/languages"
-            style={{
-              color: '#94a3b8',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'color 0.15s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#38bdf8')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
-          >
-            <BookOpen size={15} />
-            <span>{isEn ? 'Curriculum' : '정규 커리큘럼'}</span>
-          </Link>
-          <ChevronRight size={14} color="#64748b" />
-          <span style={{ color: matchedTrack.color, fontWeight: 700 }}>
-            {isEn ? getTrackName(matchedTrack, true) : matchedTrack.name}
-          </span>
-          <ChevronRight size={14} color="#64748b" />
-          <span style={{ color: '#f8fafc', fontWeight: 600 }}>
-            {isEn ? 'Level Selection' : '레벨 선택'}
-          </span>
-        </div>
-
+    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>
+      {/* Top Back Navigation Link (Left-aligned) */}
+      <div style={{ marginBottom: '28px' }}>
         <Link
           href="/languages"
           style={{
@@ -225,339 +176,24 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
             alignItems: 'center',
             gap: '8px',
             color: '#94a3b8',
-            fontSize: '0.84rem',
+            fontSize: '0.9rem',
             fontWeight: 600,
-            transition: 'all 0.15s ease',
+            transition: 'color 0.15s ease',
             textDecoration: 'none',
-            padding: '6px 14px',
-            borderRadius: '10px',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#38bdf8';
-            e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.4)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#94a3b8';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#38bdf8')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
         >
-          <ArrowLeft size={14} />
-          <span>{isEn ? 'Back to All Curriculum' : '전체 언어 목록으로'}</span>
+          <ArrowLeft size={16} />
+          <span>{isEn ? 'Back to All Curriculum' : '전체 언어 학습과정으로 돌아가기'}</span>
         </Link>
       </div>
 
-      {/* Hero Header: Cohesive extension of the Curriculum Architecture Header */}
-      <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '6px 18px',
-          borderRadius: '24px',
-          background: `${matchedTrack.color}18`,
-          border: `1px solid ${matchedTrack.color}40`,
-          color: matchedTrack.color,
-          fontSize: '0.85rem',
-          fontWeight: 700,
-          marginBottom: '16px',
-          letterSpacing: '0.05em',
-        }}>
-          <Compass size={16} />
-          <span>{isEn ? 'STAGE PROGRESSION ROADMAP' : '실전 타자 스테이지 로드맵'}</span>
-        </div>
-
-        <h1 style={{ 
-          fontSize: 'clamp(2rem, 3.8vw, 2.7rem)', 
-          fontWeight: 800, 
-          color: '#f8fafc', 
-          marginBottom: '14px',
-          letterSpacing: '-0.02em',
-          lineHeight: 1.25,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '14px',
-          flexWrap: 'wrap',
-        }}>
-          <LanguageIcon language={matchedTrack.id} size={42} />
-          <span>{isEn ? getTrackName(matchedTrack, true) : matchedTrack.name}</span>
-          <span style={{ color: matchedTrack.color }}>
-            {isEn ? 'Practice Stages' : '단계별 실전 타자'}
-          </span>
-        </h1>
-
-        <p style={{ 
-          color: '#94a3b8', 
-          fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)', 
-          maxWidth: '820px', 
-          margin: '0 auto 24px',
-          lineHeight: 1.6,
-          wordBreak: 'keep-all',
-        }}>
-          {isEn ? matchedTrack.tagline_en : matchedTrack.tagline_ko}
-        </p>
-
-        {/* Milestone Stats Counter Pills */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '20px',
-          padding: '10px 24px',
-          borderRadius: '16px',
-          background: 'rgba(15, 23, 42, 0.6)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          backdropFilter: 'blur(8px)',
-          fontSize: '0.9rem',
-          color: '#cbd5e1',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Layers size={16} color="#38bdf8" />
-            <span><strong>{matchedTrack.modules.length}</strong> {isEn ? 'Courses in Track' : '개 전문 코스'}</span>
-          </div>
-          <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <BookOpen size={16} color="#10b981" />
-            <span><strong>{totalTrackLevels}</strong> {isEn ? 'Total Levels' : '개 전체 타자 레벨'}</span>
-          </div>
-          <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Sparkles size={16} color="#f59e0b" />
-            <span><strong>{stages.length}</strong> {isEn ? 'Stages Ready' : '개 준비된 실전 스테이지'}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Language Switcher Bar: Enables Seamless Jumping Between All 13 Languages */}
-      <div style={{
-        background: 'var(--bg-surface, #1e293b)',
-        borderRadius: '20px',
-        padding: '20px',
-        border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
-        marginBottom: '32px',
-        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25)',
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '12px',
-        }}>
-          <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Code2 size={16} color="#38bdf8" />
-            <span>{isEn ? 'SWITCH LANGUAGE TRACK:' : '학습 언어 트랙 변경:'}</span>
-          </span>
-          <Link
-            href="/languages"
-            style={{ fontSize: '0.82rem', color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}
-          >
-            {isEn ? 'View All 13 Languages →' : '전체 13개 언어 커리큘럼 보기 →'}
-          </Link>
-        </div>
-
-        {/* Language Tabs Row: Selected language is expanded, clicking another navigates */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          overflowX: 'auto',
-          paddingTop: '8px',
-          paddingBottom: '14px',
-          paddingLeft: '6px',
-          paddingRight: '6px',
-          scrollbarWidth: 'none',
-        }}>
-          {/* ALL Button: Jumps back to /languages */}
-          {(() => {
-            const isHovered = hoveredTrackId === 'all';
-            return (
-              <Link
-                href="/languages"
-                onMouseEnter={() => setHoveredTrackId('all')}
-                onMouseLeave={() => setHoveredTrackId(null)}
-                style={{
-                  height: '52px',
-                  padding: isHovered ? '0 16px 0 10px' : '0 10px',
-                  borderRadius: '16px',
-                  flexShrink: 0,
-                  background: isHovered 
-                    ? 'rgba(56, 189, 248, 0.12)' 
-                    : 'rgba(255, 255, 255, 0.04)',
-                  border: isHovered
-                    ? '1.5px solid rgba(56, 189, 248, 0.4)'
-                    : '1.5px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: isHovered ? '0 4px 14px rgba(56, 189, 248, 0.25)' : 'none',
-                  transform: isHovered ? 'scale(1.04)' : 'scale(1)',
-                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: isHovered ? '8px' : '0px',
-                  textDecoration: 'none',
-                  overflow: 'hidden',
-                }}
-              >
-                <LanguageIcon language="all" size={32} />
-                <div style={{
-                  maxWidth: isHovered ? '100px' : '0px',
-                  opacity: isHovered ? 1 : 0,
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}>
-                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
-                    {isEn ? 'All' : '전체'}
-                  </span>
-                  <span style={{
-                    fontSize: '0.72rem',
-                    padding: '2px 6px',
-                    borderRadius: '6px',
-                    background: 'rgba(255, 255, 255, 0.18)',
-                    color: '#cbd5e1',
-                    fontWeight: 700,
-                  }}>
-                    {CURRICULUM_TRACKS.length}
-                  </span>
-                </div>
-              </Link>
-            );
-          })()}
-
-          {CURRICULUM_TRACKS.map((track) => {
-            const isSelected = matchedTrack.id === track.id;
-            const isHovered = hoveredTrackId === track.id;
-            const isExpanded = isSelected || isHovered;
-
-            return (
-              <Link
-                key={track.id}
-                href={`/practice/${track.id}`}
-                onMouseEnter={() => setHoveredTrackId(track.id)}
-                onMouseLeave={() => setHoveredTrackId(null)}
-                style={{
-                  height: '52px',
-                  padding: isExpanded ? '0 16px 0 11px' : '0 11px',
-                  borderRadius: '16px',
-                  flexShrink: 0,
-                  background: isSelected 
-                    ? `${track.color}25` 
-                    : isHovered
-                    ? `${track.color}15`
-                    : 'rgba(255, 255, 255, 0.04)',
-                  border: isSelected 
-                    ? `2px solid ${track.color}` 
-                    : isHovered
-                    ? `1.5px solid ${track.color}60`
-                    : '1.5px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: isSelected ? `0 6px 20px ${track.color}50` : isHovered ? `0 4px 14px ${track.color}30` : 'none',
-                  transform: isHovered ? 'scale(1.04)' : 'scale(1)',
-                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: isExpanded ? '8px' : '0px',
-                  textDecoration: 'none',
-                  overflow: 'hidden',
-                }}
-              >
-                <LanguageIcon language={track.id} size={30} />
-                <div style={{
-                  maxWidth: isExpanded ? '150px' : '0px',
-                  opacity: isExpanded ? 1 : 0,
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}>
-                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
-                    {getPillLabel(track)}
-                  </span>
-                  <span style={{
-                    fontSize: '0.72rem',
-                    padding: '2px 6px',
-                    borderRadius: '6px',
-                    background: 'rgba(255, 255, 255, 0.16)',
-                    color: '#cbd5e1',
-                    fontWeight: 700,
-                  }}>
-                    {track.modules.length}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Course Modules Switcher Tabs (If Track has multiple courses) */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-          <BookOpen size={18} color={matchedTrack.color} />
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
-            {isEn ? `${getPillLabel(matchedTrack)} Courses & Modules` : `${getPillLabel(matchedTrack)} 코스 선택`}
-          </h2>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          {matchedTrack.modules.map((mod, idx) => {
-            const isModuleActive = mod.id === activeModule.id;
-            return (
-              <button
-                key={mod.id}
-                onClick={() => setSelectedModuleId(mod.id)}
-                style={{
-                  padding: '10px 18px',
-                  borderRadius: '12px',
-                  background: isModuleActive ? `${matchedTrack.color}25` : 'rgba(255, 255, 255, 0.04)',
-                  border: isModuleActive ? `2px solid ${matchedTrack.color}` : '1px solid rgba(255, 255, 255, 0.08)',
-                  color: isModuleActive ? '#ffffff' : '#94a3b8',
-                  fontWeight: isModuleActive ? 800 : 600,
-                  fontSize: '0.88rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  boxShadow: isModuleActive ? `0 4px 16px ${matchedTrack.color}35` : 'none',
-                }}
-              >
-                <span style={{
-                  padding: '2px 6px',
-                  borderRadius: '6px',
-                  background: isModuleActive ? matchedTrack.color : 'rgba(255, 255, 255, 0.1)',
-                  color: isModuleActive ? '#09090b' : '#cbd5e1',
-                  fontSize: '0.72rem',
-                  fontWeight: 900,
-                }}>
-                  0{idx + 1}
-                </span>
-                <span>{isEn ? mod.title_en : mod.title_ko}</span>
-                <span style={{
-                  fontSize: '0.72rem',
-                  padding: '2px 6px',
-                  borderRadius: '6px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: '#cbd5e1',
-                }}>
-                  {mod.totalLevels}L
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Active Module Showcase Card: Matches Curriculum Track Header Architecture */}
+      {/* Course Header Banner */}
       <div
         style={{
           padding: '28px 32px',
-          borderRadius: '20px',
+          borderRadius: '22px',
           background: 'var(--bg-surface, #1e293b)',
           border: `1.5px solid ${matchedTrack.color}50`,
           boxShadow: `0 8px 30px rgba(0, 0, 0, 0.35), 0 0 20px ${matchedTrack.color}15`,
@@ -572,8 +208,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div
             style={{
-              width: '68px',
-              height: '68px',
+              width: '70px',
+              height: '70px',
               borderRadius: '18px',
               background: 'rgba(15, 23, 42, 0.8)',
               border: `1.5px solid ${matchedTrack.color}70`,
@@ -584,14 +220,14 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
               flexShrink: 0,
             }}
           >
-            <LanguageIcon language={matchedTrack.id} size={40} />
+            <LanguageIcon language={matchedTrack.id} size={42} />
           </div>
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <h2 style={{ fontSize: 'clamp(1.35rem, 2.2vw, 1.8rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
-                {isEn ? activeModule.title_en : activeModule.title_ko}
-              </h2>
+              <h1 style={{ fontSize: 'clamp(1.4rem, 2.3vw, 1.9rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+                {isEn ? matchedModule.title_en : matchedModule.title_ko}
+              </h1>
               <span
                 style={{
                   padding: '3px 10px',
@@ -604,24 +240,24 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                   letterSpacing: '0.03em',
                 }}
               >
-                {getCategoryName(activeModule.category, isEn)}
+                {getCategoryName(matchedModule.category, isEn)}
               </span>
               <span
                 style={{
                   padding: '3px 10px',
                   borderRadius: '10px',
-                  background: `${activeModule.difficultyColor}20`,
-                  color: activeModule.difficultyColor,
-                  border: `1px solid ${activeModule.difficultyColor}50`,
+                  background: `${matchedModule.difficultyColor || '#10b981'}20`,
+                  color: matchedModule.difficultyColor || '#10b981',
+                  border: `1px solid ${matchedModule.difficultyColor || '#10b981'}50`,
                   fontSize: '0.78rem',
                   fontWeight: 800,
                 }}
               >
-                {activeModule.difficulty}
+                {matchedModule.difficulty}
               </span>
             </div>
             <p style={{ color: '#cbd5e1', fontSize: '0.94rem', maxWidth: '720px', lineHeight: 1.55, margin: 0 }}>
-              {isEn ? activeModule.description_en : activeModule.description_ko}
+              {isEn ? matchedModule.description_en : matchedModule.description_ko}
             </p>
           </div>
         </div>
@@ -651,16 +287,16 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       </div>
 
       {/* Stage Grid Section Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Sparkles size={18} color="#38bdf8" />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+          <Sparkles size={20} color="#38bdf8" />
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
             {isEn 
-              ? `Stages for ${activeModule.title_en} (1 ~ ${stages.length})` 
-              : `${activeModule.title_ko} 실전 스테이지 (1 ~ ${stages.length}단계)`}
-          </h3>
+              ? `${matchedModule.title_en} Stages (1 ~ ${stages.length})` 
+              : `${matchedModule.title_ko} 실전 스테이지 (1 ~ ${stages.length}단계)`}
+          </h2>
         </div>
-        <div style={{ fontSize: '0.84rem', color: '#94a3b8' }}>
+        <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
           {isEn ? 'Click any stage card to start coding practice immediately' : '원하는 단계를 클릭하여 바로 실습을 시작할 수 있습니다'}
         </div>
       </div>
