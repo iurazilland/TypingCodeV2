@@ -4318,65 +4318,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 </span>
               </div>
 
-              {/* Execution Controls: [⚡ 일반 | 🐞 디버깅] + [0.5x | 1x | 2x] + [▶ 코드 실행] */}
+              {/* Execution Controls: [0.5x | 1x | 2x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 코드 실행] */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {/* Mode Toggle Switch */}
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  padding: '2px',
-                  borderRadius: '7px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                }}>
-                  <button
-                    type="button"
-                    onClick={() => setExecMode('normal')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '5px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      background: execMode === 'normal' ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
-                      color: execMode === 'normal' ? '#38bdf8' : '#94a3b8',
-                      fontWeight: execMode === 'normal' ? 800 : 600,
-                      fontSize: '0.72rem',
-                      transition: 'all 0.15s ease',
-                    }}
-                    title="일반 실행 모드 (0ms 즉각 실행)"
-                  >
-                    <Zap size={11} />
-                    <span>일반</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setExecMode('debug')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '5px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      background: execMode === 'debug' ? 'rgba(234, 88, 12, 0.25)' : 'transparent',
-                      color: execMode === 'debug' ? '#fb923c' : '#94a3b8',
-                      fontWeight: execMode === 'debug' ? 800 : 600,
-                      fontSize: '0.72rem',
-                      transition: 'all 0.15s ease',
-                    }}
-                    title="디버깅 모드 (단계별 순차 실행 및 메모리 추적)"
-                  >
-                    <Bug size={11} />
-                    <span>디버깅</span>
-                  </button>
-                </div>
-
-                {/* Debug Speed Selector */}
+                {/* Debug Speed Selector (Placed to the left of the toggle switch) */}
                 {execMode === 'debug' && (
                   <div style={{
                     display: 'inline-flex',
@@ -4410,6 +4354,62 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     ))}
                   </div>
                 )}
+
+                {/* Mode Toggle Switch: [🐞 디버깅 | ⚡ 일반] */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  padding: '2px',
+                  borderRadius: '7px',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => setExecMode('debug')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '3px 8px',
+                      borderRadius: '5px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: execMode === 'debug' ? 'rgba(234, 88, 12, 0.25)' : 'transparent',
+                      color: execMode === 'debug' ? '#fb923c' : '#94a3b8',
+                      fontWeight: execMode === 'debug' ? 800 : 600,
+                      fontSize: '0.72rem',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title="디버깅 모드 (단계별 순차 실행 및 메모리 추적)"
+                  >
+                    <Bug size={11} />
+                    <span>디버깅</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setExecMode('normal')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '3px 8px',
+                      borderRadius: '5px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: execMode === 'normal' ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
+                      color: execMode === 'normal' ? '#38bdf8' : '#94a3b8',
+                      fontWeight: execMode === 'normal' ? 800 : 600,
+                      fontSize: '0.72rem',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title="일반 실행 모드 (0ms 즉각 실행)"
+                  >
+                    <Zap size={11} />
+                    <span>일반</span>
+                  </button>
+                </div>
 
                 {/* Manual Run / Stop Button */}
                 <button
