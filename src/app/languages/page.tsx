@@ -20,6 +20,7 @@ import {
 import { CURRICULUM_TRACKS, LanguageTrack, CourseModule, DIFFICULTY_COLORS, DIFFICULTY_ORDER } from '@/lib/curriculum';
 import LanguageIcon from '@/components/LanguageIcon';
 import { useLanguage } from '@/lib/LanguageContext';
+import { getTrackName, getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
 
 export default function LanguagesPage() {
   const { language } = useLanguage();
@@ -309,7 +310,7 @@ export default function LanguagesPage() {
                   pointerEvents: 'none',
                 }}>
                   <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
-                    {isEn ? track.id.toUpperCase() : track.name.split(' ')[0]}
+                    {isEn ? getTrackName(track, true) : track.name.split(' ')[0]}
                   </span>
                   <span style={{
                     fontSize: '0.72rem',
@@ -473,7 +474,7 @@ export default function LanguagesPage() {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                       <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#f8fafc' }}>
-                        {track.name}
+                        {getTrackName(track, isEn)}
                       </h2>
                       <span style={{
                         padding: '3px 10px',
@@ -595,7 +596,7 @@ export default function LanguagesPage() {
                                 fontSize: '0.78rem',
                                 fontWeight: 700,
                               }}>
-                                {module.category}
+                                {getCategoryName(module.category, isEn)}
                               </span>
 
                               {/* Difficulty Badge */}
@@ -649,19 +650,21 @@ export default function LanguagesPage() {
                             fontSize: '1.18rem',
                             fontWeight: 800,
                             color: '#f8fafc',
-                            marginBottom: '4px',
+                            marginBottom: isEn ? '12px' : '4px',
                             lineHeight: 1.35,
                           }}>
                             {isEn ? module.title_en : module.title_ko}
                           </h3>
-                          <div style={{
-                            fontSize: '0.78rem',
-                            color: '#64748b',
-                            fontWeight: 600,
-                            marginBottom: '12px',
-                          }}>
-                            {isEn ? module.title_ko : module.title_en}
-                          </div>
+                          {!isEn && (
+                            <div style={{
+                              fontSize: '0.78rem',
+                              color: '#64748b',
+                              fontWeight: 600,
+                              marginBottom: '12px',
+                            }}>
+                              {module.title_en}
+                            </div>
+                          )}
 
                           {/* Description */}
                           <p style={{
@@ -700,7 +703,7 @@ export default function LanguagesPage() {
                                 }}
                               >
                                 <CheckCircle2 size={13} color="#38bdf8" style={{ flexShrink: 0 }} />
-                                <span>{skill}</span>
+                                <span>{getSkillName(skill, isEn)}</span>
                               </div>
                             ))}
                           </div>

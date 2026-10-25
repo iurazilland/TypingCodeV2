@@ -23,6 +23,7 @@ import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
 import { PYTHON_LEVEL_1 } from '@/data/curriculum/python/level1';
 import LanguageIcon from '@/components/LanguageIcon';
+import { getCategoryName, getTrackName } from '@/lib/curriculumTranslations';
 
 interface StageSelectPageProps {
   params: {
@@ -217,7 +218,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                   letterSpacing: '0.03em',
                 }}
               >
-                {matchedModule.category}
+                {getCategoryName(matchedModule.category, isEn)}
               </span>
             </div>
             <p style={{ color: '#cbd5e1', fontSize: '0.96rem', maxWidth: '680px', lineHeight: 1.55, margin: 0 }}>
