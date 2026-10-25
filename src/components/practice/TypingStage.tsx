@@ -286,17 +286,18 @@ export default function TypingStage({
     return idx + safeCol;
   };
 
-  // Next expected character for virtual keyboard (based on current cursor position)
+  // Next expected character for virtual keyboard (based on templateCode first, hiding '§' blank symbol)
   const nextChar = useMemo(() => {
-    if (cursorIndex < targetCode.length) {
-      const ch = targetCode[cursorIndex];
+    const keyboardGuide = templateCode || targetCode;
+    if (cursorIndex < keyboardGuide.length) {
+      const ch = keyboardGuide[cursorIndex];
       if (ch === '§') return '';
       if (ch === '\n') return 'Enter';
       if (ch === ' ') return 'Space';
       return ch;
     }
     return '';
-  }, [cursorIndex, targetCode]);
+  }, [cursorIndex, templateCode, targetCode]);
 
   // Split guideCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
   const targetLines = useMemo(() => guideCode.split('\n'), [guideCode]);
