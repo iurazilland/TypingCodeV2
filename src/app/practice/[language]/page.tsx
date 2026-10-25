@@ -6,7 +6,7 @@ import {
   ArrowLeft, 
   CheckCircle2, 
   Play,
-  Clock,
+  Lock,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
@@ -344,13 +344,19 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 {section.levels.map((level) => {
                   const isCleared = userProgress.clearedLevels.has(level.levelNumber);
                   const isCurrent = !isCleared && (level.levelNumber === currentActiveLevel);
+                  const isLocked = !isCleared && !isCurrent;
                   const isHovered = hoveredLevelNum === level.levelNumber;
 
                   return (
                     <Link
                       key={level.levelNumber}
-                      href={`/practice/${rawLang}/${level.levelNumber}`}
-                      onMouseEnter={() => setHoveredLevelNum(level.levelNumber)}
+                      href={isLocked ? '#' : `/practice/${rawLang}/${level.levelNumber}`}
+                      onClick={(e) => {
+                        if (isLocked) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onMouseEnter={() => !isLocked && setHoveredLevelNum(level.levelNumber)}
                       onMouseLeave={() => setHoveredLevelNum(null)}
                       style={{
                         display: 'flex',
@@ -360,29 +366,36 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         padding: '20px 22px',
                         borderRadius: '18px',
                         textDecoration: 'none',
-                        background: isHovered
+                        opacity: isLocked ? 0.45 : 1,
+                        background: isHovered && !isLocked
                           ? 'rgba(30, 41, 59, 0.85)'
                           : isCleared
                           ? 'rgba(16, 185, 129, 0.03)'
+                          : isLocked
+                          ? 'rgba(15, 23, 42, 0.4)'
                           : 'var(--bg-surface, #1e293b)',
-                        border: isHovered
+                        border: isHovered && !isLocked
                           ? `1.5px solid ${matchedTrack.color}`
                           : isCleared
                           ? '1px solid rgba(16, 185, 129, 0.28)'
                           : isCurrent
                           ? `1.5px solid ${matchedTrack.color}75`
+                          : isLocked
+                          ? '1px solid rgba(255, 255, 255, 0.04)'
                           : '1px solid rgba(255, 255, 255, 0.08)',
-                        boxShadow: isHovered
+                        boxShadow: isHovered && !isLocked
                           ? `0 12px 28px rgba(0, 0, 0, 0.45), 0 0 20px ${matchedTrack.color}25`
                           : isCurrent
                           ? `0 4px 16px ${matchedTrack.color}15`
+                          : isLocked
+                          ? 'none'
                           : '0 4px 14px rgba(0, 0, 0, 0.2)',
-                        transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-                        cursor: 'pointer',
+                        transform: isHovered && !isLocked ? 'translateY(-4px)' : 'translateY(0)',
+                        cursor: isLocked ? 'not-allowed' : 'pointer',
                         transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
                       }}
                     >
-                      {/* Top Row: Level Number + Status Badge (완료, 도전, 준비) */}
+                      {/* Top Row: Level Number + Status Badge (완료, 도전, 잠김) */}
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                           <span
@@ -390,14 +403,14 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.82rem',
                               fontWeight: 800,
-                              color: isCleared ? '#34d399' : matchedTrack.color,
+                              color: isLocked ? '#64748b' : isCleared ? '#34d399' : matchedTrack.color,
                               letterSpacing: '0.04em',
                             }}
                           >
                             LEVEL {level.levelNumber.toString().padStart(2, '0')}
                           </span>
 
-                          {/* Status Badge: 완료 / 도전 / 준비 */}
+                          {/* Status Badge: 완료 / 도전 / 잠김 */}
                           {isCleared ? (
                             <span
                               style={{
@@ -439,9 +452,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               style={{
                                 padding: '3px 8px',
                                 borderRadius: '7px',
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                color: '#94a3b8',
-                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                background: 'rgba(255, 255, 255, 0.04)',
+                                color: '#64748b',
+                                border: '1px solid rgba(255, 255, 255, 0.06)',
                                 fontSize: '0.72rem',
                                 fontWeight: 700,
                                 display: 'inline-flex',
@@ -449,8 +462,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                                 gap: '4px',
                               }}
                             >
-                              <Clock size={11} />
-                              <span>{isEn ? 'Ready' : '준비'}</span>
+                              <Lock size={11} />
+                              <span>{isEn ? 'Locked' : '잠김'}</span>
                             </span>
                           )}
                         </div>
@@ -460,7 +473,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           style={{
                             fontSize: '1.02rem',
                             fontWeight: 800,
-                            color: '#f8fafc',
+                            color: isLocked ? '#64748b' : '#f8fafc',
                             lineHeight: 1.45,
                             margin: 0,
                             wordBreak: 'keep-all',
@@ -478,7 +491,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           alignItems: 'center',
                           gap: '6px',
                           flexWrap: 'wrap',
-                          borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                          borderTop: isLocked ? '1px solid rgba(255, 255, 255, 0.03)' : '1px solid rgba(255, 255, 255, 0.05)',
                           paddingTop: '12px',
                         }}
                       >
@@ -489,9 +502,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.74rem',
                               fontWeight: 700,
-                              color: isHovered ? '#38bdf8' : '#94a3b8',
-                              background: 'rgba(15, 23, 42, 0.7)',
-                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                              color: isLocked ? '#475569' : isHovered ? '#38bdf8' : '#94a3b8',
+                              background: isLocked ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.7)',
+                              border: isLocked ? '1px solid rgba(255, 255, 255, 0.03)' : '1px solid rgba(255, 255, 255, 0.08)',
                               padding: '2px 7px',
                               borderRadius: '6px',
                               whiteSpace: 'nowrap',
