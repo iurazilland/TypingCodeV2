@@ -600,13 +600,25 @@ export function evaluatePythonLocally(code: string): EvaluationResult {
     return { success: false, stdout: '', stderr: '', requiresRemote: true };
   }
 
-  // Handle simple assignments & print statements locally
-  return evaluateBlocksLocally([
-    {
-      type: 'print',
-      content: trimmed.replace(/^print\s*\(([\s\S]*)\)$/, '$1'),
+  const lines = trimmed.split('\n').map((l) => l.trim()).filter(Boolean);
+  const blocks: any[] = [];
+
+  for (const line of lines) {
+    const printMatch = line.match(/^print\s*\(([\s\S]*)\)$/);
+    if (printMatch) {
+      blocks.push({ type: 'print', content: printMatch[1] });
+      continue;
     }
-  ]);
+    const assignMatch = line.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/);
+    if (assignMatch) {
+      blocks.push({ type: 'variable', varName: assignMatch[1], content: assignMatch[2] });
+      continue;
+    }
+    // Default fallback: variable or expression
+    blocks.push({ type: 'variable', varName: '_', content: line });
+  }
+
+  return evaluateBlocksLocally(blocks);
 }
 
 // Scratch execution chain order: traverses starting only from 'start' hat block

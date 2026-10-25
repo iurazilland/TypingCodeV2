@@ -32,6 +32,7 @@ export interface PracticeQuestion {
   hint_ko: string;
   hint_en?: string;
   starterCode?: string;
+  blankToken?: string; // Optional token in targetCode to be rendered as an interactive fill-in blank block
   availableBlocks?: BlockPiece[];
 }
 

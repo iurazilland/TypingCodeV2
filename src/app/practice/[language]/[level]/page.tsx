@@ -21,13 +21,17 @@ import {
   CornerDownRight,
   Sparkles,
   Key,
-  X
+  X,
+  Zap,
+  Bug,
+  Loader2
 } from 'lucide-react';
 import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
 import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
 import { evaluateBlocksLocally, evaluatePythonLocally, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
+import TypingStage from '@/components/practice/TypingStage';
 import {
   PuzzleTab,
   PuzzleNotch,
@@ -43,6 +47,9 @@ interface PracticePageProps {
   params: {
     language: string;
     level: string;
+  };
+  searchParams?: {
+    step?: string;
   };
 }
 
@@ -583,14 +590,27 @@ function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] 
 
 // evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
-export default function PracticePage({ params }: PracticePageProps) {
+export default function PracticePage({ params, searchParams }: PracticePageProps) {
   const langKey = params.language || 'python';
   const levelNum = parseInt(params.level || '1', 10);
 
   const round = getPracticeRound(langKey, levelNum);
 
+  const rawStep = searchParams?.step ? parseInt(searchParams.step, 10) - 1 : 0;
+  const initialStep = !isNaN(rawStep) && rawStep >= 0 && rawStep < round.questions.length ? rawStep : 0;
+
   // States
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(initialStep);
+
+  // Sync step if searchParams changes
+  useEffect(() => {
+    if (searchParams?.step) {
+      const s = parseInt(searchParams.step, 10) - 1;
+      if (!isNaN(s) && s >= 0 && s < round.questions.length) {
+        setCurrentStepIndex(s);
+      }
+    }
+  }, [searchParams?.step, round.questions.length]);
   const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
@@ -600,6 +620,12 @@ export default function PracticePage({ params }: PracticePageProps) {
   const [terminalOutput, setTerminalOutput] = useState<string>('');
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [runtimeMemory, setRuntimeMemory] = useState<Record<string, any>>({});
+
+  // Execution Mode & Step Debugging States
+  const [execMode, setExecMode] = useState<'normal' | 'debug'>('normal');
+  const [debugSpeed, setDebugSpeed] = useState<number>(1); // 0.5 | 1 | 2
+  const [isDebugging, setIsDebugging] = useState<boolean>(false);
+  const debugAbortRef = useRef<boolean>(false);
 
   // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
   const [ramRows, setRamRows] = useState<number>(5);
@@ -730,6 +756,9 @@ export default function PracticePage({ params }: PracticePageProps) {
 
   // Reset/sync on step change: Always start with the Start Block on canvas
   useEffect(() => {
+    debugAbortRef.current = true;
+    setIsDebugging(false);
+    setIsExecuting(false);
     lastExecutedCodeRef.current = '';
     setActiveInputHelp(null);
     setCanvasBlocks([createDefaultStartBlock()]);
@@ -1257,8 +1286,15 @@ export default function PracticePage({ params }: PracticePageProps) {
 
   const memoryBoxes = getMemoryBoxes();
 
-  // Real-time automatic execution: triggers only when assembled code actually changes
-  useEffect(() => {
+  // Manual Code Execution (Normal Run or Progressive Step Debugging)
+  const handleExecuteManual = async () => {
+    if (isExecuting || isDebugging) {
+      debugAbortRef.current = true;
+      setIsDebugging(false);
+      setIsExecuting(false);
+      return;
+    }
+
     const codeToRun = getAssembledCode().trim();
     if (!codeToRun || codeToRun === 'print()' || codeToRun === 'print') {
       lastExecutedCodeRef.current = '';
@@ -1268,46 +1304,44 @@ export default function PracticePage({ params }: PracticePageProps) {
       return;
     }
 
-    // Do NOT re-execute if assembled code hasn't changed!
-    if (codeToRun === lastExecutedCodeRef.current) {
-      return;
-    }
+    debugAbortRef.current = false;
 
-    const timer = setTimeout(async () => {
+    // 1. NORMAL EXECUTION MODE (Instant 0ms Local Evaluation)
+    if (execMode === 'normal') {
       setIsExecuting(true);
       try {
         let actualOut = '';
         let isErr = false;
 
-        // 1. In Block mode, use ultra-fast 0ms safe local AST evaluator (never calls external servers)!
         if (mode !== 'typing') {
           const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
           const evalRes = evaluateBlocksLocally(orderedBlocks);
-          if (evalRes.scope) {
-            setRuntimeMemory(evalRes.scope);
-          }
+          if (evalRes.scope) setRuntimeMemory(evalRes.scope);
           if (evalRes.success) {
             actualOut = (evalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
           } else if (evalRes.stderr) {
             isErr = true;
             actualOut = evalRes.stderr.trim();
           }
-        }
-        // 2. In Python typing mode, evaluate 100% locally in 0ms!
-        else if (langKey === 'python') {
+        } else if (langKey === 'python') {
           const localRes = evaluatePythonLocally(codeToRun);
-          if (localRes.scope) {
-            setRuntimeMemory(localRes.scope);
+          if (localRes.requiresRemote) {
+            const res = await executeCode((langKey as any), codeToRun);
+            actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+            if (res.stderr) {
+              isErr = true;
+              actualOut = res.stderr.trim();
+            }
+          } else {
+            if (localRes.scope) setRuntimeMemory(localRes.scope);
+            if (localRes.success) {
+              actualOut = (localRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+            } else if (localRes.stderr) {
+              isErr = true;
+              actualOut = localRes.stderr.trim();
+            }
           }
-          if (localRes.success) {
-            actualOut = (localRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-          } else if (localRes.stderr) {
-            isErr = true;
-            actualOut = localRes.stderr.trim();
-          }
-        }
-        // 3. Fall back to remote runner only for other non-local languages
-        else {
+        } else {
           const res = await executeCode((langKey as any), codeToRun);
           actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
           if (res.stderr) {
@@ -1317,7 +1351,6 @@ export default function PracticePage({ params }: PracticePageProps) {
         }
 
         lastExecutedCodeRef.current = codeToRun;
-
         const expectedOut = currentQuestion.expectedOutput.trim();
         setTerminalOutput(actualOut);
 
@@ -1328,6 +1361,11 @@ export default function PracticePage({ params }: PracticePageProps) {
           setIsSuccess(true);
         } else {
           setIsSuccess(false);
+          setHearts((prev) => {
+            const next = Math.max(0, prev - 1);
+            if (next === 0) setIsGameOver(true);
+            return next;
+          });
         }
       } catch {
         setTerminalOutput(currentQuestion.expectedOutput);
@@ -1335,10 +1373,127 @@ export default function PracticePage({ params }: PracticePageProps) {
       } finally {
         setIsExecuting(false);
       }
-    }, 200);
+    } else {
+      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution
+      setIsDebugging(true);
+      setTerminalOutput('');
+      setRuntimeMemory({});
+      setIsSuccess(false);
 
-    return () => clearTimeout(timer);
-  }, [canvasBlocks, userCode, mode, currentStepIndex]);
+      const stepDelay = Math.round(750 / debugSpeed);
+
+      try {
+        let actualOut = '';
+        let isErr = false;
+
+        if (mode !== 'typing') {
+          const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
+          const activeBlocks = orderedBlocks.filter((b) => b.type !== 'start');
+
+          let cumulativeScope: Record<string, any> = {};
+          let cumulativeStdout = '';
+
+          for (let i = 0; i < activeBlocks.length; i++) {
+            if (debugAbortRef.current) break;
+            const blockSlice = activeBlocks.slice(0, i + 1);
+            const evalRes = evaluateBlocksLocally(blockSlice);
+            if (evalRes.scope) {
+              cumulativeScope = { ...evalRes.scope };
+              setRuntimeMemory({ ...cumulativeScope });
+            }
+            if (evalRes.stdout !== undefined) {
+              cumulativeStdout = evalRes.stdout.replace(/^\r?\n+|\r?\n+$/g, '');
+              setTerminalOutput(cumulativeStdout);
+            }
+            if (evalRes.stderr) {
+              isErr = true;
+              actualOut = evalRes.stderr.trim();
+              setTerminalOutput(actualOut);
+              break;
+            }
+            await new Promise((r) => setTimeout(r, stepDelay));
+          }
+
+          if (!debugAbortRef.current && !isErr) {
+            const finalRes = evaluateBlocksLocally(orderedBlocks);
+            actualOut = (finalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+            setTerminalOutput(actualOut);
+          }
+        } else {
+          const lines = codeToRun.split('\n').filter((l) => l.trim().length > 0);
+          let cumulativeScope: Record<string, any> = {};
+          let cumulativeStdout = '';
+
+          // For single line code, show evaluation step before outputting
+          if (lines.length === 1) {
+            await new Promise((r) => setTimeout(r, Math.round(stepDelay * 0.6)));
+          }
+
+          for (let i = 0; i < lines.length; i++) {
+            if (debugAbortRef.current) break;
+            const subCode = lines.slice(0, i + 1).join('\n');
+            const localRes = evaluatePythonLocally(subCode);
+            if (localRes.scope) {
+              cumulativeScope = { ...cumulativeScope, ...localRes.scope };
+              setRuntimeMemory({ ...cumulativeScope });
+            }
+            if (localRes.stdout) {
+              cumulativeStdout = localRes.stdout.replace(/^\r?\n+|\r?\n+$/g, '');
+              setTerminalOutput(cumulativeStdout);
+            }
+            if (localRes.stderr) {
+              isErr = true;
+              actualOut = localRes.stderr.trim();
+              setTerminalOutput(actualOut);
+              break;
+            }
+            await new Promise((r) => setTimeout(r, stepDelay));
+          }
+
+          if (!debugAbortRef.current && !isErr) {
+            const finalRes = evaluatePythonLocally(codeToRun);
+            actualOut = (finalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+            setTerminalOutput(actualOut);
+          }
+        }
+
+        if (!debugAbortRef.current) {
+          lastExecutedCodeRef.current = codeToRun;
+          const expectedOut = currentQuestion.expectedOutput.trim();
+          const cleanTarget = currentQuestion.targetCode.trim().replace(/\s+/g, '');
+          const cleanUser = codeToRun.replace(/\s+/g, '');
+
+          if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
+            setIsSuccess(true);
+          } else {
+            setIsSuccess(false);
+            setHearts((prev) => {
+              const next = Math.max(0, prev - 1);
+              if (next === 0) setIsGameOver(true);
+              return next;
+            });
+          }
+        }
+      } catch {
+        setTerminalOutput(currentQuestion.expectedOutput);
+        setIsSuccess(true);
+      } finally {
+        setIsDebugging(false);
+      }
+    }
+  };
+
+  // Keyboard shortcut: Ctrl + Enter to run code
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        handleExecuteManual();
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  });
 
   const handleNextStep = () => {
     if (currentStepIndex < totalQuestions - 1) {
@@ -4122,7 +4277,7 @@ export default function PracticePage({ params }: PracticePageProps) {
         flex: '1 1 auto',
         height: 'calc(100vh - 52px)',
         display: 'grid',
-        gridTemplateColumns: mode === 'typing' ? 'minmax(400px, 36%) 1fr' : 'minmax(380px, 34%) 248px 1fr',
+        gridTemplateColumns: 'minmax(380px, 34%) 248px 1fr',
         background: '#090e1a',
         overflow: 'hidden',
       }}>
@@ -4147,46 +4302,154 @@ export default function PracticePage({ params }: PracticePageProps) {
           }}>
             <div style={{
               height: '46px',
-              padding: '0 16px',
+              padding: '0 12px',
               background: '#0f172a',
               borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              gap: '6px',
               flexShrink: 0,
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                 <TerminalIcon size={16} color="#38bdf8" />
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
                   터미널
                 </span>
-                <span style={{ fontSize: '0.68rem', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
-                  PYTHON 3.12
-                </span>
               </div>
 
-              {/* Live Auto-Run Status Indicator */}
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                background: isExecuting ? 'rgba(56, 189, 248, 0.15)' : 'rgba(16, 185, 129, 0.12)',
-                border: isExecuting ? '1px solid rgba(56, 189, 248, 0.35)' : '1px solid rgba(16, 185, 129, 0.3)',
-                color: isExecuting ? '#38bdf8' : '#34d399',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                transition: 'all 0.2s ease',
-              }}>
-                <span style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: isExecuting ? '#38bdf8' : '#10b981',
-                  boxShadow: isExecuting ? '0 0 8px #38bdf8' : '0 0 8px #10b981',
-                }} />
-                <span>{isExecuting ? '코드 실행 중...' : '실시간 자동 실행'}</span>
+              {/* Execution Controls: [⚡ 일반 | 🐞 디버깅] + [0.5x | 1x | 2x] + [▶ 코드 실행] */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {/* Mode Toggle Switch */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  padding: '2px',
+                  borderRadius: '7px',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => setExecMode('normal')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '3px 8px',
+                      borderRadius: '5px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: execMode === 'normal' ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
+                      color: execMode === 'normal' ? '#38bdf8' : '#94a3b8',
+                      fontWeight: execMode === 'normal' ? 800 : 600,
+                      fontSize: '0.72rem',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title="일반 실행 모드 (0ms 즉각 실행)"
+                  >
+                    <Zap size={11} />
+                    <span>일반</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setExecMode('debug')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '3px 8px',
+                      borderRadius: '5px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: execMode === 'debug' ? 'rgba(234, 88, 12, 0.25)' : 'transparent',
+                      color: execMode === 'debug' ? '#fb923c' : '#94a3b8',
+                      fontWeight: execMode === 'debug' ? 800 : 600,
+                      fontSize: '0.72rem',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title="디버깅 모드 (단계별 순차 실행 및 메모리 추적)"
+                  >
+                    <Bug size={11} />
+                    <span>디버깅</span>
+                  </button>
+                </div>
+
+                {/* Debug Speed Selector */}
+                {execMode === 'debug' && (
+                  <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    padding: '2px',
+                    borderRadius: '7px',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                  }}>
+                    {[0.5, 1, 2].map((spd) => (
+                      <button
+                        key={spd}
+                        type="button"
+                        onClick={() => setDebugSpeed(spd)}
+                        style={{
+                          padding: '3px 6px',
+                          borderRadius: '4px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          background: debugSpeed === spd ? 'rgba(251, 146, 60, 0.35)' : 'transparent',
+                          color: debugSpeed === spd ? '#fed7aa' : '#64748b',
+                          fontWeight: 800,
+                          fontSize: '0.66rem',
+                          fontFamily: 'var(--font-mono)',
+                          transition: 'all 0.15s ease',
+                        }}
+                        title={`디버깅 실행 속도: ${spd}배속`}
+                      >
+                        {spd}x
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Manual Run / Stop Button */}
+                <button
+                  type="button"
+                  onClick={handleExecuteManual}
+                  title="코드 실행 (단축키: Ctrl+Enter)"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    border: isDebugging
+                      ? '1px solid rgba(239, 68, 68, 0.5)'
+                      : '1px solid rgba(16, 185, 129, 0.5)',
+                    background: isDebugging
+                      ? 'rgba(239, 68, 68, 0.25)'
+                      : 'linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.38) 100%)',
+                    color: isDebugging ? '#f87171' : '#34d399',
+                    fontSize: '0.74rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    boxShadow: isDebugging
+                      ? '0 0 10px rgba(239, 68, 68, 0.35)'
+                      : '0 0 10px rgba(16, 185, 129, 0.25)',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {isExecuting || isDebugging ? (
+                    <>
+                      <Loader2 size={12} className="animate-spin" />
+                      <span>{isDebugging ? '중단' : '실행 중...'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play size={12} fill="currentColor" />
+                      <span>코드 실행</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
@@ -4368,71 +4631,97 @@ export default function PracticePage({ params }: PracticePageProps) {
         </section>
 
         {/* ==================================================================
-            COLUMN 2 (MIDDLE 200px): Scratch-style Continuous Block Toolbox
+            COLUMN 2 (MIDDLE 248px): Scratch-style Continuous Block Toolbox
             ================================================================== */}
-        {mode === 'block' && (
-          <section
-            id="toolbox-section"
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              e.dataTransfer.dropEffect = 'move';
-              if (!isToolboxHovered) setIsToolboxHovered(true);
-            }}
-            onDragLeave={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                setIsToolboxHovered(false);
-              }
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+        <section
+          id="toolbox-section"
+          onDragOver={(e) => {
+            if (mode === 'typing') return;
+            e.preventDefault();
+            e.stopPropagation();
+            e.dataTransfer.dropEffect = 'move';
+            if (!isToolboxHovered) setIsToolboxHovered(true);
+          }}
+          onDragLeave={(e) => {
+            if (mode === 'typing') return;
+            e.preventDefault();
+            e.stopPropagation();
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
               setIsToolboxHovered(false);
-              setIsDraggingBlock(false);
+            }
+          }}
+          onDrop={(e) => {
+            if (mode === 'typing') return;
+            e.preventDefault();
+            e.stopPropagation();
+            setIsToolboxHovered(false);
+            setIsDraggingBlock(false);
 
-              let info = draggingInfoRef.current;
-              if (!info) {
-                try {
-                  const raw = e.dataTransfer.getData('text/plain');
-                  if (raw) info = JSON.parse(raw);
-                } catch { }
-              }
+            let info = draggingInfoRef.current;
+            if (!info) {
+              try {
+                const raw = e.dataTransfer.getData('text/plain');
+                if (raw) info = JSON.parse(raw);
+              } catch { }
+            }
 
-              if (info?.source === 'canvas' && info.id) {
-                handleDeleteBlock(info.id);
-                showToast('🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.');
-              } else if (info?.source === 'inner' && info.parentBlockId) {
-                if (info.branchId) {
-                  handleRemoveInnerBlockFromBranch(info.parentBlockId, info.branchId, info.childIdx!);
-                } else {
-                  handleRemoveInnerBlockFromLoop(info.parentBlockId, info.childIdx!);
-                }
-                showToast('🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.');
+            if (info?.source === 'canvas' && info.id) {
+              handleDeleteBlock(info.id);
+              showToast('🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.');
+            } else if (info?.source === 'inner' && info.parentBlockId) {
+              if (info.branchId) {
+                handleRemoveInnerBlockFromBranch(info.parentBlockId, info.branchId, info.childIdx!);
+              } else {
+                handleRemoveInnerBlockFromLoop(info.parentBlockId, info.childIdx!);
               }
-              draggingInfoRef.current = null;
-              setDraggedBlockType(null);
-            }}
-            style={{
+              showToast('🗑️ 블록이 블록 모음함으로 드래그되어 제거되었습니다.');
+            }
+            draggingInfoRef.current = null;
+            setDraggedBlockType(null);
+          }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#0d1527',
+            borderRight: isToolboxHovered && isDraggingBlock
+              ? '2px dashed #ef4444'
+              : '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: isToolboxHovered && isDraggingBlock
+              ? 'inset 0 0 24px rgba(239, 68, 68, 0.25)'
+              : 'none',
+            height: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            zIndex: 10,
+            transition: 'all 0.2s ease',
+            filter: mode === 'typing' ? 'grayscale(0.85) opacity(0.55)' : 'none',
+            pointerEvents: mode === 'typing' ? 'none' : 'auto',
+            userSelect: mode === 'typing' ? 'none' : 'auto',
+          }}
+        >
+          {/* Typing Mode Reference Hint Banner */}
+          {mode === 'typing' && (
+            <div style={{
+              padding: '9px 12px',
+              background: 'rgba(56, 189, 248, 0.08)',
+              borderBottom: '1px solid rgba(56, 189, 248, 0.2)',
               display: 'flex',
-              flexDirection: 'column',
-              background: '#0d1527',
-              borderRight: isToolboxHovered && isDraggingBlock
-                ? '2px dashed #ef4444'
-                : '1px solid rgba(255, 255, 255, 0.08)',
-              boxShadow: isToolboxHovered && isDraggingBlock
-                ? 'inset 0 0 24px rgba(239, 68, 68, 0.25)'
-                : 'none',
-              height: '100%',
-              overflow: 'hidden',
-              position: 'relative',
-              zIndex: 10,
-              transition: 'all 0.2s ease',
-            }}
-          >
-            {/* Drag to delete overlay banner */}
-            {isToolboxHovered && isDraggingBlock && (
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              color: '#38bdf8',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              textAlign: 'center',
+              flexShrink: 0,
+              zIndex: 20,
+            }}>
+              <span>💡 힌트 참고용 (드래그 잠금)</span>
+            </div>
+          )}
+
+          {/* Drag to delete overlay banner */}
+          {isToolboxHovered && isDraggingBlock && (
               <div style={{
                 position: 'absolute',
                 top: '48px',
@@ -5290,7 +5579,6 @@ export default function PracticePage({ params }: PracticePageProps) {
               </div>
             </div>
           </section>
-        )}
 
         {/* ==================================================================
             COLUMN 3 (RIGHT 1fr): Board Top Header + Canvas + Free Move Blocks + Icon-Only Trash Can
@@ -5744,43 +6032,15 @@ export default function PracticePage({ params }: PracticePageProps) {
               </>
             ) : (
               /* ============================================================
-                 TYPING MODE
+                 TYPING MODE: Interactive Fill-in-the-Blank Code & Virtual Keyboard
                  ============================================================ */
-              <div style={{ height: '100%', padding: '24px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{
-                  fontSize: '0.76rem',
-                  color: '#64748b',
-                  fontWeight: 700,
-                  marginBottom: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}>
-                  <Code size={15} color="#38bdf8" />
-                  <span>키보드로 직접 코드를 입력하세요</span>
-                </div>
-
-                <textarea
-                  value={userCode}
-                  onChange={(e) => setUserCode(e.target.value)}
-                  placeholder={`예: ${currentQuestion.targetCode}`}
-                  style={{
-                    flex: '1 1 auto',
-                    minHeight: '260px',
-                    width: '100%',
-                    background: 'rgba(15, 23, 42, 0.95)',
-                    border: '1.5px solid rgba(56, 189, 248, 0.3)',
-                    borderRadius: '12px',
-                    padding: '20px',
-                    color: '#f8fafc',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '1.1rem',
-                    lineHeight: 1.6,
-                    resize: 'none',
-                    outline: 'none',
-                  }}
-                />
-              </div>
+              <TypingStage
+                question={currentQuestion}
+                onCodeChange={setUserCode}
+                onSubmit={handleExecuteManual}
+                isSuccess={isSuccess}
+                isExecuting={isExecuting || isDebugging}
+              />
             )}
           </div>
         </section>
