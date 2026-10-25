@@ -61,6 +61,7 @@ interface MemoryBoxItem {
   id: string;
   name: string;      // Variable/Identifier name displayed UNDER the box
   value: string;     // Value displayed INSIDE the box
+  fullValue?: string; // Full un-truncated value shown in hover tooltip
   type: string;      // int, float, str, result
   active: boolean;   // glowing when active
 }
@@ -473,6 +474,30 @@ function splitTopLevelArgs(str: string): string[] {
     result.push(current.trim());
   }
   return result;
+}
+
+/**
+ * Evaluates a range argument string (e.g. '10', '1, 10', '0, 10, 2') into an exact number array.
+ */
+function evaluateRangeString(argStr: string, scope?: Record<string, any>): number[] {
+  const parts = splitTopLevelArgs(argStr).map((s) => {
+    const trimmed = s.trim();
+    const parsed = parseInt(trimmed, 10);
+    if (!isNaN(parsed)) return parsed;
+    if (scope && typeof scope[trimmed] === 'number') return scope[trimmed];
+    return NaN;
+  }).filter((n) => !isNaN(n));
+  let start = 0, stop = 0, step = 1;
+  if (parts.length === 1) stop = parts[0];
+  else if (parts.length === 2) { start = parts[0]; stop = parts[1]; }
+  else if (parts.length >= 3) { start = parts[0]; stop = parts[1]; step = parts[2]; }
+  const arr: number[] = [];
+  if (step > 0) {
+    for (let i = start; i < stop && arr.length < 100; i += step) arr.push(i);
+  } else if (step < 0) {
+    for (let i = start; i > stop && arr.length < 100; i += step) arr.push(i);
+  }
+  return arr;
 }
 
 // Pure tree utility functions hoisted to module scope to prevent TDZ ReferenceError
@@ -1156,12 +1181,70 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const getMemoryBoxes = (): MemoryBoxItem[] => {
     const code = getAssembledCode().trim();
     const boxes: MemoryBoxItem[] = [];
-    const varMap = new Map<string, { value: string; type: string }>();
+    const varMap = new Map<string, { value: string; fullValue?: string; type: string }>();
 
     // 1. First, populate from real runtime memory scope (live evaluated values)
     if (runtimeMemory && Object.keys(runtimeMemory).length > 0) {
       for (const [varName, val] of Object.entries(runtimeMemory)) {
         if (!varName || typeof varName !== 'string') continue;
+
+        const isGeneratedSequence =
+          varName.startsWith('range') ||
+          varName.startsWith('enumerate') ||
+          varName.startsWith('zip') ||
+          varName.startsWith('reversed') ||
+          varName.startsWith('sorted');
+
+        if (Array.isArray(val)) {
+          if (isGeneratedSequence) {
+            let valType = 'range';
+            if (varName.startsWith('enumerate')) valType = 'enum';
+            else if (varName.startsWith('zip')) valType = 'zip';
+            else if (varName.startsWith('reversed')) valType = 'reversed';
+            else if (varName.startsWith('sorted')) valType = 'sorted';
+
+            const fullSeq = `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]`;
+            const shortPreview =
+              val.length <= 4
+                ? fullSeq
+                : `[${val.slice(0, 3).map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}, …]`;
+
+            varMap.set(varName, {
+              value: shortPreview,
+              fullValue: fullSeq,
+              type: valType,
+            });
+          } else {
+            // User-created list: separate into individual memory cells: lst[0], lst[1], ...
+            if (val.length === 0) {
+              varMap.set(varName, { value: '[]', fullValue: '[]', type: 'list' });
+            } else {
+              val.forEach((item, idx) => {
+                const itemType =
+                  typeof item === 'number'
+                    ? Number.isInteger(item)
+                      ? 'int'
+                      : 'float'
+                    : typeof item === 'string'
+                    ? 'str'
+                    : typeof item === 'boolean'
+                    ? 'bool'
+                    : Array.isArray(item)
+                    ? 'list'
+                    : 'var';
+                const itemStr = typeof item === 'string' ? `'${item}'` : String(item ?? 'None');
+                const slotKey = `${varName}[${idx}]`;
+                varMap.set(slotKey, {
+                  value: itemStr,
+                  fullValue: itemStr,
+                  type: itemType,
+                });
+              });
+            }
+          }
+          continue;
+        }
+
         let valType = 'int';
         let cleanVal = String(val ?? '');
 
@@ -1169,17 +1252,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           valType = Number.isInteger(val) ? 'int' : 'float';
         } else if (typeof val === 'string') {
           valType = 'str';
+          cleanVal = `'${val}'`;
         } else if (typeof val === 'boolean') {
           valType = 'bool';
           cleanVal = val ? 'True' : 'False';
-        } else if (Array.isArray(val)) {
-          if (varName.startsWith('range')) valType = 'range';
-          else if (varName.startsWith('enumerate')) valType = 'enum';
-          else if (varName.startsWith('zip')) valType = 'zip';
-          else if (varName.startsWith('reversed')) valType = 'reversed';
-          else if (varName.startsWith('sorted')) valType = 'sorted';
-          else valType = 'list';
-          cleanVal = `[${val.map((v) => typeof v === 'string' ? `'${v}'` : String(v)).join(', ')}]`;
         } else if (typeof val === 'object' && val !== null) {
           valType = 'dict';
           cleanVal = JSON.stringify(val);
@@ -1188,7 +1264,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           cleanVal = 'None';
         }
 
-        varMap.set(varName, { value: cleanVal, type: valType });
+        varMap.set(varName, {
+          value: cleanVal,
+          fullValue: cleanVal,
+          type: valType,
+        });
       }
     }
 
@@ -1212,42 +1292,73 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         if (b.type === 'variable') {
           const vName = (b.varName || 'x').trim();
           if (vName && !varMap.has(vName)) {
-            varMap.set(vName, { value: b.content?.trim() || '0', type: 'var' });
+            varMap.set(vName, { value: b.content?.trim() || '0', fullValue: b.content?.trim() || '0', type: 'var' });
           }
         } else if (b.type === 'list') {
           const vName = (b.varName || 'my_list').trim();
-          if (vName && !varMap.has(vName)) {
-            const items = (b.items || []).filter((i) => i.trim().length > 0).join(', ');
-            varMap.set(vName, { value: `[${items}]`, type: 'list' });
+          const items = (b.items || []).filter((i) => i.trim().length > 0);
+          if (items.length === 0) {
+            varMap.set(vName, { value: '[]', fullValue: '[]', type: 'list' });
+          } else {
+            items.forEach((itemRaw, idx) => {
+              const item = itemRaw.trim();
+              const slotKey = `${vName}[${idx}]`;
+              let itemType = 'var';
+              const parsed = parseFloat(item);
+              if (!isNaN(parsed) && !item.includes('"') && !item.includes("'")) {
+                itemType = Number.isInteger(parsed) ? 'int' : 'float';
+              } else if (item.startsWith('"') || item.startsWith("'")) {
+                itemType = 'str';
+              } else if (item === 'True' || item === 'False') {
+                itemType = 'bool';
+              }
+              varMap.set(slotKey, {
+                value: item,
+                fullValue: item,
+                type: itemType,
+              });
+            });
           }
         } else if (b.type === 'tuple') {
           const vName = (b.varName || 'my_tuple').trim();
           if (vName && !varMap.has(vName)) {
             const items = (b.items || []).filter((i) => i.trim().length > 0).join(', ');
-            varMap.set(vName, { value: `(${items})`, type: 'tuple' });
+            varMap.set(vName, { value: `(${items})`, fullValue: `(${items})`, type: 'tuple' });
           }
         } else if (b.type === 'dict') {
           const vName = (b.varName || 'my_dict').trim();
           if (vName && !varMap.has(vName)) {
-            varMap.set(vName, { value: '{...}', type: 'dict' });
+            varMap.set(vName, { value: '{...}', fullValue: '{...}', type: 'dict' });
           }
         } else if (b.type === 'for_range') {
           const vName = (b.varName || 'i').trim();
-          const countNum = parseInt((b.content || '5').trim(), 10);
-          const rangeLabel = `range(${(b.content || '5').trim()})`;
-          const rangePreview = !isNaN(countNum) && countNum > 0 && countNum <= 10
-            ? `[${Array.from({ length: countNum }, (_, idx) => idx).join(', ')}]`
-            : '[0, 1, 2, 3, 4]';
+          const rangeArg = (b.content || '5').trim();
+          const rangeLabel = `range(${rangeArg})`;
+          const numbers = evaluateRangeString(rangeArg, runtimeMemory);
+          const fullSeqStr = `[${numbers.join(', ')}]`;
+          const shortPreview =
+            numbers.length <= 4
+              ? fullSeqStr
+              : `[${numbers.slice(0, 3).join(', ')}, …]`;
+
           if (!varMap.has(rangeLabel)) {
-            varMap.set(rangeLabel, { value: rangePreview, type: 'range' });
+            varMap.set(rangeLabel, {
+              value: shortPreview,
+              fullValue: fullSeqStr,
+              type: 'range',
+            });
           }
           if (vName && !varMap.has(vName)) {
-            varMap.set(vName, { value: '0', type: 'int' });
+            varMap.set(vName, {
+              value: numbers.length > 0 ? String(numbers[0]) : '0',
+              fullValue: numbers.length > 0 ? String(numbers[0]) : '0',
+              type: 'int',
+            });
           }
         } else if (b.type === 'for_in') {
           const vName = (b.varName || 'item').trim();
           if (vName && !varMap.has(vName)) {
-            varMap.set(vName, { value: '-', type: 'item' });
+            varMap.set(vName, { value: '-', fullValue: '-', type: 'item' });
           }
         }
       }
@@ -1256,29 +1367,126 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       const lines = code.split('\n');
       for (const line of lines) {
         const trimmed = line.trim();
-        const assignMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/);
+
+        // 3a. Indexed assignment: e.g. lst[0] = 99
+        const indexAssignMatch = trimmed.match(/^([a-zA-Z_]\w*)\[(\d+)\]\s*=\s*([\s\S]+)$/);
+        if (indexAssignMatch) {
+          const vName = indexAssignMatch[1];
+          const idx = indexAssignMatch[2];
+          const valExpr = indexAssignMatch[3].trim();
+          const slotKey = `${vName}[${idx}]`;
+          let itemType = 'var';
+          const parsed = parseFloat(valExpr);
+          if (!isNaN(parsed) && !valExpr.includes('"') && !valExpr.includes("'")) {
+            itemType = Number.isInteger(parsed) ? 'int' : 'float';
+          } else if (valExpr.startsWith('"') || valExpr.startsWith("'")) {
+            itemType = 'str';
+          } else if (valExpr === 'True' || valExpr === 'False') {
+            itemType = 'bool';
+          }
+          varMap.set(slotKey, {
+            value: valExpr,
+            fullValue: valExpr,
+            type: itemType,
+          });
+          continue;
+        }
+
+        // 3b. Variable assignment: e.g. x = 10, lst = [1, 2], r = range(5)
+        const assignMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*=\s*([\s\S]+)$/);
         if (assignMatch) {
           const varName = assignMatch[1];
+          const rawExpr = assignMatch[2].trim();
+
+          // User-created list literal: [ ... ] -> split into lst[0], lst[1], ...
+          if (rawExpr.startsWith('[') && rawExpr.endsWith(']')) {
+            const inner = rawExpr.slice(1, -1).trim();
+            if (!inner) {
+              if (!varMap.has(varName)) {
+                varMap.set(varName, { value: '[]', fullValue: '[]', type: 'list' });
+              }
+            } else {
+              const items = splitTopLevelArgs(inner);
+              items.forEach((itemRaw, idx) => {
+                const item = itemRaw.trim();
+                const slotKey = `${varName}[${idx}]`;
+                if (!varMap.has(slotKey)) {
+                  let itemType = 'var';
+                  const parsed = parseFloat(item);
+                  if (!isNaN(parsed) && !item.includes('"') && !item.includes("'")) {
+                    itemType = Number.isInteger(parsed) ? 'int' : 'float';
+                  } else if (item.startsWith('"') || item.startsWith("'")) {
+                    itemType = 'str';
+                  } else if (item === 'True' || item === 'False') {
+                    itemType = 'bool';
+                  }
+                  varMap.set(slotKey, {
+                    value: item,
+                    fullValue: item,
+                    type: itemType,
+                  });
+                }
+              });
+            }
+            continue;
+          }
+
+          // Function-generated range assignment: e.g. r = range(10)
+          const rangeCallMatch = rawExpr.match(/^range\(([\s\S]+?)\)$/);
+          if (rangeCallMatch) {
+            const rangeArg = rangeCallMatch[1].trim();
+            const numbers = evaluateRangeString(rangeArg, runtimeMemory);
+            const fullSeqStr = `[${numbers.join(', ')}]`;
+            const shortPreview =
+              numbers.length <= 4
+                ? fullSeqStr
+                : `[${numbers.slice(0, 3).join(', ')}, …]`;
+
+            if (!varMap.has(varName)) {
+              varMap.set(varName, {
+                value: shortPreview,
+                fullValue: fullSeqStr,
+                type: 'range',
+              });
+            }
+            continue;
+          }
+
           if (!varMap.has(varName)) {
-            varMap.set(varName, { value: assignMatch[2].trim(), type: 'var' });
+            varMap.set(varName, {
+              value: rawExpr,
+              fullValue: rawExpr,
+              type: 'var',
+            });
           }
           continue;
         }
 
-        const forRangeMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+range\((.+)\):/);
+        const forRangeMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+range\(([\s\S]+?)\):/);
         if (forRangeMatch) {
           const varName = forRangeMatch[1];
           const rangeArg = forRangeMatch[2].trim();
           const rangeLabel = `range(${rangeArg})`;
-          const parsedNum = parseInt(rangeArg, 10);
-          const rangePreview = !isNaN(parsedNum) && parsedNum > 0 && parsedNum <= 10
-            ? `[${Array.from({ length: parsedNum }, (_, idx) => idx).join(', ')}]`
-            : '[0, 1, 2, …]';
+          const numbers = evaluateRangeString(rangeArg, runtimeMemory);
+          const fullSeqStr = `[${numbers.join(', ')}]`;
+          const shortPreview =
+            numbers.length <= 4
+              ? fullSeqStr
+              : `[${numbers.slice(0, 3).join(', ')}, …]`;
+
           if (!varMap.has(rangeLabel)) {
-            varMap.set(rangeLabel, { value: rangePreview, type: 'range' });
+            varMap.set(rangeLabel, {
+              value: shortPreview,
+              fullValue: fullSeqStr,
+              type: 'range',
+            });
           }
           if (!varMap.has(varName)) {
-            varMap.set(varName, { value: '0', type: 'int' });
+            varMap.set(varName, {
+              value: numbers.length > 0 ? String(numbers[0]) : '0',
+              fullValue: numbers.length > 0 ? String(numbers[0]) : '0',
+              type: 'int',
+            });
           }
           continue;
         }
@@ -1290,11 +1498,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           if (/^(enumerate|zip|reversed|sorted)\(/.test(seqExpr)) {
             const funcName = seqExpr.match(/^([a-zA-Z_]\w*)/)?.[1] || 'seq';
             if (!varMap.has(funcName)) {
-              varMap.set(funcName, { value: '[...]', type: funcName });
+              varMap.set(funcName, { value: '[...]', fullValue: `${funcName} sequence`, type: funcName });
             }
           }
           if (!varMap.has(varName)) {
-            varMap.set(varName, { value: '-', type: 'item' });
+            varMap.set(varName, { value: '-', fullValue: '-', type: 'item' });
           }
           continue;
         }
@@ -1307,6 +1515,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         id: `var-${varName}-${boxes.length}`,
         name: varName,
         value: info.value,
+        fullValue: info.fullValue || info.value,
         type: info.type,
         active: true,
       });
@@ -4748,97 +4957,106 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 gap: '6px 6px',
                 width: '100%',
               }}>
-                {memoryBoxes.map((box) => (
-                  <div
-                    key={box.id}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '2px',
-                      minWidth: 0,
-                      width: '100%',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {/* Fixed Size Hardware Box */}
-                    <div style={{
-                      width: '100%',
-                      height: '34px',
-                      borderRadius: '6px',
-                      background: box.active
-                        ? 'rgba(168, 85, 247, 0.18)'
-                        : 'rgba(255, 255, 255, 0.02)',
-                      border: box.active
-                        ? '1.5px solid #a855f7'
-                        : '1px dashed rgba(255, 255, 255, 0.08)',
-                      boxShadow: box.active
-                        ? '0 0 8px rgba(168, 85, 247, 0.35)'
-                        : 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '2px 4px',
-                      position: 'relative',
-                      minWidth: 0,
-                      overflow: 'hidden',
-                      boxSizing: 'border-box',
-                      transition: 'all 0.25s ease',
-                    }}>
-                      {box.active && (
-                        <span style={{
-                          position: 'absolute',
-                          top: '1px',
-                          left: '3px',
-                          fontSize: '0.50rem',
-                          color: '#c084fc',
-                          fontFamily: 'var(--font-mono)',
-                          lineHeight: 1,
-                        }}>
-                          {box.type}
-                        </span>
-                      )}
-
-                      <span
-                        title={box.value}
+                {memoryBoxes.map((box) => {
+                  const tooltipText = box.active ? (box.fullValue || box.value) : undefined;
+                  return (
+                    <div
+                      key={box.id}
+                      title={tooltipText}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '2px',
+                        minWidth: 0,
+                        width: '100%',
+                        overflow: 'hidden',
+                        cursor: box.active ? 'pointer' : 'default',
+                      }}
+                    >
+                      {/* Fixed Size Hardware Box */}
+                      <div
+                        title={tooltipText}
                         style={{
-                          fontSize: '0.74rem',
-                          fontWeight: 800,
-                          color: box.active ? '#ffffff' : '#475569',
-                          fontFamily: 'var(--font-mono)',
+                          width: '100%',
+                          height: '34px',
+                          borderRadius: '6px',
+                          background: box.active
+                            ? 'rgba(168, 85, 247, 0.18)'
+                            : 'rgba(255, 255, 255, 0.02)',
+                          border: box.active
+                            ? '1.5px solid #a855f7'
+                            : '1px dashed rgba(255, 255, 255, 0.08)',
+                          boxShadow: box.active
+                            ? '0 0 8px rgba(168, 85, 247, 0.35)'
+                            : 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '2px 4px',
+                          position: 'relative',
+                          minWidth: 0,
+                          overflow: 'hidden',
+                          boxSizing: 'border-box',
+                          transition: 'all 0.25s ease',
+                        }}
+                      >
+                        {box.active && (
+                          <span style={{
+                            position: 'absolute',
+                            top: '1px',
+                            left: '3px',
+                            fontSize: '0.50rem',
+                            color: '#c084fc',
+                            fontFamily: 'var(--font-mono)',
+                            lineHeight: 1,
+                            pointerEvents: 'none',
+                          }}>
+                            {box.type}
+                          </span>
+                        )}
+
+                        <span
+                          title={tooltipText}
+                          style={{
+                            fontSize: '0.74rem',
+                            fontWeight: 800,
+                            color: box.active ? '#ffffff' : '#475569',
+                            fontFamily: 'var(--font-mono)',
+                            textAlign: 'center',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            width: '100%',
+                            maxWidth: '100%',
+                            display: 'block',
+                          }}
+                        >
+                          {box.value.length > 7 ? box.value.slice(0, 6) + '…' : box.value}
+                        </span>
+                      </div>
+
+                      {/* Small Identifier / Variable Name */}
+                      <span
+                        title={box.active && box.fullValue ? `${box.name}: ${box.fullValue}` : box.name}
+                        style={{
+                          fontSize: '0.56rem',
+                          fontWeight: 700,
+                          color: box.active ? '#e2e8f0' : '#475569',
                           textAlign: 'center',
+                          whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
                           width: '100%',
                           maxWidth: '100%',
                           display: 'block',
                         }}
                       >
-                        {box.value.length > 7 ? box.value.slice(0, 6) + '…' : box.value}
+                        {box.name}
                       </span>
                     </div>
-
-                    {/* Small Identifier / Variable Name */}
-                    <span
-                      title={box.name}
-                      style={{
-                        fontSize: '0.56rem',
-                        fontWeight: 700,
-                        color: box.active ? '#e2e8f0' : '#475569',
-                        textAlign: 'center',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        width: '100%',
-                        maxWidth: '100%',
-                        display: 'block',
-                      }}
-                    >
-                      {box.name}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
