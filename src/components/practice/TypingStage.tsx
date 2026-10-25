@@ -15,6 +15,122 @@ interface TypingStageProps {
   executingLineIndex?: number | null;
 }
 
+// ============================================================================
+// Lightweight Python Syntax Highlighter (VSCode Dark+ Theme)
+// Zero external dependencies, O(1) character-level color lookup
+// ============================================================================
+const SYNTAX_COLORS = {
+  keyword: '#c084fc',     // Purple: def, return, if, for, while, in, True, False, etc.
+  builtin: '#facc15',     // Yellow: print, range, len, int, str, sum, etc.
+  string: '#fb923c',      // Orange: "hello", 'world'
+  number: '#4ade80',      // Mint Green: 123, 3.14
+  comment: '#64748b',     // Slate Gray: # comment
+  operator: '#38bdf8',    // Sky Blue: +, -, *, /, =, :, etc.
+  identifier: '#93c5fd',  // Light Blue: variable names
+  default: '#f8fafc',     // Default White
+};
+
+const PYTHON_KEYWORDS = new Set([
+  'def', 'return', 'if', 'elif', 'else', 'for', 'while', 'in', 'is', 'not', 'and', 'or',
+  'True', 'False', 'None', 'import', 'from', 'as', 'class', 'try', 'except', 'finally',
+  'raise', 'break', 'continue', 'pass', 'lambda', 'yield', 'with', 'global', 'assert'
+]);
+
+const PYTHON_BUILTINS = new Set([
+  'print', 'input', 'range', 'len', 'int', 'str', 'float', 'list', 'dict', 'set', 'tuple',
+  'type', 'sum', 'min', 'max', 'abs', 'round', 'open', 'enumerate', 'zip', 'map', 'filter',
+  'sorted', 'reversed', 'format', 'append', 'pop', 'insert', 'remove'
+]);
+
+function getPythonLineCharColors(line: string): string[] {
+  const colors: string[] = new Array(line.length).fill(SYNTAX_COLORS.default);
+  let i = 0;
+
+  while (i < line.length) {
+    const ch = line[i];
+
+    // Comment: # to end of line
+    if (ch === '#') {
+      for (let j = i; j < line.length; j++) {
+        colors[j] = SYNTAX_COLORS.comment;
+      }
+      break;
+    }
+
+    // Strings: single or double quotes
+    if (ch === '"' || ch === "'") {
+      const quote = ch;
+      const start = i;
+      i++;
+      while (i < line.length && line[i] !== quote) {
+        if (line[i] === '\\' && i + 1 < line.length) {
+          i += 2;
+        } else {
+          i++;
+        }
+      }
+      if (i < line.length && line[i] === quote) {
+        i++;
+      }
+      for (let j = start; j < i; j++) {
+        colors[j] = SYNTAX_COLORS.string;
+      }
+      continue;
+    }
+
+    // Numbers
+    if (/\d/.test(ch)) {
+      const start = i;
+      while (i < line.length && /[\d.]/.test(line[i])) {
+        i++;
+      }
+      for (let j = start; j < i; j++) {
+        colors[j] = SYNTAX_COLORS.number;
+      }
+      continue;
+    }
+
+    // Identifiers, keywords, builtins
+    if (/[a-zA-Z_]/.test(ch)) {
+      const start = i;
+      while (i < line.length && /[a-zA-Z0-9_]/.test(line[i])) {
+        i++;
+      }
+      const word = line.slice(start, i);
+
+      // f-string prefix check (e.g. f"...")
+      if (word === 'f' && i < line.length && (line[i] === '"' || line[i] === "'")) {
+        colors[start] = SYNTAX_COLORS.keyword;
+        continue;
+      }
+
+      let color = SYNTAX_COLORS.identifier;
+      if (PYTHON_KEYWORDS.has(word)) {
+        color = SYNTAX_COLORS.keyword;
+      } else if (PYTHON_BUILTINS.has(word)) {
+        color = SYNTAX_COLORS.builtin;
+      }
+
+      for (let j = start; j < i; j++) {
+        colors[j] = color;
+      }
+      continue;
+    }
+
+    // Operators and punctuation
+    if (/[:=+\-*/%<>&|^~!,()[\]{}]/.test(ch)) {
+      colors[i] = SYNTAX_COLORS.operator;
+      i++;
+      continue;
+    }
+
+    // Default whitespace or punctuation
+    i++;
+  }
+
+  return colors;
+}
+
 export default function TypingStage({
   question,
   onCodeChange,
@@ -93,6 +209,11 @@ export default function TypingStage({
   const maxLineCount = Math.max(targetLines.length, userLines.length);
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
 
+  // Precompute Python syntax highlighting colors per character for target lines
+  const targetLinesColors = useMemo(() => {
+    return targetLines.map((line) => getPythonLineCharColors(line));
+  }, [targetLines]);
+
   const activeLineRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll editor container to keep active typing line in view
@@ -168,26 +289,62 @@ export default function TypingStage({
       return;
     }
 
-    // Enter: newline insertion at cursor (NOT code execution)
+    // Enter: newline insertion at cursor with Python-accurate auto-indent
     if (e.key === 'Enter') {
       e.preventDefault();
-      setTypedCode((prev) => {
-        const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
-        return prev.slice(0, safeIdx) + '\n' + prev.slice(safeIdx);
-      });
-      setCursorIndex((prev) => prev + 1);
+      const safeIdx = Math.max(0, Math.min(cursorIndex, typedCode.length));
+      const beforeCursor = typedCode.slice(0, safeIdx);
+      const afterCursor = typedCode.slice(safeIdx);
+
+      // Find current line text before cursor
+      const lastNewlineIdx = beforeCursor.lastIndexOf('\n');
+      const currentLineBeforeCursor = lastNewlineIdx === -1
+        ? beforeCursor
+        : beforeCursor.slice(lastNewlineIdx + 1);
+
+      // Extract current indentation (leading whitespace)
+      const indentMatch = currentLineBeforeCursor.match(/^(\s*)/);
+      let indent = indentMatch ? indentMatch[1] : '';
+
+      // Check if line before cursor ends with ':' (ignoring comments/trailing whitespace)
+      const codeWithoutComment = currentLineBeforeCursor.replace(/#.*$/, '').trim();
+      if (codeWithoutComment.endsWith(':')) {
+        indent += '    ';
+      }
+
+      const insertText = '\n' + indent;
+      setTypedCode(beforeCursor + insertText + afterCursor);
+      setCursorIndex(safeIdx + insertText.length);
       return;
     }
 
-    // Backspace: delete char before cursor
+    // Backspace: delete char before cursor, with smart 4-space dedent for indentation
     if (e.key === 'Backspace') {
       e.preventDefault();
       if (cursorIndex > 0) {
-        setTypedCode((prev) => {
-          const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
-          return prev.slice(0, safeIdx - 1) + prev.slice(safeIdx);
-        });
-        setCursorIndex((prev) => Math.max(0, prev - 1));
+        const safeIdx = Math.max(0, Math.min(cursorIndex, typedCode.length));
+        const beforeCursor = typedCode.slice(0, safeIdx);
+        const afterCursor = typedCode.slice(safeIdx);
+
+        // Check if preceding characters are 4 spaces of leading indentation
+        const lastNewlineIdx = beforeCursor.lastIndexOf('\n');
+        const currentLineBeforeCursor = lastNewlineIdx === -1
+          ? beforeCursor
+          : beforeCursor.slice(lastNewlineIdx + 1);
+
+        if (
+          currentLineBeforeCursor.length >= 4 &&
+          currentLineBeforeCursor.endsWith('    ') &&
+          /^\s+$/.test(currentLineBeforeCursor)
+        ) {
+          // Dedent 4 spaces at once
+          setTypedCode(beforeCursor.slice(0, -4) + afterCursor);
+          setCursorIndex(Math.max(0, safeIdx - 4));
+        } else {
+          // Standard single-char delete
+          setTypedCode(beforeCursor.slice(0, -1) + afterCursor);
+          setCursorIndex(Math.max(0, safeIdx - 1));
+        }
       }
       return;
     }
@@ -463,6 +620,7 @@ export default function TypingStage({
                         const targetChar = targetLineText[colIdx];
                         const isMatch = hasTargetChar && userChar === targetChar;
                         const isCursorHere = isCursorOnThisLine && cursorCol === colIdx;
+                        const syntaxColor = targetLinesColors[lineIdx]?.[colIdx] || '#93c5fd';
 
                         return (
                           <React.Fragment key={colIdx}>
@@ -491,11 +649,11 @@ export default function TypingStage({
                               }}
                               style={{
                                 display: 'inline-block',
-                                color: isMatch ? '#34d399' : hasTargetChar ? '#ef4444' : '#f8fafc',
-                                background: isMatch ? '#090e1a' : hasTargetChar ? '#3b1820' : 'transparent',
-                                fontWeight: hasTargetChar ? 800 : 600,
+                                color: isMatch ? syntaxColor : '#ef4444',
+                                background: isMatch ? 'transparent' : 'rgba(239, 68, 68, 0.22)',
+                                fontWeight: isMatch ? 700 : 800,
                                 borderRadius: '2px',
-                                boxShadow: hasTargetChar && !isMatch ? '0 0 6px rgba(239, 68, 68, 0.5)' : 'none',
+                                boxShadow: !isMatch ? '0 0 6px rgba(239, 68, 68, 0.6)' : 'none',
                                 cursor: 'text',
                               }}
                             >

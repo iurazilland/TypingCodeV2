@@ -4464,13 +4464,15 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           height: '100%',
           overflow: 'hidden',
         }}>
-          {/* Top Half: Terminal Console */}
+          {/* Top Half: Terminal Console (Locked to flex bounds with internal scrollbar) */}
           <div style={{
             flex: '1 1 52%',
             display: 'flex',
             flexDirection: 'column',
             borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
             background: '#0b1120',
+            minHeight: 0,
+            overflow: 'hidden',
           }}>
             <div style={{
               height: '46px',
@@ -4488,23 +4490,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
                   터미널
                 </span>
-                {isDebugging && debugStepInfo && (
-                  <span style={{
-                    fontSize: '0.68rem',
-                    padding: '2px 7px',
-                    borderRadius: '5px',
-                    background: 'rgba(239, 68, 68, 0.18)',
-                    border: '1px solid rgba(239, 68, 68, 0.4)',
-                    color: '#f87171',
-                    fontWeight: 800,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
-                    디버깅 ({debugStepInfo.current}/{debugStepInfo.total}스텝)
-                  </span>
-                )}
               </div>
 
               {/* Execution Controls: [0.5x | 1x | 2x | 3x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 실행 / ■ 정지] */}
@@ -4658,39 +4643,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               fontSize: '0.86rem',
               color: '#f8fafc',
               overflowY: 'auto',
+              minHeight: 0,
               background: '#020617',
               lineHeight: 1.6,
             }}>
-              <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <span>$</span>
-                  <span style={{ color: '#e2e8f0' }}>{execMode === 'debug' ? 'python -m pdb main.py' : 'python main.py'}</span>
-                </div>
-                {isDebugging && (
-                  <span style={{
-                    fontSize: '0.68rem',
-                    color: '#94a3b8',
-                    fontFamily: 'var(--font-mono)',
-                  }}>
-                    {debugSpeed}x (스텝당 {(0.6 / debugSpeed).toFixed(2).replace(/\.?0+$/, '')}초)
-                  </span>
-                )}
+              <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>$</span>
+                <span style={{ color: '#e2e8f0' }}>{execMode === 'debug' ? 'python -m pdb main.py' : 'python main.py'}</span>
               </div>
-
-              {/* Debug execution active indicator when terminal output is not yet printed */}
-              {isDebugging && !terminalOutput && (
-                <div style={{
-                  marginTop: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#94a3b8',
-                  fontSize: '0.80rem',
-                }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', display: 'inline-block', animation: 'pulse 1s infinite' }} />
-                  <span>스텝별 코드 실행 중... {debugStepInfo ? `(${debugStepInfo.current}/${debugStepInfo.total})` : ''}</span>
-                </div>
-              )}
 
               {terminalOutput && (
                 <pre style={{
