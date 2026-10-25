@@ -1401,9 +1401,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             return next;
           });
         }
-      } catch {
-        setTerminalOutput(currentQuestion.expectedOutput);
-        setIsSuccess(true);
+      } catch (err: any) {
+        setTerminalOutput(err?.message || '실행 중 오류가 발생했습니다.');
+        setIsSuccess(false);
       } finally {
         setIsExecuting(false);
       }
@@ -1510,10 +1510,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             }
           }
         }
-      } catch {
+      } catch (err: any) {
         if (!debugAbortRef.current) {
-          setTerminalOutput(currentQuestion.expectedOutput);
-          setIsSuccess(true);
+          setTerminalOutput(err?.message || '디버깅 실행 중 오류가 발생했습니다.');
+          setIsSuccess(false);
         }
       } finally {
         setIsDebugging(false);
@@ -1637,6 +1637,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     blockType: BlockType,
     extra?: { varName?: string; withElse?: boolean }
   ) => {
+    // In typing mode, dragging blocks out is locked, but wheel scrolling is preserved
+    if (mode === 'typing') {
+      e.preventDefault();
+      return;
+    }
+
     const targetEl = e.currentTarget as HTMLElement;
     const rect = targetEl.getBoundingClientRect();
     const rawGrabX = Math.round(e.clientX - rect.left);
@@ -4905,8 +4911,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             position: 'relative',
             zIndex: 10,
             transition: 'all 0.2s ease',
-            filter: mode === 'typing' ? 'grayscale(0.85) opacity(0.55)' : 'none',
-            pointerEvents: mode === 'typing' ? 'none' : 'auto',
+            filter: mode === 'typing' ? 'grayscale(0.7) opacity(0.65)' : 'none',
+            pointerEvents: 'auto',
             userSelect: mode === 'typing' ? 'none' : 'auto',
           }}
         >

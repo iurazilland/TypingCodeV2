@@ -59,12 +59,14 @@ export default function TypingStage({
       if (ch === ' ') return 'Space';
       return ch;
     }
-    return 'Enter';
+    return '';
   }, [typedCode, targetCode]);
 
-  // Split targetCode and typedCode into lines for 2-layer rendering
+  // Split targetCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
   const targetLines = useMemo(() => targetCode.split('\n'), [targetCode]);
   const userLines = useMemo(() => typedCode.split('\n'), [typedCode]);
+  const maxLineCount = Math.max(targetLines.length, userLines.length);
+  const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
   const currentLineIdx = userLines.length - 1;
 
   // Handle typing input
@@ -73,61 +75,16 @@ export default function TypingStage({
 
     if (e.key === 'Tab') {
       e.preventDefault();
-      // Indentation support: check if next target chars are spaces
-      const remainingTarget = targetCode.slice(typedCode.length);
-      if (remainingTarget.startsWith('    ')) {
-        setTypedCode((prev) => prev + '    ');
-      } else if (remainingTarget.startsWith('  ')) {
-        setTypedCode((prev) => prev + '  ');
-      } else {
-        setTypedCode((prev) => prev + '    ');
-      }
+      // Free tab indentation: 4 spaces
+      setTypedCode((prev) => prev + '    ');
       return;
     }
 
     if (e.key === 'Enter') {
       e.preventDefault();
-
-      // 1. If completed or typed matches target: execute!
-      if (typedCode.trim() === targetCode.trim() || typedCode.length >= targetCode.length) {
-        onSubmit();
-        return;
-      }
-
-      // 2. Single-line target (no newline in targetCode):
-      // Enter runs the code if user typed anything. NEVER append '\n'!
-      if (!targetCode.includes('\n')) {
-        if (typedCode.trim().length > 0) {
-          onSubmit();
-        }
-        return;
-      }
-
-      // 3. Multi-line target:
-      // If the next expected character in targetCode is '\n', advance to next line!
-      if (targetCode[typedCode.length] === '\n') {
-        setTypedCode((prev) => prev + '\n');
-        return;
-      }
-
-      // If user is on the last line of a multi-line target:
-      // Pressing Enter runs the code
-      if (currentLineIdx >= targetLines.length - 1) {
-        if (typedCode.trim().length > 0) {
-          onSubmit();
-        }
-        return;
-      }
-
-      // If user has reached or exceeded current intermediate line length:
-      const currentTargetLine = targetLines[currentLineIdx] || '';
-      if (userLines[currentLineIdx].length >= currentTargetLine.length) {
-        setTypedCode((prev) => prev + '\n');
-        return;
-      }
-
-      // If user pressed Enter prematurely in the middle of an intermediate line:
-      // Do nothing to avoid breaking line alignment and destroying example code!
+      // In typing mode, Enter creates a newline in the editor, NOT code execution.
+      // Execution is handled via Terminal's Run button.
+      setTypedCode((prev) => prev + '\n');
       return;
     }
 
@@ -137,13 +94,10 @@ export default function TypingStage({
       return;
     }
 
-    // Normal printable character
+    // Normal printable character: free typing without artificial length limits
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
-      // Allow typing up to target length + 8 extra typo chars
-      if (typedCode.length < targetCode.length + 8) {
-        setTypedCode((prev) => prev + e.key);
-      }
+      setTypedCode((prev) => prev + e.key);
     }
   };
 
@@ -242,7 +196,10 @@ export default function TypingStage({
             color: '#f8fafc',
           }}
         >
-          {targetLines.map((targetLineText, lineIdx) => {
+          {lineIndices.map((lineIdx) => {
+            const targetLineText = targetLines[lineIdx] || '';
+            const userLineText = userLines[lineIdx] !== undefined ? userLines[lineIdx] : null;
+
             const isThisLineExecuting = Boolean(
               isDebugging && executingLineIndex !== null && executingLineIndex !== undefined && executingLineIndex === lineIdx
             );
@@ -252,7 +209,6 @@ export default function TypingStage({
             const isThisLineDimmed = Boolean(isAnyLineExecuting && !isThisLineExecuting);
 
             const isUserOnThisLine = currentLineIdx === lineIdx;
-            const userLineText = userLines[lineIdx] !== undefined ? userLines[lineIdx] : null;
 
             return (
               <div
@@ -356,19 +312,20 @@ export default function TypingStage({
                     >
                       {/* 입력된 각 문자별 오버레이 */}
                       {userLineText.split('').map((userChar, colIdx) => {
+                        const hasTargetChar = colIdx < targetLineText.length;
                         const targetChar = targetLineText[colIdx];
-                        const isMatch = userChar === targetChar;
+                        const isMatch = hasTargetChar && userChar === targetChar;
 
                         return (
                           <span
                             key={colIdx}
                             style={{
                               display: 'inline-block',
-                              color: isMatch ? '#34d399' : '#ef4444',
-                              background: isMatch ? '#090e1a' : '#3b1820',
-                              fontWeight: 800,
+                              color: isMatch ? '#34d399' : hasTargetChar ? '#ef4444' : '#f8fafc',
+                              background: isMatch ? '#090e1a' : hasTargetChar ? '#3b1820' : 'transparent',
+                              fontWeight: hasTargetChar ? 800 : 600,
                               borderRadius: '2px',
-                              boxShadow: !isMatch ? '0 0 6px rgba(239, 68, 68, 0.5)' : 'none',
+                              boxShadow: hasTargetChar && !isMatch ? '0 0 6px rgba(239, 68, 68, 0.5)' : 'none',
                             }}
                           >
                             {userChar}
@@ -406,24 +363,6 @@ export default function TypingStage({
                           ↵
                         </span>
                       )}
-
-                      {/* 모든 코드 입력 완료 시 Enter 실행 안내 */}
-                      {isUserOnThisLine &&
-                        lineIdx === targetLines.length - 1 &&
-                        userLineText.length >= targetLineText.length && (
-                          <span
-                            style={{
-                              color: '#34d399',
-                              fontSize: '0.78em',
-                              marginLeft: '8px',
-                              userSelect: 'none',
-                              fontWeight: 700,
-                              opacity: 0.9,
-                            }}
-                          >
-                            ↵ Enter로 실행
-                          </span>
-                        )}
                     </div>
                   )}
                 </div>
