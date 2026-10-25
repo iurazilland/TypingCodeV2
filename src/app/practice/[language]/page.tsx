@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -8,15 +8,16 @@ import {
   Sparkles, 
   Trophy, 
   ArrowRight,
-  Puzzle,
-  Keyboard,
-  Wrench,
+  CheckCircle2,
+  Lock,
+  Layers,
+  RotateCcw,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
-import { PYTHON_LEVEL_1 } from '@/data/curriculum/python/level1';
 import LanguageIcon from '@/components/LanguageIcon';
-import { getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
+import { getCategoryName } from '@/lib/curriculumTranslations';
+import { getCourseSections, LevelSection, LevelItem } from '@/lib/curriculumSections';
 
 interface StageSelectPageProps {
   params: {
@@ -28,6 +29,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
   const { language } = useLanguage();
   const isEn = language === 'en';
   const rawLang = params.language.toLowerCase();
+
+  // Hover state tracker for level cards
+  const [hoveredLevelNum, setHoveredLevelNum] = useState<number | null>(null);
 
   // Find matching track and module from CURRICULUM_TRACKS
   const { matchedTrack, matchedModule } = useMemo(() => {
@@ -69,106 +73,77 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     return { matchedTrack: tFound, matchedModule: mFound };
   }, [rawLang]);
 
-  // Generate Stage Cards for the module
-  const isPythonBasic = (rawLang === 'python_basic' || matchedModule.id === 'py-basic') && matchedTrack.id === 'python';
+  // Section & Level definitions for this course
+  const sections: LevelSection[] = useMemo(() => {
+    return getCourseSections(
+      matchedTrack.id, 
+      matchedModule.id, 
+      matchedModule.totalLevels || 20, 
+      matchedModule.skills || []
+    );
+  }, [matchedTrack, matchedModule]);
 
-  const stages = useMemo(() => {
-    if (isPythonBasic) {
-      return PYTHON_LEVEL_1.questions.map((q) => {
-        let badgeType: 'block' | 'blank' | 'bug' | 'challenge' = 'block';
-        if (q.kind === 'fill_blank') badgeType = 'blank';
-        else if (q.kind === 'fix_bug') badgeType = 'bug';
-        else if (q.type === 'typing') badgeType = 'blank';
+  // Total levels across all sections
+  const totalLevelsCount = useMemo(() => {
+    return sections.reduce((sum, s) => sum + s.levels.length, 0);
+  }, [sections]);
 
-        return {
-          step: q.step,
-          type: badgeType,
-          title_ko: q.prompt_ko,
-          title_en: q.prompt_en,
-          hint_ko: q.hint_ko,
-          hint_en: q.hint_en,
-          practiceUrl: `/practice/${rawLang}/1?step=${q.step}`,
-          isAvailable: true,
-        };
+  // User learning DB progress loaded from localStorage
+  const [userProgress, setUserProgress] = useState<{
+    highestUnlockedLevel: number;
+    clearedLevels: Set<number>;
+  }>({
+    highestUnlockedLevel: 1,
+    clearedLevels: new Set(),
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const cleared = new Set<number>();
+      let maxUnlocked = 1;
+
+      // 1. Direct saved checkpoint
+      const directUnlocked = parseInt(localStorage.getItem(`unlocked_level_${rawLang}`) || '1', 10);
+      maxUnlocked = Math.max(maxUnlocked, directUnlocked);
+
+      // 2. Scan per-level steps (each level has 10 steps; if >= 10, marked as cleared)
+      for (let lvl = 1; lvl <= 50; lvl++) {
+        const stepVal = parseInt(localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`) || '0', 10);
+        if (stepVal >= 10) {
+          cleared.add(lvl);
+          maxUnlocked = Math.max(maxUnlocked, lvl + 1);
+        }
+      }
+
+      setUserProgress({
+        highestUnlockedLevel: maxUnlocked,
+        clearedLevels: cleared,
       });
+    } catch (e) {
+      console.error(e);
     }
+  }, [rawLang]);
 
-    const totalStages = Math.min(matchedModule.totalLevels || 10, 10);
-    return Array.from({ length: totalStages }, (_, i) => {
-      const stepNum = i + 1;
-      const isBlock = stepNum <= 4;
-      const isBug = stepNum === 7 || stepNum === 8;
-      const isChallenge = stepNum === totalStages;
-      const badgeType: 'block' | 'blank' | 'bug' | 'challenge' = isChallenge
-        ? 'challenge'
-        : isBug
-        ? 'bug'
-        : isBlock
-        ? 'block'
-        : 'blank';
-
-      const skillIndex = i % (matchedModule.skills.length || 1);
-      const skillName = matchedModule.skills[skillIndex] || `${matchedTrack.name} 핵심 문법`;
-
-      return {
-        step: stepNum,
-        type: badgeType,
-        title_ko: `${skillName} 실습 (${stepNum}단계)`,
-        title_en: `${getSkillName(skillName, isEn)} (Stage ${stepNum})`,
-        hint_ko: '코드를 직접 타이핑하고 실시간 런타임에서 실행 결과를 확인합니다.',
-        hint_en: 'Type code hands-on and verify real execution output in the sandbox.',
-        practiceUrl: `/practice/${rawLang}/1?step=${stepNum}`,
-        isAvailable: true,
-      };
-    });
-  }, [isPythonBasic, matchedModule, matchedTrack, rawLang, isEn]);
-
-  const getBadgeInfo = (type: 'block' | 'blank' | 'bug' | 'challenge') => {
-    switch (type) {
-      case 'block':
-        return {
-          icon: <Puzzle size={13} />,
-          text_ko: '🧩 블록 코딩',
-          text_en: '🧩 Block Coding',
-          bg: 'rgba(59, 130, 246, 0.15)',
-          color: '#60a5fa',
-          border: 'rgba(59, 130, 246, 0.35)',
-        };
-      case 'blank':
-        return {
-          icon: <Keyboard size={13} />,
-          text_ko: '⌨️ 빈칸 타이핑',
-          text_en: '⌨️ Fill Blank',
-          bg: 'rgba(16, 185, 129, 0.15)',
-          color: '#34d399',
-          border: 'rgba(16, 185, 129, 0.35)',
-        };
-      case 'bug':
-        return {
-          icon: <Wrench size={13} />,
-          text_ko: '🔍 오타 수정',
-          text_en: '🔍 Bug Fix',
-          bg: 'rgba(239, 68, 68, 0.15)',
-          color: '#f87171',
-          border: 'rgba(239, 68, 68, 0.35)',
-        };
-      case 'challenge':
-      default:
-        return {
-          icon: <Trophy size={13} />,
-          text_ko: '🏆 실전 챌린지',
-          text_en: '🏆 Challenge',
-          bg: 'rgba(245, 158, 11, 0.15)',
-          color: '#fbbf24',
-          border: 'rgba(245, 158, 11, 0.35)',
-        };
+  // Current active level to resume
+  const currentResumeLevel = useMemo(() => {
+    for (const sec of sections) {
+      for (const lvl of sec.levels) {
+        if (!userProgress.clearedLevels.has(lvl.levelNumber) && lvl.levelNumber <= userProgress.highestUnlockedLevel) {
+          return lvl.levelNumber;
+        }
+      }
     }
-  };
+    return 1;
+  }, [sections, userProgress]);
+
+  const clearedCount = userProgress.clearedLevels.size;
+  const progressPercent = totalLevelsCount > 0 ? Math.min(100, Math.round((clearedCount / totalLevelsCount) * 100)) : 0;
 
   return (
     <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '36px 24px 100px' }}>
       {/* Top Back Navigation Link (Left-aligned) */}
-      <div style={{ marginBottom: '28px' }}>
+      <div style={{ marginBottom: '24px' }}>
         <Link
           href="/languages"
           style={{
@@ -189,13 +164,13 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         </Link>
       </div>
 
-      {/* Course Header Banner */}
+      {/* Course Overview Banner with User Progress Summary & Resume Button */}
       <div
         style={{
-          padding: '28px 32px',
-          borderRadius: '22px',
+          padding: '24px 30px',
+          borderRadius: '20px',
           background: 'var(--bg-surface, #1e293b)',
-          border: `1.5px solid ${matchedTrack.color}50`,
+          border: `1.5px solid ${matchedTrack.color}45`,
           boxShadow: `0 8px 30px rgba(0, 0, 0, 0.35), 0 0 20px ${matchedTrack.color}15`,
           marginBottom: '36px',
           display: 'flex',
@@ -205,11 +180,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           gap: '24px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flex: 1, minWidth: 0 }}>
+        {/* Left: Course Info */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, minWidth: 0 }}>
           <div
             style={{
-              width: '70px',
-              height: '70px',
+              width: '68px',
+              height: '68px',
               borderRadius: '18px',
               background: 'rgba(15, 23, 42, 0.8)',
               border: `1.5px solid ${matchedTrack.color}70`,
@@ -225,7 +201,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <h1 style={{ fontSize: 'clamp(1.4rem, 2.3vw, 1.9rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+              <h1 style={{ fontSize: 'clamp(1.35rem, 2.2vw, 1.85rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
                 {isEn ? matchedModule.title_en : matchedModule.title_ko}
               </h1>
               <span
@@ -258,7 +234,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
             </div>
             <p style={{
               color: '#cbd5e1',
-              fontSize: '0.94rem',
+              fontSize: '0.92rem',
               lineHeight: 1.55,
               margin: 0,
               wordBreak: 'keep-all',
@@ -268,155 +244,296 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           </div>
         </div>
 
-        {/* Milestone Trophy Badge */}
+        {/* Right: User Learning Progress & Quick Resume CTA */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '14px',
-            background: 'rgba(11, 19, 41, 0.65)',
+            gap: '18px',
+            background: 'rgba(11, 19, 41, 0.7)',
             padding: '14px 22px',
-            borderRadius: '14px',
+            borderRadius: '16px',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             flexShrink: 0,
           }}
         >
-          <Trophy size={28} color="#f59e0b" />
           <div>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>
-              {isEn ? 'CURRICULUM STAGES' : '도전 스테이지'}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '6px' }}>
+              <span style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600 }}>
+                {isEn ? 'CURRICULUM PROGRESS' : '학습 달성률'}
+              </span>
+              <span style={{ fontSize: '0.86rem', color: '#f8fafc', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
+                {clearedCount} / {totalLevelsCount} ({progressPercent}%)
+              </span>
             </div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}>
-              {isEn ? `Total ${stages.length} Stages` : `총 ${stages.length}개 스테이지`}
+            {/* Progress Bar */}
+            <div style={{ width: '160px', height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+              <div
+                style={{
+                  width: `${progressPercent}%`,
+                  height: '100%',
+                  background: progressPercent === 100 ? '#10b981' : matchedTrack.color,
+                  borderRadius: '4px',
+                  transition: 'width 0.3s ease',
+                }}
+              />
             </div>
           </div>
+
+          <Link
+            href={`/practice/${rawLang}/${currentResumeLevel}`}
+            className="tactile-btn tactile-btn-primary"
+            style={{
+              padding: '10px 18px',
+              fontSize: '0.86rem',
+              fontWeight: 800,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              textDecoration: 'none',
+              borderRadius: '12px',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Play size={14} fill="currentColor" />
+            <span>{isEn ? `Resume Level ${currentResumeLevel}` : `${currentResumeLevel}레벨 이어하기`}</span>
+          </Link>
         </div>
       </div>
 
-      {/* Stage Grid Section Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px', flexWrap: 'wrap', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Sparkles size={20} color="#38bdf8" />
-          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
-            {isEn 
-              ? `${matchedModule.title_en} Stages (1 ~ ${stages.length})` 
-              : `${matchedModule.title_ko} 실전 스테이지 (1 ~ ${stages.length}단계)`}
-          </h2>
-        </div>
-        <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-          {isEn ? 'Click any stage card to start coding practice immediately' : '원하는 단계를 클릭하여 바로 실습을 시작할 수 있습니다'}
-        </div>
-      </div>
+      {/* Sections and Level Cards Grid */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '38px' }}>
+        {sections.map((section) => {
+          const sectionClearedCount = section.levels.filter((l) => userProgress.clearedLevels.has(l.levelNumber)).length;
+          const isSectionComplete = sectionClearedCount === section.levels.length && section.levels.length > 0;
 
-      {/* Stage Cards Responsive Grid */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(330px, 1fr))',
-          gap: '20px',
-        }}
-      >
-        {stages.map((stage) => {
-          const badge = getBadgeInfo(stage.type);
           return (
-            <div
-              key={stage.step}
-              className="quest-card"
-              style={{
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                minHeight: '210px',
-                background: 'var(--bg-surface, #1e293b)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '18px',
-                boxShadow: '0 6px 18px rgba(0, 0, 0, 0.25)',
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}
-            >
-              <div>
-                {/* Stage Header Row: Stage Number + Type Badge */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <div key={section.id}>
+              {/* Section Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '16px',
+                  flexWrap: 'wrap',
+                  gap: '10px',
+                  paddingBottom: '10px',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span
                     style={{
-                      fontSize: '0.85rem',
+                      padding: '3px 9px',
+                      borderRadius: '8px',
+                      background: isSectionComplete ? 'rgba(16, 185, 129, 0.18)' : `${matchedTrack.color}20`,
+                      color: isSectionComplete ? '#34d399' : matchedTrack.color,
+                      border: `1px solid ${isSectionComplete ? 'rgba(16, 185, 129, 0.4)' : matchedTrack.color + '40'}`,
                       fontFamily: 'var(--font-mono)',
+                      fontSize: '0.78rem',
                       fontWeight: 800,
-                      color: '#38bdf8',
                       letterSpacing: '0.04em',
                     }}
                   >
-                    STAGE {stage.step.toString().padStart(2, '0')}
+                    SECTION 0{section.sectionNumber}
                   </span>
-
-                  <span
-                    style={{
-                      padding: '3px 10px',
-                      borderRadius: '8px',
-                      fontSize: '0.76rem',
-                      fontWeight: 700,
-                      background: badge.bg,
-                      color: badge.color,
-                      border: `1px solid ${badge.border}`,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    {isEn ? badge.text_en : badge.text_ko}
-                  </span>
+                  <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+                    {isEn ? section.title_en : section.title_ko}
+                  </h2>
                 </div>
 
-                {/* Stage Prompt Title */}
-                <h4
-                  style={{
-                    fontSize: '1.05rem',
-                    fontWeight: 700,
-                    color: '#f8fafc',
-                    marginBottom: '8px',
-                    lineHeight: 1.45,
-                  }}
-                >
-                  {isEn ? stage.title_en : stage.title_ko}
-                </h4>
-
-                {/* Stage Hint/Description */}
-                <p
-                  style={{
-                    fontSize: '0.86rem',
-                    color: '#94a3b8',
-                    lineHeight: 1.5,
-                    margin: 0,
-                  }}
-                >
-                  {isEn ? stage.hint_en : stage.hint_ko}
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', color: '#94a3b8' }}>
+                  {isSectionComplete ? (
+                    <span style={{ color: '#34d399', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={14} />
+                      {isEn ? 'Section Complete' : '섹션 전체 완료'}
+                    </span>
+                  ) : (
+                    <span>
+                      {sectionClearedCount} / {section.levels.length} {isEn ? 'Levels Cleared' : '레벨 완료'}
+                    </span>
+                  )}
+                </div>
               </div>
 
-              {/* Card Footer: Action Launch Button */}
-              <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <Link
-                  href={stage.practiceUrl}
-                  className="tactile-btn tactile-btn-primary"
-                  style={{
-                    width: '100%',
-                    padding: '10px 16px',
-                    fontSize: '0.88rem',
-                    fontWeight: 800,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    textDecoration: 'none',
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 14px rgba(56, 189, 248, 0.25)',
-                  }}
-                >
-                  <Play size={14} fill="currentColor" />
-                  <span>{isEn ? `Start Stage ${stage.step}` : `${stage.step}단계 실습 시작하기`}</span>
-                  <ArrowRight size={14} />
-                </Link>
+              {/* Level Cards Responsive Grid (3~4 columns, each card is 1 Level) */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: '16px',
+                }}
+              >
+                {section.levels.map((level) => {
+                  const isCleared = userProgress.clearedLevels.has(level.levelNumber);
+                  const isUnlocked = level.levelNumber <= userProgress.highestUnlockedLevel;
+                  const isCurrent = !isCleared && isUnlocked;
+                  const isLocked = !isUnlocked;
+                  const isHovered = hoveredLevelNum === level.levelNumber;
+
+                  return (
+                    <Link
+                      key={level.levelNumber}
+                      href={isLocked ? '#' : `/practice/${rawLang}/${level.levelNumber}`}
+                      onClick={(e) => {
+                        if (isLocked) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onMouseEnter={() => setHoveredLevelNum(level.levelNumber)}
+                      onMouseLeave={() => setHoveredLevelNum(null)}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        minHeight: '142px',
+                        padding: '20px',
+                        borderRadius: '16px',
+                        textDecoration: 'none',
+                        background: isLocked
+                          ? 'rgba(15, 23, 42, 0.4)'
+                          : isCurrent
+                          ? 'rgba(30, 41, 59, 0.95)'
+                          : 'var(--bg-surface, #1e293b)',
+                        border: isLocked
+                          ? '1px solid rgba(255, 255, 255, 0.04)'
+                          : isHovered
+                          ? `1.5px solid ${matchedTrack.color}`
+                          : isCurrent
+                          ? `1.5px solid ${matchedTrack.color}70`
+                          : '1px solid rgba(255, 255, 255, 0.08)',
+                        boxShadow: isHovered && !isLocked
+                          ? `0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px ${matchedTrack.color}35`
+                          : isCurrent
+                          ? `0 4px 16px ${matchedTrack.color}20`
+                          : '0 4px 12px rgba(0, 0, 0, 0.2)',
+                        transform: isHovered && !isLocked ? 'translateY(-4px)' : 'translateY(0)',
+                        cursor: isLocked ? 'not-allowed' : 'pointer',
+                        opacity: isLocked ? 0.45 : 1,
+                        transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                      }}
+                    >
+                      {/* Top Row: Level Number + Status Badge */}
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              color: isLocked ? '#64748b' : matchedTrack.color,
+                              letterSpacing: '0.04em',
+                            }}
+                          >
+                            LEVEL {level.levelNumber.toString().padStart(2, '0')}
+                          </span>
+
+                          {/* Status Badge */}
+                          {isCleared ? (
+                            <span
+                              style={{
+                                padding: '2px 8px',
+                                borderRadius: '6px',
+                                background: 'rgba(16, 185, 129, 0.16)',
+                                color: '#34d399',
+                                border: '1px solid rgba(16, 185, 129, 0.35)',
+                                fontSize: '0.72rem',
+                                fontWeight: 800,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                              }}
+                            >
+                              <CheckCircle2 size={12} />
+                              <span>{isEn ? 'Cleared' : '완료'}</span>
+                            </span>
+                          ) : isCurrent ? (
+                            <span
+                              style={{
+                                padding: '2px 8px',
+                                borderRadius: '6px',
+                                background: `${matchedTrack.color}22`,
+                                color: matchedTrack.color,
+                                border: `1px solid ${matchedTrack.color}50`,
+                                fontSize: '0.72rem',
+                                fontWeight: 800,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                              }}
+                            >
+                              <Play size={10} fill="currentColor" />
+                              <span>{isEn ? 'Current' : '도전 가능'}</span>
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                padding: '2px 8px',
+                                borderRadius: '6px',
+                                background: 'rgba(255, 255, 255, 0.04)',
+                                color: '#64748b',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                fontSize: '0.72rem',
+                                fontWeight: 700,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                              }}
+                            >
+                              <Lock size={11} />
+                              <span>{isEn ? 'Locked' : '잠김'}</span>
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Level Title */}
+                        <h3
+                          style={{
+                            fontSize: '1.02rem',
+                            fontWeight: 800,
+                            color: isLocked ? '#94a3b8' : '#f8fafc',
+                            lineHeight: 1.4,
+                            margin: 0,
+                            wordBreak: 'keep-all',
+                          }}
+                        >
+                          {isEn ? level.title_en : level.title_ko}
+                        </h3>
+                      </div>
+
+                      {/* Bottom Row: 10 Steps Notice + Subtle Arrow */}
+                      <div
+                        style={{
+                          marginTop: '16px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                          paddingTop: '10px',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
+                          {isEn ? '10 Stages inside' : '10개 실전 단계'}
+                        </span>
+
+                        {!isLocked && (
+                          <span
+                            style={{
+                              color: isHovered ? matchedTrack.color : '#94a3b8',
+                              transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
+                              transition: 'all 0.15s ease',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <ArrowRight size={14} />
+                          </span>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           );
