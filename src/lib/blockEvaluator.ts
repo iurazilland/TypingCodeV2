@@ -75,6 +75,23 @@ export function splitTopLevelArgs(str: string): string[] {
   return result;
 }
 
+export function unescapePythonString(str: string): string {
+  return str.replace(/\\([nrtbfv\\'"])/g, (match, char) => {
+    switch (char) {
+      case 'n': return '\n';
+      case 'r': return '\r';
+      case 't': return '\t';
+      case 'b': return '\b';
+      case 'f': return '\f';
+      case 'v': return '\v';
+      case '\\': return '\\';
+      case "'": return "'";
+      case '"': return '"';
+      default: return match;
+    }
+  });
+}
+
 // 0ms Safe Local Block AST Evaluator with trace generation and loop cycling support
 export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
   try {
@@ -109,10 +126,15 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
       const expr = (rawExpr || '').trim();
       if (!expr) return null;
 
-      // String literals
-      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
-        return expr.slice(1, -1);
+      // String literals (triple quotes and regular single/double quotes)
+      if ((expr.startsWith('"""') && expr.endsWith('"""')) || (expr.startsWith("'''") && expr.endsWith("'''"))) {
+        return unescapePythonString(expr.slice(3, -3));
       }
+      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+        return unescapePythonString(expr.slice(1, -1));
+      }
+      if (expr === '\\n') return '\n';
+      if (expr === '\\t') return '\t';
       if (expr === 'True' || expr === 'true') return true;
       if (expr === 'False' || expr === 'false') return false;
       if (expr === 'None' || expr === 'null') return null;

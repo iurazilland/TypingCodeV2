@@ -625,6 +625,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   // Execution Mode & Step Debugging States
   const [execMode, setExecMode] = useState<'normal' | 'debug'>('normal');
   const [debugSpeed, setDebugSpeed] = useState<number>(1); // 0.5 | 1 | 2 | 3
+  const debugSpeedRef = useRef<number>(debugSpeed);
+  debugSpeedRef.current = debugSpeed;
   const [isDebugging, setIsDebugging] = useState<boolean>(false);
   const [debugStepInfo, setDebugStepInfo] = useState<{ current: number; total: number } | null>(null);
   const [executingBlockId, setExecutingBlockId] = useState<string | null>(null);
@@ -1290,12 +1292,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   const memoryBoxes = getMemoryBoxes();
 
-  // Helper for interruptible sleep during debugging
-  const sleepInterruptible = (ms: number) => {
+  // Helper for interruptible sleep during debugging that dynamically reflects live speed changes
+  const sleepInterruptible = (baseMs: number = 600) => {
     return new Promise<void>((resolve) => {
       const start = Date.now();
       const interval = setInterval(() => {
-        if (debugAbortRef.current || Date.now() - start >= ms) {
+        const currentTargetMs = Math.round(baseMs / (debugSpeedRef.current || 1));
+        if (debugAbortRef.current || Date.now() - start >= currentTargetMs) {
           clearInterval(interval);
           resolve();
         }
@@ -1403,20 +1406,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         setIsExecuting(false);
       }
     } else {
-      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (0.6s base step delay)
+      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (0.6s base step delay, live speed adjustable)
       setIsDebugging(true);
       setExecutingBlockId(null);
       setExecutingLineIndex(null);
-
-      const baseStepTime = 600; // 0.6초 기준 (1x = 600ms, 0.5x = 1200ms, 2x = 300ms, 3x = 200ms)
-      const stepDelay = Math.round(baseStepTime / debugSpeed);
 
       try {
         let actualOut = '';
         let isErr = false;
 
         // Step 1: Initial pause on execution start so the user sees the start of debug
-        await sleepInterruptible(stepDelay);
+        await sleepInterruptible(600);
 
         if (mode !== 'typing') {
           const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
@@ -1443,7 +1443,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 setTerminalOutput(actualOut);
                 break;
               }
-              await sleepInterruptible(stepDelay);
+              await sleepInterruptible(600);
             }
             if (!isErr) {
               actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
@@ -1473,7 +1473,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 setTerminalOutput(actualOut);
                 break;
               }
-              await sleepInterruptible(stepDelay);
+              await sleepInterruptible(600);
             }
             if (!isErr) {
               actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
@@ -1493,7 +1493,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           const cleanUser = codeToRun.replace(/\s+/g, '');
 
           // Pause after execution completes so the user can inspect output and memory before success modal
-          await sleepInterruptible(Math.max(900, stepDelay * 1.5));
+          await sleepInterruptible(900);
 
           if (!debugAbortRef.current) {
             if (!isErr && (cleanUser === cleanTarget || (actualOut === expectedOut && actualOut !== ''))) {
@@ -4390,7 +4390,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       <button
                         key={spd}
                         type="button"
-                        onClick={() => setDebugSpeed(spd)}
+                        onClick={() => {
+                          setDebugSpeed(spd);
+                          debugSpeedRef.current = spd;
+                        }}
                         style={{
                           padding: '3px 6px',
                           borderRadius: '4px',
@@ -4403,7 +4406,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           fontFamily: 'var(--font-mono)',
                           transition: 'all 0.15s ease',
                         }}
-                        title={`디버깅 실행 속도: ${spd}배속 (기준: 0.6초)`}
+                        title={`디버깅 실행 속도: ${spd}배속 (기준: 0.6초, 실행 중 즉시 변경 가능)`}
                       >
                         {spd}x
                       </button>
