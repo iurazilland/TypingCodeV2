@@ -113,7 +113,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
   const progressPercent = totalLevelsCount > 0 ? Math.min(100, Math.round((clearedCount / totalLevelsCount) * 100)) : 0;
 
   return (
-    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '36px 24px 100px' }}>
+    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>
       {/* Top Back Navigation Link (Left-aligned) */}
       <div style={{ marginBottom: '24px' }}>
         <Link
@@ -123,7 +123,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
             alignItems: 'center',
             gap: '8px',
             color: '#94a3b8',
-            fontSize: '0.9rem',
+            fontSize: '0.88rem',
             fontWeight: 600,
             transition: 'color 0.15s ease',
             textDecoration: 'none',
@@ -136,14 +136,15 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         </Link>
       </div>
 
-      {/* Course Overview Banner with User Learning Progress Summary */}
+      {/* Course Overview Bento Pod with Learning Progress */}
       <div
         style={{
-          padding: '24px 30px',
-          borderRadius: '20px',
-          background: 'var(--bg-surface, #1e293b)',
-          border: `1.5px solid ${matchedTrack.color}45`,
-          boxShadow: `0 8px 30px rgba(0, 0, 0, 0.35), 0 0 20px ${matchedTrack.color}15`,
+          padding: '26px 32px',
+          borderRadius: '24px',
+          background: 'rgba(15, 23, 42, 0.65)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(16px)',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
           marginBottom: '36px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -152,28 +153,28 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           gap: '24px',
         }}
       >
-        {/* Left: Course Info */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, minWidth: 0 }}>
+        {/* Left: Language Icon + Title + Description */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flex: 1, minWidth: '300px' }}>
           <div
             style={{
-              width: '68px',
-              height: '68px',
+              width: '64px',
+              height: '64px',
               borderRadius: '18px',
               background: 'rgba(15, 23, 42, 0.8)',
-              border: `1.5px solid ${matchedTrack.color}70`,
+              border: `1.5px solid ${matchedTrack.color}60`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: `0 6px 18px ${matchedTrack.color}35`,
+              boxShadow: `0 6px 20px ${matchedTrack.color}30`,
               flexShrink: 0,
             }}
           >
-            <LanguageIcon language={matchedTrack.id} size={42} />
+            <LanguageIcon language={matchedTrack.id} size={38} />
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <h1 style={{ fontSize: 'clamp(1.35rem, 2.2vw, 1.85rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+              <h1 style={{ fontSize: 'clamp(1.3rem, 2.2vw, 1.75rem)', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
                 {isEn ? matchedModule.title_en : matchedModule.title_ko}
               </h1>
               <span
@@ -182,7 +183,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                   borderRadius: '10px',
                   background: 'rgba(15, 23, 42, 0.7)',
                   color: matchedTrack.color,
-                  border: `1px solid ${matchedTrack.color}60`,
+                  border: `1px solid ${matchedTrack.color}50`,
                   fontSize: '0.78rem',
                   fontWeight: 800,
                   letterSpacing: '0.03em',
@@ -196,7 +197,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                   borderRadius: '10px',
                   background: `${matchedModule.difficultyColor || '#10b981'}20`,
                   color: matchedModule.difficultyColor || '#10b981',
-                  border: `1px solid ${matchedModule.difficultyColor || '#10b981'}50`,
+                  border: `1px solid ${matchedModule.difficultyColor || '#10b981'}45`,
                   fontSize: '0.78rem',
                   fontWeight: 800,
                 }}
@@ -216,13 +217,10 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           </div>
         </div>
 
-        {/* Right: User Learning Progress (Progress bar only) */}
+        {/* Right: Progress Meter */}
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            background: 'rgba(11, 19, 41, 0.7)',
+            background: 'rgba(11, 19, 41, 0.65)',
             padding: '16px 22px',
             borderRadius: '16px',
             border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -231,20 +229,19 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600, letterSpacing: '0.04em' }}>
               {isEn ? 'CURRICULUM PROGRESS' : '학습 달성률'}
             </span>
             <span style={{ fontSize: '0.88rem', color: '#f8fafc', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
               {clearedCount} / {totalLevelsCount} ({progressPercent}%)
             </span>
           </div>
-          {/* Progress Bar */}
           <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
             <div
               style={{
                 width: `${progressPercent}%`,
                 height: '100%',
-                background: progressPercent === 100 ? '#10b981' : matchedTrack.color,
+                background: progressPercent === 100 ? '#10b981' : `linear-gradient(90deg, ${matchedTrack.color}, #10b981)`,
                 borderRadius: '4px',
                 transition: 'width 0.3s ease',
               }}
@@ -253,68 +250,95 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         </div>
       </div>
 
-      {/* Sections and Level Cards Grid */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
+      {/* Bento Grid Chapter Containers (Apple / Linear Bento Style) */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
         {sections.map((section) => {
           const sectionClearedCount = section.levels.filter((l) => userProgress.clearedLevels.has(l.levelNumber)).length;
           const isSectionComplete = sectionClearedCount === section.levels.length && section.levels.length > 0;
 
           return (
-            <div key={section.id}>
-              {/* Section Header */}
+            <div
+              key={section.id}
+              style={{
+                borderRadius: '24px',
+                background: 'rgba(15, 23, 42, 0.55)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(16px)',
+                padding: '28px 30px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Subtle decorative glow from top-left */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '320px',
+                  height: '120px',
+                  background: `radial-gradient(ellipse at top left, ${matchedTrack.color}15, transparent 70%)`,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Section Header Row */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '16px',
+                  marginBottom: '20px',
                   flexWrap: 'wrap',
-                  gap: '10px',
-                  paddingBottom: '10px',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                  gap: '12px',
+                  position: 'relative',
+                  zIndex: 1,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span
                     style={{
-                      padding: '3px 9px',
+                      padding: '4px 11px',
                       borderRadius: '8px',
-                      background: isSectionComplete ? 'rgba(16, 185, 129, 0.18)' : `${matchedTrack.color}20`,
+                      background: isSectionComplete ? 'rgba(16, 185, 129, 0.16)' : `${matchedTrack.color}18`,
                       color: isSectionComplete ? '#34d399' : matchedTrack.color,
-                      border: `1px solid ${isSectionComplete ? 'rgba(16, 185, 129, 0.4)' : matchedTrack.color + '40'}`,
+                      border: `1px solid ${isSectionComplete ? 'rgba(16, 185, 129, 0.35)' : matchedTrack.color + '35'}`,
                       fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
+                      fontSize: '0.76rem',
                       fontWeight: 800,
                       letterSpacing: '0.04em',
                     }}
                   >
                     SECTION 0{section.sectionNumber}
                   </span>
-                  <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', margin: 0, letterSpacing: '-0.01em' }}>
                     {isEn ? section.title_en : section.title_ko}
                   </h2>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', color: '#94a3b8' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem' }}>
                   {isSectionComplete ? (
-                    <span style={{ color: '#34d399', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                      <CheckCircle2 size={14} />
-                      {isEn ? 'Section Complete' : '섹션 전체 완료'}
+                    <span style={{ color: '#34d399', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                      <CheckCircle2 size={15} />
+                      <span>{isEn ? 'Section Cleared' : '섹션 전체 완료'}</span>
                     </span>
                   ) : (
-                    <span>
-                      {sectionClearedCount} / {section.levels.length} {isEn ? 'Levels Cleared' : '레벨 완료'}
+                    <span style={{ color: '#94a3b8', fontWeight: 600 }}>
+                      {sectionClearedCount} / {section.levels.length} {isEn ? 'Cleared' : '완료'}
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Ultra-Simple Level Cards Grid: Only Level & Title */}
+              {/* Level Cells Grid nested cleanly inside Bento Box */}
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                  gap: '16px',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                  gap: '14px',
+                  position: 'relative',
+                  zIndex: 1,
                 }}
               >
                 {section.levels.map((level) => {
@@ -331,34 +355,34 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        minHeight: '108px',
-                        padding: '20px 24px',
+                        minHeight: '106px',
+                        padding: '18px 20px',
                         borderRadius: '16px',
                         textDecoration: 'none',
-                        background: isCleared
-                          ? 'rgba(16, 185, 129, 0.05)'
-                          : 'var(--bg-surface, #1e293b)',
+                        background: isHovered
+                          ? 'rgba(255, 255, 255, 0.07)'
+                          : isCleared
+                          ? 'rgba(16, 185, 129, 0.04)'
+                          : 'rgba(255, 255, 255, 0.03)',
                         border: isHovered
                           ? `1.5px solid ${matchedTrack.color}`
                           : isCleared
-                          ? '1px solid rgba(16, 185, 129, 0.35)'
-                          : '1px solid rgba(255, 255, 255, 0.08)',
+                          ? '1px solid rgba(16, 185, 129, 0.28)'
+                          : '1px solid rgba(255, 255, 255, 0.06)',
                         boxShadow: isHovered
-                          ? `0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px ${matchedTrack.color}35`
-                          : isCleared
-                          ? '0 4px 14px rgba(16, 185, 129, 0.12)'
-                          : '0 4px 12px rgba(0, 0, 0, 0.2)',
+                          ? `0 10px 24px rgba(0, 0, 0, 0.4), 0 0 16px ${matchedTrack.color}30`
+                          : 'none',
                         transform: isHovered ? 'translateY(-3px)' : 'translateY(0)',
                         cursor: 'pointer',
                         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                       }}
                     >
-                      {/* Top Row: Level Number + Optional Clear Checkmark */}
+                      {/* Level Number + Checkmark */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.82rem',
+                            fontSize: '0.8rem',
                             fontWeight: 800,
                             color: isCleared ? '#34d399' : matchedTrack.color,
                             letterSpacing: '0.04em',
@@ -368,18 +392,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         </span>
 
                         {isCleared && (
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              color: '#34d399',
-                              fontSize: '0.74rem',
-                              fontWeight: 800,
-                            }}
-                          >
-                            <CheckCircle2 size={13} />
-                            <span>{isEn ? 'Cleared' : '완료'}</span>
+                          <span style={{ color: '#34d399', display: 'inline-flex', alignItems: 'center' }}>
+                            <CheckCircle2 size={14} />
                           </span>
                         )}
                       </div>
@@ -387,10 +401,10 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                       {/* Level Title Only */}
                       <h3
                         style={{
-                          fontSize: '1.05rem',
+                          fontSize: '0.98rem',
                           fontWeight: 800,
                           color: '#f8fafc',
-                          lineHeight: 1.4,
+                          lineHeight: 1.45,
                           margin: 0,
                           wordBreak: 'keep-all',
                         }}
