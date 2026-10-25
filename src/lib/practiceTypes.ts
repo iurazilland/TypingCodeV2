@@ -22,6 +22,16 @@ export interface BlockPiece {
 
 export type ChallengeKind = 'fill_blank' | 'fix_bug' | 'one_line' | 'standard';
 
+export interface TestCase {
+  id?: string | number;
+  input?: string; // Standard input (stdin) for interactive executions
+  expectedOutput: string; // Expected terminal stdout
+  expectedVariables?: Record<string, any>; // Expected variable state in memory
+  description_ko?: string;
+  description_en?: string;
+  isHidden?: boolean; // Hidden test case flag for grading mode
+}
+
 export interface PracticeQuestion {
   id: number;
   step: number; // 1 ~ 10
@@ -31,13 +41,15 @@ export interface PracticeQuestion {
   title_en?: string;
   prompt_ko: string;
   prompt_en?: string;
-  templateCode?: string; // Code template shown in background guide layer (supports [   ] blanks)
+  templateCode?: string; // Code template shown in background guide layer
   targetCode: string; // Canonical / reference answer code
-  expectedOutput: string; // Ground truth expected terminal output
+  blankToken?: string; // Specific token/substring to render as zero-displacement underline slot
+  expectedOutput: string; // Primary ground truth expected terminal output
+  expectedVariables?: Record<string, any>; // Expected runtime memory variables (e.g. { x: 10, total: 55 })
+  testCases?: TestCase[]; // Test cases with inputs, expected outputs, and variable assertions
   hint_ko: string;
   hint_en?: string;
   starterCode?: string;
-  blankToken?: string; // Legacy fill-in blank token
   availableBlocks?: BlockPiece[]; // Legacy block pieces
 }
 

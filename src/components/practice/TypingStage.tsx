@@ -234,7 +234,7 @@ export default function TypingStage({
 }: TypingStageProps) {
   const targetCode = (question.targetCode || '').replace(/\r\n/g, '\n');
   const templateCode = (question.templateCode || '').replace(/\r\n/g, '\n');
-  const guideCode = templateCode || targetCode;
+  const guideCode = (question.kind === 'fill_blank' || !templateCode) ? targetCode : templateCode;
 
   // User's typed code text and cursor position
   const [typedCode, setTypedCode] = useState<string>('');
@@ -466,58 +466,107 @@ export default function TypingStage({
     }
   };
 
-  // Helper: Renders the background guide line, transforming [   ] blanks into stylish cyan dotted capsule badges
+  // Helper: Renders the background guide line without taking extra space or shifting character columns
   const renderGuideLine = (lineText: string) => {
     if (!lineText) return ' ';
 
-    // Match blank patterns: [   ], [?], [빈칸], [___]
-    const blankRegex = /\[\s*(?:|\?|___|빈칸)\s*\]/g;
-    if (!blankRegex.test(lineText)) {
-      return lineText;
-    }
+    // 1. If blankToken is present in this line, render an exact-width dashed underline slot (zero displacement)
+    if (question.blankToken && lineText.includes(question.blankToken)) {
+      const token = question.blankToken;
+      const tokenIdx = lineText.indexOf(token);
+      const before = lineText.slice(0, tokenIdx);
+      const after = lineText.slice(tokenIdx + token.length);
 
-    const parts: React.ReactNode[] = [];
-    let lastIndex = 0;
-    let match: RegExpExecArray | null;
-    blankRegex.lastIndex = 0;
-
-    while ((match = blankRegex.exec(lineText)) !== null) {
-      if (match.index > lastIndex) {
-        parts.push(lineText.slice(lastIndex, match.index));
-      }
-      parts.push(
-        <span
-          key={match.index}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0 8px',
-            height: '24px',
-            borderRadius: '5px',
-            border: '1.5px dashed rgba(56, 189, 248, 0.75)',
-            background: 'rgba(56, 189, 248, 0.12)',
-            boxShadow: '0 0 10px rgba(56, 189, 248, 0.25)',
-            color: '#38bdf8',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.78rem',
-            fontWeight: 800,
-            verticalAlign: 'middle',
-            margin: '0 2px',
-            userSelect: 'none',
-          }}
-        >
-          빈칸
-        </span>
+      return (
+        <>
+          {before}
+          <span
+            style={{
+              display: 'inline-block',
+              borderBottom: '2px dashed #38bdf8',
+              background: 'rgba(56, 189, 248, 0.08)',
+              boxShadow: '0 0 6px rgba(56, 189, 248, 0.2)',
+              borderRadius: '2px',
+              color: 'transparent',
+              userSelect: 'none',
+              verticalAlign: 'baseline',
+            }}
+          >
+            {'\u00A0'.repeat(token.length)}
+          </span>
+          {after}
+        </>
       );
-      lastIndex = match.index + match[0].length;
     }
 
-    if (lastIndex < lineText.length) {
-      parts.push(lineText.slice(lastIndex));
+    // 2. If it is a fix_bug question with a known typo (e.g. pritn), highlight with red wavy underline
+    if (question.kind === 'fix_bug') {
+      const bugTokens = ['pritn', 'pirnt', 'prnt'];
+      for (const bug of bugTokens) {
+        if (lineText.includes(bug)) {
+          const bugIdx = lineText.indexOf(bug);
+          const before = lineText.slice(0, bugIdx);
+          const after = lineText.slice(bugIdx + bug.length);
+          return (
+            <>
+              {before}
+              <span
+                style={{
+                  display: 'inline-block',
+                  borderBottom: '2px wavy #f87171',
+                  color: '#f87171',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  borderRadius: '2px',
+                  userSelect: 'none',
+                  verticalAlign: 'baseline',
+                }}
+              >
+                {bug}
+              </span>
+              {after}
+            </>
+          );
+        }
+      }
     }
 
-    return <>{parts}</>;
+    // 3. Fallback: if line has legacy [   ] brackets, convert to exact 3-space dashed underline slot (no brackets, no "빈칸" text)
+    const blankRegex = /\[\s*(?:|\?|___|빈칸)\s*\]/g;
+    if (blankRegex.test(lineText)) {
+      blankRegex.lastIndex = 0;
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+      let match: RegExpExecArray | null;
+      while ((match = blankRegex.exec(lineText)) !== null) {
+        if (match.index > lastIndex) {
+          parts.push(lineText.slice(lastIndex, match.index));
+        }
+        parts.push(
+          <span
+            key={match.index}
+            style={{
+              display: 'inline-block',
+              borderBottom: '2px dashed #38bdf8',
+              background: 'rgba(56, 189, 248, 0.08)',
+              boxShadow: '0 0 6px rgba(56, 189, 248, 0.2)',
+              borderRadius: '2px',
+              color: 'transparent',
+              userSelect: 'none',
+              verticalAlign: 'baseline',
+            }}
+          >
+            {'\u00A0\u00A0\u00A0'}
+          </span>
+        );
+        lastIndex = match.index + match[0].length;
+      }
+      if (lastIndex < lineText.length) {
+        parts.push(lineText.slice(lastIndex));
+      }
+      return <>{parts}</>;
+    }
+
+    return lineText;
   };
 
   return (
@@ -753,9 +802,13 @@ export default function TypingStage({
                       (t) => userLineText.length >= t.end
                     );
 
-                    const blankStart = targetLineText.indexOf('[');
-                    const blankEnd = targetLineText.indexOf(']');
-                    const hasBlank = blankStart !== -1 && blankEnd !== -1;
+                    const blankStart = question.blankToken
+                      ? targetLineText.indexOf(question.blankToken)
+                      : targetLineText.indexOf('[');
+                    const blankEnd = question.blankToken && blankStart !== -1
+                      ? blankStart + question.blankToken.length
+                      : targetLineText.indexOf(']');
+                    const hasBlank = blankStart !== -1 && (question.blankToken ? true : blankEnd !== -1);
 
                     return (
                       <div

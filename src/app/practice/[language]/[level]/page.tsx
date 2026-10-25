@@ -1622,7 +1622,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   };
 
   // Helper to validate code execution result
-  // - Output comparison: actualOut must match expectedOut (trimmed) and cannot be empty
+  // - Output comparison: actualOut must match expectedOut (or testCases expected output) and cannot be empty
+  // - Variable check: Verifies expectedVariables in runtime scope if specified
   // - Block mode: Purely output-based (for conceptual learning)
   // - Typing mode: Disallows unresolved blanks, residual bug tokens, or excessive typos outside the blank
   const checkSubmissionPass = (
@@ -1631,12 +1632,27 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     expectedOut: string,
     isErr: boolean,
     question: PracticeQuestion,
-    isTyping: boolean
+    isTyping: boolean,
+    runtimeScope?: Record<string, any>
   ): boolean => {
     if (isErr) return false;
     const cleanActual = actualOut.trim();
-    const cleanExpected = expectedOut.trim();
-    if (!cleanActual || cleanActual !== cleanExpected) return false;
+
+    // 1. Output comparison (against expectedOutput or first primary testCase)
+    const targetExpected = (question.testCases && question.testCases.length > 0)
+      ? question.testCases[0].expectedOutput.trim()
+      : expectedOut.trim();
+
+    if (!cleanActual || cleanActual !== targetExpected) return false;
+
+    // 2. Expected variable verification (if question specifies expectedVariables)
+    if (question.expectedVariables && runtimeScope) {
+      for (const [varName, expectedVal] of Object.entries(question.expectedVariables)) {
+        if (runtimeScope[varName] !== expectedVal) {
+          return false;
+        }
+      }
+    }
 
     // Block mode is lenient (conceptual explanation stage)
     if (!isTyping) return true;
@@ -1644,38 +1660,60 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     const trimmedUser = userCodeStr.trim();
     if (!trimmedUser) return false;
 
-    // 1. Unfilled blank placeholder check: [   ], [ ? ], [___], [빈칸]
+    // 3. Unfilled blank placeholder check: [   ], [ ? ], [___], [빈칸]
     if (/\[\s*(?:|\?|___|빈칸)\s*\]/.test(trimmedUser)) {
       return false;
     }
 
-    // 2. In bug fix mode, template bug should not persist
-    if (question.kind === 'fix_bug' && question.templateCode) {
-      const bugTokens = ['pritn', 'pirnt'];
-      if (bugTokens.some((b) => question.templateCode?.includes(b) && trimmedUser.includes(b))) {
+    // 4. In bug fix mode, template bug should not persist
+    if (question.kind === 'fix_bug') {
+      const bugTokens = ['pritn', 'pirnt', 'prnt'];
+      if (bugTokens.some((b) => (question.templateCode?.includes(b) || trimmedUser.includes(b)) && trimmedUser.includes(b))) {
         return false;
       }
     }
 
-    // 3. Typo count check for fill-in-the-blank questions
-    if (question.kind === 'fill_blank' && question.templateCode) {
-      const match = question.templateCode.match(/^(.*?)\[\s*(?:|\?|___|빈칸)\s*\](.*)$/);
-      if (match) {
-        const [, prefix, suffix] = match;
-        if (prefix && !trimmedUser.startsWith(prefix.trimEnd())) {
+    // 5. Typo count check for fill-in-the-blank questions
+    if (question.kind === 'fill_blank') {
+      if (question.blankToken && question.targetCode.includes(question.blankToken)) {
+        const tokenIdx = question.targetCode.indexOf(question.blankToken);
+        const prefix = question.targetCode.slice(0, tokenIdx).trim();
+        const suffix = question.targetCode.slice(tokenIdx + question.blankToken.length).trim();
+
+        if (prefix && !trimmedUser.startsWith(prefix)) {
           let prefixMismatches = 0;
           for (let i = 0; i < prefix.length; i++) {
             if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
           }
           if (prefixMismatches > 2) return false;
         }
-        if (suffix && !trimmedUser.endsWith(suffix.trimStart())) {
+        if (suffix && !trimmedUser.endsWith(suffix)) {
           let suffixMismatches = 0;
           for (let i = 0; i < suffix.length; i++) {
             const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
             if (userChar !== suffix[i]) suffixMismatches++;
           }
           if (suffixMismatches > 2) return false;
+        }
+      } else if (question.templateCode) {
+        const match = question.templateCode.match(/^(.*?)\[\s*(?:|\?|___|빈칸)\s*\](.*)$/);
+        if (match) {
+          const [, prefix, suffix] = match;
+          if (prefix && !trimmedUser.startsWith(prefix.trimEnd())) {
+            let prefixMismatches = 0;
+            for (let i = 0; i < prefix.length; i++) {
+              if (trimmedUser[i] !== prefix[i]) prefixMismatches++;
+            }
+            if (prefixMismatches > 2) return false;
+          }
+          if (suffix && !trimmedUser.endsWith(suffix.trimStart())) {
+            let suffixMismatches = 0;
+            for (let i = 0; i < suffix.length; i++) {
+              const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
+              if (userChar !== suffix[i]) suffixMismatches++;
+            }
+            if (suffixMismatches > 2) return false;
+          }
         }
       }
     }
@@ -1724,11 +1762,15 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       try {
         let actualOut = '';
         let isErr = false;
+        let evalScope: Record<string, any> | undefined = undefined;
 
         if (mode !== 'typing') {
           const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
           const evalRes = evaluateBlocksLocally(orderedBlocks);
-          if (evalRes.scope) setRuntimeMemory(evalRes.scope);
+          if (evalRes.scope) {
+            setRuntimeMemory(evalRes.scope);
+            evalScope = evalRes.scope;
+          }
           if (evalRes.success) {
             actualOut = (evalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
           } else if (evalRes.stderr) {
@@ -1745,7 +1787,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               actualOut = res.stderr.trim();
             }
           } else {
-            if (localRes.scope) setRuntimeMemory(localRes.scope);
+            if (localRes.scope) {
+              setRuntimeMemory(localRes.scope);
+              evalScope = localRes.scope;
+            }
             if (localRes.success) {
               actualOut = (localRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
             } else if (localRes.stderr) {
@@ -1772,7 +1817,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           expectedOut,
           isErr,
           currentQuestion,
-          mode === 'typing'
+          mode === 'typing',
+          evalScope || runtimeMemory
         );
 
         if (passed) {
@@ -1900,7 +1946,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               expectedOut,
               isErr,
               currentQuestion,
-              mode === 'typing'
+              mode === 'typing',
+              runtimeMemory
             );
 
             if (passed) {
