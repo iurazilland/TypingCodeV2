@@ -483,38 +483,40 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         </h3>
                       </div>
 
-                      {/* Bottom Row: Syntax Code Keyword Tags (Exercism Concept Tagging) */}
-                      <div
-                        style={{
-                          marginTop: '16px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          flexWrap: 'wrap',
-                          borderTop: isLocked ? '1px solid rgba(255, 255, 255, 0.03)' : '1px solid rgba(255, 255, 255, 0.05)',
-                          paddingTop: '12px',
-                        }}
-                      >
-                        {level.syntaxTags.map((tag, tIdx) => (
-                          <span
-                            key={tIdx}
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.74rem',
-                              fontWeight: 700,
-                              color: isLocked ? '#475569' : isHovered ? '#38bdf8' : '#94a3b8',
-                              background: isLocked ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.7)',
-                              border: isLocked ? '1px solid rgba(255, 255, 255, 0.03)' : '1px solid rgba(255, 255, 255, 0.08)',
-                              padding: '2px 7px',
-                              borderRadius: '6px',
-                              whiteSpace: 'nowrap',
-                              transition: 'color 0.15s ease',
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                      {/* Bottom Row: Syntax Code Keyword Tags (Exercism Concept Tagging, only if tags exist) */}
+                      {level.syntaxTags && level.syntaxTags.length > 0 && (
+                        <div
+                          style={{
+                            marginTop: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            flexWrap: 'wrap',
+                            borderTop: isLocked ? '1px solid rgba(255, 255, 255, 0.03)' : '1px solid rgba(255, 255, 255, 0.05)',
+                            paddingTop: '12px',
+                          }}
+                        >
+                          {level.syntaxTags.map((tag, tIdx) => (
+                            <span
+                              key={tIdx}
+                              style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.74rem',
+                                fontWeight: 700,
+                                color: isLocked ? '#475569' : isHovered ? '#38bdf8' : '#94a3b8',
+                                background: isLocked ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.7)',
+                                border: isLocked ? '1px solid rgba(255, 255, 255, 0.03)' : '1px solid rgba(255, 255, 255, 0.08)',
+                                padding: '2px 7px',
+                                borderRadius: '6px',
+                                whiteSpace: 'nowrap',
+                                transition: 'color 0.15s ease',
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </Link>
                   );
                 })}
