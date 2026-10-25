@@ -2092,7 +2092,8 @@ export default function PracticePage({ params }: PracticePageProps) {
       const defaultContent = blockInfo.content || (
         bType === 'for_range' ? '5' :
           bType === 'for_in' ? 'items' :
-            bType === 'while' ? 'False' : ''
+            bType === 'range' ? '5' :
+              bType === 'while' ? 'False' : ''
       );
       const isIfElse = isIf && !!blockInfo.withElse;
       baseBlock = {
@@ -3574,33 +3575,45 @@ export default function PracticePage({ params }: PracticePageProps) {
       const idsToDelete = new Set([blockId, ...descendantIds]);
       deletedCount = idsToDelete.size;
 
-      return prev
-        .filter((b) => !idsToDelete.has(b.id))
-        .map((b) => {
-          let updated = { ...b };
-          if (b.nextBlockId && idsToDelete.has(b.nextBlockId)) {
-            updated.nextBlockId = undefined;
-          }
-          if (target && b.id === target.prevBlockId) {
-            updated.nextBlockId = undefined;
-          }
-          if (b.attachedMethodId && idsToDelete.has(b.attachedMethodId)) {
-            updated.attachedMethodId = undefined;
-          }
-          if (target && b.id === target.attachedToBlockId) {
-            updated.attachedMethodId = undefined;
-          }
-          if (b.innerBlocks) {
-            updated.innerBlocks = b.innerBlocks.filter((ib) => !idsToDelete.has(ib.id));
-          }
-          if (b.branches) {
-            updated.branches = b.branches.map((br) => ({
-              ...br,
-              innerBlocks: (br.innerBlocks || []).filter((ib) => !idsToDelete.has(ib.id)),
-            }));
-          }
-          return updated;
-        });
+      const cleanBlockTree = (list: CanvasBlock[]): CanvasBlock[] => {
+        return list
+          .filter((b) => !idsToDelete.has(b.id))
+          .map((b) => {
+            let updated = { ...b };
+            if (b.nextBlockId && idsToDelete.has(b.nextBlockId)) {
+              updated.nextBlockId = undefined;
+            }
+            if (target && b.id === target.prevBlockId) {
+              updated.nextBlockId = undefined;
+            }
+            if (b.attachedMethodId && idsToDelete.has(b.attachedMethodId)) {
+              updated.attachedMethodId = undefined;
+            }
+            if (target && b.id === target.attachedToBlockId) {
+              updated.attachedMethodId = undefined;
+            }
+            if (b.argBlock) {
+              if (idsToDelete.has(b.argBlock.id)) {
+                updated.argBlock = undefined;
+              } else {
+                const cleanedArg = cleanBlockTree([b.argBlock]);
+                updated.argBlock = cleanedArg[0] || undefined;
+              }
+            }
+            if (b.innerBlocks) {
+              updated.innerBlocks = cleanBlockTree(b.innerBlocks);
+            }
+            if (b.branches) {
+              updated.branches = b.branches.map((br) => ({
+                ...br,
+                innerBlocks: br.innerBlocks ? cleanBlockTree(br.innerBlocks) : [],
+              }));
+            }
+            return updated;
+          });
+      };
+
+      return cleanBlockTree(prev);
     });
     setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
     showToast(

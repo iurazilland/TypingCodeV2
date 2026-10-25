@@ -138,8 +138,30 @@ export function evaluateBlocksLocally(blocks: any[]): EvaluationResult {
           return fnArgs[0] !== undefined ? String(fnArgs[0]) : '';
         }
         if (fnName === 'range') {
-          const count = typeof fnArgs[0] === 'number' ? fnArgs[0] : parseInt(String(fnArgs[0]), 10) || 0;
-          return Array.from({ length: Math.max(0, count) }, (_, i) => i);
+          let start = 0, stop = 0, step = 1;
+          if (fnArgs.length === 1) {
+            stop = Number(fnArgs[0]) || 0;
+          } else if (fnArgs.length === 2) {
+            start = Number(fnArgs[0]) || 0;
+            stop = Number(fnArgs[1]) || 0;
+          } else if (fnArgs.length >= 3) {
+            start = Number(fnArgs[0]) || 0;
+            stop = Number(fnArgs[1]) || 0;
+            step = Number(fnArgs[2]) || 1;
+          }
+          const rList: number[] = [];
+          if (step > 0) {
+            for (let i = start; i < stop; i += step) {
+              if (rList.length >= 500) break;
+              rList.push(i);
+            }
+          } else if (step < 0) {
+            for (let i = start; i > stop; i += step) {
+              if (rList.length >= 500) break;
+              rList.push(i);
+            }
+          }
+          return rList;
         }
         if (fnName === 'sum') {
           const list = Array.isArray(fnArgs[0]) ? fnArgs[0] : [];
