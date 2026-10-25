@@ -15,7 +15,9 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Dedicated fullscreen practice studio has its own dedicated top header & controls
-  if (pathname?.startsWith('/practice')) {
+  // Only hide the global Navbar when inside an active practice/coding room (e.g. /practice/[language]/[level])
+  const pathSegments = pathname?.split('/').filter(Boolean) || [];
+  if (pathSegments[0] === 'practice' && pathSegments.length >= 3) {
     return null;
   }
 
@@ -30,7 +32,7 @@ export default function Navbar() {
       label: t.nav.learn,
       href: '/languages',
       icon: BookOpen,
-      isActive: pathname.startsWith('/languages') || pathname.startsWith('/learn'),
+      isActive: pathname.startsWith('/languages') || pathname.startsWith('/learn') || pathname.startsWith('/practice'),
     },
     {
       label: t.nav.problems,
