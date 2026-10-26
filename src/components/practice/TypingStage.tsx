@@ -856,7 +856,7 @@ export default function TypingStage({
                                 style={{
                                   display: 'inline-block',
                                   color: isCharError ? VSCODE_DARK_PLUS.error : syntaxColor,
-                                  background: isCharError ? 'rgba(239, 68, 68, 0.2)' : '#090e1a',
+                                  background: '#090e1a',
                                   fontWeight: token && (token.type === 'keyword' || token.type === 'builtin') ? 700 : 500,
                                   borderRadius: '2px',
                                   boxShadow: 'none',
