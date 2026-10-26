@@ -2030,12 +2030,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   };
 
   const handleNextStep = () => {
-    if (currentStepIndex < totalQuestions - 1 && isStepUnlocked(currentStepIndex + 1)) {
+    if (currentStepIndex < totalQuestions - 1) {
       const nextIdx = currentStepIndex + 1;
-      setCurrentStepIndex(nextIdx);
       if (typeof window !== 'undefined') {
+        const key = `unlocked_step_${rawLang}_${levelNum}`;
+        const currentMax = parseInt(localStorage.getItem(key) || '0', 10);
+        if (nextIdx > currentMax) {
+          localStorage.setItem(key, String(nextIdx));
+        }
         window.history.replaceState(null, '', `?step=${nextIdx + 1}`);
       }
+      setCurrentStepIndex(nextIdx);
     }
   };
 
@@ -5123,6 +5128,27 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span>$</span>
                 <span style={{ color: '#e2e8f0' }}>{execMode === 'debug' ? 'python -m pdb main.py' : 'python main.py'}</span>
+                {isSuccess && (
+                  <span
+                    style={{
+                      marginLeft: 'auto',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      color: '#34d399',
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      padding: '2px 9px',
+                      borderRadius: '5px',
+                      border: '1px solid rgba(16, 185, 129, 0.35)',
+                      boxShadow: '0 0 10px rgba(16, 185, 129, 0.25)',
+                    }}
+                  >
+                    <CheckCircle2 size={13} color="#10b981" />
+                    <span>정답 (Passed)</span>
+                  </span>
+                )}
               </div>
 
               {terminalOutput ? (
@@ -7007,15 +7033,106 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       )}
 
       {/* ====================================================================
-          SUCCESS MODAL (정답 모달 팝업: 다음 문제 이동 & Enter 키 지원)
+          1. SUCCESS BOTTOM DOCK (진행 중 단계: 화면/터미널을 가리지 않는 하단 슬림 바)
           ==================================================================== */}
-      {isSuccess && (
+      {isSuccess && currentStepIndex < totalQuestions - 1 && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 9000,
+            width: 'min(760px, calc(100% - 32px))',
+            padding: '14px 22px',
+            background: 'rgba(13, 21, 39, 0.95)',
+            backdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(16, 185, 129, 0.5)',
+            borderRadius: '18px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            animation: 'bottomDockSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          }}
+        >
+          {/* Left: Glowing Green Check Badge + Text */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+            <div
+              style={{
+                width: '42px',
+                height: '42px',
+                minWidth: '42px',
+                borderRadius: '12px',
+                background: 'rgba(16, 185, 129, 0.15)',
+                border: '1px solid rgba(16, 185, 129, 0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 16px rgba(16, 185, 129, 0.35)',
+              }}
+            >
+              <CheckCircle2 size={24} color="#10b981" />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: '1.02rem', fontWeight: 900, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>🎉 정답입니다!</span>
+              </div>
+              <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 통과했습니다. 터미널 출력을 확인하고 다음 단계로 진행하세요.
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Next Step Action Button */}
+          <button
+            onClick={handleNextStep}
+            autoFocus
+            className="tactile-btn tactile-btn-green"
+            style={{
+              padding: '10px 20px',
+              fontSize: '0.94rem',
+              fontWeight: 800,
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: '0 0 20px rgba(16, 185, 129, 0.45)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
+            <span>다음 단계</span>
+            <span
+              style={{
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                padding: '2px 7px',
+                borderRadius: '6px',
+                background: 'rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+              }}
+            >
+              Enter ↵
+            </span>
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      )}
+
+      {/* ====================================================================
+          2. ROUND COMPLETE CELEBRATION MODAL (마지막 문제까지 모두 완료 시)
+          ==================================================================== */}
+      {isSuccess && currentStepIndex >= totalQuestions - 1 && (
         <div
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 9999,
-            background: 'rgba(2, 6, 23, 0.80)',
+            background: 'rgba(2, 6, 23, 0.85)',
             backdropFilter: 'blur(8px)',
             display: 'flex',
             alignItems: 'center',
@@ -7066,7 +7183,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 marginBottom: '8px',
               }}
             >
-              {currentStepIndex < totalQuestions - 1 ? '🎉 정답입니다!' : '🏆 모든 미션 완료!'}
+              🏆 모든 미션 완료!
             </h3>
 
             <p
@@ -7074,122 +7191,48 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 fontSize: '0.90rem',
                 color: '#94a3b8',
                 lineHeight: 1.6,
-                marginBottom: terminalOutput ? '18px' : '26px',
+                marginBottom: '28px',
               }}
             >
-              {currentStepIndex < totalQuestions - 1 ? (
-                <>
-                  <strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 성공적으로 해결했습니다.<br />
-                  다음 문제로 넘어가 실력을 더 키워보세요!
-                </>
-              ) : (
-                <>
-                  축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />
-                  다음 레벨이나 새로운 언어 학습에 도전해보세요!
-                </>
-              )}
+              축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />
+              다음 레벨이나 새로운 언어 학습에 도전해보세요!
             </p>
 
-            {/* Clean Output Preview in Modal */}
-            {terminalOutput && (
-              <div
-                style={{
-                  width: '100%',
-                  padding: '10px 14px',
-                  borderRadius: '10px',
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.82rem',
-                  color: '#34d399',
-                  textAlign: 'left',
-                  marginBottom: '24px',
-                  maxHeight: '120px',
-                  overflowY: 'auto',
-                }}
-              >
-                <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
-                  출력 결과:
-                </div>
-                <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
-                  {terminalOutput}
-                </pre>
-              </div>
-            )}
-
-            {/* Next / Complete Actions */}
-            {currentStepIndex < totalQuestions - 1 ? (
+            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
               <button
-                onClick={handleNextStep}
-                autoFocus
-                className="tactile-btn tactile-btn-green"
+                onClick={handleResetRound}
                 style={{
-                  width: '100%',
-                  padding: '13px 20px',
-                  fontSize: '0.96rem',
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '10px',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: '#e2e8f0',
+                  fontSize: '0.88rem',
                   fontWeight: 800,
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
                   cursor: 'pointer',
                 }}
               >
-                <span>다음 단계로 이동</span>
-                <span
-                  style={{
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    padding: '2px 8px',
-                    borderRadius: '6px',
-                    background: 'rgba(0, 0, 0, 0.25)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    marginLeft: '4px',
-                  }}
-                >
-                  Enter ↵
-                </span>
-                <ChevronRight size={17} />
+                다시 풀기
               </button>
-            ) : (
-              <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-                <button
-                  onClick={handleResetRound}
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#e2e8f0',
-                    fontSize: '0.88rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                  }}
-                >
-                  다시 풀기
-                </button>
-                <Link
-                  href={`/practice/${rawLang}`}
-                  className="tactile-btn tactile-btn-green"
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    borderRadius: '10px',
-                    fontSize: '0.88rem',
-                    fontWeight: 800,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textDecoration: 'none',
-                  }}
-                >
-                  단계 목록으로
-                </Link>
-              </div>
-            )}
+              <Link
+                href={`/practice/${rawLang}`}
+                className="tactile-btn tactile-btn-green"
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '10px',
+                  fontSize: '0.88rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textDecoration: 'none',
+                }}
+              >
+                단계 목록으로
+              </Link>
+            </div>
           </div>
         </div>
       )}
