@@ -818,8 +818,13 @@ export default function TypingStage({
                               }
                             }
                           } else if (question.kind === 'fix_bug') {
-                            // 오타 수정: 사용자가 타이핑하는 중에는 실시간 오타(빨간색)를 표시하지 않음 (스포일러 원천 차단)
-                            isCharError = false;
+                            // 오타 수정: templateCode(화면 가이드) 또는 targetCode(정답 코드) 둘 중 하나라도 일치하면 정상
+                            // 둘 다 아닌 엉뚱한 글자를 입력했을 때만 오타(빨간색 글자)로 즉시 표시
+                            const templateChar = (targetLines[lineIdx] || '')[colIdx];
+                            const targetChar = (targetCodeLines[lineIdx] || '')[colIdx];
+                            if (userChar !== templateChar && userChar !== targetChar) {
+                              isCharError = true;
+                            }
                           } else {
                             // 일반 고정 코드: 표시된 글자와 다르면 오타 처리
                             const targetChar = targetLineText[colIdx];
