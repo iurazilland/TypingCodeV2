@@ -5170,11 +5170,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       fontSize: '0.74rem',
                       fontWeight: 800,
                       color: '#34d399',
-                      background: 'rgba(16, 185, 129, 0.15)',
+                      background: 'rgba(16, 185, 129, 0.18)',
                       padding: '2px 9px',
                       borderRadius: '5px',
-                      border: '1px solid rgba(16, 185, 129, 0.35)',
-                      boxShadow: '0 0 10px rgba(16, 185, 129, 0.25)',
+                      border: '1px solid rgba(16, 185, 129, 0.4)',
+                      boxShadow: '0 0 12px rgba(16, 185, 129, 0.3)',
+                      animation: 'slideUp 0.2s ease',
                     }}
                   >
                     <CheckCircle2 size={13} color="#10b981" />
@@ -5191,11 +5192,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       fontSize: '0.74rem',
                       fontWeight: 800,
                       color: '#f87171',
-                      background: 'rgba(239, 68, 68, 0.15)',
+                      background: 'rgba(239, 68, 68, 0.18)',
                       padding: '2px 9px',
                       borderRadius: '5px',
-                      border: '1px solid rgba(239, 68, 68, 0.35)',
-                      boxShadow: '0 0 10px rgba(239, 68, 68, 0.25)',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      boxShadow: '0 0 12px rgba(239, 68, 68, 0.3)',
+                      animation: 'slideUp 0.2s ease',
                     }}
                   >
                     <AlertCircle size={13} color="#ef4444" />
@@ -7228,101 +7230,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               Enter ↵
             </span>
             <ChevronRight size={16} />
-          </button>
-        </div>
-      )}
-
-      {/* ====================================================================
-          1.5 ERROR BOTTOM DOCK (오답 발생 시: 화면을 가리지 않고 하단에 피드백 표시)
-          ==================================================================== */}
-      {isErrorShown && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 9000,
-            width: 'min(760px, calc(100% - 32px))',
-            padding: '14px 22px',
-            background: 'rgba(24, 12, 18, 0.96)',
-            backdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(239, 68, 68, 0.55)',
-            borderRadius: '18px',
-            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(239, 68, 68, 0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '16px',
-            animation: 'bottomDockSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-          }}
-        >
-          {/* Left: Glowing Red Alert Badge + Text & Heart Loss Info */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
-            <div
-              style={{
-                width: '42px',
-                height: '42px',
-                minWidth: '42px',
-                borderRadius: '12px',
-                background: 'rgba(239, 68, 68, 0.15)',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 16px rgba(239, 68, 68, 0.35)',
-              }}
-            >
-              <AlertCircle size={24} color="#ef4444" />
-            </div>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '1.02rem', fontWeight: 900, color: '#fecaca', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span>❌ 아쉽네요, 다시 도전해보세요!</span>
-                <span
-                  style={{
-                    fontSize: '0.74rem',
-                    fontWeight: 800,
-                    color: '#f87171',
-                    background: 'rgba(239, 68, 68, 0.2)',
-                    border: '1px solid rgba(239, 68, 68, 0.4)',
-                    padding: '2px 8px',
-                    borderRadius: '6px',
-                  }}
-                >
-                  하트 -1 (남은 하트: {hearts}개)
-                </span>
-              </div>
-              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                터미널에 출력된 결과와 문제의 목표 출력을 비교하여 코드를 수정해보세요.
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Dismiss / Retry Button */}
-          <button
-            onClick={() => setIsErrorShown(false)}
-            autoFocus
-            style={{
-              padding: '10px 18px',
-              fontSize: '0.88rem',
-              fontWeight: 800,
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              background: 'rgba(239, 68, 68, 0.22)',
-              border: '1px solid rgba(239, 68, 68, 0.5)',
-              color: '#fca5a5',
-              boxShadow: '0 0 14px rgba(239, 68, 68, 0.25)',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-              transition: 'all 0.15s ease',
-            }}
-          >
-            <span>다시 시도</span>
-            <RotateCcw size={14} />
           </button>
         </div>
       )}
