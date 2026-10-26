@@ -28,8 +28,11 @@ import {
   Bug,
   Loader2,
   Square,
-  AlertCircle
+  AlertCircle,
+  Compass
 } from 'lucide-react';
+import { useLanguage } from '@/lib/LanguageContext';
+import SpotlightTour from '@/components/practice/SpotlightTour';
 import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
@@ -686,6 +689,10 @@ function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] 
 // evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
 export default function PracticePage({ params, searchParams }: PracticePageProps) {
+  const { language } = useLanguage();
+  const isEn = language === 'en';
+  const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
+
   const rawLang = params.language || 'python_basic';
   const langKey = rawLang.startsWith('python') ? 'python' : rawLang;
   const levelNum = parseInt(params.level || '1', 10);
@@ -718,6 +725,20 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   // States
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(initialStep);
+
+  // Auto-launch spotlight tour on Level 1, Step 1 if not previously seen
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const seen = localStorage.getItem('typingcode_tour_seen_v1');
+      if (seen !== 'true' && levelNum === 1 && currentStepIndex === 0) {
+        const timer = setTimeout(() => {
+          setIsTourOpen(true);
+        }, 600);
+        return () => clearTimeout(timer);
+      }
+    } catch { }
+  }, [levelNum, currentStepIndex]);
 
   // Sync step if searchParams changes
   useEffect(() => {
@@ -4862,7 +4883,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             }}
           >
             <ArrowLeft size={15} />
-            <span>나가기</span>
+            <span>{isEn ? 'Exit' : '나가기'}</span>
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -4879,7 +4900,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               {rawLang.startsWith('python') || round.language === 'python' ? 'PYTHON BASIC' : round.language.toUpperCase()}
             </span>
             <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc' }}>
-              {round.title_ko}
+              {isEn ? (round.title_en || round.title_ko) : round.title_ko}
             </span>
           </div>
         </div>
@@ -4903,7 +4924,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             <button
               onClick={handlePrevStep}
               disabled={currentStepIndex <= 0}
-              title={currentStepIndex > 0 ? '이전 문제' : '첫 번째 문제입니다'}
+              title={
+                currentStepIndex > 0
+                  ? (isEn ? 'Previous Problem' : '이전 문제')
+                  : (isEn ? 'This is the first problem' : '첫 번째 문제입니다')
+              }
               style={{
                 width: '28px',
                 height: '28px',
@@ -4948,10 +4973,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               disabled={currentStepIndex >= totalQuestions - 1 || !isStepUnlocked(currentStepIndex + 1)}
               title={
                 currentStepIndex >= totalQuestions - 1
-                  ? '마지막 문제입니다'
+                  ? (isEn ? 'This is the last problem' : '마지막 문제입니다')
                   : !isStepUnlocked(currentStepIndex + 1)
-                    ? '이전 문제를 완료해야 이동할 수 있습니다 (배포 잠금)'
-                    : '다음 문제'
+                    ? (isEn ? 'Complete previous problem to unlock' : '이전 문제를 완료해야 이동할 수 있습니다 (배포 잠금)')
+                    : (isEn ? 'Next Problem' : '다음 문제')
               }
               style={{
                 width: '28px',
@@ -5001,14 +5026,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         {/* ==================================================================
             COLUMN 1 (LEFT ~38%): Spacious Terminal + Compact RAM Storage Boxes
             ================================================================== */}
-        <section style={{
-          display: 'flex',
-          flexDirection: 'column',
-          background: '#0d1527',
-          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
-          height: '100%',
-          overflow: 'hidden',
-        }}>
+        <section
+          id="tour-col-terminal"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#0d1527',
+            borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+            height: '100%',
+            overflow: 'hidden',
+          }}
+        >
           {/* Top Half: Terminal Console (Locked to flex bounds with internal scrollbar) */}
           <div style={{
             flex: '1 1 52%',
@@ -5033,7 +5061,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                 <TerminalIcon size={16} color="#38bdf8" />
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
-                  터미널
+                  {isEn ? 'Terminal' : '터미널'}
                 </span>
               </div>
 
@@ -5103,10 +5131,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       fontSize: '0.72rem',
                       transition: 'all 0.15s ease',
                     }}
-                    title="디버깅 모드 (단계별 순차 실행 및 메모리 추적)"
+                    title={isEn ? 'Debug Mode (Step-by-step trace)' : '디버깅 모드 (단계별 순차 실행 및 메모리 추적)'}
                   >
                     <Bug size={11} />
-                    <span>디버깅</span>
+                    <span>{isEn ? 'Debug' : '디버깅'}</span>
                   </button>
 
                   <button
@@ -5126,10 +5154,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       fontSize: '0.72rem',
                       transition: 'all 0.15s ease',
                     }}
-                    title="일반 실행 모드 (0ms 즉각 실행)"
+                    title={isEn ? 'Normal Run Mode (0ms instant)' : '일반 실행 모드 (0ms 즉각 실행)'}
                   >
                     <Zap size={11} />
-                    <span>일반</span>
+                    <span>{isEn ? 'Normal' : '일반'}</span>
                   </button>
                 </div>
 
@@ -5137,7 +5165,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 <button
                   type="button"
                   onClick={handleExecuteManual}
-                  title={isExecuting || isDebugging ? '실행 정지' : '실행 (단축키: Ctrl+Enter)'}
+                  title={isExecuting || isDebugging ? (isEn ? 'Stop Execution' : '실행 정지') : (isEn ? 'Run (Ctrl+Enter)' : '실행 (단축키: Ctrl+Enter)')}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -5169,12 +5197,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   {isExecuting || isDebugging ? (
                     <>
                       <Square size={11} fill="currentColor" />
-                      <span>정지</span>
+                      <span>{isEn ? 'Stop' : '정지'}</span>
                     </>
                   ) : (
                     <>
                       <Play size={12} fill="currentColor" />
-                      <span>실행</span>
+                      <span>{isEn ? 'Run' : '실행'}</span>
                     </>
                   )}
                 </button>
@@ -5319,7 +5347,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Box size={16} color="#a855f7" />
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
-                  메모리 시각화
+                  {isEn ? 'Memory Visualizer' : '메모리 시각화'}
                 </span>
               </div>
             </div>
@@ -5469,7 +5497,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             COLUMN 2 (MIDDLE 248px): Scratch-style Continuous Block Toolbox
             ================================================================== */}
         <section
-          id="toolbox-section"
+          id="tour-col-toolbox"
           onDragOver={(e) => {
             if (mode === 'typing') return;
             e.preventDefault();
@@ -5556,7 +5584,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               pointerEvents: 'none',
             }}>
               <Trash2 size={13} />
-              <span>여기에 놓으면 블록 삭제</span>
+              <span>{isEn ? 'Drop here to delete block' : '여기에 놓으면 블록 삭제'}</span>
             </div>
           )}
 
@@ -5574,7 +5602,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               <div id="cat-sec-function" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#60a5fa', fontSize: '0.76rem', fontWeight: 800 }}>
                   <TerminalIcon size={14} color="#3b82f6" />
-                  <span>함수</span>
+                  <span>{isEn ? 'Functions' : '함수'}</span>
                 </div>
 
                 {/* print() 블록 */}
@@ -5984,7 +6012,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               <div id="cat-sec-control" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fbbf24', fontSize: '0.76rem', fontWeight: 800 }}>
                   <Code size={14} color="#f59e0b" />
-                  <span>제어</span>
+                  <span>{isEn ? 'Control' : '제어'}</span>
                 </div>
 
                 {/* if [조건]: ㄷ자 블록 */}
@@ -6338,7 +6366,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fb923c', fontSize: '0.76rem', fontWeight: 800 }}>
                     <Box size={14} color="#ea580c" />
-                    <span>변수</span>
+                    <span>{isEn ? 'Variables' : '변수'}</span>
                   </div>
                 </div>
 
@@ -6369,7 +6397,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   }}
                 >
                   <Plus size={14} color="#fb923c" />
-                  <span>변수 생성</span>
+                  <span>{isEn ? 'Create Variable' : '변수 생성'}</span>
                 </button>
 
                 {/* List of Created Custom Variables in Toolbox */}
@@ -6462,7 +6490,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           {/* ================================================================
               BOARD TOP HEADER: Step Badge, Large Goal Prompt, Hearts, Hint Toggle
               ================================================================ */}
-          <div style={{
+          <div
+            id="tour-col-mission"
+            style={{
             padding: '12px 20px',
             background: '#0d1527',
             borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
@@ -6482,7 +6512,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             }}>
               {/* Continuous Progress Gauge Bar extending to just before hearts */}
               <div
-                title={`진행도: ${progressPercent}%`}
+                title={isEn ? `Progress: ${progressPercent}%` : `진행도: ${progressPercent}%`}
                 style={{
                   flex: 1,
                   height: '8px',
@@ -6523,7 +6553,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   transition: 'background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
                   flexShrink: 0,
                 }}
-                title={`남은 하트: ${hearts} / 5`}
+                title={isEn ? `Remaining Hearts: ${hearts} / 5` : `남은 하트: ${hearts} / 5`}
                 suppressHydrationWarning
               >
                 {/* Floating -1 Heart Popup when heart is lost */}
@@ -6601,10 +6631,35 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 lineHeight: 1.3,
                 flex: '1 1 auto',
               }}>
-                {currentQuestion.prompt_ko}
+                {isEn ? (currentQuestion.prompt_en || currentQuestion.prompt_ko) : currentQuestion.prompt_ko}
               </span>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                {/* Spotlight Tour Manual Trigger Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsTourOpen(true)}
+                  title={isEn ? 'Screen Guide Tour' : '화면 구성 가이드 투어'}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '0 12px',
+                    height: '34px',
+                    borderRadius: '8px',
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    border: '1px solid rgba(56, 189, 248, 0.3)',
+                    color: '#38bdf8',
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <Compass size={15} color="#38bdf8" />
+                  <span>{isEn ? 'Tour' : '화면 둘러보기'}</span>
+                </button>
+
                 {/* Hint Toggle Button Container with Relative Anchor for Floating Popover */}
                 <div style={{ position: 'relative' }} ref={hintContainerRef}>
                   <button
@@ -6626,7 +6681,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     }}
                   >
                     <Lightbulb size={15} color={showHint ? '#fbbf24' : '#94a3b8'} />
-                    <span>도움말</span>
+                    <span>{isEn ? 'Hint' : '도움말'}</span>
                   </button>
 
                   {/* Floating Hint Popover: Absolute positioning so it NEVER pushes canvas or blocks */}
@@ -6663,7 +6718,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                         }}
                       >
                         <Lightbulb size={16} color="#fbbf24" />
-                        <span>도움말</span>
+                        <span>{isEn ? 'Hint' : '도움말'}</span>
                       </div>
 
                       <div
@@ -6675,7 +6730,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           wordBreak: 'break-word',
                         }}
                       >
-                        {currentQuestion?.hint_ko || '제공된 힌트가 없습니다.'}
+                        {isEn ? (currentQuestion?.hint_en || currentQuestion?.hint_ko || 'No hint provided.') : (currentQuestion?.hint_ko || '제공된 힌트가 없습니다.')}
                       </div>
                     </div>
                   )}
@@ -6708,6 +6763,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
           {/* Main Canvas Workspace Area */}
           <div
+            id="tour-col-canvas"
             ref={workspaceRef}
             onClick={() => setActiveInputHelp(null)}
             onDragOver={handleCanvasDragOver}
@@ -6932,6 +6988,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 isExecuting={isExecuting || isDebugging}
                 isDebugging={isDebugging}
                 executingLineIndex={executingLineIndex}
+                language={language}
               />
             )}
           </div>
@@ -7222,10 +7279,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             </div>
             <div style={{ minWidth: 0 }}>
               <div style={{ fontSize: '1.02rem', fontWeight: 900, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span>🎉 정답입니다!</span>
+                <span>{isEn ? '🎉 Correct!' : '🎉 정답입니다!'}</span>
               </div>
               <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 통과했습니다. 터미널 출력을 확인하고 다음 단계로 진행하세요.
+                {isEn ? (
+                  <>Passed <strong style={{ color: '#e2e8f0' }}>Step {currentStepIndex + 1}</strong>. Check terminal output and proceed to the next step.</>
+                ) : (
+                  <><strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 통과했습니다. 터미널 출력을 확인하고 다음 단계로 진행하세요.</>
+                )}
               </div>
             </div>
           </div>
@@ -7250,7 +7311,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               flexShrink: 0,
             }}
           >
-            <span>다음 단계</span>
+            <span>{isEn ? 'Next Step' : '다음 단계'}</span>
             <span
               style={{
                 fontSize: '0.72rem',
@@ -7328,7 +7389,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 marginBottom: '8px',
               }}
             >
-              🏆 모든 미션 완료!
+              {isEn ? '🏆 All Missions Completed!' : '🏆 모든 미션 완료!'}
             </h3>
 
             <p
@@ -7339,8 +7400,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 marginBottom: '28px',
               }}
             >
-              축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />
-              다음 레벨이나 새로운 언어 학습에 도전해보세요!
+              {isEn ? (
+                <>Congratulations! You have completed all missions in this round.<br />Challenge yourself with the next level or another language!</>
+              ) : (
+                <>축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />다음 레벨이나 새로운 언어 학습에 도전해보세요!</>
+              )}
             </p>
 
             <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
@@ -7358,7 +7422,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   cursor: 'pointer',
                 }}
               >
-                다시 풀기
+                {isEn ? 'Retry Round' : '다시 풀기'}
               </button>
               <Link
                 href={`/practice/${rawLang}`}
@@ -7375,7 +7439,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   textDecoration: 'none',
                 }}
               >
-                단계 목록으로
+                {isEn ? 'Back to Levels' : '단계 목록으로'}
               </Link>
             </div>
           </div>
@@ -7422,11 +7486,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             </div>
 
             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginBottom: '8px' }}>
-              모든 하트를 소진했습니다!
+              {isEn ? 'All Hearts Depleted!' : '모든 하트를 소진했습니다!'}
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '24px' }}>
-              5번의 오답으로 하트가 모두 소모되었습니다.<br />
-              1단계부터 다시 도전하여 실력을 다져보세요!
+              {isEn ? (
+                <>You have used all 5 hearts with incorrect attempts.<br />Try again from Step 1 to master the skills!</>
+              ) : (
+                <>5번의 오답으로 하트가 모두 소모되었습니다.<br />1단계부터 다시 도전하여 실력을 다져보세요!</>
+              )}
             </p>
 
             <button
@@ -7440,7 +7507,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               }}
             >
               <RotateCcw size={16} />
-              <span>1단계부터 다시 도전하기</span>
+              <span>{isEn ? 'Retry from Step 1' : '1단계부터 다시 도전하기'}</span>
             </button>
           </div>
         </div>
@@ -7742,6 +7809,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           </div>
         </div>
       )}
+
+      {/* Interactive Screen Layout Spotlight Tour */}
+      <SpotlightTour
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        language={language}
+      />
     </div>
   );
 }

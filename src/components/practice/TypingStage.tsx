@@ -13,6 +13,7 @@ interface TypingStageProps {
   isExecuting: boolean;
   isDebugging?: boolean;
   executingLineIndex?: number | null;
+  language?: 'ko' | 'en';
 }
 
 // ============================================================================
@@ -231,7 +232,9 @@ export default function TypingStage({
   isExecuting,
   isDebugging = false,
   executingLineIndex = null,
+  language = 'ko',
 }: TypingStageProps) {
+  const isEn = language === 'en';
   const targetCode = (question.targetCode || '').replace(/\r\n/g, '\n');
   const templateCode = (question.templateCode || '').replace(/\r\n/g, '\n');
   const guideCode = templateCode || targetCode;
@@ -696,7 +699,7 @@ export default function TypingStage({
             <span>main.py</span>
             {isSuccess && (
               <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 800, marginLeft: '6px' }}>
-                ✓ 성공
+                {isEn ? '✓ Success' : '✓ 성공'}
               </span>
             )}
           </div>
@@ -766,7 +769,7 @@ export default function TypingStage({
                     setCursorIndex(getIndexFromLineAndCol(lineIdx, 0));
                     hiddenInputRef.current?.focus();
                   }}
-                  title={`줄 ${lineIdx + 1}로 이동`}
+                  title={isEn ? `Go to line ${lineIdx + 1}` : `줄 ${lineIdx + 1}로 이동`}
                   style={{
                     width: '54px',
                     minWidth: '54px',
