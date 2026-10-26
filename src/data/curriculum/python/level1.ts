@@ -1,12 +1,19 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
-// 파이썬 기초 1레벨: print() 함수와 숫자의 기초 (10단계)
+// 파이썬 기초 1레벨: print() 함수와 기본 사칙연산 (10단계)
 // - 1~5단계: 코드블록 모드 (Block Mode) - 블록으로 개념 체득
-// - 6~10단계: 타이핑 모드 (Typing Mode) - 빈칸 채우기 및 오타 수정
-// - prompt: 사용자가 직관적으로 파악할 수 있는 선명하고 간결한 미션 지시문
-// - hint: 정답 코드를 직접 노출하지 않고, 개념적 길잡이 및 인터페이스 힌트 제공
-// - 채점 기준: testCases 배열 내의 expectedOutput을 기준으로 자동 검증
+//   1. 숫자 출력
+//   2. 덧셈식과 결과 출력
+//   3. 곱셈식과 결과 출력
+//   4. 나눗셈과 덧셈 (곱셈/나눗셈 우선 계산)
+//   5. 괄호 계산식 (괄호 우선 계산)
+// - 6~10단계: 타이핑 모드 (Typing Mode) - 1~5번 유형의 문제 형식 반복
+//   6. [유형1] 빈칸 채우기 (단일 숫자 출력)
+//   7. [유형2] 빈칸 채우기 (덧셈식 계산)
+//   8. [유형3] 오타 수정 (수학 기호 x -> 곱셈 기호 *)
+//   9. [유형4] 빈칸 채우기 (나눗셈/곱셈 우선순위)
+//   10. [유형5] 빈칸 채우기 (괄호 우선순위)
 // ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
@@ -14,8 +21,8 @@ export const PYTHON_LEVEL_1: PracticeRound = {
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 1,
-  title_ko: '1레벨: print() 함수와 숫자 출력',
-  title_en: 'Level 1: print() & Numbers',
+  title_ko: '1레벨: print() 함수와 기본 사칙연산',
+  title_en: 'Level 1: print() & Basic Arithmetic',
   totalQuestions: 10,
   unlockedBlocks: ['print'],
   questions: [
@@ -29,8 +36,8 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'standard',
       prompt_ko: '숫자 10을 화면에 출력해보세요.',
       prompt_en: 'Output the number 10 on the screen.',
-      hint_ko: '도구 상자의 함수 카테고리에서 출력 블록을 찾아 시작 블록 밑에 홈을 맞춰 끼워보세요.',
-      hint_en: 'Find the output block in the toolbox functions category and snap it beneath the start block.',
+      hint_ko: '도구 상자의 함수 카테고리에서 print() 블록을 꺼내 시작 블록에 연결하고, 안쪽 슬롯에 10을 입력하세요.',
+      hint_en: 'Snap the print() block to the start block and enter 10 inside the slot.',
       targetCode: 'print(10)',
       testCases: [
         {
@@ -45,16 +52,16 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 2,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '한 자리 숫자 5를 출력해보세요.',
-      prompt_en: 'Output the single-digit number 5.',
-      hint_ko: '블록 안쪽의 흰색 입력 슬롯을 클릭하면 원하는 숫자를 변경할 수 있습니다.',
-      hint_en: 'Click on the inner white input slot of the block to change the number.',
-      targetCode: 'print(5)',
+      prompt_ko: '10 + 5 덧셈식을 계산하여 결과(15)를 출력해보세요.',
+      prompt_en: 'Calculate and print the addition result of 10 + 5.',
+      hint_ko: 'print() 블록의 입력 슬롯에 10 + 5를 입력하면 파이썬이 덧셈을 계산하여 15를 출력합니다.',
+      hint_en: 'Enter 10 + 5 into the print() slot to have Python calculate and print 15.',
+      targetCode: 'print(10 + 5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '5',
+          expectedOutput: '15',
         },
       ],
     },
@@ -63,16 +70,16 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '세 자리 큰 숫자 100을 출력해보세요.',
-      prompt_en: 'Output the 3-digit number 100.',
-      hint_ko: '파이썬에서 숫자는 글자(문자열)와 달리 따옴표("")를 감싸지 않고 숫자 자체로 다룹니다.',
-      hint_en: 'In Python, numbers are written directly without quotation marks, unlike text strings.',
-      targetCode: 'print(100)',
+      prompt_ko: '곱셈 기호(*)를 사용해 4 * 5를 계산하여 출력해보세요.',
+      prompt_en: 'Use the asterisk (*) operator to calculate and print 4 * 5.',
+      hint_ko: '파이썬에서 곱셈은 키보드의 별표(*) 기호를 사용합니다. 4 * 5를 넣으면 20이 출력됩니다.',
+      hint_en: 'In Python, multiplication uses the asterisk (*) operator. 4 * 5 produces 20.',
+      targetCode: 'print(4 * 5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '100',
+          expectedOutput: '20',
         },
       ],
     },
@@ -81,16 +88,16 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 4,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '숫자 0을 화면에 출력해보세요.',
-      prompt_en: 'Output the number 0 on the screen.',
-      hint_ko: '0 역시 양수나 음수처럼 파이썬에서 유효한 정수(int) 데이터입니다.',
-      hint_en: 'Zero is a valid integer (int) data type in Python, just like positive or negative numbers.',
-      targetCode: 'print(0)',
+      prompt_ko: '10 + 20 / 4를 계산하여 출력해보세요. (곱셈과 나눗셈은 덧셈보다 먼저 계산됩니다)',
+      prompt_en: 'Calculate and print 10 + 20 / 4. (Multiplication and division evaluate before addition)',
+      hint_ko: '수학의 사칙연산 규칙과 동일하게 20 / 4(5.0)가 먼저 계산된 후 10이 더해져 15.0이 출력됩니다.',
+      hint_en: 'Just like math order of operations, 20 / 4 (5.0) runs first, then 10 is added, producing 15.0.',
+      targetCode: 'print(10 + 20 / 4)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '0',
+          expectedOutput: '15.0',
         },
       ],
     },
@@ -99,22 +106,22 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '행운의 숫자 7을 출력해보세요.',
-      prompt_en: 'Output the lucky number 7.',
-      hint_ko: '시작 블록의 아래쪽 홈에 블록이 자석처럼 딸깍 붙었는지 확인하고 실행 버튼을 눌러보세요.',
-      hint_en: 'Make sure the block snaps firmly into the bottom notch of the start block before running.',
-      targetCode: 'print(7)',
+      prompt_ko: '(10 + 20) * 3을 계산하여 출력해보세요. (괄호 안의 식이 가장 먼저 계산됩니다)',
+      prompt_en: 'Calculate and print (10 + 20) * 3. (Expressions inside parentheses evaluate first)',
+      hint_ko: '괄호 ()로 묶은 10 + 20(= 30)이 가장 먼저 계산되고, 그 결과에 3을 곱해 90이 출력됩니다.',
+      hint_en: 'Parentheses () take the highest priority: 10 + 20 (= 30) evaluates first, then multiplied by 3 to produce 90.',
+      targetCode: 'print((10 + 20) * 3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '7',
+          expectedOutput: '90',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // [타이핑 모드] 6~10단계: V1 챌린지 모드 (빈칸 채우기, 오타 수정)
+    // [타이핑 모드] 6~10단계: 1~5번 유형의 문제형 반복
     // - 빈칸은 § 기호로 지정 (예: §§은 2글자 빈칸 박스)
     // ------------------------------------------------------------------------
     {
@@ -122,17 +129,17 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 숫자 10을 출력해보세요.',
-      prompt_en: 'Fill in the blank to output the number 10.',
-      hint_ko: '함수 괄호 () 안에는 화면에 보여주고 싶은 전달값(인자)이 들어갑니다.',
-      hint_en: 'The value (argument) you want to display goes inside the function parentheses ().',
+      prompt_ko: '빈칸을 채워 숫자 77을 화면에 출력해보세요.',
+      prompt_en: 'Fill in the blank to print the number 77.',
+      hint_ko: 'print() 함수의 괄호 안에 출력하고 싶은 두 자리 숫자 77을 입력하세요.',
+      hint_en: 'Type the two-digit number 77 inside the print() function parentheses.',
       templateCode: 'print(§§)',
-      targetCode: 'print(10)',
+      targetCode: 'print(77)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '10',
+          expectedOutput: '77',
         },
       ],
     },
@@ -141,17 +148,17 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 7,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 숫자 5를 출력해보세요.',
-      prompt_en: 'Fill in the blank to output the number 5.',
-      hint_ko: '빈칸 박스의 길이는 입력해야 할 글자 수와 일치합니다.',
-      hint_en: 'The width of the blank box matches the number of characters required.',
-      templateCode: 'print(§)',
-      targetCode: 'print(5)',
+      prompt_ko: '빈칸을 채워 20 + 30의 덧셈 결과를 출력해보세요.',
+      prompt_en: 'Fill in the blank to print the addition result of 20 + 30.',
+      hint_ko: '더하기 기호(+) 뒤에 더할 숫자 30을 입력하세요.',
+      hint_en: 'Type the number 30 after the plus (+) operator.',
+      templateCode: 'print(20 + §§)',
+      targetCode: 'print(20 + 30)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '5',
+          expectedOutput: '50',
         },
       ],
     },
@@ -160,17 +167,17 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '오타를 고쳐 숫자 100을 출력해보세요.',
-      prompt_en: 'Fix the typo to output the number 100.',
-      hint_ko: '파이썬의 화면 출력 표준 함수 이름은 영어로 "인쇄하다"라는 뜻의 철자를 가집니다.',
-      hint_en: 'The standard Python function name for display is spelled like the English word for "to print".',
-      templateCode: 'pritn(100)',
-      targetCode: 'print(100)',
+      prompt_ko: '수학 기호 x 대신 파이썬 곱셈 기호(*)를 사용하여 6 * 7의 결과를 출력해보세요.',
+      prompt_en: 'Fix the typo using the Python multiplication operator (*) instead of x to print 6 * 7.',
+      hint_ko: '키보드의 별표(*) 기호가 파이썬의 곱셈 연산자입니다. 알파벳 x를 *로 고쳐보세요.',
+      hint_en: 'Replace the letter x with the asterisk (*) operator to perform multiplication.',
+      templateCode: 'print(6 x 7)',
+      targetCode: 'print(6 * 7)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '100',
+          expectedOutput: '42',
         },
       ],
     },
@@ -179,17 +186,17 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 숫자 0을 출력해보세요.',
-      prompt_en: 'Fill in the blank to output the number 0.',
-      hint_ko: '알파벳 대문자 O가 아닌, 키보드 숫자 0 키를 눌러 입력해야 합니다.',
-      hint_en: 'Make sure to type the numeric key 0 rather than the uppercase letter O.',
-      templateCode: 'print(§)',
-      targetCode: 'print(0)',
+      prompt_ko: '빈칸에 나눗셈 기호(/)를 넣어 50 + 100 / 2의 계산 결과(100.0)를 출력해보세요.',
+      prompt_en: 'Fill in the slash (/) to print the result of 50 + 100 / 2 (100.0).',
+      hint_ko: '빈칸에 슬래시(/)를 입력하면 100 / 2(50.0)가 먼저 계산된 후 50이 더해집니다.',
+      hint_en: 'Type the slash (/) operator: 100 / 2 evaluates to 50.0 first, then 50 is added.',
+      templateCode: 'print(50 + 100 § 2)',
+      targetCode: 'print(50 + 100 / 2)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '0',
+          expectedOutput: '100.0',
         },
       ],
     },
@@ -198,17 +205,17 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 숫자 77을 출력해보세요.',
-      prompt_en: 'Fill in the blank to output the number 77.',
-      hint_ko: '두 자리 연속된 동일한 숫자를 빈칸 박스 안에 차례대로 입력하세요.',
-      hint_en: 'Type the two consecutive identical digits into the blank box sequentially.',
-      templateCode: 'print(§§)',
-      targetCode: 'print(77)',
+      prompt_ko: '빈칸에 괄호 ()를 채워 2 + 3을 먼저 계산한 뒤 4를 곱한 결과(20)를 출력해보세요.',
+      prompt_en: 'Fill in the parentheses () so that 2 + 3 evaluates first before multiplying by 4.',
+      hint_ko: '괄호 (와 ) 사이에 2 + 3을 감싸면 덧셈이 곱셈보다 먼저 계산되어 20이 출력됩니다.',
+      hint_en: 'Enclosing 2 + 3 in parentheses forces addition before multiplication, yielding 20.',
+      templateCode: 'print(§2 + 3§ * 4)',
+      targetCode: 'print((2 + 3) * 4)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '77',
+          expectedOutput: '20',
         },
       ],
     },

@@ -25,9 +25,9 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
     levels: [
       { 
         levelNumber: 1, 
-        title_ko: 'print() 함수와 숫자의 기초', 
-        title_en: 'print() & Numbers Foundation',
-        syntaxTags: ['print()'],
+        title_ko: 'print() 함수와 사칙연산의 기초', 
+        title_en: 'print() & Basic Arithmetic',
+        syntaxTags: ['print()', '+, -, *, /', '( )'],
       },
       { 
         levelNumber: 2, 
