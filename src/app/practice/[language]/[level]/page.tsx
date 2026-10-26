@@ -729,16 +729,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     }
   }, [searchParams?.step, round.questions.length]);
 
-  const [hearts, setHearts] = useState<number>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(`hearts_${rawLang}_${levelNum}`);
-      if (saved !== null) {
-        const parsed = parseInt(saved, 10);
-        if (!isNaN(parsed) && parsed >= 0 && parsed <= 5) return parsed;
-      }
-    }
-    return 5;
-  });
+  const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
   const hintContainerRef = useRef<HTMLDivElement>(null);
 
@@ -754,19 +745,30 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   }, [showHint]);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
 
-  const [isGameOver, setIsGameOver] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const isHeartsLoadedRef = useRef(false);
+
+  // Sync saved hearts from localStorage after client hydration (prevents SSR hydration error)
+  useEffect(() => {
+    try {
       const saved = localStorage.getItem(`hearts_${rawLang}_${levelNum}`);
-      if (saved === '0') return true;
-    }
-    return false;
-  });
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed >= 0 && parsed <= 5) {
+          setHearts(parsed);
+          if (parsed === 0) setIsGameOver(true);
+        }
+      }
+    } catch { }
+    isHeartsLoadedRef.current = true;
+  }, [rawLang, levelNum]);
 
   // Persist hearts in localStorage so refreshing doesn't refill lost hearts
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (!isHeartsLoadedRef.current) return;
+    try {
       localStorage.setItem(`hearts_${rawLang}_${levelNum}`, String(hearts));
-    }
+    } catch { }
   }, [hearts, rawLang, levelNum]);
 
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
@@ -6522,6 +6524,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   flexShrink: 0,
                 }}
                 title={`남은 하트: ${hearts} / 5`}
+                suppressHydrationWarning
               >
                 {/* Floating -1 Heart Popup when heart is lost */}
                 {isHeartShaking && (
@@ -6567,6 +6570,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
                 {/* Numeric Heart Counter */}
                 <span
+                  suppressHydrationWarning
                   style={{
                     fontSize: '0.82rem',
                     fontWeight: 900,

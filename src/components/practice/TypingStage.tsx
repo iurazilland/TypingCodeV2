@@ -293,6 +293,7 @@ export default function TypingStage({
 
   // Next expected character for virtual keyboard (based on templateCode first, hiding '§' blank symbol)
   const nextChar = useMemo(() => {
+    if (question.kind === 'fix_bug') return '';
     const keyboardGuide = templateCode || targetCode;
     if (cursorIndex < keyboardGuide.length) {
       const ch = keyboardGuide[cursorIndex];
@@ -302,7 +303,7 @@ export default function TypingStage({
       return ch;
     }
     return '';
-  }, [cursorIndex, templateCode, targetCode]);
+  }, [cursorIndex, templateCode, targetCode, question.kind]);
 
   // Split guideCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
   const targetLines = useMemo(() => guideCode.split('\n'), [guideCode]);
@@ -817,11 +818,8 @@ export default function TypingStage({
                               }
                             }
                           } else if (question.kind === 'fix_bug') {
-                            // 오타 수정: 정답 코드(targetCode)와 비교하여 올바른 수정 문자는 정상(흰색) 표시
-                            const correctChar = (targetCodeLines[lineIdx] || '')[colIdx];
-                            if (correctChar && userChar !== correctChar) {
-                              isCharError = true;
-                            }
+                            // 오타 수정: 사용자가 타이핑하는 중에는 실시간 오타(빨간색)를 표시하지 않음 (스포일러 원천 차단)
+                            isCharError = false;
                           } else {
                             // 일반 고정 코드: 표시된 글자와 다르면 오타 처리
                             const targetChar = targetLineText[colIdx];

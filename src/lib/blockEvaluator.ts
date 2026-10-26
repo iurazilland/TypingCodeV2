@@ -260,7 +260,7 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
       // Variable reference
       if (/^[a-zA-Z_]\w*$/.test(expr)) {
         if (expr in scope) return scope[expr];
-        return expr;
+        throw new Error(`NameError: name '${expr}' is not defined`);
       }
 
       // Mathematical & boolean expressions
@@ -289,15 +289,30 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
         js = js.replace(/(\(?[^()*]+?\)?)\s*___POW___\s*(\(?[^()*]+?\)?)/, 'Math.pow(($1), ($2))');
       }
 
-      if (!/^[0-9+\-*/%().\s,Mathfloorpow"'[\]{}><=!&|]+$/.test(js)) {
-        return expr;
+      // Strip string literals to validate remaining code syntax safely
+      const codeWithoutStrings = js.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""');
+
+      // Check for undefined identifiers outside string literals
+      const identMatch = codeWithoutStrings.match(/\b([a-zA-Z_]\w*)\b/);
+      if (identMatch) {
+        const word = identMatch[1];
+        if (!['Math', 'true', 'false', 'null', 'floor', 'pow'].includes(word)) {
+          if (/\d\s+[a-zA-Z_]/.test(codeWithoutStrings) || /[a-zA-Z_]\s+\d/.test(codeWithoutStrings)) {
+            throw new Error(`SyntaxError: invalid syntax`);
+          }
+          throw new Error(`NameError: name '${word}' is not defined`);
+        }
+      }
+
+      if (!/^[0-9+\-*/%().\s,Mathfloorpow"'[\]{}><=!&|]+$/.test(codeWithoutStrings)) {
+        throw new Error(`SyntaxError: invalid syntax`);
       }
 
       try {
         const fn = new Function(`"use strict"; return (${js})`);
         return fn();
       } catch {
-        return expr;
+        throw new Error(`SyntaxError: invalid syntax`);
       }
     };
 
