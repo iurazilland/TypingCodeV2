@@ -4906,8 +4906,41 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         </div>
 
 
-        {/* Right: Level Step Navigator */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        {/* Right: Level Step Navigator & Screen Tour Button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* Spotlight Tour Manual Trigger Button */}
+          <button
+            type="button"
+            onClick={() => setIsTourOpen(true)}
+            title={isEn ? 'Screen Guide Tour' : '화면 구성 가이드 투어'}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '0 12px',
+              height: '32px',
+              borderRadius: '8px',
+              background: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.3)',
+              color: '#38bdf8',
+              fontSize: '0.80rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(56, 189, 248, 0.18)';
+              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(56, 189, 248, 0.1)';
+              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+            }}
+          >
+            <Compass size={14} color="#38bdf8" />
+            <span>{isEn ? 'Tour' : '화면 둘러보기'}</span>
+          </button>
+
           <div
             id="tour-step-nav"
             style={{
@@ -6652,31 +6685,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               </span>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                {/* Spotlight Tour Manual Trigger Button */}
-                <button
-                  type="button"
-                  onClick={() => setIsTourOpen(true)}
-                  title={isEn ? 'Screen Guide Tour' : '화면 구성 가이드 투어'}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '0 12px',
-                    height: '34px',
-                    borderRadius: '8px',
-                    background: 'rgba(56, 189, 248, 0.1)',
-                    border: '1px solid rgba(56, 189, 248, 0.3)',
-                    color: '#38bdf8',
-                    fontSize: '0.82rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <Compass size={15} color="#38bdf8" />
-                  <span>{isEn ? 'Tour' : '화면 둘러보기'}</span>
-                </button>
-
                 {/* Hint Toggle Button Container with Relative Anchor for Floating Popover */}
                 <div style={{ position: 'relative' }} ref={hintContainerRef}>
                   <button
