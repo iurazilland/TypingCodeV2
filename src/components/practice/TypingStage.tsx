@@ -243,20 +243,25 @@ export default function TypingStage({
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenInputRef = useRef<HTMLTextAreaElement>(null);
 
+  const onCodeChangeRef = useRef(onCodeChange);
+  useEffect(() => {
+    onCodeChangeRef.current = onCodeChange;
+  });
+
   // Reset when question changes
   useEffect(() => {
     setTypedCode('');
     setCursorIndex(0);
-    onCodeChange('');
+    onCodeChangeRef.current('');
     setTimeout(() => {
       hiddenInputRef.current?.focus();
     }, 50);
-  }, [question.id, question.targetCode, question.templateCode, onCodeChange]);
+  }, [question.id]);
 
   // Sync typed code upward
   useEffect(() => {
-    onCodeChange(typedCode);
-  }, [typedCode, onCodeChange]);
+    onCodeChangeRef.current(typedCode);
+  }, [typedCode]);
 
   // Focus input on click anywhere in editor
   const handleStageClick = () => {

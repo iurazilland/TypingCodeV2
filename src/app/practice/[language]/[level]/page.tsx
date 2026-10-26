@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -728,7 +728,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       }
     }
   }, [searchParams?.step, round.questions.length]);
-  const [hearts, setHearts] = useState<number>(5);
+
+  const [hearts, setHearts] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`hearts_${rawLang}_${levelNum}`);
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed >= 0 && parsed <= 5) return parsed;
+      }
+    }
+    return 5;
+  });
   const [showHint, setShowHint] = useState<boolean>(false);
   const hintContainerRef = useRef<HTMLDivElement>(null);
 
@@ -744,13 +754,33 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   }, [showHint]);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
 
-  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`hearts_${rawLang}_${levelNum}`);
+      if (saved === '0') return true;
+    }
+    return false;
+  });
+
+  // Persist hearts in localStorage so refreshing doesn't refill lost hearts
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`hearts_${rawLang}_${levelNum}`, String(hearts));
+    }
+  }, [hearts, rawLang, levelNum]);
+
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [terminalOutput, setTerminalOutput] = useState<string>('');
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isErrorShown, setIsErrorShown] = useState<boolean>(false);
   const [isHeartShaking, setIsHeartShaking] = useState<boolean>(false);
   const [runtimeMemory, setRuntimeMemory] = useState<Record<string, any>>({});
+
+  // Stable callback for TypingStage to prevent unnecessary rerenders/resets
+  const handleUserCodeChange = useCallback((c: string) => {
+    setUserCode(c);
+    setIsErrorShown(false);
+  }, []);
 
   // Execution Mode & Step Debugging States
   const [execMode, setExecMode] = useState<'normal' | 'debug'>('normal');
@@ -2118,6 +2148,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const handleResetRound = () => {
     lastExecutedCodeRef.current = '';
     setHearts(5);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`hearts_${rawLang}_${levelNum}`, '5');
+    }
     setCurrentStepIndex(0);
     setIsGameOver(false);
     setCanvasBlocks([createDefaultStartBlock()]);
@@ -6889,10 +6922,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                  ============================================================ */
               <TypingStage
                 question={currentQuestion}
-                onCodeChange={(c) => {
-                  setUserCode(c);
-                  if (isErrorShown) setIsErrorShown(false);
-                }}
+                onCodeChange={handleUserCodeChange}
                 onSubmit={handleExecuteManual}
                 isSuccess={isSuccess}
                 isExecuting={isExecuting || isDebugging}
