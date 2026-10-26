@@ -4909,6 +4909,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         {/* Right: Level Step Navigator */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div
+            id="tour-step-nav"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -5038,7 +5039,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           }}
         >
           {/* Top Half: Terminal Console (Locked to flex bounds with internal scrollbar) */}
-          <div style={{
+          <div
+            id="tour-terminal-console"
+            style={{
             flex: '1 1 52%',
             display: 'flex',
             flexDirection: 'column',
@@ -5067,8 +5070,50 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
               {/* Execution Controls: [0.5x | 1x | 2x | 3x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 실행 / ■ 정지] */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {/* Debug Speed Selector (Placed to the left of the toggle switch) */}
-                {execMode === 'debug' && (
+                {/* Debug Speed & Mode Toggle Switch Container */}
+                <div
+                  id="tour-debug-mode"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  {/* Debug Speed Selector (Placed to the left of the toggle switch) */}
+                  {execMode === 'debug' && (
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      background: 'rgba(255, 255, 255, 0.06)',
+                      padding: '2px',
+                      borderRadius: '7px',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}>
+                      {[0.2, 0.5, 1, 2, 3].map((spd) => (
+                        <button
+                          key={spd}
+                          type="button"
+                          onClick={() => {
+                            setDebugSpeed(spd);
+                            debugSpeedRef.current = spd;
+                          }}
+                          style={{
+                            padding: '3px 6px',
+                            borderRadius: '4px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            background: debugSpeed === spd ? 'rgba(251, 146, 60, 0.35)' : 'transparent',
+                            color: debugSpeed === spd ? '#fed7aa' : '#64748b',
+                            fontWeight: 800,
+                            fontSize: '0.66rem',
+                            fontFamily: 'var(--font-mono)',
+                            transition: 'all 0.15s ease',
+                          }}
+                          title={`디버깅 실행 속도: ${spd}배속 (기준: 0.6초, 실행 중 즉시 변경 가능)`}
+                        >
+                          {spd}x
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Mode Toggle Switch: [🐞 디버깅 | ⚡ 일반] */}
                   <div style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -5077,92 +5122,57 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     borderRadius: '7px',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                   }}>
-                    {[0.2, 0.5, 1, 2, 3].map((spd) => (
-                      <button
-                        key={spd}
-                        type="button"
-                        onClick={() => {
-                          setDebugSpeed(spd);
-                          debugSpeedRef.current = spd;
-                        }}
-                        style={{
-                          padding: '3px 6px',
-                          borderRadius: '4px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          background: debugSpeed === spd ? 'rgba(251, 146, 60, 0.35)' : 'transparent',
-                          color: debugSpeed === spd ? '#fed7aa' : '#64748b',
-                          fontWeight: 800,
-                          fontSize: '0.66rem',
-                          fontFamily: 'var(--font-mono)',
-                          transition: 'all 0.15s ease',
-                        }}
-                        title={`디버깅 실행 속도: ${spd}배속 (기준: 0.6초, 실행 중 즉시 변경 가능)`}
-                      >
-                        {spd}x
-                      </button>
-                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setExecMode('debug')}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '3px 8px',
+                        borderRadius: '5px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        background: execMode === 'debug' ? 'rgba(234, 88, 12, 0.25)' : 'transparent',
+                        color: execMode === 'debug' ? '#fb923c' : '#94a3b8',
+                        fontWeight: execMode === 'debug' ? 800 : 600,
+                        fontSize: '0.72rem',
+                        transition: 'all 0.15s ease',
+                      }}
+                      title={isEn ? 'Debug Mode (Step-by-step trace)' : '디버깅 모드 (단계별 순차 실행 및 메모리 추적)'}
+                    >
+                      <Bug size={11} />
+                      <span>{isEn ? 'Debug' : '디버깅'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setExecMode('normal')}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '3px 8px',
+                        borderRadius: '5px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        background: execMode === 'normal' ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
+                        color: execMode === 'normal' ? '#38bdf8' : '#94a3b8',
+                        fontWeight: execMode === 'normal' ? 800 : 600,
+                        fontSize: '0.72rem',
+                        transition: 'all 0.15s ease',
+                      }}
+                      title={isEn ? 'Normal Run Mode (0ms instant)' : '일반 실행 모드 (0ms 즉각 실행)'}
+                    >
+                      <Zap size={11} />
+                      <span>{isEn ? 'Normal' : '일반'}</span>
+                    </button>
                   </div>
-                )}
-
-                {/* Mode Toggle Switch: [🐞 디버깅 | ⚡ 일반] */}
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  padding: '2px',
-                  borderRadius: '7px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                }}>
-                  <button
-                    type="button"
-                    onClick={() => setExecMode('debug')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '5px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      background: execMode === 'debug' ? 'rgba(234, 88, 12, 0.25)' : 'transparent',
-                      color: execMode === 'debug' ? '#fb923c' : '#94a3b8',
-                      fontWeight: execMode === 'debug' ? 800 : 600,
-                      fontSize: '0.72rem',
-                      transition: 'all 0.15s ease',
-                    }}
-                    title={isEn ? 'Debug Mode (Step-by-step trace)' : '디버깅 모드 (단계별 순차 실행 및 메모리 추적)'}
-                  >
-                    <Bug size={11} />
-                    <span>{isEn ? 'Debug' : '디버깅'}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setExecMode('normal')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '5px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      background: execMode === 'normal' ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
-                      color: execMode === 'normal' ? '#38bdf8' : '#94a3b8',
-                      fontWeight: execMode === 'normal' ? 800 : 600,
-                      fontSize: '0.72rem',
-                      transition: 'all 0.15s ease',
-                    }}
-                    title={isEn ? 'Normal Run Mode (0ms instant)' : '일반 실행 모드 (0ms 즉각 실행)'}
-                  >
-                    <Zap size={11} />
-                    <span>{isEn ? 'Normal' : '일반'}</span>
-                  </button>
                 </div>
 
                 {/* Manual Run / Stop Button (Fixed 68px width: no size jumping!) */}
                 <button
+                  id="tour-run-btn"
                   type="button"
                   onClick={handleExecuteManual}
                   title={isExecuting || isDebugging ? (isEn ? 'Stop Execution' : '실행 정지') : (isEn ? 'Run (Ctrl+Enter)' : '실행 (단축키: Ctrl+Enter)')}
@@ -5325,7 +5335,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           </div>
 
           {/* Bottom Half: DYNAMIC COMPACT PRE-PLACED RAM STORAGE BOXES */}
-          <div style={{
+          <div
+            id="tour-memory-visualizer"
+            style={{
             flex: '1 1 48%',
             display: 'flex',
             flexDirection: 'column',
@@ -6512,6 +6524,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             }}>
               {/* Continuous Progress Gauge Bar extending to just before hearts */}
               <div
+                id="tour-progress-bar"
                 title={isEn ? `Progress: ${progressPercent}%` : `진행도: ${progressPercent}%`}
                 style={{
                   flex: 1,
@@ -6537,6 +6550,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
               {/* Far Right: Prominent Duolingo-style Hearts Pill Badge */}
               <div
+                id="tour-hearts-system"
                 style={{
                   position: 'relative',
                   display: 'flex',
@@ -6623,14 +6637,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               gap: '12px',
               minHeight: '36px',
             }}>
-              <span style={{
-                fontSize: '1.2rem',
-                fontWeight: 800,
-                color: '#ffffff',
-                letterSpacing: '-0.015em',
-                lineHeight: 1.3,
-                flex: '1 1 auto',
-              }}>
+              <span
+                id="tour-mission-prompt"
+                style={{
+                  fontSize: '1.2rem',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  letterSpacing: '-0.015em',
+                  lineHeight: 1.3,
+                  flex: '1 1 auto',
+                }}
+              >
                 {isEn ? (currentQuestion.prompt_en || currentQuestion.prompt_ko) : currentQuestion.prompt_ko}
               </span>
 
