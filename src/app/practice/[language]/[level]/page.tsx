@@ -27,7 +27,8 @@ import {
   Zap,
   Bug,
   Loader2,
-  Square
+  Square,
+  AlertCircle
 } from 'lucide-react';
 import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
@@ -747,6 +748,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [terminalOutput, setTerminalOutput] = useState<string>('');
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isErrorShown, setIsErrorShown] = useState<boolean>(false);
+  const [isHeartShaking, setIsHeartShaking] = useState<boolean>(false);
   const [runtimeMemory, setRuntimeMemory] = useState<Record<string, any>>({});
 
   // Execution Mode & Step Debugging States
@@ -908,6 +911,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setRuntimeMemory({});
     setHighlightedMemoryKeys(new Set());
     setIsSuccess(false);
+    setIsErrorShown(false);
+    setIsHeartShaking(false);
     setShowHint(false);
   }, [currentStepIndex]);
 
@@ -1773,11 +1778,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
     debugAbortRef.current = false;
 
-    // Always clear terminal, memory, and success state cleanly before new execution
+    // Always clear terminal, memory, and success/error state cleanly before new execution
     setTerminalOutput('');
     setRuntimeMemory({});
     setHighlightedMemoryKeys(new Set());
     setIsSuccess(false);
+    setIsErrorShown(false);
 
     // Yield briefly so React flushes the cleared terminal state to the DOM
     await new Promise((r) => setTimeout(r, 60));
@@ -1849,8 +1855,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
         if (passed) {
           setIsSuccess(true);
+          setIsErrorShown(false);
         } else {
           setIsSuccess(false);
+          setIsErrorShown(true);
+          setIsHeartShaking(true);
+          setTimeout(() => setIsHeartShaking(false), 800);
           setHearts((prev) => {
             const next = Math.max(0, prev - 1);
             if (next === 0) setIsGameOver(true);
@@ -1860,6 +1870,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       } catch (err: any) {
         setTerminalOutput(err?.message || '실행 중 오류가 발생했습니다.');
         setIsSuccess(false);
+        setIsErrorShown(true);
+        setIsHeartShaking(true);
+        setTimeout(() => setIsHeartShaking(false), 800);
+        setHearts((prev) => {
+          const next = Math.max(0, prev - 1);
+          if (next === 0) setIsGameOver(true);
+          return next;
+        });
       } finally {
         setIsExecuting(false);
       }
@@ -1978,8 +1996,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
             if (passed) {
               setIsSuccess(true);
+              setIsErrorShown(false);
             } else {
               setIsSuccess(false);
+              setIsErrorShown(true);
+              setIsHeartShaking(true);
+              setTimeout(() => setIsHeartShaking(false), 800);
               setHearts((prev) => {
                 const next = Math.max(0, prev - 1);
                 if (next === 0) setIsGameOver(true);
@@ -1992,6 +2014,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         if (!debugAbortRef.current) {
           setTerminalOutput(err?.message || '디버깅 실행 중 오류가 발생했습니다.');
           setIsSuccess(false);
+          setIsErrorShown(true);
+          setIsHeartShaking(true);
+          setTimeout(() => setIsHeartShaking(false), 800);
+          setHearts((prev) => {
+            const next = Math.max(0, prev - 1);
+            if (next === 0) setIsGameOver(true);
+            return next;
+          });
         }
       } finally {
         setIsDebugging(false);
@@ -2094,6 +2124,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setUserCode('');
     setTerminalOutput('');
     setIsSuccess(false);
+    setIsErrorShown(false);
+    setIsHeartShaking(false);
   };
 
   // Global dragend listener to ensure snap indicators and dragging states reset cleanly
@@ -5149,6 +5181,27 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     <span>정답 (Passed)</span>
                   </span>
                 )}
+                {isErrorShown && (
+                  <span
+                    style={{
+                      marginLeft: 'auto',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      color: '#f87171',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      padding: '2px 9px',
+                      borderRadius: '5px',
+                      border: '1px solid rgba(239, 68, 68, 0.35)',
+                      boxShadow: '0 0 10px rgba(239, 68, 68, 0.25)',
+                    }}
+                  >
+                    <AlertCircle size={13} color="#ef4444" />
+                    <span>오답 (Failed)</span>
+                  </span>
+                )}
               </div>
 
               {terminalOutput ? (
@@ -6415,28 +6468,81 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 />
               </div>
 
-              {/* Far Right: 5 Large Duolingo Hearts (Border & text removed) */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                flexShrink: 0,
-              }}>
-                {[1, 2, 3, 4, 5].map((hIndex) => {
-                  const isFull = hIndex <= hearts;
-                  return (
-                    <Heart
-                      key={hIndex}
-                      size={20}
-                      fill={isFull ? '#ef4444' : 'transparent'}
-                      color={isFull ? '#ef4444' : 'rgba(255, 255, 255, 0.25)'}
-                      style={{
-                        filter: isFull ? 'drop-shadow(0 0 6px rgba(239, 68, 68, 0.75))' : 'none',
-                        transition: 'all 0.2s ease',
-                      }}
-                    />
-                  );
-                })}
+              {/* Far Right: Prominent Duolingo-style Hearts Pill Badge */}
+              <div
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '4px 12px',
+                  borderRadius: '999px',
+                  background: isHeartShaking ? 'rgba(239, 68, 68, 0.25)' : 'rgba(239, 68, 68, 0.08)',
+                  border: isHeartShaking ? '1.5px solid #ef4444' : '1px solid rgba(239, 68, 68, 0.3)',
+                  boxShadow: isHeartShaking
+                    ? '0 0 20px rgba(239, 68, 68, 0.6), inset 0 0 10px rgba(239, 68, 68, 0.3)'
+                    : '0 0 10px rgba(239, 68, 68, 0.15)',
+                  animation: isHeartShaking ? 'heartLossShake 0.6s ease' : 'none',
+                  transition: 'background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
+                  flexShrink: 0,
+                }}
+                title={`남은 하트: ${hearts} / 5`}
+              >
+                {/* Floating -1 Heart Popup when heart is lost */}
+                {isHeartShaking && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '-20px',
+                      right: '12px',
+                      color: '#f87171',
+                      fontWeight: 900,
+                      fontSize: '0.85rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '2px',
+                      animation: 'floatUpFadeOut 0.8s ease forwards',
+                      pointerEvents: 'none',
+                      textShadow: '0 0 8px rgba(239, 68, 68, 0.8)',
+                    }}
+                  >
+                    -1 ❤️
+                  </span>
+                )}
+
+                {/* 5 Heart Icons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {[1, 2, 3, 4, 5].map((hIndex) => {
+                    const isFull = hIndex <= hearts;
+                    return (
+                      <Heart
+                        key={hIndex}
+                        size={18}
+                        fill={isFull ? '#ef4444' : 'transparent'}
+                        color={isFull ? '#ef4444' : 'rgba(255, 255, 255, 0.25)'}
+                        style={{
+                          filter: isFull ? 'drop-shadow(0 0 5px rgba(239, 68, 68, 0.7))' : 'none',
+                          transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                          transform: isFull ? 'scale(1)' : 'scale(0.85)',
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+
+                {/* Numeric Heart Counter */}
+                <span
+                  style={{
+                    fontSize: '0.82rem',
+                    fontWeight: 900,
+                    fontFamily: 'var(--font-mono)',
+                    color: hearts <= 1 ? '#f87171' : '#fca5a5',
+                    marginLeft: '2px',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  {hearts}/5
+                </span>
               </div>
             </div>
 
@@ -6781,7 +6887,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                  ============================================================ */
               <TypingStage
                 question={currentQuestion}
-                onCodeChange={setUserCode}
+                onCodeChange={(c) => {
+                  setUserCode(c);
+                  if (isErrorShown) setIsErrorShown(false);
+                }}
                 onSubmit={handleExecuteManual}
                 isSuccess={isSuccess}
                 isExecuting={isExecuting || isDebugging}
@@ -7119,6 +7228,101 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               Enter ↵
             </span>
             <ChevronRight size={16} />
+          </button>
+        </div>
+      )}
+
+      {/* ====================================================================
+          1.5 ERROR BOTTOM DOCK (오답 발생 시: 화면을 가리지 않고 하단에 피드백 표시)
+          ==================================================================== */}
+      {isErrorShown && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 9000,
+            width: 'min(760px, calc(100% - 32px))',
+            padding: '14px 22px',
+            background: 'rgba(24, 12, 18, 0.96)',
+            backdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(239, 68, 68, 0.55)',
+            borderRadius: '18px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(239, 68, 68, 0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            animation: 'bottomDockSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          }}
+        >
+          {/* Left: Glowing Red Alert Badge + Text & Heart Loss Info */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+            <div
+              style={{
+                width: '42px',
+                height: '42px',
+                minWidth: '42px',
+                borderRadius: '12px',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 16px rgba(239, 68, 68, 0.35)',
+              }}
+            >
+              <AlertCircle size={24} color="#ef4444" />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: '1.02rem', fontWeight: 900, color: '#fecaca', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>❌ 아쉽네요, 다시 도전해보세요!</span>
+                <span
+                  style={{
+                    fontSize: '0.74rem',
+                    fontWeight: 800,
+                    color: '#f87171',
+                    background: 'rgba(239, 68, 68, 0.2)',
+                    border: '1px solid rgba(239, 68, 68, 0.4)',
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                  }}
+                >
+                  하트 -1 (남은 하트: {hearts}개)
+                </span>
+              </div>
+              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                터미널에 출력된 결과와 문제의 목표 출력을 비교하여 코드를 수정해보세요.
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Dismiss / Retry Button */}
+          <button
+            onClick={() => setIsErrorShown(false)}
+            autoFocus
+            style={{
+              padding: '10px 18px',
+              fontSize: '0.88rem',
+              fontWeight: 800,
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              background: 'rgba(239, 68, 68, 0.22)',
+              border: '1px solid rgba(239, 68, 68, 0.5)',
+              color: '#fca5a5',
+              boxShadow: '0 0 14px rgba(239, 68, 68, 0.25)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <span>다시 시도</span>
+            <RotateCcw size={14} />
           </button>
         </div>
       )}

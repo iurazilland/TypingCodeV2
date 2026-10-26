@@ -361,3 +361,27 @@ button {
     transform: translate(-50%, 0) scale(1);
   }
 }
+
+@keyframes heartLossShake {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+  }
+  20%, 60% {
+    transform: translateX(-5px) scale(1.06);
+  }
+  40%, 80% {
+    transform: translateX(5px) scale(1.06);
+  }
+}
+
+@keyframes floatUpFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1.2);
+  }
+}
+
