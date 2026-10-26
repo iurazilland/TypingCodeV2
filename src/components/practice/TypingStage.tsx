@@ -243,6 +243,10 @@ export default function TypingStage({
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenInputRef = useRef<HTMLTextAreaElement>(null);
 
+  // IME (Korean/CJK) composition tracking
+  const composingStartIndexRef = useRef<number | null>(null);
+  const lastComposingLenRef = useRef<number>(0);
+
   const onCodeChangeRef = useRef(onCodeChange);
   useEffect(() => {
     onCodeChangeRef.current = onCodeChange;
@@ -252,6 +256,11 @@ export default function TypingStage({
   useEffect(() => {
     setTypedCode('');
     setCursorIndex(0);
+    composingStartIndexRef.current = null;
+    lastComposingLenRef.current = 0;
+    if (hiddenInputRef.current) {
+      hiddenInputRef.current.value = '';
+    }
     onCodeChangeRef.current('');
     setTimeout(() => {
       hiddenInputRef.current?.focus();
@@ -265,7 +274,69 @@ export default function TypingStage({
 
   // Focus input on click anywhere in editor
   const handleStageClick = () => {
+    composingStartIndexRef.current = null;
+    lastComposingLenRef.current = 0;
+    if (hiddenInputRef.current) {
+      hiddenInputRef.current.value = '';
+    }
     hiddenInputRef.current?.focus();
+  };
+
+  // IME Handlers: Support native Korean / multilingual character composition
+  const handleCompositionStart = () => {
+    composingStartIndexRef.current = cursorIndex;
+    lastComposingLenRef.current = 0;
+  };
+
+  const handleCompositionUpdate = (e: React.CompositionEvent<HTMLTextAreaElement>) => {
+    const composingText = e.data;
+    if (!composingText) return;
+
+    if (composingStartIndexRef.current === null) {
+      composingStartIndexRef.current = cursorIndex;
+      lastComposingLenRef.current = 0;
+    }
+
+    const startIdx = composingStartIndexRef.current;
+    const lenToReplace = lastComposingLenRef.current;
+
+    setTypedCode((prev) => {
+      const safeStart = Math.max(0, Math.min(startIdx, prev.length));
+      return prev.slice(0, safeStart) + composingText + prev.slice(safeStart + lenToReplace);
+    });
+
+    setCursorIndex(startIdx + composingText.length);
+    lastComposingLenRef.current = composingText.length;
+  };
+
+  const handleCompositionEnd = (e: React.CompositionEvent<HTMLTextAreaElement>) => {
+    const finalData = e.data;
+    if (finalData && composingStartIndexRef.current !== null) {
+      const startIdx = composingStartIndexRef.current;
+      const lenToReplace = lastComposingLenRef.current;
+      setTypedCode((prev) => {
+        const safeStart = Math.max(0, Math.min(startIdx, prev.length));
+        return prev.slice(0, safeStart) + finalData + prev.slice(safeStart + lenToReplace);
+      });
+      setCursorIndex(startIdx + finalData.length);
+    }
+    composingStartIndexRef.current = null;
+    lastComposingLenRef.current = 0;
+    if (hiddenInputRef.current) {
+      hiddenInputRef.current.value = '';
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    if (val && composingStartIndexRef.current === null) {
+      setTypedCode((prev) => {
+        const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
+        return prev.slice(0, safeIdx) + val + prev.slice(safeIdx);
+      });
+      setCursorIndex((prev) => prev + val.length);
+      e.target.value = '';
+    }
   };
 
   // Cursor line and column calculation
@@ -327,6 +398,11 @@ export default function TypingStage({
   // Handle typing input and keyboard cursor navigation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (isExecuting) return;
+
+    // While IME is actively composing (e.g. Korean / CJK), let browser IME handle it
+    if (e.nativeEvent.isComposing || e.key === 'Process' || e.key === 'HangulMode') {
+      return;
+    }
 
     // Arrow Left
     if (e.key === 'ArrowLeft') {
@@ -541,12 +617,18 @@ export default function TypingStage({
         position: 'relative',
       }}
     >
-      {/* Invisible input capturing keystrokes */}
+      {/* Invisible input capturing keystrokes and IME composition */}
       <textarea
         ref={hiddenInputRef}
-        value=""
-        onChange={() => {}}
+        defaultValue=""
+        onChange={handleInputChange}
+        onCompositionStart={handleCompositionStart}
+        onCompositionUpdate={handleCompositionUpdate}
+        onCompositionEnd={handleCompositionEnd}
         onKeyDown={handleKeyDown}
+        autoCapitalize="off"
+        autoCorrect="off"
+        spellCheck={false}
         onPaste={(e) => {
           e.preventDefault();
           const text = e.clipboardData.getData('text');
