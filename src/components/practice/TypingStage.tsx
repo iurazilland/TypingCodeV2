@@ -883,18 +883,20 @@ export default function TypingStage({
                             if (colIdx >= blankStartIdx && colIdx <= blankLastIdx) {
                               // 빈칸 내부: 사용자가 무엇을 적든 오타 처리하지 않음
                               isCharError = false;
-                            } else if (colIdx < blankStartIdx) {
-                              // 빈칸 이전 고정 코드: 이미 표시된 글자와 다르면 빨간색 오타 처리
-                              const targetChar = targetLineText[colIdx];
-                              if (userChar !== targetChar) {
-                                isCharError = true;
-                              }
                             } else {
-                              // 빈칸 이후 닫는 괄호 등: suffix가 존재할 때 비교
-                              const suffix = targetLineText.slice(blankLastIdx + 1);
-                              const suffixOffset = colIdx - (userLineText.length - suffix.length);
-                              if (suffixOffset >= 0 && suffixOffset < suffix.length) {
-                                if (userChar !== suffix[suffixOffset]) {
+                              // 빈칸 외부: targetCode(정답) 또는 templateCode(가이드)와 일치하면 정상
+                              const targetChar = (targetCodeLines[lineIdx] || '')[colIdx];
+                              const templateChar = targetLineText[colIdx];
+                              if (userChar === targetChar || userChar === templateChar) {
+                                isCharError = false;
+                              } else {
+                                // 빈칸 길이가 달라 suffix 위치가 가변적인 경우 보정
+                                const suffix = targetLineText.slice(blankLastIdx + 1);
+                                const suffixStartInUser = userLineText.length - suffix.length;
+                                const suffixOffset = colIdx - suffixStartInUser;
+                                if (suffixOffset >= 0 && suffixOffset < suffix.length && userChar === suffix[suffixOffset]) {
+                                  isCharError = false;
+                                } else {
                                   isCharError = true;
                                 }
                               }
