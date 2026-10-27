@@ -217,7 +217,329 @@ export default function HomePage() {
         </section>
 
         {/* =================================================================
-            2. NOVEL CURRICULUM COMMAND DECK (Second Screen)
+            2. THE PROBLEM & THE BRIDGE (Why TypingCode is Essential)
+            ================================================================= */}
+        <section id="why-typingcode" style={{ marginBottom: '110px' }}>
+          
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 48px' }}>
+            <div className="brilliant-badge" style={{ marginBottom: '14px' }}>
+              Why TypingCode
+            </div>
+            <h2 style={{
+              fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
+              fontWeight: 800,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              marginBottom: '14px',
+              wordBreak: 'keep-all',
+            }}>
+              {isEn 
+                ? 'Why does learning to code always feel like hitting a wall?' 
+                : '코딩, 왜 매번 중간에서 막히고 멈추게 될까요?'}
+            </h2>
+            <p style={{ color: '#64748b', fontSize: '1.05rem', lineHeight: 1.6, wordBreak: 'keep-all', maxWidth: '640px', margin: '0 auto' }}>
+              {isEn
+                ? 'The problem was never your willpower. It was the way we were taught to learn code.'
+                : '당신의 끈기나 재능 탓이 아닙니다. 지금까지 우리가 코딩을 배워온 방식에 결정적인 함정이 있었습니다.'}
+            </p>
+          </div>
+
+          {/* 2 Problem Cards Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '24px',
+            marginBottom: '32px',
+          }}>
+            {/* Problem Card 1: Thick Books & Boring Lectures */}
+            <div style={{
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '20px',
+              padding: '32px',
+              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.05)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
+                  background: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '22px',
+                  marginBottom: '18px',
+                }}>
+                  📖
+                </div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                  PROBLEM 01
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px', wordBreak: 'keep-all' }}>
+                  {isEn 
+                    ? '800-Page Textbooks & Endless Passive Lectures' 
+                    : '두꺼운 문법책과 끝없는 동영상 강의의 늪'}
+                </h3>
+                <p style={{ fontSize: '0.94rem', color: '#64748b', lineHeight: 1.65, wordBreak: 'keep-all', margin: 0 }}>
+                  {isEn
+                    ? 'You watch hours of tutorials and read hundreds of pages, yet the moment you face a blank IDE, you freeze. Coding is a physical motor skill—you cannot master it merely by watching someone else code.'
+                    : '수백 페이지의 문법 규칙을 읽고 수십 시간짜리 인강을 볼 땐 다 이해한 것 같지만, 막상 빈 화면 앞에 서면 타이핑 한 줄 못 치고 멈춥니다. 코딩은 눈으로 외우는 지식이 아니라, 손으로 익히는 기술입니다.'}
+                </p>
+              </div>
+
+              <div style={{
+                marginTop: '24px',
+                paddingTop: '16px',
+                borderTop: '1px solid #f1f5f9',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '0.82rem',
+                color: '#ef4444',
+                fontWeight: 600,
+              }}>
+                <span>✕</span>
+                <span>눈으로만 보는 수동적 학습의 한계</span>
+              </div>
+            </div>
+
+            {/* Problem Card 2: The Block Coding Chasm */}
+            <div style={{
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '20px',
+              padding: '32px',
+              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.05)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
+                  background: '#fffbeb',
+                  border: '1px solid #fde68a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '22px',
+                  marginBottom: '18px',
+                }}>
+                  🧩
+                </div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                  PROBLEM 02
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px', wordBreak: 'keep-all' }}>
+                  {isEn 
+                    ? 'The Huge Chasm Between Block Coding & Real Syntax' 
+                    : '블록 코딩은 쉬웠는데, 실제 코딩은 왜 이리 어려울까?'}
+                </h3>
+                <p style={{ fontSize: '0.94rem', color: '#64748b', lineHeight: 1.65, wordBreak: 'keep-all', margin: 0 }}>
+                  {isEn
+                    ? 'Dragging puzzle blocks is intuitive, but transitioning to real Python, C, or JavaScript feels like falling off a cliff. Indentation, semicolons, brackets, and syntax errors instantly overwhelm beginners.'
+                    : '마우스로 맞추는 블록 코딩(스크래치 등)은 장난감처럼 쉬웠지만, 실제 현업에서 쓰는 파이썬이나 C언어는 완전히 다른 세상입니다. 괄호 하나, 오타 하나에 멈춰버리는 텍스트 코딩의 거대한 절벽을 마주하게 됩니다.'}
+                </p>
+              </div>
+
+              <div style={{
+                marginTop: '24px',
+                paddingTop: '16px',
+                borderTop: '1px solid #f1f5f9',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '0.82rem',
+                color: '#f59e0b',
+                fontWeight: 600,
+              }}>
+                <span>✕</span>
+                <span>장난감 블록과 실제 텍스트 코드 사이의 거대한 단절</span>
+              </div>
+            </div>
+          </div>
+
+          {/* The Solution Bridge Banner with Generated Infographic Image */}
+          <div style={{
+            background: '#0e121a',
+            border: '1.5px solid rgba(6, 182, 212, 0.35)',
+            borderRadius: '24px',
+            overflow: 'hidden',
+            boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.25), 0 0 40px rgba(6, 182, 212, 0.1)',
+            position: 'relative',
+          }}>
+            {/* Visual Image Header */}
+            <div style={{
+              width: '100%',
+              maxHeight: '440px',
+              overflow: 'hidden',
+              position: 'relative',
+              background: '#080c14',
+            }}>
+              <img 
+                src="/images/block_to_code_bridge.jpg" 
+                alt="Transition from block coding to real code with TypingCode"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: '80px',
+                background: 'linear-gradient(to top, #0e121a, transparent)',
+                pointerEvents: 'none',
+              }} />
+            </div>
+
+            {/* Editorial Content Below Image */}
+            <div style={{ padding: '36px 40px 44px', color: '#f8fafc' }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 12px',
+                borderRadius: '8px',
+                background: 'rgba(6, 182, 212, 0.15)',
+                border: '1px solid rgba(6, 182, 212, 0.35)',
+                color: '#22d3ee',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                marginBottom: '16px',
+              }}>
+                THE TYPINGCODE SOLUTION
+              </div>
+
+              <h3 style={{
+                fontSize: 'clamp(1.5rem, 3vw, 2.1rem)',
+                fontWeight: 800,
+                lineHeight: 1.3,
+                marginBottom: '16px',
+                color: '#ffffff',
+                wordBreak: 'keep-all',
+              }}>
+                {isEn
+                  ? 'The Missing Bridge: From Visual Intuition to Real Text Syntax'
+                  : '블록 코딩의 쉬운 재미와 실전 텍스트 코딩을 잇는 가장 확실한 징검다리'}
+              </h3>
+
+              <p style={{
+                fontSize: '1.02rem',
+                color: '#94a3b8',
+                lineHeight: 1.7,
+                maxWidth: '780px',
+                marginBottom: '32px',
+                wordBreak: 'keep-all',
+              }}>
+                {isEn
+                  ? 'TypingCode does not make you memorize abstract theory. By typing authentic code line by line in your browser, your fingers naturally build muscle memory. Zero setup, real feedback—the fastest way to master real code.'
+                  : 'TypingCode는 블록 코딩처럼 부담 없이 시작하지만, 다루는 대상은 현업에서 쓰이는 100% 진짜 텍스트 코드입니다. 복잡한 환경 설정이나 IDE 설치 없이, 브라우저에서 화면을 보고 타자 치듯 따라 치기만 하면 손가락이 코드를 먼저 기억합니다.'}
+              </p>
+
+              {/* 3 Core Value Pillars */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: '20px',
+                paddingTop: '24px',
+                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              }}>
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '10px',
+                    background: 'rgba(6, 182, 212, 0.15)',
+                    color: '#22d3ee',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '18px',
+                    flexShrink: 0,
+                  }}>
+                    ⌨️
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+                      손가락 근육 기억 (Muscle Memory)
+                    </h4>
+                    <p style={{ fontSize: '0.84rem', color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>
+                      머리로 외우려 애쓰지 마세요. 반복 타이핑을 통해 괄호, 들여쓰기, 예약어가 손끝에 자연스럽게 각인됩니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '10px',
+                    background: 'rgba(16, 185, 129, 0.15)',
+                    color: '#34d399',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '18px',
+                    flexShrink: 0,
+                  }}>
+                    ⚡
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+                      설치 0초, 즉시 실행 런타임
+                    </h4>
+                    <p style={{ fontSize: '0.84rem', color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>
+                      파이썬, C, 러스트 등 13개 언어 컴파일러가 브라우저에 내장되어 별도 설치 없이 1초 만에 실행 결과를 확인합니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '10px',
+                    background: 'rgba(139, 92, 246, 0.15)',
+                    color: '#c084fc',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '18px',
+                    flexShrink: 0,
+                  }}>
+                    🎯
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+                      실전 13개 언어 단계별 로드맵
+                    </h4>
+                    <p style={{ fontSize: '0.84rem', color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>
+                      기초 키워드부터 실제 현업 알고리즘·라이브러리 활용까지 20단계 체계적 스캐폴딩으로 실력이 탄탄해집니다.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =================================================================
+            3. NOVEL CURRICULUM COMMAND DECK (Third Screen)
             ================================================================= */}
         <section id="curriculum" style={{ marginBottom: '96px', scrollMarginTop: '80px' }}>
           
