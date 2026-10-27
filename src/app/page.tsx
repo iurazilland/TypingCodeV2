@@ -499,9 +499,6 @@ export default function HomePage() {
           
           {/* Section Header */}
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px', padding: '0 20px' }}>
-            <div className="brilliant-badge" style={{ marginBottom: '14px' }}>
-              Full Curriculum Flow
-            </div>
             <h2 style={{
               fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
               fontWeight: 800,
@@ -530,7 +527,6 @@ export default function HomePage() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
               maxWidth: '1280px',
               margin: '0 auto 12px',
               padding: '0 24px',
@@ -556,16 +552,6 @@ export default function HomePage() {
                   {isEn ? 'Beginner Foundation Track' : '초급 입문 트랙 (13개 언어 기초 문법)'}
                 </span>
               </div>
-              <span style={{
-                fontSize: '0.76rem',
-                color: '#94a3b8',
-                fontWeight: 600,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}>
-                <span>{isEn ? 'Right to Left ➔' : '오른쪽 ➔ 왼쪽으로 흐름'}</span>
-              </span>
             </div>
 
             <div className="curriculum-marquee-row">
@@ -665,7 +651,6 @@ export default function HomePage() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
               maxWidth: '1280px',
               margin: '0 auto 12px',
               padding: '0 24px',
@@ -691,16 +676,6 @@ export default function HomePage() {
                   {isEn ? 'Intermediate & Advanced Practice Track' : '중급 · 상급 실전 트랙 (심화 알고리즘 · OOP · 프레임워크)'}
                 </span>
               </div>
-              <span style={{
-                fontSize: '0.76rem',
-                color: '#94a3b8',
-                fontWeight: 600,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}>
-                <span>{isEn ? '⮜ Left to Right (Opposite)' : '왼쪽 ➔ 오른쪽 (반대 방향 흐름)'}</span>
-              </span>
             </div>
 
             <div className="curriculum-marquee-row">
