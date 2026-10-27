@@ -295,6 +295,42 @@ button {
   white-space: nowrap;
   text-decoration: none;
   transition: all 0.16s ease;
+  color: #94a3b8;
+  border: 1px solid transparent;
+}
+
+.nav-link-item svg {
+  color: inherit;
+  transition: color 0.16s ease;
+}
+
+.nav-link-item:hover {
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.nav-link-item.active {
+  color: #22d3ee;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Home Landing Page (Light Mode Header): Black text by default, turns Cyan on hover */
+.navbar-header-home .nav-link-item {
+  color: #0f172a; /* Solid crisp black */
+  font-weight: 600;
+}
+
+.navbar-header-home .nav-link-item:hover {
+  color: #0891b2; /* Turns vibrant Cyan on hover! */
+  background: rgba(8, 145, 178, 0.08);
+}
+
+.navbar-header-home .nav-link-item.active {
+  color: #0891b2;
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
 .nav-link-text {

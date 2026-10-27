@@ -59,7 +59,7 @@ export default function Navbar() {
   return (
     <>
       <header
-        className="navbar-header"
+        className={`navbar-header ${isHomePage ? 'navbar-header-home' : ''}`}
         style={
           isHomePage
             ? {
@@ -134,56 +134,10 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="nav-link-item"
+                  className={`nav-link-item ${item.isActive ? 'active' : ''}`}
                   title={item.label}
-                  style={{
-                    fontWeight: item.isActive ? 700 : 500,
-                    color: item.isActive
-                      ? isHomePage
-                        ? '#0f172a'
-                        : '#ffffff'
-                      : isHomePage
-                      ? '#64748b'
-                      : '#94a3b8',
-                    background: item.isActive
-                      ? isHomePage
-                        ? '#ffffff'
-                        : 'rgba(255, 255, 255, 0.08)'
-                      : 'transparent',
-                    border: item.isActive
-                      ? isHomePage
-                        ? '1px solid #e2e8f0'
-                        : '1px solid rgba(255, 255, 255, 0.12)'
-                      : '1px solid transparent',
-                    boxShadow: item.isActive && isHomePage ? '0 1px 3px rgba(15, 23, 42, 0.06)' : 'none',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!item.isActive) {
-                      e.currentTarget.style.background = isHomePage ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.05)';
-                      e.currentTarget.style.color = isHomePage ? '#0f172a' : '#ffffff';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!item.isActive) {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = isHomePage ? '#64748b' : '#94a3b8';
-                    }
-                  }}
                 >
-                  <Icon
-                    size={16}
-                    style={{
-                      color: item.isActive
-                        ? isHomePage
-                          ? '#0891b2'
-                          : '#22d3ee'
-                        : isHomePage
-                        ? '#64748b'
-                        : '#64748b',
-                      flexShrink: 0,
-                    }}
-                  />
+                  <Icon size={16} style={{ flexShrink: 0 }} />
                   <span className="nav-link-text">{item.label}</span>
                 </Link>
               );
