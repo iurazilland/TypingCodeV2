@@ -211,8 +211,8 @@ export default function HomePage() {
             wordBreak: 'keep-all',
           }}>
             {isEn 
-              ? 'Stop memorizing syntax. Real coding at your fingertips.'
-              : '눈으로 외우는 문법 대신, 손끝으로 완성하는 진짜 코딩.'}
+              ? 'Learn to code effortlessly, simply by typing along.'
+              : '따라 치는 것만으로 쉽게 배우는 코딩.'}
           </p>
         </section>
 
