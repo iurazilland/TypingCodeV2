@@ -222,7 +222,7 @@ export default function HomePage() {
         <section id="why-typingcode" style={{ marginBottom: '100px' }}>
           
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 44px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 44px' }}>
             <h2 style={{
               fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
               fontWeight: 800,
@@ -232,19 +232,19 @@ export default function HomePage() {
               wordBreak: 'keep-all',
             }}>
               {isEn 
-                ? 'Starting is easy. Why is real coding so hard?' 
-                : '시작은 쉬운데, 실전은 왜 막막할까요?'}
+                ? 'Block coding is easy. Why is real coding so hard?' 
+                : '블록코딩은 쉬운데, 코딩은 왜 어려울까요?'}
             </h2>
             <p style={{
               fontSize: 'clamp(1rem, 2vw, 1.12rem)',
               color: '#64748b',
               lineHeight: 1.6,
-              maxWidth: '560px',
+              maxWidth: '580px',
               margin: '0 auto',
               wordBreak: 'keep-all',
             }}>
               {isEn
-                ? 'Block coding makes a fun start, but stepping into real text code brings an unexpected wall.'
+                ? 'The sudden reality wall learners hit when transitioning from visual blocks to real text code.'
                 : '블록 맞추기에서 실제 텍스트 코드로 넘어가는 순간 마주치는 현실의 벽.'}
             </p>
           </div>
@@ -272,7 +272,7 @@ export default function HomePage() {
               <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#f0f9ff' }}>
                 <img 
                   src="/images/block_coding_fun.jpg" 
-                  alt="시작은 쉽고 즐겁습니다"
+                  alt="블록코딩은 쉽고 재밌습니다."
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
                 <div style={{
@@ -301,22 +301,22 @@ export default function HomePage() {
                   fontSize: '1.28rem',
                   fontWeight: 800,
                   color: '#0f172a',
-                  marginBottom: '8px',
+                  marginBottom: '10px',
                   letterSpacing: '-0.01em',
                   wordBreak: 'keep-all',
                 }}>
-                  {isEn ? 'Easy and intuitive to start' : '시작은 쉽고 즐겁습니다'}
+                  {isEn ? 'Block coding is easy and fun.' : '블록코딩은 쉽고 재밌습니다.'}
                 </h3>
                 <p style={{
-                  fontSize: '0.94rem',
+                  fontSize: '0.95rem',
                   color: '#64748b',
-                  lineHeight: 1.6,
+                  lineHeight: 1.65,
                   margin: 0,
                   wordBreak: 'keep-all',
                 }}>
                   {isEn
-                    ? 'Snap blocks together like puzzle pieces to learn logic without syntax errors.'
-                    : '마우스로 블록을 조립하며 문법 오류 걱정 없이 직관적으로 원리를 배웁니다.'}
+                    ? 'Snap blocks together with a mouse to learn logic and computational thinking intuitively. See immediate visual results without the stress of syntax rules or typos.'
+                    : '마우스로 블록을 조립하며 프로그래밍의 논리와 알고리즘을 직관적으로 배웁니다. 문법 오타 걱정 없이 원하는 동작을 시각적으로 즉각 확인하며 코딩의 재미를 느낄 수 있습니다.'}
                 </p>
               </div>
             </div>
@@ -351,7 +351,7 @@ export default function HomePage() {
               <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#0e121a' }}>
                 <img 
                   src="/images/real_coding_hard.jpg" 
-                  alt="하지만 실전은 막막합니다"
+                  alt="실전 코딩은 복잡하고 어렵습니다."
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
                 <div style={{
@@ -380,22 +380,22 @@ export default function HomePage() {
                   fontSize: '1.28rem',
                   fontWeight: 800,
                   color: '#0f172a',
-                  marginBottom: '8px',
+                  marginBottom: '10px',
                   letterSpacing: '-0.01em',
                   wordBreak: 'keep-all',
                 }}>
-                  {isEn ? 'Real coding feels overwhelming' : '하지만 실전은 막막합니다'}
+                  {isEn ? 'Real coding is complex and difficult.' : '실전 코딩은 복잡하고 어렵습니다.'}
                 </h3>
                 <p style={{
-                  fontSize: '0.94rem',
+                  fontSize: '0.95rem',
                   color: '#64748b',
-                  lineHeight: 1.6,
+                  lineHeight: 1.65,
                   margin: 0,
                   wordBreak: 'keep-all',
                 }}>
                   {isEn
-                    ? 'Strict English syntax, tricky indentation, and tiny typos that halt everything.'
-                    : '사소한 오타 하나에도 멈춰버리는 엄격한 문법과 쏟아지는 에러의 벽.'}
+                    ? 'Stepping into a real code editor brings unfamiliar English keywords and strict syntax rules. A single typo or misplaced bracket halts execution, leaving learners stranded in error messages.'
+                    : '하지만 실제 텍스트 에디터로 넘어오는 순간, 낯선 영문 키워드와 복잡한 문법 규칙에 부딪힙니다. 단 한 글자의 사소한 오타나 괄호 실수에도 실행이 멈추고 에러 메시지 앞에서 막막해집니다.'}
                 </p>
               </div>
             </div>
