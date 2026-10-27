@@ -83,12 +83,46 @@ const TRACK_SIGNATURE_CODE: Record<string, { filename: string; code: string; hig
   },
 };
 
+const FULL_TEXT_1 = 'JUST TYPE IT,';
+const FULL_TEXT_2 = 'THEN CODE IT.';
+
 export default function HomePage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
 
   // Active track selection (default to Python)
   const [activeTrackId, setActiveTrackId] = useState<string>('python');
+
+  // Typewriter animation state for hero slogan
+  const [displayedText1, setDisplayedText1] = useState('');
+  const [displayedText2, setDisplayedText2] = useState('');
+  const [phase, setPhase] = useState<'line1' | 'line2' | 'done'>('line1');
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    if (phase === 'line1') {
+      if (displayedText1.length < FULL_TEXT_1.length) {
+        timeoutId = setTimeout(() => {
+          setDisplayedText1(FULL_TEXT_1.slice(0, displayedText1.length + 1));
+        }, 65);
+      } else {
+        timeoutId = setTimeout(() => {
+          setPhase('line2');
+        }, 220); // Brief pause before line 2
+      }
+    } else if (phase === 'line2') {
+      if (displayedText2.length < FULL_TEXT_2.length) {
+        timeoutId = setTimeout(() => {
+          setDisplayedText2(FULL_TEXT_2.slice(0, displayedText2.length + 1));
+        }, 65);
+      } else {
+        setPhase('done');
+      }
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [displayedText1, displayedText2, phase]);
 
   // Dynamic light body background for Brilliant Editorial Theme on homepage
   useEffect(() => {
@@ -123,11 +157,11 @@ export default function HomePage() {
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 120px' }}>
         
         {/* =================================================================
-            1. HERO SECTION: Pure Slogan & Subtitle (Zero Noise, Ultra-Clean)
+            1. HERO SECTION: Pure Slogan & Subtitle with Typewriter Animation
             ================================================================= */}
         <section style={{
           textAlign: 'center',
-          maxWidth: '920px',
+          maxWidth: '960px',
           margin: '0 auto',
           padding: '110px 20px 130px',
           minHeight: 'calc(78vh - 70px)',
@@ -136,21 +170,51 @@ export default function HomePage() {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          {/* Main Slogan */}
+          {/* Main Slogan with Typewriter & Terminal Caret */}
           <h1 style={{
             fontSize: 'clamp(3.1rem, 7.2vw, 5.4rem)',
             fontWeight: 900,
             letterSpacing: '-0.04em',
             color: '#0f172a',
-            lineHeight: 1.08,
-            marginBottom: '26px',
+            lineHeight: 1.12,
+            marginBottom: '28px',
             wordBreak: 'keep-all',
           }}>
-            JUST TYPE IT,<br />
-            <span style={{ color: '#2563eb' }}>AND CODE IT.</span>
+            <div style={{ minHeight: '1.18em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span>{displayedText1}</span>
+              {phase === 'line1' && (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: 'clamp(4px, 0.9vw, 7px)',
+                    height: '0.88em',
+                    backgroundColor: '#0f172a',
+                    marginLeft: '8px',
+                    borderRadius: '2px',
+                    animation: 'terminalCursorBlink 0.9s infinite',
+                  }}
+                />
+              )}
+            </div>
+            <div style={{ minHeight: '1.18em', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+              <span>{displayedText2}</span>
+              {(phase === 'line2' || phase === 'done') && (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: 'clamp(4px, 0.9vw, 7px)',
+                    height: '0.88em',
+                    backgroundColor: '#2563eb',
+                    marginLeft: '8px',
+                    borderRadius: '2px',
+                    animation: 'terminalCursorBlink 0.9s infinite',
+                  }}
+                />
+              )}
+            </div>
           </h1>
 
-          {/* Simple Subtitle */}
+          {/* Simple Subtitle (Smoothly fades in) */}
           <p style={{
             fontSize: 'clamp(1.15rem, 2.5vw, 1.38rem)',
             color: '#64748b',
@@ -159,6 +223,9 @@ export default function HomePage() {
             maxWidth: '560px',
             margin: '0 auto',
             wordBreak: 'keep-all',
+            opacity: phase === 'done' ? 1 : 0.35,
+            transform: phase === 'done' ? 'translateY(0)' : 'translateY(6px)',
+            transition: 'opacity 0.6s ease, transform 0.6s ease',
           }}>
             {isEn 
               ? 'Stop memorizing syntax. Real coding at your fingertips.'
