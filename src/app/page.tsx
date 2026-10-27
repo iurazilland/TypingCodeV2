@@ -4,90 +4,35 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ArrowRight, 
-  Terminal, 
-  Code2, 
   Sparkles,
   Check
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { CURRICULUM_TRACKS, LanguageTrack } from '@/lib/curriculum';
-import { getCourseSections, LevelSection } from '@/lib/curriculumSections';
+import { CURRICULUM_TRACKS } from '@/lib/curriculum';
+import LanguageIcon from '@/components/LanguageIcon';
 
-// Signature sample code for each track
-const TRACK_SIGNATURE_CODE: Record<string, { filename: string; code: string; highlight: string }> = {
-  python: {
-    filename: 'solution.py',
-    code: `# CPython 3.10 Runtime\ndef calculate_sum(n):\n    return sum(range(1, n + 1))\n\nresult = calculate_sum(10)\nprint(f"Result: {result}")`,
-    highlight: 'CPython 3.10',
-  },
-  c: {
-    filename: 'main.c',
-    code: `// GCC 13.2 System Compiler\n#include <stdio.h>\n\nint main() {\n    int target = 10;\n    printf("Memory Target: %d\\n", target);\n    return 0;\n}`,
-    highlight: 'GCC 13.2',
-  },
-  web: {
-    filename: 'index.html',
-    code: `<!-- Real-time HTML5 / CSS3 DOM -->\n<div class="card-grid">\n  <header class="hero-title">\n    <h1>Just Type It.</h1>\n  </header>\n</div>`,
-    highlight: 'HTML5 & CSS3',
-  },
-  javascript: {
-    filename: 'app.js',
-    code: `// V8 JavaScript Engine\nconst processData = async (items) => {\n  const results = items.map(x => x * 2);\n  return results.filter(n => n > 10);\n};`,
-    highlight: 'V8 / ES2024',
-  },
-  cpp: {
-    filename: 'vector_demo.cpp',
-    code: `// Modern C++20\n#include <iostream>\n#include <vector>\n#include <algorithm>\n\nint main() {\n    std::vector<int> nums = {3, 1, 4, 1, 5};\n    std::sort(nums.begin(), nums.end());\n    return 0;\n}`,
-    highlight: 'Modern C++20',
-  },
-  java: {
-    filename: 'Main.java',
-    code: `// OpenJDK 21 LTS\npublic class Main {\n    public static void main(String[] args) {\n        var message = "TypingCode Enterprise";\n        System.out.println(message);\n    }\n}`,
-    highlight: 'OpenJDK 21',
-  },
-  rust: {
-    filename: 'main.rs',
-    code: `// Rust 1.76 Memory Safe\nfn main() {\n    let mut vector = vec![1, 2, 3];\n    vector.push(4);\n    println!("Vector: {:?}", vector);\n}`,
-    highlight: 'Rust 1.76',
-  },
-  go: {
-    filename: 'server.go',
-    code: `// Go 1.22 Goroutine Concurrency\npackage main\nimport "fmt"\n\nfunc main() {\n    ch := make(chan int)\n    go func() { ch <- 42 }()\n    fmt.Println(<-ch)\n}`,
-    highlight: 'Go 1.22',
-  },
-  csharp: {
-    filename: 'Program.cs',
-    code: `// .NET 8 C# Modern\nvar items = Enumerable.Range(1, 10)\n    .Where(x => x % 2 == 0)\n    .ToList();\nConsole.WriteLine($"Count: {items.Count}");`,
-    highlight: '.NET 8 C#',
-  },
-  swift: {
-    filename: 'App.swift',
-    code: `// Swift 5.10\nlet numbers = [10, 20, 30]\nlet doubled = numbers.map { $0 * 2 }\nprint("Swift Result: \\(doubled)")`,
-    highlight: 'Swift 5.10',
-  },
-  sql: {
-    filename: 'query.sql',
-    code: `-- SQLite / PostgreSQL Engine\nSELECT user_id, COUNT(*) AS solved_count\nFROM practice_logs\nWHERE status = 'SUCCESS'\nGROUP BY user_id\nORDER BY solved_count DESC;`,
-    highlight: 'ANSI SQL',
-  },
-  linux: {
-    filename: 'script.sh',
-    code: `#!/bin/bash\n# Linux CLI Bash Shell\necho "Current Kernel: $(uname -r)"\nfind . -name "*.py" -type f | wc -l`,
-    highlight: 'Bash CLI',
-  },
-  vba: {
-    filename: 'Macro.bas',
-    code: `' Excel VBA Automation\nSub AutomateReport()\n    Dim ws As Worksheet\n    Set ws = ThisWorkbook.Sheets(1)\n    ws.Range("A1").Value = "Completed"\nEnd Sub`,
-    highlight: 'Excel VBA',
-  },
+interface MarqueeCardItem {
+  trackId: string;
+  trackName: string;
+  mainTitle: string;
+  subTitle: string;
+  difficulty: '입문' | '중급' | '심화';
+  difficultyLabel: string;
+  totalLevels: number;
+  practiceUrl: string;
+}
+
+const parseCardTitle = (raw: string) => {
+  const match = raw.match(/^(.*?)\s*\((.*?)\)$/);
+  if (match) {
+    return { main: match[1].trim(), sub: match[2].trim() };
+  }
+  return { main: raw.trim(), sub: '' };
 };
 
 export default function HomePage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
-
-  // Active track selection (default to Python)
-  const [activeTrackId, setActiveTrackId] = useState<string>('python');
 
   // Dynamic light body background for Brilliant Editorial Theme on homepage
   useEffect(() => {
@@ -97,18 +42,51 @@ export default function HomePage() {
     };
   }, []);
 
-  // Currently selected track metadata
-  const currentTrack: LanguageTrack = React.useMemo(() => {
-    return CURRICULUM_TRACKS.find((t) => t.id === activeTrackId) || CURRICULUM_TRACKS[0];
-  }, [activeTrackId]);
+  // Beginner line modules (Line 1: Right to Left)
+  const BEGINNER_MODULES: MarqueeCardItem[] = React.useMemo(() => {
+    const list: MarqueeCardItem[] = [];
+    CURRICULUM_TRACKS.forEach((track) => {
+      track.modules.forEach((mod) => {
+        if (mod.difficulty === '입문') {
+          const parsed = parseCardTitle(isEn ? mod.title_en : mod.title_ko);
+          list.push({
+            trackId: track.id,
+            trackName: track.name.split(' (')[0],
+            mainTitle: parsed.main,
+            subTitle: parsed.sub,
+            difficulty: mod.difficulty,
+            difficultyLabel: isEn ? 'Beginner' : '초급',
+            totalLevels: mod.totalLevels,
+            practiceUrl: mod.practiceUrl || `/practice/${track.id}/1`,
+          });
+        }
+      });
+    });
+    return list;
+  }, [isEn]);
 
-  // Sections for current track
-  const currentSections: LevelSection[] = React.useMemo(() => {
-    return getCourseSections(currentTrack.id, currentTrack.modules[0]?.id || `${currentTrack.id}-basic`);
-  }, [currentTrack]);
-
-  // Signature code preview
-  const signature = TRACK_SIGNATURE_CODE[currentTrack.id] || TRACK_SIGNATURE_CODE.python;
+  // Intermediate & Advanced line modules (Line 2: Left to Right)
+  const ADVANCED_MODULES: MarqueeCardItem[] = React.useMemo(() => {
+    const list: MarqueeCardItem[] = [];
+    CURRICULUM_TRACKS.forEach((track) => {
+      track.modules.forEach((mod) => {
+        if (mod.difficulty === '중급' || mod.difficulty === '심화') {
+          const parsed = parseCardTitle(isEn ? mod.title_en : mod.title_ko);
+          list.push({
+            trackId: track.id,
+            trackName: track.name.split(' (')[0],
+            mainTitle: parsed.main,
+            subTitle: parsed.sub,
+            difficulty: mod.difficulty,
+            difficultyLabel: mod.difficulty === '심화' ? (isEn ? 'Adv' : '상급') : (isEn ? 'Int' : '중급'),
+            totalLevels: mod.totalLevels,
+            practiceUrl: mod.practiceUrl || `/practice/${track.id}/1`,
+          });
+        }
+      });
+    });
+    return list;
+  }, [isEn]);
 
   // Typewriter live typing effect
   const TYPEWRITER_TARGET = isEn 
@@ -514,285 +492,332 @@ export default function HomePage() {
         {/* =================================================================
             3. NOVEL CURRICULUM COMMAND DECK (Third Screen)
             ================================================================= */}
-        <section id="curriculum" style={{ marginBottom: '96px', scrollMarginTop: '80px' }}>
+        {/* =================================================================
+            3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
+            ================================================================= */}
+        <section id="curriculum" style={{ marginBottom: '110px', scrollMarginTop: '80px' }}>
           
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 36px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px', padding: '0 20px' }}>
             <div className="brilliant-badge" style={{ marginBottom: '14px' }}>
-              Interactive Language Console
+              Full Curriculum Flow
             </div>
             <h2 style={{
-              fontSize: '2.2rem',
+              fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
               fontWeight: 800,
               color: '#0f172a',
               letterSpacing: '-0.02em',
-              marginBottom: '10px',
+              marginBottom: '12px',
+              wordBreak: 'keep-all',
             }}>
-              {isEn ? '13 Languages. Real Syllabuses.' : '13개 언어 커리큘럼 콘솔'}
+              {isEn ? 'Dual-Track Curriculum from Basics to Mastery' : '초급부터 실전 심화까지, 단계별 코딩 코스'}
             </h2>
-            <p style={{ color: '#64748b', fontSize: '1.02rem', lineHeight: 1.6 }}>
+            <p style={{
+              color: '#64748b',
+              fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
+              lineHeight: 1.6,
+              margin: 0,
+              wordBreak: 'keep-all',
+            }}>
               {isEn
-                ? 'Select any language to inspect its compiler engine, signature syntax, and structured syllabus progression.'
-                : '언어를 클릭하면 내장 컴파일러 엔진과 시그니처 코드, 단계별 실전 커리큘럼을 즉시 확인할 수 있습니다.'}
+                ? 'Hover any card to pause. Click to jump directly into interactive hands-on code typing practice.'
+                : '마우스를 올리면 흐름이 멈추고, 카드를 클릭하면 브라우저에서 바로 실전 타이핑 학습을 시작합니다.'}
             </p>
           </div>
 
-          {/* Interactive Language Chips Dock */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            gap: '8px',
-            marginBottom: '28px',
-          }}>
-            {CURRICULUM_TRACKS.map((track) => {
-              const isActive = track.id === activeTrackId;
-              return (
-                <button
-                  key={track.id}
-                  onClick={() => setActiveTrackId(track.id)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '7px',
-                    padding: '8px 16px',
-                    borderRadius: '24px',
-                    fontSize: '0.86rem',
-                    fontWeight: isActive ? 700 : 500,
-                    background: isActive ? '#0f172a' : '#ffffff',
-                    color: isActive ? '#ffffff' : '#475569',
-                    border: isActive ? '1px solid #0f172a' : '1px solid #e2e8f0',
-                    boxShadow: isActive ? '0 4px 14px rgba(15, 23, 42, 0.16)' : '0 1px 2px rgba(0,0,0,0.03)',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  <span style={{ fontSize: '1rem' }}>{track.icon}</span>
-                  <span>{track.name.split(' (')[0]}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Main Language Console Workbench */}
-          <div style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: '24px',
-            padding: '36px',
-            boxShadow: '0 20px 48px -12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
-          }}>
+          {/* Marquee Row 1: Beginner Line (Right to Left) */}
+          <div style={{ marginBottom: '32px' }}>
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(320px, 1fr) minmax(360px, 1.25fr)',
-              gap: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              maxWidth: '1280px',
+              margin: '0 auto 12px',
+              padding: '0 24px',
             }}>
-              {/* Left Column: Language DNA & Code Preview */}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  {/* Track Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ fontSize: '2.2rem' }}>{currentTrack.icon}</span>
-                      <div>
-                        <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                          {currentTrack.name}
-                        </h3>
-                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>
-                          {currentTrack.modules.length}개 모듈 · 총 {currentTrack.modules.reduce((acc, m) => acc + m.totalLevels, 0)}단계 커리큘럼
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '8px',
+                  background: '#ecfdf5',
+                  color: '#059669',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  border: '1px solid #a7f3d0',
+                }}>
+                  01
+                </span>
+                <span style={{ fontSize: '1.02rem', fontWeight: 800, color: '#0f172a' }}>
+                  {isEn ? 'Beginner Foundation Track' : '초급 입문 트랙 (13개 언어 기초 문법)'}
+                </span>
+              </div>
+              <span style={{
+                fontSize: '0.76rem',
+                color: '#94a3b8',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}>
+                <span>{isEn ? 'Right to Left ➔' : '오른쪽 ➔ 왼쪽으로 흐름'}</span>
+              </span>
+            </div>
+
+            <div className="curriculum-marquee-row">
+              <div className="curriculum-marquee-track marquee-scroll-left">
+                {[...BEGINNER_MODULES, ...BEGINNER_MODULES].map((item, idx) => {
+                  const isBeginner = item.difficulty === '입문';
+                  const isHard = item.difficulty === '심화';
+                  const badgeBg = isBeginner ? '#ecfdf5' : isHard ? '#faf5ff' : '#eff6ff';
+                  const badgeColor = isBeginner ? '#059669' : isHard ? '#7c3aed' : '#2563eb';
+                  const badgeBorder = isBeginner ? '#a7f3d0' : isHard ? '#e9d5ff' : '#bfdbfe';
+
+                  return (
+                    <Link
+                      key={`begin-${idx}`}
+                      href={item.practiceUrl}
+                      className="curriculum-square-card"
+                    >
+                      {/* Top: Language Icon + Track Name */}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                        <LanguageIcon language={item.trackId} size={38} />
+                        <span style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          color: '#64748b',
+                          letterSpacing: '0.02em',
+                          textTransform: 'uppercase',
+                        }}>
+                          {item.trackName}
                         </span>
                       </div>
-                    </div>
 
-                    <span style={{
-                      padding: '4px 12px',
-                      borderRadius: '8px',
-                      background: '#ecfeff',
-                      color: '#0891b2',
-                      fontSize: '0.8rem',
-                      fontWeight: 700,
-                      fontFamily: 'var(--font-mono)',
-                      border: '1px solid #a5f3fc',
-                    }}>
-                      {currentTrack.badge}
-                    </span>
-                  </div>
-
-                  {/* Tagline */}
-                  <p style={{
-                    fontSize: '0.94rem',
-                    color: '#475569',
-                    lineHeight: 1.6,
-                    marginBottom: '22px',
-                  }}>
-                    {isEn ? currentTrack.tagline_en : currentTrack.tagline_ko}
-                  </p>
-
-                  {/* Signature Code Box */}
-                  <div style={{
-                    background: '#0d1117',
-                    borderRadius: '14px',
-                    padding: '18px',
-                    border: '1px solid #30363d',
-                    marginBottom: '20px',
-                    fontFamily: 'var(--font-mono)',
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      paddingBottom: '10px',
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                      marginBottom: '12px',
-                      fontSize: '0.74rem',
-                      color: '#8b949e',
-                    }}>
-                      <div style={{ display: 'flex', gap: '5px' }}>
-                        <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ff5f56' }} />
-                        <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ffbd2e' }} />
-                        <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#27c93f' }} />
-                      </div>
-                      <span>{signature.filename}</span>
-                    </div>
-
-                    <pre style={{
-                      margin: 0,
-                      fontSize: '0.82rem',
-                      lineHeight: 1.6,
-                      color: '#c9d1d9',
-                      whiteSpace: 'pre-wrap',
-                      wordBreak: 'break-all',
-                    }}>
-                      {signature.code}
-                    </pre>
-                  </div>
-                </div>
-
-                {/* Direct Action Link */}
-                <Link
-                  href={currentTrack.modules[0]?.practiceUrl || `/practice/${currentTrack.id}/1`}
-                  className="brilliant-btn brilliant-btn-primary"
-                  style={{
-                    padding: '14px 24px',
-                    fontSize: '0.98rem',
-                    fontWeight: 700,
-                    borderRadius: '12px',
-                    width: '100%',
-                  }}
-                >
-                  <span>{currentTrack.name.split(' (')[0]} 1단계 실습 시작하기</span>
-                  <ArrowRight size={16} />
-                </Link>
-              </div>
-
-              {/* Right Column: Progressive Syllabus Stages */}
-              <div style={{
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: '18px',
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}>
-                <div>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '18px',
-                    paddingBottom: '12px',
-                    borderBottom: '1px solid #e2e8f0',
-                  }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      {currentTrack.name.split(' (')[0]} Roadmap Syllabus
-                    </span>
-                    <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
-                      20 Levels Scaffolding
-                    </span>
-                  </div>
-
-                  {/* Chapter List */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxHeight: '420px', overflowY: 'auto' }}>
-                    {currentSections.map((sec, idx) => (
-                      <div
-                        key={sec.id}
-                        style={{
-                          background: '#ffffff',
-                          border: '1px solid #e2e8f0',
-                          borderRadius: '12px',
-                          padding: '16px',
-                        }}
-                      >
+                      {/* Middle: Learning Title (Main & Sub) */}
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '2px',
+                        width: '100%',
+                        padding: '0 4px',
+                      }}>
                         <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginBottom: '8px',
+                          fontSize: '0.86rem',
+                          fontWeight: 800,
+                          color: '#0f172a',
+                          lineHeight: 1.25,
+                          textAlign: 'center',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: '152px',
                         }}>
-                          <span style={{
-                            fontSize: '0.78rem',
-                            fontWeight: 800,
-                            color: '#0891b2',
-                            fontFamily: 'var(--font-mono)',
+                          {item.mainTitle}
+                        </div>
+                        {item.subTitle && (
+                          <div style={{
+                            fontSize: '0.72rem',
+                            color: '#64748b',
+                            lineHeight: 1.2,
+                            textAlign: 'center',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            maxWidth: '152px',
                           }}>
-                            CHAPTER 0{idx + 1}
-                          </span>
-                          <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
-                            {sec.levels.length}개 레벨
-                          </span>
-                        </div>
-
-                        <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a', margin: '0 0 8px' }}>
-                          {isEn ? sec.title_en : sec.title_ko}
-                        </h4>
-
-                        {/* Level tags sample */}
-                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                          {sec.levels.slice(0, 3).map((lvl) => (
-                            <Link
-                              key={lvl.levelNumber}
-                              href={`/practice/${currentTrack.id}/${lvl.levelNumber}`}
-                              style={{
-                                fontSize: '0.74rem',
-                                color: '#475569',
-                                background: '#f1f5f9',
-                                padding: '3px 8px',
-                                borderRadius: '6px',
-                                textDecoration: 'none',
-                                transition: 'all 0.1s ease',
-                              }}
-                            >
-                              L{lvl.levelNumber}. {isEn ? lvl.title_en.split(' ')[0] : lvl.title_ko.split(' ')[0]}
-                            </Link>
-                          ))}
-                          {sec.levels.length > 3 && (
-                            <span style={{ fontSize: '0.72rem', color: '#94a3b8', alignSelf: 'center' }}>
-                              +{sec.levels.length - 3} more
-                            </span>
-                          )}
-                        </div>
+                            {item.subTitle}
+                          </div>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </div>
 
-                {/* Footnote */}
-                <div style={{
-                  paddingTop: '16px',
-                  borderTop: '1px solid #e2e8f0',
-                  fontSize: '0.78rem',
-                  color: '#64748b',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
-                  <span>브라우저 내장 독립 샌드박스 런타임</span>
-                  <span style={{ color: '#10b981', fontWeight: 700 }}>✓ Zero-Installation</span>
-                </div>
+                      {/* Bottom: Difficulty & Level Badge */}
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '3px 10px',
+                        borderRadius: '10px',
+                        background: badgeBg,
+                        color: badgeColor,
+                        border: `1px solid ${badgeBorder}`,
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-mono), monospace',
+                      }}>
+                        <span>{item.difficultyLabel}</span>
+                        <span style={{ opacity: 0.5 }}>·</span>
+                        <span>{item.totalLevels}L</span>
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
+          </div>
+
+          {/* Marquee Row 2: Intermediate + Advanced Line (Left to Right - Opposite) */}
+          <div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              maxWidth: '1280px',
+              margin: '0 auto 12px',
+              padding: '0 24px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '8px',
+                  background: '#eff6ff',
+                  color: '#2563eb',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  border: '1px solid #bfdbfe',
+                }}>
+                  02
+                </span>
+                <span style={{ fontSize: '1.02rem', fontWeight: 800, color: '#0f172a' }}>
+                  {isEn ? 'Intermediate & Advanced Practice Track' : '중급 · 상급 실전 트랙 (심화 알고리즘 · OOP · 프레임워크)'}
+                </span>
+              </div>
+              <span style={{
+                fontSize: '0.76rem',
+                color: '#94a3b8',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}>
+                <span>{isEn ? '⮜ Left to Right (Opposite)' : '왼쪽 ➔ 오른쪽 (반대 방향 흐름)'}</span>
+              </span>
+            </div>
+
+            <div className="curriculum-marquee-row">
+              <div className="curriculum-marquee-track marquee-scroll-right">
+                {[...ADVANCED_MODULES, ...ADVANCED_MODULES].map((item, idx) => {
+                  const isBeginner = item.difficulty === '입문';
+                  const isHard = item.difficulty === '심화';
+                  const badgeBg = isBeginner ? '#ecfdf5' : isHard ? '#faf5ff' : '#eff6ff';
+                  const badgeColor = isBeginner ? '#059669' : isHard ? '#7c3aed' : '#2563eb';
+                  const badgeBorder = isBeginner ? '#a7f3d0' : isHard ? '#e9d5ff' : '#bfdbfe';
+
+                  return (
+                    <Link
+                      key={`adv-${idx}`}
+                      href={item.practiceUrl}
+                      className="curriculum-square-card"
+                    >
+                      {/* Top: Language Icon + Track Name */}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                        <LanguageIcon language={item.trackId} size={38} />
+                        <span style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          color: '#64748b',
+                          letterSpacing: '0.02em',
+                          textTransform: 'uppercase',
+                        }}>
+                          {item.trackName}
+                        </span>
+                      </div>
+
+                      {/* Middle: Learning Title (Main & Sub) */}
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '2px',
+                        width: '100%',
+                        padding: '0 4px',
+                      }}>
+                        <div style={{
+                          fontSize: '0.86rem',
+                          fontWeight: 800,
+                          color: '#0f172a',
+                          lineHeight: 1.25,
+                          textAlign: 'center',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: '152px',
+                        }}>
+                          {item.mainTitle}
+                        </div>
+                        {item.subTitle && (
+                          <div style={{
+                            fontSize: '0.72rem',
+                            color: '#64748b',
+                            lineHeight: 1.2,
+                            textAlign: 'center',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            maxWidth: '152px',
+                          }}>
+                            {item.subTitle}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Bottom: Difficulty & Level Badge */}
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '3px 10px',
+                        borderRadius: '10px',
+                        background: badgeBg,
+                        color: badgeColor,
+                        border: `1px solid ${badgeBorder}`,
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-mono), monospace',
+                      }}>
+                        <span>{item.difficultyLabel}</span>
+                        <span style={{ opacity: 0.5 }}>·</span>
+                        <span>{item.totalLevels}L</span>
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Action: Link to all languages */}
+          <div style={{ textAlign: 'center', marginTop: '48px' }}>
+            <Link
+              href="/languages"
+              className="brilliant-btn brilliant-btn-secondary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 24px',
+                fontSize: '0.94rem',
+                fontWeight: 700,
+                borderRadius: '16px',
+                background: '#ffffff',
+                border: '1.5px solid #e2e8f0',
+                color: '#0f172a',
+                boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+                textDecoration: 'none',
+              }}
+            >
+              <span>{isEn ? 'Browse All 13 Language Curriculums' : '전체 13개 언어 커리큘럼 자세히 보기'}</span>
+              <ArrowRight size={16} />
+            </Link>
           </div>
         </section>
 

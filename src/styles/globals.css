@@ -554,6 +554,77 @@ button {
   }
 }
 
+@keyframes marqueeScrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marqueeScrollRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.curriculum-marquee-row {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 12px 0;
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+
+.curriculum-marquee-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-scroll-left {
+  animation: marqueeScrollLeft 38s linear infinite;
+}
+
+.marquee-scroll-right {
+  animation: marqueeScrollRight 75s linear infinite;
+}
+
+.curriculum-marquee-row:hover .curriculum-marquee-track {
+  animation-play-state: paused;
+}
+
+.curriculum-square-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 180px;
+  height: 180px;
+  padding: 18px 14px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.curriculum-square-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: #94a3b8;
+  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12);
+}
 
 /* ==========================================================================
    Refined Studio Design System (Option B - JetBrains / Brilliant Style)

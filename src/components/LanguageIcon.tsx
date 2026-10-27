@@ -15,7 +15,8 @@ export default function LanguageIcon({
   className = '',
   style = {},
 }: LanguageIconProps) {
-  const langKey = language.toLowerCase();
+  const rawKey = language.toLowerCase();
+  const langKey = rawKey === 'vba' ? 'vb' : rawKey;
   const iconSrc = `/icons/languages/${langKey}.svg`;
 
   return (
