@@ -683,3 +683,10 @@ button {
   color: #0891b2;
 }
 
+@media (max-width: 1080px) {
+  .step-connector-arrow {
+    display: none !important;
+  }
+}
+
+
