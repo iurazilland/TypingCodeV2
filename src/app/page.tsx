@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Sparkles, CheckCircle2, ChevronRight, Terminal as TerminalIcon, BookOpen, Layers } from 'lucide-react';
-import UnifiedHeroCard from '@/components/UnifiedHeroCard';
 import { useLanguage } from '@/lib/LanguageContext';
 import LanguageIcon from '@/components/LanguageIcon';
 
@@ -53,29 +52,17 @@ export default function HomePage() {
           zIndex: 1,
           textAlign: 'center',
           maxWidth: '860px',
-          margin: '24px auto 40px',
+          margin: '36px auto 64px',
           padding: '0 20px',
         }}>
-          {/* Brilliant Style Eyebrow Badge */}
-          <div className="brilliant-badge" style={{ marginBottom: '20px' }}>
-            <span style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: '#2563eb',
-              display: 'inline-block',
-            }} />
-            <span>Interactive Code Learning Studio</span>
-          </div>
-
           {/* Authoritative Editorial Title */}
           <h1 style={{
-            fontSize: '3.5rem',
+            fontSize: '3.6rem',
             fontWeight: 800,
             letterSpacing: '-0.03em',
             color: '#0f172a',
-            lineHeight: 1.15,
-            marginBottom: '18px',
+            lineHeight: 1.18,
+            marginBottom: '20px',
           }}>
             JUST TYPE IT{' '}
             <span style={{
@@ -87,66 +74,19 @@ export default function HomePage() {
           </h1>
 
           <p style={{
-            fontSize: '1.2rem',
+            fontSize: '1.22rem',
             color: '#475569',
-            lineHeight: 1.7,
-            maxWidth: '720px',
-            margin: '0 auto 32px',
+            lineHeight: 1.75,
+            maxWidth: '740px',
+            margin: '0 auto',
             fontWeight: 400,
             wordBreak: 'keep-all',
           }}>
             {t.slogan.subtitle}
           </p>
-
-          {/* Action CTA Buttons */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '14px',
-            flexWrap: 'wrap',
-          }}>
-            <Link
-              href="/practice/python/1"
-              className="brilliant-btn brilliant-btn-primary"
-              style={{
-                padding: '14px 28px',
-                fontSize: '1.02rem',
-                borderRadius: '12px',
-                fontWeight: 700,
-              }}
-            >
-              <span>{t.courses.pyBtn}</span>
-              <ArrowRight size={17} />
-            </Link>
-
-            <a
-              href="#tracks"
-              className="brilliant-btn"
-              style={{
-                padding: '14px 24px',
-                fontSize: '1.02rem',
-                borderRadius: '12px',
-                fontWeight: 600,
-              }}
-            >
-              <span>{t.courses.title.split(' ')[0]} 둘러보기</span>
-              <ChevronRight size={16} color="#64748b" />
-            </a>
-          </div>
         </section>
 
-        {/* 2. Floating Live IDE Window (Stunning Dark Studio Contrast on Light Canvas) */}
-        <section style={{
-          position: 'relative',
-          zIndex: 1,
-          marginBottom: '84px',
-          filter: 'drop-shadow(0 20px 40px rgba(15, 23, 42, 0.08))',
-        }}>
-          <UnifiedHeroCard />
-        </section>
-
-        {/* 3. "Why can you learn coding just by typing?" 4 Core Advantages (Brilliant Grid) */}
+        {/* 2. "Why can you learn coding just by typing?" 4 Core Advantages (Brilliant Grid) */}
         <section style={{
           position: 'relative',
           zIndex: 1,
