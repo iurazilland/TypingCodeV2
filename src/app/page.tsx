@@ -847,56 +847,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* =================================================================
-            5. FINAL CALL TO ACTION: Direct Launch Invitation
-            ================================================================= */}
-        <section style={{
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-          borderRadius: '24px',
-          padding: '64px 40px',
-          textAlign: 'center',
-          boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.25)',
-          color: '#ffffff',
-        }}>
-          <h2 style={{
-            fontSize: '2.4rem',
-            fontWeight: 800,
-            color: '#ffffff',
-            letterSpacing: '-0.02em',
-            marginBottom: '14px',
-          }}>
-            {isEn 
-              ? 'Ready to type your very first line of code?' 
-              : '지금 바로 첫 번째 코드를 직접 타이핑해볼까요?'}
-          </h2>
-          <p style={{
-            fontSize: '1.1rem',
-            color: '#cbd5e1',
-            maxWidth: '640px',
-            margin: '0 auto 34px',
-            lineHeight: 1.65,
-          }}>
-            {isEn
-              ? 'Click below to launch Level 1 instantly in your browser. No sign-up required to explore.'
-              : '설치도 회원가입도 필요 없이, 버튼을 누르는 순간 1초 만에 파이썬 1단계 샌드박스가 열립니다.'}
-          </p>
-
-          <Link
-            href="/practice/python/1"
-            className="brilliant-btn brilliant-btn-primary"
-            style={{
-              padding: '16px 36px',
-              fontSize: '1.1rem',
-              fontWeight: 700,
-              borderRadius: '14px',
-              boxShadow: '0 8px 24px rgba(37, 99, 235, 0.4)',
-            }}
-          >
-            <span>{isEn ? 'Launch Python Level 1 Now' : '파이썬 1단계 즉시 시작하기'}</span>
-            <ArrowRight size={18} />
-          </Link>
-        </section>
       </div>
     </div>
   );
