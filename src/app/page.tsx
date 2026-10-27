@@ -154,8 +154,8 @@ export default function HomePage() {
           textAlign: 'center',
           maxWidth: '960px',
           margin: '0 auto',
-          padding: '80px 20px 110px',
-          minHeight: 'calc(78vh - 70px)',
+          padding: '140px 24px 170px',
+          minHeight: 'calc(90vh - 70px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -166,7 +166,7 @@ export default function HomePage() {
             display: 'inline-flex',
             flexDirection: 'column',
             alignItems: 'center',
-            marginBottom: '32px',
+            marginBottom: '36px',
           }}>
             {/* Slogan Text: Exact 13 Characters on each line in JetBrains Mono */}
             <h1 style={{
