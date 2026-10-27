@@ -217,121 +217,96 @@ export default function HomePage() {
         </section>
 
         {/* =================================================================
-            2. THE CORE PROBLEM (Why Coding is Hard & Why TypingCode)
+            2. THE PROBLEM: BLOCK CODING VS REAL CODING
             ================================================================= */}
         <section id="why-typingcode" style={{ marginBottom: '100px' }}>
           
-          {/* Section Header: Simple, honest, impactful */}
+          {/* Section Header */}
           <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 40px' }}>
             <h2 style={{
               fontSize: 'clamp(2rem, 4vw, 2.6rem)',
               fontWeight: 800,
               color: '#0f172a',
               letterSpacing: '-0.02em',
-              marginBottom: '12px',
-              wordBreak: 'keep-all',
-            }}>
-              {isEn ? 'Coding is genuinely hard.' : '코딩, 원래 어렵습니다.'}
-            </h2>
-            <p style={{ color: '#64748b', fontSize: '1.05rem', lineHeight: 1.6, wordBreak: 'keep-all', margin: 0 }}>
-              {isEn
-                ? 'Thick textbooks, syntax-heavy lectures, and the huge gap between toy block coding and real syntax.'
-                : '두꺼운 문법책과 어려운 강의, 그리고 블록 코딩과 실전 코딩 사이의 거대한 벽 때문입니다.'}
-            </p>
-          </div>
-
-          {/* 2 Focused Problem Cards Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '28px',
-          }}>
-            {/* Card 1: Thick Books & Syntax Lectures */}
-            <div style={{
-              background: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '20px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-            }}>
-              <div style={{ width: '100%', height: '240px', overflow: 'hidden', background: '#080c14' }}>
-                <img 
-                  src="/images/thick_coding_books.jpg" 
-                  alt="두꺼운 코딩책과 문법 위주의 어려운 강의"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
-              <div style={{ padding: '28px 26px 30px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px', wordBreak: 'keep-all' }}>
-                    {isEn ? 'Thick Textbooks & Syntax-Heavy Lectures' : '두꺼운 코딩책과 문법 위주의 어려운 강의'}
-                  </h3>
-                  <p style={{ fontSize: '0.94rem', color: '#64748b', lineHeight: 1.65, wordBreak: 'keep-all', margin: 0 }}>
-                    {isEn
-                      ? 'No matter how many rules you memorize or videos you watch, the moment you face a blank editor, you freeze without typing a single line.'
-                      : '수백 페이지의 문법을 눈으로 아무리 외우고 강의를 보아도, 정작 빈 에디터 앞에서는 타이핑 한 줄조차 치지 못하고 멈추게 됩니다.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Block Coding vs Real Coding Cliff */}
-            <div style={{
-              background: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '20px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-            }}>
-              <div style={{ width: '100%', height: '240px', overflow: 'hidden', background: '#080c14' }}>
-                <img 
-                  src="/images/block_coding_cliff.jpg" 
-                  alt="블록 코딩은 쉽지만 실제 코딩은 너무 어렵다"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
-              <div style={{ padding: '28px 26px 30px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px', wordBreak: 'keep-all' }}>
-                    {isEn ? 'Block Coding is Easy, But Real Coding is Too Hard' : '블록 코딩은 쉽지만, 실제 코딩은 너무 어렵다'}
-                  </h3>
-                  <p style={{ fontSize: '0.94rem', color: '#64748b', lineHeight: 1.65, wordBreak: 'keep-all', margin: 0 }}>
-                    {isEn
-                      ? 'Matching toy blocks was playful and simple, but moving to real Python or C syntax presents a terrifying cliff of syntax errors and brackets.'
-                      : '마우스로 블록을 맞출 땐 쉬웠지만, 실제 텍스트 코드로 넘어가는 순간 괄호 하나, 오타 하나의 거대한 장벽에 가로막힙니다.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Simple, Punchy Connecting Bridge */}
-          <div style={{
-            marginTop: '32px',
-            textAlign: 'center',
-            padding: '22px 28px',
-            borderRadius: '16px',
-            background: 'rgba(8, 145, 178, 0.06)',
-            border: '1px solid rgba(8, 145, 178, 0.2)',
-          }}>
-            <p style={{
               margin: 0,
-              fontSize: 'clamp(1rem, 2vw, 1.12rem)',
-              fontWeight: 700,
-              color: '#0f172a',
               wordBreak: 'keep-all',
-              lineHeight: 1.6,
             }}>
-              {isEn
-                ? 'That is why TypingCode exists. Just type along, and real code completes naturally.'
-                : '그래서 타이핑코드. 눈으로 외우지 않고 손으로 직접 따라 치며, 진짜 코드를 자연스럽게 완성합니다.'}
-            </p>
+              {isEn ? 'Coding is too difficult.' : '코딩은 너무 어렵습니다.'}
+            </h2>
+          </div>
+
+          {/* 2 Cards with Middle Arrow */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '24px',
+            flexWrap: 'wrap',
+          }}>
+            {/* Card 1: Block Coding */}
+            <div style={{
+              flex: '1 1 360px',
+              maxWidth: '480px',
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.06)',
+            }}>
+              <div style={{ width: '100%', height: '280px', overflow: 'hidden', background: '#f8fafc' }}>
+                <img 
+                  src="/images/block_coding_pure.jpg" 
+                  alt="블록코딩은 쉽고 재밌습니다"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              <div style={{ padding: '24px 24px', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0, wordBreak: 'keep-all' }}>
+                  {isEn ? 'Block coding is easy and fun.' : '블록코딩은 쉽고 재밌습니다.'}
+                </h3>
+              </div>
+            </div>
+
+            {/* Middle Connecting Arrow */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '54px',
+              height: '54px',
+              borderRadius: '50%',
+              background: '#ffffff',
+              border: '1.5px solid #e2e8f0',
+              color: '#0891b2',
+              boxShadow: '0 4px 14px rgba(15, 23, 42, 0.08)',
+              flexShrink: 0,
+            }}>
+              <ArrowRight size={24} />
+            </div>
+
+            {/* Card 2: Real Text Code */}
+            <div style={{
+              flex: '1 1 360px',
+              maxWidth: '480px',
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.06)',
+            }}>
+              <div style={{ width: '100%', height: '280px', overflow: 'hidden', background: '#0e121a' }}>
+                <img 
+                  src="/images/real_text_code.jpg" 
+                  alt="실제 코딩은 너무 어렵습니다"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              <div style={{ padding: '24px 24px', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0, wordBreak: 'keep-all' }}>
+                  {isEn ? 'Real coding is too difficult.' : '실제 코딩은 너무 어렵습니다.'}
+                </h3>
+              </div>
+            </div>
           </div>
         </section>
 
