@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Sparkles, ChevronRight, ChevronLeft, X, Code2, Play } from 'lucide-react';
+import { Sparkles, ChevronRight, ChevronLeft, Code2, Play } from 'lucide-react';
 
 export interface TourStep {
   targetId: string;
@@ -110,6 +110,14 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
   const isEn = language === 'en';
   const currentStep = TOUR_STEPS[stepIndex] || TOUR_STEPS[0];
 
+  // Reset tour state when opened
+  useEffect(() => {
+    if (isOpen) {
+      setStepIndex(0);
+      setDontShowAgain(true);
+    }
+  }, [isOpen]);
+
   // Update target element bounding rect
   const updateRect = useCallback(() => {
     if (!isOpen) return;
@@ -133,13 +141,11 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
     };
   }, [isOpen, updateRect]);
 
-  // Keyboard navigation (Esc to close, Arrow keys to navigate)
+  // Keyboard navigation (Arrow keys to navigate)
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleFinish();
-      } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
+      if (e.key === 'ArrowRight' || e.key === 'Enter') {
         if (stepIndex < TOUR_STEPS.length - 1) {
           setStepIndex((prev) => prev + 1);
         } else {
@@ -266,50 +272,29 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
           gap: '14px',
         }}
       >
-        {/* Card Header: Step Badge + Title + Close Button */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '2px 8px',
-                borderRadius: '999px',
-                background: 'rgba(56, 189, 248, 0.15)',
-                border: '1px solid rgba(56, 189, 248, 0.4)',
-                color: '#38bdf8',
-                fontSize: '0.72rem',
-                fontWeight: 900,
-                fontFamily: 'var(--font-mono)',
-              }}
-            >
-              <Sparkles size={11} />
-              {stepIndex + 1} / {TOUR_STEPS.length}
-            </span>
-            <h4 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
-              {isEn ? currentStep.title_en : currentStep.title_ko}
-            </h4>
-          </div>
-
-          <button
-            onClick={handleFinish}
-            title={isEn ? 'Close Tour' : '가이드 닫기'}
+        {/* Card Header: Step Badge + Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span
             style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              padding: '4px',
-              borderRadius: '6px',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'color 0.15s ease',
+              gap: '4px',
+              padding: '2px 8px',
+              borderRadius: '999px',
+              background: 'rgba(56, 189, 248, 0.15)',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+              color: '#38bdf8',
+              fontSize: '0.72rem',
+              fontWeight: 900,
+              fontFamily: 'var(--font-mono)',
             }}
           >
-            <X size={16} />
-          </button>
+            <Sparkles size={11} />
+            {stepIndex + 1} / {TOUR_STEPS.length}
+          </span>
+          <h4 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
+            {isEn ? currentStep.title_en : currentStep.title_ko}
+          </h4>
         </div>
 
         {/* Card Body: Formal Instructional Description */}
@@ -510,28 +495,32 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
             borderTop: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
-          <label
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '0.76rem',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              userSelect: 'none',
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={dontShowAgain}
-              onChange={(e) => setDontShowAgain(e.target.checked)}
+          {stepIndex === TOUR_STEPS.length - 1 ? (
+            <label
               style={{
-                accentColor: '#38bdf8',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '0.76rem',
+                color: '#94a3b8',
                 cursor: 'pointer',
+                userSelect: 'none',
               }}
-            />
-            <span>{isEn ? "Don't show again" : '다시 보지 않기'}</span>
-          </label>
+            >
+              <input
+                type="checkbox"
+                checked={dontShowAgain}
+                onChange={(e) => setDontShowAgain(e.target.checked)}
+                style={{
+                  accentColor: '#38bdf8',
+                  cursor: 'pointer',
+                }}
+              />
+              <span>{isEn ? "Don't show again" : '다시 보지 않기'}</span>
+            </label>
+          ) : (
+            <div />
+          )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {stepIndex > 0 && (
