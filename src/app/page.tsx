@@ -137,83 +137,67 @@ export default function HomePage() {
           justifyContent: 'center',
         }}>
           {/* Main Slogan: Mathematically exact rectangular justified typography with kinetic slide-up reveal */}
+          {/* Main Slogan: Continuous Animation in Exact 13x2 Monospace Geometric Rectangle */}
           <div style={{
-            display: 'flex',
+            display: 'inline-flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '100%',
-            maxWidth: '780px',
-            margin: '0 auto 28px',
-            animation: 'sloganGlowPulse 5s ease-in-out infinite',
+            padding: '36px 48px',
+            borderRadius: '24px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            border: '1.5px solid rgba(37, 99, 235, 0.22)',
+            animation: 'ambientBoxGlow 4s ease-in-out infinite',
+            position: 'relative',
+            overflow: 'hidden',
+            marginBottom: '32px',
+            backdropFilter: 'blur(16px)',
           }}>
-            <svg
-              viewBox="0 0 740 185"
-              style={{
-                width: '100%',
-                height: 'auto',
-                overflow: 'visible',
-                display: 'block',
-              }}
-            >
-              <defs>
-                <linearGradient id="sloganGradientFlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#2563eb">
-                    <animate attributeName="stop-color" values="#2563eb; #38bdf8; #2563eb" dur="5s" repeatCount="indefinite" />
-                  </stop>
-                  <stop offset="50%" stopColor="#38bdf8">
-                    <animate attributeName="stop-color" values="#38bdf8; #60a5fa; #38bdf8" dur="5s" repeatCount="indefinite" />
-                  </stop>
-                  <stop offset="100%" stopColor="#2563eb">
-                    <animate attributeName="stop-color" values="#2563eb; #38bdf8; #2563eb" dur="5s" repeatCount="indefinite" />
-                  </stop>
-                </linearGradient>
+            {/* Continuous Diagonal Sheen Beam Effect */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '40%',
+              height: '100%',
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent)',
+              animation: 'continuousSheen 4.5s ease-in-out infinite',
+              pointerEvents: 'none',
+            }} />
 
-                <clipPath id="sloganMask1">
-                  <rect x="0" y="0" width="740" height="92" />
-                </clipPath>
-                <clipPath id="sloganMask2">
-                  <rect x="0" y="92" width="740" height="93" />
-                </clipPath>
-              </defs>
+            {/* Slogan Text: Exact 13 Characters on each line in JetBrains Mono */}
+            <h1 style={{
+              fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+              fontSize: 'clamp(2.3rem, 5.8vw, 4.4rem)',
+              fontWeight: 800,
+              lineHeight: 1.15,
+              letterSpacing: '0.06em',
+              textAlign: 'center',
+              margin: 0,
+              userSelect: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}>
+              {/* Line 1: 13 characters */}
+              <div style={{
+                color: '#0f172a',
+                whiteSpace: 'nowrap',
+              }}>
+                JUST TYPE IT,
+              </div>
 
-              {/* Line 1: JUST TYPE IT, (Fitted exactly to 740px width) */}
-              <g clipPath="url(#sloganMask1)">
-                <text
-                  x="0"
-                  y="74"
-                  textLength="740"
-                  lengthAdjust="spacing"
-                  fill="#0f172a"
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                    fontWeight: 900,
-                    fontSize: '76px',
-                    animation: 'kineticSloganSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                  }}
-                >
-                  JUST TYPE IT,
-                </text>
-              </g>
-
-              {/* Line 2: THEN CODE IT. (Fitted exactly to 740px width) */}
-              <g clipPath="url(#sloganMask2)">
-                <text
-                  x="0"
-                  y="166"
-                  textLength="740"
-                  lengthAdjust="spacing"
-                  fill="url(#sloganGradientFlow)"
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                    fontWeight: 900,
-                    fontSize: '76px',
-                    animation: 'kineticSloganSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.14s forwards',
-                  }}
-                >
-                  THEN CODE IT.
-                </text>
-              </g>
-            </svg>
+              {/* Line 2: 13 characters with Continuous Flowing Gradient */}
+              <div style={{
+                whiteSpace: 'nowrap',
+                background: 'linear-gradient(90deg, #2563eb 0%, #38bdf8 25%, #818cf8 50%, #38bdf8 75%, #2563eb 100%)',
+                backgroundSize: '250% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                animation: 'continuousGradientFlow 4s linear infinite',
+              }}>
+                THEN CODE IT.
+              </div>
+            </h1>
           </div>
 
           {/* Simple Subtitle */}
