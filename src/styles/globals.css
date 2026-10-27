@@ -427,6 +427,110 @@ button {
 }
 
 /* ==========================================================================
+   5 Slogan Animation Presets
+   ========================================================================== */
+
+/* 1. 3D Float & Tilt */
+@keyframes anim3DFloat {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 16px 40px -10px rgba(37, 99, 235, 0.12), 0 0 0 1.5px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(4deg) rotateY(-2deg);
+    box-shadow: 0 28px 60px -8px rgba(56, 189, 248, 0.3), 0 0 0 1.5px rgba(56, 189, 248, 0.45);
+  }
+}
+
+/* 2. Laser Scan Line */
+@keyframes laserScanMove {
+  0% {
+    top: -5%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+/* 3. Cyber Neon Glitch */
+@keyframes glitchJitter {
+  0%, 88%, 100% {
+    transform: translate(0, 0);
+    text-shadow: none;
+  }
+  90% {
+    transform: translate(-3px, 1px);
+    text-shadow: 2px 0 #38bdf8, -2px 0 #ef4444;
+  }
+  92% {
+    transform: translate(3px, -1px);
+    text-shadow: -2px 0 #38bdf8, 2px 0 #a855f7;
+  }
+  94% {
+    transform: translate(-1px, 2px);
+    text-shadow: 1px 0 #2563eb, -1px 0 #10b981;
+  }
+  96% {
+    transform: translate(2px, 0);
+    text-shadow: 2px 0 #38bdf8;
+  }
+  98% {
+    transform: translate(0, 0);
+    text-shadow: none;
+  }
+}
+
+/* 4. Kinetic Letter Wave */
+@keyframes kineticWaveChar {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+    color: #38bdf8;
+  }
+}
+
+/* 5. Ping-Pong Focus Switch */
+@keyframes pingPongLine1 {
+  0%, 45% {
+    color: #2563eb;
+    text-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  55%, 100% {
+    color: #64748b;
+    text-shadow: none;
+    opacity: 0.65;
+    transform: scale(1);
+  }
+}
+
+@keyframes pingPongLine2 {
+  0%, 45% {
+    color: #64748b;
+    text-shadow: none;
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  55%, 100% {
+    color: #10b981;
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* ==========================================================================
    Refined Studio Design System (Option B - JetBrains / Brilliant Style)
    ========================================================================== */
 
