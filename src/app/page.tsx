@@ -248,30 +248,27 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 3-Step Progression Grid: Block Coding ➔ Real Coding ➔ TypingCode */}
+          {/* 2 Comparison Cards with Center Arrow */}
           <div style={{
             display: 'flex',
-            alignItems: 'stretch',
+            alignItems: 'center',
             justifyContent: 'center',
-            gap: '16px',
-            maxWidth: '1240px',
+            gap: '24px',
+            maxWidth: '1040px',
             margin: '0 auto',
             flexWrap: 'wrap',
           }}>
             {/* Card 1: Block Coding */}
             <div style={{
-              flex: '1 1 320px',
-              maxWidth: '360px',
+              flex: '1 1 360px',
+              maxWidth: '480px',
               background: '#ffffff',
               border: '1.5px solid #e0f2fe',
               borderRadius: '24px',
               overflow: 'hidden',
               boxShadow: '0 10px 28px -6px rgba(14, 165, 233, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04)',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
             }}>
-              <div style={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden', background: '#f0f9ff' }}>
+              <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#f0f9ff' }}>
                 <img 
                   src="/images/block_coding_fun.jpg" 
                   alt="블록코딩은 쉽고 재밌습니다."
@@ -294,13 +291,13 @@ export default function HomePage() {
                   color: '#0284c7',
                 }}>
                   <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981' }} />
-                  {isEn ? 'Step 1 · Block Coding' : '1단계 · 블록 코딩'}
+                  {isEn ? 'Block Coding' : '블록 코딩'}
                 </div>
               </div>
 
-              <div style={{ padding: '24px 22px 26px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div style={{ padding: '24px 28px 28px' }}>
                 <h3 style={{
-                  fontSize: '1.2rem',
+                  fontSize: '1.28rem',
                   fontWeight: 800,
                   color: '#0f172a',
                   marginBottom: '10px',
@@ -310,51 +307,47 @@ export default function HomePage() {
                   {isEn ? 'Block coding is easy and fun.' : '블록코딩은 쉽고 재밌습니다.'}
                 </h3>
                 <p style={{
-                  fontSize: '0.92rem',
+                  fontSize: '0.95rem',
                   color: '#64748b',
                   lineHeight: 1.65,
                   margin: 0,
                   wordBreak: 'keep-all',
                 }}>
                   {isEn
-                    ? 'Snap blocks together with a mouse to learn logic intuitively without worrying about syntax errors.'
-                    : '마우스로 블록을 조립하며 프로그래밍의 논리를 직관적으로 배웁니다. 문법 오타 걱정 없이 즉각적인 시각적 피드백을 얻을 수 있습니다.'}
+                    ? 'Snap blocks together with a mouse to learn logic and computational thinking intuitively. See immediate visual results without the stress of syntax rules or typos.'
+                    : '마우스로 블록을 조립하며 프로그래밍의 논리와 알고리즘을 직관적으로 배웁니다. 문법 오타 걱정 없이 원하는 동작을 시각적으로 즉각 확인하며 코딩의 재미를 느낄 수 있습니다.'}
                 </p>
               </div>
             </div>
 
-            {/* Connecting Arrow 1 */}
-            <div className="step-connector-arrow" style={{
+            {/* Middle Connecting Arrow */}
+            <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '42px',
-              height: '42px',
+              width: '54px',
+              height: '54px',
               borderRadius: '50%',
               background: '#ffffff',
               border: '1.5px solid #e2e8f0',
               color: '#0284c7',
-              boxShadow: '0 4px 12px rgba(15, 23, 42, 0.06)',
+              boxShadow: '0 4px 14px rgba(15, 23, 42, 0.08)',
               flexShrink: 0,
-              alignSelf: 'center',
             }}>
-              <ArrowRight size={20} strokeWidth={2.5} />
+              <ArrowRight size={22} strokeWidth={2.5} />
             </div>
 
             {/* Card 2: Real Text Code */}
             <div style={{
-              flex: '1 1 320px',
-              maxWidth: '360px',
+              flex: '1 1 360px',
+              maxWidth: '480px',
               background: '#ffffff',
               border: '1.5px solid #e2e8f0',
               borderRadius: '24px',
               overflow: 'hidden',
               boxShadow: '0 10px 28px -6px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04)',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
             }}>
-              <div style={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden', background: '#0e121a' }}>
+              <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#0e121a' }}>
                 <img 
                   src="/images/real_coding_hard.jpg" 
                   alt="실전 코딩은 복잡하고 어렵습니다."
@@ -377,13 +370,13 @@ export default function HomePage() {
                   color: '#f87171',
                 }}>
                   <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#ef4444' }} />
-                  {isEn ? 'Step 2 · Real Coding' : '2단계 · 실전 코딩'}
+                  {isEn ? 'Real Coding' : '실전 코딩'}
                 </div>
               </div>
 
-              <div style={{ padding: '24px 22px 26px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div style={{ padding: '24px 28px 28px' }}>
                 <h3 style={{
-                  fontSize: '1.2rem',
+                  fontSize: '1.28rem',
                   fontWeight: 800,
                   color: '#0f172a',
                   marginBottom: '10px',
@@ -393,102 +386,70 @@ export default function HomePage() {
                   {isEn ? 'Real coding is complex and difficult.' : '실전 코딩은 복잡하고 어렵습니다.'}
                 </h3>
                 <p style={{
-                  fontSize: '0.92rem',
+                  fontSize: '0.95rem',
                   color: '#64748b',
                   lineHeight: 1.65,
                   margin: 0,
                   wordBreak: 'keep-all',
                 }}>
                   {isEn
-                    ? 'Stepping into a real code editor brings unfamiliar English keywords and strict syntax rules where a single typo halts everything.'
-                    : '하지만 실제 텍스트 에디터로 넘어오는 순간, 낯선 영문 키워드와 복잡한 문법 규칙에 부딪힙니다. 단 한 글자의 오타에도 실행이 멈춰 막막해집니다.'}
+                    ? 'Stepping into a real code editor brings unfamiliar English keywords and strict syntax rules. A single typo or misplaced bracket halts execution, leaving learners stranded in error messages.'
+                    : '하지만 실제 텍스트 에디터로 넘어오는 순간, 낯선 영문 키워드와 복잡한 문법 규칙에 부딪힙니다. 단 한 글자의 사소한 오타나 괄호 실수에도 실행이 멈추고 에러 메시지 앞에서 막막해집니다.'}
                 </p>
               </div>
             </div>
+          </div>
 
-            {/* Connecting Arrow 2 */}
-            <div className="step-connector-arrow" style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '42px',
-              height: '42px',
-              borderRadius: '50%',
-              background: '#ffffff',
-              border: '1.5px solid #ccfbf1',
-              color: '#0d9488',
-              boxShadow: '0 4px 12px rgba(13, 148, 136, 0.12)',
-              flexShrink: 0,
-              alignSelf: 'center',
-            }}>
-              <ArrowRight size={20} strokeWidth={2.5} />
-            </div>
-
-            {/* Card 3: TypingCode Solution */}
+          {/* Bottom Foundation Statement (Pure Typography) */}
+          <div style={{
+            textAlign: 'center',
+            maxWidth: '820px',
+            margin: '52px auto 0',
+            padding: '0 20px',
+          }}>
             <div style={{
-              flex: '1 1 320px',
-              maxWidth: '360px',
-              background: 'linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%)',
-              border: '2px solid #0d9488',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              boxShadow: '0 12px 32px -6px rgba(13, 148, 136, 0.14), 0 2px 8px rgba(15, 23, 42, 0.04)',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 14px',
+              borderRadius: '20px',
+              background: '#f0fdfa',
+              border: '1px solid #ccfbf1',
+              color: '#0d9488',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              marginBottom: '16px',
             }}>
-              <div style={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden', background: '#f8fafc' }}>
-                <img 
-                  src="/images/typingcode_solution.jpg" 
-                  alt="따라치다 보면 손이 먼저 기억합니다."
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-                <div style={{
-                  position: 'absolute',
-                  top: '16px',
-                  left: '16px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '5px 12px',
-                  borderRadius: '14px',
-                  background: 'rgba(255, 255, 255, 0.95)',
-                  backdropFilter: 'blur(8px)',
-                  border: '1px solid #ccfbf1',
-                  boxShadow: '0 2px 8px rgba(13, 148, 136, 0.12)',
-                  fontSize: '0.78rem',
-                  fontWeight: 700,
-                  color: '#0d9488',
-                }}>
-                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#0d9488' }} />
-                  {isEn ? 'Solution · TypingCode' : '해결책 · 타이핑코드'}
-                </div>
-              </div>
-
-              <div style={{ padding: '24px 22px 26px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <h3 style={{
-                  fontSize: '1.2rem',
-                  fontWeight: 800,
-                  color: '#0f172a',
-                  marginBottom: '10px',
-                  letterSpacing: '-0.01em',
-                  wordBreak: 'keep-all',
-                }}>
-                  {isEn ? 'Just type along, code flows naturally.' : '따라치다 보면 손이 먼저 기억합니다.'}
-                </h3>
-                <p style={{
-                  fontSize: '0.92rem',
-                  color: '#64748b',
-                  lineHeight: 1.65,
-                  margin: 0,
-                  wordBreak: 'keep-all',
-                }}>
-                  {isEn
-                    ? 'No thick textbooks, no hard lectures. Type directly to bridge the gap between block coding and real code effortlessly.'
-                    : '두꺼운 코딩책도 어려운 강의도 없이, 손끝으로 직접 타이핑하며 블록코딩과 실전 코딩 사이의 거대한 간극을 가장 자연스럽게 채웁니다.'}
-                </p>
-              </div>
+              <Sparkles size={14} />
+              <span>{isEn ? 'The TypingCode Solution' : '타이핑코드가 채우는 해답'}</span>
             </div>
+
+            <h3 style={{
+              fontSize: 'clamp(1.4rem, 2.8vw, 1.85rem)',
+              fontWeight: 800,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.45,
+              marginBottom: '14px',
+              wordBreak: 'keep-all',
+            }}>
+              {isEn
+                ? 'No thick textbooks, no hard lectures. Just type along, and code flows.'
+                : '두꺼운 코딩책도 어려운 강의도 없이,\n따라치다 보면 손이 먼저 코드를 기억합니다.'}
+            </h3>
+
+            <p style={{
+              fontSize: 'clamp(1rem, 1.8vw, 1.1rem)',
+              color: '#64748b',
+              lineHeight: 1.7,
+              margin: '0 auto',
+              maxWidth: '640px',
+              wordBreak: 'keep-all',
+            }}>
+              {isEn
+                ? 'TypingCode fills the difficult gap between block coding and real programming through intuitive interactive typing.'
+                : '타이핑코드는 블록코딩과 실전 코딩 사이의 거대한 간극을 손끝의 타이핑으로 자연스럽게 채워주는 연습실입니다.'}
+            </p>
           </div>
         </section>
 
