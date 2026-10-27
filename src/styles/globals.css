@@ -213,6 +213,21 @@ button {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
 }
 
+/* Light Mode Matte High-Contrast Card System */
+.light-mode-card {
+  background: #ffffff !important;
+  border: 2px solid #94a3b8;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.light-mode-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 16px 36px -4px rgba(2, 132, 199, 0.2), 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
 /* Custom friendly scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -609,10 +624,10 @@ button {
   height: 180px;
   padding: 18px 14px;
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: 2px solid #94a3b8;
   border-radius: 20px;
   text-decoration: none;
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
   cursor: pointer;
   user-select: none;
@@ -621,9 +636,9 @@ button {
 }
 
 .curriculum-square-card:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-6px) scale(1.03);
   border-color: #0284c7;
-  box-shadow: 0 16px 32px -6px rgba(14, 165, 233, 0.16), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 16px 36px -6px rgba(14, 165, 233, 0.2), 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 /* ==========================================================================

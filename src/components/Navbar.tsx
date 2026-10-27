@@ -21,7 +21,11 @@ export default function Navbar() {
     return null;
   }
 
-  const isHomePage = pathname === '/';
+  const isLightPage =
+    pathname === '/' ||
+    pathname === '/languages' ||
+    pathname?.startsWith('/learn') ||
+    (pathSegments[0] === 'practice' && pathSegments.length <= 2);
 
   const openLogin = () => {
     setAuthModalTab('login');
@@ -59,14 +63,14 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`navbar-header ${isHomePage ? 'navbar-header-home' : ''}`}
+        className={`navbar-header ${isLightPage ? 'navbar-header-home' : ''}`}
         style={
-          isHomePage
+          isLightPage
             ? {
-                background: 'rgba(255, 255, 255, 0.92)',
+                background: 'rgba(226, 239, 246, 0.9)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                borderBottom: '1px solid #e2e8f0',
+                borderBottom: '1px solid #cbd5e1',
                 boxShadow: '0 2px 12px -2px rgba(15, 23, 42, 0.05)',
               }
             : undefined
@@ -96,7 +100,7 @@ export default function Navbar() {
                 fontSize: '1.35rem',
                 fontWeight: 800,
                 letterSpacing: '-0.5px',
-                color: isHomePage ? '#0f172a' : '#f8fafc',
+                color: isLightPage ? '#0f172a' : '#f8fafc',
                 whiteSpace: 'nowrap',
               }}
             >
@@ -121,11 +125,11 @@ export default function Navbar() {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              background: isHomePage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
-              border: isHomePage ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.08)',
+              background: isLightPage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
+              border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.08)',
               padding: '5px 8px',
               borderRadius: '14px',
-              boxShadow: isHomePage ? 'none' : 'inset 0 1px 3px rgba(0, 0, 0, 0.2)',
+              boxShadow: isLightPage ? 'none' : 'inset 0 1px 3px rgba(0, 0, 0, 0.2)',
             }}
           >
             {navItems.map((item) => {
@@ -152,8 +156,8 @@ export default function Navbar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              background: isHomePage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
-              border: isHomePage ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.08)',
+              background: isLightPage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
+              border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.08)',
               borderRadius: '10px',
               padding: '3px',
               gap: '2px',
@@ -168,28 +172,28 @@ export default function Navbar() {
                 borderRadius: '7px',
                 border:
                   language === 'ko'
-                    ? isHomePage
-                      ? '1px solid #e2e8f0'
+                    ? isLightPage
+                      ? '1px solid #cbd5e1'
                       : '1px solid rgba(255, 255, 255, 0.12)'
                     : '1px solid transparent',
                 background:
                   language === 'ko'
-                    ? isHomePage
+                    ? isLightPage
                       ? '#ffffff'
                       : 'rgba(255, 255, 255, 0.1)'
                     : 'transparent',
                 color:
                   language === 'ko'
-                    ? isHomePage
+                    ? isLightPage
                       ? '#0f172a'
                       : '#ffffff'
-                    : isHomePage
+                    : isLightPage
                     ? '#64748b'
                     : '#64748b',
                 fontWeight: language === 'ko' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
-                boxShadow: language === 'ko' && isHomePage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
+                boxShadow: language === 'ko' && isLightPage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -203,28 +207,28 @@ export default function Navbar() {
                 borderRadius: '7px',
                 border:
                   language === 'en'
-                    ? isHomePage
-                      ? '1px solid #e2e8f0'
+                    ? isLightPage
+                      ? '1px solid #cbd5e1'
                       : '1px solid rgba(255, 255, 255, 0.12)'
                     : '1px solid transparent',
                 background:
                   language === 'en'
-                    ? isHomePage
+                    ? isLightPage
                       ? '#ffffff'
                       : 'rgba(255, 255, 255, 0.1)'
                     : 'transparent',
                 color:
                   language === 'en'
-                    ? isHomePage
+                    ? isLightPage
                       ? '#0f172a'
                       : '#ffffff'
-                    : isHomePage
+                    : isLightPage
                     ? '#64748b'
                     : '#64748b',
                 fontWeight: language === 'en' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
-                boxShadow: language === 'en' && isHomePage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
+                boxShadow: language === 'en' && isLightPage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   ArrowRight, 
@@ -25,6 +25,14 @@ import { getTrackName, getCategoryName, getSkillName } from '@/lib/curriculumTra
 export default function LanguagesPage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
+
+  // Dynamic matte soft ice-cyan body background for glare-free comfort
+  useEffect(() => {
+    document.body.style.backgroundColor = '#e2eff6';
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
+  }, []);
 
   const [selectedTrackId, setSelectedTrackId] = useState<string>('all');
   const [hoveredTrackId, setHoveredTrackId] = useState<string | null>(null);
@@ -103,13 +111,14 @@ export default function LanguagesPage() {
           gap: '8px',
           padding: '6px 18px',
           borderRadius: '24px',
-          background: 'rgba(56, 189, 248, 0.12)',
-          border: '1px solid rgba(56, 189, 248, 0.25)',
-          color: '#38bdf8',
+          background: '#ffffff',
+          border: '1.5px solid #94a3b8',
+          color: '#0284c7',
           fontSize: '0.85rem',
           fontWeight: 700,
           marginBottom: '18px',
           letterSpacing: '0.05em',
+          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.06)',
         }}>
           <Compass size={16} />
           <span>CURRICULUM ARCHITECTURE</span>
@@ -118,7 +127,7 @@ export default function LanguagesPage() {
         <h1 style={{ 
           fontSize: 'clamp(2rem, 4vw, 2.8rem)', 
           fontWeight: 800, 
-          color: '#f8fafc', 
+          color: '#0f172a', 
           marginBottom: '14px',
           letterSpacing: '-0.02em',
           lineHeight: 1.2
@@ -127,7 +136,7 @@ export default function LanguagesPage() {
         </h1>
 
         <p style={{ 
-          color: '#94a3b8', 
+          color: '#475569', 
           fontSize: 'clamp(1rem, 2vw, 1.15rem)', 
           maxWidth: '820px', 
           margin: '0 auto 24px',
@@ -152,41 +161,41 @@ export default function LanguagesPage() {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '20px',
-          padding: '10px 24px',
-          borderRadius: '16px',
-          background: 'rgba(15, 23, 42, 0.6)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          backdropFilter: 'blur(8px)',
-          fontSize: '0.9rem',
-          color: '#cbd5e1',
+          padding: '12px 28px',
+          borderRadius: '20px',
+          background: '#ffffff',
+          border: '2px solid #94a3b8',
+          boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+          fontSize: '0.92rem',
+          color: '#334155',
           flexWrap: 'wrap',
           justifyContent: 'center',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Layers size={16} color="#38bdf8" />
-            <span><strong>{stats.totalTracks}</strong> {isEn ? 'Tracks' : '개 언어 트랙'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Layers size={18} color="#0284c7" />
+            <span><strong style={{ color: '#0f172a', fontWeight: 800 }}>{stats.totalTracks}</strong> {isEn ? 'Tracks' : '개 언어 트랙'}</span>
           </div>
-          <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <BookOpen size={16} color="#10b981" />
-            <span><strong>{stats.totalModules}</strong> {isEn ? 'Courses' : '개 전문 코스'}</span>
+          <span style={{ color: '#cbd5e1' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <BookOpen size={18} color="#10b981" />
+            <span><strong style={{ color: '#0f172a', fontWeight: 800 }}>{stats.totalModules}</strong> {isEn ? 'Courses' : '개 전문 코스'}</span>
           </div>
-          <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Sparkles size={16} color="#f59e0b" />
-            <span><strong>{stats.totalLevels}+</strong> {isEn ? 'Stages' : '개 실전 타자 단계'}</span>
+          <span style={{ color: '#cbd5e1' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Sparkles size={18} color="#f59e0b" />
+            <span><strong style={{ color: '#0f172a', fontWeight: 800 }}>{stats.totalLevels}+</strong> {isEn ? 'Stages' : '개 실전 타자 단계'}</span>
           </div>
         </div>
       </div>
 
       {/* Filter & Search Bar */}
       <div style={{
-        background: 'var(--bg-surface, #1e293b)',
-        borderRadius: '20px',
-        padding: '20px',
-        border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+        background: '#ffffff',
+        borderRadius: '24px',
+        padding: '22px 24px',
+        border: '2px solid #94a3b8',
         marginBottom: '36px',
-        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25)',
+        boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
       }}>
         {/* Language Tabs Row: Square Icon Buttons */}
         <div style={{
@@ -194,12 +203,12 @@ export default function LanguagesPage() {
           alignItems: 'center',
           gap: '12px',
           overflowX: 'auto',
-          paddingTop: '8px',
+          paddingTop: '6px',
           paddingBottom: '14px',
-          paddingLeft: '6px',
-          paddingRight: '6px',
-          marginBottom: '16px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+          paddingLeft: '4px',
+          paddingRight: '4px',
+          marginBottom: '18px',
+          borderBottom: '1.5px solid #e2e8f0',
           scrollbarWidth: 'none',
         }}>
           {/* ALL Tracks Button: Expands smoothly on hover */}
@@ -218,16 +227,16 @@ export default function LanguagesPage() {
                   borderRadius: '16px',
                   flexShrink: 0,
                   background: isSelected 
-                    ? 'rgba(56, 189, 248, 0.22)' 
+                    ? 'rgba(8, 145, 178, 0.12)' 
                     : isHovered 
-                    ? 'rgba(56, 189, 248, 0.12)'
-                    : 'rgba(255, 255, 255, 0.04)',
+                    ? '#f1f5f9'
+                    : '#f8fafc',
                   border: isSelected 
-                    ? '2px solid #38bdf8' 
+                    ? '2px solid #0891b2' 
                     : isHovered
-                    ? '1.5px solid rgba(56, 189, 248, 0.4)'
-                    : '1.5px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: isSelected ? '0 6px 20px rgba(56, 189, 248, 0.45)' : 'none',
+                    ? '1.5px solid #0891b2'
+                    : '1.5px solid #cbd5e1',
+                  boxShadow: isSelected ? '0 4px 14px rgba(8, 145, 178, 0.25)' : 'none',
                   transform: isHovered ? 'scale(1.04)' : 'scale(1)',
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'inline-flex',
@@ -249,15 +258,15 @@ export default function LanguagesPage() {
                   gap: '6px',
                   pointerEvents: 'none',
                 }}>
-                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
+                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: isSelected ? '#0891b2' : '#0f172a' }}>
                     {isEn ? 'All' : '전체'}
                   </span>
                   <span style={{
                     fontSize: '0.72rem',
                     padding: '2px 6px',
                     borderRadius: '6px',
-                    background: 'rgba(255, 255, 255, 0.18)',
-                    color: '#cbd5e1',
+                    background: isSelected ? 'rgba(8, 145, 178, 0.2)' : '#e2e8f0',
+                    color: isSelected ? '#0e7490' : '#475569',
                     fontWeight: 700,
                   }}>
                     {stats.totalModules}
@@ -313,16 +322,16 @@ export default function LanguagesPage() {
                   borderRadius: '16px',
                   flexShrink: 0,
                   background: isSelected 
-                    ? `${track.color}25` 
+                    ? `${track.color}18` 
                     : isHovered
-                    ? `${track.color}15`
-                    : 'rgba(255, 255, 255, 0.04)',
+                    ? `${track.color}0d`
+                    : '#f8fafc',
                   border: isSelected 
                     ? `2px solid ${track.color}` 
                     : isHovered
-                    ? `1.5px solid ${track.color}60`
-                    : '1.5px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: isSelected ? `0 6px 20px ${track.color}50` : isHovered ? `0 4px 14px ${track.color}30` : 'none',
+                    ? `1.5px solid ${track.color}`
+                    : '1.5px solid #cbd5e1',
+                  boxShadow: isSelected ? `0 4px 14px ${track.color}35` : 'none',
                   transform: isHovered ? 'scale(1.04)' : 'scale(1)',
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'inline-flex',
@@ -344,15 +353,15 @@ export default function LanguagesPage() {
                   gap: '6px',
                   pointerEvents: 'none',
                 }}>
-                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
+                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: isSelected ? track.color : '#0f172a' }}>
                     {pillLabel}
                   </span>
                   <span style={{
                     fontSize: '0.72rem',
                     padding: '2px 6px',
                     borderRadius: '6px',
-                    background: 'rgba(255, 255, 255, 0.16)',
-                    color: '#cbd5e1',
+                    background: isSelected ? `${track.color}25` : '#e2e8f0',
+                    color: isSelected ? '#0f172a' : '#475569',
                     fontWeight: 700,
                   }}>
                     {track.modules.length}
@@ -396,11 +405,12 @@ export default function LanguagesPage() {
                 width: '100%',
                 padding: '10px 38px 10px 42px',
                 borderRadius: '12px',
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                color: '#0f172a',
                 fontSize: '0.9rem',
                 outline: 'none',
+                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
               }}
             />
             {searchQuery && (
@@ -411,7 +421,10 @@ export default function LanguagesPage() {
                   right: '12px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: '#94a3b8',
+                  color: '#64748b',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
                   padding: '4px',
                 }}
               >
@@ -422,7 +435,7 @@ export default function LanguagesPage() {
 
           {/* Difficulty Filter Pills */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.82rem', color: '#64748b', marginRight: '4px', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.84rem', color: '#475569', marginRight: '4px', fontWeight: 700 }}>
               {isEn ? 'Difficulty:' : '난이도:'}
             </span>
             {difficultyOptions.map((diff) => (
@@ -430,13 +443,15 @@ export default function LanguagesPage() {
                 key={diff}
                 onClick={() => setSelectedDifficulty(diff)}
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: '8px',
+                  padding: '7px 14px',
+                  borderRadius: '10px',
                   fontSize: '0.82rem',
-                  fontWeight: 600,
-                  background: selectedDifficulty === diff ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255, 255, 255, 0.04)',
-                  color: selectedDifficulty === diff ? '#38bdf8' : '#94a3b8',
-                  border: selectedDifficulty === diff ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid rgba(255, 255, 255, 0.06)',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  background: selectedDifficulty === diff ? '#0891b2' : '#f8fafc',
+                  color: selectedDifficulty === diff ? '#ffffff' : '#475569',
+                  border: selectedDifficulty === diff ? '1.5px solid #0891b2' : '1.5px solid #cbd5e1',
+                  boxShadow: selectedDifficulty === diff ? '0 2px 8px rgba(8, 145, 178, 0.3)' : 'none',
                   transition: 'all 0.15s ease',
                 }}
               >
@@ -452,14 +467,15 @@ export default function LanguagesPage() {
         <div style={{
           textAlign: 'center',
           padding: '80px 20px',
-          background: 'var(--bg-surface, #1e293b)',
+          background: '#ffffff',
           borderRadius: '24px',
-          border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+          border: '2px solid #94a3b8',
+          boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
         }}>
-          <p style={{ fontSize: '1.2rem', color: '#f8fafc', marginBottom: '8px', fontWeight: 700 }}>
+          <p style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '8px', fontWeight: 800 }}>
             {isEn ? 'No matching courses found.' : '검색 결과와 일치하는 코스가 없습니다.'}
           </p>
-          <p style={{ fontSize: '0.95rem', color: '#94a3b8', marginBottom: '20px' }}>
+          <p style={{ fontSize: '0.95rem', color: '#64748b', marginBottom: '20px' }}>
             {isEn ? 'Try searching with different keywords or reset your filters.' : '다른 검색어를 입력하시거나 필터를 초기화해 보세요.'}
           </p>
           <button
@@ -469,7 +485,7 @@ export default function LanguagesPage() {
               setSelectedDifficulty('all');
             }}
             className="tactile-btn tactile-btn-primary"
-            style={{ padding: '10px 20px', fontSize: '0.9rem' }}
+            style={{ padding: '10px 20px', fontSize: '0.9rem', borderRadius: '12px' }}
           >
             <span>{isEn ? 'View All Courses' : '모든 과정 전체보기'}</span>
           </button>
@@ -480,9 +496,9 @@ export default function LanguagesPage() {
             <section key={track.id} id={`track-${track.id}`}>
               {/* Track Header Card */}
               <div style={{
-                background: 'var(--bg-surface, #1e293b)',
-                border: `1px solid ${track.color}45`,
-                borderRadius: '20px',
+                background: '#ffffff',
+                border: '2px solid #94a3b8',
+                borderRadius: '24px',
                 padding: '24px 28px',
                 marginBottom: '20px',
                 display: 'flex',
@@ -490,40 +506,40 @@ export default function LanguagesPage() {
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: '16px',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
+                boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <div style={{
                     width: '56px',
                     height: '56px',
                     borderRadius: '16px',
-                    background: 'rgba(15, 23, 42, 0.7)',
-                    border: `1px solid ${track.color}60`,
+                    background: '#f8fafc',
+                    border: `2px solid ${track.color}60`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: `0 4px 16px ${track.color}30`,
+                    boxShadow: `0 4px 12px ${track.color}20`,
                   }}>
                     <LanguageIcon language={track.id} size={36} />
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#f8fafc' }}>
+                      <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#0f172a' }}>
                         {getTrackName(track, isEn)}
                       </h2>
                       <span style={{
                         padding: '3px 10px',
                         borderRadius: '10px',
-                        background: 'rgba(15, 23, 42, 0.6)',
-                        border: `1px solid ${track.color}60`,
+                        background: `${track.color}15`,
+                        border: `1.5px solid ${track.color}45`,
                         color: track.color,
                         fontSize: '0.75rem',
-                        fontWeight: 700,
+                        fontWeight: 800,
                       }}>
                         {track.badge}
                       </span>
                     </div>
-                    <p style={{ color: '#cbd5e1', fontSize: '0.92rem', marginTop: '4px' }}>
+                    <p style={{ color: '#475569', fontSize: '0.92rem', marginTop: '4px', fontWeight: 500 }}>
                       {isEn ? track.tagline_en : track.tagline_ko}
                     </p>
                   </div>
@@ -533,12 +549,12 @@ export default function LanguagesPage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  background: 'rgba(15, 23, 42, 0.5)',
+                  background: '#f1f5f9',
                   padding: '6px 14px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: '1.5px solid #cbd5e1',
                   fontSize: '0.85rem',
-                  color: '#cbd5e1',
+                  color: '#334155',
                 }}>
                   <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong>{track.modules.length}개</strong> 과정 개설</>}</span>
                 </div>
@@ -553,7 +569,7 @@ export default function LanguagesPage() {
                 {[...track.modules]
                   .sort((a, b) => (DIFFICULTY_ORDER[a.difficulty] || 99) - (DIFFICULTY_ORDER[b.difficulty] || 99))
                   .map((module) => {
-                    // Simulated or stored progress: py-basic 36%, web-html 20%, c-basic 8%, etc.
+                    // Simulated or stored progress: py-basic 9, web-html 5, c-basic 2, etc.
                     const defaultProgress: Record<string, number> = {
                       'py-basic': 9,
                       'web-html': 5,
@@ -567,19 +583,20 @@ export default function LanguagesPage() {
                     return (
                       <div
                         key={module.id}
-                        className="quest-card"
+                        className="light-mode-card"
                         style={{
                           padding: '24px',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          background: '#131e33',
+                          background: '#ffffff',
+                          borderRadius: '22px',
                           border: isStarted
-                            ? '1.5px solid rgba(56, 189, 248, 0.45)'
-                            : '1px solid rgba(255, 255, 255, 0.08)',
+                            ? '2px solid #0284c7'
+                            : '2px solid #94a3b8',
                           boxShadow: isStarted 
-                            ? '0 8px 24px rgba(56, 189, 248, 0.12)' 
-                            : '0 4px 14px rgba(0, 0, 0, 0.2)',
+                            ? '0 12px 30px -4px rgba(2, 132, 199, 0.16)' 
+                            : '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
                           transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
                           position: 'relative',
                           overflow: 'visible',
@@ -600,7 +617,7 @@ export default function LanguagesPage() {
                             fontSize: '0.74rem',
                             fontWeight: 800,
                             letterSpacing: '0.02em',
-                            boxShadow: '0 4px 12px rgba(2, 132, 199, 0.45)',
+                            boxShadow: '0 4px 12px rgba(2, 132, 199, 0.35)',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '4px',
@@ -625,9 +642,9 @@ export default function LanguagesPage() {
                               <span style={{
                                 padding: '4px 10px',
                                 borderRadius: '8px',
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                color: '#94a3b8',
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                background: '#f1f5f9',
+                                color: '#475569',
+                                border: '1px solid #cbd5e1',
                                 fontSize: '0.78rem',
                                 fontWeight: 700,
                               }}>
@@ -660,8 +677,8 @@ export default function LanguagesPage() {
                                   gap: '4px',
                                   padding: '2px 8px',
                                   borderRadius: '6px',
-                                  background: 'rgba(239, 68, 68, 0.15)',
-                                  color: '#f87171',
+                                  background: 'rgba(239, 68, 68, 0.12)',
+                                  color: '#dc2626',
                                   fontSize: '0.72rem',
                                   fontWeight: 800,
                                   border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -672,7 +689,7 @@ export default function LanguagesPage() {
                               )}
                               <span style={{
                                 fontSize: '0.78rem',
-                                color: '#94a3b8',
+                                color: '#64748b',
                                 fontWeight: 600,
                               }}>
                                 {module.totalLevels}{isEn ? ' Stages' : '단계'}
@@ -684,7 +701,7 @@ export default function LanguagesPage() {
                           <h3 style={{
                             fontSize: '1.18rem',
                             fontWeight: 800,
-                            color: '#f8fafc',
+                            color: '#0f172a',
                             marginBottom: isEn ? '12px' : '4px',
                             lineHeight: 1.35,
                           }}>
@@ -704,7 +721,7 @@ export default function LanguagesPage() {
                           {/* Description */}
                           <p style={{
                             fontSize: '0.88rem',
-                            color: '#94a3b8',
+                            color: '#475569',
                             lineHeight: 1.55,
                             marginBottom: '16px',
                             minHeight: '44px',
@@ -718,10 +735,10 @@ export default function LanguagesPage() {
                             flexDirection: 'column',
                             gap: '6px',
                             marginBottom: '20px',
-                            padding: '12px',
-                            borderRadius: '12px',
-                            background: 'rgba(15, 23, 42, 0.5)',
-                            border: '1px solid rgba(255, 255, 255, 0.04)',
+                            padding: '12px 14px',
+                            borderRadius: '14px',
+                            background: '#f8fafc',
+                            border: '1.5px solid #e2e8f0',
                           }}>
                             <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, marginBottom: '2px' }}>
                               {isEn ? 'Key Skills:' : '핵심 습득 기술:'}
@@ -734,23 +751,24 @@ export default function LanguagesPage() {
                                   alignItems: 'center',
                                   gap: '6px',
                                   fontSize: '0.8rem',
-                                  color: '#cbd5e1',
+                                  color: '#334155',
+                                  fontWeight: 500,
                                 }}
                               >
-                                <CheckCircle2 size={13} color="#38bdf8" style={{ flexShrink: 0 }} />
+                                <CheckCircle2 size={13} color="#0284c7" style={{ flexShrink: 0 }} />
                                 <span>{getSkillName(skill, isEn)}</span>
                               </div>
                             ))}
                           </div>
                         </div>
 
-                        {/* Bottom Action Area: Replaced '실시간 코드 샌드박스' with Progress Gauge Bar */}
+                        {/* Bottom Action Area: Progress Gauge Bar & CTA */}
                         <div style={{
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           paddingTop: '16px',
-                          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                          borderTop: '1.5px solid #e2e8f0',
                           gap: '12px',
                         }}>
                           {/* Progress Gauge */}
@@ -763,7 +781,7 @@ export default function LanguagesPage() {
                             }}>
                               <span style={{
                                 fontSize: '0.76rem',
-                                color: isStarted ? '#38bdf8' : '#64748b',
+                                color: isStarted ? '#0284c7' : '#64748b',
                                 fontWeight: 700,
                               }}>
                                 {isStarted 
@@ -772,7 +790,7 @@ export default function LanguagesPage() {
                               </span>
                               <span style={{
                                 fontSize: '0.72rem',
-                                color: '#94a3b8',
+                                color: '#64748b',
                                 fontWeight: 600,
                                 fontFamily: 'var(--font-mono)',
                               }}>
@@ -785,7 +803,7 @@ export default function LanguagesPage() {
                               width: '100%',
                               height: '7px',
                               borderRadius: '4px',
-                              background: 'rgba(255, 255, 255, 0.08)',
+                              background: '#e2e8f0',
                               overflow: 'hidden',
                             }}>
                               {/* Gauge Fill */}
@@ -793,7 +811,7 @@ export default function LanguagesPage() {
                                 width: `${progressPercent}%`,
                                 height: '100%',
                                 borderRadius: '4px',
-                                background: isStarted ? '#0ea5e9' : 'transparent',
+                                background: isStarted ? '#0284c7' : 'transparent',
                                 transition: 'width 0.4s ease',
                               }} />
                             </div>
@@ -806,6 +824,7 @@ export default function LanguagesPage() {
                             style={{
                               padding: '9px 18px',
                               fontSize: '0.88rem',
+                              borderRadius: '12px',
                               whiteSpace: 'nowrap',
                               flexShrink: 0,
                             }}
