@@ -400,56 +400,122 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom Foundation Statement (Pure Typography) */}
+          {/* Bottom Foundation Statement with Dynamic Shimmer & Ambient Aura */}
           <div style={{
-            textAlign: 'center',
-            maxWidth: '820px',
+            position: 'relative',
+            maxWidth: '860px',
             margin: '52px auto 0',
-            padding: '0 20px',
+            padding: '0 16px',
           }}>
+            {/* Ambient Breathing Aura Background */}
             <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '5px 14px',
-              borderRadius: '20px',
-              background: '#f0fdfa',
-              border: '1px solid #ccfbf1',
-              color: '#0d9488',
-              fontSize: '0.82rem',
-              fontWeight: 700,
-              marginBottom: '16px',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: 'min(680px, 95vw)',
+              height: '200px',
+              background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.09) 45%, transparent 75%)',
+              filter: 'blur(28px)',
+              pointerEvents: 'none',
+              zIndex: 0,
+              animation: 'auraBreathing 6s ease-in-out infinite',
+            }} />
+
+            {/* Glassmorphism Stage Container */}
+            <div style={{
+              position: 'relative',
+              zIndex: 1,
+              textAlign: 'center',
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.88) 100%)',
+              backdropFilter: 'blur(16px)',
+              border: '1.5px solid rgba(226, 232, 240, 0.9)',
+              borderRadius: '24px',
+              padding: '44px 36px',
+              boxShadow: '0 20px 40px -15px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.9) inset',
             }}>
-              <Sparkles size={14} />
-              <span>{isEn ? 'The TypingCode Solution' : '타이핑코드가 채우는 해답'}</span>
+              <h3 style={{
+                fontSize: 'clamp(1.35rem, 2.7vw, 1.85rem)',
+                fontWeight: 800,
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.45,
+                marginBottom: '14px',
+                wordBreak: 'keep-all',
+              }}>
+                <span style={{ display: 'block', marginBottom: '4px' }}>
+                  {isEn 
+                    ? 'No thick textbooks, no hard lectures.' 
+                    : '두꺼운 코딩책도 어려운 강의도 없이,'}
+                </span>
+                <span style={{
+                  display: 'inline-block',
+                  background: 'linear-gradient(90deg, #0284c7 0%, #06b6d4 25%, #6366f1 55%, #0891b2 80%, #0284c7 100%)',
+                  backgroundSize: '200% auto',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  animation: 'textShimmerWave 4.5s linear infinite',
+                  fontWeight: 800,
+                }}>
+                  {isEn 
+                    ? 'Just type along, and code becomes second nature.' 
+                    : '따라치다 보면 손이 먼저 코드를 기억합니다.'}
+                </span>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '3.5px',
+                    height: '1.05em',
+                    background: '#06b6d4',
+                    marginLeft: '6px',
+                    verticalAlign: 'text-bottom',
+                    borderRadius: '2px',
+                    animation: 'cursorBlinkGlow 1.05s steps(2, start) infinite',
+                  }}
+                />
+              </h3>
+
+              <p style={{
+                fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
+                color: '#64748b',
+                lineHeight: 1.7,
+                margin: '0 auto',
+                maxWidth: '660px',
+                wordBreak: 'keep-all',
+              }}>
+                {isEn ? (
+                  <>
+                    TypingCode fills the difficult gap between block coding and real programming through{' '}
+                    <span style={{
+                      color: '#0f172a',
+                      fontWeight: 700,
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      background: 'rgba(6, 182, 212, 0.1)',
+                      border: '1px solid rgba(6, 182, 212, 0.25)',
+                      display: 'inline-block',
+                    }}>
+                      interactive typing
+                    </span>.
+                  </>
+                ) : (
+                  <>
+                    타이핑코드는 블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
+                    <span style={{
+                      color: '#0f172a',
+                      fontWeight: 700,
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      background: 'rgba(6, 182, 212, 0.1)',
+                      border: '1px solid rgba(6, 182, 212, 0.25)',
+                      display: 'inline-block',
+                    }}>
+                      손끝의 타이핑
+                    </span>
+                    으로 자연스럽게 채워주는 연습실입니다.
+                  </>
+                )}
+              </p>
             </div>
-
-            <h3 style={{
-              fontSize: 'clamp(1.4rem, 2.8vw, 1.85rem)',
-              fontWeight: 800,
-              color: '#0f172a',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.45,
-              marginBottom: '14px',
-              wordBreak: 'keep-all',
-            }}>
-              {isEn
-                ? 'No thick textbooks, no hard lectures. Just type along, and code flows.'
-                : '두꺼운 코딩책도 어려운 강의도 없이,\n따라치다 보면 손이 먼저 코드를 기억합니다.'}
-            </h3>
-
-            <p style={{
-              fontSize: 'clamp(1rem, 1.8vw, 1.1rem)',
-              color: '#64748b',
-              lineHeight: 1.7,
-              margin: '0 auto',
-              maxWidth: '640px',
-              wordBreak: 'keep-all',
-            }}>
-              {isEn
-                ? 'TypingCode fills the difficult gap between block coding and real programming through intuitive interactive typing.'
-                : '타이핑코드는 블록코딩과 실전 코딩 사이의 거대한 간극을 손끝의 타이핑으로 자연스럽게 채워주는 연습실입니다.'}
-            </p>
           </div>
         </section>
 

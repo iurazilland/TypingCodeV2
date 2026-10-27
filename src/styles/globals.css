@@ -518,6 +518,43 @@ button {
 }
 
 /* ==========================================================================
+   Foundation Statement Dynamic Text & Aura Animations
+   ========================================================================== */
+@keyframes textShimmerWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes cursorBlinkGlow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.9);
+  }
+  50% {
+    opacity: 0;
+    box-shadow: none;
+  }
+}
+
+@keyframes auraBreathing {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.12);
+    opacity: 0.95;
+  }
+}
+
+/* ==========================================================================
    Refined Studio Design System (Option B - JetBrains / Brilliant Style)
    ========================================================================== */
 
@@ -682,11 +719,4 @@ button {
   border: 1px solid #a5f3fc;
   color: #0891b2;
 }
-
-@media (max-width: 1080px) {
-  .step-connector-arrow {
-    display: none !important;
-  }
-}
-
 
