@@ -211,8 +211,8 @@ export default function HomePage() {
             wordBreak: 'keep-all',
           }}>
             {isEn 
-              ? 'Learn to code effortlessly, simply by typing along.'
-              : '따라 치는 것만으로 쉽게 배우는 코딩.'}
+              ? 'Just type along. Before you know it, you’re coding.'
+              : '일단 따라 치다 보면, 어느새 내 코드가 됩니다.'}
           </p>
         </section>
 
