@@ -7,7 +7,6 @@ import {
   Terminal, 
   Code2, 
   Sparkles,
-  ChevronRight,
   Check
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -401,105 +400,83 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Integrated Solution Bridge Card with 3D Illustration */}
+          {/* Natural Flow Connector */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            margin: '28px 0 16px',
+          }}>
+            <div style={{ height: '1px', flex: 1, maxWidth: '90px', background: 'linear-gradient(to right, transparent, #cbd5e1)' }} />
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 14px',
+              borderRadius: '20px',
+              background: '#f0fdfa',
+              border: '1px solid #ccfbf1',
+              color: '#0d9488',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+            }}>
+              <Sparkles size={14} />
+              <span>{isEn ? 'The TypingCode Solution' : '타이핑코드가 채우는 해답'}</span>
+            </div>
+            <div style={{ height: '1px', flex: 1, maxWidth: '90px', background: 'linear-gradient(to left, transparent, #cbd5e1)' }} />
+          </div>
+
+          {/* Unified Harmonious Solution Card: Centered Text on Top, Cinematic 3D Illustration on Bottom */}
           <div style={{
             maxWidth: '1040px',
-            margin: '28px auto 0',
+            margin: '0 auto',
             background: '#ffffff',
             border: '1.5px solid #e2e8f0',
             borderRadius: '24px',
             overflow: 'hidden',
-            boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.06)',
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap',
+            boxShadow: '0 10px 28px -6px rgba(15, 23, 42, 0.06)',
           }}>
-            {/* Left Content Area: Minimal & Impactful */}
-            <div style={{
-              flex: '1 1 420px',
-              padding: '40px 44px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '4px 12px',
-                borderRadius: '16px',
-                background: '#f0fdfa',
-                border: '1px solid #ccfbf1',
-                color: '#0d9488',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                marginBottom: '16px',
-                alignSelf: 'flex-start',
-              }}>
-                <Sparkles size={14} />
-                <span>{isEn ? 'The TypingCode Solution' : '타이핑코드가 채우는 해답'}</span>
-              </div>
-
+            {/* Top Text Content (Centered, Minimal, No Button) */}
+            <div style={{ padding: '38px 36px 28px', textAlign: 'center', maxWidth: '780px', margin: '0 auto' }}>
               <h3 style={{
-                fontSize: 'clamp(1.35rem, 2.5vw, 1.75rem)',
+                fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)',
                 fontWeight: 800,
                 color: '#0f172a',
                 letterSpacing: '-0.02em',
-                lineHeight: 1.4,
-                marginBottom: '14px',
+                lineHeight: 1.45,
+                marginBottom: '10px',
                 wordBreak: 'keep-all',
               }}>
                 {isEn
                   ? 'No thick textbooks, no hard lectures. Just type along, and code flows.'
                   : '두꺼운 코딩책도 어려운 강의도 없이, 따라치다 보면 손이 먼저 코드를 기억합니다.'}
               </h3>
-
               <p style={{
                 fontSize: '0.98rem',
                 color: '#64748b',
                 lineHeight: 1.65,
-                margin: '0 0 24px',
+                margin: 0,
                 wordBreak: 'keep-all',
               }}>
                 {isEn
                   ? 'TypingCode fills the difficult gap between block coding and real programming through intuitive interactive typing.'
                   : '타이핑코드는 블록코딩과 실전 코딩 사이의 거대한 간극을 손끝의 타이핑으로 자연스럽게 채워주는 연습실입니다.'}
               </p>
-
-              <div>
-                <a
-                  href="#curriculum"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '12px 22px',
-                    borderRadius: '14px',
-                    background: '#0f172a',
-                    color: '#ffffff',
-                    fontSize: '0.92rem',
-                    fontWeight: 700,
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <span>{isEn ? 'Start Typing Code' : '타이핑으로 시작하기'}</span>
-                  <ChevronRight size={16} />
-                </a>
-              </div>
             </div>
 
-            {/* Right Solution Illustration */}
+            {/* Bottom Solution 3D Illustration */}
             <div style={{
-              flex: '1 1 420px',
-              height: '340px',
+              width: '100%',
+              height: '380px',
               overflow: 'hidden',
               background: '#f8fafc',
+              borderTop: '1px solid #f1f5f9',
             }}>
               <img 
                 src="/images/typingcode_solution.jpg" 
                 alt="타이핑코드로 완성하는 실전 코딩"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', display: 'block' }}
               />
             </div>
           </div>
