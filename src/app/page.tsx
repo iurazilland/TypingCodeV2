@@ -83,23 +83,12 @@ const TRACK_SIGNATURE_CODE: Record<string, { filename: string; code: string; hig
   },
 };
 
-const ANIMATION_PRESETS = [
-  { id: 'float', label: '1. 3D 플로팅', desc: '무중력 공간처럼 부드러운 3D 틸트 호버링' },
-  { id: 'laser', label: '2. 레이저 스캔', desc: '상하로 스캔하는 사이버네틱 레이저 광선' },
-  { id: 'glitch', label: '3. 네온 글리치', desc: '3초마다 찌릿하게 번쩍이는 전기 신호 글리치' },
-  { id: 'wave', label: '4. 키네틱 웨이브', desc: '13개 글자가 파도를 타듯 오르내리는 리듬' },
-  { id: 'pingpong', label: '5. 핑퐁 스위칭', desc: 'TYPE IT과 CODE IT이 번갈아가며 포커스 점등' },
-];
-
 export default function HomePage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
 
   // Active track selection (default to Python)
   const [activeTrackId, setActiveTrackId] = useState<string>('python');
-
-  // Active Slogan Animation Preset (User choice)
-  const [activePreset, setActivePreset] = useState<'float' | 'laser' | 'glitch' | 'wave' | 'pingpong'>('float');
 
   // Dynamic light body background for Brilliant Editorial Theme on homepage
   useEffect(() => {
@@ -150,88 +139,17 @@ export default function HomePage() {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          {/* Interactive Animation Showcase Selector */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '6px 10px',
-            borderRadius: '24px',
-            background: '#ffffff',
-            border: '1px solid #bfdbfe',
-            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.08)',
-            marginBottom: '28px',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}>
-            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#2563eb', padding: '0 6px' }}>
-              ⚡ 애니메이션 효과 선택:
-            </span>
-            {ANIMATION_PRESETS.map((preset) => {
-              const isSelected = activePreset === preset.id;
-              return (
-                <button
-                  key={preset.id}
-                  onClick={() => setActivePreset(preset.id as any)}
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '16px',
-                    fontSize: '0.8rem',
-                    fontWeight: isSelected ? 800 : 500,
-                    background: isSelected ? '#2563eb' : 'transparent',
-                    color: isSelected ? '#ffffff' : '#475569',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    boxShadow: isSelected ? '0 2px 8px rgba(37, 99, 235, 0.35)' : 'none',
-                  }}
-                >
-                  {preset.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Main Slogan: Exact 13x2 Monospace Geometric Rectangle with Dynamic Active Preset Animation */}
+          {/* Main Slogan: Exact 13x2 Monospace Geometric Grid with Kinetic Wave Animation */}
           <div style={{
             display: 'inline-flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '36px 48px',
-            borderRadius: '24px',
-            background: 'rgba(255, 255, 255, 0.95)',
-            border: activePreset === 'laser' 
-              ? '1.5px solid rgba(56, 189, 248, 0.5)' 
-              : '1.5px solid rgba(37, 99, 235, 0.22)',
-            animation: activePreset === 'float' 
-              ? 'anim3DFloat 4.5s ease-in-out infinite' 
-              : activePreset === 'laser'
-              ? 'none'
-              : 'ambientBoxGlow 4s ease-in-out infinite',
-            position: 'relative',
-            overflow: 'hidden',
-            marginBottom: '16px',
-            backdropFilter: 'blur(16px)',
+            marginBottom: '32px',
           }}>
-            {/* Preset 2: Laser Scan Line */}
-            {activePreset === 'laser' && (
-              <div style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                height: '3px',
-                background: 'linear-gradient(90deg, transparent, #38bdf8, #60a5fa, transparent)',
-                boxShadow: '0 0 16px #38bdf8',
-                animation: 'laserScanMove 2.4s ease-in-out infinite',
-                pointerEvents: 'none',
-                zIndex: 10,
-              }} />
-            )}
-
             {/* Slogan Text: Exact 13 Characters on each line in JetBrains Mono */}
             <h1 style={{
               fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
-              fontSize: 'clamp(2.3rem, 5.8vw, 4.4rem)',
+              fontSize: 'clamp(2.4rem, 6vw, 4.6rem)',
               fontWeight: 800,
               lineHeight: 1.15,
               letterSpacing: '0.06em',
@@ -246,79 +164,40 @@ export default function HomePage() {
               <div style={{
                 color: '#0f172a',
                 whiteSpace: 'nowrap',
-                animation: activePreset === 'glitch' 
-                  ? 'glitchJitter 3.5s ease-in-out infinite' 
-                  : activePreset === 'pingpong'
-                  ? 'pingPongLine1 3.4s ease-in-out infinite'
-                  : 'none',
               }}>
-                {activePreset === 'wave' ? (
-                  LINE_1_CHARS.map((char, idx) => (
-                    <span
-                      key={idx}
-                      style={{
-                        display: 'inline-block',
-                        animation: 'kineticWaveChar 1.8s ease-in-out infinite',
-                        animationDelay: `${idx * 0.08}s`,
-                      }}
-                    >
-                      {char === ' ' ? '\u00A0' : char}
-                    </span>
-                  ))
-                ) : (
-                  'JUST TYPE IT,'
-                )}
+                {LINE_1_CHARS.map((char, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      display: 'inline-block',
+                      animation: 'kineticWaveCharLine1 3.3s cubic-bezier(0.25, 1, 0.5, 1) infinite',
+                      animationDelay: `${idx * 0.02}s`,
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </span>
+                ))}
               </div>
 
               {/* Line 2: 13 characters */}
               <div style={{
+                color: '#2563eb',
                 whiteSpace: 'nowrap',
-                color: activePreset === 'pingpong' ? undefined : '#2563eb',
-                animation: activePreset === 'glitch'
-                  ? 'glitchJitter 3.5s ease-in-out infinite 0.12s'
-                  : activePreset === 'pingpong'
-                  ? 'pingPongLine2 3.4s ease-in-out infinite'
-                  : 'none',
-                ...(activePreset === 'float' && {
-                  background: 'linear-gradient(90deg, #2563eb 0%, #38bdf8 25%, #818cf8 50%, #38bdf8 75%, #2563eb 100%)',
-                  backgroundSize: '250% 100%',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  animation: 'continuousGradientFlow 4s linear infinite',
-                }),
               }}>
-                {activePreset === 'wave' ? (
-                  LINE_2_CHARS.map((char, idx) => (
-                    <span
-                      key={idx}
-                      style={{
-                        display: 'inline-block',
-                        color: '#2563eb',
-                        animation: 'kineticWaveChar 1.8s ease-in-out infinite',
-                        animationDelay: `${(idx + 4) * 0.08}s`,
-                      }}
-                    >
-                      {char === ' ' ? '\u00A0' : char}
-                    </span>
-                  ))
-                ) : (
-                  'THEN CODE IT.'
-                )}
+                {LINE_2_CHARS.map((char, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      display: 'inline-block',
+                      animation: 'kineticWaveCharLine2 3.3s cubic-bezier(0.25, 1, 0.5, 1) infinite',
+                      animationDelay: `${idx * 0.02}s`,
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </span>
+                ))}
               </div>
             </h1>
-          </div>
-
-          {/* Active Preset Description Badge */}
-          <div style={{
-            fontSize: '0.82rem',
-            color: '#2563eb',
-            fontWeight: 600,
-            marginBottom: '20px',
-            background: 'rgba(37, 99, 235, 0.08)',
-            padding: '4px 14px',
-            borderRadius: '12px',
-          }}>
-            💡 {ANIMATION_PRESETS.find(p => p.id === activePreset)?.desc}
           </div>
 
           {/* Simple Subtitle */}
