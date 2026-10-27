@@ -135,12 +135,12 @@ button {
 }
 
 .tactile-btn-primary {
-  background: #2563eb;
+  background: #0891b2;
   color: #ffffff;
-  box-shadow: 0 4px 0 #1d4ed8;
+  box-shadow: 0 4px 0 #0e7490;
 }
 .tactile-btn-primary:hover {
-  background: #1d4ed8;
+  background: #0e7490;
 }
 
 .tactile-btn-green {
