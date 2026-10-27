@@ -253,9 +253,9 @@ export default function HomePage() {
               overflow: 'hidden',
               boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.06)',
             }}>
-              <div style={{ width: '100%', height: '280px', overflow: 'hidden', background: '#f8fafc' }}>
+              <div style={{ width: '100%', height: '300px', overflow: 'hidden', background: '#f8fafc' }}>
                 <img 
-                  src="/images/block_coding_pure.jpg" 
+                  src="/images/block_coding_fun.jpg" 
                   alt="블록코딩은 쉽고 재밌습니다"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
@@ -294,9 +294,9 @@ export default function HomePage() {
               overflow: 'hidden',
               boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.06)',
             }}>
-              <div style={{ width: '100%', height: '280px', overflow: 'hidden', background: '#0e121a' }}>
+              <div style={{ width: '100%', height: '300px', overflow: 'hidden', background: '#0e121a' }}>
                 <img 
-                  src="/images/real_text_code.jpg" 
+                  src="/images/real_coding_hard.jpg" 
                   alt="실제 코딩은 너무 어렵습니다"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
