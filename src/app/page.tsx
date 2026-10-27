@@ -8,7 +8,10 @@ import {
   Code2, 
   Sparkles,
   ChevronRight,
-  Check
+  Check,
+  BookOpen,
+  Keyboard,
+  Zap
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, LanguageTrack } from '@/lib/curriculum';
@@ -396,6 +399,185 @@ export default function HomePage() {
                   {isEn
                     ? 'Stepping into a real code editor brings unfamiliar English keywords and strict syntax rules. A single typo or misplaced bracket halts execution, leaving learners stranded in error messages.'
                     : '하지만 실제 텍스트 에디터로 넘어오는 순간, 낯선 영문 키워드와 복잡한 문법 규칙에 부딪힙니다. 단 한 글자의 사소한 오타나 괄호 실수에도 실행이 멈추고 에러 메시지 앞에서 막막해집니다.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Seamless Connector to the Foundation Bridge */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            margin: '28px 0 16px',
+          }}>
+            <div style={{ height: '1px', flex: 1, maxWidth: '120px', background: 'linear-gradient(to right, transparent, #cbd5e1)' }} />
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 14px',
+              borderRadius: '20px',
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              color: '#0891b2',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+            }}>
+              <Sparkles size={14} />
+              <span>{isEn ? 'The TypingCode Foundation' : '타이핑코드가 채우는 해답'}</span>
+            </div>
+            <div style={{ height: '1px', flex: 1, maxWidth: '120px', background: 'linear-gradient(to left, transparent, #cbd5e1)' }} />
+          </div>
+
+          {/* Integrated Foundation Banner */}
+          <div style={{
+            maxWidth: '1040px',
+            margin: '0 auto',
+            background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+            border: '1.5px solid #e2e8f0',
+            borderRadius: '24px',
+            padding: '36px 36px 32px',
+            boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.05), 0 2px 6px rgba(15, 23, 42, 0.02)',
+          }}>
+            {/* Main Headline */}
+            <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 28px' }}>
+              <h3 style={{
+                fontSize: 'clamp(1.25rem, 2.6vw, 1.6rem)',
+                fontWeight: 800,
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                marginBottom: '12px',
+                lineHeight: 1.45,
+                wordBreak: 'keep-all',
+              }}>
+                {isEn
+                  ? 'No thick textbooks, no passive lectures. Just type along, and code becomes muscle memory.'
+                  : '두꺼운 코딩책도 어려운 강의도 없이, 따라치다 보면 손이 먼저 코드를 기억합니다.'}
+              </h3>
+              <p style={{
+                fontSize: 'clamp(0.95rem, 1.8vw, 1.05rem)',
+                color: '#64748b',
+                lineHeight: 1.65,
+                margin: '0 auto',
+                wordBreak: 'keep-all',
+              }}>
+                {isEn
+                  ? 'TypingCode is designed to bridge the difficult chasm between visual block coding and real-world syntax. Instead of getting stuck on frustrating errors, practice real code naturally with interactive typing.'
+                  : '타이핑코드는 블록코딩의 직관적인 즐거움과 실전 코딩의 높은 문법 장벽 사이, 가장 넘기 어려웠던 그 간극을 채워줍니다. 한 글자 오타에 멈춰 서던 에러의 두려움 없이, 손끝으로 직접 키보드를 두드리며 진짜 개발자의 코딩 감각을 체득하세요.'}
+              </p>
+            </div>
+
+            {/* 3 Core Pillars */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '16px',
+            }}>
+              {/* Pillar 1 */}
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '16px',
+                padding: '20px 22px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '10px',
+                    background: '#e0f2fe',
+                    color: '#0284c7',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <BookOpen size={16} />
+                  </div>
+                  <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                    {isEn ? 'Learn by Doing, Not Watching' : '눈이 아닌 손으로 체득'}
+                  </h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, margin: 0, wordBreak: 'keep-all' }}>
+                  {isEn
+                    ? 'Move beyond passively watching lectures. Practice real syntax directly by typing each line.'
+                    : '강의를 멍하니 보기만 하는 수동적 학습 대신, 직접 키보드로 치며 손이 기억하도록 배웁니다.'}
+                </p>
+              </div>
+
+              {/* Pillar 2 */}
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '16px',
+                padding: '20px 22px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '10px',
+                    background: '#fef3c7',
+                    color: '#d97706',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Keyboard size={16} />
+                  </div>
+                  <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                    {isEn ? 'Bridge the Syntax Chasm' : '블록과 실전의 갭 해소'}
+                  </h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, margin: 0, wordBreak: 'keep-all' }}>
+                  {isEn
+                    ? 'Connect the logic learned in block coding seamlessly into real programming language syntax.'
+                    : '블록코딩의 직관적인 논리를 13개 실제 프로그래밍 언어의 실전 문법으로 자연스럽게 이어줍니다.'}
+                </p>
+              </div>
+
+              {/* Pillar 3 */}
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '16px',
+                padding: '20px 22px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '10px',
+                    background: '#dcfce7',
+                    color: '#16a34a',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Zap size={16} />
+                  </div>
+                  <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                    {isEn ? 'Automatic Rhythm & Confidence' : '자연스러운 코드 감각 완성'}
+                  </h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, margin: 0, wordBreak: 'keep-all' }}>
+                  {isEn
+                    ? 'Build typing rhythm and confidence as lines assemble smoothly with each correct stroke.'
+                    : '오타 스트레스 없이 가볍게 입력하며, 생각의 흐름대로 코드가 완성되는 즐거움을 경험합니다.'}
                 </p>
               </div>
             </div>
