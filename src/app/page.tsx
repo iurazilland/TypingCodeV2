@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ArrowRight, 
@@ -23,8 +23,6 @@ export default function HomePage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
 
-  // Demo interactive tab in hero section (0: Block, 1: Typing, 2: Run)
-  const [heroStep, setHeroStep] = useState<0 | 1 | 2>(1);
 
   // Dynamic light body background for Brilliant Editorial Theme on homepage
   useEffect(() => {
@@ -46,365 +44,127 @@ export default function HomePage() {
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '30px 24px 120px' }}>
         
         {/* =================================================================
-            1. HERO SECTION: 2-Column Asymmetric Value Proposition
+            1. HERO SECTION: Focused Value Proposition
             ================================================================= */}
         <section style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(440px, 1fr))',
-          gap: '48px',
-          alignItems: 'center',
-          padding: '40px 0 80px',
+          textAlign: 'center',
+          maxWidth: '860px',
+          margin: '0 auto',
+          padding: '44px 20px 72px',
         }}>
-          {/* Left Column: Authentic Hook & Action */}
-          <div>
-            {/* Context Pill */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              borderRadius: '20px',
-              background: '#eff6ff',
-              border: '1px solid #bfdbfe',
-              color: '#2563eb',
-              fontSize: '0.84rem',
-              fontWeight: 700,
-              marginBottom: '20px',
-            }}>
-              <span style={{ fontSize: '1rem' }}>🧩</span>
-              <span>
-                {isEn 
-                  ? 'The Missing Bridge after Block Coding' 
-                  : '스크래치·엔트리 다음 단계, 텍스트 코딩으로의 도약'}
-              </span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 style={{
-              fontSize: '3.1rem',
-              fontWeight: 800,
-              letterSpacing: '-0.03em',
-              color: '#0f172a',
-              lineHeight: 1.2,
-              marginBottom: '20px',
-              wordBreak: 'keep-all',
-            }}>
-              {isEn ? (
-                <>
-                  Stop memorizing syntax.<br />
-                  <span style={{ color: '#2563eb' }}>Learn real code by typing.</span>
-                </>
-              ) : (
-                <>
-                  눈으로 외우는 문법 대신,<br />
-                  <span style={{ color: '#2563eb' }}>손끝으로 완성하는 진짜 코딩.</span>
-                </>
-              )}
-            </h1>
-
-            {/* Description */}
-            <p style={{
-              fontSize: '1.14rem',
-              color: '#475569',
-              lineHeight: 1.7,
-              marginBottom: '32px',
-              wordBreak: 'keep-all',
-            }}>
+          {/* Context Pill */}
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '6px 16px',
+            borderRadius: '20px',
+            background: '#eff6ff',
+            border: '1px solid #bfdbfe',
+            color: '#2563eb',
+            fontSize: '0.86rem',
+            fontWeight: 700,
+            marginBottom: '22px',
+          }}>
+            <span style={{ fontSize: '1.05rem' }}>🧩</span>
+            <span>
               {isEn 
-                ? 'Transition smoothly from visual blocks to text programming. Snap blocks to understand logic, fill in blanks with direct typing, and watch live execution on a real terminal runtime.'
-                : '블록 조립으로 알고리즘의 뼈대를 세우고, 직접 타이핑하며 실전 감각을 익히세요. 괄호 하나 오타 하나에 좌절하지 않고, 브라우저에서 1단계부터 차근차근 파이썬과 C언어를 체득합니다.'}
-            </p>
-
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '28px' }}>
-              <Link
-                href="/practice/python/1"
-                className="brilliant-btn brilliant-btn-primary"
-                style={{
-                  padding: '15px 30px',
-                  fontSize: '1.05rem',
-                  fontWeight: 700,
-                  borderRadius: '12px',
-                }}
-              >
-                <span>{isEn ? 'Start Python Level 1' : '파이썬 1단계 무료 시작하기'}</span>
-                <ArrowRight size={18} />
-              </Link>
-
-              <a
-                href="#how-it-works"
-                className="brilliant-btn"
-                style={{
-                  padding: '15px 24px',
-                  fontSize: '1.05rem',
-                  fontWeight: 600,
-                  borderRadius: '12px',
-                }}
-              >
-                <span>{isEn ? 'How It Works' : '학습 방식 살펴보기'}</span>
-              </a>
-            </div>
-
-            {/* Trust points */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '20px',
-              fontSize: '0.86rem',
-              color: '#64748b',
-              flexWrap: 'wrap',
-            }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={16} color="#10b981" />
-                <span>{isEn ? 'No Installation Required' : '별도 프로그램 설치 제로'}</span>
-              </span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={16} color="#10b981" />
-                <span>{isEn ? 'CPython 3.10 Runtime' : '실제 파이썬 인터프리터 탑재'}</span>
-              </span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={16} color="#10b981" />
-                <span>{isEn ? '100% Free Practice' : '전 레벨 무료 실습'}</span>
-              </span>
-            </div>
+                ? 'The Missing Bridge after Block Coding' 
+                : '스크래치·엔트리 다음 단계, 텍스트 코딩으로의 도약'}
+            </span>
           </div>
 
-          {/* Right Column: Interactive Mechanism Interactive Visualizer */}
-          <div style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: '24px',
-            padding: '28px',
-            boxShadow: '0 20px 48px -12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
+          {/* Main Headline */}
+          <h1 style={{
+            fontSize: '3.2rem',
+            fontWeight: 800,
+            letterSpacing: '-0.03em',
+            color: '#0f172a',
+            lineHeight: 1.22,
+            marginBottom: '20px',
+            wordBreak: 'keep-all',
           }}>
-            {/* Step Selector Tabs */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              background: '#f1f5f9',
-              padding: '4px',
-              borderRadius: '12px',
-              marginBottom: '20px',
-            }}>
-              <button
-                onClick={() => setHeroStep(0)}
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.82rem',
-                  fontWeight: heroStep === 0 ? 700 : 500,
-                  background: heroStep === 0 ? '#ffffff' : 'transparent',
-                  color: heroStep === 0 ? '#0f172a' : '#64748b',
-                  boxShadow: heroStep === 0 ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                {isEn ? '1. Block Mode' : '1단계. 블록 조립'}
-              </button>
-              <button
-                onClick={() => setHeroStep(1)}
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.82rem',
-                  fontWeight: heroStep === 1 ? 700 : 500,
-                  background: heroStep === 1 ? '#ffffff' : 'transparent',
-                  color: heroStep === 1 ? '#0f172a' : '#64748b',
-                  boxShadow: heroStep === 1 ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                {isEn ? '2. Fill Blanks' : '2단계. 빈칸 타이핑'}
-              </button>
-              <button
-                onClick={() => setHeroStep(2)}
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.82rem',
-                  fontWeight: heroStep === 2 ? 700 : 500,
-                  background: heroStep === 2 ? '#ffffff' : 'transparent',
-                  color: heroStep === 2 ? '#0f172a' : '#64748b',
-                  boxShadow: heroStep === 2 ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                {isEn ? '3. Live Run' : '3단계. 터미널 실행'}
-              </button>
-            </div>
+            {isEn ? (
+              <>
+                Stop memorizing syntax.<br />
+                <span style={{ color: '#2563eb' }}>Learn real code by typing.</span>
+              </>
+            ) : (
+              <>
+                눈으로 외우는 문법 대신,<br />
+                <span style={{ color: '#2563eb' }}>손끝으로 완성하는 진짜 코딩.</span>
+              </>
+            )}
+          </h1>
 
-            {/* Visual Canvas Demonstrator */}
-            <div style={{
-              background: '#0d1117',
-              borderRadius: '16px',
-              padding: '24px',
-              minHeight: '260px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              fontFamily: 'var(--font-mono)',
-              border: '1px solid #30363d',
-            }}>
-              {/* Window Header */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingBottom: '14px',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                color: '#8b949e',
-                fontSize: '0.78rem',
-              }}>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f56' }} />
-                  <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e' }} />
-                  <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#27c93f' }} />
-                </div>
-                <span>level_1_step_{heroStep === 0 ? '1' : heroStep === 1 ? '6' : 'execute'}.py</span>
-              </div>
+          {/* Description */}
+          <p style={{
+            fontSize: '1.15rem',
+            color: '#475569',
+            lineHeight: 1.72,
+            marginBottom: '32px',
+            maxWidth: '680px',
+            margin: '0 auto 32px',
+            wordBreak: 'keep-all',
+          }}>
+            {isEn 
+              ? 'Transition smoothly from visual blocks to text programming. Snap blocks to understand logic, fill in blanks with direct typing, and watch live execution on a real terminal runtime.'
+              : '블록 조립으로 알고리즘의 뼈대를 세우고, 직접 타이핑하며 실전 감각을 익히세요. 괄호 하나 오타 하나에 좌절하지 않고, 브라우저에서 1단계부터 차근차근 파이썬과 C언어를 체득합니다.'}
+          </p>
 
-              {/* Dynamic Step Content */}
-              <div style={{ padding: '20px 0', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {heroStep === 0 && (
-                  <div style={{ textAlign: 'center', width: '100%' }}>
-                    {/* Visual Puzzle Block Representation */}
-                    <div style={{
-                      display: 'inline-flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}>
-                      <div style={{
-                        background: '#10b981',
-                        color: '#ffffff',
-                        padding: '8px 20px',
-                        borderRadius: '8px 8px 4px 4px',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        boxShadow: '0 3px 0 #047857',
-                      }}>
-                        ▶ 시작할 때 (Start)
-                      </div>
-                      <div style={{
-                        background: '#3b82f6',
-                        color: '#ffffff',
-                        padding: '10px 24px',
-                        borderRadius: '4px 4px 8px 8px',
-                        fontSize: '0.92rem',
-                        fontWeight: 700,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        boxShadow: '0 4px 0 #1d4ed8',
-                      }}>
-                        <span>출력하기</span>
-                        <span style={{
-                          background: '#ffffff',
-                          color: '#1e293b',
-                          padding: '3px 12px',
-                          borderRadius: '6px',
-                          fontWeight: 800,
-                        }}>
-                          10
-                        </span>
-                      </div>
-                    </div>
-                    <div style={{ color: '#8b949e', fontSize: '0.8rem', marginTop: '16px' }}>
-                      {isEn ? 'Drag and snap blocks to understand logic' : '블록을 홈에 맞추면 파이썬 코드가 자동으로 생성돼요'}
-                    </div>
-                  </div>
-                )}
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '32px' }}>
+            <Link
+              href="/practice/python/1"
+              className="brilliant-btn brilliant-btn-primary"
+              style={{
+                padding: '15px 32px',
+                fontSize: '1.05rem',
+                fontWeight: 700,
+                borderRadius: '12px',
+                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+              }}
+            >
+              <span>{isEn ? 'Start Python Level 1' : '파이썬 1단계 무료 시작하기'}</span>
+              <ArrowRight size={18} />
+            </Link>
 
-                {heroStep === 1 && (
-                  <div style={{ width: '100%', padding: '0 10px' }}>
-                    <div style={{ color: '#8b949e', fontSize: '0.82rem', marginBottom: '8px' }}>
-                      # 빈칸을 채워 숫자 10을 화면에 출력해보세요.
-                    </div>
-                    <div style={{
-                      fontSize: '1.2rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}>
-                      <span style={{ color: '#dcdcaa' }}>print</span>
-                      <span style={{ color: '#d4d4d4' }}>(</span>
-                      <span style={{
-                        background: '#1e293b',
-                        border: '2px solid #38bdf8',
-                        color: '#38bdf8',
-                        padding: '2px 14px',
-                        borderRadius: '6px',
-                        fontWeight: 700,
-                        boxShadow: '0 0 10px rgba(56, 189, 248, 0.3)',
-                        animation: 'blink 1.2s infinite',
-                      }}>
-                        10
-                      </span>
-                      <span style={{ color: '#d4d4d4' }}>)</span>
-                    </div>
-                    <div style={{ color: '#38bdf8', fontSize: '0.78rem', marginTop: '14px' }}>
-                      {isEn ? 'Fill in the blank with keyboard typing' : '키보드로 두 자리 숫자 10을 입력하면 완성!'}
-                    </div>
-                  </div>
-                )}
+            <a
+              href="#how-it-works"
+              className="brilliant-btn"
+              style={{
+                padding: '15px 26px',
+                fontSize: '1.05rem',
+                fontWeight: 600,
+                borderRadius: '12px',
+              }}
+            >
+              <span>{isEn ? 'How It Works' : '학습 방식 살펴보기'}</span>
+            </a>
+          </div>
 
-                {heroStep === 2 && (
-                  <div style={{ width: '100%', padding: '0 10px' }}>
-                    <div style={{ color: '#8b949e', fontSize: '0.82rem', marginBottom: '6px' }}>
-                      user@typingcode:~$ python3 solution.py
-                    </div>
-                    <div style={{
-                      fontSize: '1.4rem',
-                      color: '#34d399',
-                      fontWeight: 700,
-                      marginBottom: '10px',
-                    }}>
-                      10
-                    </div>
-                    <div style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: 'rgba(16, 185, 129, 0.15)',
-                      border: '1px solid rgba(16, 185, 129, 0.3)',
-                      color: '#34d399',
-                      padding: '4px 10px',
-                      borderRadius: '6px',
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                    }}>
-                      <CheckCircle2 size={14} />
-                      <span>{isEn ? 'Test Passed! (Expected 10)' : '정답 일치! 기대 출력(10)과 동일합니다.'}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Bottom Mini Prompt Bar */}
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.04)',
-                borderRadius: '8px',
-                padding: '8px 12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                fontSize: '0.76rem',
-                color: '#8b949e',
-              }}>
-                <span>🎯 {isEn ? 'Core Goal' : '핵심 목표'}: print(10)</span>
-                <span style={{ color: '#60a5fa' }}>{isEn ? 'Step Transition' : '블록 → 타이핑 전환'}</span>
-              </div>
-            </div>
+          {/* Trust points */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '24px',
+            fontSize: '0.88rem',
+            color: '#64748b',
+            flexWrap: 'wrap',
+          }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <CheckCircle2 size={16} color="#10b981" />
+              <span>{isEn ? 'No Installation Required' : '별도 프로그램 설치 제로'}</span>
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <CheckCircle2 size={16} color="#10b981" />
+              <span>{isEn ? 'CPython 3.10 Runtime' : '실제 파이썬 인터프리터 탑재'}</span>
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <CheckCircle2 size={16} color="#10b981" />
+              <span>{isEn ? '100% Free Practice' : '전 레벨 무료 실습'}</span>
+            </span>
           </div>
         </section>
 
@@ -557,70 +317,320 @@ export default function HomePage() {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
             gap: '24px',
           }}>
-            {/* Step 1 */}
-            <div className="brilliant-card" style={{ padding: '34px 28px' }}>
-              <div style={{
-                fontSize: '0.88rem',
-                fontWeight: 800,
-                color: '#2563eb',
-                fontFamily: 'var(--font-mono)',
-                marginBottom: '12px',
-              }}>
-                STEP 01
+            {/* Step 1 Card: Block Puzzle */}
+            <div className="brilliant-card" style={{
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                {/* Visual Demonstration Window */}
+                <div style={{
+                  background: '#0d1117',
+                  borderRadius: '14px',
+                  padding: '18px',
+                  border: '1px solid #30363d',
+                  marginBottom: '22px',
+                  fontFamily: 'var(--font-mono)',
+                  minHeight: '185px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}>
+                  {/* Window Bar */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: '12px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#8b949e',
+                    fontSize: '0.74rem',
+                  }}>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ff5f56' }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ffbd2e' }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#27c93f' }} />
+                    </div>
+                    <span>step_1_blocks.py</span>
+                  </div>
+
+                  {/* Puzzle Block Visual */}
+                  <div style={{ padding: '10px 0', textAlign: 'center' }}>
+                    <div style={{
+                      display: 'inline-flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}>
+                      <div style={{
+                        background: '#10b981',
+                        color: '#ffffff',
+                        padding: '6px 18px',
+                        borderRadius: '6px 6px 3px 3px',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        boxShadow: '0 2px 0 #047857',
+                      }}>
+                        ▶ 시작할 때 (Start)
+                      </div>
+                      <div style={{
+                        background: '#3b82f6',
+                        color: '#ffffff',
+                        padding: '8px 20px',
+                        borderRadius: '3px 3px 6px 6px',
+                        fontSize: '0.86rem',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 3px 0 #1d4ed8',
+                      }}>
+                        <span>출력하기</span>
+                        <span style={{
+                          background: '#ffffff',
+                          color: '#1e293b',
+                          padding: '2px 10px',
+                          borderRadius: '4px',
+                          fontWeight: 800,
+                        }}>
+                          10
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sub-label */}
+                  <div style={{ color: '#8b949e', fontSize: '0.74rem', textAlign: 'center' }}>
+                    {isEn ? 'Blocks snap into syntax structure' : '블록 결합으로 파이썬 문법 뼈대 자동 생성'}
+                  </div>
+                </div>
+
+                {/* Step Metadata & Description */}
+                <div style={{
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  color: '#2563eb',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: '8px',
+                  display: 'inline-flex',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  background: '#eff6ff',
+                }}>
+                  STEP 01
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
+                  {isEn ? '1. Block Concept Snapping' : '1단계. 블록으로 논리 구조 파악'}
+                </h3>
+                <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.65, margin: 0 }}>
+                  {isEn
+                    ? 'Snap function, loop, and variable blocks in the visual canvas. The platform automatically converts visual blocks into standard Python syntax in real time.'
+                    : '도구함에서 블록을 꺼내 조립하면 실제 파이썬 코드가 자동으로 그려집니다. 오타 걱정 없이 문법 구조와 알고리즘의 뼈대를 먼저 이해합니다.'}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>
-                {isEn ? 'Block Concept Snapping' : '블록으로 논리 구조 파악'}
-              </h3>
-              <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.7, margin: 0 }}>
-                {isEn
-                  ? 'Snap function, loop, and variable blocks in the visual canvas. The platform automatically converts visual blocks into standard Python syntax in real time.'
-                  : '도구함에서 블록을 꺼내 연결하면 우측 에디터에 실제 파이썬 코드가 자동으로 그려집니다. 오타 걱정 없이 문법 구조와 알고리즘의 흐름을 먼저 익힙니다.'}
-              </p>
             </div>
 
-            {/* Step 2 */}
-            <div className="brilliant-card" style={{ padding: '34px 28px' }}>
-              <div style={{
-                fontSize: '0.88rem',
-                fontWeight: 800,
-                color: '#2563eb',
-                fontFamily: 'var(--font-mono)',
-                marginBottom: '12px',
-              }}>
-                STEP 02
+            {/* Step 2 Card: Blank Typing */}
+            <div className="brilliant-card" style={{
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                {/* Visual Demonstration Window */}
+                <div style={{
+                  background: '#0d1117',
+                  borderRadius: '14px',
+                  padding: '18px',
+                  border: '1px solid #30363d',
+                  marginBottom: '22px',
+                  fontFamily: 'var(--font-mono)',
+                  minHeight: '185px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}>
+                  {/* Window Bar */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: '12px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#8b949e',
+                    fontSize: '0.74rem',
+                  }}>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ff5f56' }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ffbd2e' }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#27c93f' }} />
+                    </div>
+                    <span>step_2_typing.py</span>
+                  </div>
+
+                  {/* Blank Typing Visual */}
+                  <div style={{ padding: '8px 4px' }}>
+                    <div style={{ color: '#8b949e', fontSize: '0.74rem', marginBottom: '8px' }}>
+                      # 빈칸을 채워 숫자 10을 화면에 출력해보세요.
+                    </div>
+                    <div style={{
+                      fontSize: '1.12rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}>
+                      <span style={{ color: '#dcdcaa' }}>print</span>
+                      <span style={{ color: '#d4d4d4' }}>(</span>
+                      <span style={{
+                        background: '#1e293b',
+                        border: '2px solid #38bdf8',
+                        color: '#38bdf8',
+                        padding: '1px 12px',
+                        borderRadius: '5px',
+                        fontWeight: 700,
+                        boxShadow: '0 0 10px rgba(56, 189, 248, 0.3)',
+                      }}>
+                        10
+                      </span>
+                      <span style={{ color: '#d4d4d4' }}>)</span>
+                    </div>
+                  </div>
+
+                  {/* Sub-label */}
+                  <div style={{ color: '#38bdf8', fontSize: '0.74rem' }}>
+                    {isEn ? 'Direct typing into fixed-width capsule' : '글자수 맞춤 캡슐 박스에 키보드로 직접 입력'}
+                  </div>
+                </div>
+
+                {/* Step Metadata & Description */}
+                <div style={{
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  color: '#2563eb',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: '8px',
+                  display: 'inline-flex',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  background: '#eff6ff',
+                }}>
+                  STEP 02
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
+                  {isEn ? '2. Blank Typing & Bug Fixing' : '2단계. 빈칸 타이핑 & 오타 교정'}
+                </h3>
+                <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.65, margin: 0 }}>
+                  {isEn
+                    ? 'Transition to the keyboard! Fill in essential code blanks and diagnose real syntax errors. The virtual keyboard lights up with next keys to eliminate hunting.'
+                    : '블록에 익숙해지면 타이핑 모드로 전환됩니다. 글자 수에 딱 맞춘 캡슐 박스에 직접 키를 입력하고, 틀린 기호를 수정하며 실전 키보드 타수와 감각을 기릅니다.'}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>
-                {isEn ? 'Blank Typing & Bug Fixing' : '빈칸 타이핑 & 오타 수정'}
-              </h3>
-              <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.7, margin: 0 }}>
-                {isEn
-                  ? 'Transition to the keyboard! Fill in essential code blanks and diagnose real syntax errors. The virtual keyboard lights up with next keys to eliminate hunting.'
-                  : '블록에 익숙해지면 타이핑 모드로 전환됩니다. 글자 수에 딱 맞춘 캡슐 박스에 직접 키를 입력하고, 틀린 기호를 수정하며 실전 키보드 타수와 감각을 기릅니다.'}
-              </p>
             </div>
 
-            {/* Step 3 */}
-            <div className="brilliant-card" style={{ padding: '34px 28px' }}>
-              <div style={{
-                fontSize: '0.88rem',
-                fontWeight: 800,
-                color: '#2563eb',
-                fontFamily: 'var(--font-mono)',
-                marginBottom: '12px',
-              }}>
-                STEP 03
+            {/* Step 3 Card: Terminal Run */}
+            <div className="brilliant-card" style={{
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                {/* Visual Demonstration Window */}
+                <div style={{
+                  background: '#0d1117',
+                  borderRadius: '14px',
+                  padding: '18px',
+                  border: '1px solid #30363d',
+                  marginBottom: '22px',
+                  fontFamily: 'var(--font-mono)',
+                  minHeight: '185px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}>
+                  {/* Window Bar */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: '12px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#8b949e',
+                    fontSize: '0.74rem',
+                  }}>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ff5f56' }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ffbd2e' }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#27c93f' }} />
+                    </div>
+                    <span>terminal_run.sh</span>
+                  </div>
+
+                  {/* Terminal Visual */}
+                  <div style={{ padding: '4px 0' }}>
+                    <div style={{ color: '#8b949e', fontSize: '0.74rem', marginBottom: '4px' }}>
+                      user@typingcode:~$ python3 solution.py
+                    </div>
+                    <div style={{
+                      fontSize: '1.25rem',
+                      color: '#34d399',
+                      fontWeight: 700,
+                      marginBottom: '8px',
+                    }}>
+                      10
+                    </div>
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      color: '#34d399',
+                      padding: '3px 8px',
+                      borderRadius: '5px',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                    }}>
+                      <CheckCircle2 size={13} />
+                      <span>{isEn ? 'Test Passed! (Expected 10)' : '정답 일치! 기대 출력(10)과 동일합니다.'}</span>
+                    </div>
+                  </div>
+
+                  {/* Sub-label */}
+                  <div style={{ color: '#8b949e', fontSize: '0.74rem' }}>
+                    {isEn ? 'Real Pyodide CPython 3.10 runtime' : '브라우저 내장 실제 파이썬 인터프리터 실행'}
+                  </div>
+                </div>
+
+                {/* Step Metadata & Description */}
+                <div style={{
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  color: '#2563eb',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: '8px',
+                  display: 'inline-flex',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  background: '#eff6ff',
+                }}>
+                  STEP 03
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
+                  {isEn ? '3. Live Terminal Feedback' : '3단계. 터미널 실시간 결과 검증'}
+                </h3>
+                <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.65, margin: 0 }}>
+                  {isEn
+                    ? 'Code runs against real Python interpreters and GCC compilers. Memory boxes show variable states dynamically while standard outputs prove success.'
+                    : '내가 완성한 코드가 실제 컴퓨터에서 실행됩니다. 터미널의 실시간 출력과 변수 상자(Memory Storage)의 값 변화를 눈으로 직접 확인하며 성취감을 얻습니다.'}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>
-                {isEn ? 'Live Terminal Feedback' : '터미널 실시간 결과 검증'}
-              </h3>
-              <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.7, margin: 0 }}>
-                {isEn
-                  ? 'Code runs against real Python interpreters and GCC compilers. Memory boxes show variable states dynamically while standard outputs prove success.'
-                  : '내가 완성한 코드가 실제 컴퓨터에서 실행됩니다. 터미널의 실시간 출력과 변수 상자(Memory Storage)의 값 변화를 눈으로 직접 확인하며 성취감을 얻습니다.'}
-              </p>
             </div>
           </div>
         </section>
