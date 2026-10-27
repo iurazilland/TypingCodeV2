@@ -8,7 +8,9 @@ import {
   Code2, 
   Sparkles,
   ChevronRight,
-  Check
+  Check,
+  X,
+  Lightbulb
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, LanguageTrack } from '@/lib/curriculum';
@@ -219,94 +221,358 @@ export default function HomePage() {
         {/* =================================================================
             2. THE PROBLEM: BLOCK CODING VS REAL CODING
             ================================================================= */}
-        <section id="why-typingcode" style={{ marginBottom: '100px' }}>
+        <section id="why-typingcode" style={{ marginBottom: '110px' }}>
           
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 40px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 48px' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 14px',
+              borderRadius: '20px',
+              background: '#f1f5f9',
+              border: '1px solid #e2e8f0',
+              color: '#475569',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '14px',
+            }}>
+              <span>The Reality Gap</span>
+            </div>
             <h2 style={{
               fontSize: 'clamp(2rem, 4vw, 2.6rem)',
               fontWeight: 800,
               color: '#0f172a',
               letterSpacing: '-0.02em',
-              margin: 0,
+              marginBottom: '14px',
               wordBreak: 'keep-all',
             }}>
               {isEn ? 'Coding is too difficult.' : '코딩은 너무 어렵습니다.'}
             </h2>
+            <p style={{
+              fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+              color: '#64748b',
+              lineHeight: 1.65,
+              maxWidth: '620px',
+              margin: '0 auto',
+              wordBreak: 'keep-all',
+            }}>
+              {isEn
+                ? 'Block coding makes a fun first impression, but real programming presents a wall of syntax, errors, and overwhelming frustration.'
+                : '블록 맞추기처럼 직관적이던 첫걸음이, 실제 코드 화면을 마주하는 순간 끝없는 영문 문법과 에러의 벽으로 변합니다.'}
+            </p>
           </div>
 
-          {/* 2 Cards with Middle Arrow */}
+          {/* 2 Comparison Cards with Center Bridge */}
           <div style={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'stretch',
             justifyContent: 'center',
             gap: '24px',
+            position: 'relative',
+            maxWidth: '1060px',
+            margin: '0 auto',
             flexWrap: 'wrap',
           }}>
             {/* Card 1: Block Coding */}
             <div style={{
-              flex: '1 1 360px',
-              maxWidth: '480px',
+              flex: '1 1 380px',
+              maxWidth: '490px',
               background: '#ffffff',
-              border: '1px solid #e2e8f0',
+              border: '1.5px solid #e0f2fe',
               borderRadius: '24px',
               overflow: 'hidden',
-              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.06)',
+              boxShadow: '0 12px 32px -8px rgba(14, 165, 233, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03)',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
             }}>
-              <div style={{ width: '100%', height: '300px', overflow: 'hidden', background: '#f8fafc' }}>
+              {/* Image Banner */}
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                height: '260px',
+                overflow: 'hidden',
+                background: '#f0f9ff',
+              }}>
                 <img 
                   src="/images/block_coding_fun.jpg" 
                   alt="블록코딩은 쉽고 재밌습니다"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
+                <div style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '16px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '5px 12px',
+                  borderRadius: '16px',
+                  background: 'rgba(255, 255, 255, 0.92)',
+                  backdropFilter: 'blur(8px)',
+                  boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: '#0284c7',
+                }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
+                  {isEn ? 'Step 1: Introduction' : '1단계 · 쉬운 입문'}
+                </div>
               </div>
-              <div style={{ padding: '24px 24px', textAlign: 'center' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0, wordBreak: 'keep-all' }}>
+
+              {/* Content Area */}
+              <div style={{ padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <h3 style={{
+                  fontSize: '1.35rem',
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  marginBottom: '12px',
+                  letterSpacing: '-0.01em',
+                  wordBreak: 'keep-all',
+                }}>
                   {isEn ? 'Block coding is easy and fun.' : '블록코딩은 쉽고 재밌습니다.'}
                 </h3>
+                <p style={{
+                  fontSize: '0.96rem',
+                  color: '#64748b',
+                  lineHeight: 1.65,
+                  marginBottom: '22px',
+                  wordBreak: 'keep-all',
+                }}>
+                  {isEn
+                    ? 'Snap blocks together like Lego to learn logic and computational thinking with immediate visual feedback, free from syntax rules.'
+                    : '레고 블록처럼 마우스로 조립하며 프로그래밍의 원리와 논리를 직관적으로 익힙니다. 문법 오타 걱정 없이 즉각적인 시각적 피드백을 얻을 수 있습니다.'}
+                </p>
+
+                {/* Feature Tags / Points */}
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '0.88rem', color: '#334155' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a', flexShrink: 0 }}>
+                      <Check size={13} strokeWidth={3} />
+                    </div>
+                    <span>{isEn ? 'Intuitive drag-and-drop assembly' : '마우스 드래그 앤 드롭 조립 방식'}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '0.88rem', color: '#334155' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a', flexShrink: 0 }}>
+                      <Check size={13} strokeWidth={3} />
+                    </div>
+                    <span>{isEn ? 'Immediate visual results and animations' : '시각적인 즉각 반응과 애니메이션'}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '0.88rem', color: '#334155' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a', flexShrink: 0 }}>
+                      <Check size={13} strokeWidth={3} />
+                    </div>
+                    <span>{isEn ? 'Zero syntax error stress' : '문법 에러나 오타 스트레스 제로'}</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Middle Connecting Arrow */}
+            {/* Middle Connecting Bridge */}
             <div style={{
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '54px',
-              height: '54px',
-              borderRadius: '50%',
-              background: '#ffffff',
-              border: '1.5px solid #e2e8f0',
-              color: '#0891b2',
-              boxShadow: '0 4px 14px rgba(15, 23, 42, 0.08)',
+              gap: '8px',
+              padding: '12px 0',
               flexShrink: 0,
+              zIndex: 2,
+              alignSelf: 'center',
             }}>
-              <ArrowRight size={24} />
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #0284c7 0%, #0f172a 100%)',
+                color: '#ffffff',
+                boxShadow: '0 8px 24px -4px rgba(2, 132, 199, 0.4), 0 2px 6px rgba(15, 23, 42, 0.1)',
+                border: '3px solid #ffffff',
+              }}>
+                <ArrowRight size={24} strokeWidth={2.5} />
+              </div>
+              <span style={{
+                fontSize: '0.74rem',
+                fontWeight: 800,
+                color: '#94a3b8',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                background: '#f8fafc',
+                padding: '2px 8px',
+                borderRadius: '10px',
+                border: '1px solid #e2e8f0',
+              }}>
+                GAP
+              </span>
             </div>
 
             {/* Card 2: Real Text Code */}
             <div style={{
-              flex: '1 1 360px',
-              maxWidth: '480px',
+              flex: '1 1 380px',
+              maxWidth: '490px',
               background: '#ffffff',
-              border: '1px solid #e2e8f0',
+              border: '1.5px solid #cbd5e1',
               borderRadius: '24px',
               overflow: 'hidden',
-              boxShadow: '0 4px 20px -4px rgba(15, 23, 42, 0.06)',
+              boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.1), 0 4px 12px rgba(15, 23, 42, 0.03)',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
             }}>
-              <div style={{ width: '100%', height: '300px', overflow: 'hidden', background: '#0e121a' }}>
+              {/* Image Banner */}
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                height: '260px',
+                overflow: 'hidden',
+                background: '#0e121a',
+              }}>
                 <img 
                   src="/images/real_coding_hard.jpg" 
                   alt="실제 코딩은 너무 어렵습니다"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
+                <div style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '16px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '5px 12px',
+                  borderRadius: '16px',
+                  background: 'rgba(15, 23, 42, 0.88)',
+                  backdropFilter: 'blur(8px)',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: '#f87171',
+                }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }} />
+                  {isEn ? 'Step 2: The Reality Wall' : '2단계 · 현실의 장벽'}
+                </div>
               </div>
-              <div style={{ padding: '24px 24px', textAlign: 'center' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0, wordBreak: 'keep-all' }}>
+
+              {/* Content Area */}
+              <div style={{ padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <h3 style={{
+                  fontSize: '1.35rem',
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  marginBottom: '12px',
+                  letterSpacing: '-0.01em',
+                  wordBreak: 'keep-all',
+                }}>
                   {isEn ? 'Real coding is too difficult.' : '실제 코딩은 너무 어렵습니다.'}
                 </h3>
+                <p style={{
+                  fontSize: '0.96rem',
+                  color: '#64748b',
+                  lineHeight: 1.65,
+                  marginBottom: '22px',
+                  wordBreak: 'keep-all',
+                }}>
+                  {isEn
+                    ? 'Moving to a real code editor brings syntax errors on single typos, strict indentation rules, and confusing compiler messages.'
+                    : '하지만 실전 에디터로 넘어오는 순간, 낯선 영문 키워드와 단 한 글자의 오타에도 멈추는 엄격한 문법, 쏟아지는 빨간색 에러 메시지에 쉽게 좌절합니다.'}
+                </p>
+
+                {/* Feature Tags / Points */}
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '0.88rem', color: '#475569' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626', flexShrink: 0 }}>
+                      <X size={13} strokeWidth={3} />
+                    </div>
+                    <span>{isEn ? 'Strict syntax, brackets & indentation' : '엄격한 영문 문법, 괄호와 들여쓰기'}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '0.88rem', color: '#475569' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626', flexShrink: 0 }}>
+                      <X size={13} strokeWidth={3} />
+                    </div>
+                    <span>{isEn ? 'Halts on a single typographical error' : '단 1개의 사소한 오타에도 전체 작동 중단'}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '0.88rem', color: '#475569' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626', flexShrink: 0 }}>
+                      <X size={13} strokeWidth={3} />
+                    </div>
+                    <span>{isEn ? 'Overwhelming debugging frustration' : '어려운 영문 에러 메시지와 디버깅 스트레스'}</span>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+
+          {/* Bottom Solution Bridge Banner: Why TypingCode Exists */}
+          <div style={{
+            maxWidth: '1060px',
+            margin: '36px auto 0',
+            padding: '24px 32px',
+            borderRadius: '20px',
+            background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #f8fafc 100%)',
+            border: '1.5px solid #bae6fd',
+            boxShadow: '0 8px 24px -4px rgba(2, 132, 199, 0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '24px',
+            flexWrap: 'wrap',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 500px' }}>
+              <div style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '14px',
+                background: '#0284c7',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)',
+              }}>
+                <Lightbulb size={24} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', margin: '0 0 4px' }}>
+                  {isEn 
+                    ? 'TypingCode connects the gap through muscle memory.' 
+                    : 'TypingCode가 이 거대한 간극을 타이핑으로 자연스럽게 이어줍니다.'}
+                </h4>
+                <p style={{ fontSize: '0.92rem', color: '#64748b', margin: 0, lineHeight: 1.5, wordBreak: 'keep-all' }}>
+                  {isEn
+                    ? 'No thick programming textbooks or passive lectures needed. Build real coding muscle memory directly through interactive typing.'
+                    : '두꺼운 코딩책도, 지루한 문법 강의도 필요 없습니다. 손끝으로 직접 키보드를 두드리며 손이 기억하는 진짜 코딩을 완성하세요.'}
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="#curriculum"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 24px',
+                borderRadius: '14px',
+                background: '#0f172a',
+                color: '#ffffff',
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+                flexShrink: 0,
+              }}
+            >
+              <span>{isEn ? 'Explore Curriculum' : '커리큘럼 둘러보기'}</span>
+              <ChevronRight size={16} />
+            </a>
           </div>
         </section>
 
