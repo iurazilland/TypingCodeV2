@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import '@/styles/globals.css';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
@@ -19,18 +20,7 @@ export default function RootLayout({
         <LanguageProvider>
           <Navbar />
           <main style={{ paddingTop: '70px' }}>{children}</main>
-          <footer style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            padding: '30px 24px',
-            textAlign: 'center',
-            color: '#64748b',
-            fontSize: '0.85rem',
-            marginTop: '60px',
-          }}>
-            <div>
-              TypingCode V2 Sandbox Platform &copy; 2026. Built with Next.js 14, Piston Sandbox & Glass-Tech VDS.
-            </div>
-          </footer>
+          <Footer />
         </LanguageProvider>
       </body>
     </html>

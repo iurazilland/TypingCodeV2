@@ -34,9 +34,9 @@ export default function HomePage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
 
-  // Dynamic light body background for Brilliant Editorial Theme on homepage
+  // Dynamic matte soft ice-cyan body background for glare-free comfort
   useEffect(() => {
-    document.body.style.backgroundColor = '#f8fafc';
+    document.body.style.backgroundColor = '#e2eff6';
     return () => {
       document.body.style.backgroundColor = '';
     };
@@ -116,27 +116,24 @@ export default function HomePage() {
 
   return (
     <div style={{
+      background: '#e2eff6',
       color: '#0f172a',
       minHeight: '100vh',
       marginTop: '-70px',
       paddingTop: '70px',
       overflowX: 'hidden',
     }}>
-      {/* =================================================================
-          1. HERO SECTION: Pure Slogan with Live 5 Animation Showcase
-          (Clean Pure White with Subtle Ambient Aura)
-          ================================================================= */}
-      <section style={{
-        background: '#ffffff',
-        padding: '120px 24px 140px',
-        borderBottom: '1px solid #edf2f7',
-        position: 'relative',
-      }}>
-        <div style={{
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 48px' }}>
+        
+        {/* =================================================================
+            1. HERO SECTION: Pure Slogan with Live 5 Animation Showcase
+            ================================================================= */}
+        <section style={{
           textAlign: 'center',
           maxWidth: '960px',
           margin: '0 auto',
-          minHeight: 'calc(80vh - 70px)',
+          padding: '140px 24px 170px',
+          minHeight: 'calc(90vh - 70px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -198,9 +195,9 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* Line 2: 13 characters */}
+              {/* Line 2: 13 characters in Deep Royal Blue */}
               <div style={{
-                color: '#0891b2',
+                color: '#1d4ed8',
                 whiteSpace: 'nowrap',
               }}>
                 {LINE_2_CHARS.map((char, idx) => (
@@ -219,10 +216,10 @@ export default function HomePage() {
             </h1>
           </div>
 
-          {/* Simple Subtitle */}
+          {/* Simple Subtitle with enhanced contrast */}
           <p style={{
             fontSize: 'clamp(1.15rem, 2.5vw, 1.38rem)',
-            color: '#64748b',
+            color: '#475569',
             fontWeight: 500,
             lineHeight: 1.6,
             maxWidth: '560px',
@@ -233,22 +230,15 @@ export default function HomePage() {
               ? 'Simply type. The code will follow.'
               : '그냥 입력하세요. 코드가 완성됩니다.'}
           </p>
-        </div>
-      </section>
+        </section>
 
-      {/* =================================================================
-          2. THE PROBLEM: BLOCK CODING VS REAL CODING
-          (Subtle Slate Cool-Gray Tone: #f8fafc with Crisp White Cards)
-          ================================================================= */}
-      <section id="why-typingcode" style={{
-        background: '#f8fafc',
-        padding: '120px 24px 140px',
-        borderBottom: '1px solid #e2e8f0',
-      }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+        {/* =================================================================
+            2. THE PROBLEM: BLOCK CODING VS REAL CODING
+            ================================================================= */}
+        <section id="why-typingcode" style={{ marginBottom: '180px' }}>
           
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 44px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 64px' }}>
             <h2 style={{
               fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
               fontWeight: 800,
@@ -285,15 +275,15 @@ export default function HomePage() {
             margin: '0 auto',
             flexWrap: 'wrap',
           }}>
-            {/* Card 1: Block Coding */}
+            {/* Card 1: Block Coding (High-Contrast 2px Slate Border) */}
             <div style={{
               flex: '1 1 360px',
               maxWidth: '480px',
               background: '#ffffff',
-              border: '1.5px solid #e0f2fe',
+              border: '2px solid #94a3b8',
               borderRadius: '24px',
               overflow: 'hidden',
-              boxShadow: '0 10px 28px -6px rgba(14, 165, 233, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04)',
+              boxShadow: '0 12px 32px -6px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.05)',
             }}>
               <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#f0f9ff' }}>
                 <img 
@@ -365,15 +355,15 @@ export default function HomePage() {
               <ArrowRight size={22} strokeWidth={2.5} />
             </div>
 
-            {/* Card 2: Real Text Code */}
+            {/* Card 2: Real Text Code (High-Contrast 2px Slate Border) */}
             <div style={{
               flex: '1 1 360px',
               maxWidth: '480px',
               background: '#ffffff',
-              border: '1.5px solid #cbd5e1',
+              border: '2px solid #94a3b8',
               borderRadius: '24px',
               overflow: 'hidden',
-              boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.04)',
+              boxShadow: '0 12px 32px -6px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.05)',
             }}>
               <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#0e121a' }}>
                 <img 
@@ -431,17 +421,17 @@ export default function HomePage() {
           {/* Foundation Statement with Typewriter Typing Effect */}
           <div style={{
             maxWidth: '860px',
-            margin: '48px auto 0',
+            margin: '80px auto 0',
             padding: '0 16px',
           }}>
             <div style={{
               position: 'relative',
               textAlign: 'center',
               background: 'linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%)',
-              border: '1.5px solid #ccfbf1',
+              border: '2px solid #94a3b8',
               borderRadius: '24px',
-              padding: '48px 36px',
-              boxShadow: '0 18px 40px -12px rgba(8, 145, 178, 0.1), 0 2px 6px rgba(0, 0, 0, 0.02)',
+              padding: '56px 40px',
+              boxShadow: '0 18px 40px -12px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04)',
             }}>
               <h3 style={{
                 fontSize: 'clamp(1.35rem, 2.7vw, 1.85rem)',
@@ -514,20 +504,21 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* =================================================================
-          3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
-          (Clean Pure White Background with Pure White Cards & Dark CTA)
-          ================================================================= */}
-      <section id="curriculum" style={{
-        background: '#ffffff',
-        padding: '120px 0 140px',
-        scrollMarginTop: '80px',
-      }}>
+        {/* =================================================================
+            3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
+            ================================================================= */}
+        <section id="curriculum" style={{
+          background: 'transparent',
+          border: 'none',
+          padding: '20px 0 20px',
+          marginBottom: '140px',
+          scrollMarginTop: '80px',
+        }}>
+          
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px', padding: '0 20px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 64px', padding: '0 20px' }}>
             <h2 style={{
               fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
               fontWeight: 800,
@@ -552,12 +543,12 @@ export default function HomePage() {
           </div>
 
           {/* Marquee Row 1: Beginner Line (Right to Left) */}
-          <div style={{ marginBottom: '32px' }}>
+          <div style={{ marginBottom: '48px' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               maxWidth: '1280px',
-              margin: '0 auto 12px',
+              margin: '0 auto 16px',
               padding: '0 24px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -578,7 +569,7 @@ export default function HomePage() {
                   01
                 </span>
                 <span style={{ fontSize: '1.02rem', fontWeight: 800, color: '#0f172a' }}>
-                  {isEn ? 'Beginner Foundation Track (13 Languages Basic Syntax)' : '초급 입문 트랙 (13개 언어 기초 문법)'}
+                  {isEn ? 'Beginner Foundation Track' : '초급 입문 트랙 (13개 언어 기초 문법)'}
                 </span>
               </div>
             </div>
@@ -681,7 +672,7 @@ export default function HomePage() {
               display: 'flex',
               alignItems: 'center',
               maxWidth: '1280px',
-              margin: '0 auto 12px',
+              margin: '0 auto 16px',
               padding: '0 24px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -800,7 +791,7 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Action: Link to all languages (High-Contrast Primary CTA) */}
-          <div style={{ textAlign: 'center', marginTop: '48px' }}>
+          <div style={{ textAlign: 'center', marginTop: '56px' }}>
             <Link
               href="/languages"
               style={{
@@ -811,22 +802,22 @@ export default function HomePage() {
                 fontSize: '1rem',
                 fontWeight: 800,
                 borderRadius: '18px',
-                background: '#0f172a',
+                background: '#0891b2',
                 color: '#ffffff',
-                boxShadow: '0 12px 30px -6px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset',
+                boxShadow: '0 12px 30px -6px rgba(8, 145, 178, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.2) inset',
                 textDecoration: 'none',
                 transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                 letterSpacing: '-0.01em',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
-                e.currentTarget.style.background = '#1e293b';
-                e.currentTarget.style.boxShadow = '0 18px 36px -6px rgba(15, 23, 42, 0.45)';
+                e.currentTarget.style.background = '#0e7490';
+                e.currentTarget.style.boxShadow = '0 18px 36px -6px rgba(8, 145, 178, 0.55)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.background = '#0f172a';
-                e.currentTarget.style.boxShadow = '0 12px 30px -6px rgba(15, 23, 42, 0.35)';
+                e.currentTarget.style.background = '#0891b2';
+                e.currentTarget.style.boxShadow = '0 12px 30px -6px rgba(8, 145, 178, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.2) inset';
               }}
             >
               <span>{isEn ? 'Explore All 13 Language Curriculums' : '전체 13개 언어 커리큘럼 모두 보기'}</span>
@@ -837,14 +828,236 @@ export default function HomePage() {
                 width: '24px',
                 height: '24px',
                 borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.15)',
-                color: '#38bdf8',
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: '#ffffff',
               }}>
                 <ArrowRight size={14} strokeWidth={2.5} />
               </span>
             </Link>
           </div>
         </section>
+
+        {/* =================================================================
+            4. FREE STARTER ACCESS BANNER (Standalone Full-Width Hero Card)
+            ================================================================= */}
+        <section id="free-starter" style={{ marginBottom: '60px' }}>
+          <div style={{
+            maxWidth: '1240px',
+            margin: '0 auto',
+            position: 'relative',
+            borderRadius: '36px',
+            background: 'linear-gradient(145deg, #090d16 0%, #0f172a 45%, #082444 100%)',
+            border: '2px solid rgba(255, 255, 255, 0.14)',
+            boxShadow: '0 32px 72px -16px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.08) inset',
+            overflow: 'hidden',
+            padding: '72px 64px',
+          }}>
+            {/* Ambient Background Glow Effect */}
+            <div style={{
+              position: 'absolute',
+              top: '-100px',
+              left: '-100px',
+              width: '460px',
+              height: '460px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%)',
+              pointerEvents: 'none',
+              filter: 'blur(55px)',
+            }} />
+            <div style={{
+              position: 'absolute',
+              bottom: '-100px',
+              right: '-100px',
+              width: '460px',
+              height: '460px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
+              pointerEvents: 'none',
+              filter: 'blur(55px)',
+            }} />
+
+            <div style={{
+              position: 'relative',
+              zIndex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '48px',
+              flexWrap: 'wrap',
+            }}>
+              {/* Left Column: Promotion Pitch & Value Props */}
+              <div style={{ flex: '1 1 520px', minWidth: '300px' }}>
+                {/* Glowing Badge */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '7px 16px',
+                  borderRadius: '24px',
+                  background: 'rgba(6, 182, 212, 0.12)',
+                  border: '1px solid rgba(6, 182, 212, 0.35)',
+                  boxShadow: '0 0 16px rgba(6, 182, 212, 0.22)',
+                  color: '#22d3ee',
+                  fontSize: '0.85rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  marginBottom: '20px',
+                }}>
+                  <Sparkles size={15} />
+                  <span>{isEn ? '100% Free Beginner Track' : '기초 단계 100% 무료 학습'}</span>
+                </div>
+
+                {/* Bold Main Headline */}
+                <h3 style={{
+                  fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+                  fontWeight: 900,
+                  color: '#ffffff',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1.25,
+                  margin: '0 0 16px 0',
+                  wordBreak: 'keep-all',
+                }}>
+                  {isEn ? (
+                    <>
+                      All Beginner Courses Are{' '}
+                      <span style={{
+                        background: 'linear-gradient(135deg, #22d3ee, #38bdf8)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}>
+                        100% Free
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      모든 언어의 기초 단계는{' '}
+                      <span style={{
+                        background: 'linear-gradient(135deg, #22d3ee, #38bdf8)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}>
+                        완전 무료
+                      </span>
+                      입니다
+                    </>
+                  )}
+                </h3>
+
+                {/* Subtitle Description */}
+                <p style={{
+                  fontSize: 'clamp(1rem, 1.9vw, 1.12rem)',
+                  color: '#94a3b8',
+                  lineHeight: 1.7,
+                  margin: '0 0 26px 0',
+                  maxWidth: '620px',
+                  wordBreak: 'keep-all',
+                }}>
+                  {isEn
+                    ? 'Start learning with zero cost. The entire beginner curriculum across all 13 languages is 100% free — type interactive code and execute it live right in your browser.'
+                    : '부담 없이 시작하세요. 파이썬, C, 웹 등 13개 전 언어의 기초 입문 단계는 누구에게나 100% 무료로 제공됩니다. 브라우저에서 바로 실시간 코드를 타이핑하고 실행해보세요.'}
+                </p>
+
+                {/* Proof Points Chips */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '20px',
+                  flexWrap: 'wrap',
+                }}>
+                  {[
+                    { ko: '설치 불필요 (Web IDE)', en: 'No Setup (Web IDE)' },
+                    { ko: '즉시 실시간 코드 실행', en: 'Live Code Execution' },
+                    { ko: '손으로 익히는 근육기억', en: 'Muscle Memory Typing' },
+                  ].map((chip, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '7px',
+                        fontSize: '0.88rem',
+                        fontWeight: 600,
+                        color: '#cbd5e1',
+                      }}
+                    >
+                      <Check size={16} color="#06b6d4" strokeWidth={3} />
+                      <span>{isEn ? chip.en : chip.ko}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Column: High-Impact Python Starter Action Pod */}
+              <div style={{
+                flex: '0 0 auto',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                minWidth: '300px',
+              }}>
+                {/* Recommended Tag */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: '#38bdf8',
+                  marginBottom: '14px',
+                  letterSpacing: '-0.01em',
+                }}>
+                  <span style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#10b981',
+                    boxShadow: '0 0 10px #10b981',
+                  }} />
+                  <span>{isEn ? 'Most Recommended First Track' : '가장 추천하는 첫 코딩 코스'}</span>
+                </div>
+
+                {/* Big Python Start Button */}
+                <Link
+                  href="/practice/python/1"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '14px',
+                    padding: '20px 42px',
+                    fontSize: '1.18rem',
+                    fontWeight: 800,
+                    borderRadius: '22px',
+                    background: 'linear-gradient(135deg, #06b6d4 0%, #0284c7 50%, #2563eb 100%)',
+                    color: '#ffffff',
+                    boxShadow: '0 16px 38px -4px rgba(6, 182, 212, 0.55), 0 0 24px rgba(14, 165, 233, 0.35)',
+                    textDecoration: 'none',
+                    transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+                    letterSpacing: '-0.01em',
+                    whiteSpace: 'nowrap',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px) scale(1.03)';
+                    e.currentTarget.style.boxShadow = '0 22px 46px -4px rgba(6, 182, 212, 0.75), 0 0 32px rgba(14, 165, 233, 0.55)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                    e.currentTarget.style.boxShadow = '0 16px 38px -4px rgba(6, 182, 212, 0.55), 0 0 24px rgba(14, 165, 233, 0.35)';
+                  }}
+                >
+                  <LanguageIcon language="python" size={26} />
+                  <span>{isEn ? 'Start with Python Basics' : '파이썬 기초로 시작하기'}</span>
+                  <ArrowRight size={20} strokeWidth={2.8} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
-    );
-  }
+    </div>
+  );
+}
