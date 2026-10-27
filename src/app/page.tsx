@@ -484,7 +484,7 @@ export default function HomePage() {
               }}>
                 {isEn ? (
                   <>
-                    TypingCode fills the difficult gap between block coding and real programming through{' '}
+                    Fills the massive gap between block coding and real programming{' '}
                     <span style={{
                       color: '#0f172a',
                       fontWeight: 700,
@@ -494,12 +494,12 @@ export default function HomePage() {
                       border: '1px solid rgba(6, 182, 212, 0.25)',
                       display: 'inline-block',
                     }}>
-                      interactive typing
+                      purely through typing
                     </span>.
                   </>
                 ) : (
                   <>
-                    타이핑코드는 블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
+                    블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
                     <span style={{
                       color: '#0f172a',
                       fontWeight: 700,
@@ -509,9 +509,9 @@ export default function HomePage() {
                       border: '1px solid rgba(6, 182, 212, 0.25)',
                       display: 'inline-block',
                     }}>
-                      손끝의 타이핑
-                    </span>
-                    으로 자연스럽게 채워주는 연습실입니다.
+                      타이핑만으로
+                    </span>{' '}
+                    자연스럽게 채워줍니다.
                   </>
                 )}
               </p>
