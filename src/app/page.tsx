@@ -110,6 +110,32 @@ export default function HomePage() {
   // Signature code preview
   const signature = TRACK_SIGNATURE_CODE[currentTrack.id] || TRACK_SIGNATURE_CODE.python;
 
+  // Effect switcher for the 4 requested options
+  const [selectedEffect, setSelectedEffect] = useState<'typewriter' | 'borderBeam' | 'terminal' | 'keycaps'>('typewriter');
+
+  // Typewriter live typing effect
+  const TYPEWRITER_TARGET = isEn 
+    ? 'Just type along, and code becomes second nature.' 
+    : '따라치다 보면 손이 먼저 코드를 기억합니다.';
+  const [typewriterText, setTypewriterText] = useState('');
+  const [typewriterIdx, setTypewriterIdx] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (typewriterIdx < TYPEWRITER_TARGET.length) {
+      timer = setTimeout(() => {
+        setTypewriterText(TYPEWRITER_TARGET.slice(0, typewriterIdx + 1));
+        setTypewriterIdx((prev) => prev + 1);
+      }, 75);
+    } else {
+      timer = setTimeout(() => {
+        setTypewriterIdx(0);
+        setTypewriterText('');
+      }, 3500);
+    }
+    return () => clearTimeout(timer);
+  }, [typewriterIdx, TYPEWRITER_TARGET]);
+
   const LINE_1_CHARS = 'JUST TYPE IT,'.split('');
   const LINE_2_CHARS = 'THEN CODE IT.'.split('');
 
@@ -400,122 +426,360 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom Foundation Statement with Dynamic Shimmer & Ambient Aura */}
+          {/* Interactive 4-Option Effect Showcase */}
           <div style={{
-            position: 'relative',
             maxWidth: '860px',
             margin: '52px auto 0',
             padding: '0 16px',
           }}>
-            {/* Ambient Breathing Aura Background */}
+            {/* Effect Switcher Tabs */}
             <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: 'min(680px, 95vw)',
-              height: '200px',
-              background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.09) 45%, transparent 75%)',
-              filter: 'blur(28px)',
-              pointerEvents: 'none',
-              zIndex: 0,
-              animation: 'auraBreathing 6s ease-in-out infinite',
-            }} />
-
-            {/* Glassmorphism Stage Container */}
-            <div style={{
-              position: 'relative',
-              zIndex: 1,
-              textAlign: 'center',
-              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.88) 100%)',
-              backdropFilter: 'blur(16px)',
-              border: '1.5px solid rgba(226, 232, 240, 0.9)',
-              borderRadius: '24px',
-              padding: '44px 36px',
-              boxShadow: '0 20px 40px -15px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.9) inset',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              flexWrap: 'wrap',
+              marginBottom: '22px',
             }}>
-              <h3 style={{
-                fontSize: 'clamp(1.35rem, 2.7vw, 1.85rem)',
-                fontWeight: 800,
-                color: '#0f172a',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.45,
-                marginBottom: '14px',
-                wordBreak: 'keep-all',
-              }}>
-                <span style={{ display: 'block', marginBottom: '4px' }}>
-                  {isEn 
-                    ? 'No thick textbooks, no hard lectures.' 
-                    : '두꺼운 코딩책도 어려운 강의도 없이,'}
-                </span>
-                <span style={{
-                  display: 'inline-block',
-                  background: 'linear-gradient(90deg, #0284c7 0%, #06b6d4 25%, #6366f1 55%, #0891b2 80%, #0284c7 100%)',
-                  backgroundSize: '200% auto',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  animation: 'textShimmerWave 4.5s linear infinite',
-                  fontWeight: 800,
-                }}>
-                  {isEn 
-                    ? 'Just type along, and code becomes second nature.' 
-                    : '따라치다 보면 손이 먼저 코드를 기억합니다.'}
-                </span>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '3.5px',
-                    height: '1.05em',
-                    background: '#06b6d4',
-                    marginLeft: '6px',
-                    verticalAlign: 'text-bottom',
-                    borderRadius: '2px',
-                    animation: 'cursorBlinkGlow 1.05s steps(2, start) infinite',
-                  }}
-                />
-              </h3>
-
-              <p style={{
-                fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
-                color: '#64748b',
-                lineHeight: 1.7,
-                margin: '0 auto',
-                maxWidth: '660px',
-                wordBreak: 'keep-all',
-              }}>
-                {isEn ? (
-                  <>
-                    Fills the massive gap between block coding and real programming{' '}
-                    <span style={{
-                      color: '#0f172a',
+              {[
+                { id: 'typewriter', label: isEn ? '1. Typewriter' : '1. 타자기 타이핑', icon: '⌨️' },
+                { id: 'borderBeam', label: isEn ? '2. Border Beam' : '2. 보더 빔 (Linear)', icon: '✨' },
+                { id: 'terminal', label: isEn ? '3. Terminal IDE' : '3. 터미널 콘솔', icon: '💻' },
+                { id: 'keycaps', label: isEn ? '4. Keycaps Wave' : '4. 키캡 웨이브', icon: '🎹' },
+              ].map((tab) => {
+                const isActive = selectedEffect === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedEffect(tab.id as any)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 16px',
+                      borderRadius: '16px',
+                      fontSize: '0.84rem',
                       fontWeight: 700,
-                      padding: '2px 8px',
-                      borderRadius: '6px',
-                      background: 'rgba(6, 182, 212, 0.1)',
-                      border: '1px solid rgba(6, 182, 212, 0.25)',
+                      background: isActive ? '#0f172a' : '#ffffff',
+                      color: isActive ? '#ffffff' : '#64748b',
+                      border: isActive ? '1px solid #0f172a' : '1px solid #e2e8f0',
+                      boxShadow: isActive ? '0 4px 12px rgba(15, 23, 42, 0.15)' : '0 2px 6px rgba(15, 23, 42, 0.03)',
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                    }}
+                  >
+                    <span>{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* =================================================================
+                OPTION 1: TYPEWRITER EFFECT
+                ================================================================= */}
+            {selectedEffect === 'typewriter' && (
+              <div style={{
+                position: 'relative',
+                textAlign: 'center',
+                background: '#ffffff',
+                border: '1.5px solid #e2e8f0',
+                borderRadius: '24px',
+                padding: '48px 36px',
+                boxShadow: '0 16px 36px -12px rgba(15, 23, 42, 0.06)',
+                transition: 'all 0.3s ease',
+              }}>
+                <h3 style={{
+                  fontSize: 'clamp(1.35rem, 2.7vw, 1.85rem)',
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.45,
+                  marginBottom: '14px',
+                  wordBreak: 'keep-all',
+                }}>
+                  <span style={{ display: 'block', marginBottom: '6px', color: '#334155' }}>
+                    {isEn ? 'No thick textbooks, no hard lectures.' : '두꺼운 코딩책도 어려운 강의도 없이,'}
+                  </span>
+                  <span style={{ color: '#0f172a', fontWeight: 800 }}>
+                    {typewriterText}
+                  </span>
+                  <span
+                    style={{
                       display: 'inline-block',
+                      width: '3.5px',
+                      height: '1.1em',
+                      background: '#0891b2',
+                      marginLeft: '6px',
+                      verticalAlign: 'text-bottom',
+                      borderRadius: '2px',
+                      animation: 'cursorBlinkGlow 0.9s infinite',
+                    }}
+                  />
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
+                  color: '#64748b',
+                  lineHeight: 1.7,
+                  margin: '0 auto',
+                  maxWidth: '660px',
+                  wordBreak: 'keep-all',
+                }}>
+                  블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
+                  <span style={{
+                    color: '#0f172a',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    background: '#f0fdfa',
+                    border: '1px solid #ccfbf1',
+                    display: 'inline-block',
+                  }}>
+                    타이핑만으로
+                  </span>{' '}
+                  자연스럽게 채워줍니다.
+                </p>
+              </div>
+            )}
+
+            {/* =================================================================
+                OPTION 2: BORDER BEAM EFFECT (Linear Style)
+                ================================================================= */}
+            {selectedEffect === 'borderBeam' && (
+              <div style={{
+                position: 'relative',
+                borderRadius: '24px',
+                padding: '2px',
+                overflow: 'hidden',
+                boxShadow: '0 20px 44px -12px rgba(6, 182, 212, 0.15)',
+              }}>
+                {/* Rotating Conic Gradient Beam */}
+                <div style={{
+                  position: 'absolute',
+                  inset: '-50%',
+                  background: 'conic-gradient(from 0deg, transparent 0 320deg, #06b6d4 350deg, #0284c7 360deg)',
+                  animation: 'borderBeamSpin 4s linear infinite',
+                  pointerEvents: 'none',
+                }} />
+
+                {/* Inner Stage Card */}
+                <div style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  textAlign: 'center',
+                  background: '#ffffff',
+                  borderRadius: '22px',
+                  padding: '46px 36px',
+                }}>
+                  <h3 style={{
+                    fontSize: 'clamp(1.35rem, 2.7vw, 1.85rem)',
+                    fontWeight: 800,
+                    color: '#0f172a',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.45,
+                    marginBottom: '14px',
+                    wordBreak: 'keep-all',
+                  }}>
+                    <span style={{ display: 'block', marginBottom: '6px' }}>
+                      {isEn ? 'No thick textbooks, no hard lectures.' : '두꺼운 코딩책도 어려운 강의도 없이,'}
+                    </span>
+                    <span style={{
+                      display: 'inline-block',
+                      background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 60%, #0f172a 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      fontWeight: 800,
                     }}>
-                      purely through typing
-                    </span>.
-                  </>
-                ) : (
-                  <>
+                      {isEn ? 'Just type along, and code becomes second nature.' : '따라치다 보면 손이 먼저 코드를 기억합니다.'}
+                    </span>
+                  </h3>
+                  <p style={{
+                    fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
+                    color: '#64748b',
+                    lineHeight: 1.7,
+                    margin: '0 auto',
+                    maxWidth: '660px',
+                    wordBreak: 'keep-all',
+                  }}>
                     블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
                     <span style={{
-                      color: '#0f172a',
+                      color: '#0284c7',
                       fontWeight: 700,
                       padding: '2px 8px',
                       borderRadius: '6px',
-                      background: 'rgba(6, 182, 212, 0.1)',
-                      border: '1px solid rgba(6, 182, 212, 0.25)',
+                      background: '#f0f9ff',
+                      border: '1px solid #bae6fd',
                       display: 'inline-block',
                     }}>
                       타이핑만으로
                     </span>{' '}
                     자연스럽게 채워줍니다.
-                  </>
-                )}
-              </p>
-            </div>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* =================================================================
+                OPTION 3: TERMINAL CONSOLE EFFECT (IDE Style)
+                ================================================================= */}
+            {selectedEffect === 'terminal' && (
+              <div style={{
+                background: '#0d1117',
+                border: '1px solid #30363d',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                boxShadow: '0 20px 48px -12px rgba(0, 0, 0, 0.4)',
+                textAlign: 'left',
+                fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+              }}>
+                {/* Terminal Header */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 18px',
+                  background: '#161b22',
+                  borderBottom: '1px solid #30363d',
+                }}>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f56' }} />
+                    <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e' }} />
+                    <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#27c93f' }} />
+                  </div>
+                  <span style={{ fontSize: '0.76rem', color: '#8b949e', fontWeight: 600 }}>typingcode-bridge.sh</span>
+                  <div style={{ width: '40px' }} />
+                </div>
+
+                {/* Terminal Body */}
+                <div style={{ padding: '36px 36px 32px' }}>
+                  <div style={{ fontSize: '0.88rem', color: '#58a6ff', marginBottom: '18px' }}>
+                    $ typingcode --fill-the-gap
+                  </div>
+                  <h3 style={{
+                    fontSize: 'clamp(1.2rem, 2.3vw, 1.55rem)',
+                    fontWeight: 700,
+                    lineHeight: 1.55,
+                    marginBottom: '16px',
+                    fontFamily: 'inherit',
+                    wordBreak: 'keep-all',
+                  }}>
+                    <span style={{ display: 'block', color: '#8b949e', marginBottom: '6px' }}>
+                      [READY] 두꺼운 코딩책도 어려운 강의도 없이,
+                    </span>
+                    <span style={{ color: '#3fb950' }}>
+                      &gt; 따라치다 보면 손이 먼저 코드를 기억합니다.
+                    </span>
+                    <span style={{
+                      display: 'inline-block',
+                      width: '8px',
+                      height: '1.05em',
+                      background: '#3fb950',
+                      marginLeft: '6px',
+                      verticalAlign: 'text-bottom',
+                      animation: 'cursorBlinkGlow 1s infinite',
+                    }} />
+                  </h3>
+                  <p style={{
+                    fontSize: '0.92rem',
+                    color: '#8b949e',
+                    lineHeight: 1.6,
+                    margin: 0,
+                    wordBreak: 'keep-all',
+                  }}>
+                    <span style={{ color: '#d29922' }}>//</span> 블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
+                    <span style={{ color: '#58a6ff', fontWeight: 700 }}>타이핑만으로</span> 자연스럽게 채워줍니다.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* =================================================================
+                OPTION 4: KEYCAPS WAVE EFFECT (Tactile Mechanical)
+                ================================================================= */}
+            {selectedEffect === 'keycaps' && (
+              <div style={{
+                textAlign: 'center',
+                background: '#ffffff',
+                border: '1.5px solid #e2e8f0',
+                borderRadius: '24px',
+                padding: '44px 32px',
+                boxShadow: '0 16px 36px -12px rgba(15, 23, 42, 0.06)',
+              }}>
+                <div style={{
+                  fontSize: 'clamp(1.15rem, 2.2vw, 1.4rem)',
+                  fontWeight: 700,
+                  color: '#64748b',
+                  marginBottom: '16px',
+                  wordBreak: 'keep-all',
+                }}>
+                  두꺼운 코딩책도 어려운 강의도 없이,
+                </div>
+
+                {/* Tactile Keycaps Container */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                  gap: '8px',
+                  marginBottom: '20px',
+                }}>
+                  {['따라치다', '보면', '손이', '먼저', '코드를', '기억합니다'].map((word, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        padding: '10px 18px',
+                        background: '#ffffff',
+                        border: '1.5px solid #cbd5e1',
+                        borderRadius: '12px',
+                        fontSize: 'clamp(1.05rem, 2.2vw, 1.4rem)',
+                        fontWeight: 800,
+                        color: '#0f172a',
+                        fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+                        userSelect: 'none',
+                        cursor: 'pointer',
+                        animation: 'keycapPressWave 3.2s ease-in-out infinite',
+                        animationDelay: `${idx * 0.15}s`,
+                        transition: 'transform 0.1s ease',
+                      }}
+                      onMouseDown={(e) => {
+                        e.currentTarget.style.transform = 'translateY(3px)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                      onMouseUp={(e) => {
+                        e.currentTarget.style.transform = '';
+                        e.currentTarget.style.boxShadow = '';
+                      }}
+                    >
+                      {word}
+                    </div>
+                  ))}
+                </div>
+
+                <p style={{
+                  fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
+                  color: '#64748b',
+                  lineHeight: 1.7,
+                  margin: '0 auto',
+                  maxWidth: '660px',
+                  wordBreak: 'keep-all',
+                }}>
+                  블록코딩과 실전 코딩 사이의 거대한 간극을{' '}
+                  <span style={{
+                    color: '#0f172a',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    background: '#f1f5f9',
+                    border: '1px solid #e2e8f0',
+                    display: 'inline-block',
+                  }}>
+                    타이핑만으로
+                  </span>{' '}
+                  자연스럽게 채워줍니다.
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
