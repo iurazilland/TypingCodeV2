@@ -21,6 +21,8 @@ export default function Navbar() {
     return null;
   }
 
+  const isHomePage = pathname === '/';
+
   const openLogin = () => {
     setAuthModalTab('login');
     setIsAuthModalOpen(true);
@@ -56,7 +58,20 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="navbar-header">
+      <header
+        className="navbar-header"
+        style={
+          isHomePage
+            ? {
+                background: 'rgba(255, 255, 255, 0.92)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                borderBottom: '1px solid #e2e8f0',
+                boxShadow: '0 2px 12px -2px rgba(15, 23, 42, 0.05)',
+              }
+            : undefined
+        }
+      >
         {/* Left Side: Brand Logo & Title (Clean & Simple) */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
@@ -76,7 +91,15 @@ export default function Navbar() {
             >
               ⌨️
             </div>
-            <span style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.5px', color: '#f8fafc', whiteSpace: 'nowrap' }}>
+            <span
+              style={{
+                fontSize: '1.35rem',
+                fontWeight: 800,
+                letterSpacing: '-0.5px',
+                color: isHomePage ? '#0f172a' : '#f8fafc',
+                whiteSpace: 'nowrap',
+              }}
+            >
               Typing<span style={{ color: '#10b981' }}>Code</span>
             </span>
           </Link>
@@ -98,11 +121,11 @@ export default function Navbar() {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              background: isHomePage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
+              border: isHomePage ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.08)',
               padding: '5px 8px',
-              borderRadius: '16px',
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.2)',
+              borderRadius: '14px',
+              boxShadow: isHomePage ? 'none' : 'inset 0 1px 3px rgba(0, 0, 0, 0.2)',
             }}
           >
             {navItems.map((item) => {
@@ -115,26 +138,52 @@ export default function Navbar() {
                   title={item.label}
                   style={{
                     fontWeight: item.isActive ? 700 : 500,
-                    color: item.isActive ? '#ffffff' : '#94a3b8',
-                    background: item.isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                    border: item.isActive ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid transparent',
-                    boxShadow: 'none',
+                    color: item.isActive
+                      ? isHomePage
+                        ? '#0f172a'
+                        : '#ffffff'
+                      : isHomePage
+                      ? '#64748b'
+                      : '#94a3b8',
+                    background: item.isActive
+                      ? isHomePage
+                        ? '#ffffff'
+                        : 'rgba(255, 255, 255, 0.08)'
+                      : 'transparent',
+                    border: item.isActive
+                      ? isHomePage
+                        ? '1px solid #e2e8f0'
+                        : '1px solid rgba(255, 255, 255, 0.12)'
+                      : '1px solid transparent',
+                    boxShadow: item.isActive && isHomePage ? '0 1px 3px rgba(15, 23, 42, 0.06)' : 'none',
                     whiteSpace: 'nowrap',
                   }}
                   onMouseEnter={(e) => {
                     if (!item.isActive) {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.background = isHomePage ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.05)';
+                      e.currentTarget.style.color = isHomePage ? '#0f172a' : '#ffffff';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!item.isActive) {
                       e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#94a3b8';
+                      e.currentTarget.style.color = isHomePage ? '#64748b' : '#94a3b8';
                     }
                   }}
                 >
-                  <Icon size={16} style={{ color: item.isActive ? '#60a5fa' : '#64748b', flexShrink: 0 }} />
+                  <Icon
+                    size={16}
+                    style={{
+                      color: item.isActive
+                        ? isHomePage
+                          ? '#2563eb'
+                          : '#60a5fa'
+                        : isHomePage
+                        ? '#64748b'
+                        : '#64748b',
+                      flexShrink: 0,
+                    }}
+                  />
                   <span className="nav-link-text">{item.label}</span>
                 </Link>
               );
@@ -149,8 +198,8 @@ export default function Navbar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              background: isHomePage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
+              border: isHomePage ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.08)',
               borderRadius: '10px',
               padding: '3px',
               gap: '2px',
@@ -163,12 +212,30 @@ export default function Navbar() {
               style={{
                 padding: '5px 11px',
                 borderRadius: '7px',
-                border: language === 'ko' ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid transparent',
-                background: language === 'ko' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-                color: language === 'ko' ? '#ffffff' : '#64748b',
+                border:
+                  language === 'ko'
+                    ? isHomePage
+                      ? '1px solid #e2e8f0'
+                      : '1px solid rgba(255, 255, 255, 0.12)'
+                    : '1px solid transparent',
+                background:
+                  language === 'ko'
+                    ? isHomePage
+                      ? '#ffffff'
+                      : 'rgba(255, 255, 255, 0.1)'
+                    : 'transparent',
+                color:
+                  language === 'ko'
+                    ? isHomePage
+                      ? '#0f172a'
+                      : '#ffffff'
+                    : isHomePage
+                    ? '#64748b'
+                    : '#64748b',
                 fontWeight: language === 'ko' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
+                boxShadow: language === 'ko' && isHomePage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -180,12 +247,30 @@ export default function Navbar() {
               style={{
                 padding: '5px 11px',
                 borderRadius: '7px',
-                border: language === 'en' ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid transparent',
-                background: language === 'en' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-                color: language === 'en' ? '#ffffff' : '#64748b',
+                border:
+                  language === 'en'
+                    ? isHomePage
+                      ? '1px solid #e2e8f0'
+                      : '1px solid rgba(255, 255, 255, 0.12)'
+                    : '1px solid transparent',
+                background:
+                  language === 'en'
+                    ? isHomePage
+                      ? '#ffffff'
+                      : 'rgba(255, 255, 255, 0.1)'
+                    : 'transparent',
+                color:
+                  language === 'en'
+                    ? isHomePage
+                      ? '#0f172a'
+                      : '#ffffff'
+                    : isHomePage
+                    ? '#64748b'
+                    : '#64748b',
                 fontWeight: language === 'en' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
+                boxShadow: language === 'en' && isHomePage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -206,10 +291,10 @@ export default function Navbar() {
               fontSize: '0.88rem',
               fontWeight: 700,
               borderRadius: '12px',
-              background: 'rgba(56, 189, 248, 0.15)',
-              border: '1.5px solid rgba(56, 189, 248, 0.45)',
-              color: '#38bdf8',
-              boxShadow: '0 4px 14px rgba(56, 189, 248, 0.2)',
+              background: isHomePage ? '#0f172a' : '#2563eb',
+              border: isHomePage ? '1px solid #0f172a' : '1px solid #3b82f6',
+              color: '#ffffff',
+              boxShadow: isHomePage ? '0 2px 8px rgba(15, 23, 42, 0.15)' : '0 4px 14px rgba(37, 99, 235, 0.3)',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
               whiteSpace: 'nowrap',
@@ -217,13 +302,15 @@ export default function Navbar() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(56, 189, 248, 0.35)';
-              e.currentTarget.style.borderColor = '#38bdf8';
+              if (isHomePage) {
+                e.currentTarget.style.background = '#1e293b';
+              }
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 14px rgba(56, 189, 248, 0.2)';
-              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.45)';
+              if (isHomePage) {
+                e.currentTarget.style.background = '#0f172a';
+              }
             }}
           >
             <User size={15} style={{ flexShrink: 0 }} />
