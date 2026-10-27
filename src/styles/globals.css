@@ -427,19 +427,19 @@ button {
 }
 
 /* ==========================================================================
-   Hero Slogan Kinetic Wave Animation (0.2s wave bounce, 3s rest interval)
+   Hero Slogan Kinetic Wave Animation (0.5s wave bounce, 3s rest interval)
    ========================================================================== */
 @keyframes kineticWaveCharLine1 {
   0% {
     transform: translateY(0);
     color: #0f172a;
   }
-  3% {
+  7% {
     transform: translateY(-8px);
     color: #2563eb;
     text-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   }
-  6.5% {
+  14% {
     transform: translateY(0);
     color: #0f172a;
     text-shadow: none;
@@ -456,12 +456,12 @@ button {
     transform: translateY(0);
     color: #2563eb;
   }
-  3% {
+  7% {
     transform: translateY(-8px);
     color: #38bdf8;
     text-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
   }
-  6.5% {
+  14% {
     transform: translateY(0);
     color: #2563eb;
     text-shadow: none;

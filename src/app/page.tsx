@@ -170,8 +170,8 @@ export default function HomePage() {
                     key={idx}
                     style={{
                       display: 'inline-block',
-                      animation: 'kineticWaveCharLine1 3.3s cubic-bezier(0.25, 1, 0.5, 1) infinite',
-                      animationDelay: `${idx * 0.02}s`,
+                      animation: 'kineticWaveCharLine1 3.6s cubic-bezier(0.25, 1, 0.5, 1) infinite',
+                      animationDelay: `${idx * 0.03}s`,
                     }}
                   >
                     {char === ' ' ? '\u00A0' : char}
@@ -189,8 +189,8 @@ export default function HomePage() {
                     key={idx}
                     style={{
                       display: 'inline-block',
-                      animation: 'kineticWaveCharLine2 3.3s cubic-bezier(0.25, 1, 0.5, 1) infinite',
-                      animationDelay: `${idx * 0.02}s`,
+                      animation: 'kineticWaveCharLine2 3.6s cubic-bezier(0.25, 1, 0.5, 1) infinite',
+                      animationDelay: `${idx * 0.03}s`,
                     }}
                   >
                     {char === ' ' ? '\u00A0' : char}
