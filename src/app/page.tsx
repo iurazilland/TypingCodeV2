@@ -235,7 +235,7 @@ export default function HomePage() {
         {/* =================================================================
             2. THE PROBLEM: BLOCK CODING VS REAL CODING
             ================================================================= */}
-        <section id="why-typingcode" style={{ marginBottom: '100px' }}>
+        <section id="why-typingcode" style={{ marginBottom: '160px' }}>
           
           {/* Section Header */}
           <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 44px' }}>
@@ -510,29 +510,46 @@ export default function HomePage() {
             3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
             ================================================================= */}
         <section id="curriculum" style={{
-          background: '#f1f5f9',
-          border: '1.5px solid #e2e8f0',
+          background: '#0d131f',
+          border: '1.5px solid rgba(255, 255, 255, 0.1)',
           borderRadius: '32px',
-          padding: '60px 0 64px',
+          padding: '68px 0 76px',
           marginBottom: '110px',
           scrollMarginTop: '80px',
-          boxShadow: '0 20px 48px -16px rgba(15, 23, 42, 0.05)',
+          boxShadow: '0 24px 64px -16px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset',
+          position: 'relative',
+          overflow: 'hidden',
         }}>
-          
+          {/* Subtle background ambient glow for the dark studio */}
+          <div style={{
+            position: 'absolute',
+            top: '-120px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '600px',
+            height: '300px',
+            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.04) 50%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px', padding: '0 20px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 44px', padding: '0 20px', position: 'relative' }}>
             <h2 style={{
-              fontSize: 'clamp(1.9rem, 3.8vw, 2.5rem)',
+              fontSize: 'clamp(2rem, 4vw, 2.6rem)',
               fontWeight: 800,
-              color: '#0f172a',
+              color: '#ffffff',
               letterSpacing: '-0.02em',
-              marginBottom: '12px',
+              marginBottom: '14px',
               wordBreak: 'keep-all',
             }}>
-              {isEn ? 'Dual-Track Curriculum from Basics to Mastery' : '초급부터 실전 심화까지, 단계별 코딩 코스'}
+              {isEn ? (
+                <>Dual-Track Curriculum from <span style={{ color: '#38bdf8' }}>Basics</span> to <span style={{ color: '#a78bfa' }}>Mastery</span></>
+              ) : (
+                <>초급부터 실전 심화까지, <span style={{ color: '#38bdf8' }}>단계별 코딩 코스</span></>
+              )}
             </h2>
             <p style={{
-              color: '#64748b',
+              color: '#94a3b8',
               fontSize: 'clamp(0.98rem, 1.8vw, 1.08rem)',
               lineHeight: 1.6,
               margin: 0,
@@ -545,33 +562,33 @@ export default function HomePage() {
           </div>
 
           {/* Marquee Row 1: Beginner Line (Right to Left) */}
-          <div style={{ marginBottom: '32px' }}>
+          <div style={{ marginBottom: '36px', position: 'relative' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               maxWidth: '1280px',
-              margin: '0 auto 12px',
+              margin: '0 auto 14px',
               padding: '0 24px',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '26px',
-                  height: '26px',
+                  width: '28px',
+                  height: '28px',
                   borderRadius: '8px',
-                  background: '#ecfdf5',
-                  color: '#059669',
-                  fontSize: '0.74rem',
+                  background: 'rgba(16, 185, 129, 0.16)',
+                  color: '#34d399',
+                  fontSize: '0.78rem',
                   fontWeight: 800,
                   fontFamily: 'var(--font-mono)',
-                  border: '1px solid #a7f3d0',
+                  border: '1px solid rgba(52, 211, 153, 0.35)',
                 }}>
                   01
                 </span>
-                <span style={{ fontSize: '1.02rem', fontWeight: 800, color: '#0f172a' }}>
-                  {isEn ? 'Beginner Foundation Track' : '초급 입문 트랙 (13개 언어 기초 문법)'}
+                <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f8fafc' }}>
+                  {isEn ? 'Beginner Foundation Track (13 Languages Basic Syntax)' : '초급 입문 트랙 (13개 언어 기초 문법)'}
                 </span>
               </div>
             </div>
@@ -581,9 +598,9 @@ export default function HomePage() {
                 {[...BEGINNER_MODULES, ...BEGINNER_MODULES].map((item, idx) => {
                   const isBeginner = item.difficulty === '입문';
                   const isHard = item.difficulty === '심화';
-                  const badgeBg = isBeginner ? '#ecfdf5' : isHard ? '#faf5ff' : '#eff6ff';
-                  const badgeColor = isBeginner ? '#059669' : isHard ? '#7c3aed' : '#2563eb';
-                  const badgeBorder = isBeginner ? '#a7f3d0' : isHard ? '#e9d5ff' : '#bfdbfe';
+                  const badgeBg = isBeginner ? 'rgba(16, 185, 129, 0.16)' : isHard ? 'rgba(168, 85, 247, 0.16)' : 'rgba(56, 189, 248, 0.16)';
+                  const badgeColor = isBeginner ? '#34d399' : isHard ? '#c084fc' : '#38bdf8';
+                  const badgeBorder = isBeginner ? 'rgba(52, 211, 153, 0.35)' : isHard ? 'rgba(192, 132, 252, 0.35)' : 'rgba(56, 189, 248, 0.35)';
 
                   return (
                     <Link
@@ -592,13 +609,13 @@ export default function HomePage() {
                       className="curriculum-square-card"
                     >
                       {/* Top: Language Icon + Track Name */}
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-                        <LanguageIcon language={item.trackId} size={38} />
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                        <LanguageIcon language={item.trackId} size={40} />
                         <span style={{
-                          fontSize: '0.72rem',
+                          fontSize: '0.74rem',
                           fontWeight: 700,
-                          color: '#64748b',
-                          letterSpacing: '0.02em',
+                          color: '#94a3b8',
+                          letterSpacing: '0.04em',
                           textTransform: 'uppercase',
                         }}>
                           {item.trackName}
@@ -610,33 +627,33 @@ export default function HomePage() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: '2px',
+                        gap: '3px',
                         width: '100%',
-                        padding: '0 4px',
+                        padding: '0 6px',
                       }}>
                         <div style={{
-                          fontSize: '0.86rem',
+                          fontSize: '0.88rem',
                           fontWeight: 800,
-                          color: '#0f172a',
+                          color: '#f8fafc',
                           lineHeight: 1.25,
                           textAlign: 'center',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
-                          maxWidth: '152px',
+                          maxWidth: '150px',
                         }}>
                           {item.mainTitle}
                         </div>
                         {item.subTitle && (
                           <div style={{
-                            fontSize: '0.72rem',
-                            color: '#64748b',
+                            fontSize: '0.73rem',
+                            color: '#94a3b8',
                             lineHeight: 1.2,
                             textAlign: 'center',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
-                            maxWidth: '152px',
+                            maxWidth: '150px',
                           }}>
                             {item.subTitle}
                           </div>
@@ -648,7 +665,7 @@ export default function HomePage() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '4px',
-                        padding: '3px 10px',
+                        padding: '4px 10px',
                         borderRadius: '10px',
                         background: badgeBg,
                         color: badgeColor,
@@ -669,32 +686,32 @@ export default function HomePage() {
           </div>
 
           {/* Marquee Row 2: Intermediate + Advanced Line (Left to Right - Opposite) */}
-          <div>
+          <div style={{ position: 'relative' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               maxWidth: '1280px',
-              margin: '0 auto 12px',
+              margin: '0 auto 14px',
               padding: '0 24px',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '26px',
-                  height: '26px',
+                  width: '28px',
+                  height: '28px',
                   borderRadius: '8px',
-                  background: '#eff6ff',
-                  color: '#2563eb',
-                  fontSize: '0.74rem',
+                  background: 'rgba(56, 189, 248, 0.16)',
+                  color: '#38bdf8',
+                  fontSize: '0.78rem',
                   fontWeight: 800,
                   fontFamily: 'var(--font-mono)',
-                  border: '1px solid #bfdbfe',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
                 }}>
                   02
                 </span>
-                <span style={{ fontSize: '1.02rem', fontWeight: 800, color: '#0f172a' }}>
+                <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f8fafc' }}>
                   {isEn ? 'Intermediate & Advanced Practice Track' : '중급 · 상급 실전 트랙 (심화 알고리즘 · OOP · 프레임워크)'}
                 </span>
               </div>
@@ -705,9 +722,9 @@ export default function HomePage() {
                 {[...ADVANCED_MODULES, ...ADVANCED_MODULES].map((item, idx) => {
                   const isBeginner = item.difficulty === '입문';
                   const isHard = item.difficulty === '심화';
-                  const badgeBg = isBeginner ? '#ecfdf5' : isHard ? '#faf5ff' : '#eff6ff';
-                  const badgeColor = isBeginner ? '#059669' : isHard ? '#7c3aed' : '#2563eb';
-                  const badgeBorder = isBeginner ? '#a7f3d0' : isHard ? '#e9d5ff' : '#bfdbfe';
+                  const badgeBg = isBeginner ? 'rgba(16, 185, 129, 0.16)' : isHard ? 'rgba(168, 85, 247, 0.16)' : 'rgba(56, 189, 248, 0.16)';
+                  const badgeColor = isBeginner ? '#34d399' : isHard ? '#c084fc' : '#38bdf8';
+                  const badgeBorder = isBeginner ? 'rgba(52, 211, 153, 0.35)' : isHard ? 'rgba(192, 132, 252, 0.35)' : 'rgba(56, 189, 248, 0.35)';
 
                   return (
                     <Link
@@ -716,13 +733,13 @@ export default function HomePage() {
                       className="curriculum-square-card"
                     >
                       {/* Top: Language Icon + Track Name */}
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-                        <LanguageIcon language={item.trackId} size={38} />
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                        <LanguageIcon language={item.trackId} size={40} />
                         <span style={{
-                          fontSize: '0.72rem',
+                          fontSize: '0.74rem',
                           fontWeight: 700,
-                          color: '#64748b',
-                          letterSpacing: '0.02em',
+                          color: '#94a3b8',
+                          letterSpacing: '0.04em',
                           textTransform: 'uppercase',
                         }}>
                           {item.trackName}
@@ -734,33 +751,33 @@ export default function HomePage() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: '2px',
+                        gap: '3px',
                         width: '100%',
-                        padding: '0 4px',
+                        padding: '0 6px',
                       }}>
                         <div style={{
-                          fontSize: '0.86rem',
+                          fontSize: '0.88rem',
                           fontWeight: 800,
-                          color: '#0f172a',
+                          color: '#f8fafc',
                           lineHeight: 1.25,
                           textAlign: 'center',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
-                          maxWidth: '152px',
+                          maxWidth: '150px',
                         }}>
                           {item.mainTitle}
                         </div>
                         {item.subTitle && (
                           <div style={{
-                            fontSize: '0.72rem',
-                            color: '#64748b',
+                            fontSize: '0.73rem',
+                            color: '#94a3b8',
                             lineHeight: 1.2,
                             textAlign: 'center',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
-                            maxWidth: '152px',
+                            maxWidth: '150px',
                           }}>
                             {item.subTitle}
                           </div>
@@ -772,7 +789,7 @@ export default function HomePage() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '4px',
-                        padding: '3px 10px',
+                        padding: '4px 10px',
                         borderRadius: '10px',
                         background: badgeBg,
                         color: badgeColor,
@@ -792,34 +809,32 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom Action: Link to all languages (High-Contrast Primary CTA) */}
-          <div style={{ textAlign: 'center', marginTop: '48px' }}>
+          {/* Bottom Action: Link to all languages (Vibrant High-Contrast Gradient CTA) */}
+          <div style={{ textAlign: 'center', marginTop: '52px', position: 'relative' }}>
             <Link
               href="/languages"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '16px 36px',
-                fontSize: '1rem',
+                padding: '16px 40px',
+                fontSize: '1.05rem',
                 fontWeight: 800,
                 borderRadius: '18px',
-                background: '#0f172a',
+                background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%)',
                 color: '#ffffff',
-                boxShadow: '0 12px 30px -6px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset',
+                boxShadow: '0 14px 34px -4px rgba(37, 99, 235, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.2) inset',
                 textDecoration: 'none',
-                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
                 letterSpacing: '-0.01em',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
-                e.currentTarget.style.background = '#1e293b';
-                e.currentTarget.style.boxShadow = '0 18px 36px -6px rgba(15, 23, 42, 0.45)';
+                e.currentTarget.style.transform = 'translateY(-3px) scale(1.03)';
+                e.currentTarget.style.boxShadow = '0 20px 42px -6px rgba(37, 99, 235, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.3) inset';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.background = '#0f172a';
-                e.currentTarget.style.boxShadow = '0 12px 30px -6px rgba(15, 23, 42, 0.35)';
+                e.currentTarget.style.boxShadow = '0 14px 34px -4px rgba(37, 99, 235, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.2) inset';
               }}
             >
               <span>{isEn ? 'Explore All 13 Language Curriculums' : '전체 13개 언어 커리큘럼 모두 보기'}</span>
@@ -827,13 +842,13 @@ export default function HomePage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '24px',
-                height: '24px',
+                width: '26px',
+                height: '26px',
                 borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.15)',
-                color: '#38bdf8',
+                background: 'rgba(255, 255, 255, 0.22)',
+                color: '#ffffff',
               }}>
-                <ArrowRight size={14} strokeWidth={2.5} />
+                <ArrowRight size={15} strokeWidth={2.5} />
               </span>
             </Link>
           </div>
