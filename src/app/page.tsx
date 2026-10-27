@@ -83,46 +83,12 @@ const TRACK_SIGNATURE_CODE: Record<string, { filename: string; code: string; hig
   },
 };
 
-const FULL_TEXT_1 = 'JUST TYPE IT,';
-const FULL_TEXT_2 = 'THEN CODE IT.';
-
 export default function HomePage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
 
   // Active track selection (default to Python)
   const [activeTrackId, setActiveTrackId] = useState<string>('python');
-
-  // Typewriter animation state for hero slogan
-  const [displayedText1, setDisplayedText1] = useState('');
-  const [displayedText2, setDisplayedText2] = useState('');
-  const [phase, setPhase] = useState<'line1' | 'line2' | 'done'>('line1');
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    if (phase === 'line1') {
-      if (displayedText1.length < FULL_TEXT_1.length) {
-        timeoutId = setTimeout(() => {
-          setDisplayedText1(FULL_TEXT_1.slice(0, displayedText1.length + 1));
-        }, 65);
-      } else {
-        timeoutId = setTimeout(() => {
-          setPhase('line2');
-        }, 220); // Brief pause before line 2
-      }
-    } else if (phase === 'line2') {
-      if (displayedText2.length < FULL_TEXT_2.length) {
-        timeoutId = setTimeout(() => {
-          setDisplayedText2(FULL_TEXT_2.slice(0, displayedText2.length + 1));
-        }, 65);
-      } else {
-        setPhase('done');
-      }
-    }
-
-    return () => clearTimeout(timeoutId);
-  }, [displayedText1, displayedText2, phase]);
 
   // Dynamic light body background for Brilliant Editorial Theme on homepage
   useEffect(() => {
@@ -157,11 +123,11 @@ export default function HomePage() {
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 120px' }}>
         
         {/* =================================================================
-            1. HERO SECTION: Pure Slogan & Subtitle with Typewriter Animation
+            1. HERO SECTION: Pure Slogan & Subtitle in Exact Geometric Rectangle
             ================================================================= */}
         <section style={{
           textAlign: 'center',
-          maxWidth: '960px',
+          maxWidth: '920px',
           margin: '0 auto',
           padding: '110px 20px 130px',
           minHeight: 'calc(78vh - 70px)',
@@ -170,51 +136,87 @@ export default function HomePage() {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          {/* Main Slogan with Typewriter & Terminal Caret */}
-          <h1 style={{
-            fontSize: 'clamp(3.1rem, 7.2vw, 5.4rem)',
-            fontWeight: 900,
-            letterSpacing: '-0.04em',
-            color: '#0f172a',
-            lineHeight: 1.12,
-            marginBottom: '28px',
-            wordBreak: 'keep-all',
+          {/* Main Slogan: Mathematically exact rectangular justified typography with kinetic slide-up reveal */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+            maxWidth: '780px',
+            margin: '0 auto 28px',
+            animation: 'sloganGlowPulse 5s ease-in-out infinite',
           }}>
-            <div style={{ minHeight: '1.18em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span>{displayedText1}</span>
-              {phase === 'line1' && (
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: 'clamp(4px, 0.9vw, 7px)',
-                    height: '0.88em',
-                    backgroundColor: '#0f172a',
-                    marginLeft: '8px',
-                    borderRadius: '2px',
-                    animation: 'terminalCursorBlink 0.9s infinite',
-                  }}
-                />
-              )}
-            </div>
-            <div style={{ minHeight: '1.18em', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
-              <span>{displayedText2}</span>
-              {(phase === 'line2' || phase === 'done') && (
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: 'clamp(4px, 0.9vw, 7px)',
-                    height: '0.88em',
-                    backgroundColor: '#2563eb',
-                    marginLeft: '8px',
-                    borderRadius: '2px',
-                    animation: 'terminalCursorBlink 0.9s infinite',
-                  }}
-                />
-              )}
-            </div>
-          </h1>
+            <svg
+              viewBox="0 0 740 185"
+              style={{
+                width: '100%',
+                height: 'auto',
+                overflow: 'visible',
+                display: 'block',
+              }}
+            >
+              <defs>
+                <linearGradient id="sloganGradientFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#2563eb">
+                    <animate attributeName="stop-color" values="#2563eb; #38bdf8; #2563eb" dur="5s" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="50%" stopColor="#38bdf8">
+                    <animate attributeName="stop-color" values="#38bdf8; #60a5fa; #38bdf8" dur="5s" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="100%" stopColor="#2563eb">
+                    <animate attributeName="stop-color" values="#2563eb; #38bdf8; #2563eb" dur="5s" repeatCount="indefinite" />
+                  </stop>
+                </linearGradient>
 
-          {/* Simple Subtitle (Smoothly fades in) */}
+                <clipPath id="sloganMask1">
+                  <rect x="0" y="0" width="740" height="92" />
+                </clipPath>
+                <clipPath id="sloganMask2">
+                  <rect x="0" y="92" width="740" height="93" />
+                </clipPath>
+              </defs>
+
+              {/* Line 1: JUST TYPE IT, (Fitted exactly to 740px width) */}
+              <g clipPath="url(#sloganMask1)">
+                <text
+                  x="0"
+                  y="74"
+                  textLength="740"
+                  lengthAdjust="spacing"
+                  fill="#0f172a"
+                  style={{
+                    fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                    fontWeight: 900,
+                    fontSize: '76px',
+                    animation: 'kineticSloganSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                  }}
+                >
+                  JUST TYPE IT,
+                </text>
+              </g>
+
+              {/* Line 2: THEN CODE IT. (Fitted exactly to 740px width) */}
+              <g clipPath="url(#sloganMask2)">
+                <text
+                  x="0"
+                  y="166"
+                  textLength="740"
+                  lengthAdjust="spacing"
+                  fill="url(#sloganGradientFlow)"
+                  style={{
+                    fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                    fontWeight: 900,
+                    fontSize: '76px',
+                    animation: 'kineticSloganSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.14s forwards',
+                  }}
+                >
+                  THEN CODE IT.
+                </text>
+              </g>
+            </svg>
+          </div>
+
+          {/* Simple Subtitle */}
           <p style={{
             fontSize: 'clamp(1.15rem, 2.5vw, 1.38rem)',
             color: '#64748b',
@@ -223,9 +225,6 @@ export default function HomePage() {
             maxWidth: '560px',
             margin: '0 auto',
             wordBreak: 'keep-all',
-            opacity: phase === 'done' ? 1 : 0.35,
-            transform: phase === 'done' ? 'translateY(0)' : 'translateY(6px)',
-            transition: 'opacity 0.6s ease, transform 0.6s ease',
           }}>
             {isEn 
               ? 'Stop memorizing syntax. Real coding at your fingertips.'

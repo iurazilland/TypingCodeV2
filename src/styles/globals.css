@@ -385,6 +385,26 @@ button {
   }
 }
 
+@keyframes kineticSloganSlide {
+  0% {
+    transform: translateY(115%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes sloganGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 14px rgba(37, 99, 235, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.35));
+  }
+}
+
 /* ==========================================================================
    Refined Studio Design System (Option B - JetBrains / Brilliant Style)
    ========================================================================== */
