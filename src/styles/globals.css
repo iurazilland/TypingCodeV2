@@ -10,6 +10,14 @@
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-highlight: rgba(255, 255, 255, 0.16);
 
+  /* Brand Primary Cyan System */
+  --brand-cyan: #0891b2;
+  --brand-cyan-neon: #06b6d4;
+  --brand-cyan-light: #22d3ee;
+  --brand-cyan-dark: #0e7490;
+  --brand-cyan-bg: rgba(6, 182, 212, 0.08);
+  --brand-cyan-glow: rgba(6, 182, 212, 0.35);
+
   /* Playful, friendly, vibrant accent colors */
   --color-python: #3b82f6;
   --color-python-light: #60a5fa;
@@ -436,8 +444,8 @@ button {
   }
   7% {
     transform: translateY(-8px);
-    color: #2563eb;
-    text-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    color: #0891b2;
+    text-shadow: 0 4px 12px rgba(8, 145, 178, 0.25);
   }
   14% {
     transform: translateY(0);
@@ -454,21 +462,21 @@ button {
 @keyframes kineticWaveCharLine2 {
   0% {
     transform: translateY(0);
-    color: #2563eb;
+    color: #0891b2;
   }
   7% {
     transform: translateY(-8px);
-    color: #38bdf8;
-    text-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+    color: #06b6d4;
+    text-shadow: 0 4px 14px rgba(6, 182, 212, 0.45);
   }
   14% {
     transform: translateY(0);
-    color: #2563eb;
+    color: #0891b2;
     text-shadow: none;
   }
   100% {
     transform: translateY(0);
-    color: #2563eb;
+    color: #0891b2;
     text-shadow: none;
   }
 }
@@ -520,16 +528,16 @@ button {
 }
 
 .studio-btn-primary {
-  background: #2563eb;
-  border-color: #3b82f6;
+  background: #0891b2;
+  border-color: #06b6d4;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .studio-btn-primary:hover {
-  background: #1d4ed8;
-  border-color: #60a5fa;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: #0e7490;
+  border-color: #22d3ee;
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
 
@@ -543,9 +551,9 @@ button {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  color: #22d3ee;
 }
 
 /* ==========================================================================
@@ -596,18 +604,18 @@ button {
 }
 
 .brilliant-btn-primary {
-  background: #2563eb;
-  border-color: #1d4ed8;
+  background: #0891b2;
+  border-color: #0e7490;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 14px rgba(8, 145, 178, 0.3);
 }
 
 .brilliant-btn-primary:hover {
-  background: #1d4ed8;
-  border-color: #1e40af;
+  background: #0e7490;
+  border-color: #155e75;
   color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 6px 20px rgba(8, 145, 178, 0.4);
 }
 
 .brilliant-btn-dark {
@@ -634,8 +642,8 @@ button {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: #eff6ff;
-  border: 1px solid #dbeafe;
-  color: #2563eb;
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  color: #0891b2;
 }
 

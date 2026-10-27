@@ -181,7 +181,7 @@ export default function HomePage() {
 
               {/* Line 2: 13 characters */}
               <div style={{
-                color: '#2563eb',
+                color: '#0891b2',
                 whiteSpace: 'nowrap',
               }}>
                 {LINE_2_CHARS.map((char, idx) => (
@@ -313,12 +313,12 @@ export default function HomePage() {
                     <span style={{
                       padding: '4px 12px',
                       borderRadius: '8px',
-                      background: '#eff6ff',
-                      color: '#2563eb',
+                      background: '#ecfeff',
+                      color: '#0891b2',
                       fontSize: '0.8rem',
                       fontWeight: 700,
                       fontFamily: 'var(--font-mono)',
-                      border: '1px solid #bfdbfe',
+                      border: '1px solid #a5f3fc',
                     }}>
                       {currentTrack.badge}
                     </span>
@@ -439,7 +439,7 @@ export default function HomePage() {
                           <span style={{
                             fontSize: '0.78rem',
                             fontWeight: 800,
-                            color: '#2563eb',
+                            color: '#0891b2',
                             fontFamily: 'var(--font-mono)',
                           }}>
                             CHAPTER 0{idx + 1}

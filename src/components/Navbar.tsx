@@ -80,11 +80,11 @@ export default function Navbar() {
                 width: '38px',
                 height: '38px',
                 borderRadius: '12px',
-                background: '#10b981',
+                background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)',
+                boxShadow: '0 4px 14px rgba(6, 182, 212, 0.35)',
                 fontSize: '20px',
                 flexShrink: 0,
               }}
@@ -100,7 +100,7 @@ export default function Navbar() {
                 whiteSpace: 'nowrap',
               }}
             >
-              Typing<span style={{ color: '#10b981' }}>Code</span>
+              Typing<span style={{ color: '#0891b2' }}>Code</span>
             </span>
           </Link>
         </div>
@@ -176,8 +176,8 @@ export default function Navbar() {
                     style={{
                       color: item.isActive
                         ? isHomePage
-                          ? '#2563eb'
-                          : '#60a5fa'
+                          ? '#0891b2'
+                          : '#22d3ee'
                         : isHomePage
                         ? '#64748b'
                         : '#64748b',
@@ -291,10 +291,10 @@ export default function Navbar() {
               fontSize: '0.88rem',
               fontWeight: 700,
               borderRadius: '12px',
-              background: isHomePage ? '#0f172a' : '#2563eb',
-              border: isHomePage ? '1px solid #0f172a' : '1px solid #3b82f6',
+              background: isHomePage ? '#0f172a' : '#0891b2',
+              border: isHomePage ? '1px solid #0f172a' : '1px solid #06b6d4',
               color: '#ffffff',
-              boxShadow: isHomePage ? '0 2px 8px rgba(15, 23, 42, 0.15)' : '0 4px 14px rgba(37, 99, 235, 0.3)',
+              boxShadow: isHomePage ? '0 2px 8px rgba(15, 23, 42, 0.15)' : '0 4px 14px rgba(6, 182, 212, 0.35)',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
               whiteSpace: 'nowrap',
@@ -302,15 +302,11 @@ export default function Navbar() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-1px)';
-              if (isHomePage) {
-                e.currentTarget.style.background = '#1e293b';
-              }
+              e.currentTarget.style.background = isHomePage ? '#1e293b' : '#0e7490';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
-              if (isHomePage) {
-                e.currentTarget.style.background = '#0f172a';
-              }
+              e.currentTarget.style.background = isHomePage ? '#0f172a' : '#0891b2';
             }}
           >
             <User size={15} style={{ flexShrink: 0 }} />
