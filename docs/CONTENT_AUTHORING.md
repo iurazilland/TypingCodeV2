@@ -119,23 +119,37 @@ TypingCode의 모든 연습 문항은 단순 튜토리얼이 아닌 **학습자�
   - ❌ *금지 (정답 노출)*: `"수학 기호 x 대신 파이썬 곱셈 기호(*)를 사용하여 6 * 7의 결과를 출력해보세요."` (정답 기호 `*`를 직접 스포일러)
   - ⭕ *올바름 (문제와 목표만 제시)*: `"틀린 곳을 수정하여 올바른 결과를 출력해보세요."`
   - ❌ *금지 (정답 노출)*: `"빈칸에 괄호 ()를 채워 2 + 3을 먼저 계산한 뒤 4를 곱한 결과(20)를 출력해보세요."` (괄호 기호 `()`와 식을 직접 스포일러)
-  - ⭕ *올바름 (문제와 목표만 제시)*: `"빈칸을 채워 계산식의 결과(20)를 출력해보세요."`
-  - ❌ *금지 (영문 번역에서 정답 노출)*: `"Fix the typo using the Python multiplication operator (*) instead of x to print 6 * 7."`
-  - ⭕ *올바름 (영문 표준 번역)*: `"Fix the error to print the correct result."`
+  - ⭕ *올바름 (골든 표준)*: `"빈칸을 채워 화면에 결과(20)를 출력해보세요."`
+  - ❌ *금지 (영문 번역에서 수식 노출)*: `"Fill in the blank to insert the calculation expression 50 + 100 / 2 and print it on the screen."`
+  - ⭕ *올바름 (골든 표준 영문)*: `"Fill in the blank to print the result (100.0) on the screen."`
 
 ### 3.2 🏷️ 문제 유형별 표준 서두 규격 (Standard Prefixes by Question Type)
 학습자가 문항을 마주했을 때 문제의 해결 방식을 즉각 직관적으로 인지할 수 있도록, 문제 유형별 고정 서두를 표준화합니다:
 
 | 문제 유형 | 표준 서두 (한국어) | 표준 서두 (영문) | 작성 예시 |
 | :--- | :--- | :--- | :--- |
-| **빈칸 채우기** (`fill_blank`) | **`빈칸을 채워 ...`** | `Fill in the blank(s) to ...` | `빈칸을 채워 계산식의 결과(20)를 출력해보세요.`<br>`Fill in the blanks to print the calculation result (20).` |
+| **빈칸 채우기** (`fill_blank`) | **`빈칸을 채워 ...`** | `Fill in the blank(s) to ...` | `빈칸을 채워 화면에 결과(20)를 출력해보세요.`<br>`Fill in the blanks to print the result (20) on the screen.` |
 | **틀린 곳 수정** (`fix_bug`) | **`틀린 곳을 수정하여 ...`** | `Fix the error to ...` | `틀린 곳을 수정하여 올바른 결과를 출력해보세요.`<br>`Fix the error to print the correct result.` |
-| **한 줄 코드 작성** (`single_line`) | **`한 줄의 코드를 작성하여 ...`** | `Write a single line of code to ...` | `한 줄의 코드를 작성하여 숫자 100을 출력해보세요.`<br>`Write a single line of code to print the number 100 on the screen.` |
+| **한 줄 코드 작성** (`single_line`) | **`한 줄의 코드를 작성하여 ...`** | `Write a single line of code to ...` | `한 줄의 코드를 작성하여 화면에 숫자 100을 출력해보세요.`<br>`Write a single line of code to print the number 100 on the screen.` |
 | **블록 조립** (`block`) | **`... 넣어 화면에 출력해보세요.`** | `... and print it on the screen.` | `숫자 10을 넣어 화면에 출력해보세요.`<br>`Insert the number 10 and print it on the screen.` |
 
-### 3.3 🎯 프롬프트 필수 구성 요소: [문제 상황] + [요구하는 최종 결과]
-- 프롬프트에는 **오직 문제 상황과 요구하는 최종 출력값(또는 목표 상태)**만 적습니다.
-- *"무엇을 출력해야 하는가"* 혹은 *"어떤 동작을 달성해야 하는가"*만 간결하고 명확하게 전달하며, 잡다한 힌트나 풀이 과정은 프롬프트에서 완전히 배제합니다.
+### 3.3 🎯 골든 표준 템플릿 (9번·10번 표준 규격 — ★필수 인식★)
+모든 계산 및 빈칸 프롬프트는 **레벨 1의 9번·10번 문항과 정확히 동일한 형식**으로 작성합니다:
+- **한국어 골든 템플릿**:
+  > **`빈칸을 채워 화면에 결과([기대값])를 출력해보세요.`**
+- **영문 골든 템플릿**:
+  > **`Fill in the blank(s) to print the result ([expected]) on the screen.`**
+- **실전 기준 예시**:
+  - **9번 문항**:
+    - `prompt_ko`: `'빈칸을 채워 화면에 결과(100.0)을 출력해보세요.'`
+    - `prompt_en`: `'Fill in the blank to print the result (100.0) on the screen.'`
+  - **10번 문항**:
+    - `prompt_ko`: `'빈칸을 채워 화면에 결과(20)를 출력해보세요.'`
+    - `prompt_en`: `'Fill in the blanks to print the result (20) on the screen.'`
+- **핵심 원칙 3요소**:
+  1. **수식·연산자·괄호 원천 배제**: 어떤 연산자를 쓰는지 수식을 프롬프트에 적지 않고, 오직 목표 결과값 `결과(...)`만 전달.
+  2. **장소 명시**: 어디에 나타나야 하는지 `화면에 ... 출력` (`print ... on the screen`)으로 일관성 유지.
+  3. **힌트 분리**: 문법/순서 힌트는 오직 `hint_ko` / `hint_en`에만 배치.
 
 ---
 
