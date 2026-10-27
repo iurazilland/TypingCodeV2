@@ -323,10 +323,10 @@ export default function UnifiedHeroCard() {
   return (
     <div style={{
       width: '100%',
-      background: 'rgba(11, 19, 41, 0.95)',
-      border: '2px solid rgba(56, 189, 248, 0.25)',
-      borderRadius: '26px',
-      boxShadow: '0 25px 65px -15px rgba(0, 0, 0, 0.75), 0 0 45px rgba(56, 189, 248, 0.09)',
+      background: '#11151f',
+      border: '1px solid rgba(255, 255, 255, 0.09)',
+      borderRadius: '20px',
+      boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.03)',
       overflow: 'hidden',
     }}>
       {/* 1. Window Top Bar */}
@@ -334,34 +334,65 @@ export default function UnifiedHeroCard() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '16px 26px',
-        background: 'rgba(7, 12, 26, 0.98)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        padding: '13px 22px',
+        background: '#151b26',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           {/* Traffic Dots */}
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
-            <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
-            <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+          <div style={{ display: 'flex', gap: '7px' }}>
+            <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ff5f56', display: 'inline-block' }} />
+            <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
+            <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#27c93f', display: 'inline-block' }} />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '0.94rem', fontWeight: 800, color: '#f8fafc' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '7px',
+              padding: '4px 12px',
+              borderRadius: '6px',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              color: '#e2e8f0',
+              fontFamily: 'var(--font-mono)',
+            }}>
+              <LanguageIcon language="python" size={14} />
+              <span>intro.py</span>
+            </div>
+            <span style={{ fontSize: '0.84rem', color: '#64748b', fontWeight: 500 }}>
               {t.hero.title}
             </span>
-            <span style={{
-              fontSize: '0.74rem',
-              fontWeight: 700,
-              padding: '2px 8px',
-              borderRadius: '8px',
-              background: 'rgba(56, 189, 248, 0.15)',
-              color: '#38bdf8',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-            }}>
-              {t.hero.badge}
-            </span>
           </div>
+        </div>
+
+        {/* Status indicator on the right */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{
+            fontSize: '0.74rem',
+            fontWeight: 600,
+            fontFamily: 'var(--font-mono)',
+            color: isCompletedAll ? '#34d399' : '#60a5fa',
+            background: isCompletedAll ? 'rgba(16, 185, 129, 0.12)' : 'rgba(59, 130, 246, 0.12)',
+            border: isCompletedAll ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(59, 130, 246, 0.25)',
+            padding: '3px 10px',
+            borderRadius: '6px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}>
+            <span style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              backgroundColor: isCompletedAll ? '#34d399' : '#60a5fa',
+              animation: isCompletedAll ? 'none' : 'blink 1.2s infinite',
+            }} />
+            <span>{isCompletedAll ? t.hero.completed : t.hero.running}</span>
+          </span>
         </div>
       </div>
 
@@ -369,13 +400,13 @@ export default function UnifiedHeroCard() {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))',
-        minHeight: '560px',
+        minHeight: '540px',
       }}>
         {/* LEFT COLUMN: 🖥️ 진짜 실행 터미널 화면 */}
         <div style={{
-          background: '#070b16',
-          borderRight: '1.5px solid rgba(255, 255, 255, 0.08)',
-          padding: '30px 34px',
+          background: '#0a0d14',
+          borderRight: '1px solid rgba(255, 255, 255, 0.07)',
+          padding: '24px 28px',
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'var(--font-mono)',
@@ -386,38 +417,41 @@ export default function UnifiedHeroCard() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '20px',
-            paddingBottom: '14px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            marginBottom: '16px',
+            paddingBottom: '12px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <TerminalIcon size={17} color="#38bdf8" />
-              <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <TerminalIcon size={15} color="#94a3b8" />
+              <span style={{
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                color: '#94a3b8',
+                textTransform: 'uppercase',
+              }}>
                 {t.hero.terminalTitle}
               </span>
             </div>
             <span style={{
               fontSize: '0.72rem',
-              color: isCompletedAll ? '#34d399' : '#38bdf8',
-              background: isCompletedAll ? 'rgba(16, 185, 129, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-              padding: '3px 10px',
-              borderRadius: '6px',
-              fontWeight: 700,
+              color: '#64748b',
+              fontWeight: 500,
             }}>
-              {isCompletedAll ? t.hero.completed : t.hero.running}
+              bash 5.2
             </span>
           </div>
 
-          {/* Terminal Execution Body (Uniform fixed height so it never resizes as code runs) */}
+          {/* Terminal Execution Body */}
           <div
             ref={terminalScrollRef}
             style={{
-              fontSize: '0.98rem',
-              lineHeight: 2.2,
+              fontSize: '0.94rem',
+              lineHeight: 2.1,
               flex: 1,
-              height: '340px',
-              minHeight: '340px',
-              maxHeight: '340px',
+              height: '350px',
+              minHeight: '350px',
+              maxHeight: '350px',
               overflowY: 'auto',
               color: '#e2e8f0',
               fontWeight: 400,
@@ -425,7 +459,7 @@ export default function UnifiedHeroCard() {
           >
             {/* Shell command line */}
             <div style={{ color: '#64748b', marginBottom: '10px' }}>
-              <span style={{ color: '#34d399' }}>user@typingcode</span>:<span style={{ color: '#38bdf8' }}>~</span>$ python3 intro.py
+              <span style={{ color: '#34d399' }}>user@typingcode</span>:<span style={{ color: '#60a5fa' }}>~</span>$ python3 intro.py
             </div>
 
             {/* Standard Output Lines generated dynamically by code */}
@@ -433,8 +467,8 @@ export default function UnifiedHeroCard() {
               <div
                 key={idx}
                 style={{
-                  color: line.includes('🎉') ? '#34d399' : line.includes('🚀') ? '#38bdf8' : '#f8fafc',
-                  animation: 'slideUp 0.2s ease forwards',
+                  color: line.includes('🎉') ? '#34d399' : line.includes('🚀') ? '#60a5fa' : '#f8fafc',
+                  animation: 'slideUp 0.15s ease forwards',
                   wordBreak: 'break-all',
                 }}
               >
@@ -446,7 +480,7 @@ export default function UnifiedHeroCard() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
               {isCompletedAll ? (
                 <div style={{ color: '#64748b' }}>
-                  <span style={{ color: '#34d399' }}>user@typingcode</span>:<span style={{ color: '#38bdf8' }}>~</span>${' '}
+                  <span style={{ color: '#34d399' }}>user@typingcode</span>:<span style={{ color: '#60a5fa' }}>~</span>${' '}
                   <span style={{
                     display: 'inline-block',
                     width: '8px',
@@ -463,7 +497,7 @@ export default function UnifiedHeroCard() {
                     display: 'inline-block',
                     width: '8px',
                     height: '1.1em',
-                    backgroundColor: '#38bdf8',
+                    backgroundColor: '#60a5fa',
                     animation: 'blink 0.8s infinite',
                   }} />
                 </>
@@ -474,8 +508,8 @@ export default function UnifiedHeroCard() {
 
         {/* RIGHT COLUMN: 📝 진짜 파이썬 코드 에디터 */}
         <div style={{
-          background: '#0d1424',
-          padding: '30px 34px',
+          background: '#0e121a',
+          padding: '24px 28px',
           display: 'flex',
           flexDirection: 'column',
           minHeight: '440px',
@@ -485,37 +519,32 @@ export default function UnifiedHeroCard() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '20px',
-            paddingBottom: '14px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            marginBottom: '16px',
+            paddingBottom: '12px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{
-                padding: '4px 12px',
-                borderRadius: '8px',
-                background: 'rgba(59, 130, 246, 0.2)',
-                border: '1px solid rgba(59, 130, 246, 0.35)',
-                color: '#60a5fa',
-                fontSize: '0.82rem',
-                fontWeight: 800,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                color: '#94a3b8',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-mono)',
               }}>
-                <LanguageIcon language="python" size={16} />
-                <span>intro.py</span>
+                EDITOR BUFFER
               </span>
             </div>
 
-            <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
-              Python 3.10
+            <div style={{ fontSize: '0.76rem', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
+              Python 3.10 · UTF-8
             </div>
           </div>
 
           {/* Code Lines with Zero-Jitter Character-by-Character Typing */}
           <div style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.95rem',
+            fontSize: '0.94rem',
             lineHeight: 2.0,
             fontWeight: 400,
             flex: 1,
@@ -544,14 +573,20 @@ export default function UnifiedHeroCard() {
                     display: 'flex',
                     gap: '16px',
                     alignItems: 'baseline',
+                    background: isCurrent ? 'rgba(255, 255, 255, 0.03)' : 'transparent',
+                    borderRadius: '4px',
+                    padding: '1px 6px',
+                    marginLeft: '-6px',
+                    marginRight: '-6px',
+                    borderLeft: isCurrent ? '2px solid #60a5fa' : '2px solid transparent',
                   }}
                 >
                   {/* Stable consecutive line number */}
                   <span style={{
                     width: '24px',
                     textAlign: 'right',
-                    color: isCurrent ? '#38bdf8' : '#475569',
-                    fontWeight: 400,
+                    color: isCurrent ? '#60a5fa' : '#475569',
+                    fontWeight: isCurrent ? 700 : 400,
                     userSelect: 'none',
                     fontSize: '0.82rem',
                   }}>

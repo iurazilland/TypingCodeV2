@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Rich deep navy canvas - friendly, readable, not cold black */
-  --bg-base: #0b1329;
-  --bg-surface: #131f3d;
-  --bg-surface-elevated: #1a294f;
-  --bg-surface-card: rgba(22, 36, 68, 0.7);
+  /* Refined obsidian / charcoal slate canvas - JetBrains & Brilliant studio style */
+  --bg-base: #0e121a;
+  --bg-surface: #141822;
+  --bg-surface-elevated: #1a202c;
+  --bg-surface-card: rgba(20, 24, 34, 0.75);
 
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-highlight: rgba(255, 255, 255, 0.16);
@@ -267,7 +267,7 @@ button {
   z-index: 1000;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  background: rgba(11, 19, 41, 0.94);
+  background: rgba(14, 18, 26, 0.95);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0 40px;
   height: 70px;
@@ -383,5 +383,80 @@ button {
     opacity: 0;
     transform: translateY(-20px) scale(1.2);
   }
+}
+
+/* ==========================================================================
+   Refined Studio Design System (Option B - JetBrains / Brilliant Style)
+   ========================================================================== */
+
+.studio-card {
+  background: #141822;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.studio-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+}
+
+.studio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.96rem;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1c2230;
+  color: #f1f5f9;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+}
+
+.studio-btn:hover {
+  background: #252d3f;
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.studio-btn-primary {
+  background: #2563eb;
+  border-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.studio-btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #60a5fa;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.studio-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
 }
 

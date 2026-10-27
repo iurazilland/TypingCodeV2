@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight, Code2, Terminal as TerminalIcon, Sparkles } from 'lucide-react';
 import UnifiedHeroCard from '@/components/UnifiedHeroCard';
 import { useLanguage } from '@/lib/LanguageContext';
 import LanguageIcon from '@/components/LanguageIcon';
@@ -11,27 +11,58 @@ export default function HomePage() {
   const { t } = useLanguage();
 
   return (
-    <div style={{ maxWidth: '1560px', margin: '0 auto', padding: '24px 40px 100px' }}>
+    <div style={{ maxWidth: '1360px', margin: '0 auto', padding: '32px 32px 120px' }}>
       {/* 1. Main Hero Slogan Header */}
       <section style={{
         textAlign: 'center',
-        maxWidth: '960px',
-        margin: '20px auto 40px',
+        maxWidth: '880px',
+        margin: '20px auto 44px',
         padding: '0 20px',
       }}>
+        {/* Subtle Eyebrow Badge */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '6px 14px',
+          borderRadius: '20px',
+          background: 'rgba(255, 255, 255, 0.04)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          marginBottom: '20px',
+        }}>
+          <span style={{
+            width: '7px',
+            height: '7px',
+            borderRadius: '50%',
+            backgroundColor: '#10b981',
+            display: 'inline-block',
+          }} />
+          <span style={{
+            fontSize: '0.78rem',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#94a3b8',
+            fontFamily: 'var(--font-mono)',
+          }}>
+            Interactive Code Learning Studio
+          </span>
+        </div>
+
+        {/* Clean, Authoritative Slogan */}
         <h1 style={{
-          fontSize: '3.3rem',
-          fontWeight: 900,
-          letterSpacing: '0.01em',
-          wordSpacing: '0.08em',
+          fontSize: '3.4rem',
+          fontWeight: 800,
+          letterSpacing: '-0.025em',
           color: '#ffffff',
-          lineHeight: 1.2,
-          marginBottom: '16px',
-          textTransform: 'uppercase',
+          lineHeight: 1.15,
+          marginBottom: '18px',
         }}>
           JUST TYPE IT{' '}
           <span style={{
-            color: '#38bdf8',
+            background: 'linear-gradient(135deg, #60a5fa 0%, #38bdf8 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
             display: 'inline-block',
           }}>
             AND CODE IT.
@@ -39,12 +70,12 @@ export default function HomePage() {
         </h1>
 
         <p style={{
-          fontSize: '1.2rem',
+          fontSize: '1.14rem',
           color: '#94a3b8',
-          lineHeight: 1.65,
-          maxWidth: '960px',
+          lineHeight: 1.7,
+          maxWidth: '740px',
           margin: '0 auto',
-          fontWeight: 500,
+          fontWeight: 400,
           wordBreak: 'keep-all',
         }}>
           {t.slogan.subtitle}
@@ -52,428 +83,388 @@ export default function HomePage() {
       </section>
 
       {/* 2. Unified Hero Card Studio */}
-      <section style={{ marginBottom: '84px' }}>
+      <section style={{ marginBottom: '88px' }}>
         <UnifiedHeroCard />
       </section>
 
-      {/* 2. "Why can you learn coding just by typing?" 4 Core Advantages */}
+      {/* 3. "Why can you learn coding just by typing?" 4 Core Advantages */}
       <section style={{
-        background: 'var(--bg-surface, #131f3d)',
-        border: '2px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '28px',
-        padding: '52px 40px',
-        marginBottom: '72px',
+        background: '#121622',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '24px',
+        padding: '54px 40px',
+        marginBottom: '88px',
       }}>
-        <div style={{ textAlign: 'center', maxWidth: '1150px', margin: '0 auto 40px' }}>
-          <div style={{
-            display: 'inline-block',
-            padding: '5px 16px',
-            borderRadius: '16px',
-            background: 'rgba(56, 189, 248, 0.15)',
-            color: '#38bdf8',
-            fontSize: '0.85rem',
-            fontWeight: 800,
-            marginBottom: '12px',
-          }}>
+        <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 44px' }}>
+          <div className="studio-badge" style={{ marginBottom: '14px' }}>
             {t.why.tag}
           </div>
-          <h2 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#f8fafc', marginBottom: '12px', letterSpacing: '-0.015em' }}>
             {t.why.title}
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.05rem', lineHeight: 1.6, maxWidth: '1100px', margin: '0 auto', wordBreak: 'keep-all' }}>
+          <p style={{ color: '#94a3b8', fontSize: '1.02rem', lineHeight: 1.65, margin: '0 auto', wordBreak: 'keep-all' }}>
             {t.why.subtitle}
           </p>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '24px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '20px',
         }}>
           {/* Card 1 */}
-          <div style={{
-            background: '#131e33',
-            border: '2px solid rgba(59, 130, 246, 0.4)',
-            borderRadius: '22px',
-            padding: '30px 26px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            gap: '14px',
-            minHeight: '345px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-          }}>
-            <div style={{
-              width: '54px',
-              height: '54px',
-              borderRadius: '16px',
-              background: 'rgba(59, 130, 246, 0.2)',
-              border: '1.5px solid rgba(96, 165, 250, 0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              flexShrink: 0,
-            }}>
-              ⌨️
+          <div className="studio-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'rgba(59, 130, 246, 0.12)',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+              }}>
+                ⌨️
+              </div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#64748b' }}>
+                01
+              </span>
             </div>
-            <div style={{ minHeight: '64px', display: 'flex', alignItems: 'center' }}>
-              <h3 style={{ fontSize: '1.24rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
-                {t.why.card1Title}
-              </h3>
-            </div>
-            <p style={{ fontSize: '0.95rem', color: '#cbd5e1', lineHeight: 1.7, minHeight: '115px', margin: 0 }}>
+            <h3 style={{ fontSize: '1.18rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
+              {t.why.card1Title}
+            </h3>
+            <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.65, margin: 0 }}>
               {t.why.card1Desc}
             </p>
           </div>
 
           {/* Card 2 */}
-          <div style={{
-            background: '#131e33',
-            border: '2px solid rgba(16, 185, 129, 0.4)',
-            borderRadius: '22px',
-            padding: '30px 26px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            gap: '14px',
-            minHeight: '345px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-          }}>
-            <div style={{
-              width: '54px',
-              height: '54px',
-              borderRadius: '16px',
-              background: 'rgba(16, 185, 129, 0.2)',
-              border: '1.5px solid rgba(52, 211, 153, 0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              flexShrink: 0,
-            }}>
-              💡
+          <div className="studio-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'rgba(16, 185, 129, 0.12)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+              }}>
+                💡
+              </div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#64748b' }}>
+                02
+              </span>
             </div>
-            <div style={{ minHeight: '64px', display: 'flex', alignItems: 'center' }}>
-              <h3 style={{ fontSize: '1.24rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
-                {t.why.card2Title}
-              </h3>
-            </div>
-            <p style={{ fontSize: '0.95rem', color: '#cbd5e1', lineHeight: 1.7, minHeight: '115px', margin: 0 }}>
+            <h3 style={{ fontSize: '1.18rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
+              {t.why.card2Title}
+            </h3>
+            <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.65, margin: 0 }}>
               {t.why.card2Desc}
             </p>
           </div>
 
           {/* Card 3 */}
-          <div style={{
-            background: '#131e33',
-            border: '2px solid rgba(249, 115, 22, 0.4)',
-            borderRadius: '22px',
-            padding: '30px 26px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            gap: '14px',
-            minHeight: '345px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-          }}>
-            <div style={{
-              width: '54px',
-              height: '54px',
-              borderRadius: '16px',
-              background: 'rgba(249, 115, 22, 0.2)',
-              border: '1.5px solid rgba(251, 146, 60, 0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              flexShrink: 0,
-            }}>
-              🎯
+          <div className="studio-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'rgba(245, 158, 11, 0.12)',
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+              }}>
+                🎯
+              </div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#64748b' }}>
+                03
+              </span>
             </div>
-            <div style={{ minHeight: '64px', display: 'flex', alignItems: 'center' }}>
-              <h3 style={{ fontSize: '1.24rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
-                {t.why.card3Title}
-              </h3>
-            </div>
-            <p style={{ fontSize: '0.95rem', color: '#cbd5e1', lineHeight: 1.7, minHeight: '115px', margin: 0 }}>
+            <h3 style={{ fontSize: '1.18rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
+              {t.why.card3Title}
+            </h3>
+            <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.65, margin: 0 }}>
               {t.why.card3Desc}
             </p>
           </div>
 
           {/* Card 4 */}
-          <div style={{
-            background: '#131e33',
-            border: '2px solid rgba(139, 92, 246, 0.4)',
-            borderRadius: '22px',
-            padding: '30px 26px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            gap: '14px',
-            minHeight: '345px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-          }}>
-            <div style={{
-              width: '54px',
-              height: '54px',
-              borderRadius: '16px',
-              background: 'rgba(139, 92, 246, 0.2)',
-              border: '1.5px solid rgba(167, 139, 250, 0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              flexShrink: 0,
-            }}>
-              🚀
+          <div className="studio-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'rgba(139, 92, 246, 0.12)',
+                border: '1px solid rgba(139, 92, 246, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+              }}>
+                🚀
+              </div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#64748b' }}>
+                04
+              </span>
             </div>
-            <div style={{ minHeight: '64px', display: 'flex', alignItems: 'center' }}>
-              <h3 style={{ fontSize: '1.24rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
-                {t.why.card4Title}
-              </h3>
-            </div>
-            <p style={{ fontSize: '0.95rem', color: '#cbd5e1', lineHeight: 1.7, minHeight: '115px', margin: 0 }}>
+            <h3 style={{ fontSize: '1.18rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'pre-line', lineHeight: 1.35, margin: 0 }}>
+              {t.why.card4Title}
+            </h3>
+            <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.65, margin: 0 }}>
               {t.why.card4Desc}
             </p>
           </div>
         </div>
       </section>
 
-      {/* 3. Simple & Colorful Course Selection Cards */}
-      <section style={{ marginBottom: '72px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '38px' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginBottom: '10px' }}>
+      {/* 4. Core Curriculum Tracks */}
+      <section style={{ marginBottom: '88px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px' }}>
+          <div className="studio-badge" style={{ marginBottom: '14px' }}>
+            Curriculum Tracks
+          </div>
+          <h2 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#f8fafc', marginBottom: '12px', letterSpacing: '-0.015em' }}>
             {t.courses.title}
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.05rem' }}>
+          <p style={{ color: '#94a3b8', fontSize: '1.02rem', lineHeight: 1.6 }}>
             {t.courses.subtitle}
           </p>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
           gap: '24px',
         }}>
           {/* Card 1: Python */}
-          <div className="quest-card" style={{
-            padding: '34px',
+          <div className="studio-card" style={{
+            padding: '32px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             minHeight: '340px',
-            border: '2px solid rgba(59, 130, 246, 0.3)',
-            background: '#131e33',
           }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <LanguageIcon language="python" size={44} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <LanguageIcon language="python" size={40} />
                 <span style={{
-                  padding: '5px 14px',
-                  borderRadius: '16px',
-                  background: 'rgba(59, 130, 246, 0.25)',
-                  color: '#60a5fa',
-                  fontSize: '0.85rem',
-                  fontWeight: 800,
-                  border: '1px solid rgba(96, 165, 250, 0.4)',
+                  padding: '4px 12px',
+                  borderRadius: '6px',
+                  background: 'rgba(59, 130, 246, 0.12)',
+                  color: '#93c5fd',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  fontFamily: 'var(--font-mono)',
+                  border: '1px solid rgba(59, 130, 246, 0.25)',
                 }}>
                   {t.courses.pyBadge}
                 </span>
               </div>
 
-              <div style={{ minHeight: '38px', display: 'flex', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
-                  {t.courses.pyTitle}
-                </h3>
-              </div>
-              <p style={{ color: '#cbd5e1', fontSize: '0.96rem', lineHeight: 1.6, minHeight: '74px', margin: '14px 0 20px' }}>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 12px' }}>
+                {t.courses.pyTitle}
+              </h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.94rem', lineHeight: 1.65, margin: '0 0 24px' }}>
                 {t.courses.pyDesc}
               </p>
             </div>
 
             <Link
               href="/practice/python/1"
-              className="tactile-btn tactile-btn-blue"
-              style={{ padding: '14px 20px', width: '100%', fontSize: '1.02rem', borderRadius: '14px' }}
+              className="studio-btn"
+              style={{
+                width: '100%',
+                background: 'rgba(59, 130, 246, 0.12)',
+                borderColor: 'rgba(59, 130, 246, 0.3)',
+                color: '#93c5fd',
+              }}
             >
               <span>{t.courses.pyBtn}</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </Link>
           </div>
 
           {/* Card 2: Web */}
-          <div className="quest-card" style={{
-            padding: '34px',
+          <div className="studio-card" style={{
+            padding: '32px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             minHeight: '340px',
-            border: '2px solid rgba(249, 115, 22, 0.3)',
-            background: '#131e33',
           }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <LanguageIcon language="web" size={44} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <LanguageIcon language="web" size={40} />
                 <span style={{
-                  padding: '5px 14px',
-                  borderRadius: '16px',
-                  background: 'rgba(249, 115, 22, 0.25)',
-                  color: '#fb923c',
-                  fontSize: '0.85rem',
-                  fontWeight: 800,
-                  border: '1px solid rgba(251, 146, 60, 0.4)',
+                  padding: '4px 12px',
+                  borderRadius: '6px',
+                  background: 'rgba(249, 115, 22, 0.12)',
+                  color: '#fdba74',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  fontFamily: 'var(--font-mono)',
+                  border: '1px solid rgba(249, 115, 22, 0.25)',
                 }}>
                   {t.courses.webBadge}
                 </span>
               </div>
 
-              <div style={{ minHeight: '38px', display: 'flex', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
-                  {t.courses.webTitle}
-                </h3>
-              </div>
-              <p style={{ color: '#cbd5e1', fontSize: '0.96rem', lineHeight: 1.6, minHeight: '74px', margin: '14px 0 20px' }}>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 12px' }}>
+                {t.courses.webTitle}
+              </h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.94rem', lineHeight: 1.65, margin: '0 0 24px' }}>
                 {t.courses.webDesc}
               </p>
             </div>
 
             <Link
               href="/practice/web/1"
-              className="tactile-btn tactile-btn-orange"
-              style={{ padding: '14px 20px', width: '100%', fontSize: '1.02rem', borderRadius: '14px' }}
+              className="studio-btn"
+              style={{
+                width: '100%',
+                background: 'rgba(249, 115, 22, 0.12)',
+                borderColor: 'rgba(249, 115, 22, 0.3)',
+                color: '#fdba74',
+              }}
             >
               <span>{t.courses.webBtn}</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </Link>
           </div>
 
           {/* Card 3: C Language */}
-          <div className="quest-card" style={{
-            padding: '34px',
+          <div className="studio-card" style={{
+            padding: '32px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             minHeight: '340px',
-            border: '2px solid rgba(6, 182, 212, 0.3)',
-            background: '#131e33',
           }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <LanguageIcon language="c" size={44} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <LanguageIcon language="c" size={40} />
                 <span style={{
-                  padding: '5px 14px',
-                  borderRadius: '16px',
-                  background: 'rgba(6, 182, 212, 0.25)',
-                  color: '#22d3ee',
-                  fontSize: '0.85rem',
-                  fontWeight: 800,
-                  border: '1px solid rgba(34, 211, 238, 0.4)',
+                  padding: '4px 12px',
+                  borderRadius: '6px',
+                  background: 'rgba(6, 182, 212, 0.12)',
+                  color: '#67e8f9',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  fontFamily: 'var(--font-mono)',
+                  border: '1px solid rgba(6, 182, 212, 0.25)',
                 }}>
                   {t.courses.cBadge}
                 </span>
               </div>
 
-              <div style={{ minHeight: '38px', display: 'flex', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
-                  {t.courses.cTitle}
-                </h3>
-              </div>
-              <p style={{ color: '#cbd5e1', fontSize: '0.96rem', lineHeight: 1.6, minHeight: '74px', margin: '14px 0 20px' }}>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 12px' }}>
+                {t.courses.cTitle}
+              </h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.94rem', lineHeight: 1.65, margin: '0 0 24px' }}>
                 {t.courses.cDesc}
               </p>
             </div>
 
             <Link
               href="/practice/c/1"
-              className="tactile-btn tactile-btn-primary"
-              style={{ padding: '14px 20px', width: '100%', fontSize: '1.02rem', borderRadius: '14px' }}
+              className="studio-btn"
+              style={{
+                width: '100%',
+                background: 'rgba(6, 182, 212, 0.12)',
+                borderColor: 'rgba(6, 182, 212, 0.3)',
+                color: '#67e8f9',
+              }}
             >
               <span>{t.courses.cBtn}</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 4. Recommendation Box */}
+      {/* 5. Target Audience Section */}
       <section style={{
-        background: 'rgba(15, 23, 42, 0.7)',
-        border: '1.5px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '24px',
-        padding: '38px 40px',
-        marginBottom: '72px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+        background: '#121622',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '20px',
+        padding: '36px 36px',
+        marginBottom: '88px',
       }}>
-        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', marginBottom: '24px' }}>
-          🎯 {t.audience.title}
-        </h3>
+        <div style={{ textAlign: 'center', marginBottom: '26px' }}>
+          <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+            🎯 {t.audience.title}
+          </h3>
+        </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(330px, 1fr))',
-          gap: '20px',
-          width: '100%',
-          textAlign: 'left',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '16px',
         }}>
           <div style={{
-            background: 'rgba(255, 255, 255, 0.04)',
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
             padding: '20px 22px',
-            borderRadius: '16px',
+            borderRadius: '14px',
             display: 'flex',
             alignItems: 'flex-start',
             gap: '14px',
-            minHeight: '110px',
           }}>
-            <span style={{ fontSize: '1.5rem' }}>🧒</span>
+            <span style={{ fontSize: '1.4rem' }}>🧒</span>
             <div>
-              <div style={{ fontWeight: 800, color: '#f8fafc', marginBottom: '4px', minHeight: '24px' }}>
+              <div style={{ fontWeight: 700, color: '#f8fafc', marginBottom: '4px', fontSize: '0.96rem' }}>
                 {t.audience.card1Title}
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#94a3b8', minHeight: '44px' }}>
+              <div style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.55 }}>
                 {t.audience.card1Desc}
               </div>
             </div>
           </div>
 
           <div style={{
-            background: 'rgba(255, 255, 255, 0.04)',
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
             padding: '20px 22px',
-            borderRadius: '16px',
+            borderRadius: '14px',
             display: 'flex',
             alignItems: 'flex-start',
             gap: '14px',
-            minHeight: '110px',
           }}>
-            <span style={{ fontSize: '1.5rem' }}>⌨️</span>
+            <span style={{ fontSize: '1.4rem' }}>⌨️</span>
             <div>
-              <div style={{ fontWeight: 800, color: '#f8fafc', marginBottom: '4px', minHeight: '24px' }}>
+              <div style={{ fontWeight: 700, color: '#f8fafc', marginBottom: '4px', fontSize: '0.96rem' }}>
                 {t.audience.card2Title}
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#94a3b8', minHeight: '44px' }}>
+              <div style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.55 }}>
                 {t.audience.card2Desc}
               </div>
             </div>
           </div>
 
           <div style={{
-            background: 'rgba(255, 255, 255, 0.04)',
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
             padding: '20px 22px',
-            borderRadius: '16px',
+            borderRadius: '14px',
             display: 'flex',
             alignItems: 'flex-start',
             gap: '14px',
-            minHeight: '110px',
           }}>
-            <span style={{ fontSize: '1.5rem' }}>📖</span>
+            <span style={{ fontSize: '1.4rem' }}>📖</span>
             <div>
-              <div style={{ fontWeight: 800, color: '#f8fafc', marginBottom: '4px', minHeight: '24px' }}>
+              <div style={{ fontWeight: 700, color: '#f8fafc', marginBottom: '4px', fontSize: '0.96rem' }}>
                 {t.audience.card3Title}
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#94a3b8', minHeight: '44px' }}>
+              <div style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.55 }}>
                 {t.audience.card3Desc}
               </div>
             </div>
@@ -481,36 +472,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Bottom Invitation Card */}
+      {/* 6. Bottom Invitation Card (CTA) */}
       <section style={{
-        background: 'var(--bg-surface, #131f3d)',
-        border: '2px solid rgba(52, 211, 153, 0.35)',
-        borderRadius: '28px',
-        padding: '54px 36px',
+        background: 'linear-gradient(180deg, #151b28 0%, #10141e 100%)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '24px',
+        padding: '56px 36px',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <div style={{ fontSize: '3rem', marginBottom: '14px' }}>🚀</div>
-        <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', marginBottom: '12px' }}>
+        <div style={{
+          width: '56px',
+          height: '56px',
+          borderRadius: '16px',
+          background: 'rgba(37, 99, 235, 0.15)',
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1.8rem',
+          marginBottom: '20px',
+        }}>
+          🚀
+        </div>
+
+        <h2 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '14px', letterSpacing: '-0.015em' }}>
           {t.cta.title}
         </h2>
-        <p style={{ fontSize: '1.1rem', color: '#cbd5e1', maxWidth: '780px', margin: '0 auto 28px', whiteSpace: 'pre-line', lineHeight: 1.65 }}>
+        <p style={{
+          fontSize: '1.05rem',
+          color: '#94a3b8',
+          maxWidth: '680px',
+          margin: '0 auto 32px',
+          whiteSpace: 'pre-line',
+          lineHeight: 1.65,
+        }}>
           {t.cta.subtitle}
         </p>
 
         <Link
           href="/practice/python/1"
-          className="tactile-btn tactile-btn-primary"
+          className="studio-btn studio-btn-primary"
           style={{
-            padding: '18px 36px',
-            fontSize: '1.15rem',
-            borderRadius: '16px',
-            display: 'inline-flex',
+            padding: '16px 36px',
+            fontSize: '1.08rem',
+            borderRadius: '14px',
           }}
         >
-          <Sparkles size={22} />
           <span>{t.cta.btn}</span>
+          <ArrowRight size={18} />
         </Link>
       </section>
     </div>

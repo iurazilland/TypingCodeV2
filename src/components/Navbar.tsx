@@ -114,27 +114,27 @@ export default function Navbar() {
                   className="nav-link-item"
                   title={item.label}
                   style={{
-                    fontWeight: item.isActive ? 700 : 600,
-                    color: item.isActive ? '#ffffff' : '#cbd5e1',
-                    background: item.isActive ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-                    border: item.isActive ? '1px solid rgba(56, 189, 248, 0.45)' : '1px solid transparent',
-                    boxShadow: item.isActive ? '0 2px 10px rgba(56, 189, 248, 0.25)' : 'none',
+                    fontWeight: item.isActive ? 700 : 500,
+                    color: item.isActive ? '#ffffff' : '#94a3b8',
+                    background: item.isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                    border: item.isActive ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid transparent',
+                    boxShadow: 'none',
                     whiteSpace: 'nowrap',
                   }}
                   onMouseEnter={(e) => {
                     if (!item.isActive) {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
                       e.currentTarget.style.color = '#ffffff';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!item.isActive) {
                       e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#cbd5e1';
+                      e.currentTarget.style.color = '#94a3b8';
                     }
                   }}
                 >
-                  <Icon size={16} style={{ color: item.isActive ? '#38bdf8' : '#94a3b8', flexShrink: 0 }} />
+                  <Icon size={16} style={{ color: item.isActive ? '#60a5fa' : '#64748b', flexShrink: 0 }} />
                   <span className="nav-link-text">{item.label}</span>
                 </Link>
               );
@@ -149,9 +149,9 @@ export default function Navbar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '12px',
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '10px',
               padding: '3px',
               gap: '2px',
               flexShrink: 0,
@@ -161,11 +161,11 @@ export default function Navbar() {
               onClick={() => setLanguage('ko')}
               aria-label="한국어로 변경"
               style={{
-                padding: '6px 11px',
-                borderRadius: '8px',
-                border: language === 'ko' ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid transparent',
-                background: language === 'ko' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-                color: language === 'ko' ? '#38bdf8' : '#94a3b8',
+                padding: '5px 11px',
+                borderRadius: '7px',
+                border: language === 'ko' ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid transparent',
+                background: language === 'ko' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                color: language === 'ko' ? '#ffffff' : '#64748b',
                 fontWeight: language === 'ko' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
@@ -178,11 +178,11 @@ export default function Navbar() {
               onClick={() => setLanguage('en')}
               aria-label="Switch to English"
               style={{
-                padding: '6px 11px',
-                borderRadius: '8px',
-                border: language === 'en' ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid transparent',
-                background: language === 'en' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-                color: language === 'en' ? '#38bdf8' : '#94a3b8',
+                padding: '5px 11px',
+                borderRadius: '7px',
+                border: language === 'en' ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid transparent',
+                background: language === 'en' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                color: language === 'en' ? '#ffffff' : '#64748b',
                 fontWeight: language === 'en' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
