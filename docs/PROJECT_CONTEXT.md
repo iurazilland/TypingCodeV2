@@ -120,8 +120,9 @@ Wandbox 오픈 컴파일러 API 및 클라이언트 에뮬레이터 기반 13개
 
 - **커리큘럼 메타데이터**: `src/lib/curriculum.ts` (SSOT)
   - 11개 언어 트랙, 각 트랙별 모듈(베이직, 어드밴스, 데이터, 인공지능 등), 난이도, 태그라인 통합 정의.
-- **연습 및 블록 문제 데이터**: `src/lib/practiceData.ts`
+- **연습 및 블록 문제 데이터**: `src/lib/practiceData.ts` & `src/data/curriculum/[language]/level[N].ts`
   - 각 레벨/라운드별 질문(`PracticeQuestion`), 정답 코드(`targetCode`), 기대 출력(`expectedOutput`), 힌트, 제공 블록 조각(`availableBlocks`).
+  - **★프롬프트 작성 절대 원칙 (`docs/CONTENT_AUTHORING.md#3`)**: 자기주도 문제 풀이 방식이므로 **정답 코드/해법 직접 노출을 엄격히 금지**하며, 유형별 표준 서두(`빈칸을 채워 ...`, `틀린 곳을 수정하여 ...`, `한 줄의 코드를 작성하여 ...`)를 엄수.
 - **기획 및 레벨 참고용 원천 데이터**: `docs/content/`
   - 향후 신규 레벨 기획 및 참고용으로 보존.
 

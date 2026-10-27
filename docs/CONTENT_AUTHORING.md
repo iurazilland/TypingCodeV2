@@ -106,29 +106,62 @@ export const PYTHON_LEVEL_1: PracticeRound = {
 
 ---
 
-## 3. 예시 코드 설계 4대 원칙 (Authoring Principles)
+## 3. 학습 프롬프트(Prompt) 작성 표준 원칙 (Prompt Authoring Rules) — ★필수 준수★
 
-### 3.1 누적 복습 (Cumulative Review) — **가장 중요**
+TypingCode의 모든 연습 문항은 단순 튜토리얼이 아닌 **학습자의 자기주도 문제 풀이 방식(Problem-Solving Format)**으로 진행됩니다.  
+따라서 학습 프롬프트(`prompt_ko`, `prompt_en`)를 작성하거나 번역할 때는 아래 3대 규칙을 반드시 엄수해야 합니다.
+
+### 3.1 🚫 정답 코드/해법 직접 노출 절대 금지 (Never Leak Answers)
+- **프롬프트 본문에 정답 코드나 구체적인 연산자, 기호, 괄호 위치를 직접 노출해서는 절대로 안 됩니다.**
+- 학습자가 문제를 읽고 "어떤 코드를 작성해야 할지" 스스로 생각하여 해결할 수 있어야 합니다.
+- 문법 지침이나 조작 가이드는 프롬프트가 아니라, 사용자가 명시적으로 열어보는 **도움말 팝오버(`hint_ko`, `hint_en`)** 영역에 배치합니다.
+- **비교 예시**:
+  - ❌ *금지 (정답 노출)*: `"수학 기호 x 대신 파이썬 곱셈 기호(*)를 사용하여 6 * 7의 결과를 출력해보세요."` (정답 기호 `*`를 직접 스포일러)
+  - ⭕ *올바름 (문제와 목표만 제시)*: `"틀린 곳을 수정하여 올바른 결과를 출력해보세요."`
+  - ❌ *금지 (정답 노출)*: `"빈칸에 괄호 ()를 채워 2 + 3을 먼저 계산한 뒤 4를 곱한 결과(20)를 출력해보세요."` (괄호 기호 `()`와 식을 직접 스포일러)
+  - ⭕ *올바름 (문제와 목표만 제시)*: `"빈칸을 채워 계산식의 결과(20)를 출력해보세요."`
+  - ❌ *금지 (영문 번역에서 정답 노출)*: `"Fix the typo using the Python multiplication operator (*) instead of x to print 6 * 7."`
+  - ⭕ *올바름 (영문 표준 번역)*: `"Fix the error to print the correct result."`
+
+### 3.2 🏷️ 문제 유형별 표준 서두 규격 (Standard Prefixes by Question Type)
+학습자가 문항을 마주했을 때 문제의 해결 방식을 즉각 직관적으로 인지할 수 있도록, 문제 유형별 고정 서두를 표준화합니다:
+
+| 문제 유형 | 표준 서두 (한국어) | 표준 서두 (영문) | 작성 예시 |
+| :--- | :--- | :--- | :--- |
+| **빈칸 채우기** (`fill_blank`) | **`빈칸을 채워 ...`** | `Fill in the blank(s) to ...` | `빈칸을 채워 계산식의 결과(20)를 출력해보세요.`<br>`Fill in the blanks to print the calculation result (20).` |
+| **틀린 곳 수정** (`fix_bug`) | **`틀린 곳을 수정하여 ...`** | `Fix the error to ...` | `틀린 곳을 수정하여 올바른 결과를 출력해보세요.`<br>`Fix the error to print the correct result.` |
+| **한 줄 코드 작성** (`single_line`) | **`한 줄의 코드를 작성하여 ...`** | `Write a single line of code to ...` | `한 줄의 코드를 작성하여 숫자 100을 출력해보세요.`<br>`Write a single line of code to print the number 100 on the screen.` |
+| **블록 조립** (`block`) | **`... 넣어 화면에 출력해보세요.`** | `... and print it on the screen.` | `숫자 10을 넣어 화면에 출력해보세요.`<br>`Insert the number 10 and print it on the screen.` |
+
+### 3.3 🎯 프롬프트 필수 구성 요소: [문제 상황] + [요구하는 최종 결과]
+- 프롬프트에는 **오직 문제 상황과 요구하는 최종 출력값(또는 목표 상태)**만 적습니다.
+- *"무엇을 출력해야 하는가"* 혹은 *"어떤 동작을 달성해야 하는가"*만 간결하고 명확하게 전달하며, 잡다한 힌트나 풀이 과정은 프롬프트에서 완전히 배제합니다.
+
+---
+
+## 4. 예시 코드 설계 4대 원칙 (Authoring Principles)
+
+### 4.1 누적 복습 (Cumulative Review) — **가장 중요**
 - 새로운 개념을 소개하더라도 이전 레벨에서 학습한 변수, 사칙연산, 조건문을 자연스럽게 결합하여 반복 노출시킵니다.
 - *나쁜 예*: 반복문 레벨에서 단순 숫자 출력 `for i in range(5): print(i)`만 10문제 반복.
 - *좋은 예*: 이전 단계의 변수와 덧셈을 결합하여 `total += i` 형태의 누적합 로직으로 확장.
 
-### 3.2 한 줄 길이 제한 (40자 규칙)
+### 4.2 한 줄 길이 제한 (40자 규칙)
 - 타이핑 인터페이스 및 블록 캔버스 가독성을 위해 단일 라인의 코드는 **공백 포함 40자 이내**로 제한합니다.
 - 긴 표현식은 중간 변수로 쪼개어 가독성을 확보합니다.
 
-### 3.3 즉각적이고 가시적인 실행 결과 (Visual Feedback)
+### 4.3 즉각적이고 가시적인 실행 결과 (Visual Feedback)
 - 코드가 성공적으로 실행되었을 때 터미널 출력창 또는 WebPreview에 직관적인 결과가 나타나야 합니다.
 - 빈 화면이나 아무런 출력이 없는 무응답 코드는 피합니다.
 
-### 3.4 10단계 스케일링 (10-Step Scaffolding)
+### 4.4 10단계 스케일링 (10-Step Scaffolding)
 - Step 1~3: 극단적으로 단순한 기본형 (개념 도입).
 - Step 4~7: 파라미터 변경 및 기본 응용.
 - Step 8~10: 종합 복습 및 작은 미니 문제 해결.
 
 ---
 
-## 4. 커리큘럼 트랙 등록 절차 (`src/lib/curriculum.ts`)
+## 5. 커리큘럼 트랙 등록 절차 (`src/lib/curriculum.ts`)
 
 새로운 언어나 코스 모듈을 등록할 때는 `CURRICULUM_TRACKS` 배열에 객체를 추가합니다:
 ```typescript
@@ -163,7 +196,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
 
 ---
 
-## 5. 검증 및 빌드 확인
+## 6. 검증 및 빌드 확인
 새로운 콘텐츠를 추가하거나 수정한 후에는 다음 명령으로 타입스크립트 무오류 상태를 확인합니다:
 ```bash
 npx tsc --noEmit
