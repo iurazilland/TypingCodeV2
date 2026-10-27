@@ -116,24 +116,27 @@ export default function HomePage() {
 
   return (
     <div style={{
-      background: '#f8fafc',
       color: '#0f172a',
       minHeight: '100vh',
       marginTop: '-70px',
       paddingTop: '70px',
       overflowX: 'hidden',
     }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 120px' }}>
-        
-        {/* =================================================================
-            1. HERO SECTION: Pure Slogan with Live 5 Animation Showcase
-            ================================================================= */}
-        <section style={{
+      {/* =================================================================
+          1. HERO SECTION: Pure Slogan with Live 5 Animation Showcase
+          (Clean Pure White with Subtle Ambient Aura)
+          ================================================================= */}
+      <section style={{
+        background: '#ffffff',
+        padding: '120px 24px 140px',
+        borderBottom: '1px solid #edf2f7',
+        position: 'relative',
+      }}>
+        <div style={{
           textAlign: 'center',
           maxWidth: '960px',
           margin: '0 auto',
-          padding: '140px 24px 170px',
-          minHeight: 'calc(90vh - 70px)',
+          minHeight: 'calc(80vh - 70px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -230,12 +233,19 @@ export default function HomePage() {
               ? 'Simply type. The code will follow.'
               : '그냥 입력하세요. 코드가 완성됩니다.'}
           </p>
-        </section>
+        </div>
+      </section>
 
-        {/* =================================================================
-            2. THE PROBLEM: BLOCK CODING VS REAL CODING
-            ================================================================= */}
-        <section id="why-typingcode" style={{ marginBottom: '160px' }}>
+      {/* =================================================================
+          2. THE PROBLEM: BLOCK CODING VS REAL CODING
+          (Subtle Slate Cool-Gray Tone: #f8fafc with Crisp White Cards)
+          ================================================================= */}
+      <section id="why-typingcode" style={{
+        background: '#f8fafc',
+        padding: '120px 24px 140px',
+        borderBottom: '1px solid #e2e8f0',
+      }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           
           {/* Section Header */}
           <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 44px' }}>
@@ -504,15 +514,18 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* =================================================================
-            3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
-            ================================================================= */}
-        <section id="curriculum" style={{
-          marginBottom: '120px',
-          scrollMarginTop: '80px',
-        }}>
+      {/* =================================================================
+          3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
+          (Clean Pure White Background with Pure White Cards & Dark CTA)
+          ================================================================= */}
+      <section id="curriculum" style={{
+        background: '#ffffff',
+        padding: '120px 0 140px',
+        scrollMarginTop: '80px',
+      }}>
           {/* Section Header */}
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px', padding: '0 20px' }}>
             <h2 style={{
@@ -832,8 +845,6 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
-
       </div>
-    </div>
-  );
-}
+    );
+  }
