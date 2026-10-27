@@ -138,13 +138,29 @@ export default function HomePage() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          position: 'relative',
         }}>
+          {/* Subtle Ambient Radial Light Aura */}
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 'min(920px, 90vw)',
+            height: 'min(580px, 60vh)',
+            background: 'radial-gradient(ellipse at center, rgba(6, 182, 212, 0.08) 0%, rgba(2, 132, 199, 0.03) 45%, transparent 70%)',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }} />
+
           {/* Main Slogan: Exact 13x2 Monospace Geometric Grid with Kinetic Wave Animation */}
           <div style={{
             display: 'inline-flex',
             flexDirection: 'column',
             alignItems: 'center',
             marginBottom: '36px',
+            position: 'relative',
+            zIndex: 1,
           }}>
             {/* Slogan Text: Exact 13 Characters on each line in JetBrains Mono */}
             <h1 style={{
@@ -326,14 +342,15 @@ export default function HomePage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '54px',
-              height: '54px',
+              width: '52px',
+              height: '52px',
               borderRadius: '50%',
-              background: '#ffffff',
-              border: '1.5px solid #e2e8f0',
-              color: '#0284c7',
-              boxShadow: '0 4px 14px rgba(15, 23, 42, 0.08)',
+              background: '#0f172a',
+              border: '2px solid #ffffff',
+              color: '#38bdf8',
+              boxShadow: '0 8px 24px -2px rgba(15, 23, 42, 0.22)',
               flexShrink: 0,
+              zIndex: 2,
             }}>
               <ArrowRight size={22} strokeWidth={2.5} />
             </div>
@@ -343,10 +360,10 @@ export default function HomePage() {
               flex: '1 1 360px',
               maxWidth: '480px',
               background: '#ffffff',
-              border: '1.5px solid #e2e8f0',
+              border: '1.5px solid #cbd5e1',
               borderRadius: '24px',
               overflow: 'hidden',
-              boxShadow: '0 10px 28px -6px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04)',
+              boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.04)',
             }}>
               <div style={{ position: 'relative', width: '100%', height: '280px', overflow: 'hidden', background: '#0e121a' }}>
                 <img 
@@ -410,11 +427,11 @@ export default function HomePage() {
             <div style={{
               position: 'relative',
               textAlign: 'center',
-              background: '#ffffff',
-              border: '1.5px solid #e2e8f0',
+              background: 'linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%)',
+              border: '1.5px solid #ccfbf1',
               borderRadius: '24px',
               padding: '48px 36px',
-              boxShadow: '0 16px 36px -12px rgba(15, 23, 42, 0.06)',
+              boxShadow: '0 18px 40px -12px rgba(8, 145, 178, 0.1), 0 2px 6px rgba(0, 0, 0, 0.02)',
             }}>
               <h3 style={{
                 fontSize: 'clamp(1.35rem, 2.7vw, 1.85rem)',
@@ -490,12 +507,17 @@ export default function HomePage() {
         </section>
 
         {/* =================================================================
-            3. NOVEL CURRICULUM COMMAND DECK (Third Screen)
-            ================================================================= */}
-        {/* =================================================================
             3. DUAL-TRACK DYNAMIC CURRICULUM CONSOLE
             ================================================================= */}
-        <section id="curriculum" style={{ marginBottom: '110px', scrollMarginTop: '80px' }}>
+        <section id="curriculum" style={{
+          background: '#f1f5f9',
+          border: '1.5px solid #e2e8f0',
+          borderRadius: '32px',
+          padding: '60px 0 64px',
+          marginBottom: '110px',
+          scrollMarginTop: '80px',
+          boxShadow: '0 20px 48px -16px rgba(15, 23, 42, 0.05)',
+        }}>
           
           {/* Section Header */}
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px', padding: '0 20px' }}>
@@ -770,28 +792,49 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom Action: Link to all languages */}
+          {/* Bottom Action: Link to all languages (High-Contrast Primary CTA) */}
           <div style={{ textAlign: 'center', marginTop: '48px' }}>
             <Link
               href="/languages"
-              className="brilliant-btn brilliant-btn-secondary"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '12px 24px',
-                fontSize: '0.94rem',
-                fontWeight: 700,
-                borderRadius: '16px',
-                background: '#ffffff',
-                border: '1.5px solid #e2e8f0',
-                color: '#0f172a',
-                boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+                gap: '12px',
+                padding: '16px 36px',
+                fontSize: '1rem',
+                fontWeight: 800,
+                borderRadius: '18px',
+                background: '#0f172a',
+                color: '#ffffff',
+                boxShadow: '0 12px 30px -6px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset',
                 textDecoration: 'none',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                letterSpacing: '-0.01em',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+                e.currentTarget.style.background = '#1e293b';
+                e.currentTarget.style.boxShadow = '0 18px 36px -6px rgba(15, 23, 42, 0.45)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.background = '#0f172a';
+                e.currentTarget.style.boxShadow = '0 12px 30px -6px rgba(15, 23, 42, 0.35)';
               }}
             >
-              <span>{isEn ? 'Browse All 13 Language Curriculums' : '전체 13개 언어 커리큘럼 자세히 보기'}</span>
-              <ArrowRight size={16} />
+              <span>{isEn ? 'Explore All 13 Language Curriculums' : '전체 13개 언어 커리큘럼 모두 보기'}</span>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.15)',
+                color: '#38bdf8',
+              }}>
+                <ArrowRight size={14} strokeWidth={2.5} />
+              </span>
             </Link>
           </div>
         </section>
