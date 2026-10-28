@@ -43,9 +43,9 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
       },
       { 
         levelNumber: 4, 
-        title_ko: '변수(Variable) 선언과 기본 대입', 
-        title_en: 'Variables & Assignment',
-        syntaxTags: ['variable ='],
+        title_ko: '수식 출력과 나머지(%)의 실전 활용', 
+        title_en: 'Formula Printing & Modulo Usage',
+        syntaxTags: ['"식 =", 식', '구구단', '% 2 (짝수/홀수)'],
       },
       { 
         levelNumber: 5, 
