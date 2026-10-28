@@ -174,11 +174,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       {/* Course Overview Bento Pod with Learning Progress */}
       <div
         style={{
-          padding: '26px 32px',
+          padding: '28px 32px',
           borderRadius: '24px',
-          background: '#ffffff',
-          border: '2px solid #94a3b8',
-          boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+          background: 'linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%)',
+          border: '2px solid #38bdf8',
+          boxShadow: '0 8px 24px -4px rgba(8, 145, 178, 0.12), 0 2px 8px rgba(15, 23, 42, 0.04)',
           marginBottom: '36px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -194,12 +194,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
               width: '64px',
               height: '64px',
               borderRadius: '18px',
-              background: '#f8fafc',
-              border: `2px solid ${matchedTrack.color}60`,
+              background: '#ffffff',
+              border: '1.5px solid #cbd5e1',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: `0 4px 14px ${matchedTrack.color}25`,
+              boxShadow: '0 4px 12px rgba(15, 23, 42, 0.06)',
               flexShrink: 0,
             }}
           >
@@ -215,12 +215,13 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 style={{
                   padding: '3px 10px',
                   borderRadius: '10px',
-                  background: '#f1f5f9',
+                  background: '#ffffff',
                   color: '#334155',
-                  border: '1px solid #cbd5e1',
+                  border: '1.5px solid #cbd5e1',
                   fontSize: '0.78rem',
                   fontWeight: 800,
                   letterSpacing: '0.03em',
+                  boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
                 }}
               >
                 {getCategoryName(matchedModule.category, isEn)}
@@ -229,11 +230,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 style={{
                   padding: '3px 10px',
                   borderRadius: '10px',
-                  background: `${matchedModule.difficultyColor || '#10b981'}15`,
+                  background: '#ffffff',
                   color: matchedModule.difficultyColor || '#10b981',
-                  border: `1px solid ${matchedModule.difficultyColor || '#10b981'}45`,
+                  border: `1.5px solid ${matchedModule.difficultyColor || '#10b981'}`,
                   fontSize: '0.78rem',
                   fontWeight: 800,
+                  boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
                 }}
               >
                 {matchedModule.difficulty}
@@ -255,10 +257,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         {/* Right: Progress Meter */}
         <div
           style={{
-            background: '#f8fafc',
+            background: '#ffffff',
             padding: '16px 22px',
             borderRadius: '18px',
             border: '1.5px solid #cbd5e1',
+            boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
             flexShrink: 0,
             minWidth: '220px',
           }}
@@ -271,12 +274,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
               {clearedCount} / {totalLevelsCount} ({progressPercent}%)
             </span>
           </div>
-          <div style={{ width: '100%', height: '7px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
             <div
               style={{
                 width: `${progressPercent}%`,
                 height: '100%',
-                background: progressPercent === 100 ? '#10b981' : `linear-gradient(90deg, ${matchedTrack.color}, #10b981)`,
+                background: progressPercent === 100 ? '#10b981' : 'linear-gradient(90deg, #0284c7, #10b981)',
                 borderRadius: '4px',
                 transition: 'width 0.3s ease',
               }}
@@ -311,9 +314,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                     style={{
                       padding: '4px 11px',
                       borderRadius: '8px',
-                      background: isSectionComplete ? 'rgba(16, 185, 129, 0.12)' : `${matchedTrack.color}15`,
-                      color: isSectionComplete ? '#15803d' : matchedTrack.color,
-                      border: `1.5px solid ${isSectionComplete ? 'rgba(16, 185, 129, 0.4)' : matchedTrack.color + '40'}`,
+                      background: isSectionComplete ? '#dcfce7' : '#e0f2fe',
+                      color: isSectionComplete ? '#15803d' : '#0284c7',
+                      border: `1.5px solid ${isSectionComplete ? '#86efac' : '#7dd3fc'}`,
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.78rem',
                       fontWeight: 800,
@@ -374,13 +377,13 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         padding: '20px 22px',
                         borderRadius: '20px',
                         textDecoration: 'none',
-                        opacity: isLocked ? 0.65 : 1,
+                        opacity: isLocked ? 0.6 : 1,
                         background: isHovered && !isLocked
                           ? '#ffffff'
                           : isCleared
                           ? '#f0fdf4'
                           : isLocked
-                          ? '#f1f5f9'
+                          ? 'rgba(241, 245, 249, 0.7)'
                           : '#ffffff',
                         border: isHovered && !isLocked
                           ? '2px solid #0284c7'
@@ -390,16 +393,16 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           ? '2.5px solid #0284c7'
                           : isLocked
                           ? '1.5px solid #cbd5e1'
-                          : '2px solid #94a3b8',
+                          : '1.5px solid #cbd5e1',
                         boxShadow: isHovered && !isLocked
-                          ? '0 14px 30px -4px rgba(2, 132, 199, 0.22), 0 4px 10px rgba(15, 23, 42, 0.05)'
+                          ? '0 12px 28px -4px rgba(2, 132, 199, 0.22), 0 4px 10px rgba(15, 23, 42, 0.05)'
                           : isCurrent
                           ? '0 8px 24px -2px rgba(2, 132, 199, 0.25)'
                           : isCleared
-                          ? '0 4px 14px -2px rgba(22, 163, 74, 0.1)'
+                          ? '0 4px 14px -2px rgba(22, 163, 74, 0.12)'
                           : isLocked
                           ? 'none'
-                          : '0 6px 18px -2px rgba(15, 23, 42, 0.06)',
+                          : '0 4px 14px -2px rgba(15, 23, 42, 0.05)',
                         transform: isHovered && !isLocked ? 'translateY(-3px)' : 'translateY(0)',
                         cursor: isLocked ? 'not-allowed' : 'pointer',
                         transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
