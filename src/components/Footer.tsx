@@ -19,7 +19,8 @@ export default function Footer() {
   const isLightPage =
     pathname === '/' ||
     pathname === '/languages' ||
-    pathname?.startsWith('/learn');
+    pathname?.startsWith('/learn') ||
+    (pathSegments[0] === 'practice' && pathSegments.length <= 2);
 
   const linkColor = isLightPage ? '#475569' : '#94a3b8';
   const mutedColor = isLightPage ? '#64748b' : '#64748b';
