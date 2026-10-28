@@ -45,7 +45,7 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
         levelNumber: 4, 
         title_ko: '수식 출력과 나머지(%)의 실전 활용', 
         title_en: 'Formula Printing & Modulo Usage',
-        syntaxTags: ['"식 =", 식', '구구단', '% 2 (짝수/홀수)'],
+        syntaxTags: ['print("...", a + b)', 'a * b', 'n % 2'],
       },
       { 
         levelNumber: 5, 
