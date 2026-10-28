@@ -9,6 +9,7 @@ import {
   Search, 
   BookOpen, 
   Layers, 
+  CheckCircle2,
   Code2, 
   Cpu, 
   Globe, 
@@ -577,11 +578,14 @@ export default function LanguagesPage() {
                     const diffColor = DIFFICULTY_COLORS[module.difficulty] || '#10b981';
 
                     return (
-                      <div
+                      <Link
                         key={module.id}
+                        href={module.practiceUrl}
                         className="light-mode-card"
                         style={{
-                          padding: '16px 16px',
+                          textDecoration: 'none',
+                          color: 'inherit',
+                          padding: '16px',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
@@ -596,6 +600,7 @@ export default function LanguagesPage() {
                           transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
                           position: 'relative',
                           overflow: 'visible',
+                          cursor: 'pointer',
                         }}
                       >
                         {/* In-progress glowing indicator badge */}
@@ -696,105 +701,90 @@ export default function LanguagesPage() {
                             fontSize: '0.96rem',
                             fontWeight: 800,
                             color: '#0f172a',
-                            marginBottom: '6px',
-                            lineHeight: 1.3,
+                            marginBottom: '10px',
+                            lineHeight: 1.35,
                             letterSpacing: '-0.01em',
                             wordBreak: 'keep-all',
                           }}>
                             {isEn ? module.title_en : module.title_ko}
                           </h3>
 
-                          {/* Condensed Description (2 lines clamped) */}
-                          <p style={{
-                            fontSize: '0.78rem',
-                            color: '#64748b',
-                            lineHeight: 1.45,
-                            marginBottom: '10px',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            minHeight: '2.9em',
-                            wordBreak: 'keep-all',
-                          }}>
-                            {isEn ? module.description_en : module.description_ko}
-                          </p>
-
-                          {/* Concise Key Skills Tags */}
+                          {/* Original Key Skills Box */}
                           <div style={{
                             display: 'flex',
-                            flexWrap: 'wrap',
-                            gap: '4px',
-                            marginBottom: '12px',
+                            flexDirection: 'column',
+                            gap: '5px',
+                            marginBottom: '14px',
+                            padding: '10px 12px',
+                            borderRadius: '12px',
+                            background: '#f8fafc',
+                            border: '1.5px solid #e2e8f0',
                           }}>
-                            {module.skills.slice(0, 3).map((skill, idx) => (
-                              <span
+                            <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '2px' }}>
+                              {isEn ? 'Key Skills:' : '핵심 습득 기술:'}
+                            </div>
+                            {module.skills.map((skill, idx) => (
+                              <div
                                 key={idx}
                                 style={{
-                                  display: 'inline-flex',
+                                  display: 'flex',
                                   alignItems: 'center',
-                                  padding: '2px 6px',
-                                  borderRadius: '6px',
-                                  background: '#f8fafc',
-                                  border: '1px solid #e2e8f0',
-                                  fontSize: '0.68rem',
-                                  color: '#475569',
-                                  fontWeight: 600,
+                                  gap: '6px',
+                                  fontSize: '0.76rem',
+                                  color: '#334155',
+                                  fontWeight: 500,
                                 }}
                               >
-                                #{getSkillName(skill, isEn)}
-                              </span>
+                                <CheckCircle2 size={13} color="#0284c7" style={{ flexShrink: 0 }} />
+                                <span>{getSkillName(skill, isEn)}</span>
+                              </div>
                             ))}
-                            {module.skills.length > 3 && (
-                              <span style={{ fontSize: '0.66rem', color: '#94a3b8', alignSelf: 'center', padding: '0 2px' }}>
-                                +{module.skills.length - 3}
-                              </span>
-                            )}
                           </div>
                         </div>
 
-                        {/* Bottom Action Area: Progress Gauge Bar & CTA */}
+                        {/* Bottom Action Area: Full-width Progress Gauge Bar with Direct Click Feedback */}
                         <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
                           paddingTop: '10px',
                           borderTop: '1px solid #f1f5f9',
-                          gap: '8px',
                         }}>
                           {/* Progress Gauge */}
-                          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+                          <div>
                             <div style={{
                               display: 'flex',
                               justifyContent: 'space-between',
                               alignItems: 'center',
-                              marginBottom: '3px',
+                              marginBottom: '5px',
                             }}>
                               <span style={{
-                                fontSize: '0.68rem',
-                                color: isStarted ? '#0284c7' : '#94a3b8',
+                                fontSize: '0.72rem',
+                                color: isStarted ? '#0284c7' : '#475569',
                                 fontWeight: 700,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
                               }}>
-                                {isStarted 
-                                  ? (isEn ? `${progressPercent}%` : `${progressPercent}% 진행`) 
-                                  : (isEn ? 'Not Started' : '미학습')}
+                                <span>
+                                  {isStarted 
+                                    ? (isEn ? `Progress ${progressPercent}%` : `진행도 ${progressPercent}%`) 
+                                    : (isEn ? 'Start Learning' : '학습 시작')}
+                                </span>
+                                <ArrowRight size={12} color={isStarted ? '#0284c7' : '#64748b'} />
                               </span>
                               <span style={{
-                                fontSize: '0.66rem',
+                                fontSize: '0.68rem',
                                 color: '#94a3b8',
                                 fontWeight: 600,
                                 fontFamily: 'var(--font-mono)',
                               }}>
-                                {completedLevels}/{module.totalLevels}
+                                {completedLevels} / {module.totalLevels}{isEn ? ' Stages' : '단계'}
                               </span>
                             </div>
 
                             {/* Gauge Track */}
                             <div style={{
                               width: '100%',
-                              height: '4px',
-                              borderRadius: '2px',
+                              height: '5px',
+                              borderRadius: '3px',
                               background: '#e2e8f0',
                               overflow: 'hidden',
                             }}>
@@ -802,33 +792,14 @@ export default function LanguagesPage() {
                               <div style={{
                                 width: `${progressPercent}%`,
                                 height: '100%',
-                                borderRadius: '2px',
+                                borderRadius: '3px',
                                 background: isStarted ? '#0284c7' : 'transparent',
                                 transition: 'width 0.4s ease',
                               }} />
                             </div>
                           </div>
-
-                          {/* Action Button */}
-                          <Link
-                            href={module.practiceUrl}
-                            className="tactile-btn tactile-btn-primary"
-                            style={{
-                              padding: '6px 12px',
-                              fontSize: '0.78rem',
-                              borderRadius: '9px',
-                              whiteSpace: 'nowrap',
-                              flexShrink: 0,
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '3px',
-                            }}
-                          >
-                            <span>{isStarted ? (isEn ? 'Continue' : '이어하기') : (isEn ? 'Start' : '시작')}</span>
-                            <ArrowRight size={12} />
-                          </Link>
                         </div>
-                      </div>
+                      </Link>
                     );
                   })}
               </div>
