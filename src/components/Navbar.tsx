@@ -24,8 +24,7 @@ export default function Navbar() {
   const isLightPage =
     pathname === '/' ||
     pathname === '/languages' ||
-    pathname?.startsWith('/learn') ||
-    (pathSegments[0] === 'practice' && pathSegments.length <= 2);
+    pathname?.startsWith('/learn');
 
   const openLogin = () => {
     setAuthModalTab('login');
