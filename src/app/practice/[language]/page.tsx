@@ -11,6 +11,7 @@ import {
   Layers,
   Code2,
   ChevronRight,
+  Sparkles,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
@@ -32,9 +33,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
   // Hover state tracker for level cards
   const [hoveredLevelNum, setHoveredLevelNum] = useState<number | null>(null);
 
-  // View Mode: 'roadmap' (2번) | 'list' (3번) | 'studio' (4번)
-  type ViewMode = 'roadmap' | 'list' | 'studio';
-  const [viewMode, setViewMode] = useState<ViewMode>('roadmap');
+  // View Mode: 'hybrid' (2+3번 추천 통합) | 'roadmap' (2번) | 'list' (3번) | 'studio' (4번)
+  type ViewMode = 'hybrid' | 'roadmap' | 'list' | 'studio';
+  const [viewMode, setViewMode] = useState<ViewMode>('hybrid');
   const [selectedLevelNum, setSelectedLevelNum] = useState<number>(2);
 
   // Find matching track and module from CURRICULUM_TRACKS
@@ -381,6 +382,29 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         >
           <button
             type="button"
+            onClick={() => setViewMode('hybrid')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '10px',
+              border: 'none',
+              background: viewMode === 'hybrid' ? '#0284c7' : 'transparent',
+              color: viewMode === 'hybrid' ? '#ffffff' : '#475569',
+              fontSize: '0.84rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.15s ease',
+              boxShadow: viewMode === 'hybrid' ? '0 2px 8px rgba(2, 132, 199, 0.35)' : 'none',
+            }}
+          >
+            <Sparkles size={15} />
+            <span>{isEn ? 'Hybrid (Roadmap + List)' : '하이브리드 (2+3번 통합)'}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setViewMode('roadmap')}
             style={{
               padding: '8px 16px',
@@ -451,7 +475,374 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       </div>
 
       {/* ====================================================================
-          VIEW 1: ROADMAP TIMELINE (OPTION 2 - DEFAULT)
+          VIEW 0: HYBRID ROADMAP LIST (OPTION 2 + 3 INTEGRATION - DEFAULT)
+          ==================================================================== */}
+      {viewMode === 'hybrid' && (
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '32px', maxWidth: '1080px', margin: '0 auto' }}>
+          {/* Vertical Milestone Roadmap Line */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '28px',
+              bottom: '28px',
+              left: '26px',
+              width: '4px',
+              background: 'linear-gradient(to bottom, #0284c7 0%, #38bdf8 50%, #cbd5e1 100%)',
+              zIndex: 0,
+              borderRadius: '2px',
+            }}
+          />
+
+          {sections.map((section) => {
+            const sectionClearedCount = section.levels.filter((l) => userProgress.clearedLevels.has(l.levelNumber)).length;
+            const totalSectionLevels = section.levels.length;
+            const isSectionComplete = sectionClearedCount === totalSectionLevels && totalSectionLevels > 0;
+            const hasActiveLevel = section.levels.some((l) => l.levelNumber === userProgress.highestUnlockedLevel);
+            const isSectionLocked = section.levels.every((l) => l.levelNumber > userProgress.highestUnlockedLevel && !userProgress.clearedLevels.has(l.levelNumber));
+            const progressPercent = totalSectionLevels > 0 ? Math.round((sectionClearedCount / totalSectionLevels) * 100) : 0;
+
+            return (
+              <div 
+                key={section.id}
+                style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '24px',
+                }}
+              >
+                {/* Milestone Node on the Roadmap Line */}
+                <div
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 900,
+                    fontSize: '1rem',
+                    background: isSectionComplete 
+                      ? '#0284c7' 
+                      : hasActiveLevel 
+                        ? '#ffffff' 
+                        : '#f1f5f9',
+                    color: isSectionComplete 
+                      ? '#ffffff' 
+                      : hasActiveLevel 
+                        ? '#0284c7' 
+                        : '#94a3b8',
+                    border: isSectionComplete 
+                      ? '4px solid #bae6fd' 
+                      : hasActiveLevel 
+                        ? '4px solid #0284c7' 
+                        : '3px solid #cbd5e1',
+                    boxShadow: isSectionComplete 
+                      ? '0 4px 14px rgba(2, 132, 199, 0.35)' 
+                      : hasActiveLevel 
+                        ? '0 0 0 6px rgba(2, 132, 199, 0.15), 0 4px 12px rgba(2, 132, 199, 0.25)' 
+                        : '0 2px 6px rgba(15, 23, 42, 0.05)',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {isSectionComplete ? (
+                    <CheckCircle2 size={26} color="#ffffff" strokeWidth={2.6} />
+                  ) : hasActiveLevel ? (
+                    <Play size={22} color="#0284c7" fill="#0284c7" style={{ marginLeft: '2px' }} />
+                  ) : isSectionLocked ? (
+                    <Lock size={20} color="#94a3b8" />
+                  ) : (
+                    <span>{section.sectionNumber}</span>
+                  )}
+                </div>
+
+                {/* Section Main Card (Contains compact level list) */}
+                <div
+                  style={{
+                    flex: 1,
+                    background: '#ffffff',
+                    borderRadius: '18px',
+                    border: hasActiveLevel 
+                      ? '2px solid #0284c7' 
+                      : isSectionComplete 
+                        ? '1.5px solid #7dd3fc' 
+                        : '1.5px solid #e2e8f0',
+                    boxShadow: hasActiveLevel 
+                      ? '0 10px 25px -5px rgba(2, 132, 199, 0.12), 0 8px 10px -6px rgba(2, 132, 199, 0.08)' 
+                      : '0 4px 14px rgba(15, 23, 42, 0.05)',
+                    overflow: 'hidden',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {/* Section Card Header */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '12px',
+                      padding: '18px 24px',
+                      background: hasActiveLevel 
+                        ? 'linear-gradient(135deg, rgba(2, 132, 199, 0.06) 0%, rgba(255, 255, 255, 0.95) 100%)' 
+                        : '#f8fafc',
+                      borderBottom: '1px solid #e2e8f0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span
+                        style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 900,
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
+                          color: hasActiveLevel ? '#0284c7' : isSectionComplete ? '#0369a1' : '#64748b',
+                          background: hasActiveLevel ? 'rgba(2, 132, 199, 0.12)' : isSectionComplete ? '#e0f2fe' : '#e2e8f0',
+                          padding: '4px 10px',
+                          borderRadius: '8px',
+                        }}
+                      >
+                        SECTION {section.sectionNumber < 10 ? `0${section.sectionNumber}` : section.sectionNumber}
+                      </span>
+
+                      <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#0f172a' }}>
+                        {isEn ? section.title_en : section.title_ko}
+                      </h3>
+                    </div>
+
+                    {/* Progress pill & bar */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                        <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#64748b' }}>
+                          {sectionClearedCount} / {totalSectionLevels} {isEn ? 'Completed' : '완료'} ({progressPercent}%)
+                        </span>
+                        <div
+                          style={{
+                            width: '100px',
+                            height: '6px',
+                            borderRadius: '3px',
+                            background: '#e2e8f0',
+                            overflow: 'hidden',
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: `${progressPercent}%`,
+                              height: '100%',
+                              background: '#0284c7',
+                              borderRadius: '3px',
+                              transition: 'width 0.3s ease',
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Compact Level List Rows */}
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {section.levels.map((lvl, lIdx) => {
+                      const isCleared = userProgress.clearedLevels.has(lvl.levelNumber);
+                      const isCurrent = lvl.levelNumber === userProgress.highestUnlockedLevel;
+                      const isLocked = lvl.levelNumber > userProgress.highestUnlockedLevel && !isCleared;
+                      const isHovered = hoveredLevelNum === lvl.levelNumber;
+
+                      const rowContent = (
+                        <div
+                          onMouseEnter={() => setHoveredLevelNum(lvl.levelNumber)}
+                          onMouseLeave={() => setHoveredLevelNum(null)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '14px 24px',
+                            borderBottom: lIdx === section.levels.length - 1 ? 'none' : '1px solid #f1f5f9',
+                            background: isCurrent 
+                              ? (isHovered ? '#eff6ff' : 'rgba(2, 132, 199, 0.04)') 
+                              : (isHovered ? '#f8fafc' : '#ffffff'),
+                            cursor: isLocked ? 'not-allowed' : 'pointer',
+                            transition: 'all 0.15s ease',
+                            position: 'relative',
+                          }}
+                        >
+                          {/* Left active marker stripe if current */}
+                          {isCurrent && (
+                            <div
+                              style={{
+                                position: 'absolute',
+                                left: 0,
+                                top: 0,
+                                bottom: 0,
+                                width: '4px',
+                                background: '#0284c7',
+                              }}
+                            />
+                          )}
+
+                          {/* Left: Badge + Title + Syntax tags */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0, flex: 1, paddingRight: '16px' }}>
+                            {/* Level Number Pill */}
+                            <span
+                              style={{
+                                fontSize: '0.8rem',
+                                fontWeight: 800,
+                                padding: '4px 8px',
+                                borderRadius: '6px',
+                                background: isCleared 
+                                  ? '#e0f2fe' 
+                                  : isCurrent 
+                                    ? '#0284c7' 
+                                    : '#f1f5f9',
+                                color: isCleared 
+                                  ? '#0369a1' 
+                                  : isCurrent 
+                                    ? '#ffffff' 
+                                    : '#94a3b8',
+                                flexShrink: 0,
+                              }}
+                            >
+                              Lv.{lvl.levelNumber < 10 ? `0${lvl.levelNumber}` : lvl.levelNumber}
+                            </span>
+
+                            {/* Title */}
+                            <span
+                              style={{
+                                fontSize: '0.94rem',
+                                fontWeight: isCurrent ? 800 : 700,
+                                color: isLocked ? '#94a3b8' : '#0f172a',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              {isEn ? lvl.title_en : lvl.title_ko}
+                            </span>
+
+                            {/* Syntax tags */}
+                            {lvl.syntaxTags && lvl.syntaxTags.length > 0 && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                {lvl.syntaxTags.map((tag, tIdx) => (
+                                  <span
+                                    key={tIdx}
+                                    style={{
+                                      fontSize: '0.72rem',
+                                      fontFamily: 'Consolas, monospace',
+                                      fontWeight: 600,
+                                      padding: '2px 7px',
+                                      borderRadius: '4px',
+                                      background: isLocked ? '#f1f5f9' : '#f0f9ff',
+                                      color: isLocked ? '#94a3b8' : '#0284c7',
+                                      border: isLocked ? '1px solid #e2e8f0' : '1px solid #bae6fd',
+                                    }}
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Right: Status badge & Action */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                            {isCleared && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 700,
+                                  padding: '5px 12px',
+                                  borderRadius: '12px',
+                                  background: '#e0f2fe',
+                                  color: '#0284c7',
+                                  border: '1px solid #bae6fd',
+                                }}
+                              >
+                                <CheckCircle2 size={14} />
+                                <span>{isEn ? 'Cleared' : '완료'}</span>
+                              </span>
+                            )}
+
+                            {isCurrent && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 800,
+                                  padding: '6px 14px',
+                                  borderRadius: '12px',
+                                  background: '#0284c7',
+                                  color: '#ffffff',
+                                  boxShadow: '0 2px 8px rgba(2, 132, 199, 0.35)',
+                                }}
+                              >
+                                <Play size={13} fill="#ffffff" />
+                                <span>{isEn ? 'Start' : '도전하기'}</span>
+                              </span>
+                            )}
+
+                            {isLocked && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 600,
+                                  padding: '5px 10px',
+                                  borderRadius: '12px',
+                                  background: '#f1f5f9',
+                                  color: '#94a3b8',
+                                }}
+                              >
+                                <Lock size={12} />
+                                <span>{isEn ? 'Locked' : '잠김'}</span>
+                              </span>
+                            )}
+
+                            {!isLocked && (
+                              <ChevronRight 
+                                size={18} 
+                                color={isCurrent ? '#0284c7' : '#94a3b8'} 
+                                style={{
+                                  transform: isHovered ? 'translateX(3px)' : 'none',
+                                  transition: 'transform 0.15s ease',
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      );
+
+                      if (isLocked) {
+                        return <div key={lvl.levelNumber}>{rowContent}</div>;
+                      }
+
+                      return (
+                        <Link
+                          key={lvl.levelNumber}
+                          href={`/practice/${rawLang}/${lvl.levelNumber}`}
+                          style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                        >
+                          {rowContent}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ====================================================================
+          VIEW 1: ROADMAP TIMELINE (OPTION 2)
           ==================================================================== */}
       {viewMode === 'roadmap' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '38px' }}>
