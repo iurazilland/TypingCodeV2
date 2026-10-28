@@ -149,6 +149,36 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>
+      {/* Dynamic Keyframes for Current Level Animated Border & Responsive Grid */}
+      <style>{`
+        @keyframes currentLevelPulse {
+          0%, 100% {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 8px 24px -2px rgba(2, 132, 199, 0.45);
+          }
+          50% {
+            border-color: #ffffff;
+            box-shadow: 0 0 0 5px rgba(56, 189, 248, 0), 0 0 22px 6px rgba(56, 189, 248, 0.8), 0 12px 30px rgba(2, 132, 199, 0.6);
+          }
+        }
+
+        .current-level-active {
+          animation: currentLevelPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+          border-width: 2.5px !important;
+        }
+
+        @media (max-width: 1100px) {
+          .stage-select-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (max-width: 680px) {
+          .stage-select-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+      `}</style>
+
       {/* Top Back Navigation Link (Left-aligned) */}
       <div style={{ marginBottom: '24px' }}>
         <Link
@@ -344,11 +374,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 </div>
               </div>
 
-              {/* Concept Level Cards Grid (Exercism Style: 1 Card = 1 Level, Syntax Keyword Chips, No Button) */}
+              {/* Concept Level Cards Grid: 5-Column Square Layout */}
               <div
+                className="stage-select-grid"
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                  gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
                   gap: '16px',
                 }}
               >
@@ -369,12 +400,13 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                       }}
                       onMouseEnter={() => !isLocked && setHoveredLevelNum(level.levelNumber)}
                       onMouseLeave={() => setHoveredLevelNum(null)}
+                      className={`stage-select-card ${isCurrent ? 'current-level-active' : ''}`}
                       style={{
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        minHeight: '138px',
-                        padding: '20px 22px',
+                        aspectRatio: '1 / 1',
+                        padding: '18px',
                         borderRadius: '20px',
                         textDecoration: 'none',
                         opacity: isLocked ? 0.72 : 1,
@@ -408,15 +440,17 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         transform: isHovered && !isLocked ? 'translateY(-3px)' : 'translateY(0)',
                         cursor: isLocked ? 'not-allowed' : 'pointer',
                         transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                        position: 'relative',
+                        overflow: 'hidden',
                       }}
                     >
-                      {/* Top Row: Level Number + Status Badge (완료, 도전, 잠김) */}
+                      {/* Top Row: Level Number (+ Lock icon if locked) */}
                       <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                           <span
                             style={{
                               fontFamily: 'var(--font-mono)',
-                              fontSize: '0.82rem',
+                              fontSize: '0.8rem',
                               fontWeight: 800,
                               color: isLocked ? '#64748b' : '#bae6fd',
                               letterSpacing: '0.04em',
@@ -425,75 +459,24 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             LEVEL {level.levelNumber.toString().padStart(2, '0')}
                           </span>
 
-                          {/* Status Badge: 완료 / 도전 / 잠김 */}
-                          {isCleared ? (
-                            <span
-                              style={{
-                                padding: '3px 8px',
-                                borderRadius: '7px',
-                                background: '#ffffff',
-                                color: '#0284c7',
-                                border: 'none',
-                                fontSize: '0.72rem',
-                                fontWeight: 800,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.18)',
-                              }}
-                            >
-                              <CheckCircle2 size={12} />
-                              <span>{isEn ? 'Cleared' : '완료'}</span>
-                            </span>
-                          ) : isCurrent ? (
-                            <span
-                              style={{
-                                padding: '3px 8px',
-                                borderRadius: '7px',
-                                background: '#38bdf8',
-                                color: '#082f49',
-                                border: 'none',
-                                fontSize: '0.72rem',
-                                fontWeight: 800,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                boxShadow: '0 2px 8px rgba(56, 189, 248, 0.4)',
-                              }}
-                            >
-                              <Play size={10} fill="currentColor" />
-                              <span>{isEn ? 'Current' : '도전'}</span>
-                            </span>
-                          ) : (
-                            <span
-                              style={{
-                                padding: '3px 8px',
-                                borderRadius: '7px',
-                                background: '#cbd5e1',
-                                color: '#475569',
-                                border: '1px solid #94a3b8',
-                                fontSize: '0.72rem',
-                                fontWeight: 700,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                              }}
-                            >
-                              <Lock size={11} />
-                              <span>{isEn ? 'Locked' : '잠김'}</span>
-                            </span>
+                          {isLocked && (
+                            <Lock size={13} style={{ color: '#94a3b8' }} />
                           )}
                         </div>
 
                         {/* Level Title */}
                         <h3
                           style={{
-                            fontSize: '1.02rem',
+                            fontSize: 'clamp(0.92rem, 1.05vw, 1.02rem)',
                             fontWeight: 800,
                             color: isLocked ? '#64748b' : '#ffffff',
-                            lineHeight: 1.45,
+                            lineHeight: 1.4,
                             margin: 0,
                             wordBreak: 'keep-all',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
                           }}
                         >
                           {isEn ? level.title_en : level.title_ko}
@@ -504,15 +487,15 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                       {level.syntaxTags && level.syntaxTags.length > 0 && (
                         <div
                           style={{
-                            marginTop: '16px',
+                            marginTop: 'auto',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '6px',
+                            gap: '5px',
                             flexWrap: 'wrap',
                             borderTop: (isCleared || isCurrent)
-                              ? '1px solid rgba(255, 255, 255, 0.25)'
+                              ? '1px solid rgba(255, 255, 255, 0.22)'
                               : '1px solid #cbd5e1',
-                            paddingTop: '12px',
+                            paddingTop: '8px',
                           }}
                         >
                           {level.syntaxTags.map((tag, tIdx) => (
@@ -520,14 +503,14 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               key={tIdx}
                               style={{
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: '0.74rem',
+                                fontSize: '0.72rem',
                                 fontWeight: 700,
                                 color: isLocked ? '#64748b' : '#0369a1',
                                 background: isLocked ? '#e2e8f0' : 'rgba(255, 255, 255, 0.95)',
                                 border: isLocked
                                   ? '1px solid #cbd5e1'
                                   : '1.5px solid #7dd3fc',
-                                padding: '2px 7px',
+                                padding: '2px 6px',
                                 borderRadius: '6px',
                                 whiteSpace: 'nowrap',
                                 boxShadow: isLocked ? 'none' : '0 1px 3px rgba(15, 23, 42, 0.08)',
