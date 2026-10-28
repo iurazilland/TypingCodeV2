@@ -112,13 +112,13 @@ export default function LanguagesPage() {
           padding: '6px 18px',
           borderRadius: '24px',
           background: '#ffffff',
-          border: '1.5px solid #94a3b8',
+          border: '1.5px solid #cbd5e1',
           color: '#0284c7',
           fontSize: '0.85rem',
           fontWeight: 700,
           marginBottom: '18px',
           letterSpacing: '0.05em',
-          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.06)',
+          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
         }}>
           <Compass size={16} />
           <span>CURRICULUM ARCHITECTURE</span>
@@ -164,8 +164,8 @@ export default function LanguagesPage() {
           padding: '12px 28px',
           borderRadius: '20px',
           background: '#ffffff',
-          border: '2px solid #94a3b8',
-          boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+          border: '1.5px solid #cbd5e1',
+          boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.06)',
           fontSize: '0.92rem',
           color: '#334155',
           flexWrap: 'wrap',
@@ -193,9 +193,9 @@ export default function LanguagesPage() {
         background: '#ffffff',
         borderRadius: '24px',
         padding: '22px 24px',
-        border: '2px solid #94a3b8',
+        border: '1.5px solid #cbd5e1',
         marginBottom: '36px',
-        boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+        boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
       }}>
         {/* Language Tabs Row: Square Icon Buttons */}
         <div style={{
@@ -469,8 +469,8 @@ export default function LanguagesPage() {
           padding: '80px 20px',
           background: '#ffffff',
           borderRadius: '24px',
-          border: '2px solid #94a3b8',
-          boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+          border: '1.5px solid #cbd5e1',
+          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
         }}>
           <p style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '8px', fontWeight: 800 }}>
             {isEn ? 'No matching courses found.' : '검색 결과와 일치하는 코스가 없습니다.'}
@@ -494,53 +494,49 @@ export default function LanguagesPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
           {filteredTracks.map((track) => (
             <section key={track.id} id={`track-${track.id}`}>
-              {/* Track Header Card: Soft Cyan Tinted */}
+              {/* Track Section Header */}
               <div style={{
-                background: 'linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%)',
-                border: '2px solid #38bdf8',
-                borderRadius: '20px',
-                padding: '16px 22px',
-                marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: '12px',
-                boxShadow: '0 6px 20px -4px rgba(8, 145, 178, 0.12)',
+                marginBottom: '16px',
+                padding: '0 4px',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div style={{
-                    width: '48px',
-                    height: '48px',
+                    width: '46px',
+                    height: '46px',
                     borderRadius: '14px',
                     background: '#ffffff',
-                    border: '2px solid #38bdf8',
+                    border: `2px solid ${track.color}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 4px 12px rgba(56, 189, 248, 0.2)',
+                    boxShadow: `0 4px 12px ${track.color}22`,
                     flexShrink: 0,
                   }}>
-                    <LanguageIcon language={track.id} size={30} />
+                    <LanguageIcon language={track.id} size={28} />
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.01em' }}>
+                      <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.01em', margin: 0 }}>
                         {getTrackName(track, isEn)}
                       </h2>
                       <span style={{
                         padding: '2px 8px',
-                        borderRadius: '8px',
-                        background: 'rgba(8, 145, 178, 0.12)',
-                        border: '1.5px solid #0891b2',
-                        color: '#0891b2',
+                        borderRadius: '6px',
+                        background: `${track.color}15`,
+                        border: `1.5px solid ${track.color}40`,
+                        color: track.color,
                         fontSize: '0.72rem',
                         fontWeight: 800,
                       }}>
                         {track.badge}
                       </span>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '0.85rem', marginTop: '2px', fontWeight: 500 }}>
+                    <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '3px', margin: 0, fontWeight: 500 }}>
                       {isEn ? track.tagline_en : track.tagline_ko}
                     </p>
                   </div>
@@ -549,16 +545,16 @@ export default function LanguagesPage() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '6px',
                   background: '#ffffff',
                   padding: '5px 12px',
                   borderRadius: '10px',
                   border: '1.5px solid #cbd5e1',
                   fontSize: '0.8rem',
-                  color: '#334155',
-                  boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
+                  color: '#475569',
+                  boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
                 }}>
-                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong style={{ color: '#0f172a', fontWeight: 800 }}>{track.modules.length}개</strong> 과정 개설</>}</span>
+                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong style={{ color: '#0f172a', fontWeight: 800 }}>{track.modules.length}개</strong> 과정</>}</span>
                 </div>
               </div>
 
