@@ -153,18 +153,33 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       <style>{`
         @keyframes currentLevelPulse {
           0%, 100% {
+            transform: translateY(-4px) scale(1.02);
             border-color: #38bdf8;
-            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 8px 24px -2px rgba(2, 132, 199, 0.45);
+            box-shadow: 0 0 0 2.5px #38bdf8, 0 0 24px 4px rgba(56, 189, 248, 0.85), 0 12px 28px -2px rgba(2, 132, 199, 0.55);
           }
           50% {
+            transform: translateY(0px) scale(1);
             border-color: #ffffff;
-            box-shadow: 0 0 0 5px rgba(56, 189, 248, 0), 0 0 22px 6px rgba(56, 189, 248, 0.8), 0 12px 30px rgba(2, 132, 199, 0.6);
+            box-shadow: 0 0 0 3.5px #ffffff, 0 0 36px 8px rgba(56, 189, 248, 0.95), 0 6px 18px -2px rgba(2, 132, 199, 0.4);
+          }
+        }
+
+        @keyframes beaconPing {
+          0% {
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.9), 0 0 8px #38bdf8;
+          }
+          70% {
+            box-shadow: 0 0 0 8px rgba(56, 189, 248, 0), 0 0 14px #38bdf8;
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0), 0 0 8px #38bdf8;
           }
         }
 
         .current-level-active {
-          animation: currentLevelPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
-          border-width: 2.5px !important;
+          animation: currentLevelPulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+          border-width: 3px !important;
+          z-index: 3 !important;
         }
 
         @media (max-width: 1100px) {
@@ -405,8 +420,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        aspectRatio: '1 / 1',
-                        padding: '18px',
+                        minHeight: '142px',
+                        padding: '18px 20px',
                         borderRadius: '20px',
                         textDecoration: 'none',
                         opacity: isLocked ? 0.72 : 1,
@@ -422,7 +437,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         border: isHovered && !isLocked
                           ? ((isCleared || isCurrent) ? '2.5px solid #7dd3fc' : '2.5px solid #0284c7')
                           : isCurrent
-                          ? '2.5px solid #38bdf8'
+                          ? '3px solid #38bdf8'
                           : isCleared
                           ? '2px solid #38bdf8'
                           : isLocked
@@ -441,10 +456,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         cursor: isLocked ? 'not-allowed' : 'pointer',
                         transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
                         position: 'relative',
-                        overflow: 'hidden',
                       }}
                     >
-                      {/* Top Row: Level Number (+ Lock icon if locked) */}
+                      {/* Top Row: Level Number (+ Lock icon if locked, or Beacon ping if current) */}
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                           <span
@@ -459,6 +473,19 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             LEVEL {level.levelNumber.toString().padStart(2, '0')}
                           </span>
 
+                          {isCurrent && (
+                            <span
+                              style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                background: '#38bdf8',
+                                animation: 'beaconPing 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+                                flexShrink: 0,
+                              }}
+                            />
+                          )}
+
                           {isLocked && (
                             <Lock size={13} style={{ color: '#94a3b8' }} />
                           )}
@@ -467,16 +494,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         {/* Level Title */}
                         <h3
                           style={{
-                            fontSize: 'clamp(0.92rem, 1.05vw, 1.02rem)',
+                            fontSize: '1rem',
                             fontWeight: 800,
                             color: isLocked ? '#64748b' : '#ffffff',
-                            lineHeight: 1.4,
-                            margin: 0,
+                            lineHeight: 1.45,
+                            margin: '0 0 14px 0',
                             wordBreak: 'keep-all',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
                           }}
                         >
                           {isEn ? level.title_en : level.title_ko}
