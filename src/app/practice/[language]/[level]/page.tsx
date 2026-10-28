@@ -117,7 +117,9 @@ type BlockType =
   | 'list'
   | 'tuple'
   | 'set'
-  | 'dict';
+  | 'dict'
+  // 주석
+  | 'comment';
 
 interface DictPair {
   key: string;
@@ -218,6 +220,8 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   tuple: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
   set: { bg: '#9333ea', shadow: '#7e22ce', border: '#a855f7' },
   dict: { bg: '#c2410c', shadow: '#9a3412', border: '#ea580c' },
+  // 주석 (슬레이트 다크 그레이 계열)
+  comment: { bg: '#1e293b', shadow: '#0f172a', border: '#475569' },
 };
 
 const getKindLabel = (k: 'variable' | 'list' | 'tuple' | 'set' | 'dict'): string => {
@@ -711,7 +715,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     // Legacy fallback: show all blocks
     return [
       'print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def',
-      'if', 'for_range', 'for_in', 'while', 'break', 'continue', 'variable'
+      'if', 'for_range', 'for_in', 'while', 'break', 'continue', 'variable', 'comment'
     ];
   }, [round.unlockedBlocks, levelNum]);
 
@@ -719,6 +723,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def'].some(k => isBlockUnlocked(k));
   const hasControlBlocks = ['if', 'for_range', 'for_in', 'while', 'break', 'continue'].some(k => isBlockUnlocked(k));
   const hasVariableBlocks = isBlockUnlocked('variable');
+  const hasCommentBlocks = isBlockUnlocked('comment');
 
   const rawStep = searchParams?.step ? parseInt(searchParams.step, 10) - 1 : 0;
   const initialStep = !isNaN(rawStep) && rawStep >= 0 && rawStep < round.questions.length ? rawStep : 0;
@@ -1281,6 +1286,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         out.push(`${indentStr}break`);
       } else if (blk.type === 'continue') {
         out.push(`${indentStr}continue`);
+      } else if (blk.type === 'comment') {
+        const content = (blk.content || '').trim();
+        out.push(`${indentStr}# ${content}`);
       } else if (blk.type === 'if') {
         // Multi-branch E-shape conditional execution
         const branches = (blk.branches && blk.branches.length > 0)
@@ -6505,8 +6513,50 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               </div>
             )}
 
+            {/* 5. 주석 카테고리 (슬레이트 다크 그레이 계열) */}
+            {hasCommentBlocks && (
+              <div id="cat-sec-comment" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.76rem', fontWeight: 800 }}>
+                  <Edit3 size={14} color="#64748b" />
+                  <span>{isEn ? 'Comments' : '주석 / 메모'}</span>
+                </div>
+
+                {/* # 주석 블록 */}
+                <div
+                  draggable
+                  onDragStart={(e) => handleDragStartFromToolbox(e, 'comment')}
+                  style={{
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES.comment.bg,
+                    boxShadow: `0 2px 0 ${BLOCK_THEMES.comment.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                    border: `1px solid ${BLOCK_THEMES.comment.border}`,
+                    color: '#86efac',
+                    fontWeight: 700,
+                    fontSize: '0.80rem',
+                    fontFamily: 'var(--font-mono)',
+                    cursor: 'grab',
+                    userSelect: 'none',
+                    position: 'relative',
+                  }}
+                  title={isEn ? 'Comment block (# memo / explanation)' : '주석 블록 (# 코드 설명이나 메모)'}
+                >
+                  <PuzzleNotch borderColor={BLOCK_THEMES.comment.border} />
+                  <PuzzleTab borderColor={BLOCK_THEMES.comment.border} bg={BLOCK_THEMES.comment.bg} />
+                  <span style={{ color: '#4ade80', fontWeight: 900, fontStyle: 'italic' }}>#</span>
+                  <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.75rem' }}>
+                    {isEn ? 'comment...' : '주석 내용...'}
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* Empty state when no blocks are unlocked for this level */}
-            {!hasFunctionBlocks && !hasControlBlocks && !hasVariableBlocks && (
+            {!hasFunctionBlocks && !hasControlBlocks && !hasVariableBlocks && !hasCommentBlocks && (
               <div style={{ padding: '32px 16px', textAlign: 'center', color: '#64748b', fontSize: '0.8rem', lineHeight: '1.6' }}>
                 사용 가능한 블록이 없습니다.<br />커리큘럼 진행에 따라 해금됩니다.
               </div>

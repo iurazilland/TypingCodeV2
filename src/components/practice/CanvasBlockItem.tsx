@@ -1604,6 +1604,38 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             }}
           />
         </>
+      ) : block.type === 'comment' ? (
+        <>
+          <span style={{ color: '#4ade80', fontWeight: 900, marginRight: '3px', fontStyle: 'italic', fontSize: '0.85rem' }}>#</span>
+          <input
+            type="text"
+            value={block.content || ''}
+            placeholder=""
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            onFocus={handleInputFocusSelect}
+            onClick={handleInputClickSelect}
+            onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+            style={{
+              width: `${Math.max(90, getBlockInputWidth(block.content, 4))}px`,
+              height: '20px',
+              padding: '1px 6px',
+              borderRadius: '6px',
+              background: '#0f172a',
+              color: '#86efac',
+              border: '1px solid rgba(74, 222, 128, 0.35)',
+              fontWeight: 600,
+              fontFamily: 'var(--font-mono)',
+              fontStyle: 'italic',
+              fontSize: '0.76rem',
+              textAlign: 'left',
+              outline: 'none',
+              cursor: 'text',
+              boxSizing: 'border-box',
+            }}
+          />
+        </>
       ) : block.type === 'break' || block.type === 'continue' ? (
         <span style={{ color: '#ffffff' }}>{block.type}</span>
       ) : (

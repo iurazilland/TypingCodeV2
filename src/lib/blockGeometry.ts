@@ -45,7 +45,9 @@ export type BlockType =
   | 'list'
   | 'tuple'
   | 'set'
-  | 'dict';
+  | 'dict'
+  // 주석
+  | 'comment';
 
 export interface DictPair {
   key: string;
@@ -143,6 +145,8 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   tuple: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
   set: { bg: '#9333ea', shadow: '#7e22ce', border: '#a855f7' },
   dict: { bg: '#c2410c', shadow: '#9a3412', border: '#ea580c' },
+  // 주석 (슬레이트 다크 그레이 계열)
+  comment: { bg: '#1e293b', shadow: '#0f172a', border: '#475569' },
 };
 
 export const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {

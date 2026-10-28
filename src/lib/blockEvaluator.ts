@@ -529,6 +529,9 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
           });
           scope[vName] = dictObj;
           recordStep(blk);
+        } else if (blk.type === 'comment') {
+          // Pure comment block: does not affect scope or stdout
+          recordStep(blk);
         } else if (blk.type === 'def') {
           const fName = blk.varName || 'my_func';
           functions[fName] = {
