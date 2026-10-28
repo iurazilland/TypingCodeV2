@@ -494,55 +494,53 @@ export default function LanguagesPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
           {filteredTracks.map((track) => (
             <section key={track.id} id={`track-${track.id}`}>
-              {/* Track Header Card: Vibrant Cyan Banner */}
+              {/* Track Header Card: Soft Cyan Tinted */}
               <div style={{
-                background: 'linear-gradient(135deg, #0891b2 0%, #0284c7 100%)',
-                border: '2px solid #06b6d4',
+                background: 'linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%)',
+                border: '2px solid #38bdf8',
                 borderRadius: '20px',
-                padding: '18px 24px',
+                padding: '16px 22px',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '14px',
-                boxShadow: '0 10px 28px -4px rgba(8, 145, 178, 0.35)',
-                color: '#ffffff',
+                gap: '12px',
+                boxShadow: '0 6px 20px -4px rgba(8, 145, 178, 0.12)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div style={{
-                    width: '50px',
-                    height: '50px',
+                    width: '48px',
+                    height: '48px',
                     borderRadius: '14px',
                     background: '#ffffff',
-                    border: '2px solid rgba(255, 255, 255, 0.8)',
+                    border: '2px solid #38bdf8',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
+                    boxShadow: '0 4px 12px rgba(56, 189, 248, 0.2)',
                     flexShrink: 0,
                   }}>
-                    <LanguageIcon language={track.id} size={32} />
+                    <LanguageIcon language={track.id} size={30} />
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
+                      <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.01em' }}>
                         {getTrackName(track, isEn)}
                       </h2>
                       <span style={{
-                        padding: '2px 9px',
+                        padding: '2px 8px',
                         borderRadius: '8px',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        border: '1.5px solid rgba(255, 255, 255, 0.45)',
-                        color: '#ffffff',
+                        background: 'rgba(8, 145, 178, 0.12)',
+                        border: '1.5px solid #0891b2',
+                        color: '#0891b2',
                         fontSize: '0.72rem',
                         fontWeight: 800,
-                        backdropFilter: 'blur(4px)',
                       }}>
                         {track.badge}
                       </span>
                     </div>
-                    <p style={{ color: '#e0f2fe', fontSize: '0.86rem', marginTop: '3px', fontWeight: 500 }}>
+                    <p style={{ color: '#475569', fontSize: '0.85rem', marginTop: '2px', fontWeight: 500 }}>
                       {isEn ? track.tagline_en : track.tagline_ko}
                     </p>
                   </div>
@@ -552,16 +550,15 @@ export default function LanguagesPage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: 'rgba(255, 255, 255, 0.18)',
-                  backdropFilter: 'blur(4px)',
-                  padding: '6px 14px',
-                  borderRadius: '12px',
-                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
-                  fontSize: '0.82rem',
-                  color: '#ffffff',
-                  fontWeight: 600,
+                  background: '#ffffff',
+                  padding: '5px 12px',
+                  borderRadius: '10px',
+                  border: '1.5px solid #cbd5e1',
+                  fontSize: '0.8rem',
+                  color: '#334155',
+                  boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
                 }}>
-                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong style={{ color: '#ffffff', fontWeight: 800 }}>{track.modules.length}개</strong> 과정 개설</>}</span>
+                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong style={{ color: '#0f172a', fontWeight: 800 }}>{track.modules.length}개</strong> 과정 개설</>}</span>
                 </div>
               </div>
 
