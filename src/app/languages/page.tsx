@@ -510,11 +510,11 @@ export default function LanguagesPage() {
                     height: '46px',
                     borderRadius: '14px',
                     background: '#ffffff',
-                    border: `2px solid ${track.color}`,
+                    border: '1.5px solid #cbd5e1',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: `0 4px 12px ${track.color}22`,
+                    boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
                     flexShrink: 0,
                   }}>
                     <LanguageIcon language={track.id} size={28} />
@@ -527,11 +527,11 @@ export default function LanguagesPage() {
                       <span style={{
                         padding: '2px 8px',
                         borderRadius: '6px',
-                        background: `${track.color}15`,
-                        border: `1.5px solid ${track.color}40`,
-                        color: track.color,
+                        background: '#f1f5f9',
+                        border: '1.5px solid #cbd5e1',
+                        color: '#475569',
                         fontSize: '0.72rem',
-                        fontWeight: 800,
+                        fontWeight: 700,
                       }}>
                         {track.badge}
                       </span>
