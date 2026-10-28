@@ -31,9 +31,9 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
       },
       { 
         levelNumber: 2, 
-        title_ko: '쉼표(,)와 여러 수식의 동시 출력', 
-        title_en: 'Commas & Multiple Expressions',
-        syntaxTags: ['print(a, b)'],
+        title_ko: '몫(//), 나머지(%), 거듭제곱(**)과 쉼표(,)', 
+        title_en: 'Floor Div (//), Modulo (%), Power (**) & Comma (,)',
+        syntaxTags: ['//, %, **', 'print(a, b)'],
       },
       { 
         levelNumber: 3, 
