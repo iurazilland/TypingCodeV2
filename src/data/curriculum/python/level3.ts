@@ -10,9 +10,9 @@ import { PracticeRound } from '@/lib/practiceTypes';
 //   4. 따옴표 속 따옴표 포함 : print("I'm happy") (쌍따옴표 안에 작은따옴표)
 //   5. 문자열과 숫자 쉼표 출력 : print("Score:", 100) (누적 복습)
 // - 6~10단계: 타이핑 모드 (Typing Mode) - 1~5번 유형의 문제 형식 반복
-//   6. [유형1] 빈칸 채우기 (문자열 단어 입력)
-//   7. [유형2] 빈칸 채우기 (따옴표 닫기 짝 맞추기)
-//   8. [유형3] 오타 수정 (짝이 맞지 않는 따옴표 수정)
+//   6. [유형1] 빈칸 채우기 (문자열 전체 입력: "Hello")
+//   7. [유형2] 빈칸 채우기 (따옴표 닫기 짝 맞추기: 'Python')
+//   8. [유형3] 오타 수정 (작은따옴표 충돌 해결: "I'm happy")
 //   9. [유형4] 빈칸 채우기 (문자열과 숫자 사이 쉼표 입력)
 //   10. [유형5] 빈칸 채우기 (문자열 설명과 계산 결과 동시 출력)
 // ============================================================================
@@ -132,9 +132,9 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 문자열 Hello를 화면에 출력해보세요.',
       prompt_en: 'Fill in the blank to print the string Hello on the screen.',
-      hint_ko: '쌍따옴표("") 안의 빈칸에 단어 Hello를 입력하세요. 파이썬에서는 문자를 쌍따옴표나 작은따옴표로 감싸야 문자열이 됩니다.',
-      hint_en: 'Type the word Hello inside the double quotes blank. Text must be quoted to become a string in Python.',
-      templateCode: 'print("§§§§§")',
+      hint_ko: '문자열 Hello를 만들기 위해 단어 앞뒤를 큰따옴표("")로 감싸 "Hello"를 입력하세요.',
+      hint_en: 'To print the string Hello, enclose the word in double quotes like "Hello".',
+      templateCode: 'print(§§§§§§§)',
       targetCode: 'print("Hello")',
       testCases: [
         {
@@ -153,7 +153,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: 'Fill in the blank to complete the closing quote for the string Python.',
       hint_ko: '작은따옴표(\')로 시작한 문자열은 끝도 같은 작은따옴표(\')로 닫아야 합니다. 키보드의 따옴표(\') 키를 입력하세요.',
       hint_en: 'A string starting with a single quote (\') must be closed with the same single quote (\').',
-      templateCode: "print('Python'§)",
+      templateCode: "print('Python§)",
       targetCode: "print('Python')",
       testCases: [
         {
@@ -168,17 +168,17 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '틀린 곳을 수정하여 올바른 문자열을 화면에 출력해보세요.',
-      prompt_en: 'Fix the error to print the correct string on the screen.',
-      hint_ko: '시작은 쌍따옴표(")인데 끝이 작은따옴표(\')로 닫혀 있어 구문 오류가 발생합니다. 끝의 작은따옴표를 시작과 동일한 쌍따옴표(")로 수정해보세요.',
-      hint_en: 'The string opens with a double quote (") but closes with a single quote (\'). Change the closing quote to match the opening double quote (").',
-      templateCode: 'print("Hello\')',
-      targetCode: 'print("Hello")',
+      prompt_ko: '틀린 곳을 수정하여 문장 I\'m happy를 화면에 출력해보세요.',
+      prompt_en: 'Fix the error to print the sentence "I\'m happy" on the screen.',
+      hint_ko: '문장 안에 작은따옴표(\')가 포함되어 있어 바깥을 작은따옴표로 감싸면 문법 오류(SyntaxError)가 발생합니다. 바깥쪽 양쪽 따옴표를 큰따옴표(")로 수정해보세요.',
+      hint_en: 'Since the string contains an apostrophe (\'), enclosing it in single quotes causes a SyntaxError. Change the outer quotes to double quotes (").',
+      templateCode: 'print(\'I\'m happy\')',
+      targetCode: 'print("I\'m happy")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Hello',
+          expectedOutput: "I'm happy",
         },
       ],
     },
