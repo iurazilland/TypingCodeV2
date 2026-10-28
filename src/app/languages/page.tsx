@@ -9,7 +9,6 @@ import {
   Search, 
   BookOpen, 
   Layers, 
-  CheckCircle2, 
   Code2, 
   Cpu, 
   Globe, 
@@ -102,7 +101,7 @@ export default function LanguagesPage() {
   };
 
   return (
-    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '40px 24px 100px' }}>
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '36px 20px 100px' }}>
       {/* Hero Header */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <div style={{
@@ -491,55 +490,56 @@ export default function LanguagesPage() {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
           {filteredTracks.map((track) => (
             <section key={track.id} id={`track-${track.id}`}>
               {/* Track Header Card */}
               <div style={{
                 background: '#ffffff',
                 border: '2px solid #94a3b8',
-                borderRadius: '24px',
-                padding: '24px 28px',
-                marginBottom: '20px',
+                borderRadius: '20px',
+                padding: '16px 22px',
+                marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '16px',
+                gap: '12px',
                 boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '16px',
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '14px',
                     background: '#f8fafc',
                     border: `2px solid ${track.color}60`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     boxShadow: `0 4px 12px ${track.color}20`,
+                    flexShrink: 0,
                   }}>
-                    <LanguageIcon language={track.id} size={36} />
+                    <LanguageIcon language={track.id} size={30} />
                   </div>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#0f172a' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>
                         {getTrackName(track, isEn)}
                       </h2>
                       <span style={{
-                        padding: '3px 10px',
-                        borderRadius: '10px',
+                        padding: '2px 8px',
+                        borderRadius: '8px',
                         background: `${track.color}15`,
                         border: `1.5px solid ${track.color}45`,
                         color: track.color,
-                        fontSize: '0.75rem',
+                        fontSize: '0.72rem',
                         fontWeight: 800,
                       }}>
                         {track.badge}
                       </span>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '0.92rem', marginTop: '4px', fontWeight: 500 }}>
+                    <p style={{ color: '#475569', fontSize: '0.85rem', marginTop: '2px', fontWeight: 500 }}>
                       {isEn ? track.tagline_en : track.tagline_ko}
                     </p>
                   </div>
@@ -548,24 +548,20 @@ export default function LanguagesPage() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px',
+                  gap: '8px',
                   background: '#f1f5f9',
-                  padding: '6px 14px',
-                  borderRadius: '12px',
+                  padding: '5px 12px',
+                  borderRadius: '10px',
                   border: '1.5px solid #cbd5e1',
-                  fontSize: '0.85rem',
+                  fontSize: '0.8rem',
                   color: '#334155',
                 }}>
                   <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong>{track.modules.length}개</strong> 과정 개설</>}</span>
                 </div>
               </div>
 
-              {/* Course Modules Grid */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-                gap: '22px',
-              }}>
+              {/* Course Modules Grid: 4-Column Layout */}
+              <div className="curriculum-4col-grid">
                 {[...track.modules]
                   .sort((a, b) => (DIFFICULTY_ORDER[a.difficulty] || 99) - (DIFFICULTY_ORDER[b.difficulty] || 99))
                   .map((module) => {
@@ -585,45 +581,44 @@ export default function LanguagesPage() {
                         key={module.id}
                         className="light-mode-card"
                         style={{
-                          padding: '24px',
+                          padding: '16px 16px',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
                           background: '#ffffff',
-                          borderRadius: '22px',
+                          borderRadius: '18px',
                           border: isStarted
                             ? '2px solid #0284c7'
                             : '2px solid #94a3b8',
                           boxShadow: isStarted 
-                            ? '0 12px 30px -4px rgba(2, 132, 199, 0.16)' 
-                            : '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+                            ? '0 8px 20px -4px rgba(2, 132, 199, 0.16)' 
+                            : '0 6px 16px -4px rgba(15, 23, 42, 0.08)',
                           transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
                           position: 'relative',
                           overflow: 'visible',
-                          marginTop: '8px',
                         }}
                       >
                         {/* In-progress glowing indicator badge */}
                         {isStarted && (
                           <div style={{
                             position: 'absolute',
-                            top: '-11px',
-                            right: '20px',
+                            top: '-9px',
+                            right: '14px',
                             zIndex: 10,
-                            padding: '3px 12px',
-                            borderRadius: '12px',
+                            padding: '2px 8px',
+                            borderRadius: '8px',
                             background: '#0284c7',
                             color: '#ffffff',
-                            fontSize: '0.74rem',
+                            fontSize: '0.66rem',
                             fontWeight: 800,
                             letterSpacing: '0.02em',
-                            boxShadow: '0 4px 12px rgba(2, 132, 199, 0.35)',
+                            boxShadow: '0 3px 8px rgba(2, 132, 199, 0.35)',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px',
+                            gap: '3px',
                             whiteSpace: 'nowrap',
                           }}>
-                            <span>🔥 {isEn ? 'In Progress' : '학습 진행 중'}</span>
+                            <span>🔥 {isEn ? 'In Progress' : '진행 중'}</span>
                           </div>
                         )}
 
@@ -633,32 +628,18 @@ export default function LanguagesPage() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            gap: '8px',
-                            marginBottom: '14px',
-                            flexWrap: 'wrap',
+                            gap: '6px',
+                            marginBottom: '8px',
                           }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              {/* Category Badge */}
-                              <span style={{
-                                padding: '4px 10px',
-                                borderRadius: '8px',
-                                background: '#f1f5f9',
-                                color: '#475569',
-                                border: '1px solid #cbd5e1',
-                                fontSize: '0.78rem',
-                                fontWeight: 700,
-                              }}>
-                                {getCategoryName(module.category, isEn)}
-                              </span>
-
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
                               {/* Difficulty Badge */}
                               <span style={{
-                                padding: '4px 10px',
-                                borderRadius: '8px',
+                                padding: '2px 7px',
+                                borderRadius: '6px',
                                 background: `${diffColor}18`,
                                 color: diffColor,
-                                border: `1px solid ${diffColor}50`,
-                                fontSize: '0.78rem',
+                                border: `1px solid ${diffColor}45`,
+                                fontSize: '0.7rem',
                                 fontWeight: 800,
                                 letterSpacing: '0.02em',
                                 display: 'inline-flex',
@@ -666,29 +647,42 @@ export default function LanguagesPage() {
                               }}>
                                 {getDifficultyLabel(module.difficulty)}
                               </span>
+
+                              {/* Category Badge */}
+                              <span style={{
+                                padding: '2px 7px',
+                                borderRadius: '6px',
+                                background: '#f1f5f9',
+                                color: '#475569',
+                                border: '1px solid #cbd5e1',
+                                fontSize: '0.7rem',
+                                fontWeight: 700,
+                              }}>
+                                {getCategoryName(module.category, isEn)}
+                              </span>
                             </div>
 
-                            {/* Popular Badge or Level Count */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            {/* Popular Badge & Level Count */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                               {module.isPopular && (
                                 <span style={{
                                   display: 'inline-flex',
                                   alignItems: 'center',
-                                  gap: '4px',
-                                  padding: '2px 8px',
-                                  borderRadius: '6px',
-                                  background: 'rgba(239, 68, 68, 0.12)',
+                                  gap: '2px',
+                                  padding: '2px 5px',
+                                  borderRadius: '5px',
+                                  background: 'rgba(239, 68, 68, 0.1)',
                                   color: '#dc2626',
-                                  fontSize: '0.72rem',
+                                  fontSize: '0.66rem',
                                   fontWeight: 800,
-                                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                                  border: '1px solid rgba(239, 68, 68, 0.25)',
                                 }}>
-                                  <Flame size={12} />
-                                  {isEn ? 'Popular' : '인기'}
+                                  <Flame size={10} />
+                                  {isEn ? 'Hot' : '인기'}
                                 </span>
                               )}
                               <span style={{
-                                fontSize: '0.78rem',
+                                fontSize: '0.7rem',
                                 color: '#64748b',
                                 fontWeight: 600,
                               }}>
@@ -699,66 +693,64 @@ export default function LanguagesPage() {
 
                           {/* Course Title */}
                           <h3 style={{
-                            fontSize: '1.18rem',
+                            fontSize: '0.96rem',
                             fontWeight: 800,
                             color: '#0f172a',
-                            marginBottom: isEn ? '12px' : '4px',
-                            lineHeight: 1.35,
+                            marginBottom: '6px',
+                            lineHeight: 1.3,
+                            letterSpacing: '-0.01em',
+                            wordBreak: 'keep-all',
                           }}>
                             {isEn ? module.title_en : module.title_ko}
                           </h3>
-                          {!isEn && (
-                            <div style={{
-                              fontSize: '0.78rem',
-                              color: '#64748b',
-                              fontWeight: 600,
-                              marginBottom: '12px',
-                            }}>
-                              {module.title_en}
-                            </div>
-                          )}
 
-                          {/* Description */}
+                          {/* Condensed Description (2 lines clamped) */}
                           <p style={{
-                            fontSize: '0.88rem',
-                            color: '#475569',
-                            lineHeight: 1.55,
-                            marginBottom: '16px',
-                            minHeight: '44px',
+                            fontSize: '0.78rem',
+                            color: '#64748b',
+                            lineHeight: 1.45,
+                            marginBottom: '10px',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            minHeight: '2.9em',
+                            wordBreak: 'keep-all',
                           }}>
                             {isEn ? module.description_en : module.description_ko}
                           </p>
 
-                          {/* Key Skills Pills */}
+                          {/* Concise Key Skills Tags */}
                           <div style={{
                             display: 'flex',
-                            flexDirection: 'column',
-                            gap: '6px',
-                            marginBottom: '20px',
-                            padding: '12px 14px',
-                            borderRadius: '14px',
-                            background: '#f8fafc',
-                            border: '1.5px solid #e2e8f0',
+                            flexWrap: 'wrap',
+                            gap: '4px',
+                            marginBottom: '12px',
                           }}>
-                            <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, marginBottom: '2px' }}>
-                              {isEn ? 'Key Skills:' : '핵심 습득 기술:'}
-                            </div>
-                            {module.skills.map((skill, idx) => (
-                              <div
+                            {module.skills.slice(0, 3).map((skill, idx) => (
+                              <span
                                 key={idx}
                                 style={{
-                                  display: 'flex',
+                                  display: 'inline-flex',
                                   alignItems: 'center',
-                                  gap: '6px',
-                                  fontSize: '0.8rem',
-                                  color: '#334155',
-                                  fontWeight: 500,
+                                  padding: '2px 6px',
+                                  borderRadius: '6px',
+                                  background: '#f8fafc',
+                                  border: '1px solid #e2e8f0',
+                                  fontSize: '0.68rem',
+                                  color: '#475569',
+                                  fontWeight: 600,
                                 }}
                               >
-                                <CheckCircle2 size={13} color="#0284c7" style={{ flexShrink: 0 }} />
-                                <span>{getSkillName(skill, isEn)}</span>
-                              </div>
+                                #{getSkillName(skill, isEn)}
+                              </span>
                             ))}
+                            {module.skills.length > 3 && (
+                              <span style={{ fontSize: '0.66rem', color: '#94a3b8', alignSelf: 'center', padding: '0 2px' }}>
+                                +{module.skills.length - 3}
+                              </span>
+                            )}
                           </div>
                         </div>
 
@@ -767,9 +759,9 @@ export default function LanguagesPage() {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          paddingTop: '16px',
-                          borderTop: '1.5px solid #e2e8f0',
-                          gap: '12px',
+                          paddingTop: '10px',
+                          borderTop: '1px solid #f1f5f9',
+                          gap: '8px',
                         }}>
                           {/* Progress Gauge */}
                           <div style={{ flex: '1 1 auto', minWidth: 0 }}>
@@ -777,32 +769,32 @@ export default function LanguagesPage() {
                               display: 'flex',
                               justifyContent: 'space-between',
                               alignItems: 'center',
-                              marginBottom: '6px',
+                              marginBottom: '3px',
                             }}>
                               <span style={{
-                                fontSize: '0.76rem',
-                                color: isStarted ? '#0284c7' : '#64748b',
+                                fontSize: '0.68rem',
+                                color: isStarted ? '#0284c7' : '#94a3b8',
                                 fontWeight: 700,
                               }}>
                                 {isStarted 
-                                  ? (isEn ? `Progress ${progressPercent}%` : `진행도 ${progressPercent}%`) 
-                                  : (isEn ? 'Not Started' : '학습 대기')}
+                                  ? (isEn ? `${progressPercent}%` : `${progressPercent}% 진행`) 
+                                  : (isEn ? 'Not Started' : '미학습')}
                               </span>
                               <span style={{
-                                fontSize: '0.72rem',
-                                color: '#64748b',
+                                fontSize: '0.66rem',
+                                color: '#94a3b8',
                                 fontWeight: 600,
                                 fontFamily: 'var(--font-mono)',
                               }}>
-                                {completedLevels} / {module.totalLevels}{isEn ? ' Stages' : '단계'}
+                                {completedLevels}/{module.totalLevels}
                               </span>
                             </div>
 
                             {/* Gauge Track */}
                             <div style={{
                               width: '100%',
-                              height: '7px',
-                              borderRadius: '4px',
+                              height: '4px',
+                              borderRadius: '2px',
                               background: '#e2e8f0',
                               overflow: 'hidden',
                             }}>
@@ -810,7 +802,7 @@ export default function LanguagesPage() {
                               <div style={{
                                 width: `${progressPercent}%`,
                                 height: '100%',
-                                borderRadius: '4px',
+                                borderRadius: '2px',
                                 background: isStarted ? '#0284c7' : 'transparent',
                                 transition: 'width 0.4s ease',
                               }} />
@@ -822,15 +814,18 @@ export default function LanguagesPage() {
                             href={module.practiceUrl}
                             className="tactile-btn tactile-btn-primary"
                             style={{
-                              padding: '9px 18px',
-                              fontSize: '0.88rem',
-                              borderRadius: '12px',
+                              padding: '6px 12px',
+                              fontSize: '0.78rem',
+                              borderRadius: '9px',
                               whiteSpace: 'nowrap',
                               flexShrink: 0,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px',
                             }}
                           >
-                            <span>{isStarted ? (isEn ? 'Continue' : '이어하기') : (isEn ? 'Start' : '학습 시작')}</span>
-                            <ArrowRight size={15} />
+                            <span>{isStarted ? (isEn ? 'Continue' : '이어하기') : (isEn ? 'Start' : '시작')}</span>
+                            <ArrowRight size={12} />
                           </Link>
                         </div>
                       </div>
