@@ -1,6 +1,7 @@
 import { PracticeRound } from './practiceTypes';
 import { PYTHON_LEVEL_1 } from '@/data/curriculum/python/level1';
 import { PYTHON_LEVEL_2 } from '@/data/curriculum/python/level2';
+import { PYTHON_LEVEL_3 } from '@/data/curriculum/python/level3';
 
 // ============================================================================
 // 1레벨 (Level 1): print() 함수와 기본 사칙연산 (10단계: 5블록 + 5타이핑)
@@ -12,12 +13,19 @@ export const PYTHON_BASIC_ROUND_1: PracticeRound = PYTHON_LEVEL_1;
 // ============================================================================
 export const PYTHON_BASIC_ROUND_2: PracticeRound = PYTHON_LEVEL_2;
 
+// ============================================================================
+// 3레벨 (Level 3): 문자열(String)과 따옴표 출력 (10단계: 5블록 + 5타이핑)
+// ============================================================================
+export const PYTHON_BASIC_ROUND_3: PracticeRound = PYTHON_LEVEL_3;
+
 // Map of rounds by language and round number
 export const PRACTICE_ROUNDS: Record<string, PracticeRound> = {
   'py-basic-r1': PYTHON_BASIC_ROUND_1,
   'py-basic-r2': PYTHON_BASIC_ROUND_2,
+  'py-basic-r3': PYTHON_BASIC_ROUND_3,
   'python_basic-1': PYTHON_BASIC_ROUND_1,
   'python_basic-2': PYTHON_BASIC_ROUND_2,
+  'python_basic-3': PYTHON_BASIC_ROUND_3,
 };
 
 export function getPracticeRound(language: string, roundNumber: number = 1): PracticeRound {

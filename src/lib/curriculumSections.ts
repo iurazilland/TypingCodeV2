@@ -39,7 +39,7 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
         levelNumber: 3, 
         title_ko: '문자열(String)과 따옴표 출력', 
         title_en: 'Strings & Quotes Syntax',
-        syntaxTags: ['str'],
+        syntaxTags: ['" "', "' '", 'print("...")'],
       },
       { 
         levelNumber: 4, 
