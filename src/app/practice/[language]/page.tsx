@@ -379,33 +379,27 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         textDecoration: 'none',
                         opacity: isLocked ? 0.72 : 1,
                         background: isHovered && !isLocked
-                          ? (isCleared
+                          ? ((isCleared || isCurrent)
                               ? 'linear-gradient(135deg, #0369a1 0%, #075985 100%)'
-                              : isCurrent
-                              ? 'linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%)'
                               : 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)')
-                          : isCleared
+                          : (isCleared || isCurrent)
                           ? 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'
-                          : isCurrent
-                          ? 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)'
                           : isLocked
                           ? 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'
                           : '#ffffff',
                         border: isHovered && !isLocked
-                          ? (isCleared ? '2.5px solid #7dd3fc' : '2.5px solid #0284c7')
+                          ? ((isCleared || isCurrent) ? '2.5px solid #7dd3fc' : '2.5px solid #0284c7')
+                          : isCurrent
+                          ? '2.5px solid #38bdf8'
                           : isCleared
                           ? '2px solid #38bdf8'
-                          : isCurrent
-                          ? '2.5px solid #0284c7'
                           : isLocked
                           ? '1.5px dashed #94a3b8'
                           : '2px solid #38bdf8',
                         boxShadow: isHovered && !isLocked
-                          ? (isCleared
-                              ? '0 14px 30px -4px rgba(2, 132, 199, 0.45), 0 4px 12px rgba(12, 74, 110, 0.2)'
-                              : '0 14px 30px -4px rgba(2, 132, 199, 0.4), 0 4px 12px rgba(12, 74, 110, 0.12)')
+                          ? '0 14px 30px -4px rgba(2, 132, 199, 0.45), 0 4px 12px rgba(12, 74, 110, 0.2)'
                           : isCurrent
-                          ? '0 12px 26px -2px rgba(2, 132, 199, 0.32), 0 0 16px rgba(56, 189, 248, 0.25)'
+                          ? '0 12px 28px -2px rgba(2, 132, 199, 0.4), 0 0 16px rgba(56, 189, 248, 0.3)'
                           : isCleared
                           ? '0 10px 24px -2px rgba(2, 132, 199, 0.35), 0 2px 6px rgba(12, 74, 110, 0.15)'
                           : isLocked
@@ -424,7 +418,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.82rem',
                               fontWeight: 800,
-                              color: isLocked ? '#64748b' : isCleared ? '#bae6fd' : '#0369a1',
+                              color: isLocked ? '#64748b' : '#bae6fd',
                               letterSpacing: '0.04em',
                             }}
                           >
@@ -456,15 +450,15 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               style={{
                                 padding: '3px 8px',
                                 borderRadius: '7px',
-                                background: '#0284c7',
-                                color: '#ffffff',
+                                background: '#38bdf8',
+                                color: '#082f49',
                                 border: 'none',
                                 fontSize: '0.72rem',
                                 fontWeight: 800,
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '4px',
-                                boxShadow: '0 2px 8px rgba(2, 132, 199, 0.4)',
+                                boxShadow: '0 2px 8px rgba(56, 189, 248, 0.4)',
                               }}
                             >
                               <Play size={10} fill="currentColor" />
@@ -496,7 +490,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           style={{
                             fontSize: '1.02rem',
                             fontWeight: 800,
-                            color: isLocked ? '#64748b' : isCleared ? '#ffffff' : isCurrent ? '#0c4a6e' : '#0f172a',
+                            color: isLocked ? '#64748b' : '#ffffff',
                             lineHeight: 1.45,
                             margin: 0,
                             wordBreak: 'keep-all',
@@ -515,10 +509,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             alignItems: 'center',
                             gap: '6px',
                             flexWrap: 'wrap',
-                            borderTop: isCleared
+                            borderTop: (isCleared || isCurrent)
                               ? '1px solid rgba(255, 255, 255, 0.25)'
-                              : isCurrent
-                              ? '1px solid rgba(2, 132, 199, 0.35)'
                               : '1px solid #cbd5e1',
                             paddingTop: '12px',
                           }}
@@ -530,15 +522,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                                 fontFamily: 'var(--font-mono)',
                                 fontSize: '0.74rem',
                                 fontWeight: 700,
-                                color: isLocked ? '#64748b' : isCleared ? '#0369a1' : isCurrent ? '#0369a1' : '#334155',
-                                background: isLocked ? '#e2e8f0' : isCleared ? 'rgba(255, 255, 255, 0.95)' : '#ffffff',
+                                color: isLocked ? '#64748b' : '#0369a1',
+                                background: isLocked ? '#e2e8f0' : 'rgba(255, 255, 255, 0.95)',
                                 border: isLocked
                                   ? '1px solid #cbd5e1'
-                                  : isCleared
-                                  ? '1.5px solid #7dd3fc'
-                                  : isCurrent
-                                  ? '1.5px solid #38bdf8'
-                                  : '1px solid #cbd5e1',
+                                  : '1.5px solid #7dd3fc',
                                 padding: '2px 7px',
                                 borderRadius: '6px',
                                 whiteSpace: 'nowrap',
