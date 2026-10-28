@@ -192,14 +192,14 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         </Link>
       </div>
 
-      {/* Course Overview Bento Pod with Learning Progress */}
+{/* Course Overview Bento Pod with Learning Progress (Dark Intermediate Theme) */}
       <div
         style={{
           padding: '28px 32px',
           borderRadius: '24px',
-          background: 'linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%)',
-          border: '2px solid #38bdf8',
-          boxShadow: '0 8px 24px -4px rgba(8, 145, 178, 0.12), 0 2px 8px rgba(15, 23, 42, 0.04)',
+          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+          border: '1.5px solid #334155',
+          boxShadow: '0 10px 25px -4px rgba(15, 23, 42, 0.25), 0 4px 12px rgba(15, 23, 42, 0.15)',
           marginBottom: '36px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -215,12 +215,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
               width: '64px',
               height: '64px',
               borderRadius: '18px',
-              background: '#ffffff',
-              border: '1.5px solid #cbd5e1',
+              background: '#0f172a',
+              border: '1.5px solid #334155',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(15, 23, 42, 0.06)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)',
               flexShrink: 0,
             }}
           >
@@ -229,20 +229,19 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <h1 style={{ fontSize: 'clamp(1.3rem, 2.2vw, 1.75rem)', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+              <h1 style={{ fontSize: 'clamp(1.3rem, 2.2vw, 1.75rem)', fontWeight: 800, color: '#ffffff', margin: 0 }}>
                 {isEn ? matchedModule.title_en : matchedModule.title_ko}
               </h1>
               <span
                 style={{
                   padding: '3px 10px',
                   borderRadius: '10px',
-                  background: '#ffffff',
-                  color: '#334155',
-                  border: '1.5px solid #cbd5e1',
+                  background: '#0f172a',
+                  color: '#94a3b8',
+                  border: '1px solid #334155',
                   fontSize: '0.78rem',
                   fontWeight: 800,
                   letterSpacing: '0.03em',
-                  boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
                 }}
               >
                 {getCategoryName(matchedModule.category, isEn)}
@@ -251,19 +250,18 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 style={{
                   padding: '3px 10px',
                   borderRadius: '10px',
-                  background: '#ffffff',
-                  color: matchedModule.difficultyColor || '#10b981',
-                  border: `1.5px solid ${matchedModule.difficultyColor || '#10b981'}`,
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: matchedModule.difficultyColor || '#34d399',
+                  border: `1px solid ${matchedModule.difficultyColor || '#34d399'}`,
                   fontSize: '0.78rem',
                   fontWeight: 800,
-                  boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
                 }}
               >
                 {matchedModule.difficulty}
               </span>
             </div>
             <p style={{
-              color: '#475569',
+              color: '#94a3b8',
               fontSize: '0.92rem',
               lineHeight: 1.55,
               margin: 0,
@@ -278,29 +276,29 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
         {/* Right: Progress Meter */}
         <div
           style={{
-            background: '#ffffff',
+            background: '#0f172a',
             padding: '16px 22px',
             borderRadius: '18px',
-            border: '1.5px solid #cbd5e1',
-            boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+            border: '1.5px solid #334155',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)',
             flexShrink: 0,
             minWidth: '220px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 700, letterSpacing: '0.04em' }}>
+            <span style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 700, letterSpacing: '0.04em' }}>
               {isEn ? 'CURRICULUM PROGRESS' : '학습 달성률'}
             </span>
-            <span style={{ fontSize: '0.88rem', color: '#0f172a', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
+            <span style={{ fontSize: '0.88rem', color: '#ffffff', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
               {clearedCount} / {totalLevelsCount} ({progressPercent}%)
             </span>
           </div>
-          <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '8px', background: '#1e293b', borderRadius: '4px', overflow: 'hidden' }}>
             <div
               style={{
                 width: `${progressPercent}%`,
                 height: '100%',
-                background: progressPercent === 100 ? '#10b981' : 'linear-gradient(90deg, #0284c7, #10b981)',
+                background: progressPercent === 100 ? '#10b981' : 'linear-gradient(90deg, #0284c7, #38bdf8)',
                 borderRadius: '4px',
                 transition: 'width 0.3s ease',
               }}
@@ -308,7 +306,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           </div>
         </div>
       </div>
-{/* Curriculum Sections List (Option 3 - Final Dedicated Layout) */}
+
+      {/* Curriculum Sections List (Option 3 - Dark Intermediate Theme) */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', maxWidth: '1120px', margin: '0 auto' }}>
         {sections.map((section) => {
           const sectionClearedCount = section.levels.filter((l) => userProgress.clearedLevels.has(l.levelNumber)).length;
@@ -320,12 +319,12 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
             <div
               key={section.id}
               style={{
-                background: '#ffffff',
+                background: '#1e293b',
                 borderRadius: '20px',
-                border: hasActiveLevel ? '2px solid #0284c7' : '1.5px solid #cbd5e1',
+                border: hasActiveLevel ? '2px solid #38bdf8' : '1.5px solid #334155',
                 boxShadow: hasActiveLevel 
-                  ? '0 10px 25px -4px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(15, 23, 42, 0.05)'
-                  : '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
+                  ? '0 10px 25px -4px rgba(2, 132, 199, 0.25), 0 4px 12px rgba(15, 23, 42, 0.2)'
+                  : '0 4px 16px -2px rgba(15, 23, 42, 0.15)',
                 overflow: 'hidden',
                 transition: 'all 0.2s ease',
               }}
@@ -335,9 +334,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 style={{
                   padding: '16px 24px',
                   background: hasActiveLevel 
-                    ? 'linear-gradient(135deg, rgba(2, 132, 199, 0.06) 0%, rgba(255, 255, 255, 0.95) 100%)' 
-                    : '#f8fafc',
-                  borderBottom: '1.5px solid #cbd5e1',
+                    ? 'linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, #0f172a 100%)' 
+                    : '#0f172a',
+                  borderBottom: '1.5px solid #334155',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -350,9 +349,17 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                     style={{
                       padding: '4px 10px',
                       borderRadius: '8px',
-                      background: isSectionComplete ? '#dcfce7' : hasActiveLevel ? '#e0f2fe' : '#f1f5f9',
-                      color: isSectionComplete ? '#15803d' : hasActiveLevel ? '#0284c7' : '#64748b',
-                      border: `1.5px solid ${isSectionComplete ? '#86efac' : hasActiveLevel ? '#7dd3fc' : '#e2e8f0'}`,
+                      background: isSectionComplete 
+                        ? 'rgba(16, 185, 129, 0.15)' 
+                        : hasActiveLevel 
+                          ? 'rgba(56, 189, 248, 0.15)' 
+                          : 'rgba(148, 163, 184, 0.1)',
+                      color: isSectionComplete 
+                        ? '#34d399' 
+                        : hasActiveLevel 
+                          ? '#38bdf8' 
+                          : '#94a3b8',
+                      border: `1px solid ${isSectionComplete ? 'rgba(16, 185, 129, 0.4)' : hasActiveLevel ? 'rgba(56, 189, 248, 0.4)' : '#334155'}`,
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.76rem',
                       fontWeight: 800,
@@ -361,13 +368,13 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                   >
                     SECTION {section.sectionNumber < 10 ? `0${section.sectionNumber}` : section.sectionNumber}
                   </span>
-                  <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                  <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
                     {isEn ? section.title_en : section.title_ko}
                   </h2>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '0.82rem', fontWeight: 700, color: isSectionComplete ? '#15803d' : '#64748b' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, color: isSectionComplete ? '#34d399' : '#94a3b8' }}>
                     {sectionClearedCount} / {totalSectionLevels} {isEn ? 'Cleared' : '완료'}
                   </span>
                   {isSectionComplete && (
@@ -375,13 +382,14 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                       style={{
                         padding: '3px 8px',
                         borderRadius: '6px',
-                        background: '#dcfce7',
-                        color: '#15803d',
+                        background: 'rgba(16, 185, 129, 0.15)',
+                        color: '#34d399',
                         fontSize: '0.74rem',
                         fontWeight: 700,
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '4px',
+                        border: '1px solid rgba(16, 185, 129, 0.3)',
                       }}
                     >
                       <CheckCircle2 size={13} />
@@ -409,11 +417,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        borderBottom: isLast ? 'none' : '1px solid #f1f5f9',
+                        borderBottom: isLast ? 'none' : '1px solid #334155',
                         background: isCurrent 
-                          ? (isHovered ? '#eff6ff' : 'rgba(2, 132, 199, 0.04)') 
-                          : (isHovered && !isLocked ? '#f8fafc' : '#ffffff'),
-                        opacity: isLocked ? 0.6 : 1,
+                          ? (isHovered ? '#1c314e' : '#172740') 
+                          : (isHovered && !isLocked ? '#273549' : '#1e293b'),
+                        opacity: isLocked ? 0.55 : 1,
                         transition: 'all 0.15s ease',
                         cursor: isLocked ? 'not-allowed' : 'pointer',
                         position: 'relative',
@@ -430,7 +438,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             top: 0,
                             bottom: 0,
                             width: '4px',
-                            background: '#0284c7',
+                            background: '#38bdf8',
                           }}
                         />
                       )}
@@ -439,11 +447,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         {/* Status Icon */}
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', flexShrink: 0 }}>
                           {isCleared ? (
-                            <CheckCircle2 size={20} color="#0284c7" />
+                            <CheckCircle2 size={20} color="#38bdf8" />
                           ) : isCurrent ? (
-                            <Play size={18} color="#0284c7" fill="#0284c7" />
+                            <Play size={18} color="#38bdf8" fill="#38bdf8" />
                           ) : (
-                            <Lock size={16} color="#94a3b8" />
+                            <Lock size={16} color="#64748b" />
                           )}
                         </div>
 
@@ -455,8 +463,17 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             fontWeight: 800,
                             padding: '3px 8px',
                             borderRadius: '6px',
-                            background: isCurrent ? '#0284c7' : isCleared ? '#e0f2fe' : '#f1f5f9',
-                            color: isCurrent ? '#ffffff' : isCleared ? '#0369a1' : '#94a3b8',
+                            background: isCurrent 
+                              ? '#0284c7' 
+                              : isCleared 
+                                ? 'rgba(56, 189, 248, 0.15)' 
+                                : '#0f172a',
+                            color: isCurrent 
+                              ? '#ffffff' 
+                              : isCleared 
+                                ? '#38bdf8' 
+                                : '#64748b',
+                            border: isCleared ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid #334155',
                             flexShrink: 0,
                           }}
                         >
@@ -468,7 +485,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           style={{
                             fontSize: '0.96rem',
                             fontWeight: isCurrent ? 800 : 700,
-                            color: isLocked ? '#64748b' : '#0f172a',
+                            color: isLocked ? '#64748b' : isCurrent ? '#ffffff' : '#f1f5f9',
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
@@ -487,9 +504,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                                   fontFamily: 'var(--font-mono)',
                                   fontSize: '0.72rem',
                                   fontWeight: 600,
-                                  color: isLocked ? '#94a3b8' : '#0284c7',
-                                  background: isLocked ? '#f1f5f9' : '#f0f9ff',
-                                  border: isLocked ? '1px solid #e2e8f0' : '1px solid #bae6fd',
+                                  color: isLocked ? '#475569' : isCurrent ? '#7dd3fc' : '#94a3b8',
+                                  background: '#0f172a',
+                                  border: isCurrent 
+                                    ? '1px solid rgba(56, 189, 248, 0.4)' 
+                                    : '1px solid #334155',
                                   padding: '2px 7px',
                                   borderRadius: '4px',
                                 }}
@@ -515,7 +534,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '6px',
-                              boxShadow: '0 2px 8px rgba(2, 132, 199, 0.35)',
+                              boxShadow: '0 2px 10px rgba(2, 132, 199, 0.45)',
                             }}
                           >
                             <Play size={13} fill="#ffffff" />
@@ -526,9 +545,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             style={{
                               padding: '5px 12px',
                               borderRadius: '10px',
-                              background: '#e0f2fe',
-                              color: '#0284c7',
-                              border: '1px solid #bae6fd',
+                              background: 'rgba(56, 189, 248, 0.12)',
+                              color: '#38bdf8',
+                              border: '1px solid rgba(56, 189, 248, 0.3)',
                               fontSize: '0.78rem',
                               fontWeight: 700,
                               display: 'inline-flex',
@@ -544,8 +563,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             style={{
                               padding: '5px 10px',
                               borderRadius: '10px',
-                              background: '#f1f5f9',
-                              color: '#94a3b8',
+                              background: '#0f172a',
+                              color: '#64748b',
+                              border: '1px solid #334155',
                               fontSize: '0.76rem',
                               fontWeight: 600,
                               display: 'inline-flex',
@@ -561,7 +581,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         {!isLocked && (
                           <ChevronRight
                             size={18}
-                            color={isCurrent ? '#0284c7' : '#94a3b8'}
+                            color={isCurrent ? '#38bdf8' : '#64748b'}
                             style={{
                               transform: isHovered ? 'translateX(3px)' : 'none',
                               transition: 'transform 0.15s ease',
