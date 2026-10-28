@@ -7,7 +7,7 @@ import { PracticeRound } from '@/lib/practiceTypes';
 //   1. 큰따옴표(쌍따옴표) 문자열 : print("Hello")
 //   2. 작은따옴표 문자열 : print('Python') (둘 다 사용 가능)
 //   3. 공백 포함 문장 문자열 : print("Coding is fun")
-//   4. 따옴표 속 따옴표 포함 : print("I'm happy") (쌍따옴표 안에 작은따옴표)
+//   4. 따옴표 속 따옴표 포함 : print('Say "Hello"') (작은따옴표 안에 쌍따옴표)
 //   5. 문자열과 숫자 쉼표 출력 : print("Score:", 100) (누적 복습)
 // - 6~10단계: 타이핑 모드 (Typing Mode) - 1~5번 유형의 문제 형식 반복
 //   6. [유형1] 빈칸 채우기 (문자열 전체 입력: "Hello")
@@ -89,16 +89,16 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 4,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쌍따옴표("")를 사용해 작은따옴표가 들어간 "I\'m happy"를 출력해보세요.',
-      prompt_en: 'Use double quotes ("") to print "I\'m happy" containing a single quote.',
-      hint_ko: '문장 안에 작은따옴표(\')가 들어갈 때는 바깥을 쌍따옴표("")로 감싸면 충돌 없이 안전하게 출력됩니다. 두 종류의 따옴표를 모두 지원하는 파이썬의 큰 장점입니다.',
-      hint_en: 'When a string contains an apostrophe (\'), wrapping it in double quotes ("") prevents syntax errors. This is why Python supports both quote styles.',
-      targetCode: 'print("I\'m happy")',
+      prompt_ko: '작은따옴표(\'\')를 사용해 쌍따옴표가 들어간 \'Say "Hello"\'를 출력해보세요.',
+      prompt_en: 'Use single quotes (\'\') to print \'Say "Hello"\' containing double quotes.',
+      hint_ko: '문장 안에 쌍따옴표("")를 글자로 표현하고 싶을 때는 바깥쪽을 작은따옴표(\'\')로 감싸주면 충돌 없이 안전하게 출력됩니다.',
+      hint_en: 'When a string contains double quotes (""), enclosing it in single quotes (\'\') prevents syntax errors.',
+      targetCode: 'print(\'Say "Hello"\')',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: "I'm happy",
+          expectedOutput: 'Say "Hello"',
         },
       ],
     },
