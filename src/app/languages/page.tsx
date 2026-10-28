@@ -494,53 +494,55 @@ export default function LanguagesPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
           {filteredTracks.map((track) => (
             <section key={track.id} id={`track-${track.id}`}>
-              {/* Track Header Card */}
+              {/* Track Header Card: Vibrant Cyan Banner */}
               <div style={{
-                background: '#ffffff',
-                border: '2px solid #94a3b8',
+                background: 'linear-gradient(135deg, #0891b2 0%, #0284c7 100%)',
+                border: '2px solid #06b6d4',
                 borderRadius: '20px',
-                padding: '16px 22px',
+                padding: '18px 24px',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '12px',
-                boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.08)',
+                gap: '14px',
+                boxShadow: '0 10px 28px -4px rgba(8, 145, 178, 0.35)',
+                color: '#ffffff',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div style={{
-                    width: '48px',
-                    height: '48px',
+                    width: '50px',
+                    height: '50px',
                     borderRadius: '14px',
-                    background: '#f8fafc',
-                    border: `2px solid ${track.color}60`,
+                    background: '#ffffff',
+                    border: '2px solid rgba(255, 255, 255, 0.8)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: `0 4px 12px ${track.color}20`,
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
                     flexShrink: 0,
                   }}>
-                    <LanguageIcon language={track.id} size={30} />
+                    <LanguageIcon language={track.id} size={32} />
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>
+                      <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
                         {getTrackName(track, isEn)}
                       </h2>
                       <span style={{
-                        padding: '2px 8px',
+                        padding: '2px 9px',
                         borderRadius: '8px',
-                        background: `${track.color}15`,
-                        border: `1.5px solid ${track.color}45`,
-                        color: track.color,
+                        background: 'rgba(255, 255, 255, 0.2)',
+                        border: '1.5px solid rgba(255, 255, 255, 0.45)',
+                        color: '#ffffff',
                         fontSize: '0.72rem',
                         fontWeight: 800,
+                        backdropFilter: 'blur(4px)',
                       }}>
                         {track.badge}
                       </span>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '0.85rem', marginTop: '2px', fontWeight: 500 }}>
+                    <p style={{ color: '#e0f2fe', fontSize: '0.86rem', marginTop: '3px', fontWeight: 500 }}>
                       {isEn ? track.tagline_en : track.tagline_ko}
                     </p>
                   </div>
@@ -550,14 +552,16 @@ export default function LanguagesPage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: '#f1f5f9',
-                  padding: '5px 12px',
-                  borderRadius: '10px',
-                  border: '1.5px solid #cbd5e1',
-                  fontSize: '0.8rem',
-                  color: '#334155',
+                  background: 'rgba(255, 255, 255, 0.18)',
+                  backdropFilter: 'blur(4px)',
+                  padding: '6px 14px',
+                  borderRadius: '12px',
+                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                  fontSize: '0.82rem',
+                  color: '#ffffff',
+                  fontWeight: 600,
                 }}>
-                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong>{track.modules.length}개</strong> 과정 개설</>}</span>
+                  <span>{isEn ? `Total ${track.modules.length} Courses` : <>총 <strong style={{ color: '#ffffff', fontWeight: 800 }}>{track.modules.length}개</strong> 과정 개설</>}</span>
                 </div>
               </div>
 
@@ -581,7 +585,7 @@ export default function LanguagesPage() {
                       <Link
                         key={module.id}
                         href={module.practiceUrl}
-                        className="light-mode-card"
+                        className={`light-mode-card card-diff-${module.difficulty}`}
                         style={{
                           textDecoration: 'none',
                           color: 'inherit',
@@ -591,12 +595,8 @@ export default function LanguagesPage() {
                           justifyContent: 'space-between',
                           background: '#ffffff',
                           borderRadius: '18px',
-                          border: isStarted
-                            ? '2px solid #0284c7'
-                            : '2px solid #94a3b8',
-                          boxShadow: isStarted 
-                            ? '0 8px 20px -4px rgba(2, 132, 199, 0.16)' 
-                            : '0 6px 16px -4px rgba(15, 23, 42, 0.08)',
+                          border: `2px solid ${diffColor}`,
+                          boxShadow: `0 4px 16px -2px ${diffColor}22, 0 2px 6px rgba(15, 23, 42, 0.04)`,
                           transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
                           position: 'relative',
                           overflow: 'visible',
@@ -612,12 +612,12 @@ export default function LanguagesPage() {
                             zIndex: 10,
                             padding: '2px 8px',
                             borderRadius: '8px',
-                            background: '#0284c7',
+                            background: diffColor,
                             color: '#ffffff',
                             fontSize: '0.66rem',
                             fontWeight: 800,
                             letterSpacing: '0.02em',
-                            boxShadow: '0 3px 8px rgba(2, 132, 199, 0.35)',
+                            boxShadow: `0 3px 8px ${diffColor}45`,
                             display: 'flex',
                             alignItems: 'center',
                             gap: '3px',
@@ -735,7 +735,7 @@ export default function LanguagesPage() {
                                   fontWeight: 500,
                                 }}
                               >
-                                <CheckCircle2 size={13} color="#0284c7" style={{ flexShrink: 0 }} />
+                                <CheckCircle2 size={13} color={diffColor} style={{ flexShrink: 0 }} />
                                 <span>{getSkillName(skill, isEn)}</span>
                               </div>
                             ))}
@@ -757,7 +757,7 @@ export default function LanguagesPage() {
                             }}>
                               <span style={{
                                 fontSize: '0.72rem',
-                                color: isStarted ? '#0284c7' : '#475569',
+                                color: isStarted ? diffColor : '#475569',
                                 fontWeight: 700,
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -768,7 +768,7 @@ export default function LanguagesPage() {
                                     ? (isEn ? `Progress ${progressPercent}%` : `진행도 ${progressPercent}%`) 
                                     : (isEn ? 'Start Learning' : '학습 시작')}
                                 </span>
-                                <ArrowRight size={12} color={isStarted ? '#0284c7' : '#64748b'} />
+                                <ArrowRight size={12} color={isStarted ? diffColor : '#64748b'} />
                               </span>
                               <span style={{
                                 fontSize: '0.68rem',
@@ -793,7 +793,7 @@ export default function LanguagesPage() {
                                 width: `${progressPercent}%`,
                                 height: '100%',
                                 borderRadius: '3px',
-                                background: isStarted ? '#0284c7' : 'transparent',
+                                background: isStarted ? diffColor : 'transparent',
                                 transition: 'width 0.4s ease',
                               }} />
                             </div>
