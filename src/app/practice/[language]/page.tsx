@@ -377,31 +377,37 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         padding: '20px 22px',
                         borderRadius: '20px',
                         textDecoration: 'none',
-                        opacity: isLocked ? 0.65 : 1,
+                        opacity: isLocked ? 0.72 : 1,
                         background: isHovered && !isLocked
-                          ? (isCleared ? '#dcfce7' : '#f0f9ff')
+                          ? (isCleared
+                              ? 'linear-gradient(135deg, #bbf7d0 0%, #86efac 100%)'
+                              : isCurrent
+                              ? 'linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%)'
+                              : 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)')
                           : isCleared
-                          ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)'
+                          ? 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)'
                           : isCurrent
-                          ? 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)'
+                          ? 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)'
                           : isLocked
-                          ? 'rgba(255, 255, 255, 0.55)'
+                          ? 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'
                           : '#ffffff',
                         border: isHovered && !isLocked
-                          ? '2px solid #0284c7'
+                          ? (isCleared ? '2px solid #059669' : '2.5px solid #0284c7')
                           : isCleared
-                          ? '2px solid #34d399'
+                          ? '2px solid #10b981'
                           : isCurrent
                           ? '2.5px solid #0284c7'
                           : isLocked
-                          ? '1.5px dashed #cbd5e1'
+                          ? '1.5px dashed #94a3b8'
                           : '2px solid #38bdf8',
                         boxShadow: isHovered && !isLocked
-                          ? '0 12px 28px -4px rgba(2, 132, 199, 0.28), 0 4px 10px rgba(15, 23, 42, 0.06)'
+                          ? (isCleared
+                              ? '0 12px 28px -4px rgba(16, 185, 129, 0.35), 0 4px 10px rgba(6, 78, 59, 0.1)'
+                              : '0 14px 30px -4px rgba(2, 132, 199, 0.4), 0 4px 12px rgba(12, 74, 110, 0.12)')
                           : isCurrent
-                          ? '0 10px 24px -2px rgba(2, 132, 199, 0.28), 0 0 16px rgba(56, 189, 248, 0.18)'
+                          ? '0 12px 26px -2px rgba(2, 132, 199, 0.32), 0 0 16px rgba(56, 189, 248, 0.25)'
                           : isCleared
-                          ? '0 6px 18px -2px rgba(16, 185, 129, 0.2), 0 2px 6px rgba(15, 23, 42, 0.04)'
+                          ? '0 8px 22px -2px rgba(16, 185, 129, 0.25), 0 2px 6px rgba(6, 78, 59, 0.06)'
                           : isLocked
                           ? 'none'
                           : '0 4px 16px -2px rgba(56, 189, 248, 0.15), 0 2px 6px rgba(15, 23, 42, 0.04)',
@@ -418,7 +424,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.82rem',
                               fontWeight: 800,
-                              color: isLocked ? '#94a3b8' : isCleared ? '#059669' : '#0284c7',
+                              color: isLocked ? '#64748b' : isCleared ? '#047857' : '#0369a1',
                               letterSpacing: '0.04em',
                             }}
                           >
@@ -431,7 +437,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               style={{
                                 padding: '3px 8px',
                                 borderRadius: '7px',
-                                background: '#10b981',
+                                background: '#059669',
                                 color: '#ffffff',
                                 border: 'none',
                                 fontSize: '0.72rem',
@@ -439,7 +445,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '4px',
-                                boxShadow: '0 2px 6px rgba(16, 185, 129, 0.3)',
+                                boxShadow: '0 2px 6px rgba(5, 150, 105, 0.35)',
                               }}
                             >
                               <CheckCircle2 size={12} />
@@ -458,7 +464,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '4px',
-                                boxShadow: '0 2px 8px rgba(2, 132, 199, 0.35)',
+                                boxShadow: '0 2px 8px rgba(2, 132, 199, 0.4)',
                               }}
                             >
                               <Play size={10} fill="currentColor" />
@@ -469,9 +475,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                               style={{
                                 padding: '3px 8px',
                                 borderRadius: '7px',
-                                background: '#e2e8f0',
-                                color: '#64748b',
-                                border: '1px solid #cbd5e1',
+                                background: '#cbd5e1',
+                                color: '#475569',
+                                border: '1px solid #94a3b8',
                                 fontSize: '0.72rem',
                                 fontWeight: 700,
                                 display: 'inline-flex',
@@ -490,7 +496,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           style={{
                             fontSize: '1.02rem',
                             fontWeight: 800,
-                            color: isLocked ? '#64748b' : '#0f172a',
+                            color: isLocked ? '#64748b' : isCleared ? '#064e3b' : isCurrent ? '#0c4a6e' : '#0f172a',
                             lineHeight: 1.45,
                             margin: 0,
                             wordBreak: 'keep-all',
@@ -509,7 +515,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             alignItems: 'center',
                             gap: '6px',
                             flexWrap: 'wrap',
-                            borderTop: isCleared ? '1px solid rgba(52, 211, 153, 0.35)' : isCurrent ? '1px solid rgba(56, 189, 248, 0.35)' : '1px solid #e2e8f0',
+                            borderTop: isCleared
+                              ? '1px solid rgba(16, 185, 129, 0.35)'
+                              : isCurrent
+                              ? '1px solid rgba(2, 132, 199, 0.35)'
+                              : '1px solid #cbd5e1',
                             paddingTop: '12px',
                           }}
                         >
@@ -520,12 +530,19 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                                 fontFamily: 'var(--font-mono)',
                                 fontSize: '0.74rem',
                                 fontWeight: 700,
-                                color: isLocked ? '#94a3b8' : isCleared ? '#047857' : isHovered ? '#0284c7' : '#0369a1',
+                                color: isLocked ? '#64748b' : isCleared ? '#065f46' : isCurrent ? '#0369a1' : '#334155',
                                 background: isLocked ? '#e2e8f0' : '#ffffff',
-                                border: isLocked ? '1px solid #cbd5e1' : isCleared ? '1px solid #86efac' : '1px solid #7dd3fc',
+                                border: isLocked
+                                  ? '1px solid #cbd5e1'
+                                  : isCleared
+                                  ? '1.5px solid #34d399'
+                                  : isCurrent
+                                  ? '1.5px solid #38bdf8'
+                                  : '1px solid #cbd5e1',
                                 padding: '2px 7px',
                                 borderRadius: '6px',
                                 whiteSpace: 'nowrap',
+                                boxShadow: isLocked ? 'none' : '0 1px 3px rgba(15, 23, 42, 0.05)',
                                 transition: 'color 0.15s ease',
                               }}
                             >
