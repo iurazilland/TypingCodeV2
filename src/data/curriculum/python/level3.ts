@@ -3,7 +3,8 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // ============================================================================
 // 파이썬 기초 3레벨: 문자열(String)과 따옴표 출력 (10단계)
 // - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
-// - 프롬프트 내 코드 정답 노출(스포일러) 배제 & 1레벨 표준 템플릿 적용
+// - 블록 단계: 블록 내부에 넣을 코드 명확 안내
+// - 타이핑 단계: 스포일러 없이 연산자/문법 빈칸 스스로 채우기
 // - 페어 1: 큰따옴표 문자열
 //   1. [블록] print("Hello")
 //   2. [타이핑: 빈칸] print("Hello")
@@ -39,8 +40,8 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쌍따옴표("")를 사용해 인사말 Hello를 문자열로 출력해보세요.',
-      prompt_en: 'Use double quotes ("") to print the greeting Hello as a string.',
+      prompt_ko: '쌍따옴표("")를 사용해 "Hello"를 넣어 화면에 출력해보세요.',
+      prompt_en: 'Use double quotes ("") to insert "Hello" and print it on the screen.',
       hint_ko: '파이썬에서는 글자나 단어를 쌍따옴표("")로 감싸서 문자열을 만듭니다. print() 괄호 안에 "Hello"를 입력하세요.',
       hint_en: 'In Python, text strings must be enclosed in double quotes (""). Enter "Hello" inside the print() slot.',
       targetCode: 'print("Hello")',
@@ -80,8 +81,8 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '작은따옴표(\'\')를 사용해 단어 Python을 문자열로 출력해보세요.',
-      prompt_en: 'Use single quotes (\'\') to print the word Python as a string.',
+      prompt_ko: '작은따옴표(\'\')를 사용해 \'Python\'을 넣어 화면에 출력해보세요.',
+      prompt_en: "Use single quotes ('') to insert 'Python' and print it on the screen.",
       hint_ko: "파이썬은 쌍따옴표와 작은따옴표를 동일하게 지원합니다. print() 괄호 안에 'Python'을 입력하세요.",
       hint_en: "Python treats single quotes identically to double quotes. Enter 'Python' inside the print() slot.",
       targetCode: "print('Python')",
@@ -121,8 +122,8 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '작은따옴표(\'\')로 감싸 쌍따옴표가 포함된 문장 Say "Hello"를 출력해보세요.',
-      prompt_en: 'Enclose in single quotes (\'\') to print the sentence Say "Hello" containing double quotes.',
+      prompt_ko: '작은따옴표(\'\')를 사용해 \'Say "Hello"\'를 넣어 화면에 출력해보세요.',
+      prompt_en: 'Use single quotes (\'\') to insert \'Say "Hello"\' and print it on the screen.',
       hint_ko: '문장 속에 큰따옴표가 들어있을 때는 바깥쪽을 작은따옴표로 감싸 \'Say "Hello"\'와 같이 작성합니다.',
       hint_en: 'When a string contains double quotes (""), enclosing it in single quotes (\'\') prevents syntax errors.',
       targetCode: 'print(\'Say "Hello"\')',
@@ -162,8 +163,8 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '공백(띄어쓰기)이 포함된 문장 Coding is fun을 출력해보세요.',
-      prompt_en: 'Print the sentence Coding is fun preserving internal spaces.',
+      prompt_ko: '공백(띄어쓰기)이 포함된 "Coding is fun"을 넣어 화면에 출력해보세요.',
+      prompt_en: 'Insert "Coding is fun" with spaces and print it on the screen.',
       hint_ko: '따옴표 안에는 띄어쓰기도 문자열의 일부로 포함됩니다. "Coding is fun"을 입력하세요.',
       hint_en: 'Spaces inside quotes are preserved as part of the string. Enter "Coding is fun" inside the slot.',
       targetCode: 'print("Coding is fun")',
@@ -203,8 +204,8 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '문자열 설명 Score: 와 숫자 100을 쉼표(,)로 연결해 나란히 출력해보세요.',
-      prompt_en: 'Connect the descriptive label Score: and number 100 with a comma (,) to print them side by side.',
+      prompt_ko: '쉼표(,)를 사용해 "Score:", 100을 넣어 나란히 출력해보세요.',
+      prompt_en: 'Use a comma (,) to insert "Score:", 100 and print them side by side.',
       hint_ko: 'print() 안에 쉼표(,)를 찍으면 문자열과 숫자를 한 줄에 공백을 두고 나란히 출력할 수 있습니다. "Score:", 100 을 입력하세요.',
       hint_en: 'Using a comma in print() separates strings and numbers with an automatic space, outputting "Score: 100".',
       targetCode: 'print("Score:", 100)',

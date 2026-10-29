@@ -3,7 +3,8 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // ============================================================================
 // 파이썬 기초 5레벨: 문자열 연산(+)과 반복(*) (10단계)
 // - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
-// - 프롬프트 내 코드 정답 노출(스포일러) 배제 & 1레벨 표준 템플릿 적용
+// - 블록 단계: 블록 내부에 넣을 코드 명확 안내
+// - 타이핑 단계: 스포일러 없이 연산자/문법 빈칸 스스로 채우기
 // - 페어 1: 문자열 덧셈(+) 이어붙이기
 //   1. [블록] print("Hello"+"World") -> HelloWorld
 //   2. [타이핑: 빈칸] print("Python"+"Code") -> PythonCode
@@ -39,8 +40,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '덧셈 기호(+)를 사용해 두 문자열 Hello와 World를 빈칸 없이 이어붙여 출력해보세요.',
-      prompt_en: 'Use the plus (+) operator to concatenate strings Hello and World together.',
+      prompt_ko: '덧셈 기호(+)를 사용해 "Hello"+"World"를 넣어 화면에 출력해보세요.',
+      prompt_en: 'Use the plus (+) operator to insert "Hello"+"World" and print it on the screen.',
       hint_ko: '파이썬에서 문자열끼리 + 기호를 사용하면 두 글자가 빈칸 없이 이어붙습니다. "Hello"+"World"를 입력하세요.',
       hint_en: 'Using the + operator between strings concatenates them together without spaces.',
       targetCode: 'print("Hello"+"World")',
@@ -80,8 +81,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '첫 번째 단어 끝에 띄어쓰기를 넣어 단어 사이에 공백이 있는 Hello World를 이어붙여 출력해보세요.',
-      prompt_en: 'Add a space inside the first word to concatenate Hello World with spacing.',
+      prompt_ko: '공백을 포함해 "Hello "+"World"를 넣어 화면에 출력해보세요.',
+      prompt_en: 'Insert "Hello "+"World" with a space and print it on the screen.',
       hint_ko: '+ 연산자는 공백을 자동으로 넣어주지 않으므로 "Hello "+"World"처럼 문자열 안에 직접 공백을 넣어줍니다.',
       hint_en: 'The + operator does not insert spaces. Add a space inside the string like "Hello "+"World".',
       targetCode: 'print("Hello "+"World")',
@@ -121,8 +122,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '곱셈 기호(*)를 사용해 등호 문자(=)를 20번 반복한 구분선을 출력해보세요.',
-      prompt_en: 'Use the multiplication (*) operator to print a 20-character divider of equals signs (=).',
+      prompt_ko: '곱셈 기호(*)를 사용해 "="*20을 넣어 20칸 구분선을 출력해보세요.',
+      prompt_en: 'Use the multiplication (*) operator to insert "="*20 and print a 20-character divider.',
       hint_ko: '문자열에 *20을 곱하면 파이썬이 글자를 20번 연속으로 복제합니다. "="*20을 입력하세요.',
       hint_en: 'Multiplying a string by 20 duplicates it 20 times. Enter "="*20.',
       targetCode: 'print("="*20)',
@@ -162,8 +163,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '곱셈 기호(*)를 사용해 별 기호(★)를 5번 반복하여 출력해보세요.',
-      prompt_en: 'Use the asterisk (*) operator to repeat the star symbol (★) 5 times.',
+      prompt_ko: '곱셈 기호(*)를 사용해 "★"*5를 넣어 별 5개를 출력해보세요.',
+      prompt_en: 'Use the asterisk (*) operator to insert "★"*5 and print 5 stars.',
       hint_ko: '특수문자도 곱하기(*) 연산자로 원하는 개수만큼 반복할 수 있습니다. "★"*5를 입력하세요.',
       hint_en: 'Special symbols can also be repeated with the asterisk (*) operator. Enter "★"*5.',
       targetCode: 'print("★"*5)',
@@ -203,8 +204,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '글자 3을 3번 반복한 결과와 숫자 3을 곱한 결과를 나란히 출력해 차이점을 확인해보세요.',
-      prompt_en: 'Print repeating string 3 three times and numeric multiplication side by side to compare.',
+      prompt_ko: '쉼표(,)를 사용해 "3"*3, 3*3을 넣어 글자 반복과 숫자 계산을 나란히 비교해보세요.',
+      prompt_en: 'Use a comma (,) to insert "3"*3, 3*3 and compare string repetition with numeric multiplication.',
       hint_ko: '따옴표가 있는 "3"*3은 글자 반복(333), 따옴표가 없는 3*3은 숫자 곱셈(9)입니다. "3"*3, 3*3 을 입력하세요.',
       hint_en: 'Quoted "3"*3 repeats text (333), while unquoted 3*3 computes numbers (9). Enter "3"*3, 3*3.',
       targetCode: 'print("3"*3, 3*3)',

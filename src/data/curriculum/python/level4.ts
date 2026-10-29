@@ -3,7 +3,8 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // ============================================================================
 // 파이썬 기초 4레벨: 수식 출력과 나머지(%)의 실전 활용 (10단계)
 // - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
-// - 프롬프트 내 코드 정답 노출(스포일러) 배제 & 1레벨 표준 템플릿 적용
+// - 블록 단계: 블록 내부에 넣을 코드 명확 안내
+// - 타이핑 단계: 스포일러 없이 연산자/문법 빈칸 스스로 채우기
 // - 페어 1: 문자열 수식 출력 (계산되지 않음)
 //   1. [블록] print("3 + 5")
 //   2. [타이핑: 빈칸] print("3 x 7 =", 3*7)
@@ -39,8 +40,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '따옴표를 사용해 계산식이 계산되지 않고 글자 그대로 출력되도록 해보세요.',
-      prompt_en: 'Use quotes so the expression prints as literal text without being calculated.',
+      prompt_ko: '따옴표를 사용해 문자열 "3 + 5"를 넣어 화면에 출력해보세요.',
+      prompt_en: 'Use quotes to insert the string "3 + 5" and print it on the screen.',
       hint_ko: '따옴표 안에 "3 + 5"를 적으면 덧셈이 계산되지 않고 글자 그대로 출력됩니다.',
       hint_en: 'Writing an expression inside quotes outputs "3 + 5" literally without evaluating it.',
       targetCode: 'print("3 + 5")',
@@ -80,8 +81,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '수식 설명 문자열과 실제 덧셈식을 쉼표(,)로 연결해 계산식과 결과를 동시에 출력해보세요.',
-      prompt_en: 'Connect the formula string and actual addition expression with a comma (,) to print both.',
+      prompt_ko: '쉼표(,)를 사용해 "3 + 5 =", 3+5를 넣어 계산식과 결과를 동시에 출력해보세요.',
+      prompt_en: 'Use a comma (,) to insert "3 + 5 =", 3+5 and print both the formula and result.',
       hint_ko: 'print() 괄호 안에 "3 + 5 =", 3+5 를 입력하면 "3 + 5 = 8"로 한 줄에 출력됩니다.',
       hint_en: 'Entering "3 + 5 =", 3+5 outputs "3 + 5 = 8" on a single line.',
       targetCode: 'print("3 + 5 =", 3+5)',
@@ -121,8 +122,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '10을 2로 나눈 나머지를 계산해 짝수(0)임을 화면에 확인해보세요.',
-      prompt_en: 'Calculate the remainder of 10 divided by 2 to check that it is even (0).',
+      prompt_ko: '나머지 연산자(%)를 사용해 10%2를 넣어 짝수(0)인지 확인해보세요.',
+      prompt_en: 'Use the modulo operator (%) to insert 10%2 and check if it is even (0).',
       hint_ko: 'print() 괄호 안에 10%2를 입력하세요. 2로 나눈 나머지가 0이면 그 수는 짝수입니다.',
       hint_en: '10%2 produces 0. A remainder of 0 when divided by 2 confirms the number is even.',
       targetCode: 'print(10%2)',
@@ -162,8 +163,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '구구단 설명 라벨과 곱셈식을 쉼표(,)로 연결해 2단의 계산 결과를 출력해보세요.',
-      prompt_en: 'Connect the multiplication label and calculation with a comma (,) to print the 2-times table result.',
+      prompt_ko: '쉼표(,)를 사용해 "2 x 3 =", 2*3을 넣어 구구단 결과를 출력해보세요.',
+      prompt_en: 'Use a comma (,) to insert "2 x 3 =", 2*3 and print the multiplication result.',
       hint_ko: 'print() 괄호 안에 "2 x 3 =", 2*3 을 입력하세요. "2 x 3 = 6"이 출력됩니다.',
       hint_en: 'Use "2 x 3 =", 2*3 inside print() to evaluate and print "2 x 3 = 6".',
       targetCode: 'print("2 x 3 =", 2*3)',
@@ -203,8 +204,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '20을 3으로 나눈 몫과 나머지를 각각 설명 라벨과 함께 한 줄에 출력해보세요.',
-      prompt_en: 'Print both the quotient and remainder of 20 divided by 3 with descriptive labels.',
+      prompt_ko: '쉼표(,)를 사용해 "몫:", 20//3, "나머지:", 20%3을 넣어 한 줄에 출력해보세요.',
+      prompt_en: 'Use commas (,) to insert "몫:", 20//3, "나머지:", 20%3 and print them on one line.',
       hint_ko: 'print() 괄호 안에 "몫:", 20//3, "나머지:", 20%3 을 입력하면 "몫: 6 나머지: 2"가 출력됩니다.',
       hint_en: 'Enter "몫:", 20//3, "나머지:", 20%3 to print "몫: 6 나머지: 2".',
       targetCode: 'print("몫:", 20//3, "나머지:", 20%3)',
