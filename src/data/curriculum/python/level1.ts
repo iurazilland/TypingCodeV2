@@ -220,11 +220,11 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '우선 계산되는 괄호 계산식을 추가하여 계산 결과(20)를 출력해보세요.',
-      prompt_en: 'Add the parenthesized expression to calculate it first and print the result (20).',
-      hint_ko: '빈칸에 2+3을 괄호로 감싼 (2+3)을 입력하세요. 괄호 안의 덧셈이 곱셈보다 먼저 계산됩니다.',
-      hint_en: 'Type (2+3) with parentheses into the blank. The parenthesized sum evaluates before the multiplication by 4.',
-      templateCode: 'print(§§§§§*4)',
+      prompt_ko: '우선 계산되는 괄호와 2+3을 사용한 계산식을 추가하여 계산 결과(20)를 출력해보세요.',
+      prompt_en: 'Add prioritized parentheses around 2+3 to print the result (20).',
+      hint_ko: '2+3 앞뒤의 빈칸에 각각 여는 괄호 ( 와 닫는 괄호 ) 를 입력하세요.',
+      hint_en: 'Type the opening parenthesis ( and closing parenthesis ) into the blanks around 2+3.',
+      templateCode: 'print(§2+3§*4)',
       targetCode: 'print((2+3)*4)',
       testCases: [
         {
