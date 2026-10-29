@@ -3,21 +3,22 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // ============================================================================
 // 파이썬 기초 3레벨: 문자열(String)과 따옴표 출력 (10단계)
 // - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
+// - 기호와 숫자 사이 공백 제거(Compact) 및 넓은 빈칸 입력 적용
 // - 페어 1: 큰따옴표 문자열
 //   1. [블록] print("Hello")
-//   2. [타이핑: 빈칸] print("Hello")
+//   2. [타이핑: 빈칸] print("Hello") (문자열 전체 빈칸)
 // - 페어 2: 작은따옴표 문자열
 //   3. [블록] print('Python')
-//   4. [타이핑: 빈칸] print('Python') (닫는 따옴표)
+//   4. [타이핑: 빈칸] print('Python') (문자열 전체 빈칸)
 // - 페어 3: 따옴표 속 따옴표 포함
 //   5. [블록] print('Say "Hello"')
-//   6. [타이핑: 빈칸] print("I'm happy") (바깥 큰따옴표)
+//   6. [타이핑: 빈칸] print("I'm happy") (문자열 전체 빈칸)
 // - 페어 4: 공백 포함 문장 출력
 //   7. [블록] print("Coding is fun")
-//   8. [타이핑: 빈칸] print("Coding is fun")
-// - 페어 5: 문자열과 숫자 쉼표(,) 연결
+//   8. [타이핑: 빈칸] print("Coding is fun") (문장 전체 빈칸)
+// - 페어 5: 문자열과 숫자/계산식 연결
 //   9. [블록] print("Score:", 100)
-//   10. [타이핑: 빈칸] print("Result:", 10 * 5)
+//   10. [타이핑: 빈칸] print("Result:", 10*5) (계산식 전체 빈칸)
 // ============================================================================
 export const PYTHON_LEVEL_3: PracticeRound = {
   id: 'py-basic-r3',
@@ -56,10 +57,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 문자열 Hello를 화면에 출력해보세요.',
-      prompt_en: 'Fill in the blank to print the string Hello on the screen.',
-      hint_ko: '문자열 Hello를 만들기 위해 단어 앞뒤를 큰따옴표("")로 감싸 "Hello"를 입력하세요.',
-      hint_en: 'To print the string Hello, enclose the word in double quotes like "Hello".',
+      prompt_ko: '빈칸에 쌍따옴표로 감싼 "Hello"를 입력하여 화면에 출력해보세요.',
+      prompt_en: 'Fill in the string "Hello" with double quotes to print it on the screen.',
+      hint_ko: '단어 앞뒤를 큰따옴표("")로 감싸 "Hello"를 입력하세요.',
+      hint_en: 'Enclose the word in double quotes like "Hello" and enter it into the blank.',
       templateCode: 'print(§§§§§§§)',
       targetCode: 'print("Hello")',
       testCases: [
@@ -97,11 +98,11 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 문자열 Python의 닫는 따옴표를 완성해보세요.',
-      prompt_en: 'Fill in the blank to complete the closing quote for the string Python.',
-      hint_ko: '작은따옴표(\')로 시작한 문자열은 끝도 같은 작은따옴표(\')로 닫아야 합니다. 키보드의 따옴표(\') 키를 입력하세요.',
-      hint_en: 'A string starting with a single quote (\') must be closed with the same single quote (\').',
-      templateCode: "print('Python§)",
+      prompt_ko: '빈칸에 작은따옴표로 감싼 \'Python\'을 입력하여 화면에 출력해보세요.',
+      prompt_en: 'Fill in the string \'Python\' with single quotes to print it on the screen.',
+      hint_ko: '단어 앞뒤를 작은따옴표(\'\')로 감싸 \'Python\'을 입력하세요.',
+      hint_en: 'Enclose Python in single quotes like \'Python\' into the blank.',
+      templateCode: 'print(§§§§§§§§)',
       targetCode: "print('Python')",
       testCases: [
         {
@@ -138,11 +139,11 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 큰따옴표(")를 채워 작은따옴표가 포함된 문장 "I\'m happy"를 출력해보세요.',
-      prompt_en: 'Fill in the double quotes (") to print the sentence "I\'m happy" containing an apostrophe.',
-      hint_ko: '문장 안에 작은따옴표(\')가 있을 때는 바깥쪽 양끝을 큰따옴표(")로 감싸주어야 합니다.',
-      hint_en: 'Enclose the sentence in double quotes (") so the internal apostrophe does not cause an error.',
-      templateCode: 'print(§I\'m happy§)',
+      prompt_ko: '작은따옴표가 포함된 문장 "I\'m happy"를 큰따옴표로 감싸 빈칸에 입력해보세요.',
+      prompt_en: 'Fill in the sentence "I\'m happy" enclosed in double quotes into the blank.',
+      hint_ko: '문장 안에 작은따옴표(\')가 있으므로 바깥쪽을 큰따옴표로 감싸 "I\'m happy"를 입력하세요.',
+      hint_en: 'Type "I\'m happy" with outer double quotes into the blank.',
+      templateCode: 'print(§§§§§§§§§§§)',
       targetCode: 'print("I\'m happy")',
       testCases: [
         {
@@ -179,11 +180,11 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 큰따옴표(")를 채워 공백이 포함된 문장 "Coding is fun"을 출력해보세요.',
-      prompt_en: 'Fill in the double quotes (") to print the sentence "Coding is fun" on the screen.',
-      hint_ko: '문장의 앞과 뒤 빈칸에 큰따옴표(")를 각각 입력하여 전체 문자열을 감싸주세요.',
-      hint_en: 'Type double quotes (") in the opening and closing blanks to enclose the sentence.',
-      templateCode: 'print(§Coding is fun§)',
+      prompt_ko: '빈칸에 큰따옴표를 포함해 "Coding is fun" 문장 전체를 입력해보세요.',
+      prompt_en: 'Fill in the full sentence "Coding is fun" including quotes into the blank.',
+      hint_ko: '큰따옴표를 열고 Coding is fun을 적은 뒤 큰따옴표를 닫아주세요 ("Coding is fun").',
+      hint_en: 'Type "Coding is fun" with opening and closing quotes into the blank.',
+      templateCode: 'print(§§§§§§§§§§§§§§§)',
       targetCode: 'print("Coding is fun")',
       testCases: [
         {
@@ -220,12 +221,12 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 화면에 결과(Result: 50)가 출력되도록 해보세요.',
-      prompt_en: 'Fill in the blanks to print the result (Result: 50) on the screen.',
-      hint_ko: '첫 번째 빈칸에는 문자열과 계산식을 연결하는 쉼표(,), 두 번째 빈칸에는 곱셈 연산자(*)를 입력하세요.',
-      hint_en: 'Enter a comma (,) in the first blank and the multiplication operator (*) in the second blank.',
-      templateCode: 'print("Result:"§ 10 § 5)',
-      targetCode: 'print("Result:", 10 * 5)',
+      prompt_ko: '빈칸에 계산식 10*5를 입력하여 결과(Result: 50)가 출력되도록 해보세요.',
+      prompt_en: 'Fill in the expression 10*5 to print the output Result: 50.',
+      hint_ko: '쉼표 뒤의 빈칸에 곱셈식 10*5를 입력하세요.',
+      hint_en: 'Type the multiplication expression 10*5 into the blank.',
+      templateCode: 'print("Result:", §§§§)',
+      targetCode: 'print("Result:", 10*5)',
       testCases: [
         {
           id: 1,
