@@ -3,22 +3,21 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // ============================================================================
 // 파이썬 기초 1레벨: print() 함수와 기본 사칙연산 (10단계)
 // - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
-// - 기호와 숫자 사이 공백 제거(Compact) 및 넓은 빈칸 입력 적용
 // - 페어 1: 단일 숫자 출력
 //   1. [블록] print(10)
 //   2. [타이핑: 빈칸] print(77)
-// - 페어 2: 덧셈 연산자(+)
+// - 페어 2: 덧셈(+)과 뺄셈(-) 연산자
 //   3. [블록] print(10+5)
-//   4. [타이핑: 빈칸] print(20+30) (수식 전체 빈칸)
+//   4. [타이핑: 빈칸] print(30-20) (뺄셈 연산자 입력)
 // - 페어 3: 곱셈 연산자(*)
 //   5. [블록] print(4*5)
-//   6. [타이핑: 빈칸] print(6*7) (수식 전체 빈칸)
+//   6. [타이핑: 빈칸] print(6*7) (곱셈 연산자 입력)
 // - 페어 4: 나눗셈 연산자(/)
 //   7. [블록] print(20/4)
-//   8. [타이핑: 빈칸] print(100/2) (수식 전체 빈칸)
+//   8. [타이핑: 빈칸] print(100/2) (나눗셈 연산자 입력)
 // - 페어 5: 괄호 우선순위 연산
 //   9. [블록] print((10+20)*3) (블록으로 괄호 개념 설명)
-//   10. [타이핑: 빈칸] print((2+3)*4) (괄호 수식 전체 빈칸)
+//   10. [타이핑: 빈칸] print((2+3)*4) (괄호 식 빈칸 입력)
 // ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
@@ -73,7 +72,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 2: 덧셈 연산자(+)
+    // 페어 2: 덧셈(+)과 뺄셈(-) 연산자
     // ------------------------------------------------------------------------
     {
       id: 3,
@@ -98,17 +97,17 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 덧셈식 20+30을 입력하여 계산 결과(50)를 출력해보세요.',
-      prompt_en: 'Fill in the addition expression 20+30 to print the result (50).',
-      hint_ko: '빈칸에 공백 없이 덧셈식 20+30을 차례대로 입력하세요.',
-      hint_en: 'Type the expression 20+30 without spaces into the blank.',
-      templateCode: 'print(§§§§§)',
-      targetCode: 'print(20+30)',
+      prompt_ko: '빈칸에 뺄셈 연산자를 사용해 계산 결과(10)를 출력해보세요.',
+      prompt_en: 'Use the subtraction operator in the blank to print the result (10).',
+      hint_ko: '30과 20 사이의 빈칸에 뺄셈 기호인 빼기(-)를 입력하세요.',
+      hint_en: 'Type the subtraction operator minus (-) in the blank between 30 and 20.',
+      templateCode: 'print(30§20)',
+      targetCode: 'print(30-20)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '50',
+          expectedOutput: '10',
         },
       ],
     },
@@ -139,11 +138,11 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈식 6*7을 입력하여 계산 결과(42)를 출력해보세요.',
-      prompt_en: 'Fill in the multiplication expression 6*7 to print the result (42).',
-      hint_ko: '키보드의 별표(*)를 사용해 빈칸에 6*7을 입력하세요.',
-      hint_en: 'Type 6*7 using the asterisk (*) operator into the blank.',
-      templateCode: 'print(§§§)',
+      prompt_ko: '빈칸에 곱셈 연산자를 사용해 계산 결과(42)를 출력해보세요.',
+      prompt_en: 'Use the multiplication operator in the blank to print the result (42).',
+      hint_ko: '6과 7 사이의 빈칸에 곱셈 기호인 별표(*)를 입력하세요.',
+      hint_en: 'Type the multiplication asterisk (*) operator in the blank between 6 and 7.',
+      templateCode: 'print(6§7)',
       targetCode: 'print(6*7)',
       testCases: [
         {
@@ -180,11 +179,11 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 나눗셈식 100/2를 입력하여 계산 결과(50.0)를 출력해보세요.',
-      prompt_en: 'Fill in the division expression 100/2 to print the result (50.0).',
-      hint_ko: '슬래시(/) 기호를 사용해 빈칸에 100/2를 입력하세요.',
-      hint_en: 'Type 100/2 using the slash (/) operator into the blank.',
-      templateCode: 'print(§§§§§)',
+      prompt_ko: '빈칸에 나눗셈 연산자를 사용해 계산 결과(50.0)를 출력해보세요.',
+      prompt_en: 'Use the division operator in the blank to print the result (50.0).',
+      hint_ko: '100과 2 사이의 빈칸에 나눗셈 기호인 슬래시(/)를 입력하세요. 파이썬 나눗셈 결과는 실수(50.0)로 출력됩니다.',
+      hint_en: 'Type the division slash (/) operator in the blank between 100 and 2. Division in Python produces a float (50.0).',
+      templateCode: 'print(100§2)',
       targetCode: 'print(100/2)',
       testCases: [
         {
@@ -221,11 +220,11 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 괄호 계산식 (2+3)*4를 입력하여 계산 결과(20)를 출력해보세요.',
-      prompt_en: 'Fill in the parenthesized expression (2+3)*4 to print the result (20).',
-      hint_ko: '2+3을 괄호로 감싸고 곱하기 4를 연결한 (2+3)*4를 빈칸에 차례대로 입력하세요.',
-      hint_en: 'Type (2+3)*4 into the blank to enforce addition before multiplication.',
-      templateCode: 'print(§§§§§§§§§)',
+      prompt_ko: '우선 계산되는 괄호 계산식을 추가하여 계산 결과(20)를 출력해보세요.',
+      prompt_en: 'Add the parenthesized expression to calculate it first and print the result (20).',
+      hint_ko: '빈칸에 2+3을 괄호로 감싼 (2+3)을 입력하세요. 괄호 안의 덧셈이 곱셈보다 먼저 계산됩니다.',
+      hint_en: 'Type (2+3) with parentheses into the blank. The parenthesized sum evaluates before the multiplication by 4.',
+      templateCode: 'print(§§§§§*4)',
       targetCode: 'print((2+3)*4)',
       testCases: [
         {
