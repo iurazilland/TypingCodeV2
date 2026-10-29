@@ -59,6 +59,12 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
         title_en: 'Escape Characters (\\n, \\t)',
         syntaxTags: ['\\n', '\\t', '\\"'],
       },
+      { 
+        levelNumber: 7, 
+        title_ko: '기초 출력과 연산 종합 문제풀이', 
+        title_en: 'Section 1 Comprehensive Review',
+        syntaxTags: ['print() 종합', '타이핑 마스터'],
+      },
     ],
   },
   {
@@ -68,28 +74,34 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
     title_en: 'Variables, Types & Input',
     levels: [
       { 
-        levelNumber: 7, 
+        levelNumber: 8, 
         title_ko: '주석(#)과 변수(Variable) 선언', 
         title_en: 'Comments (#) & Variables',
         syntaxTags: ['# comment', 'score = 100'],
       },
       { 
-        levelNumber: 8, 
+        levelNumber: 9, 
         title_ko: '변수 값 변경과 변수 연산', 
         title_en: 'Variable Reassignment & Operations',
         syntaxTags: ['x = x + 1', 'total = a * b'],
       },
       { 
-        levelNumber: 9, 
+        levelNumber: 10, 
         title_ko: '자료형(Data Type)과 type() 함수', 
         title_en: 'Data Types & type() Function',
         syntaxTags: ['type()', 'int, str, float'],
       },
       { 
-        levelNumber: 10, 
+        levelNumber: 11, 
         title_ko: 'input() 사용자 입력과 int() 형변환', 
         title_en: 'input() & int() Type Casting',
         syntaxTags: ['input()', 'int(input())'],
+      },
+      { 
+        levelNumber: 12, 
+        title_ko: '변수와 입력 종합 실전 프로젝트', 
+        title_en: 'Section 2 Comprehensive Project',
+        syntaxTags: ['변수 종합', '실전 프로젝트'],
       },
     ],
   },
@@ -100,13 +112,13 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
     title_en: 'Conditionals & Flow Control',
     levels: [
       { 
-        levelNumber: 11, 
+        levelNumber: 13, 
         title_ko: 'if 기본 조건 분기', 
         title_en: 'if Basic Conditional Branch',
         syntaxTags: ['if condition:', '들여쓰기(Indent)'],
       },
       { 
-        levelNumber: 12, 
+        levelNumber: 14, 
         title_ko: 'if-else 양방향 분기 제어', 
         title_en: 'if-else Two-Way Branching',
         syntaxTags: ['if ... else:', '양방향 분기'],

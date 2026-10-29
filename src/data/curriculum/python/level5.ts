@@ -2,23 +2,22 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 5레벨: 문자열 연산(+)과 반복(*) (10단계)
-// - 문자열 덧셈(+) : 두 문자열을 빈칸 없이 찰떡처럼 이어붙이기 (Concatenation)
-// - 공백 포함 덧셈 : 문자열 안에 직접 공백("Hello ")을 넣어 띄어쓰기 제어
-// - 문자열 곱셈(*) : 문자열에 숫자를 곱해 지정한 횟수만큼 반복 (Repetition)
-// - 특수문자/구분선 반복 : "=" * 20, "★" * 5로 UI 구분선 만들기
-// - 문자열 연산 vs 숫자 연산 대조 : "3" * 3 (333) vs 3 * 3 (9) 차이 체득
-// - 1~5단계: 코드블록 모드 (Block Mode)
-//   1. 문자열 덧셈 (이어붙이기) : print("Hello" + "World") -> HelloWorld
-//   2. 공백 포함 문자열 덧셈 : print("Hello " + "World") -> Hello World
-//   3. 구분선 문자 반복 : print("=" * 20) -> ====================
-//   4. 특수문자 반복 : print("★" * 5) -> ★★★★★
-//   5. 문자열 vs 숫자 연산 대조 : print("3" * 3, 3 * 3) -> 333 9
-// - 6~10단계: 타이핑 모드 (Typing Mode)
-//   6. [fill_blank] 문자열 이어붙이기 연산자 채우기 (+)
-//   7. [fill_blank] 문자열 반복 연산자 채우기 (*)
-//   8. [fix_bug] 문자열과 숫자 덧셈 오류 -> 곱셈(*) 수정
-//   9. [fill_blank] 구분선 반복 횟수 채우기 (15)
-//   10. [fill_blank] 문자열 반복과 숫자 곱셈 연산자 복합 채우기 (*)
+// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
+// - 페어 1: 문자열 덧셈(+)
+//   1. [블록] print("Hello" + "World") -> HelloWorld
+//   2. [타이핑: 빈칸] print("Python" + "Code") -> PythonCode
+// - 페어 2: 공백 포함 덧셈
+//   3. [블록] print("Hello " + "World") -> Hello World
+//   4. [타이핑: 빈칸] print("Typing " + "Code") -> Typing Code
+// - 페어 3: 문자열 곱셈(*)
+//   5. [블록] print("=" * 20) -> ====================
+//   6. [타이핑: 빈칸] print("하" * 3) -> 하하하
+// - 페어 4: 특수문자/기호 반복
+//   7. [블록] print("★" * 5) -> ★★★★★
+//   8. [타이핑: 빈칸] print("가나다" * 3) -> 가나다가나다가나다
+// - 심화 타이핑 2문제:
+//   9. [타이핑: 빈칸] 구분선 반복 횟수 채우기 print("-" * 15)
+//   10. [타이핑: 빈칸] 문자열 반복 vs 숫자 곱셈 복합 종합 print("7" * 3, 7 * 3) -> 777 21
 // ============================================================================
 export const PYTHON_LEVEL_5: PracticeRound = {
   id: 'py-basic-r5',
@@ -32,7 +31,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
   unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
-    // [블록 모드] 1~5단계: 블록 조립으로 개념 잡기
+    // 페어 1: 문자열 덧셈(+) 이어붙이기
     // ------------------------------------------------------------------------
     {
       id: 1,
@@ -55,6 +54,29 @@ export const PYTHON_LEVEL_5: PracticeRound = {
     {
       id: 2,
       step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 덧셈 연산자(+)를 입력하여 두 단어가 이어진 "PythonCode"를 화면에 출력해보세요.',
+      prompt_en: 'Fill in the blank with the plus (+) operator to print the joined text "PythonCode".',
+      hint_ko: '두 문자열을 서로 이어붙일 때는 덧셈 연산자(+)를 사용합니다.',
+      hint_en: 'Use the plus (+) operator to concatenate two strings.',
+      templateCode: 'print("Python" § "Code")',
+      targetCode: 'print("Python" + "Code")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'PythonCode',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 2: 공백 포함 문자열 덧셈
+    // ------------------------------------------------------------------------
+    {
+      id: 3,
+      step: 3,
       type: 'block',
       kind: 'standard',
       prompt_ko: '첫 번째 단어 끝에 띄어쓰기를 넣어 "Hello "와 "World"를 이어붙여 출력해보세요.',
@@ -71,8 +93,31 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       ],
     },
     {
-      id: 3,
-      step: 3,
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 덧셈 연산자(+)를 채워 띄어쓰기가 반영된 "Typing Code"를 출력해보세요.',
+      prompt_en: 'Fill in the plus (+) operator to print "Typing Code" with preserved spacing.',
+      hint_ko: '앞 단어 뒤에 공백("Typing ")이 들어있으므로 덧셈 기호(+)만 채워 넣으면 "Typing Code"가 됩니다.',
+      hint_en: 'Since "Typing " already contains a trailing space, simply enter the plus (+) operator.',
+      templateCode: 'print("Typing " § "Code")',
+      targetCode: 'print("Typing " + "Code")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Typing Code',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 3: 문자열 곱셈(*) 반복
+    // ------------------------------------------------------------------------
+    {
+      id: 5,
+      step: 5,
       type: 'block',
       kind: 'standard',
       prompt_ko: '등호 문자 "="에 곱셈(*) 연산자를 사용해 20번 반복한 구분선을 출력해보세요.',
@@ -89,8 +134,31 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       ],
     },
     {
-      id: 4,
-      step: 4,
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 곱셈 연산자(*)를 입력하여 글자가 3번 반복된 "하하하"를 출력해보세요.',
+      prompt_en: 'Fill in the multiplication operator (*) to repeat the character 3 times as "하하하".',
+      hint_ko: '문자열을 지정한 횟수만큼 반복할 때는 곱셈 연산자(*)를 사용합니다.',
+      hint_en: 'Use the multiplication operator (*) to repeat a string a given number of times.',
+      templateCode: 'print("하" § 3)',
+      targetCode: 'print("하" * 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '하하하',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 4: 특수문자/기호 반복
+    // ------------------------------------------------------------------------
+    {
+      id: 7,
+      step: 7,
       type: 'block',
       kind: 'standard',
       prompt_ko: '별 기호 "★"에 곱셈(*) 연산자를 사용해 5번 반복하여 출력해보세요.',
@@ -107,76 +175,15 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       ],
     },
     {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '문자열 "3"을 3번 반복한 결과와, 숫자 3을 곱한 3 * 3의 결과를 나란히 출력해보세요.',
-      prompt_en: 'Print the result of repeating string "3" three times and the numeric multiplication 3 * 3 side by side.',
-      hint_ko: '따옴표가 있는 "3" * 3은 글자 반복이라 333이 되고, 따옴표가 없는 3 * 3은 숫자 곱셈이라 9가 됩니다. 문자열과 숫자의 중요한 차이점입니다.',
-      hint_en: 'Quoted "3" * 3 repeats the text to produce 333, while numeric 3 * 3 computes 9.',
-      targetCode: 'print("3" * 3, 3 * 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '333 9',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // [타이핑 모드] 6~10단계: 1~5번 유형의 문제형 반복
-    // - 빈칸은 § 기호로 지정 (예: §§은 2글자 빈칸 박스)
-    // ------------------------------------------------------------------------
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 적절한 연산자를 입력하여 두 단어가 이어진 "PythonCode"를 화면에 출력해보세요.',
-      prompt_en: 'Fill in the blank with the appropriate operator to print the joined text "PythonCode".',
-      hint_ko: '두 문자열을 서로 이어붙일 때는 덧셈 연산자(+)를 사용합니다.',
-      hint_en: 'Use the plus (+) operator to concatenate two strings.',
-      templateCode: 'print("Python" § "Code")',
-      targetCode: 'print("Python" + "Code")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'PythonCode',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 적절한 연산자를 입력하여 글자가 3번 반복된 "하하하"를 출력해보세요.',
-      prompt_en: 'Fill in the blank with the proper operator to repeat the character 3 times as "하하하".',
-      hint_ko: '문자열을 지정한 횟수만큼 반복할 때는 곱셈 연산자(*)를 사용합니다.',
-      hint_en: 'Use the multiplication operator (*) to repeat a string a given number of times.',
-      templateCode: 'print("하" § 3)',
-      targetCode: 'print("하" * 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '하하하',
-        },
-      ],
-    },
-    {
       id: 8,
       step: 8,
       type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '문자열을 3번 반복하려다 발생한 오류를 찾아 올바른 연산자로 수정해보세요.',
-      prompt_en: 'Find the bug caused while attempting to repeat a string 3 times and fix it with the correct operator.',
-      hint_ko: '파이썬에서는 문자열과 숫자를 더할(+) 수 없습니다. 글자를 여러 번 반복할 때는 곱셈 연산자(*)로 고쳐야 합니다.',
-      hint_en: 'Python cannot add (+) a string and an integer. Replace + with the asterisk (*) to repeat the string.',
-      templateCode: 'print("가나다" + 3)',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 곱셈 연산자(*)를 채워 단어가 3번 반복된 "가나다가나다가나다"를 출력해보세요.',
+      prompt_en: 'Fill in the asterisk (*) operator to repeat the word 3 times.',
+      hint_ko: '문자열 뒤의 빈칸에 곱셈 연산자(*)를 넣으면 해당 단어가 3번 연속으로 출력됩니다.',
+      hint_en: 'Type the asterisk (*) operator in the blank to repeat the word 3 times.',
+      templateCode: 'print("가나다" § 3)',
       targetCode: 'print("가나다" * 3)',
       testCases: [
         {
@@ -186,6 +193,10 @@ export const PYTHON_LEVEL_5: PracticeRound = {
         },
       ],
     },
+
+    // ------------------------------------------------------------------------
+    // 심화 타이핑 2문제 (9, 10단계): 구분선 길이 지정 및 글자 반복 vs 숫자 연산 대조
+    // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
@@ -210,8 +221,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 동일한 연산자를 채워 글자 3번 반복(777)과 숫자 곱셈(21)을 동시에 출력해보세요.',
-      prompt_en: 'Fill in both blanks with the same operator to output text repetition (777) and multiplication (21) at once.',
+      prompt_ko: '두 빈칸에 곱셈 연산자(*)를 채워 글자 3번 반복(777)과 숫자 곱셈(21)을 동시에 출력해보세요.',
+      prompt_en: 'Fill in both blanks with the asterisk (*) to output text repetition (777) and multiplication (21) at once.',
       hint_ko: '문자열과 숫자 모두에 곱셈 연산자(*)를 적용하면, 앞은 글자 반복(777), 뒤는 실제 계산(21)이 됩니다.',
       hint_en: 'Applying the asterisk (*) operator repeats the string (777) on the left and computes multiplication (21) on the right.',
       templateCode: 'print("7" § 3, 7 § 3)',

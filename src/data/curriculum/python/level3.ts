@@ -2,19 +2,22 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 3레벨: 문자열(String)과 따옴표 출력 (10단계)
-// - 쌍따옴표("")와 작은따옴표('')를 둘 다 사용할 수 있음을 학습
-// - 1~5단계: 코드블록 모드 (Block Mode) - 블록으로 개념 체득
-//   1. 큰따옴표(쌍따옴표) 문자열 : print("Hello")
-//   2. 작은따옴표 문자열 : print('Python') (둘 다 사용 가능)
-//   3. 공백 포함 문장 문자열 : print("Coding is fun")
-//   4. 따옴표 속 따옴표 포함 : print('Say "Hello"') (작은따옴표 안에 쌍따옴표)
-//   5. 문자열과 숫자 쉼표 출력 : print("Score:", 100) (누적 복습)
-// - 6~10단계: 타이핑 모드 (Typing Mode) - 1~5번 유형의 문제 형식 반복
-//   6. [유형1] 빈칸 채우기 (문자열 전체 입력: "Hello")
-//   7. [유형2] 빈칸 채우기 (따옴표 닫기 짝 맞추기: 'Python')
-//   8. [유형3] 오타 수정 (작은따옴표 충돌 해결: "I'm happy")
-//   9. [유형4] 빈칸 채우기 (문자열과 숫자 사이 쉼표 입력)
-//   10. [유형5] 빈칸 채우기 (문자열 설명과 계산 결과 동시 출력)
+// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
+// - 페어 1: 큰따옴표 문자열
+//   1. [블록] print("Hello")
+//   2. [타이핑: 빈칸] print("Hello")
+// - 페어 2: 작은따옴표 문자열
+//   3. [블록] print('Python')
+//   4. [타이핑: 빈칸] print('Python') (닫는 따옴표)
+// - 페어 3: 따옴표 속 따옴표 포함
+//   5. [블록] print('Say "Hello"')
+//   6. [타이핑: 빈칸] print("I'm happy") (바깥쪽 큰따옴표 감싸기)
+// - 페어 4: 문자열과 숫자 쉼표(,) 연결
+//   7. [블록] print("Score:", 100)
+//   8. [타이핑: 빈칸] print("Level", 3)
+// - 심화 타이핑 2문제:
+//   9. [타이핑: 빈칸] 공백 포함 문장 출력 print("Coding is fun")
+//   10. [타이핑: 빈칸] 문자열 라벨과 계산 결과 동시 출력 print("Result:", 10 * 5)
 // ============================================================================
 export const PYTHON_LEVEL_3: PracticeRound = {
   id: 'py-basic-r3',
@@ -28,7 +31,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
   unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
-    // [블록 모드] 1~5단계: 블록 조립으로 개념 잡기
+    // 페어 1: 큰따옴표 문자열
     // ------------------------------------------------------------------------
     {
       id: 1,
@@ -51,83 +54,6 @@ export const PYTHON_LEVEL_3: PracticeRound = {
     {
       id: 2,
       step: 2,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '작은따옴표(\'\')를 사용해 문자열 \'Python\'을 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use single quotes (\'\') to insert the string \'Python\' and print it on the screen.',
-      hint_ko: '파이썬은 쌍따옴표("")와 작은따옴표(\'\')를 완전히 똑같이 문자열 기호로 지원합니다. 시작과 끝의 따옴표 모양만 맞춰주면 동일하게 동작합니다.',
-      hint_en: 'Python treats double quotes ("") and single quotes (\'\') identically. As long as the opening and closing quotes match, it prints correctly.',
-      targetCode: "print('Python')",
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Python',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '문자열 "Coding is fun"을 넣어 화면에 출력해보세요.',
-      prompt_en: 'Insert the string "Coding is fun" and print it on the screen.',
-      hint_ko: '따옴표 안에는 영문, 한글뿐만 아니라 띄어쓰기(공백)도 그대로 문자열의 일부로 포함되어 출력됩니다.',
-      hint_en: 'Spaces inside quotes are preserved as part of the string. Enter "Coding is fun" inside the print() slot.',
-      targetCode: 'print("Coding is fun")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Coding is fun',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '작은따옴표(\'\')를 사용해 쌍따옴표가 들어간 \'Say "Hello"\'를 출력해보세요.',
-      prompt_en: 'Use single quotes (\'\') to print \'Say "Hello"\' containing double quotes.',
-      hint_ko: '문장 안에 쌍따옴표("")를 글자로 표현하고 싶을 때는 바깥쪽을 작은따옴표(\'\')로 감싸주면 충돌 없이 안전하게 출력됩니다.',
-      hint_en: 'When a string contains double quotes (""), enclosing it in single quotes (\'\') prevents syntax errors.',
-      targetCode: 'print(\'Say "Hello"\')',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Say "Hello"',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '문자열 "Score:"와 숫자 100을 쉼표(,)로 연결해 나란히 출력해보세요.',
-      prompt_en: 'Connect the string "Score:" and number 100 with a comma (,) to print them side by side.',
-      hint_ko: 'print() 안에 쉼표(,)를 찍으면 문자열과 숫자를 한 줄에 공백을 두고 나란히 출력할 수 있습니다. "Score: 100"이 출력됩니다.',
-      hint_en: 'Using a comma in print() separates strings and numbers with an automatic space, outputting "Score: 100".',
-      targetCode: 'print("Score:", 100)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Score: 100',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // [타이핑 모드] 6~10단계: 1~5번 유형의 문제형 반복
-    // - 빈칸은 § 기호로 지정 (예: §§은 2글자 빈칸 박스)
-    // ------------------------------------------------------------------------
-    {
-      id: 6,
-      step: 6,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 문자열 Hello를 화면에 출력해보세요.',
@@ -144,9 +70,31 @@ export const PYTHON_LEVEL_3: PracticeRound = {
         },
       ],
     },
+
+    // ------------------------------------------------------------------------
+    // 페어 2: 작은따옴표 문자열
+    // ------------------------------------------------------------------------
     {
-      id: 7,
-      step: 7,
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '작은따옴표(\'\')를 사용해 문자열 \'Python\'을 넣어 화면에 출력해보세요.',
+      prompt_en: 'Use single quotes (\'\') to insert the string \'Python\' and print it on the screen.',
+      hint_ko: '파이썬은 쌍따옴표("")와 작은따옴표(\'\')를 완전히 똑같이 문자열 기호로 지원합니다. 시작과 끝의 따옴표 모양만 맞춰주면 동일하게 동작합니다.',
+      hint_en: 'Python treats double quotes ("") and single quotes (\'\') identically. As long as the opening and closing quotes match, it prints correctly.',
+      targetCode: "print('Python')",
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Python',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 문자열 Python의 닫는 따옴표를 완성해보세요.',
@@ -163,16 +111,38 @@ export const PYTHON_LEVEL_3: PracticeRound = {
         },
       ],
     },
+
+    // ------------------------------------------------------------------------
+    // 페어 3: 따옴표 속 따옴표 포함
+    // ------------------------------------------------------------------------
     {
-      id: 8,
-      step: 8,
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '작은따옴표(\'\')를 사용해 쌍따옴표가 들어간 \'Say "Hello"\'를 출력해보세요.',
+      prompt_en: 'Use single quotes (\'\') to print \'Say "Hello"\' containing double quotes.',
+      hint_ko: '문장 안에 쌍따옴표("")를 글자로 표현하고 싶을 때는 바깥쪽을 작은따옴표(\'\')로 감싸주면 충돌 없이 안전하게 출력됩니다.',
+      hint_en: 'When a string contains double quotes (""), enclosing it in single quotes (\'\') prevents syntax errors.',
+      targetCode: 'print(\'Say "Hello"\')',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Say "Hello"',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
       type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '틀린 곳을 수정하여 문장 I\'m happy를 화면에 출력해보세요.',
-      prompt_en: 'Fix the error to print the sentence "I\'m happy" on the screen.',
-      hint_ko: '문장 안에 작은따옴표(\')가 포함되어 있어 바깥을 작은따옴표로 감싸면 문법 오류(SyntaxError)가 발생합니다. 바깥쪽 양쪽 따옴표를 큰따옴표(")로 수정해보세요.',
-      hint_en: 'Since the string contains an apostrophe (\'), enclosing it in single quotes causes a SyntaxError. Change the outer quotes to double quotes (").',
-      templateCode: 'print(\'I\'m happy\')',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 큰따옴표(")를 채워 작은따옴표가 포함된 문장 "I\'m happy"를 출력해보세요.',
+      prompt_en: 'Fill in the double quotes (") to print the sentence "I\'m happy" containing an apostrophe.',
+      hint_ko: '문장 안에 작은따옴표(\')가 있을 때는 바깥쪽 양끝을 큰따옴표(")로 감싸주어야 합니다.',
+      hint_en: 'Enclose the sentence in double quotes (") so the internal apostrophe does not cause an error.',
+      templateCode: 'print(§I\'m happy§)',
       targetCode: 'print("I\'m happy")',
       testCases: [
         {
@@ -182,9 +152,31 @@ export const PYTHON_LEVEL_3: PracticeRound = {
         },
       ],
     },
+
+    // ------------------------------------------------------------------------
+    // 페어 4: 문자열과 숫자 쉼표(,) 연결
+    // ------------------------------------------------------------------------
     {
-      id: 9,
-      step: 9,
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '문자열 "Score:"와 숫자 100을 쉼표(,)로 연결해 나란히 출력해보세요.',
+      prompt_en: 'Connect the string "Score:" and number 100 with a comma (,) to print them side by side.',
+      hint_ko: 'print() 안에 쉼표(,)를 찍으면 문자열과 숫자를 한 줄에 공백을 두고 나란히 출력할 수 있습니다. "Score: 100"이 출력됩니다.',
+      hint_en: 'Using a comma in print() separates strings and numbers with an automatic space, outputting "Score: 100".',
+      targetCode: 'print("Score:", 100)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Score: 100',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 문자열과 숫자가 나란히 출력되도록 해보세요.',
@@ -198,6 +190,29 @@ export const PYTHON_LEVEL_3: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: 'Level 3',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 심화 타이핑 2문제 (9, 10단계): 문장 출력 및 복합 수식 라벨
+    // ------------------------------------------------------------------------
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 큰따옴표(")를 채워 공백이 포함된 문장 "Coding is fun"을 출력해보세요.',
+      prompt_en: 'Fill in the double quotes (") to print the sentence "Coding is fun" on the screen.',
+      hint_ko: '문장의 앞과 뒤 빈칸에 큰따옴표(")를 각각 입력하여 전체 문자열을 감싸주세요.',
+      hint_en: 'Type double quotes (") in the opening and closing blanks to enclose the sentence.',
+      templateCode: 'print(§Coding is fun§)',
+      targetCode: 'print("Coding is fun")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Coding is fun',
         },
       ],
     },

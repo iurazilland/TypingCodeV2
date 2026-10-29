@@ -2,22 +2,22 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 4레벨: 수식 출력과 나머지(%)의 실전 활용 (10단계)
-// - 문자열 수식과 실제 계산식의 차이 이해 ("3 + 5" vs 3 + 5)
-// - 쉼표(,)를 활용해 문자열 수식 라벨과 실제 계산 결과를 한 번에 출력
-// - 사람이 읽는 수식 기호(x)와 컴퓨터 연산자(*)의 차이를 구구단으로 체득
-// - 2로 나눈 나머지(%)가 0이면 짝수라는 실전 프로그래밍 핵심 개념 학습
-// - 1~5단계: 코드블록 모드 (Block Mode) - 블록으로 개념 체득
-//   1. 문자열 수식 출력 (계산 안 됨) : print("3 + 5")
-//   2. 덧셈 수식과 결과 동시 출력 : print("3 + 5 =", 3 + 5)
-//   3. 나머지(%)의 실전 활용 (짝수 판별) : print(10 % 2) (0이면 짝수)
-//   4. 구구단 한 줄 출력 : print("2 x 3 =", 2 * 3)
-//   5. 몫과 나머지 라벨 동시 출력 : print("몫:", 20 // 3, "나머지:", 20 % 3)
-// - 6~10단계: 타이핑 모드 (Typing Mode) - 1~5번 유형의 문제 형식 반복
-//   6. [유형1] 빈칸 채우기 (계산식 전체 입력: 7 + 8)
-//   7. [유형2] 빈칸 채우기 (수식 라벨 문자열 입력: 3 x 7 =)
-//   8. [유형3] 오타 수정 (수학 기호 x -> 프로그래밍 곱셈 기호 *)
-//   9. [유형4] 빈칸 채우기 (라벨과 연산식 모두 나머지 연산자 %)
-//   10. [유형5] 빈칸 채우기 (몫 // 과 나머지 % 복합 종합)
+// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
+// - 페어 1: 수식과 결과 동시 출력
+//   1. [블록] print("3 + 5 =", 3 + 5)
+//   2. [타이핑: 빈칸] print("7 + 8 =", 7 + 8)
+// - 페어 2: 나머지(%)의 실전 활용 (짝수 판별)
+//   3. [블록] print(10 % 2) (0이면 짝수)
+//   4. [타이핑: 빈칸] print("8 % 2 =", 8 % 2)
+// - 페어 3: 구구단 라벨과 곱셈 연산자(*)
+//   5. [블록] print("2 x 3 =", 2 * 3)
+//   6. [타이핑: 빈칸] print("4 x 5 =", 4 * 5)
+// - 페어 4: 문자열 수식 출력
+//   7. [블록] print("3 + 5") (계산되지 않음)
+//   8. [타이핑: 빈칸] print("3 x 7 =", 3 * 7)
+// - 심화 타이핑 2문제:
+//   9. [타이핑: 빈칸] 몫과 나머지 라벨 동시 출력 print("몫:", 20 // 3, "나머지:", 20 % 3)
+//   10. [타이핑: 빈칸] 복합 몫과 나머지 심화 종합 print("몫:", 14 // 3, "나머지:", 14 % 3)
 // ============================================================================
 export const PYTHON_LEVEL_4: PracticeRound = {
   id: 'py-basic-r4',
@@ -31,29 +31,11 @@ export const PYTHON_LEVEL_4: PracticeRound = {
   unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
-    // [블록 모드] 1~5단계: 블록 조립으로 개념 잡기
+    // 페어 1: 수식과 결과 동시 출력
     // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '따옴표를 사용해 계산식이 글자 그대로 나오는 "3 + 5"를 출력해보세요.',
-      prompt_en: 'Use quotes to print the expression "3 + 5" as literal text on the screen.',
-      hint_ko: '따옴표 안에 수식을 적으면 계산되지 않고 문자 그대로 "3 + 5"가 출력됩니다.',
-      hint_en: 'Writing an expression inside quotes outputs "3 + 5" literally without evaluating it.',
-      targetCode: 'print("3 + 5")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '3 + 5',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
       type: 'block',
       kind: 'standard',
       prompt_ko: '문자열 "3 + 5 ="와 실제 계산식 3 + 5를 쉼표로 연결해 출력해보세요.',
@@ -69,6 +51,29 @@ export const PYTHON_LEVEL_4: PracticeRound = {
         },
       ],
     },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸을 채워 7 + 8의 계산 결과(7 + 8 = 15)를 화면에 출력해보세요.',
+      prompt_en: 'Fill in the blank to print 7 + 8 = 15 on the screen.',
+      hint_ko: '쉼표 뒤의 빈칸에 수식 7 + 8을 입력하세요. 파이썬이 이를 계산하여 15로 출력합니다.',
+      hint_en: 'Type the expression 7 + 8 in the blank. Python will evaluate it and print 15.',
+      templateCode: 'print("7 + 8 =", §§§§§)',
+      targetCode: 'print("7 + 8 =", 7 + 8)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '7 + 8 = 15',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 2: 나머지(%)의 실전 활용 (짝수 판별)
+    // ------------------------------------------------------------------------
     {
       id: 3,
       step: 3,
@@ -90,104 +95,6 @@ export const PYTHON_LEVEL_4: PracticeRound = {
     {
       id: 4,
       step: 4,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '문자열 "2 x 3 ="과 계산식 2 * 3을 연결해 구구단 결과를 출력해보세요.',
-      prompt_en: 'Connect the string "2 x 3 =" and expression 2 * 3 to print the multiplication result.',
-      hint_ko: '화면에 보여줄 수식 모양은 문자열 "2 x 3 ="으로 쓰고, 실제 계산은 파이썬 곱셈 연산자(*)를 사용해 2 * 3을 넣으면 "2 x 3 = 6"이 출력됩니다.',
-      hint_en: 'Use the string "2 x 3 =" for display and the asterisk (*) operator for calculation to print "2 x 3 = 6".',
-      targetCode: 'print("2 x 3 =", 2 * 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '2 x 3 = 6',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '20을 3으로 나눈 몫과 나머지를 설명과 함께 나란히 출력해보세요.',
-      prompt_en: 'Print both the quotient and remainder of 20 divided by 3 with labels side by side.',
-      hint_ko: '몫 연산자(//)와 나머지 연산자(%)를 설명 문자열과 함께 쉼표로 연결하면 "몫: 6 나머지: 2"가 보기 좋게 출력됩니다.',
-      hint_en: 'Connecting floor division (//) and modulo (%) with descriptive strings produces "몫: 6 나머지: 2".',
-      targetCode: 'print("몫:", 20 // 3, "나머지:", 20 % 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '몫: 6 나머지: 2',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // [타이핑 모드] 6~10단계: 1~5번 유형의 문제형 반복
-    // - 빈칸은 § 기호로 지정 (예: §§은 2글자 빈칸 박스)
-    // ------------------------------------------------------------------------
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 7 + 8의 계산 결과(7 + 8 = 15)를 화면에 출력해보세요.',
-      prompt_en: 'Fill in the blank to print 7 + 8 = 15 on the screen.',
-      hint_ko: '쉼표 뒤의 빈칸에 수식 7 + 8을 입력하세요. 파이썬이 이를 계산하여 15로 출력합니다.',
-      hint_en: 'Type the expression 7 + 8 in the blank. Python will evaluate it and print 15.',
-      templateCode: 'print("7 + 8 =", §§§§§)',
-      targetCode: 'print("7 + 8 =", 7 + 8)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '7 + 8 = 15',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 구구단 3단의 수식 설명(3 x 7 = 21)을 완성해보세요.',
-      prompt_en: 'Fill in the blank to complete the formula label for 3 x 7 = 21.',
-      hint_ko: '따옴표 안의 빈칸에 수식 모양인 3 x 7 = 을 입력하세요.',
-      hint_en: 'Type 3 x 7 = inside the quotes to display the formula.',
-      templateCode: 'print("§§§§§§§", 3 * 7)',
-      targetCode: 'print("3 x 7 =", 3 * 7)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '3 x 7 = 21',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '틀린 곳을 수정하여 구구단(4 x 5 = 20)이 계산되도록 해보세요.',
-      prompt_en: 'Fix the error to calculate the multiplication (4 x 5 = 20) correctly.',
-      hint_ko: '파이썬은 알파벳 x를 곱셈 연산자로 인식하지 못합니다. x를 곱셈 연산자(*)로 고쳐보세요.',
-      hint_en: 'Python does not recognize the letter x as an operator. Replace x with the asterisk (*) operator.',
-      templateCode: 'print("4 x 5 =", 4 x 5)',
-      targetCode: 'print("4 x 5 =", 4 * 5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '4 x 5 = 20',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 짝수 확인 식과 결과(8 % 2 = 0)를 화면에 출력해보세요.',
@@ -204,6 +111,111 @@ export const PYTHON_LEVEL_4: PracticeRound = {
         },
       ],
     },
+
+    // ------------------------------------------------------------------------
+    // 페어 3: 구구단 라벨과 곱셈 연산자(*)
+    // ------------------------------------------------------------------------
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '문자열 "2 x 3 ="과 계산식 2 * 3을 연결해 구구단 결과를 출력해보세요.',
+      prompt_en: 'Connect the string "2 x 3 =" and expression 2 * 3 to print the multiplication result.',
+      hint_ko: '화면에 보여줄 수식 모양은 문자열 "2 x 3 ="으로 쓰고, 실제 계산은 파이썬 곱셈 연산자(*)를 사용해 2 * 3을 넣으면 "2 x 3 = 6"이 출력됩니다.',
+      hint_en: 'Use the string "2 x 3 =" for display and the asterisk (*) operator for calculation to print "2 x 3 = 6".',
+      targetCode: 'print("2 x 3 =", 2 * 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 x 3 = 6',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 곱셈 연산자(*)를 채워 구구단(4 x 5 = 20)이 계산되도록 해보세요.',
+      prompt_en: 'Fill in the asterisk (*) multiplication operator to calculate 4 x 5 = 20.',
+      hint_ko: '화면에는 "4 x 5 =" 라벨이 보이고, 실제 계산은 곱셈 기호(*)를 사용해야 하므로 빈칸에 *를 입력하세요.',
+      hint_en: 'Enter the asterisk (*) operator in the blank to perform multiplication.',
+      templateCode: 'print("4 x 5 =", 4 § 5)',
+      targetCode: 'print("4 x 5 =", 4 * 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '4 x 5 = 20',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 4: 문자열 수식 출력과 수식 라벨 완성
+    // ------------------------------------------------------------------------
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '따옴표를 사용해 계산식이 글자 그대로 나오는 "3 + 5"를 출력해보세요.',
+      prompt_en: 'Use quotes to print the expression "3 + 5" as literal text on the screen.',
+      hint_ko: '따옴표 안에 수식을 적으면 계산되지 않고 문자 그대로 "3 + 5"가 출력됩니다.',
+      hint_en: 'Writing an expression inside quotes outputs "3 + 5" literally without evaluating it.',
+      targetCode: 'print("3 + 5")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 + 5',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸을 채워 구구단 3단의 수식 설명(3 x 7 = 21)을 완성해보세요.',
+      prompt_en: 'Fill in the blank to complete the formula label for 3 x 7 = 21.',
+      hint_ko: '따옴표 안의 빈칸에 수식 모양인 3 x 7 = 을 입력하세요.',
+      hint_en: 'Type 3 x 7 = inside the quotes to display the formula.',
+      templateCode: 'print("§§§§§§§", 3 * 7)',
+      targetCode: 'print("3 x 7 =", 3 * 7)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 x 7 = 21',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 심화 타이핑 2문제 (9, 10단계): 몫과 나머지 동시 출력 및 복합 연산
+    // ------------------------------------------------------------------------
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸을 채워 20을 3으로 나눈 몫(6)과 나머지(2)를 설명 라벨과 함께 출력해보세요.',
+      prompt_en: 'Fill in the blanks to print the quotient (6) and remainder (2) of 20 divided by 3 with labels.',
+      hint_ko: '첫 번째 빈칸에는 몫 연산자(//), 두 번째 빈칸에는 나머지 연산자(%)를 입력하세요.',
+      hint_en: 'Enter the floor division operator (//) in the first blank and modulo operator (%) in the second.',
+      templateCode: 'print("몫:", 20 §§ 3, "나머지:", 20 § 3)',
+      targetCode: 'print("몫:", 20 // 3, "나머지:", 20 % 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '몫: 6 나머지: 2',
+        },
+      ],
+    },
     {
       id: 10,
       step: 10,
@@ -211,8 +223,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 14를 3으로 나눈 몫(4)과 나머지(2)를 함께 출력해보세요.',
       prompt_en: 'Fill in the blanks to print the quotient (4) and remainder (2) of 14 divided by 3 together.',
-      hint_ko: '첫 번째 빈칸에는 몫 연산자(//), 두 번째 빈칸에는 나머지 연산자(%)를 입력하세요.',
-      hint_en: 'Enter the floor division operator (//) in the first blank and modulo operator (%) in the second blank.',
+      hint_ko: '첫 번째 빈칸에는 몫(//), 두 번째 빈칸에는 나머지(%) 연산자를 입력하세요.',
+      hint_en: 'Enter floor division (//) in the first blank and modulo (%) in the second blank.',
       templateCode: 'print("몫:", 14 §§ 3, "나머지:", 14 § 3)',
       targetCode: 'print("몫:", 14 // 3, "나머지:", 14 % 3)',
       testCases: [
