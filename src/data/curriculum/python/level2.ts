@@ -2,7 +2,7 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 2레벨: 몫(//), 나머지(%), 거듭제곱(**)과 쉼표(,) (10단계)
-// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
+// - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
 // - 페어 1: 몫 연산자(//)
 //   1. [블록] print(17 // 5) -> 3
 //   2. [타이핑: 빈칸] print(20 // 3) -> 6
@@ -15,9 +15,9 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // - 페어 4: 쉼표(,) 다중 출력
 //   7. [블록] print(10, 20) -> 10 20
 //   8. [타이핑: 빈칸] print(50, 100) -> 50 100
-// - 심화 타이핑 2문제:
-//   9. [타이핑: 빈칸] 몫과 나머지 동시 출력 print(17 // 5, 17 % 5) -> 3 2
-//   10. [타이핑: 빈칸] 몫과 나머지 종합 심화 print(15 // 4, 15 % 4) -> 3 3
+// - 페어 5: 몫과 나머지 동시 출력
+//   9. [블록] print(17 // 5, 17 % 5) -> 3 2
+//   10. [타이핑: 빈칸] print(15 // 4, 15 % 4) -> 3 3
 // ============================================================================
 export const PYTHON_LEVEL_2: PracticeRound = {
   id: 'py-basic-r2',
@@ -195,18 +195,17 @@ export const PYTHON_LEVEL_2: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 심화 타이핑 2문제 (9, 10단계): 몫과 나머지 동시 출력 및 종합
+    // 페어 5: 몫과 나머지 동시 출력 (9번 블록 ➔ 10번 타이핑)
     // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 17을 5로 나눈 몫(3)과 나머지(2)를 한 번에 출력해보세요.',
-      prompt_en: 'Fill in the blanks to print both the quotient (3) and remainder (2) of 17 divided by 5 together.',
-      hint_ko: '첫 번째 빈칸은 몫(//), 두 번째는 쉼표(,), 세 번째는 나머지(%) 연산자를 입력하세요.',
-      hint_en: 'Enter floor division (//) in the first blank, a comma (,) in the second, and modulo (%) in the third.',
-      templateCode: 'print(17 §§ 5§ 17 § 5)',
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '쉼표(,)를 사용해 17을 5로 나눈 몫(17 // 5)과 나머지(17 % 5)를 한 번에 출력해보세요.',
+      prompt_en: 'Use a comma (,) to print both the quotient (17 // 5) and remainder (17 % 5) together.',
+      hint_ko: '17 // 5, 17 % 5 와 같이 쉼표로 연결하면 몫(3)과 나머지(2)가 한 칸 띄워져 "3 2"로 출력됩니다.',
+      hint_en: 'Writing 17 // 5, 17 % 5 separated by a comma prints the quotient (3) and remainder (2) as "3 2".',
       targetCode: 'print(17 // 5, 17 % 5)',
       testCases: [
         {

@@ -2,7 +2,7 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 3레벨: 문자열(String)과 따옴표 출력 (10단계)
-// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
+// - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
 // - 페어 1: 큰따옴표 문자열
 //   1. [블록] print("Hello")
 //   2. [타이핑: 빈칸] print("Hello")
@@ -11,13 +11,13 @@ import { PracticeRound } from '@/lib/practiceTypes';
 //   4. [타이핑: 빈칸] print('Python') (닫는 따옴표)
 // - 페어 3: 따옴표 속 따옴표 포함
 //   5. [블록] print('Say "Hello"')
-//   6. [타이핑: 빈칸] print("I'm happy") (바깥쪽 큰따옴표 감싸기)
-// - 페어 4: 문자열과 숫자 쉼표(,) 연결
-//   7. [블록] print("Score:", 100)
-//   8. [타이핑: 빈칸] print("Level", 3)
-// - 심화 타이핑 2문제:
-//   9. [타이핑: 빈칸] 공백 포함 문장 출력 print("Coding is fun")
-//   10. [타이핑: 빈칸] 문자열 라벨과 계산 결과 동시 출력 print("Result:", 10 * 5)
+//   6. [타이핑: 빈칸] print("I'm happy") (바깥 큰따옴표)
+// - 페어 4: 공백 포함 문장 출력
+//   7. [블록] print("Coding is fun")
+//   8. [타이핑: 빈칸] print("Coding is fun")
+// - 페어 5: 문자열과 숫자 쉼표(,) 연결
+//   9. [블록] print("Score:", 100)
+//   10. [타이핑: 빈칸] print("Result:", 10 * 5)
 // ============================================================================
 export const PYTHON_LEVEL_3: PracticeRound = {
   id: 'py-basic-r3',
@@ -154,52 +154,29 @@ export const PYTHON_LEVEL_3: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 4: 문자열과 숫자 쉼표(,) 연결
+    // 페어 4: 공백 포함 문장 출력
     // ------------------------------------------------------------------------
     {
       id: 7,
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '문자열 "Score:"와 숫자 100을 쉼표(,)로 연결해 나란히 출력해보세요.',
-      prompt_en: 'Connect the string "Score:" and number 100 with a comma (,) to print them side by side.',
-      hint_ko: 'print() 안에 쉼표(,)를 찍으면 문자열과 숫자를 한 줄에 공백을 두고 나란히 출력할 수 있습니다. "Score: 100"이 출력됩니다.',
-      hint_en: 'Using a comma in print() separates strings and numbers with an automatic space, outputting "Score: 100".',
-      targetCode: 'print("Score:", 100)',
+      prompt_ko: '문자열 "Coding is fun"을 넣어 화면에 출력해보세요.',
+      prompt_en: 'Insert the string "Coding is fun" and print it on the screen.',
+      hint_ko: '따옴표 안에는 영문, 한글뿐만 아니라 띄어쓰기(공백)도 그대로 문자열의 일부로 포함되어 출력됩니다.',
+      hint_en: 'Spaces inside quotes are preserved as part of the string. Enter "Coding is fun" inside the print() slot.',
+      targetCode: 'print("Coding is fun")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Score: 100',
+          expectedOutput: 'Coding is fun',
         },
       ],
     },
     {
       id: 8,
       step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 문자열과 숫자가 나란히 출력되도록 해보세요.',
-      prompt_en: 'Fill in the blank to print the string and number side by side.',
-      hint_ko: '문자열과 숫자 사이의 빈칸에 쉼표(,)를 입력하면 두 값이 공백으로 구분되어 "Level 3"으로 출력됩니다.',
-      hint_en: 'Type a comma (,) between the string and number to print them side by side separated by a space.',
-      templateCode: 'print("Level"§ 3)',
-      targetCode: 'print("Level", 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Level 3',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 심화 타이핑 2문제 (9, 10단계): 문장 출력 및 복합 수식 라벨
-    // ------------------------------------------------------------------------
-    {
-      id: 9,
-      step: 9,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸에 큰따옴표(")를 채워 공백이 포함된 문장 "Coding is fun"을 출력해보세요.',
@@ -213,6 +190,28 @@ export const PYTHON_LEVEL_3: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: 'Coding is fun',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 5: 문자열과 숫자 쉼표 연결 (9번 블록 ➔ 10번 타이핑)
+    // ------------------------------------------------------------------------
+    {
+      id: 9,
+      step: 9,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '문자열 "Score:"와 숫자 100을 쉼표(,)로 연결해 나란히 출력해보세요.',
+      prompt_en: 'Connect the string "Score:" and number 100 with a comma (,) to print them side by side.',
+      hint_ko: 'print() 안에 쉼표(,)를 찍으면 문자열과 숫자를 한 줄에 공백을 두고 나란히 출력할 수 있습니다. "Score: 100"이 출력됩니다.',
+      hint_en: 'Using a comma in print() separates strings and numbers with an automatic space, outputting "Score: 100".',
+      targetCode: 'print("Score:", 100)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Score: 100',
         },
       ],
     },

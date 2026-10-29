@@ -2,22 +2,22 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 5레벨: 문자열 연산(+)과 반복(*) (10단계)
-// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
-// - 페어 1: 문자열 덧셈(+)
+// - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
+// - 페어 1: 문자열 덧셈(+) 이어붙이기
 //   1. [블록] print("Hello" + "World") -> HelloWorld
 //   2. [타이핑: 빈칸] print("Python" + "Code") -> PythonCode
 // - 페어 2: 공백 포함 덧셈
 //   3. [블록] print("Hello " + "World") -> Hello World
 //   4. [타이핑: 빈칸] print("Typing " + "Code") -> Typing Code
-// - 페어 3: 문자열 곱셈(*)
+// - 페어 3: 문자열 곱셈(*) 구분선 반복
 //   5. [블록] print("=" * 20) -> ====================
-//   6. [타이핑: 빈칸] print("하" * 3) -> 하하하
-// - 페어 4: 특수문자/기호 반복
+//   6. [타이핑: 빈칸] print("-" * 15) -> ---------------
+// - 페어 4: 특수문자/글자 반복
 //   7. [블록] print("★" * 5) -> ★★★★★
-//   8. [타이핑: 빈칸] print("가나다" * 3) -> 가나다가나다가나다
-// - 심화 타이핑 2문제:
-//   9. [타이핑: 빈칸] 구분선 반복 횟수 채우기 print("-" * 15)
-//   10. [타이핑: 빈칸] 문자열 반복 vs 숫자 곱셈 복합 종합 print("7" * 3, 7 * 3) -> 777 21
+//   8. [타이핑: 빈칸] print("하" * 3) -> 하하하
+// - 페어 5: 문자열 반복 vs 숫자 곱셈 대조
+//   9. [블록] print("3" * 3, 3 * 3) -> 333 9 (블록으로 대조 개념 설명)
+//   10. [타이핑: 빈칸] print("7" * 3, 7 * 3) -> 777 21 (타이핑으로 완성)
 // ============================================================================
 export const PYTHON_LEVEL_5: PracticeRound = {
   id: 'py-basic-r5',
@@ -113,7 +113,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 3: 문자열 곱셈(*) 반복
+    // 페어 3: 문자열 곱셈(*) 구분선 반복
     // ------------------------------------------------------------------------
     {
       id: 5,
@@ -138,23 +138,23 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈 연산자(*)를 입력하여 글자가 3번 반복된 "하하하"를 출력해보세요.',
-      prompt_en: 'Fill in the multiplication operator (*) to repeat the character 3 times as "하하하".',
-      hint_ko: '문자열을 지정한 횟수만큼 반복할 때는 곱셈 연산자(*)를 사용합니다.',
-      hint_en: 'Use the multiplication operator (*) to repeat a string a given number of times.',
-      templateCode: 'print("하" § 3)',
-      targetCode: 'print("하" * 3)',
+      prompt_ko: '빈칸에 반복할 횟수를 숫자로 입력하여 15칸짜리 대시 구분선(---------------)을 완성해보세요.',
+      prompt_en: 'Fill in the number of repetitions to create a 15-character dash divider (---------------).',
+      hint_ko: '대시("-") 기호가 15번 연속으로 나오도록 곱해줄 숫자 15를 입력하세요.',
+      hint_en: 'Enter the number 15 to multiply the dash ("-") character 15 times.',
+      templateCode: 'print("-" * §§)',
+      targetCode: 'print("-" * 15)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '하하하',
+          expectedOutput: '---------------',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // 페어 4: 특수문자/기호 반복
+    // 페어 4: 특수문자/글자 반복
     // ------------------------------------------------------------------------
     {
       id: 7,
@@ -179,40 +179,39 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈 연산자(*)를 채워 단어가 3번 반복된 "가나다가나다가나다"를 출력해보세요.',
-      prompt_en: 'Fill in the asterisk (*) operator to repeat the word 3 times.',
-      hint_ko: '문자열 뒤의 빈칸에 곱셈 연산자(*)를 넣으면 해당 단어가 3번 연속으로 출력됩니다.',
-      hint_en: 'Type the asterisk (*) operator in the blank to repeat the word 3 times.',
-      templateCode: 'print("가나다" § 3)',
-      targetCode: 'print("가나다" * 3)',
+      prompt_ko: '빈칸에 곱셈 연산자(*)를 입력하여 글자가 3번 반복된 "하하하"를 출력해보세요.',
+      prompt_en: 'Fill in the multiplication operator (*) to repeat the character 3 times as "하하하".',
+      hint_ko: '문자열을 지정한 횟수만큼 반복할 때는 곱셈 연산자(*)를 사용합니다.',
+      hint_en: 'Use the multiplication operator (*) to repeat a string a given number of times.',
+      templateCode: 'print("하" § 3)',
+      targetCode: 'print("하" * 3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '가나다가나다가나다',
+          expectedOutput: '하하하',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // 심화 타이핑 2문제 (9, 10단계): 구분선 길이 지정 및 글자 반복 vs 숫자 연산 대조
+    // 페어 5: 문자열 반복 vs 숫자 곱셈 대조 (9번 블록 ➔ 10번 타이핑)
     // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 반복할 횟수를 숫자로 입력하여 15칸짜리 대시 구분선(---------------)을 완성해보세요.',
-      prompt_en: 'Fill in the number of repetitions to create a 15-character dash divider (---------------).',
-      hint_ko: '대시("-") 기호가 15번 연속으로 나오도록 곱해줄 숫자 15를 입력하세요.',
-      hint_en: 'Enter the number 15 to multiply the dash ("-") character 15 times.',
-      templateCode: 'print("-" * §§)',
-      targetCode: 'print("-" * 15)',
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '문자열 "3"을 3번 반복한 결과와, 숫자 3을 곱한 3 * 3의 결과를 나란히 출력해보세요.',
+      prompt_en: 'Print the result of repeating string "3" three times and the numeric multiplication 3 * 3 side by side.',
+      hint_ko: '따옴표가 있는 "3" * 3은 글자 반복이라 333이 되고, 따옴표가 없는 3 * 3은 숫자 곱셈이라 9가 됩니다. 문자열과 숫자의 중요한 차이점입니다.',
+      hint_en: 'Quoted "3" * 3 repeats the text to produce 333, while numeric 3 * 3 computes 9.',
+      targetCode: 'print("3" * 3, 3 * 3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '---------------',
+          expectedOutput: '333 9',
         },
       ],
     },

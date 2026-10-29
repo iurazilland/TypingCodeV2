@@ -2,7 +2,7 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 1레벨: print() 함수와 기본 사칙연산 (10단계)
-// - [블록 ➔ 타이핑 교차 4쌍(8문제)] + [심화 타이핑 2문제] 구조
+// - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
 // - 페어 1: 단일 숫자 출력
 //   1. [블록] print(10)
 //   2. [타이핑: 빈칸] print(77)
@@ -15,9 +15,9 @@ import { PracticeRound } from '@/lib/practiceTypes';
 // - 페어 4: 나눗셈 연산자(/)
 //   7. [블록] print(20 / 4)
 //   8. [타이핑: 빈칸] print(100 / 2)
-// - 심화 타이핑 2문제:
-//   9. [타이핑: 빈칸] 괄호 우선순위 print((2 + 3) * 4) -> 20
-//   10. [타이핑: 빈칸] 복합 괄호 사칙연산 print((10 + 20) * 3) -> 90
+// - 페어 5: 괄호 우선순위 연산
+//   9. [블록] print((10 + 20) * 3) (블록으로 괄호 개념 설명)
+//   10. [타이핑: 빈칸] print((2 + 3) * 4) (타이핑으로 괄호 완성)
 // ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
@@ -195,11 +195,29 @@ export const PYTHON_LEVEL_1: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 심화 타이핑 2문제 (9, 10단계): 연산 우선순위와 복합 사칙연산
+    // 페어 5: 괄호 우선순위 연산 (9번 블록 ➔ 10번 타이핑)
     // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '우선 계산되는 괄호를 활용해 (10 + 20) * 3을 넣어 화면에 출력해보세요.',
+      prompt_en: 'Use parentheses () for prioritized calculation to insert (10 + 20) * 3 and print it on the screen.',
+      hint_ko: '괄호 ()로 묶은 10 + 20(= 30)이 가장 먼저 계산되고, 그 결과에 3을 곱해 90이 출력됩니다.',
+      hint_en: 'Parentheses () take the highest priority: 10 + 20 (= 30) evaluates first, then multiplied by 3 to produce 90.',
+      targetCode: 'print((10 + 20) * 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '90',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸에 괄호를 채워 2 + 3을 먼저 계산한 결과(20)를 출력해보세요.',
@@ -213,25 +231,6 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '20',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈 연산자(*)를 채워 괄호 연산과 곱셈이 결합된 식의 결과(90)를 출력해보세요.',
-      prompt_en: 'Fill in the multiplication operator (*) to print the combined result (90).',
-      hint_ko: '괄호 안의 10 + 20(= 30)에 곱해줄 곱셈 기호(*)를 빈칸에 입력하세요.',
-      hint_en: 'Type the asterisk (*) operator to multiply the parenthesized sum (10 + 20 = 30) by 3.',
-      templateCode: 'print((10 + 20) § 3)',
-      targetCode: 'print((10 + 20) * 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '90',
         },
       ],
     },
