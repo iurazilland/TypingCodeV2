@@ -28,8 +28,8 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'standard',
       prompt_ko: '숫자 10을 넣어 화면에 출력해보세요.',
       prompt_en: 'Insert the number 10 and print it on the screen.',
-      hint_ko: '도구 상자의 함수 카테고리에서 print() 블록을 꺼내 시작 블록에 연결하고, 안쪽 슬롯에 10을 입력하세요.',
-      hint_en: 'Snap the print() block to the start block and enter 10 inside the slot.',
+      hint_ko: '미리 연결된 print() 블록의 빈칸에 숫자 10을 입력하고 실행 버튼을 눌러보세요.',
+      hint_en: 'Enter 10 inside the pre-placed print() block slot and click Run.',
       targetCode: 'print(10)',
       testCases: [
         {

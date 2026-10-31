@@ -2,7 +2,7 @@ import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
 // 파이썬 기초 7레벨: print()의 sep과 end 옵션 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (기본 print 블록 우클릭 → sep / end 옵션 개별 추가 및 기본값 확인)
+// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (옵션이 구성된 print 블록 사전 배치 → 기본값 " ", "\n" 확인 및 변경)
 // - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
 // - [11단계] 버그 수정 (fix_bug)
 // - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: 'print 블록을 우클릭해 sep 옵션을 추가하고, 세 숫자 2026, 10, 31을 넣은 뒤 구분자(sep)를 " "에서 "-"로 변경하여 2026-10-31을 출력해보세요.',
-      prompt_en: 'Right-click the print block to add the sep option, enter 2026, 10, 31, and change the separator (sep) from " " to "-" to print 2026-10-31.',
-      hint_ko: '캔버스에 놓은 print 블록을 우클릭하여 [sep 옵션 추가]를 선택한 뒤, 값 칸에 2026, 10, 31을 넣고 sep= 칸의 기본값 " "을 "-"로 바꿔보세요.',
-      hint_en: 'Right-click the print block on the canvas, select [Add sep option], enter 2026, 10, 31, and change sep= from " " to "-".',
+      prompt_ko: '세 숫자 2026, 10, 31을 넣고 구분자(sep)를 " "에서 "-"로 변경하여 2026-10-31을 출력해보세요.',
+      prompt_en: 'Enter 2026, 10, 31 and change the separator (sep) from " " to "-" to print 2026-10-31.',
+      hint_ko: 'print 블록의 첫째 칸에 2026, 10, 31을 입력하고, sep= 칸의 기본값 " "을 "-"로 바꿔보세요.',
+      hint_en: 'Enter 2026, 10, 31 in the first slot of print(), and change sep= from " " to "-".',
       targetCode: 'print(2026, 10, 31, sep="-")',
       testCases: [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: 'print 블록에 우클릭으로 sep 옵션을 추가하고, 문자열 "Lv"와 숫자 7 사이의 구분자(sep)를 빈 문자열 ""로 바꾸어 Lv7을 출력해보세요.',
-      prompt_en: 'Right-click the print block to add sep, enter "Lv", 7, and change the separator (sep) to an empty string "" to print Lv7.',
-      hint_ko: 'print 블록 우클릭 → [sep 옵션 추가] 후 첫째 칸에 "Lv", 7을 입력하고, sep= 칸의 기본 공백을 지워 따옴표 두 개("")만 남겨보세요.',
-      hint_en: 'Right-click print → [Add sep option], enter "Lv", 7 in the first slot, and change sep= to two quotes ("") with no space inside.',
+      prompt_ko: '문자열 "Lv", 숫자 7을 넣고 구분자(sep)를 " "에서 빈 문자열 ""로 변경하여 Lv7을 출력해보세요.',
+      prompt_en: 'Enter "Lv", 7 and change the separator (sep) from " " to an empty string "" to print Lv7.',
+      hint_ko: '첫째 칸에 "Lv", 7을 입력하고, sep= 칸의 공백을 지워 따옴표 두 개("")만 남겨보세요.',
+      hint_en: 'Enter "Lv", 7 in the first slot, and remove the space in sep= so only two quotes ("") remain.',
       targetCode: 'print("Lv", 7, sep="")',
       testCases: [
         {
@@ -106,10 +106,10 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: '두 개의 print 블록을 연결하고, 첫째 블록을 우클릭해 end 옵션을 추가한 뒤 "Ready"와 끝맺음 문자 "!"를, 둘째 블록에 "Go"를 넣어 Ready!Go를 출력해보세요.',
-      prompt_en: 'Connect two print blocks, right-click the first to add the end option with "Ready" and "!", and put "Go" in the second to print Ready!Go.',
-      hint_ko: '첫째 print 블록을 우클릭해 [end 옵션 추가]를 누르면 기본 줄바꿈("\\n")이 보입니다. 값 칸에 "Ready"를 넣고 end= 칸을 "!"로 바꾼 뒤 아래에 print("Go") 블록을 연결하세요.',
-      hint_en: 'Right-click the first print block and select [Add end option] (defaults to "\\n"). Enter "Ready", change end= to "!", and snap print("Go") below.',
+      prompt_ko: '첫째 블록에 "Ready"를 넣고 끝맺음(end)을 "\\n"에서 "!"로 변경한 뒤, 둘째 블록에 "Go"를 넣어 Ready!Go를 출력해보세요.',
+      prompt_en: 'Enter "Ready" in the first block and change end from "\\n" to "!", then enter "Go" in the second block to print Ready!Go.',
+      hint_ko: '첫째 블록의 값 칸에 "Ready", end= 칸에 "!"를 넣고, 아래 둘째 블록에 "Go"를 입력하면 줄바꿈 없이 한 줄에 이어집니다.',
+      hint_en: 'Enter "Ready" and set end= to "!" in the first block, then enter "Go" in the second block so they print on one line.',
       targetCode: 'print("Ready", end="!")\nprint("Go")',
       testCases: [
         {
@@ -146,10 +146,10 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: '첫째 print 블록에 우클릭으로 end 옵션을 추가해 "Score"와 ":"를 넣고, 둘째 print 블록에서 숫자 100을 출력해 한 줄에 Score:100을 만들어보세요.',
-      prompt_en: 'Right-click the first print block to add end with "Score" and ":", and output 100 in a second print block to print Score:100.',
-      hint_ko: '첫째 print 블록 우클릭 → [end 옵션 추가] 후 값 칸에 "Score", end= 칸에 ":"를 입력하고, 아래에 연결한 둘째 print 블록에 따옴표 없이 100을 입력하세요.',
-      hint_en: 'Right-click the first print block → [Add end option], enter "Score" and set end= to ":", then connect a second print block below with 100.',
+      prompt_ko: '첫째 블록에 "Score"를 넣고 끝맺음(end)을 "\\n"에서 ":"로 변경한 뒤, 둘째 블록에 숫자 100을 넣어 Score:100을 출력해보세요.',
+      prompt_en: 'Enter "Score" in the first block and change end from "\\n" to ":", then enter 100 in the second block to print Score:100.',
+      hint_ko: '첫째 블록의 값 칸에 "Score", end= 칸에 ":"를 입력하고, 둘째 블록에는 따옴표 없이 100을 입력하세요.',
+      hint_en: 'Enter "Score" and set end= to ":" in the first block, then enter 100 without quotes in the second block.',
       targetCode: 'print("Score", end=":")\nprint(100)',
       testCases: [
         {
@@ -186,10 +186,10 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: '첫째 print 블록을 우클릭해 sep과 end 옵션을 모두 추가한 뒤 "A", "B"와 구분자(sep) "-", 끝맺음 "!"를 넣고, 둘째 print 블록에 "OK"를 넣어 A-B!OK를 출력해보세요.',
-      prompt_en: 'Right-click the first print block to add both sep and end options, fill in "A", "B" with separator (sep) "-" and "!", and print "OK" in a second block to output A-B!OK.',
-      hint_ko: '첫째 print 블록을 우클릭해 [sep 옵션 추가]와 [end 옵션 추가]를 모두 켜고, 값 칸에 "A", "B" / sep= 칸에 "-" / end= 칸에 "!"를 넣은 뒤 아래에 print("OK")를 연결하세요.',
-      hint_en: 'Right-click the first print block to enable both [Add sep option] and [Add end option], enter "A", "B", sep="-", end="!", and attach print("OK") below.',
+      prompt_ko: '첫째 블록에 "A", "B"를 넣고 구분자(sep)를 "-"로, 끝맺음(end)을 "!"로 변경한 뒤, 둘째 블록에 "OK"를 넣어 A-B!OK를 출력해보세요.',
+      prompt_en: 'Enter "A", "B" in the first block, change separator (sep) to "-" and end to "!", then enter "OK" in the second block to print A-B!OK.',
+      hint_ko: '첫째 블록에 "A", "B" / sep= 칸에 "-" / end= 칸에 "!"를 차례대로 입력하고, 둘째 블록에 "OK"를 입력하세요.',
+      hint_en: 'In the first block enter "A", "B", set sep= to "-", and end= to "!", then enter "OK" in the second block.',
       targetCode: 'print("A", "B", sep="-", end="!")\nprint("OK")',
       testCases: [
         {

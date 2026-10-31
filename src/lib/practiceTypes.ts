@@ -1,4 +1,5 @@
 import { SupportedLanguage } from './types';
+import { CanvasBlock } from './blockGeometry';
 
 // ============================================================================
 // MakeCode & Duolingo-style Practice Learning Types
@@ -48,6 +49,7 @@ export interface PracticeQuestion {
   expectedVariables?: Record<string, any>; // Expected runtime memory variables (e.g. { x: 10, total: 55 })
   testCases?: TestCase[]; // Test cases for input/output verification
   starterCode?: string;
+  initialBlocks?: Partial<CanvasBlock>[]; // Optional pre-placed canvas blocks for Block Mode
   availableBlocks?: BlockPiece[]; // Legacy block pieces
 }
 

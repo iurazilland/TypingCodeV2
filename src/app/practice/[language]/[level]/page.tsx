@@ -489,6 +489,115 @@ function splitTopLevelArgs(str: string): string[] {
 }
 
 /**
+ * Builds the initial canvas block stack (Start block + pre-placed skeleton blocks) for Block Mode questions.
+ * Uses explicit question.initialBlocks if specified, otherwise derives clean empty-slot blocks from question.targetCode.
+ */
+function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
+  const startBlock: CanvasBlock = {
+    ...createDefaultStartBlock(),
+    zIndex: 30,
+  };
+
+  if (
+    !question ||
+    question.type === 'typing' ||
+    question.type === 'quiz' ||
+    question.kind === 'predict_output'
+  ) {
+    return [startBlock];
+  }
+
+  const derived: CanvasBlock[] = [];
+
+  if (question.initialBlocks && question.initialBlocks.length > 0) {
+    question.initialBlocks.forEach((partial, idx) => {
+      derived.push({
+        id: partial.id || `init-blk-${question.step}-${idx}`,
+        type: (partial.type as BlockType) || 'print',
+        content: partial.content ?? '',
+        varName: partial.varName,
+        hasSep: partial.hasSep,
+        sepVal: partial.hasSep ? (partial.sepVal ?? '" "') : undefined,
+        hasEnd: partial.hasEnd,
+        endVal: partial.hasEnd ? (partial.endVal ?? '"\\n"') : undefined,
+        hasReturn: partial.hasReturn,
+        returnVal: partial.returnVal,
+        isIfElse: partial.isIfElse,
+        items: partial.items,
+        dictPairs: partial.dictPairs,
+        argBlock: partial.argBlock as CanvasBlock | undefined,
+        innerBlocks: partial.innerBlocks as CanvasBlock[] | undefined,
+        branches: partial.branches as IfBranch[] | undefined,
+        x: 40,
+        y: 66 + idx * 32,
+        zIndex: Math.max(10, 29 - idx),
+      });
+    });
+  } else {
+    const lines = (question.targetCode || '')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0);
+
+    lines.forEach((trimmed, idx) => {
+      const id = `init-blk-${question.step}-${idx}`;
+      const y = 66 + idx * 32;
+      const zIndex = Math.max(10, 29 - idx);
+
+      if (trimmed.startsWith('#')) {
+        derived.push({ id, type: 'comment', content: '', x: 40, y, zIndex });
+        return;
+      }
+
+      const printMatch = trimmed.match(/^print\s*\(([\s\S]*)\)$/);
+      if (printMatch) {
+        const args = splitTopLevelArgs(printMatch[1]);
+        const hasSep = args.some((a) => /^sep\s*=(?!=)/.test(a));
+        const hasEnd = args.some((a) => /^end\s*=(?!=)/.test(a));
+        derived.push({
+          id,
+          type: 'print',
+          content: '',
+          hasSep: hasSep ? true : undefined,
+          sepVal: hasSep ? '" "' : undefined,
+          hasEnd: hasEnd ? true : undefined,
+          endVal: hasEnd ? '"\\n"' : undefined,
+          x: 40,
+          y,
+          zIndex,
+        });
+        return;
+      }
+
+      const assignMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*=(?!=)\s*([\s\S]+)$/);
+      if (assignMatch) {
+        derived.push({
+          id,
+          type: 'variable',
+          varName: assignMatch[1],
+          content: '',
+          x: 40,
+          y,
+          zIndex,
+        });
+      }
+    });
+  }
+
+  if (derived.length === 0) {
+    return [startBlock];
+  }
+
+  startBlock.nextBlockId = derived[0].id;
+  for (let i = 0; i < derived.length; i++) {
+    derived[i].prevBlockId = i === 0 ? startBlock.id : derived[i - 1].id;
+    derived[i].nextBlockId = i + 1 < derived.length ? derived[i + 1].id : undefined;
+  }
+
+  return [startBlock, ...derived];
+}
+
+/**
  * Evaluates a range argument string (e.g. '10', '1, 10', '0, 10, 2') into an exact number array.
  */
 function evaluateRangeString(argStr: string, scope?: Record<string, any>): number[] {
@@ -862,8 +971,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     markerMouthHeight?: number;
   }
 
-  // Drag and Drop Canvas Blocks: Starts with the default Start Block
-  const [canvasBlocks, setCanvasBlocks] = useState<CanvasBlock[]>([createDefaultStartBlock()]);
+  // Drag and Drop Canvas Blocks: Starts with Start Block + pre-placed skeleton blocks for Block Mode
+  const [canvasBlocks, setCanvasBlocks] = useState<CanvasBlock[]>(() =>
+    createInitialCanvasBlocks(round.questions[initialStep] || round.questions[0])
+  );
   const [draggedBlockType, setDraggedBlockType] = useState<BlockType | null>(null);
   const [isDraggingBlock, setIsDraggingBlock] = useState<boolean>(false);
   const [draggingBlockId, setDraggingBlockId] = useState<string | null>(null);
@@ -969,7 +1080,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setIsExecuting(false);
     lastExecutedCodeRef.current = '';
     setActiveInputHelp(null);
-    setCanvasBlocks([createDefaultStartBlock()]);
+    setCanvasBlocks(createInitialCanvasBlocks(currentQuestion));
     setUserCode('');
     setSelectedChoiceIndex(null);
     setTerminalOutput('');
@@ -979,7 +1090,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setIsErrorShown(false);
     setIsHeartShaking(false);
     setShowHint(false);
-  }, [currentStepIndex]);
+  }, [currentStepIndex, round.id]);
 
   // Keep connected stacks seamlessly aligned without gaps or overlaps
   useEffect(() => {
@@ -2304,7 +2415,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     }
     setCurrentStepIndex(0);
     setIsGameOver(false);
-    setCanvasBlocks([createDefaultStartBlock()]);
+    setCanvasBlocks(createInitialCanvasBlocks(round.questions[0]));
     setUserCode('');
     setSelectedChoiceIndex(null);
     setTerminalOutput('');
