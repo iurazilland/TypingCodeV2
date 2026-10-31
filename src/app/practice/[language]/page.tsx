@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -93,9 +93,14 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     clearedLevels: new Set([1]), // 1레벨 기본 완료 처리
     highestUnlockedLevel: 2,
   });
+  const [isProgressLoaded, setIsProgressLoaded] = useState(false);
+  const activeLevelRowRef = useRef<HTMLDivElement | null>(null);
+  const hasAutoScrolledRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    hasAutoScrolledRef.current = false;
+    setIsProgressLoaded(false);
     try {
       const cleared = new Set<number>([1]); // 1레벨 기본 완료 처리
       let maxUnlocked = 2;
@@ -128,6 +133,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       });
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsProgressLoaded(true);
     }
   }, [rawLang]);
 
@@ -150,6 +157,17 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     }
     return 1;
   }, [sections, userProgress]);
+
+  // Auto-scroll once to the next active level after localStorage progress loads
+  useEffect(() => {
+    if (!isProgressLoaded || hasAutoScrolledRef.current) return;
+    if (!activeLevelRowRef.current) return;
+    hasAutoScrolledRef.current = true;
+    const rafId = requestAnimationFrame(() => {
+      activeLevelRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [isProgressLoaded, currentActiveLevel]);
 
   const clearedCount = userProgress.clearedLevels.size;
   const progressPercent = totalLevelsCount > 0 ? Math.min(100, Math.round((clearedCount / totalLevelsCount) * 100)) : 0;
@@ -389,6 +407,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
                   const rowContent = (
                     <div
+                      ref={isCurrent ? activeLevelRowRef : undefined}
                       onMouseEnter={() => setHoveredLevelNum(level.levelNumber)}
                       onMouseLeave={() => setHoveredLevelNum(null)}
                       style={{
