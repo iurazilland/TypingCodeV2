@@ -6809,11 +6809,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               <span
                 id="tour-mission-prompt"
                 style={{
-                  fontSize: '1.2rem',
-                  fontWeight: 800,
+                  fontSize: '1.16rem',
+                  fontFamily: isEn ? 'var(--font-sans)' : 'var(--font-prompt)',
+                  fontWeight: 700,
                   color: '#ffffff',
-                  letterSpacing: '-0.015em',
-                  lineHeight: 1.3,
+                  letterSpacing: '0.01em',
+                  wordSpacing: isEn ? '0.18em' : '0.06em',
+                  lineHeight: 1.4,
+                  whiteSpace: 'pre-wrap',
                   flex: '1 1 auto',
                 }}
               >
@@ -6885,8 +6888,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       <div
                         style={{
                           color: '#fef3c7',
+                          fontFamily: isEn ? 'var(--font-sans)' : 'var(--font-prompt)',
                           fontSize: '0.84rem',
-                          lineHeight: 1.55,
+                          letterSpacing: '0.01em',
+                          wordSpacing: isEn ? '0.14em' : '0.05em',
+                          lineHeight: 1.6,
                           whiteSpace: 'pre-wrap',
                           wordBreak: 'break-word',
                         }}
