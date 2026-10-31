@@ -1085,18 +1085,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
-  const hintContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!showHint) return;
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (hintContainerRef.current && !hintContainerRef.current.contains(e.target as Node)) {
-        setShowHint(false);
-      }
-    };
-    window.addEventListener('mousedown', handleOutsideClick);
-    return () => window.removeEventListener('mousedown', handleOutsideClick);
-  }, [showHint]);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
 
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -7454,10 +7442,16 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               </span>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                {/* Hint Toggle Button Container with Relative Anchor for Floating Popover */}
-                <div style={{ position: 'relative' }} ref={hintContainerRef}>
+                {/* Hint Hover Button Container with Relative Anchor for Floating Popover */}
+                <div
+                  style={{ position: 'relative' }}
+                  onMouseEnter={() => setShowHint(true)}
+                  onMouseLeave={() => setShowHint(false)}
+                >
                   <button
-                    onClick={() => setShowHint((prev) => !prev)}
+                    type="button"
+                    onFocus={() => setShowHint(true)}
+                    onBlur={() => setShowHint(false)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -7478,27 +7472,32 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     <span>{isEn ? 'Hint' : '도움말'}</span>
                   </button>
 
-                  {/* Floating Hint Popover: Absolute positioning so it NEVER pushes canvas or blocks */}
+                  {/* Floating Hint Popover: 8px top padding bridges hover area without pushing canvas */}
                   {showHint && (
                     <div
                       style={{
                         position: 'absolute',
-                        top: 'calc(100% + 8px)',
+                        top: '100%',
                         right: 0,
-                        width: '380px',
-                        maxWidth: 'calc(100vw - 48px)',
-                        padding: '14px 16px',
-                        background: 'rgba(15, 23, 42, 0.97)',
-                        backdropFilter: 'blur(16px)',
-                        border: '1px solid rgba(245, 158, 11, 0.45)',
-                        borderRadius: '12px',
-                        boxShadow: '0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.15)',
+                        paddingTop: '8px',
                         zIndex: 100,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px',
                       }}
                     >
+                      <div
+                        style={{
+                          width: '380px',
+                          maxWidth: 'calc(100vw - 48px)',
+                          padding: '14px 16px',
+                          background: 'rgba(15, 23, 42, 0.97)',
+                          backdropFilter: 'blur(16px)',
+                          border: '1px solid rgba(245, 158, 11, 0.45)',
+                          borderRadius: '12px',
+                          boxShadow: '0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.15)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '8px',
+                        }}
+                      >
                       <div
                         style={{
                           display: 'flex',
@@ -7515,19 +7514,20 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                         <span>{isEn ? 'Hint' : '도움말'}</span>
                       </div>
 
-                      <div
-                        style={{
-                          color: '#fef3c7',
-                          fontFamily: 'var(--font-prompt)',
-                          fontSize: '0.85rem',
-                          letterSpacing: '0em',
-                          wordSpacing: '0.04em',
-                          lineHeight: 1.55,
-                          whiteSpace: 'pre-wrap',
-                          wordBreak: 'break-word',
-                        }}
-                      >
-                        {isEn ? (currentQuestion?.hint_en || currentQuestion?.hint_ko || 'No hint provided.') : (currentQuestion?.hint_ko || '제공된 힌트가 없습니다.')}
+                        <div
+                          style={{
+                            color: '#fef3c7',
+                            fontFamily: 'var(--font-prompt)',
+                            fontSize: '0.85rem',
+                            letterSpacing: '0em',
+                            wordSpacing: '0.04em',
+                            lineHeight: 1.55,
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                          }}
+                        >
+                          {isEn ? (currentQuestion?.hint_en || currentQuestion?.hint_ko || 'No hint provided.') : (currentQuestion?.hint_ko || '제공된 힌트가 없습니다.')}
+                        </div>
                       </div>
                     </div>
                   )}
