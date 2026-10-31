@@ -2003,6 +2003,18 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       return;
     }
 
+    const penalizeHeartOnError = () => {
+      // Block mode is a guided learning stage: do not deduct hearts on errors or wrong outputs
+      if (mode !== 'typing') return;
+      setIsHeartShaking(true);
+      setTimeout(() => setIsHeartShaking(false), 800);
+      setHearts((prev) => {
+        const next = Math.max(0, prev - 1);
+        if (next === 0) setIsGameOver(true);
+        return next;
+      });
+    };
+
     if (isQuiz) {
       if (selectedChoiceIndex === null) {
         showToast(isEn ? '💡 먼저 출력될 결과를 보기에서 선택해주세요!' : '💡 먼저 출력될 결과를 보기에서 선택해주세요!');
@@ -2024,13 +2036,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             : '❌ 선택한 결과가 실제 실행 출력과 다릅니다. 코드를 차근차근 계산해보세요!'
         );
         setIsErrorShown(true);
-        setIsHeartShaking(true);
-        setTimeout(() => setIsHeartShaking(false), 800);
-        setHearts((prev) => {
-          const next = Math.max(0, prev - 1);
-          if (next === 0) setIsGameOver(true);
-          return next;
-        });
+        penalizeHeartOnError();
       }
       return;
     }
@@ -2129,25 +2135,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         } else {
           setIsSuccess(false);
           setIsErrorShown(true);
-          setIsHeartShaking(true);
-          setTimeout(() => setIsHeartShaking(false), 800);
-          setHearts((prev) => {
-            const next = Math.max(0, prev - 1);
-            if (next === 0) setIsGameOver(true);
-            return next;
-          });
+          penalizeHeartOnError();
         }
       } catch (err: any) {
         setTerminalOutput(err?.message || '실행 중 오류가 발생했습니다.');
         setIsSuccess(false);
         setIsErrorShown(true);
-        setIsHeartShaking(true);
-        setTimeout(() => setIsHeartShaking(false), 800);
-        setHearts((prev) => {
-          const next = Math.max(0, prev - 1);
-          if (next === 0) setIsGameOver(true);
-          return next;
-        });
+        penalizeHeartOnError();
       } finally {
         setIsExecuting(false);
       }
@@ -2270,13 +2264,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             } else {
               setIsSuccess(false);
               setIsErrorShown(true);
-              setIsHeartShaking(true);
-              setTimeout(() => setIsHeartShaking(false), 800);
-              setHearts((prev) => {
-                const next = Math.max(0, prev - 1);
-                if (next === 0) setIsGameOver(true);
-                return next;
-              });
+              penalizeHeartOnError();
             }
           }
         }
@@ -2285,13 +2273,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           setTerminalOutput(err?.message || '디버깅 실행 중 오류가 발생했습니다.');
           setIsSuccess(false);
           setIsErrorShown(true);
-          setIsHeartShaking(true);
-          setTimeout(() => setIsHeartShaking(false), 800);
-          setHearts((prev) => {
-            const next = Math.max(0, prev - 1);
-            if (next === 0) setIsGameOver(true);
-            return next;
-          });
+          penalizeHeartOnError();
         }
       } finally {
         setIsDebugging(false);
