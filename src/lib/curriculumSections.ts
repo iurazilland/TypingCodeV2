@@ -61,6 +61,12 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
       },
       { 
         levelNumber: 7, 
+        title_ko: 'print()의 sep과 end 옵션', 
+        title_en: 'print() Options (sep & end)',
+        syntaxTags: ['sep="-"', 'end=""', 'print(a, b, sep, end)'],
+      },
+      { 
+        levelNumber: 8, 
         title_ko: '기초 출력과 연산 종합 문제풀이', 
         title_en: 'Section 1 Comprehensive Review',
         syntaxTags: ['print() 종합', '타이핑 마스터'],
@@ -74,31 +80,31 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
     title_en: 'Variables, Types & Input',
     levels: [
       { 
-        levelNumber: 8, 
+        levelNumber: 9, 
         title_ko: '주석(#)과 변수(Variable) 선언', 
         title_en: 'Comments (#) & Variables',
         syntaxTags: ['# comment', 'score = 100'],
       },
       { 
-        levelNumber: 9, 
+        levelNumber: 10, 
         title_ko: '변수 값 변경과 변수 연산', 
         title_en: 'Variable Reassignment & Operations',
         syntaxTags: ['x = x + 1', 'total = a * b'],
       },
       { 
-        levelNumber: 10, 
+        levelNumber: 11, 
         title_ko: '자료형(Data Type)과 type() 함수', 
         title_en: 'Data Types & type() Function',
         syntaxTags: ['type()', 'int, str, float'],
       },
       { 
-        levelNumber: 11, 
+        levelNumber: 12, 
         title_ko: 'input() 사용자 입력과 int() 형변환', 
         title_en: 'input() & int() Type Casting',
         syntaxTags: ['input()', 'int(input())'],
       },
       { 
-        levelNumber: 12, 
+        levelNumber: 13, 
         title_ko: '변수와 입력 종합 실전 프로젝트', 
         title_en: 'Section 2 Comprehensive Project',
         syntaxTags: ['변수 종합', '실전 프로젝트'],
@@ -112,31 +118,31 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
     title_en: 'Conditionals & Flow Control',
     levels: [
       { 
-        levelNumber: 13, 
+        levelNumber: 14, 
         title_ko: 'if 기본 조건 분기', 
         title_en: 'if Basic Conditional Branch',
         syntaxTags: ['if condition:', '들여쓰기(Indent)'],
       },
       { 
-        levelNumber: 14, 
+        levelNumber: 15, 
         title_ko: 'if-else 양방향 분기 제어', 
         title_en: 'if-else Two-Way Branching',
         syntaxTags: ['if ... else:', '양방향 분기'],
       },
       { 
-        levelNumber: 13, 
+        levelNumber: 16, 
         title_ko: 'if-elif-else 다중 분기문', 
         title_en: 'if-elif-else Multi-Conditionals',
         syntaxTags: ['elif condition:', '다중 조건'],
       },
       { 
-        levelNumber: 14, 
+        levelNumber: 17, 
         title_ko: '중첩 조건문과 복합 조건식', 
         title_en: 'Nested Conditionals',
         syntaxTags: ['if in if', '복합 논리식'],
       },
       { 
-        levelNumber: 15, 
+        levelNumber: 18, 
         title_ko: '조건문 종합 실전 챌린지', 
         title_en: 'Conditionals Comprehensive Challenge',
         syntaxTags: ['if / elif / else', '판별 알고리즘'],
@@ -150,31 +156,31 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
     title_en: 'Loops & Iteration Control',
     levels: [
       { 
-        levelNumber: 16, 
+        levelNumber: 19, 
         title_ko: 'for 반복문과 range() 기초', 
         title_en: 'for Loops & range() Basics',
         syntaxTags: ['for i in range():', '반복문'],
       },
       { 
-        levelNumber: 17, 
+        levelNumber: 20, 
         title_ko: 'for 반복문 응용과 누적 합계', 
         title_en: 'for Loops & Accumulator Pattern',
         syntaxTags: ['total += i', '누적 연산'],
       },
       { 
-        levelNumber: 18, 
+        levelNumber: 21, 
         title_ko: 'while 조건 반복문', 
         title_en: 'while Loops & Condition',
         syntaxTags: ['while condition:', '루프 탈출'],
       },
       { 
-        levelNumber: 19, 
+        levelNumber: 22, 
         title_ko: 'break와 continue 흐름 제어', 
         title_en: 'break & continue Control',
         syntaxTags: ['break', 'continue'],
       },
       { 
-        levelNumber: 20, 
+        levelNumber: 23, 
         title_ko: '기초 제어문 마스터 챌린지', 
         title_en: 'Control Flow Master Challenge',
         syntaxTags: ['for', 'while', 'if', '제어문 마스터'],

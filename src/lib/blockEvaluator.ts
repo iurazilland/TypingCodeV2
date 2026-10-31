@@ -449,7 +449,7 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
       if (identMatch) {
         const word = identMatch[1];
         if (!['Math', 'true', 'false', 'null', 'floor', 'pow'].includes(word)) {
-          if (/\d\s+[a-zA-Z_]/.test(codeWithoutStrings) || /[a-zA-Z_]\s+\d/.test(codeWithoutStrings)) {
+          if (/\d\s+[a-zA-Z_]/.test(codeWithoutStrings) || /[a-zA-Z_]\s+\d/.test(codeWithoutStrings) || codeWithoutStrings.includes(':')) {
             throw new Error(`SyntaxError: invalid syntax`);
           }
           throw new Error(`NameError: name '${word}' is not defined`);
@@ -694,32 +694,74 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
           };
           recordStep(blk);
         } else if (blk.type === 'print') {
+          let sep = ' ';
+          let end = '\n';
+
+          const applySepExpr = (exprStr: string) => {
+            const val = evalExpr(exprStr);
+            if (val === null || val === undefined) {
+              sep = ' ';
+            } else if (typeof val !== 'string') {
+              throw new Error(`TypeError: sep must be None or a string, not ${typeof val}`);
+            } else {
+              sep = val;
+            }
+          };
+
+          const applyEndExpr = (exprStr: string) => {
+            const val = evalExpr(exprStr);
+            if (val === null || val === undefined) {
+              end = '\n';
+            } else if (typeof val !== 'string') {
+              throw new Error(`TypeError: end must be None or a string, not ${typeof val}`);
+            } else {
+              end = val;
+            }
+          };
+
+          if (blk.hasPrintOptions) {
+            const rawSep = (blk.sepVal ?? '').trim().replace(/^sep\s*=\s*/, '');
+            if (rawSep.length > 0) {
+              applySepExpr(rawSep);
+            }
+            const rawEnd = (blk.endVal ?? '').trim().replace(/^end\s*=\s*/, '');
+            if (rawEnd.length > 0) {
+              applyEndExpr(rawEnd);
+            }
+          }
+
           if (blk.argBlock) {
             const val = evalBlockAsExpr(blk.argBlock);
-            if (val === null || val === undefined) stdoutBuffer += 'None\n';
-            else if (typeof val === 'boolean') stdoutBuffer += (val ? 'True' : 'False') + '\n';
-            else if (Array.isArray(val)) stdoutBuffer += `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]\n`;
-            else stdoutBuffer += String(val) + '\n';
+            if (val === null || val === undefined) stdoutBuffer += 'None' + end;
+            else if (typeof val === 'boolean') stdoutBuffer += (val ? 'True' : 'False') + end;
+            else if (Array.isArray(val)) stdoutBuffer += `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}]` + end;
+            else stdoutBuffer += String(val) + end;
           } else {
             const raw = (blk.content || '').trim();
             if (!raw) {
-              stdoutBuffer += '\n';
+              stdoutBuffer += end;
             } else {
               const args = splitTopLevelArgs(raw);
-              let sep = ' ';
-              let end = '\n';
               const posArgs: string[] = [];
+              let seenKeyword = false;
 
               for (const arg of args) {
-                const sepMatch = arg.match(/^sep\s*=\s*(.+)$/);
-                const endMatch = arg.match(/^end\s*=\s*(.+)$/);
-                if (sepMatch) {
-                  const val = evalExpr(sepMatch[1]);
-                  sep = String(val ?? '').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
-                } else if (endMatch) {
-                  const val = evalExpr(endMatch[1]);
-                  end = String(val ?? '').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+                const kwMatch = arg.match(/^([a-zA-Z_]\w*)\s*=(?!=)\s*([\s\S]+)$/);
+                if (kwMatch) {
+                  seenKeyword = true;
+                  const kwName = kwMatch[1];
+                  const kwExpr = kwMatch[2];
+                  if (kwName === 'sep') {
+                    applySepExpr(kwExpr);
+                  } else if (kwName === 'end') {
+                    applyEndExpr(kwExpr);
+                  } else {
+                    throw new Error(`TypeError: '${kwName}' is an invalid keyword argument for print()`);
+                  }
                 } else {
+                  if (seenKeyword) {
+                    throw new Error('SyntaxError: positional argument follows keyword argument');
+                  }
                   posArgs.push(arg);
                 }
               }

@@ -1,12 +1,12 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
-// 파이썬 기초 7레벨: 기초 출력과 연산 종합 문제풀이 (10단계 - 전 문항 실전 문제풀이)
-// - 블록 모드 없이 Section 1 (1~6레벨) 핵심 문법을 4대 문제 유형으로 총점검
-// - [1~3단계] 빈칸 채우기 (fill_blank)
-// - [4~6단계] 틀린 곳 수정 (fix_bug)
-// - [7~8단계] 예제 아래 한 줄 추가 작성 (one_line)
-// - [9~10단계] 출력 결과 예측 선택 (predict_output)
+// 파이썬 기초 7레벨: print()의 sep과 end 옵션 (13단계 표준 구성)
+// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (기본 1칸 print 블록 + 3칸 sep/end 옵션 print 블록 병행 및 우클릭 전환)
+// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
+// - [11단계] 버그 수정 (fix_bug)
+// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
+// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
 // ============================================================================
 export const PYTHON_LEVEL_7: PracticeRound = {
   id: 'py-basic-r7',
@@ -14,30 +14,28 @@ export const PYTHON_LEVEL_7: PracticeRound = {
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 7,
-  title_ko: '7레벨: 기초 출력과 연산 종합 문제풀이',
-  title_en: 'Level 7: Section 1 Comprehensive Review',
-  totalQuestions: 10,
-  unlockedBlocks: ['print'],
+  title_ko: '7레벨: print()의 sep과 end 옵션',
+  title_en: 'Level 7: print() Options (sep & end)',
+  totalQuestions: 13,
+  unlockedBlocks: ['print', 'print_options'],
   questions: [
     // ------------------------------------------------------------------------
-    // 1~3단계: 빈칸 채우기 (fill_blank)
+    // Pair 1 (1~2단계): sep="구분자" 기본 사용법
     // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 15와 5를 먼저 더한 뒤 4로 나눈 실수 결과(5.0)를 출력해보세요.',
-      prompt_en: 'Fill in the blanks to add 15 and 5 first, then divide by 4 to print 5.0.',
-      hint_ko: '15+5 앞뒤를 괄호 ()로 감싸고 4 앞에 실수 나눗셈 기호(/)를 이어서 입력하세요.',
-      hint_en: 'Wrap 15+5 with parentheses ( ) and place the division slash (/) right before 4.',
-      templateCode: 'print(§15+5§§4)',
-      targetCode: 'print((15+5)/4)',
+      type: 'block',
+      prompt_ko: '세 숫자 2026, 10, 31을 쉼표(,)로 구분하고, 옵션 print 블록의 sep 칸에 "-"를 넣어 2026-10-31을 출력해보세요.',
+      prompt_en: 'Separate 2026, 10, 31 with commas and put "-" in the sep slot of the option print block to print 2026-10-31.',
+      hint_ko: '3칸짜리 print 블록(또는 기본 print 블록 우클릭 전환)의 첫째 칸에 2026, 10, 31을, sep= 칸에 "-"를 입력하세요. end= 칸은 비워둡니다.',
+      hint_en: 'In the 3-slot print block (or right-click a print block to switch), enter 2026, 10, 31 in the first slot and "-" in sep=. Leave end= empty.',
+      targetCode: 'print(2026, 10, 31, sep="-")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '5.0',
+          expectedOutput: '2026-10-31',
         },
       ],
     },
@@ -46,78 +44,78 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '세 빈칸을 채워 130초를 60으로 나눈 분(몫)과 초(나머지) 결과(min: 2 sec: 10)를 한 줄에 출력해보세요.',
-      prompt_en: 'Fill in the blanks to convert 130 seconds into minutes and seconds (min: 2 sec: 10) on one line.',
-      hint_ko: '첫째 빈칸에는 몫 연산자(//), 둘째 빈칸에는 항목을 나란히 연결하는 쉼표(,), 셋째 빈칸에는 나머지 연산자(%)를 입력하세요.',
-      hint_en: 'Use floor division (//) in the first blank, a comma (,) in the second, and modulo (%) in the third.',
-      templateCode: 'print("min:", 130§§60§ "sec:", 130§60)',
-      targetCode: 'print("min:", 130//60, "sec:", 130%60)',
+      prompt_ko: '빈칸에 알맞은 구분자 옵션 이름을 채워 세 숫자가 붙임표로 연결된 결과가 출력되도록 해보세요.',
+      prompt_en: 'Fill in the blank with the separator option name so the three numbers are joined with hyphens.',
+      hint_ko: '쉼표로 나열한 항목 사이의 구분 문자열을 지정하는 옵션 이름인 sep을 빈칸에 입력하세요.',
+      hint_en: 'Enter sep in the blank to specify the separator string between comma-separated items.',
+      templateCode: 'print(10, 20, 30, §§§="-")',
+      targetCode: 'print(10, 20, 30, sep="-")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'min: 2 sec: 10',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '세 빈칸을 채워 양쪽 대괄호 사이에 등호 5개가 반복되어 이어진 [=====]를 출력해보세요.',
-      prompt_en: 'Fill in the three blanks to repeat the equals sign 5 times inside brackets as [=====].',
-      hint_ko: '문자열을 이어붙이는 첫째·셋째 빈칸에는 +를, "="을 5번 반복하는 둘째 빈칸에는 *를 입력하세요.',
-      hint_en: 'Use + in the first and third blanks to concatenate, and * in the second blank to repeat "=" 5 times.',
-      templateCode: 'print("["§"="§5§"]")',
-      targetCode: 'print("["+"="*5+"]")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '[=====]',
+          expectedOutput: '10-20-30',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // 4~6단계: 틀린 곳 수정 (fix_bug)
+    // Pair 2 (3~4단계): sep="" 빈 문자열로 기본 공백 없애기
     // ------------------------------------------------------------------------
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: "틀린 곳을 수정하여 문장 Let's code가 문법 오류 없이 출력되도록 해보세요.",
-      prompt_en: "Fix the error so that the sentence Let's code prints without a syntax error.",
-      hint_ko: "문장 안에 작은따옴표(')가 포함되어 있으므로 바깥 양쪽을 큰따옴표(\")로 감싸거나 \\'로 이스케이프해보세요.",
-      hint_en: 'Enclose the string with outer double quotes (") or escape the inner apostrophe as \\\'.',
-      templateCode: "print('Let's code')",
-      targetCode: 'print("Let\'s code")',
+      id: 3,
+      step: 3,
+      type: 'block',
+      prompt_ko: '문자열 "Lv"와 숫자 7을 쉼표(,)로 나란히 넣고, sep 칸에 빈 문자열 ""을 넣어 공백 없이 붙은 Lv7을 출력해보세요.',
+      prompt_en: 'Place "Lv" and 7 separated by a comma, and enter an empty string "" in the sep slot to print Lv7 without a space.',
+      hint_ko: '문자열과 숫자는 +로 더할 수 없지만, 첫째 칸에 "Lv", 7을 넣고 sep= 칸에 따옴표 두 개("")만 입력하면 공백 없이 Lv7로 이어집니다.',
+      hint_en: 'Put "Lv", 7 in the first slot and two quotes ("") in sep= so they join without the default space.',
+      targetCode: 'print("Lv", 7, sep="")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: "Let's code",
+          expectedOutput: 'Lv7',
         },
       ],
     },
     {
-      id: 5,
-      step: 5,
+      id: 4,
+      step: 4,
       type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '틀린 곳을 수정하여 라벨과 몫 계산 결과가 한 줄에 나란히(Total: 166) 출력되도록 해보세요.',
-      prompt_en: 'Fix the error so the label and quotient print side by side (Total: 166).',
-      hint_ko: 'print() 안에서 문자열 "Total:"과 수식 500//3을 구분하려면 사이에 쉼표(,)가 빠지지 않았는지 확인하세요.',
-      hint_en: 'Separate the string "Total:" and expression 500//3 with a comma (,) inside print().',
-      templateCode: 'print("Total:" 500//3)',
-      targetCode: 'print("Total:", 500//3)',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸을 채워 문자열과 숫자 사이의 기본 공백을 없애고 빈틈없이 이어진 No1을 출력해보세요.',
+      prompt_en: 'Fill in the blank to remove the default space between the text and number so No1 prints without a gap.',
+      hint_ko: '항목 사이의 구분자를 빈 문자열로 지정하는 sep=""를 빈칸에 입력하세요.',
+      hint_en: 'Enter sep="" in the blank to set the separator to an empty string.',
+      templateCode: 'print("No", 1, §§§§§§)',
+      targetCode: 'print("No", 1, sep="")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Total: 166',
+          expectedOutput: 'No1',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // Pair 3 (5~6단계): end 옵션으로 줄바꿈 대신 한 줄로 이어 출력하기
+    // ------------------------------------------------------------------------
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      prompt_ko: '두 개의 print 블록을 연결해 첫째 블록은 "Ready" 뒤에 줄바꿈 대신 end 칸에 "!"를 넣고, 둘째 블록은 "Go"를 넣어 한 줄에 Ready!Go를 출력해보세요.',
+      prompt_en: 'Connect two print blocks: put "Ready" with "!" in the end slot on the first block, and "Go" on the second block to print Ready!Go on one line.',
+      hint_ko: '첫째 print(3칸)의 값 칸에 "Ready", end= 칸에 "!"를 입력하고(sep= 칸은 비움), 그 아래에 두 번째 print 블록을 붙여 "Go"를 입력하세요.',
+      hint_en: 'In the first 3-slot print block, enter "Ready" and set end= to "!" (leave sep= empty), then snap a second print block below with "Go".',
+      targetCode: 'print("Ready", end="!")\nprint("Go")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Ready!Go',
         },
       ],
     },
@@ -125,41 +123,39 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 6,
       step: 6,
       type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '틀린 곳을 수정하여 Menu와 Price 사이에 탭 간격이 적용되도록 해보세요.',
-      prompt_en: 'Fix the error so that a tab space is applied between Menu and Price.',
-      hint_ko: '탭 이스케이프 문자는 일반 슬래시(/)가 아니라 역슬래시(\\)를 사용한 \\t입니다.',
-      hint_en: 'The tab escape character uses a backslash (\\t), not a forward slash (/t).',
-      templateCode: 'print("Menu/tPrice")',
-      targetCode: 'print("Menu\\tPrice")',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 알맞은 끝맺음 옵션 이름을 채워 두 줄의 출력문이 줄바꿈 대신 공백 하나로 이어지도록 해보세요.',
+      prompt_en: 'Fill in the blank with the ending option name so the two print statements join on one line with a single space.',
+      hint_ko: '출력의 끝(기본값 줄바꿈)을 다른 문자열로 바꾸는 옵션 이름인 end를 빈칸에 입력하세요.',
+      hint_en: 'Type end in the blank to replace the trailing newline with a space.',
+      templateCode: 'print("Hello", §§§=" ")\nprint("Python")',
+      targetCode: 'print("Hello", end=" ")\nprint("Python")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Menu\tPrice',
+          expectedOutput: 'Hello Python',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // 7~8단계: 예제 아래 한 줄 추가 작성 (one_line)
+    // Pair 4 (7~8단계): end="기호"를 활용한 라벨과 값의 한 줄 연결
     // ------------------------------------------------------------------------
     {
       id: 7,
       step: 7,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '예제 코드 아래에 한 줄을 추가하여 라벨과 2의 10제곱 결과를 연결한 Power: 1024를 출력해보세요.',
-      prompt_en: 'Type the example code and add a line below to print the label and 2 to the power of 10 as Power: 1024.',
-      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print("Power:", 2**10)을 입력하세요.',
-      hint_en: 'Type the first line example, press Enter, and write print("Power:", 2**10) on the second line.',
-      templateCode: 'print("Power:", 2**3)\n§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("Power:", 2**3)\nprint("Power:", 2**10)',
+      type: 'block',
+      prompt_ko: '첫째 print 블록에서 "Score"의 end 칸에 ":"를 넣고, 둘째 print 블록에서 숫자 100을 출력해 한 줄에 Score:100을 만들어보세요.',
+      prompt_en: 'In the first print block put "Score" with ":" in the end slot, and in the second print block output 100 to print Score:100 on one line.',
+      hint_ko: '첫째 print(3칸)의 값 칸에 "Score", end= 칸에 ":"를 넣고, 아래에 연결한 둘째 print 블록의 값 칸에 따옴표 없이 100을 입력하세요.',
+      hint_en: 'Set the first 3-slot print block to "Score" and end= to ":", then connect a second print block below with 100.',
+      targetCode: 'print("Score", end=":")\nprint(100)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Power: 8\nPower: 1024',
+          expectedOutput: 'Score:100',
         },
       ],
     },
@@ -167,67 +163,128 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       id: 8,
       step: 8,
       type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '예제 코드 아래에 한 줄을 추가하여 과목명 Math와 점수 100이 탭 간격으로 정렬된 한 줄을 출력해보세요.',
-      prompt_en: 'Type the example code and add a line below to print Math and 100 separated by a tab space.',
-      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print("Math\\t100")을 입력하세요.',
-      hint_en: 'Type the first line example, press Enter, and write print("Math\\t100") on the second line.',
-      templateCode: 'print("Kor\\t90")\n§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("Kor\\t90")\nprint("Math\\t100")',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸을 채워 첫 번째 출력 뒤에 줄을 바꾸지 않고 붙임표 기호로 두 단어가 한 줄에 연결되도록 해보세요.',
+      prompt_en: 'Fill in the blank so the first output does not break the line and connects to the second word with a hyphen.',
+      hint_ko: '줄바꿈 대신 붙임표를 끝에 출력하도록 빈칸에 end="-"를 입력하세요.',
+      hint_en: 'Enter end="-" in the blank to print a hyphen instead of a newline at the end.',
+      templateCode: 'print("Step1", §§§§§§§)\nprint("Step2")',
+      targetCode: 'print("Step1", end="-")\nprint("Step2")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Kor\t90\nMath\t100',
+          expectedOutput: 'Step1-Step2',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // 9~10단계: 출력 결과 예측 선택 (predict_output)
+    // Pair 5 (9~10단계): sep과 end 동시 활용
     // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.',
-      prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
-      hint_ko: '거듭제곱(2**3 = 8)은 덧셈보다 먼저 계산되며, 따옴표로 감싼 "5"*2는 문자열 반복, 5*2는 숫자 곱셈입니다.',
-      hint_en: 'Exponentiation (2**3 = 8) runs before addition, while "5"*2 repeats text and 5*2 multiplies numbers.',
-      targetCode: 'print(10+2**3)\nprint("5"*2, 5*2)',
-      choices: ['16\n10 10', '18\n55 10', '1728\n55 10', '18\n10 10'],
-      correctChoiceIndex: 1,
+      type: 'block',
+      prompt_ko: '첫째 print 블록의 세 칸을 모두 활용해 "A", "B" 사이에는 sep 칸으로 "-"를, 끝에는 end 칸으로 "!"를 넣고, 둘째 print 블록에 "OK"를 넣어 A-B!OK를 출력해보세요.',
+      prompt_en: 'Use all three slots of the first print block to join "A", "B" with "-" in sep and "!" in end, then print "OK" in a second block to output A-B!OK.',
+      hint_ko: '첫째 print(3칸)에 순서대로 "A", "B" / sep= 칸에 "-" / end= 칸에 "!"를 입력하고, 아래 둘째 print 블록에 "OK"를 입력하세요.',
+      hint_en: 'Fill the first 3-slot print block with "A", "B", sep="-", and end="!", then attach a second print block below with "OK".',
+      targetCode: 'print("A", "B", sep="-", end="!")\nprint("OK")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '18\n55 10',
+          expectedOutput: 'A-B!OK',
         },
       ],
     },
     {
       id: 10,
       step: 10,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.',
-      prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
-      hint_ko: '첫째 줄에서 \\t로 탭 간격을 띄운 뒤 \\n으로 줄을 바꾸어 등호 4개(====)를 이어붙여 출력하고, 둘째 줄에서 17을 5로 나눈 나머지를 출력합니다.',
-      hint_en: 'Line 1 prints A and B separated by a tab, then a newline and ====. Line 2 prints 17%5 = 2.',
-      targetCode: 'print("A\\tB\\n"+"="*4)\nprint("17%5 =", 17%5)',
-      choices: [
-        'A\tB\n====\n17%5 = 2',
-        'A\nB\t====\n17%5 = 3',
-        'A\\tB\\n====\n2 = 2',
-        'A\tB====\n17%5 = 2',
-      ],
-      correctChoiceIndex: 0,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '두 빈칸에 알맞은 옵션 이름을 각각 채워 숫자 사이에는 슬래시가 들어가고 문장 끝에는 마침표가 찍히도록 해보세요.',
+      prompt_en: 'Fill in the two blanks with the option names so slashes appear between numbers and a period appears at the end.',
+      hint_ko: '항목 사이를 구분하는 첫째 빈칸에는 sep을, 출력 끝을 지정하는 둘째 빈칸에는 end를 입력하세요.',
+      hint_en: 'Enter sep in the first blank for the item separator, and end in the second blank for the ending string.',
+      templateCode: 'print(1, 2, 3, §§§="/", §§§=".")',
+      targetCode: 'print(1, 2, 3, sep="/", end=".")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'A\tB\n====\n17%5 = 2',
+          expectedOutput: '1/2/3.',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 11단계: 틀린 곳 수정 (fix_bug)
+    // ------------------------------------------------------------------------
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '틀린 곳을 수정하여 세 알파벳이 붙임표로 구분된 한 줄이 문법 오류 없이 출력되도록 해보세요.',
+      prompt_en: 'Fix the syntax error so the three letters print on one line separated by hyphens.',
+      hint_ko: '파이썬 함수에 옵션을 지정할 때는 콜론(:)이 아니라 등호(=)를 사용해 sep="-"처럼 작성해야 합니다.',
+      hint_en: 'Keyword options in Python functions use an equals sign (sep="-"), not a colon (:).',
+      templateCode: 'print("A", "B", "C", sep:"-")',
+      targetCode: 'print("A", "B", "C", sep="-")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'A-B-C',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 12단계: 예제 아래 한 줄 추가 작성 (one_line)
+    // ------------------------------------------------------------------------
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '날짜를 출력하는 예제 코드 아래에 한 줄을 추가하여 세 숫자 12, 30, 0을 콜론 기호로 구분한 시각 형태를 출력해보세요.',
+      prompt_en: 'Type the date example code and add a line below to print the three numbers 12, 30, and 0 separated by colons.',
+      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print(12, 30, 0, sep=":")을 입력하세요.',
+      hint_en: 'Type the first line example, press Enter, and write print(12, 30, 0, sep=":") on the second line.',
+      templateCode: 'print(2026, 10, 31, sep="-")\n§§§§§§§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'print(2026, 10, 31, sep="-")\nprint(12, 30, 0, sep=":")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2026-10-31\n12:30:0',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 13단계: 출력 결과 예측 선택 (predict_output)
+    // ------------------------------------------------------------------------
+    {
+      id: 13,
+      step: 13,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.',
+      prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
+      hint_ko: '첫째 줄에서 "A"와 "B" 사이에는 "-"가 들어가고, 줄바꿈 대신 끝에 ":"가 붙은 뒤 둘째 줄의 "C"가 같은 줄에 이어서 출력됩니다.',
+      hint_en: 'Line 1 joins "A" and "B" with "-" and ends with ":" instead of a newline, so "C" prints right after ":" on the same line.',
+      targetCode: 'print("A", "B", sep="-", end=":")\nprint("C")',
+      choices: ['A-B\nC', 'A-B:C', 'A:B-C', 'A B:C'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'A-B:C',
         },
       ],
     },
