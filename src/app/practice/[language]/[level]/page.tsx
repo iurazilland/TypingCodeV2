@@ -7184,7 +7184,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                         <span style={{ padding: '1px 6px', borderRadius: '3px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>
                           {cv.name}
                         </span>
-                        <span>=</span>
+                        {cv.kind === 'variable' ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '20px', padding: '0 6px', borderRadius: '5px', background: 'rgba(0, 0, 0, 0.26)', border: '1px solid rgba(255, 255, 255, 0.34)', fontSize: '0.76rem', lineHeight: 1 }}>=</span>
+                        ) : (
+                          <span>=</span>
+                        )}
                         {cv.kind === 'variable' && (
                           <span style={{ width: '26px', height: '20px', borderRadius: '3px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                         )}
