@@ -748,7 +748,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
           continue;
         }
 
-        // Compound assignment: player_score += 20, health_point -= 25, etc. (uses unified variable block)
+        // Compound assignment: defaults pre-placed variable block operator to '+='
         const compoundMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=)\s*([\s\S]+)$/);
         if (compoundMatch) {
           const rhsExpr = compoundMatch[3].trim();
@@ -757,6 +757,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
             id: nextId('var'),
             type: 'variable',
             varName: '',
+            assignOp: '+=',
             content: '',
             argBlock: rhsArgBlk,
             x: 40,
