@@ -19,17 +19,58 @@ export const PYTHON_LEVEL_5: PracticeRound = {
   unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
-    // 페어 1: 문자열 덧셈(+) 이어붙이기
+    // 페어 1: 쉼표(,) 문자열 나란히 출력 (자동 공백 복습)
     // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '덧셈 기호(+)를 사용해 "Hello"+"World"를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use the plus (+) operator to insert "Hello"+"World" and print it on the screen.',
-      hint_ko: '파이썬에서 문자열끼리 + 기호를 사용하면 두 글자가 빈칸 없이 이어붙습니다. "Hello"+"World"를 입력하세요.',
-      hint_en: 'Using the + operator between strings concatenates them together without spaces.',
+      prompt_ko: '쉼표(,)를 사용해 "Hello", "World"를 넣어 공백을 두고 나란히 출력해보세요.',
+      prompt_en: 'Use a comma (,) to insert "Hello", "World" and print them separated by a space.',
+      hint_ko: 'print() 안에서 쉼표(,)로 두 문자열을 구분하면 사이에 공백 한 칸이 자동으로 들어가 "Hello World"가 출력됩니다.',
+      hint_en: 'Separating two strings with a comma (,) automatically inserts a space, printing "Hello World".',
+      targetCode: 'print("Hello", "World")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Hello World',
+        },
+      ],
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸을 채워 두 단어 사이에 공백이 자동으로 들어간 Python Code를 출력해보세요.',
+      prompt_en: 'Fill in the blank so the two words print with an automatic space as Python Code.',
+      hint_ko: '두 문자열 사이에 공백 한 칸을 자동으로 넣어 나란히 출력하려면 빈칸에 쉼표(,)를 입력하세요.',
+      hint_en: 'Enter a comma (,) in the blank to separate the two strings with an automatic space.',
+      templateCode: 'print("Python"§ "Code")',
+      targetCode: 'print("Python", "Code")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Python Code',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 페어 2: 문자열 덧셈(+) 이어붙이기 (쉼표와의 공백 차이 대조)
+    // ------------------------------------------------------------------------
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '덧셈 기호(+)를 사용해 "Hello"+"World"를 넣어 공백 없이 이어붙여 출력해보세요.',
+      prompt_en: 'Use the plus (+) operator to insert "Hello"+"World" and join them without spaces.',
+      hint_ko: '쉼표(,)와 달리 문자열끼리 + 기호를 사용하면 공백 없이 하나로 이어붙어 "HelloWorld"가 출력됩니다.',
+      hint_en: 'Unlike a comma, using + between strings concatenates them without spaces as "HelloWorld".',
       targetCode: 'print("Hello"+"World")',
       testCases: [
         {
@@ -40,14 +81,14 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       ],
     },
     {
-      id: 2,
-      step: 2,
+      id: 4,
+      step: 4,
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 두 단어가 공백 없이 하나로 이어진 PythonCode를 출력해보세요.',
       prompt_en: 'Fill in the blank to join the two words without spaces into PythonCode.',
-      hint_ko: '두 문자열을 빈칸 없이 이어붙이려면 사이의 빈칸에 덧셈 기호(+)를 입력하세요.',
-      hint_en: 'Type the plus (+) operator into the blank between the two strings.',
+      hint_ko: '쉼표와 달리 두 문자열을 빈칸 없이 하나로 합치려면 사이의 빈칸에 덧셈 기호(+)를 입력하세요.',
+      hint_en: 'Type the plus (+) operator into the blank between the two strings to join them without spaces.',
       templateCode: 'print("Python"§"Code")',
       targetCode: 'print("Python"+"Code")',
       testCases: [
@@ -55,47 +96,6 @@ export const PYTHON_LEVEL_5: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: 'PythonCode',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 페어 2: 공백 포함 문자열 덧셈
-    // ------------------------------------------------------------------------
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '공백을 포함해 "Hello "+"World"를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Insert "Hello "+"World" with a space and print it on the screen.',
-      hint_ko: '+ 연산자는 공백을 자동으로 넣어주지 않으므로 "Hello "+"World"처럼 문자열 안에 직접 공백을 넣어줍니다.',
-      hint_en: 'The + operator does not insert spaces automatically. Include a space inside "Hello "+"World".',
-      targetCode: 'print("Hello "+"World")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Hello World',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 앞 단어의 공백이 유지된 Typing Code를 출력해보세요.',
-      prompt_en: 'Fill in the blank to concatenate the strings and output Typing Code with its space.',
-      hint_ko: '두 문자열을 이어붙일 수 있도록 사이의 빈칸에 덧셈 기호(+)를 입력하세요.',
-      hint_en: 'Enter the plus (+) operator into the blank between the words.',
-      templateCode: 'print("Typing "§"Code")',
-      targetCode: 'print("Typing "+"Code")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Typing Code',
         },
       ],
     },
