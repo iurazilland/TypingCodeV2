@@ -230,18 +230,18 @@ export const PYTHON_LEVEL_10: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - 변수 선언 전 참조(순서 오류) 교정
+    // 11단계: 버그 수정 (fix_bug) - 잘못된 저장 대상 변수명 수정
     // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '변수를 선언하기 전에 먼저 계산에 사용해 발생한 오류(NameError)를 줄 순서를 바로잡아 수정하고 150을 출력해보세요.',
-      prompt_en: 'Fix the line order bug causing a NameError before variable bonus is defined so that 150 is printed.',
-      hint_ko: '파이썬 코드는 위에서 아래로 한 줄씩 실행되므로 bonus = 50이 total = bonus + 100보다 먼저 나와야 합니다.',
-      hint_en: 'Python runs top to bottom, so bonus = 50 must come before total = bonus + 100.',
-      templateCode: 'total = bonus + 100\nbonus = 50\nprint(total)',
+      prompt_ko: '계산 결과를 total이 아닌 bonus에 잘못 저장해 발생한 오류(NameError)를 수정하고 150을 출력해보세요.',
+      prompt_en: 'Fix the bug where the sum was stored back in bonus instead of total (causing a NameError) and print 150.',
+      hint_ko: '셋째 줄에서 total을 출력하고 있으므로, 둘째 줄의 왼쪽 변수 이름을 bonus에서 total로 고쳐보세요.',
+      hint_en: 'Since line 3 prints total, change the left-hand variable on line 2 from bonus to total.',
+      templateCode: 'bonus = 50\nbonus = bonus + 100\nprint(total)',
       targetCode: 'bonus = 50\ntotal = bonus + 100\nprint(total)',
       expectedVariables: { bonus: 50, total: 150 },
       testCases: [
