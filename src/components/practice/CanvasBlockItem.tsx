@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, ChevronDown } from 'lucide-react';
+import { Play } from 'lucide-react';
 import {
   CanvasBlock,
   BlockType,
@@ -1670,7 +1670,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             }}
           >
             <span>{block.assignOp || '='}</span>
-            <ChevronDown size={13} strokeWidth={3} color="#fed7aa" style={{ flexShrink: 0 }} />
+            <svg width="9" height="7" viewBox="0 0 10 8" style={{ flexShrink: 0 }}>
+              <path d="M1 1.5h8L5 7z" fill="#fed7aa" />
+            </svg>
             <select
               value={block.assignOp || '='}
               onMouseDown={(e) => e.stopPropagation()}
