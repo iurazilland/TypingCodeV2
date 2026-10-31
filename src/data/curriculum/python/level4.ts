@@ -183,23 +183,23 @@ export const PYTHON_LEVEL_4: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 5: 몫과 나머지 라벨 동시 출력
+    // 페어 5: 몫(Q)과 나머지(R) 라벨 동시 출력
     // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 "몫:", 20//3, "나머지:", 20%3을 넣어 한 줄에 출력해보세요.',
-      prompt_en: 'Use commas (,) to insert "몫:", 20//3, "나머지:", 20%3 and print them on one line.',
-      hint_ko: 'print() 괄호 안에 "몫:", 20//3, "나머지:", 20%3을 입력하면 "몫: 6 나머지: 2"가 출력됩니다.',
-      hint_en: 'Enter "몫:", 20//3, "나머지:", 20%3 to print "몫: 6 나머지: 2".',
-      targetCode: 'print("몫:", 20//3, "나머지:", 20%3)',
+      prompt_ko: '쉼표(,)를 사용해 몫(Q)과 나머지(R)를 나타내는 "Q:", 20//3, "R:", 20%3을 넣어 한 줄에 출력해보세요.',
+      prompt_en: 'Use commas (,) to insert "Q:", 20//3, "R:", 20%3 and print quotient and remainder on one line.',
+      hint_ko: 'print() 괄호 안에 "Q:", 20//3, "R:", 20%3을 입력하면 "Q: 6 R: 2"가 출력됩니다.',
+      hint_en: 'Enter "Q:", 20//3, "R:", 20%3 to print "Q: 6 R: 2".',
+      targetCode: 'print("Q:", 20//3, "R:", 20%3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '몫: 6 나머지: 2',
+          expectedOutput: 'Q: 6 R: 2',
         },
       ],
     },
@@ -208,17 +208,17 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 각각 몫과 나머지 연산자를 채워 계산 결과(몫: 4 나머지: 2)를 완성해보세요.',
-      prompt_en: 'Fill in the floor division and modulo operators into the blanks to complete the result.',
+      prompt_ko: '두 빈칸에 각각 몫과 나머지 연산자를 채워 계산 결과(Q: 4 R: 2)를 완성해보세요.',
+      prompt_en: 'Fill in the floor division and modulo operators into the blanks to complete the result (Q: 4 R: 2).',
       hint_ko: '첫 번째 빈칸에는 몫 연산자(//), 두 번째 빈칸에는 나머지 연산자(%)를 입력하세요.',
       hint_en: 'Enter floor division (//) in the first blank and modulo (%) in the second blank.',
-      templateCode: 'print("몫:", 14§§3, "나머지:", 14§3)',
-      targetCode: 'print("몫:", 14//3, "나머지:", 14%3)',
+      templateCode: 'print("Q:", 14§§3, "R:", 14§3)',
+      targetCode: 'print("Q:", 14//3, "R:", 14%3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '몫: 4 나머지: 2',
+          expectedOutput: 'Q: 4 R: 2',
         },
       ],
     },

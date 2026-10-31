@@ -142,23 +142,23 @@ export const PYTHON_LEVEL_5: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 4: 특수문자/글자 반복
+    // 페어 4: 단어/글자 반복
     // ------------------------------------------------------------------------
     {
       id: 7,
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '곱셈 기호(*)를 사용해 "★"*5를 넣어 별 5개를 출력해보세요.',
-      prompt_en: 'Use the asterisk (*) operator to insert "★"*5 and print 5 stars.',
-      hint_ko: '특수문자도 곱하기(*) 연산자로 원하는 개수만큼 반복할 수 있습니다. "★"*5를 입력하세요.',
-      hint_en: 'Special symbols can also be repeated with the asterisk (*) operator. Enter "★"*5.',
-      targetCode: 'print("★"*5)',
+      prompt_ko: '곱셈 기호(*)를 사용해 "Hi"*3을 넣어 인사말을 3번 연속 출력해보세요.',
+      prompt_en: 'Use the asterisk (*) operator to insert "Hi"*3 and print the greeting 3 times.',
+      hint_ko: '단어 문자열도 곱하기(*) 연산자로 원하는 횟수만큼 반복할 수 있습니다. "Hi"*3을 입력하세요.',
+      hint_en: 'Word strings can also be repeated with the asterisk (*) operator. Enter "Hi"*3.',
+      targetCode: 'print("Hi"*3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '★★★★★',
+          expectedOutput: 'HiHiHi',
         },
       ],
     },
@@ -167,17 +167,17 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 글자가 세 번 연속 반복된 하하하를 출력해보세요.',
-      prompt_en: 'Fill in the blank to repeat the character three times as 하하하.',
-      hint_ko: '문자열을 지정한 횟수만큼 반복하려면 "하"와 3 사이의 빈칸에 곱셈 기호(*)를 입력하세요.',
-      hint_en: 'Enter the asterisk (*) operator into the blank between "하" and 3.',
-      templateCode: 'print("하"§3)',
-      targetCode: 'print("하"*3)',
+      prompt_ko: '빈칸을 채워 글자가 세 번 연속 반복된 HaHaHa를 출력해보세요.',
+      prompt_en: 'Fill in the blank to repeat the text three times as HaHaHa.',
+      hint_ko: '문자열을 지정한 횟수만큼 반복하려면 "Ha"와 3 사이의 빈칸에 곱셈 기호(*)를 입력하세요.',
+      hint_en: 'Enter the asterisk (*) operator into the blank between "Ha" and 3.',
+      templateCode: 'print("Ha"§3)',
+      targetCode: 'print("Ha"*3)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '하하하',
+          expectedOutput: 'HaHaHa',
         },
       ],
     },
