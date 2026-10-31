@@ -1645,58 +1645,58 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               boxSizing: 'border-box',
             }}
           />
-          {block.assignOp !== undefined ? (
-            <div
+          <div
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            title="클릭하여 대입 연산자 선택 (=, +=, -=, *=, /=, //=, %=)"
+            style={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '2px',
+              height: '20px',
+              padding: '0 5px',
+              borderRadius: '4px',
+              background: 'rgba(0, 0, 0, 0.2)',
+              border: '1px solid rgba(255, 255, 255, 0.22)',
+              color: '#ffffff',
+              fontWeight: 800,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.76rem',
+              cursor: 'pointer',
+              boxSizing: 'border-box',
+              userSelect: 'none',
+              lineHeight: 1,
+            }}
+          >
+            <span>{block.assignOp || '='}</span>
+            <span style={{ fontSize: '0.5rem', opacity: 0.72 }}>▾</span>
+            <select
+              value={block.assignOp || '='}
               onMouseDown={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
+              onChange={(e) => onAssignOpChange?.(block.id, e.target.value as AssignOperator)}
               style={{
-                position: 'relative',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '2px',
-                height: '20px',
-                padding: '0 5px',
-                borderRadius: '4px',
-                background: 'rgba(255, 255, 255, 0.92)',
-                color: '#0f172a',
-                fontWeight: 800,
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0,
                 cursor: 'pointer',
-                boxSizing: 'border-box',
-                userSelect: 'none',
-                lineHeight: 1,
+                fontSize: '0.82rem',
+                color: '#0f172a',
+                background: '#ffffff',
               }}
             >
-              <span>{block.assignOp}</span>
-              <span style={{ fontSize: '0.55rem', transform: 'scaleY(0.85)', opacity: 0.85 }}>▼</span>
-              <select
-                value={block.assignOp}
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onChange={(e) => onAssignOpChange?.(block.id, e.target.value as AssignOperator)}
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  opacity: 0,
-                  cursor: 'pointer',
-                  fontSize: '0.82rem',
-                }}
-              >
-                <option value="=">=</option>
-                <option value="+=">+=</option>
-                <option value="-=">-=</option>
-                <option value="*=">*=</option>
-                <option value="/=">/=</option>
-                <option value="//=">//=</option>
-                <option value="%=">%=</option>
-              </select>
-            </div>
-          ) : (
-            <span>=</span>
-          )}
+              <option value="=">=</option>
+              <option value="+=">+=</option>
+              <option value="-=">-=</option>
+              <option value="*=">*=</option>
+              <option value="/=">/=</option>
+              <option value="//=">//=</option>
+              <option value="%=">%=</option>
+            </select>
+          </div>
           {renderArgSlot('variable', true)}
         </>
       ) : block.type === 'return' ? (

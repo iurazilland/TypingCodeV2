@@ -748,15 +748,17 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
           continue;
         }
 
-        // Compound assignment: score += 20, hp -= 35, coin *= 3, num /= 4, num //= 4, num %= 2
+        // Compound assignment: player_score += 20, health_point -= 25, etc. (uses unified variable block)
         const compoundMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=)\s*([\s\S]+)$/);
         if (compoundMatch) {
+          const rhsExpr = compoundMatch[3].trim();
+          const rhsArgBlk = tryBuildArgBlock(rhsExpr);
           suiteBlocks.push({
             id: nextId('var'),
             type: 'variable',
             varName: '',
-            assignOp: '=',
             content: '',
+            argBlock: rhsArgBlk,
             x: 40,
             y: 66,
           });
@@ -5294,19 +5296,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     );
   };
 
-  const handleToggleCompoundAssign = (blockId: string, enable: boolean) => {
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, blockId, (b) => ({
-        ...b,
-        assignOp: enable ? (b.assignOp && b.assignOp !== '=' ? b.assignOp : '+=') : undefined,
-      }))
-    );
-    showToast(
-      enable
-        ? (isEn ? '✨ Enabled compound assignment (+=, -=, ...).' : '✨ 복합 대입 연산자(+=, -= 등) 모드가 활성화되었습니다.')
-        : (isEn ? '🗑️ Restored basic assignment (=).' : '🗑️ 기본 대입 연산자(=)로 변경되었습니다.')
-    );
-  };
 
   // Canvas block input selection handler:
   // First click/focus selects all text; subsequent clicks place normal cursor.
@@ -7195,7 +7184,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                         <span style={{ padding: '1px 6px', borderRadius: '3px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>
                           {cv.name}
                         </span>
-                        <span>=</span>
+                        {cv.kind === 'variable' ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', height: '20px', padding: '0 5px', borderRadius: '4px', background: 'rgba(0, 0, 0, 0.2)', border: '1px solid rgba(255, 255, 255, 0.22)', fontSize: '0.76rem', lineHeight: 1 }}>
+                            <span>=</span>
+                            <span style={{ fontSize: '0.5rem', opacity: 0.72 }}>▾</span>
+                          </span>
+                        ) : (
+                          <span>=</span>
+                        )}
                         {cv.kind === 'variable' && (
                           <span style={{ width: '26px', height: '20px', borderRadius: '3px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                         )}
@@ -8118,7 +8114,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               }
 
               const isPrintBlock = target?.type === 'print';
-              const isVarBlock = target?.type === 'variable';
               const isIfBlock = target?.type === 'if';
               const isDefBlock = target?.type === 'def';
               const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
@@ -8203,51 +8198,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           <>
                             <Plus size={14} color="#60a5fa" />
                             <span>{isEn ? 'Add end option (end="\\n")' : 'end 옵션 추가 (끝맺음)'}</span>
-                          </>
-                        )}
-                      </button>
-                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                    </>
-                  )}
-
-                  {/* Variable Block Special Action: Compound Assignment Toggle (+=, -=, *=, /=) */}
-                  {isVarBlock && target && (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleToggleCompoundAssign(target.id, target.assignOp === undefined);
-                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '8px 12px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: 'transparent',
-                          color: target.assignOp !== undefined ? '#fca5a5' : '#fdba74',
-                          fontSize: '0.82rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                          transition: 'background 0.15s ease',
-                        }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.background =
-                            target.assignOp !== undefined ? 'rgba(239, 68, 68, 0.18)' : 'rgba(249, 115, 22, 0.2)')
-                        }
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        {target.assignOp !== undefined ? (
-                          <>
-                            <Trash2 size={14} color="#f87171" />
-                            <span>{isEn ? 'Use basic assignment (=)' : '기본 대입(=)으로 전환'}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus size={14} color="#fb923c" />
-                            <span>{isEn ? 'Use compound assignment (+=, -=, ...)' : '복합 대입 연산자(+=, -= 등) 사용'}</span>
                           </>
                         )}
                       </button>
