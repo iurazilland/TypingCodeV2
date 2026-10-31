@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play } from 'lucide-react';
+import { Play, ChevronDown } from 'lucide-react';
 import {
   CanvasBlock,
   BlockType,
@@ -1653,12 +1653,12 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               position: 'relative',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '2px',
+              gap: '4px',
               height: '20px',
-              padding: '0 5px',
-              borderRadius: '4px',
-              background: 'rgba(0, 0, 0, 0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.22)',
+              padding: '0 4px 0 6px',
+              borderRadius: '5px',
+              background: 'rgba(0, 0, 0, 0.26)',
+              border: '1px solid rgba(255, 255, 255, 0.34)',
               color: '#ffffff',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
@@ -1670,7 +1670,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             }}
           >
             <span>{block.assignOp || '='}</span>
-            <span style={{ fontSize: '0.5rem', opacity: 0.72 }}>▾</span>
+            <ChevronDown size={13} strokeWidth={3} color="#fed7aa" style={{ flexShrink: 0 }} />
             <select
               value={block.assignOp || '='}
               onMouseDown={(e) => e.stopPropagation()}

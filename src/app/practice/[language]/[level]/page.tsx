@@ -16,6 +16,7 @@ import {
   Box,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   Lock,
   Copy,
   Edit3,
@@ -7185,9 +7186,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           {cv.name}
                         </span>
                         {cv.kind === 'variable' ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', height: '20px', padding: '0 5px', borderRadius: '4px', background: 'rgba(0, 0, 0, 0.2)', border: '1px solid rgba(255, 255, 255, 0.22)', fontSize: '0.76rem', lineHeight: 1 }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', height: '20px', padding: '0 4px 0 6px', borderRadius: '5px', background: 'rgba(0, 0, 0, 0.26)', border: '1px solid rgba(255, 255, 255, 0.34)', fontSize: '0.76rem', lineHeight: 1 }}>
                             <span>=</span>
-                            <span style={{ fontSize: '0.5rem', opacity: 0.72 }}>▾</span>
+                            <ChevronDown size={13} strokeWidth={3} color="#fed7aa" style={{ flexShrink: 0 }} />
                           </span>
                         ) : (
                           <span>=</span>
