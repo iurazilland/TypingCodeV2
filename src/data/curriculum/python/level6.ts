@@ -101,23 +101,23 @@ export const PYTHON_LEVEL_6: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 3: 따옴표 이스케이프(\", \')
+    // 페어 3: 따옴표 이스케이프(\')
     // ------------------------------------------------------------------------
     {
       id: 5,
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '따옴표 이스케이프(\\")를 사용해 "Say \\"Hi\\""를 넣어 큰따옴표까지 출력해보세요.',
-      prompt_en: 'Use escaped quotes (\\") to insert "Say \\"Hi\\"" and print the double quotes.',
-      hint_ko: '큰따옴표 문자열 안에서 큰따옴표를 글자로 출력하려면 앞에 역슬래시를 붙여 \\"로 작성합니다.',
-      hint_en: 'Prefix inner double quotes with a backslash (\\") so Python prints them as characters.',
-      targetCode: 'print("Say \\"Hi\\"")',
+      prompt_ko: "따옴표 이스케이프(\\')를 사용해 'It\\'s'를 넣어 작은따옴표까지 출력해보세요.",
+      prompt_en: "Use an escaped quote (\\') to insert 'It\\'s' and print the apostrophe.",
+      hint_ko: "작은따옴표 문자열 안에서 작은따옴표를 글자로 출력하려면 앞에 역슬래시를 붙여 \\'로 작성합니다. 'It\\'s'를 입력하세요.",
+      hint_en: "Prefix the inner single quote with a backslash (\\') so Python prints it as a character. Enter 'It\\'s'.",
+      targetCode: "print('It\\'s')",
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Say "Hi"',
+          expectedOutput: "It's",
         },
       ],
     },
@@ -126,17 +126,17 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: "빈칸을 채워 바깥 따옴표가 중간에 끊기지 않고 It's fun이 출력되도록 해보세요.",
-      prompt_en: "Fill in the blank so the string does not break early and prints It's fun.",
+      prompt_ko: "빈칸을 채워 바깥 따옴표가 중간에 끊기지 않고 Let's go가 출력되도록 해보세요.",
+      prompt_en: "Fill in the blank so the string does not break early and prints Let's go.",
       hint_ko: "작은따옴표 문자열 안에 작은따옴표를 글자로 넣으려면 역슬래시를 붙인 \\'를 빈칸에 입력하세요.",
       hint_en: "Type \\' in the blank to escape the apostrophe inside single quotes.",
-      templateCode: "print('It§§s fun')",
-      targetCode: "print('It\\'s fun')",
+      templateCode: "print('Let§§s go')",
+      targetCode: "print('Let\\'s go')",
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: "It's fun",
+          expectedOutput: "Let's go",
         },
       ],
     },
@@ -291,3 +291,4 @@ export const PYTHON_LEVEL_6: PracticeRound = {
     },
   ],
 };
+
