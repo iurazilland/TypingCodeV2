@@ -719,15 +719,19 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
             }
           };
 
-          if (blk.hasPrintOptions) {
+          if (blk.hasSep) {
             const rawSep = (blk.sepVal ?? '').trim().replace(/^sep\s*=\s*/, '');
-            if (rawSep.length > 0) {
-              applySepExpr(rawSep);
+            if (rawSep.length === 0) {
+              throw new Error('SyntaxError: invalid syntax');
             }
+            applySepExpr(rawSep);
+          }
+          if (blk.hasEnd) {
             const rawEnd = (blk.endVal ?? '').trim().replace(/^end\s*=\s*/, '');
-            if (rawEnd.length > 0) {
-              applyEndExpr(rawEnd);
+            if (rawEnd.length === 0) {
+              throw new Error('SyntaxError: invalid syntax');
             }
+            applyEndExpr(rawEnd);
           }
 
           if (blk.argBlock) {

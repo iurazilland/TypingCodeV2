@@ -71,8 +71,9 @@ export interface CanvasBlock {
   isIfElse?: boolean;
   hasReturn?: boolean;
   returnVal?: string;
-  hasPrintOptions?: boolean;
+  hasSep?: boolean;
   sepVal?: string;
+  hasEnd?: boolean;
   endVal?: string;
   methodName?: string;
   attachedMethodId?: string;

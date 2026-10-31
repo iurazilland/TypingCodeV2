@@ -17,7 +17,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
   title_ko: '8레벨: 기초 출력과 연산 종합 문제풀이',
   title_en: 'Level 8: Section 1 Comprehensive Review',
   totalQuestions: 10,
-  unlockedBlocks: ['print', 'print_options'],
+  unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
     // 1~3단계: 빈칸 채우기 (fill_blank)
@@ -233,3 +233,4 @@ export const PYTHON_LEVEL_8: PracticeRound = {
     },
   ],
 };
+

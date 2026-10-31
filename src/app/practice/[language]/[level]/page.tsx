@@ -144,8 +144,9 @@ interface CanvasBlock {
   isIfElse?: boolean;
   hasReturn?: boolean;
   returnVal?: string;
-  hasPrintOptions?: boolean;
+  hasSep?: boolean;
   sepVal?: string;
+  hasEnd?: boolean;
   endVal?: string;
   // Method block properties
   methodName?: string;
@@ -723,7 +724,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   }, [round.unlockedBlocks, levelNum]);
 
   const isBlockUnlocked = (key: string) => unlockedBlocks.includes(key);
-  const hasFunctionBlocks = ['print', 'print_options', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def'].some(k => isBlockUnlocked(k));
+  const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def'].some(k => isBlockUnlocked(k));
   const hasControlBlocks = ['if', 'for_range', 'for_in', 'while', 'break', 'continue'].some(k => isBlockUnlocked(k));
   const hasVariableBlocks = isBlockUnlocked('variable');
   const hasCommentBlocks = isBlockUnlocked('comment');
@@ -882,7 +883,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     varName?: string;
     content?: string;
     withElse?: boolean;
-    withPrintOptions?: boolean;
     startX: number;
     startY: number;
     startPointerX?: number;
@@ -906,7 +906,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     branchId?: string;
     content?: string;
     withElse?: boolean;
-    withPrintOptions?: boolean;
     initialWidth?: number;
     initialHeight?: number;
     grabX?: number;
@@ -1181,13 +1180,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         ];
         if (funcTypes.includes(b.type)) {
           const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
-          if (b.type === 'print' && b.hasPrintOptions) {
+          if (b.type === 'print' && (b.hasSep || b.hasEnd)) {
             const parts: string[] = [];
             if (inner.length > 0) parts.push(inner);
-            const cleanSep = (b.sepVal || '').trim().replace(/^sep\s*=\s*/, '');
-            if (cleanSep.length > 0) parts.push(`sep=${cleanSep}`);
-            const cleanEnd = (b.endVal || '').trim().replace(/^end\s*=\s*/, '');
-            if (cleanEnd.length > 0) parts.push(`end=${cleanEnd}`);
+            if (b.hasSep) {
+              const cleanSep = (b.sepVal ?? '').trim().replace(/^sep\s*=\s*/, '');
+              parts.push(`sep=${cleanSep}`);
+            }
+            if (b.hasEnd) {
+              const cleanEnd = (b.endVal ?? '').trim().replace(/^end\s*=\s*/, '');
+              parts.push(`end=${cleanEnd}`);
+            }
             return `print(${parts.join(', ')})${chain}`;
           }
           return `${b.type}(${inner})${chain}`;
@@ -1256,13 +1259,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         'range', 'map', 'sorted', 'enumerate', 'zip', 'all', 'any', 'reversed'
       ].includes(blk.type)) {
         const content = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
-        if (blk.type === 'print' && blk.hasPrintOptions) {
+        if (blk.type === 'print' && (blk.hasSep || blk.hasEnd)) {
           const parts: string[] = [];
           if (content.length > 0) parts.push(content);
-          const cleanSep = (blk.sepVal || '').trim().replace(/^sep\s*=\s*/, '');
-          if (cleanSep.length > 0) parts.push(`sep=${cleanSep}`);
-          const cleanEnd = (blk.endVal || '').trim().replace(/^end\s*=\s*/, '');
-          if (cleanEnd.length > 0) parts.push(`end=${cleanEnd}`);
+          if (blk.hasSep) {
+            const cleanSep = (blk.sepVal ?? '').trim().replace(/^sep\s*=\s*/, '');
+            parts.push(`sep=${cleanSep}`);
+          }
+          if (blk.hasEnd) {
+            const cleanEnd = (blk.endVal ?? '').trim().replace(/^end\s*=\s*/, '');
+            parts.push(`end=${cleanEnd}`);
+          }
           out.push(`${indentStr}print(${parts.join(', ')})${mSuffix}`);
         } else {
           out.push(`${indentStr}${blk.type}(${content})${mSuffix}`);
@@ -2329,7 +2336,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const handleDragStartFromToolbox = (
     e: React.DragEvent,
     blockType: BlockType,
-    extra?: { varName?: string; withElse?: boolean; withPrintOptions?: boolean }
+    extra?: { varName?: string; withElse?: boolean }
   ) => {
     // In typing mode, dragging blocks out is locked, but wheel scrolling is preserved
     if (mode === 'typing') {
@@ -2346,7 +2353,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       blockType,
       varName: extra?.varName,
       withElse: extra?.withElse,
-      withPrintOptions: extra?.withPrintOptions,
       grabX: Math.max(10, Math.min(rawGrabX, 60)),
       grabY: Math.max(5, Math.min(rawGrabY, 25)),
       initialWidth: Math.round(rect.width),
@@ -2945,7 +2951,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       varName?: string;
       content?: string;
       withElse?: boolean;
-      withPrintOptions?: boolean;
       parentBlockId?: string;
       childIdx?: number;
       branchId?: string;
@@ -3033,14 +3038,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               bType === 'while' ? 'False' : ''
       );
       const isIfElse = isIf && !!blockInfo.withElse;
-      const hasPrintOptions = bType === 'print' && !!blockInfo.withPrintOptions;
       baseBlock = {
         id: `${bType}-${Date.now()}`,
         type: bType,
         isIfElse: isIfElse ? true : undefined,
-        hasPrintOptions: hasPrintOptions ? true : undefined,
-        sepVal: hasPrintOptions ? '' : undefined,
-        endVal: hasPrintOptions ? '' : undefined,
         varName,
         methodName: bType === 'method' ? 'method' : undefined,
         content: defaultContent,
@@ -4272,7 +4273,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         varName: info?.varName,
         content: info?.content,
         withElse: (info as any)?.withElse,
-        withPrintOptions: (info as any)?.withPrintOptions,
         parentBlockId: info?.parentBlockId,
         childIdx: info?.childIdx,
         branchId: info?.branchId,
@@ -4748,19 +4748,34 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     );
   };
 
-  const handleTogglePrintOptions = (blockId: string, enable: boolean) => {
+  const handleTogglePrintOption = (blockId: string, option: 'sep' | 'end', enable: boolean) => {
     setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, blockId, (b) => ({
-        ...b,
-        hasPrintOptions: enable ? true : undefined,
-        sepVal: enable ? (b.sepVal ?? '') : undefined,
-        endVal: enable ? (b.endVal ?? '') : undefined,
-      }))
+      updateAnyBlockInTree(prev, blockId, (b) =>
+        option === 'sep'
+          ? {
+              ...b,
+              hasSep: enable ? true : undefined,
+              sepVal: enable ? (b.sepVal ?? '" "') : undefined,
+            }
+          : {
+              ...b,
+              hasEnd: enable ? true : undefined,
+              endVal: enable ? (b.endVal ?? '"\\n"') : undefined,
+            }
+      )
     );
-    if (enable) {
-      showToast(isEn ? '✨ Switched to print(sep, end) 3-slot block.' : '✨ 옵션 print(sep, end) 3칸 블록으로 전환되었습니다.');
+    if (option === 'sep') {
+      showToast(
+        enable
+          ? (isEn ? '✨ Added sep=" " option to print().' : '✨ sep=" " 구분자 옵션이 추가되었습니다.')
+          : (isEn ? '🗑️ Removed sep option from print().' : '🗑️ sep 구분자 옵션이 제거되었습니다.')
+      );
     } else {
-      showToast(isEn ? '✨ Switched to basic print() 1-slot block.' : '✨ 기본 print() 1칸 블록으로 전환되었습니다.');
+      showToast(
+        enable
+          ? (isEn ? '✨ Added end="\\n" option to print().' : '✨ end="\\n" 끝맺음 옵션이 추가되었습니다.')
+          : (isEn ? '🗑️ Removed end option from print().' : '🗑️ end 끝맺음 옵션이 제거되었습니다.')
+      );
     }
   };
 
@@ -5832,44 +5847,6 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     <PuzzleTab borderColor={BLOCK_THEMES.print.border} bg={BLOCK_THEMES.print.bg} />
                     <span>print(</span>
                     <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* print( , sep= , end= ) 3칸 옵션 블록 */}
-                {isBlockUnlocked('print_options') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'print', { withPrintOptions: true })}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      whiteSpace: 'nowrap',
-                      gap: '2px',
-                      padding: '5px 8px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.print.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.print.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.print.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.75rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title={isEn ? 'print(value, sep=, end=) 3-slot block (Right-click on canvas to switch)' : 'print(값, sep=, end=) 3칸 옵션 블록 (캔버스에서 우클릭으로 기본 블록과 전환 가능)'}
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.print.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.print.border} bg={BLOCK_THEMES.print.bg} />
-                    <span>print(</span>
-                    <span style={{ width: '18px', height: '18px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>, sep=</span>
-                    <span style={{ width: '18px', height: '18px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>, end=</span>
-                    <span style={{ width: '18px', height: '18px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                     <span>)</span>
                   </div>
                 )}
@@ -7597,12 +7574,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
               return (
                 <>
-                  {/* Print Block Special Action: Toggle 1-slot basic <-> 3-slot sep/end options */}
+                  {/* Print Block Special Actions: Independent sep & end Option Add/Remove */}
                   {isPrintBlock && target && (
                     <>
                       <button
                         onClick={() => {
-                          handleTogglePrintOptions(target.id, !target.hasPrintOptions);
+                          handleTogglePrintOption(target.id, 'sep', !target.hasSep);
                           setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
                         }}
                         style={{
@@ -7613,22 +7590,70 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           borderRadius: '8px',
                           border: 'none',
                           background: 'transparent',
-                          color: '#93c5fd',
+                          color: target.hasSep ? '#fca5a5' : '#93c5fd',
                           fontSize: '0.82rem',
                           fontWeight: 700,
                           cursor: 'pointer',
                           textAlign: 'left',
                           transition: 'background 0.15s ease',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.22)')}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = target.hasSep
+                            ? 'rgba(239, 68, 68, 0.18)'
+                            : 'rgba(59, 130, 246, 0.22)')
+                        }
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >
-                        <Sparkles size={14} color="#60a5fa" />
-                        <span>
-                          {target.hasPrintOptions
-                            ? (isEn ? 'Switch to basic print() (1 slot)' : '기본 print() 블록으로 변경 (1칸)')
-                            : (isEn ? 'Switch to print(sep, end) (3 slots)' : '옵션 print(sep, end) 블록으로 변경 (3칸)')}
-                        </span>
+                        {target.hasSep ? (
+                          <>
+                            <Trash2 size={14} color="#f87171" />
+                            <span>{isEn ? 'Remove sep option' : 'sep 옵션 제거'}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus size={14} color="#60a5fa" />
+                            <span>{isEn ? 'Add sep option (sep=" ")' : 'sep 옵션 추가 (구분자)'}</span>
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleTogglePrintOption(target.id, 'end', !target.hasEnd);
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: target.hasEnd ? '#fca5a5' : '#93c5fd',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background 0.15s ease',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = target.hasEnd
+                            ? 'rgba(239, 68, 68, 0.18)'
+                            : 'rgba(59, 130, 246, 0.22)')
+                        }
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {target.hasEnd ? (
+                          <>
+                            <Trash2 size={14} color="#f87171" />
+                            <span>{isEn ? 'Remove end option' : 'end 옵션 제거'}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus size={14} color="#60a5fa" />
+                            <span>{isEn ? 'Add end option (end="\\n")' : 'end 옵션 추가 (끝맺음)'}</span>
+                          </>
+                        )}
                       </button>
                       <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
                     </>

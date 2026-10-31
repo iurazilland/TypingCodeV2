@@ -1373,70 +1373,74 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Block Body Content */}
-      {block.type === 'print' && block.hasPrintOptions ? (
+      {block.type === 'print' && (block.hasSep || block.hasEnd) ? (
         <>
           <span>print(</span>
           {renderArgSlot('print')}
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '-2px' }}>
-            <span>, sep=</span>
-            <input
-              type="text"
-              value={block.sepVal || ''}
-              placeholder=""
-              onMouseDown={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-              onFocus={handleInputFocusSelect}
-              onClick={handleInputClickSelect}
-              onChange={(e) => onPrintOptionChange?.(block.id, 'sep', e.target.value)}
-              style={{
-                width: `${getBlockInputWidth(block.sepVal)}px`,
-                height: '20px',
-                padding: '1px 5px',
-                borderRadius: '6px',
-                background: '#ffffff',
-                color: '#0f172a',
-                border: '1px solid rgba(0,0,0,0.2)',
-                fontWeight: 800,
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.76rem',
-                textAlign: 'left',
-                outline: 'none',
-                cursor: 'text',
-                boxSizing: 'border-box',
-              }}
-            />
-          </span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '-2px' }}>
-            <span>, end=</span>
-            <input
-              type="text"
-              value={block.endVal || ''}
-              placeholder=""
-              onMouseDown={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-              onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-              onFocus={handleInputFocusSelect}
-              onClick={handleInputClickSelect}
-              onChange={(e) => onPrintOptionChange?.(block.id, 'end', e.target.value)}
-              style={{
-                width: `${getBlockInputWidth(block.endVal)}px`,
-                height: '20px',
-                padding: '1px 5px',
-                borderRadius: '6px',
-                background: '#ffffff',
-                color: '#0f172a',
-                border: '1px solid rgba(0,0,0,0.2)',
-                fontWeight: 800,
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.76rem',
-                textAlign: 'left',
-                outline: 'none',
-                cursor: 'text',
-                boxSizing: 'border-box',
-              }}
-            />
-          </span>
+          {block.hasSep && (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '-2px' }}>
+              <span>, sep=</span>
+              <input
+                type="text"
+                value={block.sepVal ?? ''}
+                placeholder=""
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onFocus={handleInputFocusSelect}
+                onClick={handleInputClickSelect}
+                onChange={(e) => onPrintOptionChange?.(block.id, 'sep', e.target.value)}
+                style={{
+                  width: `${getBlockInputWidth(block.sepVal)}px`,
+                  height: '20px',
+                  padding: '1px 5px',
+                  borderRadius: '6px',
+                  background: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid rgba(0,0,0,0.2)',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.76rem',
+                  textAlign: 'left',
+                  outline: 'none',
+                  cursor: 'text',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </span>
+          )}
+          {block.hasEnd && (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '-2px' }}>
+              <span>, end=</span>
+              <input
+                type="text"
+                value={block.endVal ?? ''}
+                placeholder=""
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onFocus={handleInputFocusSelect}
+                onClick={handleInputClickSelect}
+                onChange={(e) => onPrintOptionChange?.(block.id, 'end', e.target.value)}
+                style={{
+                  width: `${getBlockInputWidth(block.endVal)}px`,
+                  height: '20px',
+                  padding: '1px 5px',
+                  borderRadius: '6px',
+                  background: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid rgba(0,0,0,0.2)',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.76rem',
+                  textAlign: 'left',
+                  outline: 'none',
+                  cursor: 'text',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </span>
+          )}
           <span>)</span>
         </>
       ) : block.type === 'print' ||
