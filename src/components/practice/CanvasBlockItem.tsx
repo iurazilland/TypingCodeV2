@@ -3,6 +3,7 @@ import { Play } from 'lucide-react';
 import {
   CanvasBlock,
   BlockType,
+  AssignOperator,
   IfBranch,
   DictPair,
   BLOCK_GEOMETRY,
@@ -61,6 +62,7 @@ export interface CanvasBlockItemProps {
   isDebugging?: boolean;
   onDefReturnValChange?: (blockId: string, val: string) => void;
   onPrintOptionChange?: (blockId: string, field: 'sep' | 'end', val: string) => void;
+  onAssignOpChange?: (blockId: string, op: AssignOperator) => void;
   onRemoveInnerBlock?: (parentBlockId: string, cIdx: number, branchId?: string) => void;
   onMethodNameChange?: (blockId: string, methodName: string) => void;
   onBlockTypeChange?: (blockId: string, newType: BlockType) => void;
@@ -128,6 +130,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     onToggleDefReturn,
     onDefReturnValChange,
     onPrintOptionChange,
+    onAssignOpChange,
     onRemoveInnerBlock,
     onMethodNameChange,
     onBlockTypeChange,
@@ -1617,7 +1620,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         <>
           <input
             type="text"
-            value={block.varName || 'x'}
+            value={block.varName ?? 'x'}
             placeholder=""
             onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
@@ -1626,7 +1629,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             onClick={handleInputClickSelect}
             onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
             style={{
-              width: `${getBlockInputWidth(block.varName || 'x')}px`,
+              width: `${getBlockInputWidth(block.varName ?? 'x')}px`,
               height: '20px',
               padding: '1px 5px',
               borderRadius: '6px',
@@ -1642,7 +1645,58 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               boxSizing: 'border-box',
             }}
           />
-          <span>=</span>
+          {block.assignOp !== undefined ? (
+            <div
+              onMouseDown={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+              style={{
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '2px',
+                height: '20px',
+                padding: '0 5px',
+                borderRadius: '4px',
+                background: 'rgba(255, 255, 255, 0.92)',
+                color: '#0f172a',
+                fontWeight: 800,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.75rem',
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                userSelect: 'none',
+                lineHeight: 1,
+              }}
+            >
+              <span>{block.assignOp}</span>
+              <span style={{ fontSize: '0.55rem', transform: 'scaleY(0.85)', opacity: 0.85 }}>▼</span>
+              <select
+                value={block.assignOp}
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                onChange={(e) => onAssignOpChange?.(block.id, e.target.value as AssignOperator)}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: 0,
+                  cursor: 'pointer',
+                  fontSize: '0.82rem',
+                }}
+              >
+                <option value="=">=</option>
+                <option value="+=">+=</option>
+                <option value="-=">-=</option>
+                <option value="*=">*=</option>
+                <option value="/=">/=</option>
+                <option value="//=">//=</option>
+                <option value="%=">%=</option>
+              </select>
+            </div>
+          ) : (
+            <span>=</span>
+          )}
           {renderArgSlot('variable', true)}
         </>
       ) : block.type === 'return' ? (

@@ -37,6 +37,7 @@ import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
 import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
+import { AssignOperator } from '@/lib/blockGeometry';
 import { evaluateBlocksLocally, evaluatePythonLocally, evaluateBlocksWithTrace, evaluatePythonWithTrace, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
 import TypingStage, { tokenizePythonLine, VSCODE_DARK_PLUS } from '@/components/practice/TypingStage';
 import {
@@ -138,6 +139,7 @@ interface CanvasBlock {
   id: string;
   type: BlockType;
   varName?: string;
+  assignOp?: AssignOperator;
   content?: string;
   items?: string[];
   dictPairs?: DictPair[];
@@ -508,6 +510,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
   }
 
   const derived: CanvasBlock[] = [];
+  const extraMethodBlocks: CanvasBlock[] = [];
 
   if (question.initialBlocks && question.initialBlocks.length > 0) {
     question.initialBlocks.forEach((partial, idx) => {
@@ -516,6 +519,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
         type: (partial.type as BlockType) || 'print',
         content: partial.content ?? '',
         varName: partial.varName,
+        assignOp: (partial as CanvasBlock).assignOp,
         hasSep: partial.hasSep,
         sepVal: partial.hasSep ? (partial.sepVal ?? '" "') : undefined,
         hasEnd: partial.hasEnd,
@@ -525,6 +529,9 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
         isIfElse: partial.isIfElse,
         items: partial.items,
         dictPairs: partial.dictPairs,
+        methodName: partial.methodName,
+        attachedMethodId: partial.attachedMethodId,
+        attachedToBlockId: partial.attachedToBlockId,
         argBlock: partial.argBlock as CanvasBlock | undefined,
         innerBlocks: partial.innerBlocks as CanvasBlock[] | undefined,
         branches: partial.branches as IfBranch[] | undefined,
@@ -534,64 +541,272 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
       });
     });
   } else {
-    const lines = (question.targetCode || '')
+    let seq = 0;
+    const nextId = (prefix: string) => `init-${prefix}-${question.step}-${seq++}`;
+
+    const stripTrailingInlineComment = (rawLine: string): string => {
+      const trimmedCheck = rawLine.trim();
+      if (trimmedCheck.startsWith('#')) return rawLine;
+      let q: string | null = null;
+      for (let k = 0; k < rawLine.length; k++) {
+        const ch = rawLine[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < rawLine.length) {
+            k++;
+            continue;
+          }
+          if (ch === q) q = null;
+        } else if (ch === '"' || ch === "'") {
+          q = ch;
+        } else if (ch === '#') {
+          return rawLine.slice(0, k).trimEnd();
+        }
+      }
+      return rawLine;
+    };
+
+    const matchSingleCall = (expr: string): { fn: BlockType; inner: string } | null => {
+      const s = expr.trim();
+      const m = s.match(/^(type|int|float|str|bool|input|len)\s*\(/);
+      if (!m) return null;
+      const openIdx = s.indexOf('(');
+      let depth = 0;
+      let q: string | null = null;
+      for (let k = openIdx; k < s.length; k++) {
+        const ch = s[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < s.length) {
+            k++;
+            continue;
+          }
+          if (ch === q) q = null;
+        } else if (ch === '"' || ch === "'") {
+          q = ch;
+        } else if (ch === '(' || ch === '[' || ch === '{') {
+          depth++;
+        } else if (ch === ')' || ch === ']' || ch === '}') {
+          depth--;
+          if (depth === 0) {
+            if (k === s.length - 1) {
+              return { fn: m[1] as BlockType, inner: s.slice(openIdx + 1, k).trim() };
+            }
+            return null;
+          }
+        }
+      }
+      return null;
+    };
+
+    const tryBuildArgBlock = (exprRaw: string): CanvasBlock | undefined => {
+      const s = exprRaw.trim();
+      if (!s) return undefined;
+
+      // Support <call>.split(...) -> argBlock with horizontally attached .split() method block
+      const splitMatch = s.match(/^([\s\S]+)\.split\s*\(([^()]*)\)$/);
+      if (splitMatch) {
+        const baseBlk = tryBuildArgBlock(splitMatch[1].trim());
+        if (baseBlk) {
+          const mId = nextId('method');
+          baseBlk.attachedMethodId = mId;
+          extraMethodBlocks.push({
+            id: mId,
+            type: 'method',
+            methodName: 'split',
+            content: '',
+            attachedToBlockId: baseBlk.id,
+            x: 180,
+            y: 66,
+            zIndex: 25,
+          });
+          return baseBlk;
+        }
+      }
+
+      const call = matchSingleCall(s);
+      if (!call) return undefined;
+      const callArgs = splitTopLevelArgs(call.inner);
+      if (callArgs.length > 1) return undefined;
+      const nestedArg = callArgs.length === 1 ? tryBuildArgBlock(callArgs[0]) : undefined;
+      return {
+        id: nextId(call.fn),
+        type: call.fn,
+        content: '',
+        argBlock: nestedArg,
+        x: 0,
+        y: 0,
+      };
+    };
+
+    const parsedLines = (question.targetCode || '')
       .split('\n')
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0);
+      .map((raw) => {
+        const cleaned = stripTrailingInlineComment(raw);
+        const trimmed = cleaned.trim();
+        const indentMatch = cleaned.match(/^(\s*)/);
+        const indent = indentMatch ? indentMatch[1].replace(/\t/g, '    ').length : 0;
+        return { indent, trimmed };
+      })
+      .filter((l) => l.trimmed.length > 0);
 
-    lines.forEach((trimmed, idx) => {
-      const id = `init-blk-${question.step}-${idx}`;
-      const y = 66 + idx * 32;
-      const zIndex = Math.max(10, 29 - idx);
+    const parseSuite = (startIdx: number, minIndent: number): { blocks: CanvasBlock[]; nextIdx: number } => {
+      const suiteBlocks: CanvasBlock[] = [];
+      let i = startIdx;
 
-      if (trimmed.startsWith('#')) {
-        derived.push({ id, type: 'comment', content: '', x: 40, y, zIndex });
-        return;
+      while (i < parsedLines.length) {
+        const { indent, trimmed } = parsedLines[i];
+        if (indent < minIndent) break;
+
+        if (trimmed.startsWith('#')) {
+          suiteBlocks.push({
+            id: nextId('comment'),
+            type: 'comment',
+            content: '',
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        if (/^if\s+[\s\S]+:$/.test(trimmed)) {
+          const branches: IfBranch[] = [];
+          const firstBodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const ifBody = parseSuite(i + 1, firstBodyIndent);
+          branches.push({
+            id: nextId('br-if'),
+            kind: 'if',
+            condition: '',
+            innerBlocks: ifBody.blocks,
+          });
+          i = ifBody.nextIdx;
+
+          while (i < parsedLines.length && parsedLines[i].indent === indent) {
+            const brTrimmed = parsedLines[i].trimmed;
+            if (/^elif\s+[\s\S]+:$/.test(brTrimmed)) {
+              const elifIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+                ? parsedLines[i + 1].indent
+                : indent + 4;
+              const elifBody = parseSuite(i + 1, elifIndent);
+              branches.push({
+                id: nextId('br-elif'),
+                kind: 'elif',
+                condition: '',
+                innerBlocks: elifBody.blocks,
+              });
+              i = elifBody.nextIdx;
+            } else if (/^else\s*:$/.test(brTrimmed)) {
+              const elseIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+                ? parsedLines[i + 1].indent
+                : indent + 4;
+              const elseBody = parseSuite(i + 1, elseIndent);
+              branches.push({
+                id: nextId('br-else'),
+                kind: 'else',
+                innerBlocks: elseBody.blocks,
+              });
+              i = elseBody.nextIdx;
+              break;
+            } else {
+              break;
+            }
+          }
+
+          suiteBlocks.push({
+            id: nextId('if'),
+            type: 'if',
+            content: '',
+            isIfElse: branches.some((b) => b.kind === 'else') ? true : undefined,
+            branches,
+            x: 40,
+            y: 66,
+          });
+          continue;
+        }
+
+        const printMatch = trimmed.match(/^print\s*\(([\s\S]*)\)$/);
+        if (printMatch) {
+          const args = splitTopLevelArgs(printMatch[1]);
+          const hasSep = args.some((a) => /^sep\s*=(?!=)/.test(a));
+          const hasEnd = args.some((a) => /^end\s*=(?!=)/.test(a));
+          const posArgs = args.filter((a) => !/^[a-zA-Z_]\w*\s*=(?!=)/.test(a));
+          const argBlk = !hasSep && !hasEnd && posArgs.length === 1 ? tryBuildArgBlock(posArgs[0]) : undefined;
+          suiteBlocks.push({
+            id: nextId('print'),
+            type: 'print',
+            content: '',
+            argBlock: argBlk,
+            hasSep: hasSep ? true : undefined,
+            sepVal: hasSep ? '" "' : undefined,
+            hasEnd: hasEnd ? true : undefined,
+            endVal: hasEnd ? '"\\n"' : undefined,
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        // Compound assignment: score += 20, hp -= 35, coin *= 3, num /= 4, num //= 4, num %= 2
+        const compoundMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=)\s*([\s\S]+)$/);
+        if (compoundMatch) {
+          suiteBlocks.push({
+            id: nextId('var'),
+            type: 'variable',
+            varName: '',
+            assignOp: '=',
+            content: '',
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        // Single or multiple assignment: x = 10, a, b = 10, 20, a, b = input().split()
+        const assignMatch = trimmed.match(/^([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s*=(?!=)\s*([\s\S]+)$/);
+        if (assignMatch) {
+          const rhsExpr = assignMatch[2].trim();
+          const rhsArgBlk = tryBuildArgBlock(rhsExpr);
+          suiteBlocks.push({
+            id: nextId('var'),
+            type: 'variable',
+            varName: '',
+            content: '',
+            argBlock: rhsArgBlk,
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        i++;
       }
 
-      const printMatch = trimmed.match(/^print\s*\(([\s\S]*)\)$/);
-      if (printMatch) {
-        const args = splitTopLevelArgs(printMatch[1]);
-        const hasSep = args.some((a) => /^sep\s*=(?!=)/.test(a));
-        const hasEnd = args.some((a) => /^end\s*=(?!=)/.test(a));
-        derived.push({
-          id,
-          type: 'print',
-          content: '',
-          hasSep: hasSep ? true : undefined,
-          sepVal: hasSep ? '" "' : undefined,
-          hasEnd: hasEnd ? true : undefined,
-          endVal: hasEnd ? '"\\n"' : undefined,
-          x: 40,
-          y,
-          zIndex,
-        });
-        return;
-      }
+      return { blocks: suiteBlocks, nextIdx: i };
+    };
 
-      const assignMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*=(?!=)\s*([\s\S]+)$/);
-      if (assignMatch) {
-        derived.push({
-          id,
-          type: 'variable',
-          varName: assignMatch[1],
-          content: '',
-          x: 40,
-          y,
-          zIndex,
-        });
-      }
+    const rootSuite = parseSuite(0, 0);
+    rootSuite.blocks.forEach((blk, idx) => {
+      blk.x = 40;
+      blk.y = 66 + idx * 32;
+      blk.zIndex = Math.max(10, 29 - idx);
+      derived.push(blk);
     });
+    extraMethodBlocks.forEach((mb) => derived.push(mb));
   }
 
-  if (derived.length === 0) {
-    return [startBlock];
+  const stackBlocks = derived.filter((b) => !b.attachedToBlockId);
+  if (stackBlocks.length === 0) {
+    return [startBlock, ...derived];
   }
 
-  startBlock.nextBlockId = derived[0].id;
-  for (let i = 0; i < derived.length; i++) {
-    derived[i].prevBlockId = i === 0 ? startBlock.id : derived[i - 1].id;
-    derived[i].nextBlockId = i + 1 < derived.length ? derived[i + 1].id : undefined;
+  startBlock.nextBlockId = stackBlocks[0].id;
+  for (let i = 0; i < stackBlocks.length; i++) {
+    stackBlocks[i].prevBlockId = i === 0 ? startBlock.id : stackBlocks[i - 1].id;
+    stackBlocks[i].nextBlockId = i + 1 < stackBlocks.length ? stackBlocks[i + 1].id : undefined;
   }
 
   return [startBlock, ...derived];
@@ -1320,13 +1535,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         out.push(`${indentStr}# .${blk.methodName || 'method'}(${(blk.content || '').trim()})${mSuffix}`);
       } else if (blk.type === 'variable') {
         const vName = (blk.varName || 'x').trim();
+        const op = blk.assignOp || '=';
         const content = (blk.content || '').trim();
         const expr = blk.argBlock ? generateExpression(blk.argBlock) : content;
-        if (mSuffix && !expr) {
+        if (mSuffix && !expr && op === '=') {
           // Statement method call without assignment: e.g. nums.append(5) or s.clear()
           out.push(`${indentStr}${vName}${mSuffix}`);
         } else {
-          out.push(`${indentStr}${vName} = ${expr || 'None'}${mSuffix}`);
+          out.push(`${indentStr}${vName} ${op} ${expr || 'None'}${mSuffix}`);
         }
       } else if (blk.type === 'list') {
         const vName = (blk.varName || 'my_list').trim();
@@ -1610,9 +1826,16 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
       for (const b of allBlocks) {
         if (b.type === 'variable') {
-          const vName = (b.varName || 'x').trim();
-          if (vName && !varMap.has(vName)) {
-            varMap.set(vName, { value: b.content?.trim() || '0', fullValue: b.content?.trim() || '0', type: 'var' });
+          const rawNames = (b.varName ?? 'x').trim();
+          if (rawNames) {
+            const names = rawNames.split(',').map((n) => n.trim()).filter(Boolean);
+            const vals = (b.content ?? '').split(',').map((v) => v.trim());
+            names.forEach((vName, idx) => {
+              if (vName && !varMap.has(vName)) {
+                const preview = vals[idx] || (b.argBlock ? `${b.argBlock.type}(…)` : '?');
+                varMap.set(vName, { value: preview, fullValue: preview, type: 'var' });
+              }
+            });
           }
         } else if (b.type === 'list') {
           const vName = (b.varName || 'my_list').trim();
@@ -1910,6 +2133,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     if (/\bsep\s*=/.test(question.targetCode || '') && !/\bsep\s*=/.test(userCodeStr)) return false;
     if (/\bend\s*=/.test(question.targetCode || '') && !/\bend\s*=/.test(userCodeStr)) return false;
 
+    // Enforce non-empty # comment when targetCode explicitly teaches comments
+    const targetHasComment = (question.targetCode || '').split('\n').some((l) => l.trim().startsWith('#'));
+    if (targetHasComment) {
+      const userHasNonEmptyComment = userCodeStr.split('\n').some((l) => /^#\s*\S+/.test(l.trim()));
+      if (!userHasNonEmptyComment) return false;
+    }
+
     // Block mode is lenient (conceptual explanation stage)
     if (!isTyping) return true;
 
@@ -1929,15 +2159,22 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       }
     }
 
-    // 5. Validation for one_line (example line + added line) & anti-hardcoding check
+    // 5. Validation for one_line (fixed setup/example lines + 1 added line) & anti-hardcoding check
     if (question.kind === 'one_line' && question.templateCode && question.templateCode.includes('\n')) {
-      const exampleLine = question.templateCode.split('\n')[0].trim();
-      const userActiveLines = trimmedUser
-        .split('\n')
-        .map((l) => l.trim())
-        .filter((l) => l.length > 0 && !l.startsWith('#'));
-      if (userActiveLines.length !== 2 || userActiveLines[0] !== exampleLine) {
+      const normalizeOneLine = (src: string) =>
+        src
+          .split('\n')
+          .map((l) => l.trim())
+          .filter((l) => l.length > 0 && (targetHasComment || !l.startsWith('#')));
+      const tplLines = normalizeOneLine(question.templateCode);
+      const userActiveLines = normalizeOneLine(trimmedUser);
+      if (userActiveLines.length !== tplLines.length) {
         return false;
+      }
+      for (let idx = 0; idx < tplLines.length; idx++) {
+        if (!tplLines[idx].includes('§') && userActiveLines[idx] !== tplLines[idx]) {
+          return false;
+        }
       }
     }
 
@@ -2024,7 +2261,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       setIsErrorShown(false);
       const correctIdx = currentQuestion.correctChoiceIndex ?? 0;
       if (selectedChoiceIndex === correctIdx) {
-        const localRes = evaluatePythonLocally(currentQuestion.targetCode);
+        const quizStdin = currentQuestion.testCases?.[0]?.input ?? '';
+        const localRes = evaluatePythonLocally(currentQuestion.targetCode, quizStdin);
         if (localRes.scope) setRuntimeMemory(localRes.scope);
         const out = (localRes.stdout || currentQuestion.testCases?.[0]?.expectedOutput || '').replace(/^\r?\n+|\r?\n+$/g, '');
         setTerminalOutput(out);
@@ -2064,6 +2302,30 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     // Yield briefly so React flushes the cleared terminal state to the DOM
     await new Promise((r) => setTimeout(r, 60));
 
+    const primaryStdin = currentQuestion.testCases?.[0]?.input ?? '';
+    const verifyExtraTestCases = (orderedForBlocks?: CanvasBlock[]): string | null => {
+      if (!currentQuestion.testCases || currentQuestion.testCases.length <= 1 || langKey !== 'python') {
+        return null;
+      }
+      for (let tcIdx = 1; tcIdx < currentQuestion.testCases.length; tcIdx++) {
+        const tc = currentQuestion.testCases[tcIdx];
+        const tcInput = tc.input ?? '';
+        const tcExpected = (tc.expectedOutput ?? '').trim();
+        const tcRes =
+          mode !== 'typing'
+            ? evaluateBlocksLocally(orderedForBlocks || getOrderedCanvasBlocks(canvasBlocks), tcInput)
+            : evaluatePythonLocally(codeToRun, tcInput);
+        const tcActual = (tcRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '').trim();
+        if (!tcRes.success || tcActual !== tcExpected) {
+          const formattedIn = tcInput.replace(/\n/g, ' ↵ ');
+          return isEn
+            ? `\n\n❌ Failed additional test case #${tcIdx + 1} (input: ${formattedIn})\nExpected: ${tcExpected}\nActual: ${tcRes.success ? (tcActual || '(empty)') : tcRes.stderr.trim()}`
+            : `\n\n❌ 추가 입력 검증 실패 (테스트 #${tcIdx + 1} — 입력값: ${formattedIn})\n기대 출력: ${tcExpected}\n실제 출력: ${tcRes.success ? (tcActual || '(출력 없음)') : tcRes.stderr.trim()}`;
+        }
+      }
+      return null;
+    };
+
     // 1. NORMAL EXECUTION MODE (Instant 0ms Local Evaluation)
     if (execMode === 'normal') {
       setIsExecuting(true);
@@ -2071,10 +2333,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         let actualOut = '';
         let isErr = false;
         let evalScope: Record<string, any> | undefined = undefined;
+        let cachedOrderedBlocks: CanvasBlock[] | undefined = undefined;
 
         if (mode !== 'typing') {
-          const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
-          const evalRes = evaluateBlocksLocally(orderedBlocks);
+          cachedOrderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
+          const evalRes = evaluateBlocksLocally(cachedOrderedBlocks, primaryStdin);
           if (evalRes.scope) {
             setRuntimeMemory(evalRes.scope);
             evalScope = evalRes.scope;
@@ -2086,7 +2349,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             actualOut = evalRes.stderr.trim();
           }
         } else if (langKey === 'python') {
-          const localRes = evaluatePythonLocally(codeToRun);
+          const localRes = evaluatePythonLocally(codeToRun, primaryStdin);
           if (localRes.requiresRemote) {
             const res = await executeCode((langKey as any), codeToRun);
             actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
@@ -2119,7 +2382,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         const expectedOut = (currentQuestion.testCases?.[0]?.expectedOutput || currentQuestion.expectedOutput || '').trim();
         setTerminalOutput(actualOut);
 
-        const passed = checkSubmissionPass(
+        let passed = checkSubmissionPass(
           codeToRun,
           actualOut,
           expectedOut,
@@ -2128,6 +2391,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           mode === 'typing',
           evalScope || runtimeMemory
         );
+
+        if (passed) {
+          const extraErr = verifyExtraTestCases(cachedOrderedBlocks);
+          if (extraErr) {
+            passed = false;
+            setTerminalOutput((actualOut || '') + extraErr);
+          }
+        }
 
         if (passed) {
           setIsSuccess(true);
@@ -2155,14 +2426,17 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       try {
         let actualOut = '';
         let isErr = false;
+        let finalDebugScope: Record<string, any> | undefined = undefined;
+        let cachedOrderedBlocks: CanvasBlock[] | undefined = undefined;
 
         // Step 1: Initial pause on execution start so the user sees the start of debug
         await sleepInterruptible(600);
 
         if (mode !== 'typing') {
-          const orderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
-          const activeBlocks = orderedBlocks.filter((b) => b.type !== 'start');
-          const trace = evaluateBlocksWithTrace(activeBlocks);
+          cachedOrderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
+          const activeBlocks = cachedOrderedBlocks.filter((b) => b.type !== 'start');
+          const trace = evaluateBlocksWithTrace(activeBlocks, primaryStdin);
+          finalDebugScope = trace.scope;
           const steps = trace.steps;
           const totalSteps = Math.max(1, steps.length);
           setDebugStepInfo({ current: 0, total: totalSteps });
@@ -2198,7 +2472,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             }
           }
         } else {
-          const trace = evaluatePythonWithTrace(codeToRun);
+          const trace = evaluatePythonWithTrace(codeToRun, primaryStdin);
+          finalDebugScope = trace.scope;
           const steps = trace.steps;
           const totalSteps = Math.max(1, steps.length);
           setDebugStepInfo({ current: 0, total: totalSteps });
@@ -2248,15 +2523,23 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           await sleepInterruptible(900);
 
           if (!debugAbortRef.current) {
-            const passed = checkSubmissionPass(
+            let passed = checkSubmissionPass(
               codeToRun,
               actualOut,
               expectedOut,
               isErr,
               currentQuestion,
               mode === 'typing',
-              runtimeMemory
+              finalDebugScope || runtimeMemory
             );
+
+            if (passed) {
+              const extraErr = verifyExtraTestCases(cachedOrderedBlocks);
+              if (extraErr) {
+                passed = false;
+                setTerminalOutput((actualOut || '') + extraErr);
+              }
+            }
 
             if (passed) {
               setIsSuccess(true);
@@ -4880,6 +5163,26 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     );
   };
 
+  const handleAssignOpChange = (blockId: string, op: AssignOperator) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, assignOp: op }))
+    );
+  };
+
+  const handleToggleCompoundAssign = (blockId: string, enable: boolean) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => ({
+        ...b,
+        assignOp: enable ? (b.assignOp && b.assignOp !== '=' ? b.assignOp : '+=') : undefined,
+      }))
+    );
+    showToast(
+      enable
+        ? (isEn ? '✨ Enabled compound assignment (+=, -=, ...).' : '✨ 복합 대입 연산자(+=, -= 등) 모드가 활성화되었습니다.')
+        : (isEn ? '🗑️ Restored basic assignment (=).' : '🗑️ 기본 대입 연산자(=)로 변경되었습니다.')
+    );
+  };
+
   // Canvas block input selection handler:
   // First click/focus selects all text; subsequent clicks place normal cursor.
   const handleInputFocusSelect = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -5360,6 +5663,30 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
                   {isEn ? 'Terminal' : '터미널'}
                 </span>
+                {Boolean(currentQuestion?.testCases?.[0]?.input) && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      marginLeft: '6px',
+                      padding: '2px 8px',
+                      borderRadius: '5px',
+                      background: 'rgba(56, 189, 248, 0.14)',
+                      border: '1px solid rgba(56, 189, 248, 0.32)',
+                      color: '#7dd3fc',
+                      fontSize: '0.71rem',
+                      fontFamily: 'var(--font-mono)',
+                      fontWeight: 700,
+                    }}
+                    title={isEn ? 'Example input fed to input()' : 'input() 실행 시 자동으로 전달되는 예시 입력값입니다'}
+                  >
+                    <span>{isEn ? 'stdin:' : '입력값:'}</span>
+                    <span style={{ color: '#e0f2fe' }}>
+                      {currentQuestion.testCases![0].input!.replace(/\n/g, ' ↵ ')}
+                    </span>
+                  </span>
+                )}
               </div>
 
               {/* Execution Controls: [0.5x | 1x | 2x | 3x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 실행 / ■ 정지] */}
@@ -7213,20 +7540,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       onContextMenu={handleBlockContextMenu}
                       onDragOver={handleCanvasDragOver}
                       onDrop={handleCanvasDrop}
-                      onContentChange={(val, blockId, parentBlockId, cIdx, branchId) => {
-                        if (parentBlockId && cIdx !== undefined) {
-                          if (branchId) {
-                            handleBranchInnerInputChange(parentBlockId, branchId, cIdx, val);
-                          } else {
-                            handleLoopInnerInputChange(parentBlockId, cIdx, val);
-                          }
-                        } else {
-                          handleBlockInputChange(blockId, val);
-                        }
+                      onContentChange={(val, blockId) => {
+                        handleBlockInputChange(blockId, val);
                       }}
                       onVarNameChange={(val, blockId) => {
                         handleLoopInnerVarNameChange(blockId, val);
                       }}
+                      onAssignOpChange={handleAssignOpChange}
                       onBranchConditionChange={handleBranchConditionChange}
                       onAddBranch={(blockId, kind) => {
                         if (kind === 'elif') {
@@ -7661,6 +7981,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               }
 
               const isPrintBlock = target?.type === 'print';
+              const isVarBlock = target?.type === 'variable';
               const isIfBlock = target?.type === 'if';
               const isDefBlock = target?.type === 'def';
               const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
@@ -7745,6 +8066,51 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           <>
                             <Plus size={14} color="#60a5fa" />
                             <span>{isEn ? 'Add end option (end="\\n")' : 'end 옵션 추가 (끝맺음)'}</span>
+                          </>
+                        )}
+                      </button>
+                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                    </>
+                  )}
+
+                  {/* Variable Block Special Action: Compound Assignment Toggle (+=, -=, *=, /=) */}
+                  {isVarBlock && target && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleToggleCompoundAssign(target.id, target.assignOp === undefined);
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: target.assignOp !== undefined ? '#fca5a5' : '#fdba74',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background 0.15s ease',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background =
+                            target.assignOp !== undefined ? 'rgba(239, 68, 68, 0.18)' : 'rgba(249, 115, 22, 0.2)')
+                        }
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {target.assignOp !== undefined ? (
+                          <>
+                            <Trash2 size={14} color="#f87171" />
+                            <span>{isEn ? 'Use basic assignment (=)' : '기본 대입(=)으로 전환'}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus size={14} color="#fb923c" />
+                            <span>{isEn ? 'Use compound assignment (+=, -=, ...)' : '복합 대입 연산자(+=, -= 등) 사용'}</span>
                           </>
                         )}
                       </button>

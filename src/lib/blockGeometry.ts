@@ -61,10 +61,13 @@ export interface IfBranch {
   innerBlocks: CanvasBlock[];
 }
 
+export type AssignOperator = '=' | '+=' | '-=' | '*=' | '/=' | '//=' | '%=';
+
 export interface CanvasBlock {
   id: string;
   type: BlockType;
   varName?: string;
+  assignOp?: AssignOperator;
   content?: string;
   items?: string[];
   dictPairs?: DictPair[];
