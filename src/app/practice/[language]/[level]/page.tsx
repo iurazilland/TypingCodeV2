@@ -748,7 +748,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
           continue;
         }
 
-        // Compound assignment: defaults pre-placed variable block operator to '+='
+        // Compound assignment: defaults pre-placed variable block operator to the target compound operator
         const compoundMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=)\s*([\s\S]+)$/);
         if (compoundMatch) {
           const rhsExpr = compoundMatch[3].trim();
@@ -757,7 +757,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
             id: nextId('var'),
             type: 'variable',
             varName: '',
-            assignOp: '+=',
+            assignOp: compoundMatch[2] as AssignOperator,
             content: '',
             argBlock: rhsArgBlk,
             x: 40,

@@ -71,8 +71,8 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       type: 'block',
       prompt_ko: 'health = health - 35는 health -= 35로 줄여 쓸 수 있습니다. health에 100을 저장한 뒤 -=로 35를 빼고 65를 출력해보세요.',
       prompt_en: 'health = health - 35 can be shortened to health -= 35. Store 100 in health, subtract 35 with -=, and print 65.',
-      hint_ko: '둘째 블록 가운데의 += 박스를 클릭해 -=로 바꾸고 오른쪽에 35를 입력하세요.',
-      hint_en: 'Click the += box on the second block to select -= and enter 35.',
+      hint_ko: '첫째 블록에는 health = 100을, 둘째 블록(-=)에는 왼쪽에 health, 오른쪽에 35를 넣고 health를 출력하세요.',
+      hint_en: 'Enter health = 100 in the first block, health -= 35 in the second block, and print health.',
       targetCode: 'health = 100\nhealth -= 35\nprint(health)',
       expectedVariables: { health: 65 },
       testCases: [
@@ -113,8 +113,8 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       type: 'block',
       prompt_ko: 'price = price * 3은 price *= 3으로 줄여 쓸 수 있습니다. price에 1500을 저장한 뒤 *=로 3을 곱해 4500을 출력해보세요.',
       prompt_en: 'price = price * 3 can be shortened to price *= 3. Store 1500 in price, multiply by 3 with *=, and print 4500.',
-      hint_ko: '둘째 블록 가운데의 += 박스를 클릭해 *=로 바꾸고 오른쪽에 3을 입력하세요.',
-      hint_en: 'Click the += box on the second block to select *= and enter 3.',
+      hint_ko: '첫째 블록에는 price = 1500을, 둘째 블록(*=)에는 왼쪽에 price, 오른쪽에 3을 넣고 price를 출력하세요.',
+      hint_en: 'Enter price = 1500 in the first block, price *= 3 in the second block, and print price.',
       targetCode: 'price = 1500\nprice *= 3\nprint(price)',
       expectedVariables: { price: 4500 },
       testCases: [
@@ -155,8 +155,8 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       type: 'block',
       prompt_ko: 'total = total / 4는 total /= 4로 줄여 쓸 수 있습니다. total에 20을 저장한 뒤 /=로 4를 나누어 5.0을 출력해보세요.',
       prompt_en: 'total = total / 4 can be shortened to total /= 4. Store 20 in total, divide by 4 with /=, and print 5.0.',
-      hint_ko: '둘째 블록의 += 박스를 클릭해 /=로 바꾸세요. 파이썬의 나눗셈(/=) 결과는 항상 소수점이 있는 실수(5.0)가 됩니다.',
-      hint_en: 'Change the += box on the second block to /=. In Python, /= always produces a float (5.0).',
+      hint_ko: '첫째 블록에 total = 20을, 둘째 블록(/=)에 total과 4를 넣으세요. 파이썬의 나눗셈(/=) 결과는 항상 실수(5.0)가 됩니다.',
+      hint_en: 'Enter total = 20 in the first block and total /= 4 in the second block. In Python, /= always produces a float (5.0).',
       targetCode: 'total = 20\ntotal /= 4\nprint(total)',
       expectedVariables: { total: 5 },
       testCases: [
