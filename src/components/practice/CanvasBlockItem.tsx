@@ -1653,26 +1653,19 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               position: 'relative',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '4px',
+              justifyContent: 'center',
               height: '20px',
-              padding: '0 4px 0 6px',
-              borderRadius: '5px',
-              background: 'rgba(0, 0, 0, 0.26)',
-              border: '1px solid rgba(255, 255, 255, 0.34)',
+              padding: '0 2px',
               color: '#ffffff',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.76rem',
+              fontSize: '0.80rem',
               cursor: 'pointer',
-              boxSizing: 'border-box',
               userSelect: 'none',
               lineHeight: 1,
             }}
           >
             <span>{block.assignOp || '='}</span>
-            <svg width="9" height="7" viewBox="0 0 10 8" style={{ flexShrink: 0 }}>
-              <path d="M1 1.5h8L5 7z" fill="#fed7aa" />
-            </svg>
             <select
               value={block.assignOp || '='}
               onMouseDown={(e) => e.stopPropagation()}
