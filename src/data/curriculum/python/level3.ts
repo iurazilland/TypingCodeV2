@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '작은따옴표(\'\')를 사용해 \'Say "Hello"\'를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use single quotes (\'\') to insert \'Say "Hello"\' and print it on the screen.',
-      hint_ko: '문장 속에 큰따옴표가 들어있을 때는 바깥쪽을 작은따옴표로 감싸 \'Say "Hello"\'와 같이 작성합니다.',
-      hint_en: 'When a string contains double quotes (""), enclosing it in single quotes (\'\') prevents syntax errors.',
+      prompt_ko: '두 개의 따옴표를 교차 사용해서 \'Say "Hello"\'를 넣어 화면에 출력해보세요.',
+      prompt_en: 'Alternate the two types of quotes to insert \'Say "Hello"\' and print it on the screen.',
+      hint_ko: '문장 속에 큰따옴표가 들어있을 때는 바깥쪽을 작은따옴표로 감싸 교차 사용합니다. \'Say "Hello"\'를 입력하세요.',
+      hint_en: 'When a string contains double quotes (""), enclose the outside with single quotes (\'\') to alternate them.',
       targetCode: 'print(\'Say "Hello"\')',
       testCases: [
         {
