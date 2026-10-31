@@ -2140,6 +2140,84 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       if (!userHasNonEmptyComment) return false;
     }
 
+    // Enforce Python structural usage (variables, functions, keywords, operators, escapes) against literal hardcoding
+    if (langKey === 'python' && question.targetCode) {
+      const analyzePythonStructure = (src: string) => {
+        const idCounts: Record<string, number> = {};
+        const opCounts: Record<string, number> = {};
+        let hasNewlineEscape = false;
+        let hasTabEscape = false;
+        let codeWithoutStrings = '';
+
+        for (const line of src.split('\n')) {
+          let q: string | null = null;
+          for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            if (q) {
+              if (ch === '\\' && i + 1 < line.length) {
+                const next = line[i + 1];
+                if (next === 'n') hasNewlineEscape = true;
+                if (next === 't') hasTabEscape = true;
+                i++;
+                continue;
+              }
+              if (ch === q) q = null;
+              continue;
+            }
+            if (ch === '"' || ch === "'") {
+              q = ch;
+              codeWithoutStrings += '""';
+              continue;
+            }
+            if (ch === '#') break;
+            codeWithoutStrings += ch;
+          }
+          codeWithoutStrings += '\n';
+        }
+
+        const idMatches = codeWithoutStrings.match(/\b[a-zA-Z_]\w*\b/g) || [];
+        for (const w of idMatches) {
+          idCounts[w] = (idCounts[w] || 0) + 1;
+        }
+
+        const opMatches =
+          codeWithoutStrings.match(/\*\*=|\/\/=|\+=|-=|\*=|\/=|%=|\*\*|\/\/|==|!=|>=|<=|[+\-*/%><=]/g) || [];
+        for (const op of opMatches) {
+          opCounts[op] = (opCounts[op] || 0) + 1;
+        }
+
+        return { idCounts, opCounts, hasNewlineEscape, hasTabEscape };
+      };
+
+      const targetStruct = analyzePythonStructure(question.targetCode);
+      const userStruct = analyzePythonStructure(userCodeStr);
+
+      for (const [token, reqCount] of Object.entries(targetStruct.idCounts)) {
+        if ((userStruct.idCounts[token] || 0) < reqCount) {
+          return false;
+        }
+      }
+
+      const exactRequiredOps = ['**=', '//=', '+=', '-=', '*=', '/=', '%=', '**', '//', '==', '!=', '+', '-', '*', '/', '%'];
+      for (const op of exactRequiredOps) {
+        const reqOpCount = targetStruct.opCounts[op] || 0;
+        if (reqOpCount > 0 && (userStruct.opCounts[op] || 0) < reqOpCount) {
+          return false;
+        }
+      }
+
+      const reqStrictCmp = (targetStruct.opCounts['>'] || 0) + (targetStruct.opCounts['<'] || 0);
+      const userStrictCmp = (userStruct.opCounts['>'] || 0) + (userStruct.opCounts['<'] || 0);
+      if (reqStrictCmp > 0 && userStrictCmp < reqStrictCmp) return false;
+
+      const reqInclCmp = (targetStruct.opCounts['>='] || 0) + (targetStruct.opCounts['<='] || 0);
+      const userInclCmp = (userStruct.opCounts['>='] || 0) + (userStruct.opCounts['<='] || 0);
+      if (reqInclCmp > 0 && userInclCmp < reqInclCmp) return false;
+
+      if (targetStruct.hasNewlineEscape && !userStruct.hasNewlineEscape) return false;
+      if (targetStruct.hasTabEscape && !userStruct.hasTabEscape) return false;
+    }
+
     // Block mode is lenient (conceptual explanation stage)
     if (!isTyping) return true;
 
@@ -2398,6 +2476,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             passed = false;
             setTerminalOutput((actualOut || '') + extraErr);
           }
+        } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
+          const structMsg = isEn
+            ? '\n\n⚠️ Output matches, but required variables, operators, or syntax from the prompt were not used.'
+            : '\n\n⚠️ 출력 결과는 같지만 문제에서 요구한 변수·연산자·문법을 사용하지 않았습니다. 지시문을 확인해주세요.';
+          setTerminalOutput((actualOut || '') + structMsg);
         }
 
         if (passed) {
@@ -2539,6 +2622,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 passed = false;
                 setTerminalOutput((actualOut || '') + extraErr);
               }
+            } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
+              const structMsg = isEn
+                ? '\n\n⚠️ Output matches, but required variables, operators, or syntax from the prompt were not used.'
+                : '\n\n⚠️ 출력 결과는 같지만 문제에서 요구한 변수·연산자·문법을 사용하지 않았습니다. 지시문을 확인해주세요.';
+              setTerminalOutput((actualOut || '') + structMsg);
             }
 
             if (passed) {

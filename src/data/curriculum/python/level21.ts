@@ -26,8 +26,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: '공백으로 입력된 두 점수를 kor, eng에 정수로 저장하고, kor >= 60 and eng >= 60이면 "Pass", 아니면 "Fail"을 출력해보세요. (예: 75 80 -> Pass)',
-      prompt_en: 'Read two scores into integers kor and eng; print "Pass" if kor >= 60 and eng >= 60, else "Fail".',
+      prompt_ko: '공백으로 입력된 두 점수를 a, b로 나눠 정수 kor, eng에 저장하고, kor >= 60 and eng >= 60이면 "Pass", 아니면 "Fail"을 출력해보세요. (예: 75 80 -> Pass)',
+      prompt_en: 'Split the input into a, b, convert to integers kor and eng, and print "Pass" if kor >= 60 and eng >= 60, else "Fail".',
       hint_ko: '두 과목 모두 60점 이상이어야 통과하므로 if 조건 칸에 kor >= 60 and eng >= 60을 입력하세요.',
       hint_en: 'Both subjects must be at least 60, so use kor >= 60 and eng >= 60 in the if condition.',
       targetCode: 'a, b = input().split()\nkor = int(a)\neng = int(b)\nif kor >= 60 and eng >= 60:\n    print("Pass")\nelse:\n    print("Fail")',
@@ -415,3 +415,4 @@ export const PYTHON_LEVEL_21: PracticeRound = {
     },
   ],
 };
+
