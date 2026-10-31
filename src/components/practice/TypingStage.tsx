@@ -63,7 +63,7 @@ const PYTHON_BUILTINS = new Set([
  * Strings (like "print" inside print("print")) are parsed as continuous string literals,
  * ensuring inner words are not mistakenly highlighted as functions or keywords.
  */
-function tokenizePythonLine(line: string): PythonToken[] {
+export function tokenizePythonLine(line: string): PythonToken[] {
   const tokens: PythonToken[] = [];
   let i = 0;
 

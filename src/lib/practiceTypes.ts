@@ -20,7 +20,7 @@ export interface BlockPiece {
   category: BlockCategory;
 }
 
-export type ChallengeKind = 'fill_blank' | 'fix_bug' | 'one_line' | 'standard';
+export type ChallengeKind = 'fill_blank' | 'fix_bug' | 'one_line' | 'predict_output' | 'standard';
 
 export interface TestCase {
   id?: string | number;
@@ -32,15 +32,17 @@ export interface TestCase {
 
 export interface PracticeQuestion {
   id: number;
-  step: number; // 1 ~ 10
-  type?: 'block' | 'typing'; // 'block' for steps 1-5, 'typing' for steps 6-10
-  kind?: ChallengeKind; // 'fill_blank' | 'fix_bug' | 'one_line' | 'standard'
+  step: number; // 1 ~ 13 (or 1 ~ 10 for comprehensive review levels)
+  type?: 'block' | 'typing' | 'quiz'; // 'block' | 'typing' | 'quiz' (output prediction)
+  kind?: ChallengeKind; // 'fill_blank' | 'fix_bug' | 'one_line' | 'predict_output' | 'standard'
   prompt_ko: string;
   prompt_en?: string;
   hint_ko: string;
   hint_en?: string;
   templateCode?: string; // Code template shown in background guide layer (uses § for blanks)
-  targetCode: string; // Canonical / reference answer code
+  targetCode: string; // Canonical / reference answer code (or displayed code for quiz)
+  choices?: string[]; // Multiple-choice output options for 'quiz' / 'predict_output'
+  correctChoiceIndex?: number; // 0-based index of the correct choice in choices[]
   blankToken?: string; // Legacy / optional blank token
   expectedOutput?: string; // Optional ground truth expected terminal output (prefer testCases[0].expectedOutput)
   expectedVariables?: Record<string, any>; // Expected runtime memory variables (e.g. { x: 10, total: 55 })

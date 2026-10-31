@@ -38,7 +38,7 @@ import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
 import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
 import { evaluateBlocksLocally, evaluatePythonLocally, evaluateBlocksWithTrace, evaluatePythonWithTrace, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
-import TypingStage from '@/components/practice/TypingStage';
+import TypingStage, { tokenizePythonLine, VSCODE_DARK_PLUS } from '@/components/practice/TypingStage';
 import {
   PuzzleTab,
   PuzzleNotch,
@@ -933,11 +933,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   // Direct Typing Mode Code
   const [userCode, setUserCode] = useState<string>('');
+  const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
   const lastExecutedCodeRef = useRef<string>('');
 
   const totalQuestions = round.questions.length;
   const currentQuestion: PracticeQuestion = round.questions[currentStepIndex] || round.questions[0];
-  const mode: 'block' | 'typing' = (currentQuestion as any).type === 'typing' ? 'typing' : 'block';
+  const isQuiz = currentQuestion.type === 'quiz' || currentQuestion.kind === 'predict_output';
+  const mode: 'block' | 'typing' = currentQuestion.type === 'typing' || isQuiz ? 'typing' : 'block';
   const progressPercent = Math.round(((currentStepIndex + 1) / totalQuestions) * 100);
 
   // Scratch-style downstream shifted blocks to open up preview space for ghost block
@@ -965,6 +967,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setActiveInputHelp(null);
     setCanvasBlocks([createDefaultStartBlock()]);
     setUserCode('');
+    setSelectedChoiceIndex(null);
     setTerminalOutput('');
     setRuntimeMemory({});
     setHighlightedMemoryKeys(new Set());
@@ -1780,7 +1783,35 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       }
     }
 
-    // 5. Code modification ratio check for fill_blank questions
+    // 5. Validation for one_line (example line + added line) & anti-hardcoding check
+    if (question.kind === 'one_line' && question.templateCode && question.templateCode.includes('\n')) {
+      const exampleLine = question.templateCode.split('\n')[0].trim();
+      const userActiveLines = trimmedUser
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0 && !l.startsWith('#'));
+      if (userActiveLines.length !== 2 || userActiveLines[0] !== exampleLine) {
+        return false;
+      }
+    }
+
+    if (question.kind === 'fix_bug' || question.kind === 'one_line') {
+      const userLinesClean = trimmedUser.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
+      const targetLinesClean = (question.targetCode || '').trim().split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
+      const expectedLinesClean = targetExpected.split('\n').map((l) => l.trim());
+      const lastUserLine = userLinesClean[userLinesClean.length - 1] || '';
+      const lastTargetLine = targetLinesClean[targetLinesClean.length - 1] || '';
+      const lastExpectedLine = expectedLinesClean[expectedLinesClean.length - 1] || '';
+      if (lastExpectedLine && lastUserLine && lastTargetLine) {
+        const escapedExp = lastExpectedLine.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const directPrintRegex = new RegExp(`^print\\s*\\(\\s*['"]?${escapedExp}['"]?\\s*\\)$`);
+        if (directPrintRegex.test(lastUserLine) && !directPrintRegex.test(lastTargetLine)) {
+          return false;
+        }
+      }
+    }
+
+    // 6. Code modification ratio check for fill_blank questions
     // If more than 30% of the fixed skeleton code is corrupted/modified, reject as incorrect
     if (question.kind === 'fill_blank' && question.templateCode && question.templateCode.includes('§')) {
       const firstSection = question.templateCode.indexOf('§');
@@ -1823,6 +1854,38 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       setExecutingLineIndex(null);
       setDebugStepInfo(null);
       setHighlightedMemoryKeys(new Set());
+      return;
+    }
+
+    if (isQuiz) {
+      if (selectedChoiceIndex === null) {
+        showToast(isEn ? '💡 먼저 출력될 결과를 보기에서 선택해주세요!' : '💡 먼저 출력될 결과를 보기에서 선택해주세요!');
+        return;
+      }
+      setIsSuccess(false);
+      setIsErrorShown(false);
+      const correctIdx = currentQuestion.correctChoiceIndex ?? 0;
+      if (selectedChoiceIndex === correctIdx) {
+        const localRes = evaluatePythonLocally(currentQuestion.targetCode);
+        if (localRes.scope) setRuntimeMemory(localRes.scope);
+        const out = (localRes.stdout || currentQuestion.testCases?.[0]?.expectedOutput || '').replace(/^\r?\n+|\r?\n+$/g, '');
+        setTerminalOutput(out);
+        setIsSuccess(true);
+      } else {
+        setTerminalOutput(
+          isEn
+            ? '❌ Incorrect choice. Trace the code carefully and try again!'
+            : '❌ 선택한 결과가 실제 실행 출력과 다릅니다. 코드를 차근차근 계산해보세요!'
+        );
+        setIsErrorShown(true);
+        setIsHeartShaking(true);
+        setTimeout(() => setIsHeartShaking(false), 800);
+        setHearts((prev) => {
+          const next = Math.max(0, prev - 1);
+          if (next === 0) setIsGameOver(true);
+          return next;
+        });
+      }
       return;
     }
 
@@ -2176,6 +2239,28 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     };
   }, [isSuccess, currentStepIndex, totalQuestions]);
 
+  // Quiz mode keyboard shortcuts: 1~4 to select choice, Enter to check answer
+  useEffect(() => {
+    if (!isQuiz || isSuccess || isGameOver) return;
+
+    const handleQuizKey = (e: KeyboardEvent) => {
+      const choices = currentQuestion.choices || [];
+      if (['1', '2', '3', '4'].includes(e.key)) {
+        const idx = parseInt(e.key, 10) - 1;
+        if (idx >= 0 && idx < choices.length) {
+          e.preventDefault();
+          setSelectedChoiceIndex(idx);
+        }
+      } else if (e.key === 'Enter' && selectedChoiceIndex !== null) {
+        e.preventDefault();
+        handleExecuteManual();
+      }
+    };
+
+    window.addEventListener('keydown', handleQuizKey);
+    return () => window.removeEventListener('keydown', handleQuizKey);
+  }, [isQuiz, isSuccess, isGameOver, currentQuestion, selectedChoiceIndex]);
+
   const handleResetRound = () => {
     lastExecutedCodeRef.current = '';
     setHearts(5);
@@ -2186,6 +2271,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setIsGameOver(false);
     setCanvasBlocks([createDefaultStartBlock()]);
     setUserCode('');
+    setSelectedChoiceIndex(null);
     setTerminalOutput('');
     setIsSuccess(false);
     setIsErrorShown(false);
@@ -7051,6 +7137,299 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   />
                 </div>
               </>
+            ) : isQuiz ? (
+              /* ============================================================
+                 QUIZ MODE: Output Prediction Multiple-Choice Stage
+                 ============================================================ */
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  background: '#090e1a',
+                  overflowY: 'auto',
+                }}
+              >
+                {/* Header Tab */}
+                <div
+                  style={{
+                    height: '34px',
+                    background: '#0d1527',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0 16px',
+                    flexShrink: 0,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '5px 14px',
+                      background: '#090e1a',
+                      borderRadius: '6px 6px 0 0',
+                      borderTop: isSuccess ? '2px solid #10b981' : '2px solid #a855f7',
+                      fontSize: '0.78rem',
+                      color: '#f8fafc',
+                      fontWeight: 700,
+                      fontFamily: 'var(--font-mono)',
+                    }}
+                  >
+                    <Code size={13} color={isSuccess ? '#10b981' : '#a855f7'} />
+                    <span>main.py</span>
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      color: '#c084fc',
+                      background: 'rgba(168, 85, 247, 0.14)',
+                      border: '1px solid rgba(168, 85, 247, 0.35)',
+                      padding: '2px 10px',
+                      borderRadius: '999px',
+                    }}
+                  >
+                    {isEn ? 'Output Prediction (Press 1-4)' : '출력 결과 선택 (단축키 1~4)'}
+                  </span>
+                </div>
+
+                {/* Main Content Container */}
+                <div
+                  style={{
+                    padding: '24px 28px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '22px',
+                    maxWidth: '760px',
+                  }}
+                >
+                  {/* Read-only Syntax Highlighted Code Card */}
+                  <div
+                    style={{
+                      background: '#0d1527',
+                      border: '1px solid rgba(56, 189, 248, 0.22)',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: '8px 16px',
+                        background: 'rgba(15, 23, 42, 0.85)',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        color: '#94a3b8',
+                      }}
+                    >
+                      {isEn ? 'Python Code to Trace' : '실행할 파이썬 코드'}
+                    </div>
+                    <div
+                      style={{
+                        padding: '16px 0',
+                        fontFamily: 'var(--font-mono), monospace',
+                        fontSize: '1.2rem',
+                        lineHeight: 1.8,
+                      }}
+                    >
+                      {(currentQuestion.targetCode || '').split('\n').map((codeLine, lIdx) => {
+                        const tokens = tokenizePythonLine(codeLine);
+                        const rendered: React.ReactNode[] = [];
+                        let cursor = 0;
+                        tokens.forEach((tok, tIdx) => {
+                          if (tok.start > cursor) {
+                            rendered.push(
+                              <span key={`ws-${tIdx}`} style={{ color: VSCODE_DARK_PLUS.default }}>
+                                {codeLine.slice(cursor, tok.start)}
+                              </span>
+                            );
+                          }
+                          rendered.push(
+                            <span
+                              key={`tk-${tIdx}`}
+                              style={{ color: VSCODE_DARK_PLUS[tok.type] || VSCODE_DARK_PLUS.default }}
+                            >
+                              {tok.text}
+                            </span>
+                          );
+                          cursor = tok.end;
+                        });
+                        if (cursor < codeLine.length) {
+                          rendered.push(
+                            <span key="ws-end" style={{ color: VSCODE_DARK_PLUS.default }}>
+                              {codeLine.slice(cursor)}
+                            </span>
+                          );
+                        }
+                        return (
+                          <div
+                            key={lIdx}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              minHeight: '34px',
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: '50px',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                paddingRight: '14px',
+                                color: '#475569',
+                                fontSize: '0.84rem',
+                                fontWeight: 700,
+                                userSelect: 'none',
+                                borderRight: '1px solid rgba(255, 255, 255, 0.06)',
+                              }}
+                            >
+                              {String(lIdx + 1).padStart(2, '0')}
+                            </div>
+                            <div style={{ padding: '0 20px', whiteSpace: 'pre' }}>{rendered}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Multiple-Choice Output Cards */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#cbd5e1' }}>
+                      {isEn ? 'Select the exact terminal output:' : '위 코드를 실행했을 때 화면에 출력될 결과를 선택하세요:'}
+                    </div>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                        gap: '12px',
+                      }}
+                    >
+                      {(currentQuestion.choices || []).map((choiceText, cIdx) => {
+                        const isSelected = selectedChoiceIndex === cIdx;
+                        const isCorrectDone = isSuccess && cIdx === (currentQuestion.correctChoiceIndex ?? 0);
+                        return (
+                          <button
+                            key={cIdx}
+                            type="button"
+                            onClick={() => {
+                              if (!isSuccess) {
+                                setSelectedChoiceIndex(cIdx);
+                                setIsErrorShown(false);
+                              }
+                            }}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '12px',
+                              padding: '14px 16px',
+                              borderRadius: '10px',
+                              textAlign: 'left',
+                              cursor: isSuccess ? 'default' : 'pointer',
+                              background: isCorrectDone
+                                ? 'rgba(16, 185, 129, 0.16)'
+                                : isSelected
+                                  ? 'rgba(56, 189, 248, 0.16)'
+                                  : 'rgba(15, 23, 42, 0.85)',
+                              border: isCorrectDone
+                                ? '2px solid #10b981'
+                                : isSelected
+                                  ? '2px solid #38bdf8'
+                                  : '1.5px solid rgba(255, 255, 255, 0.1)',
+                              boxShadow: isSelected ? '0 0 16px rgba(56, 189, 248, 0.2)' : 'none',
+                              transition: 'all 0.15s ease',
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                                minWidth: '24px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.8rem',
+                                fontWeight: 900,
+                                fontFamily: 'var(--font-mono)',
+                                background: isCorrectDone
+                                  ? '#10b981'
+                                  : isSelected
+                                    ? '#38bdf8'
+                                    : 'rgba(255, 255, 255, 0.08)',
+                                color: isCorrectDone || isSelected ? '#090e1a' : '#94a3b8',
+                              }}
+                            >
+                              {cIdx + 1}
+                            </span>
+                            <pre
+                              style={{
+                                margin: 0,
+                                fontFamily: 'var(--font-mono), monospace',
+                                fontSize: '1.02rem',
+                                lineHeight: 1.55,
+                                color: '#f8fafc',
+                                whiteSpace: 'pre-wrap',
+                                wordBreak: 'break-word',
+                              }}
+                            >
+                              {choiceText}
+                            </pre>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Check Answer Button */}
+                  <div>
+                    <button
+                      type="button"
+                      disabled={selectedChoiceIndex === null || isSuccess}
+                      onClick={handleExecuteManual}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        padding: '11px 24px',
+                        borderRadius: '9px',
+                        border: 'none',
+                        fontWeight: 800,
+                        fontSize: '0.92rem',
+                        cursor: selectedChoiceIndex === null || isSuccess ? 'not-allowed' : 'pointer',
+                        background:
+                          selectedChoiceIndex === null
+                            ? 'rgba(255, 255, 255, 0.08)'
+                            : isSuccess
+                              ? '#10b981'
+                              : 'linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)',
+                        color: selectedChoiceIndex === null ? '#64748b' : '#ffffff',
+                        boxShadow:
+                          selectedChoiceIndex !== null && !isSuccess
+                            ? '0 4px 16px rgba(56, 189, 248, 0.35)'
+                            : 'none',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      <CheckCircle2 size={17} />
+                      <span>
+                        {isSuccess
+                          ? isEn
+                            ? 'Correct!'
+                            : '정답입니다!'
+                          : isEn
+                            ? 'Check Answer (Enter)'
+                            : '정답 확인 (Enter)'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             ) : (
               /* ============================================================
                  TYPING MODE: Interactive Fill-in-the-Blank Code & Virtual Keyboard

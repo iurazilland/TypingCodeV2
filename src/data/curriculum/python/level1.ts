@@ -1,23 +1,11 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
-// 파이썬 기초 1레벨: print() 함수와 기본 사칙연산 (10단계)
-// - [블록 ➔ 타이핑 1:1 교차 5쌍(10문제)] 구조
-// - 페어 1: 단일 숫자 출력
-//   1. [블록] print(10)
-//   2. [타이핑: 빈칸] print(77)
-// - 페어 2: 덧셈(+)과 뺄셈(-) 연산자
-//   3. [블록] print(10+5)
-//   4. [타이핑: 빈칸] print(30-20) (뺄셈 연산자 입력)
-// - 페어 3: 곱셈 연산자(*)
-//   5. [블록] print(4*5)
-//   6. [타이핑: 빈칸] print(6*7) (곱셈 연산자 입력)
-// - 페어 4: 나눗셈 연산자(/)
-//   7. [블록] print(20/4)
-//   8. [타이핑: 빈칸] print(100/2) (나눗셈 연산자 입력)
-// - 페어 5: 괄호 우선순위 연산
-//   9. [블록] print((10+20)*3) (블록으로 괄호 개념 설명)
-//   10. [타이핑: 빈칸] print((2+3)*4) (괄호 식 빈칸 입력)
+// 파이썬 기초 1레벨: print() 함수와 기본 사칙연산 (13단계)
+// - [1~10단계] 블록 ➔ 타이핑 1:1 교차 5쌍
+// - [11단계] 틀린 곳 수정 (fix_bug)
+// - [12단계] 예제 아래 한 줄 추가 작성 (one_line)
+// - [13단계] 출력 결과 예측 선택 (predict_output)
 // ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
@@ -27,7 +15,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
   roundNumber: 1,
   title_ko: '1레벨: print() 함수와 기본 사칙연산',
   title_en: 'Level 1: print() & Basic Arithmetic',
-  totalQuestions: 10,
+  totalQuestions: 13,
   unlockedBlocks: ['print'],
   questions: [
     // ------------------------------------------------------------------------
@@ -195,7 +183,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 5: 괄호 우선순위 연산 (9번 블록 ➔ 10번 타이핑)
+    // 페어 5: 괄호 우선순위 연산
     // ------------------------------------------------------------------------
     {
       id: 9,
@@ -231,6 +219,68 @@ export const PYTHON_LEVEL_1: PracticeRound = {
           id: 1,
           input: '',
           expectedOutput: '20',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 11~13단계: 실전 응용 3유형 (틀린 곳 수정 / 한 줄 추가 / 출력 결과 선택)
+    // ------------------------------------------------------------------------
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '틀린 곳을 수정하여 덧셈 계산 결과(30)가 화면에 출력되도록 해보세요.',
+      prompt_en: 'Fix the error so that the addition result (30) is printed on the screen.',
+      hint_ko: '화면에 값을 출력하는 명령어의 영어 철자가 틀렸습니다. pritn을 올바른 함수명 print로 고쳐보세요.',
+      hint_en: 'The output function name is misspelled. Fix pritn to print.',
+      templateCode: 'pritn(10+20)',
+      targetCode: 'print(10+20)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '예제 코드 아래에 한 줄을 추가하여 3과 7을 먼저 더한 뒤 5를 곱한 결과(50)를 출력해보세요.',
+      prompt_en: 'Type the example code and add a line below to add 3 and 7 first, then multiply by 5 to print 50.',
+      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print((3+7)*5)를 입력하세요.',
+      hint_en: 'Type the first line example, press Enter, and write print((3+7)*5) on the second line.',
+      templateCode: 'print((10+20)*2)\n§§§§§§§§§§§§§§',
+      targetCode: 'print((10+20)*2)\nprint((3+7)*5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '60\n50',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.',
+      prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
+      hint_ko: '첫째 줄은 괄호가 없으므로 곱셈(5*2)이 먼저 계산되고, 둘째 줄은 괄호 안의 덧셈(10+5)이 먼저 계산됩니다.',
+      hint_en: 'On line 1, multiplication (5*2) runs before addition. On line 2, parentheses (10+5) evaluate first.',
+      targetCode: 'print(10+5*2)\nprint((10+5)*2)',
+      choices: ['30\n30', '20\n30', '30\n20', '20\n20'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '20\n30',
         },
       ],
     },

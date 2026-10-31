@@ -37,8 +37,13 @@ export function splitTopLevelArgs(str: string): string[] {
   for (let i = 0; i < str.length; i++) {
     const ch = str[i];
     if (inQuote) {
+      if (ch === '\\' && i + 1 < str.length) {
+        current += ch + str[i + 1];
+        i++;
+        continue;
+      }
       current += ch;
-      if (ch === inQuote && str[i - 1] !== '\\') {
+      if (ch === inQuote) {
         inQuote = null;
       }
     } else if (ch === '"' || ch === "'") {
@@ -126,12 +131,61 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
       const expr = (rawExpr || '').trim();
       if (!expr) return null;
 
-      // String literals (triple quotes and regular single/double quotes)
-      if ((expr.startsWith('"""') && expr.endsWith('"""')) || (expr.startsWith("'''") && expr.endsWith("'''"))) {
+      // Unwrap balanced outer parentheses (excluding tuples with top-level commas)
+      if (expr.startsWith('(') && expr.endsWith(')')) {
+        let depth = 0;
+        let q: string | null = null;
+        let hasTopComma = false;
+        let wrapsAll = true;
+        for (let k = 0; k < expr.length; k++) {
+          const c = expr[k];
+          if (q) {
+            if (c === '\\' && k + 1 < expr.length) { k++; continue; }
+            if (c === q) q = null;
+          } else if (c === '"' || c === "'") {
+            q = c;
+          } else if (c === '(') {
+            depth++;
+          } else if (c === ')') {
+            depth--;
+            if (depth === 0 && k < expr.length - 1) {
+              wrapsAll = false;
+              break;
+            }
+          } else if (c === ',' && depth === 1) {
+            hasTopComma = true;
+          }
+        }
+        if (wrapsAll && depth === 0 && !q && !hasTopComma) {
+          return evalExpr(expr.slice(1, -1));
+        }
+      }
+
+      // String literals (triple quotes and standalone single/double quotes)
+      if (
+        (expr.length >= 6 && expr.startsWith('"""') && expr.endsWith('"""') && expr.indexOf('"""', 3) === expr.length - 3) ||
+        (expr.length >= 6 && expr.startsWith("'''") && expr.endsWith("'''") && expr.indexOf("'''", 3) === expr.length - 3)
+      ) {
         return unescapePythonString(expr.slice(3, -3));
       }
-      if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
-        return unescapePythonString(expr.slice(1, -1));
+      if (expr.length >= 2 && (expr[0] === '"' || expr[0] === "'") && expr[expr.length - 1] === expr[0]) {
+        const quoteChar = expr[0];
+        let k = 1;
+        let closedAt = -1;
+        while (k < expr.length) {
+          if (expr[k] === '\\' && k + 1 < expr.length) {
+            k += 2;
+            continue;
+          }
+          if (expr[k] === quoteChar) {
+            closedAt = k;
+            break;
+          }
+          k++;
+        }
+        if (closedAt === expr.length - 1) {
+          return unescapePythonString(expr.slice(1, -1));
+        }
       }
       if (expr === '\\n') return '\n';
       if (expr === '\\t') return '\t';
@@ -142,6 +196,92 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
       // Numbers
       if (/^-?\d+$/.test(expr)) return parseInt(expr, 10);
       if (/^-?\d+\.\d+$/.test(expr)) return parseFloat(expr);
+
+      // Python string concatenation (+) and repetition (*) with strict TypeError checking
+      const mayContainString =
+        expr.includes('"') ||
+        expr.includes("'") ||
+        Object.keys(scope).some((vn) => typeof scope[vn] === 'string' && expr.includes(vn));
+
+      if (mayContainString) {
+        let q: string | null = null;
+        let pDepth = 0, bDepth = 0, cDepth = 0;
+        let hasTopCompare = false;
+        const addSplits: { idx: number; op: '+' | '-' }[] = [];
+        const mulSplits: number[] = [];
+
+        for (let k = 0; k < expr.length; k++) {
+          const c = expr[k];
+          if (q) {
+            if (c === '\\' && k + 1 < expr.length) { k++; continue; }
+            if (c === q) q = null;
+            continue;
+          }
+          if (c === '"' || c === "'") { q = c; continue; }
+          if (c === '(') { pDepth++; continue; }
+          if (c === ')') { pDepth = Math.max(0, pDepth - 1); continue; }
+          if (c === '[') { bDepth++; continue; }
+          if (c === ']') { bDepth = Math.max(0, bDepth - 1); continue; }
+          if (c === '{') { cDepth++; continue; }
+          if (c === '}') { cDepth = Math.max(0, cDepth - 1); continue; }
+
+          if (pDepth === 0 && bDepth === 0 && cDepth === 0) {
+            if (c === '=' || c === '<' || c === '>' || c === '!') {
+              hasTopCompare = true;
+              break;
+            }
+            if (c === '+' || c === '-') {
+              const prevNonSpace = expr.slice(0, k).trimEnd().slice(-1);
+              const isUnary = !prevNonSpace || /[+\-*/%(,[:]/.test(prevNonSpace);
+              if (!isUnary) {
+                addSplits.push({ idx: k, op: c });
+              }
+            } else if (c === '*' && expr[k + 1] !== '*' && expr[k - 1] !== '*') {
+              mulSplits.push(k);
+            }
+          }
+        }
+
+        if (q) {
+          throw new Error('SyntaxError: EOL while scanning string literal');
+        }
+
+        if (!hasTopCompare && addSplits.length > 0) {
+          let acc = evalExpr(expr.slice(0, addSplits[0].idx));
+          for (let s = 0; s < addSplits.length; s++) {
+            const nextEnd = s + 1 < addSplits.length ? addSplits[s + 1].idx : expr.length;
+            const rhs = evalExpr(expr.slice(addSplits[s].idx + 1, nextEnd));
+            if (addSplits[s].op === '+') {
+              if (typeof acc === 'string' && typeof rhs === 'string') acc = acc + rhs;
+              else if (typeof acc === 'number' && typeof rhs === 'number') acc = acc + rhs;
+              else if (Array.isArray(acc) && Array.isArray(rhs)) acc = [...acc, ...rhs];
+              else throw new Error('TypeError: can only concatenate str (not "int") to str');
+            } else {
+              if (typeof acc === 'number' && typeof rhs === 'number') acc = acc - rhs;
+              else throw new Error('TypeError: unsupported operand type(s) for -');
+            }
+          }
+          return acc;
+        }
+
+        if (!hasTopCompare && mulSplits.length > 0) {
+          let acc = evalExpr(expr.slice(0, mulSplits[0]));
+          for (let s = 0; s < mulSplits.length; s++) {
+            const nextEnd = s + 1 < mulSplits.length ? mulSplits[s + 1] : expr.length;
+            const rhs = evalExpr(expr.slice(mulSplits[s] + 1, nextEnd));
+            if (typeof acc === 'string' && typeof rhs === 'number' && Number.isInteger(rhs)) {
+              acc = acc.repeat(Math.max(0, rhs));
+            } else if (typeof acc === 'number' && Number.isInteger(acc) && typeof rhs === 'string') {
+              acc = rhs.repeat(Math.max(0, acc));
+            } else if (typeof acc === 'number' && typeof rhs === 'number') {
+              acc = acc * rhs;
+            } else {
+              throw new Error("TypeError: can't multiply sequence by non-int");
+            }
+          }
+          return acc;
+        }
+      }
 
       // List literals: [1, 2, 3]
       if (expr.startsWith('[') && expr.endsWith(']')) {
@@ -282,11 +422,23 @@ export function evaluateBlocksWithTrace(blocks: any[]): TraceEvaluationResult {
         js = js.replace(regex, rep);
       }
 
-      while (js.includes('___INTDIV___')) {
-        js = js.replace(/(\(?[^/()]+?\)?)\s*___INTDIV___\s*(\(?[^/()]+?\)?)/, 'Math.floor(($1) / ($2))');
+      let powGuard = 20;
+      while (js.includes('___POW___') && powGuard-- > 0) {
+        const nextJs = js.replace(
+          /(\([^()]+\)|[a-zA-Z0-9_.]+)\s*___POW___\s*(\([^()]+\)|-?[a-zA-Z0-9_.]+)/,
+          'Math.pow($1, $2)'
+        );
+        if (nextJs === js) break;
+        js = nextJs;
       }
-      while (js.includes('___POW___')) {
-        js = js.replace(/(\(?[^()*]+?\)?)\s*___POW___\s*(\(?[^()*]+?\)?)/, 'Math.pow(($1), ($2))');
+      let divGuard = 20;
+      while (js.includes('___INTDIV___') && divGuard-- > 0) {
+        const nextJs = js.replace(
+          /(\([^()]+\)|Math\.pow\([^()]+\)|[a-zA-Z0-9_.]+)\s*___INTDIV___\s*(\([^()]+\)|Math\.pow\([^()]+\)|-?[a-zA-Z0-9_.]+)/,
+          'Math.floor(($1) / ($2))'
+        );
+        if (nextJs === js) break;
+        js = nextJs;
       }
 
       // Strip string literals to validate remaining code syntax safely

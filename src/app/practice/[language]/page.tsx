@@ -14,6 +14,7 @@ import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum
 import LanguageIcon from '@/components/LanguageIcon';
 import { getCategoryName } from '@/lib/curriculumTranslations';
 import { getCourseSections, LevelSection, LevelItem } from '@/lib/curriculumSections';
+import { getPracticeRound } from '@/lib/practiceData';
 
 interface StageSelectPageProps {
   params: {
@@ -99,15 +100,20 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       const cleared = new Set<number>([1]); // 1레벨 기본 완료 처리
       let maxUnlocked = 2;
 
-      // 1레벨이 localStorage에 없다면 완료 상태(10단계 완료)로 기록
+      const round1 = getPracticeRound(rawLang, 1);
+      const lvl1Total = round1 && round1.roundNumber === 1 ? round1.questions.length : 10;
+
+      // 1레벨이 localStorage에 없다면 완료 상태로 기록
       if (!localStorage.getItem(`unlocked_step_${rawLang}_1`)) {
-        localStorage.setItem(`unlocked_step_${rawLang}_1`, '10');
+        localStorage.setItem(`unlocked_step_${rawLang}_1`, String(lvl1Total));
       }
 
-      // Scan per-level steps (each level has 10 steps; if >= 10, marked as cleared)
+      // Scan per-level steps dynamically against each level's actual question count
       for (let lvl = 1; lvl <= 50; lvl++) {
         const stepVal = parseInt(localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`) || '0', 10);
-        if (stepVal >= 10) {
+        const lvlRound = getPracticeRound(rawLang, lvl);
+        const requiredSteps = lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
+        if (stepVal >= requiredSteps) {
           cleared.add(lvl);
           maxUnlocked = Math.max(maxUnlocked, lvl + 1);
         }
