@@ -88,10 +88,10 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 가로(width)와 세로(height) 변수를 곱한 넓이 40을 변수 area에 저장하고 출력해보세요.',
-      prompt_en: 'Fill in the blanks to multiply width and height into variable area and print 40.',
+      prompt_en: 'Fill in the blank to multiply width and height into variable area and print 40.',
       hint_ko: '숫자 대신 변수 이름끼리 곱셈 기호로 연결해 width * height를 입력하세요.',
       hint_en: 'Multiply the two variable names directly as width * height.',
-      templateCode: 'width = 8\nheight = 5\narea = §§§§§ § §§§§§§\nprint(area)',
+      templateCode: 'width = 8\nheight = 5\narea = §§§§§§§§§§§§§§\nprint(area)',
       targetCode: 'width = 8\nheight = 5\narea = width * height\nprint(area)',
       expectedVariables: { area: 40 },
       testCases: [
@@ -130,10 +130,10 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 현재 체력(hp) 100에서 25를 뺀 값을 다시 hp에 저장하여 75가 출력되도록 해보세요.',
-      prompt_en: 'Fill in the blanks to subtract 25 from current hp (100), store it back in hp, and print 75.',
-      hint_ko: '오른쪽에서 현재 변수 hp에서 25를 빼도록 hp - 25 형태로 빈칸을 채워보세요.',
-      hint_en: 'Write hp - 25 on the right side so the reduced value is stored back in hp.',
-      templateCode: 'hp = 100\nhp = §§ § 25\nprint(hp)',
+      prompt_en: 'Fill in the blank to subtract 25 from current hp (100), store it back in hp, and print 75.',
+      hint_ko: '오른쪽 빈칸에 현재 변수 hp에서 25를 빼는 식(hp - 25)을 입력하세요.',
+      hint_en: 'Write hp - 25 in the blank so the reduced value is stored back in hp.',
+      templateCode: 'hp = 100\nhp = §§§§§§§\nprint(hp)',
       targetCode: 'hp = 100\nhp = hp - 25\nprint(hp)',
       expectedVariables: { hp: 75 },
       testCases: [
@@ -172,10 +172,10 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       type: 'typing',
       kind: 'fill_blank',
       prompt_ko: '빈칸을 채워 변수 star에 담긴 별표를 5번 반복한 문자열을 line에 저장하고 *****를 출력해보세요.',
-      prompt_en: 'Fill in the blanks to repeat variable star 5 times into variable line and print *****.',
-      hint_ko: '문자열 변수 star에 곱셈 기호(*)로 정수를 곱하면 문자열이 반복됩니다.',
-      hint_en: 'Multiply string variable star by 5 using * to repeat the character.',
-      templateCode: 'star = "*"\nline = §§§§ § 5\nprint(line)',
+      prompt_en: 'Fill in the blank to repeat variable star 5 times into variable line and print *****.',
+      hint_ko: '오른쪽 빈칸에 문자열 변수 star와 5를 곱하는 식(star * 5)을 입력하세요.',
+      hint_en: 'Multiply string variable star by 5 using star * 5.',
+      templateCode: 'star = "*"\nline = §§§§§§§§\nprint(line)',
       targetCode: 'star = "*"\nline = star * 5\nprint(line)',
       expectedVariables: { line: '*****' },
       testCases: [
@@ -301,3 +301,4 @@ export const PYTHON_LEVEL_10: PracticeRound = {
     },
   ],
 };
+
