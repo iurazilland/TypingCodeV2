@@ -2140,22 +2140,27 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       if (!userHasNonEmptyComment) return false;
     }
 
-    // Enforce Python structural usage (variables, functions, keywords, operators, escapes) against literal hardcoding
+    // Flexible anti-hardcoding check: enforces variable reference usage & core lesson syntax while allowing equivalent expressions
     if (langKey === 'python' && question.targetCode) {
-      const analyzePythonStructure = (src: string) => {
-        const idCounts: Record<string, number> = {};
-        const opCounts: Record<string, number> = {};
+      const analyzePythonIntent = (src: string) => {
+        const assignedVars = new Set<string>();
+        const readVars = new Set<string>();
+        const tokens = new Set<string>();
+        let hasCompoundOp = false;
+        let hasArithOp = false;
+        let hasCmpOp = false;
+        let hasLogicOp = false;
         let hasNewlineEscape = false;
         let hasTabEscape = false;
-        let codeWithoutStrings = '';
 
-        for (const line of src.split('\n')) {
+        for (const rawLine of src.split('\n')) {
+          let line = '';
           let q: string | null = null;
-          for (let i = 0; i < line.length; i++) {
-            const ch = line[i];
+          for (let i = 0; i < rawLine.length; i++) {
+            const ch = rawLine[i];
             if (q) {
-              if (ch === '\\' && i + 1 < line.length) {
-                const next = line[i + 1];
+              if (ch === '\\' && i + 1 < rawLine.length) {
+                const next = rawLine[i + 1];
                 if (next === 'n') hasNewlineEscape = true;
                 if (next === 't') hasTabEscape = true;
                 i++;
@@ -2166,56 +2171,100 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             }
             if (ch === '"' || ch === "'") {
               q = ch;
-              codeWithoutStrings += '""';
+              line += '""';
               continue;
             }
             if (ch === '#') break;
-            codeWithoutStrings += ch;
+            line += ch;
           }
-          codeWithoutStrings += '\n';
+
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+
+          for (const w of trimmed.match(/\b[a-zA-Z_]\w*\b/g) || []) {
+            tokens.add(w);
+          }
+          if (/\b(?:and|or|not)\b/.test(trimmed)) hasLogicOp = true;
+
+          const ops = trimmed.match(/\*\*=|\/\/=|\+=|-=|\*=|\/=|%=|\*\*|\/\/|==|!=|>=|<=|[+\-*/%><=]/g) || [];
+          for (const op of ops) {
+            if (['+=', '-=', '*=', '/=', '//=', '%=', '**='].includes(op)) {
+              hasCompoundOp = true;
+              hasArithOp = true;
+            } else if (['+', '-', '*', '/', '//', '%', '**'].includes(op)) {
+              hasArithOp = true;
+            } else if (['==', '!=', '>', '<', '>=', '<='].includes(op)) {
+              hasCmpOp = true;
+            }
+          }
+
+          const compMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(?:\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*([\s\S]+)$/);
+          if (compMatch) {
+            assignedVars.add(compMatch[1]);
+            for (const w of compMatch[2].match(/\b[a-zA-Z_]\w*\b/g) || []) {
+              readVars.add(w);
+            }
+            continue;
+          }
+
+          const plainMatch = trimmed.match(/^([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s*=(?!=)\s*([\s\S]+)$/);
+          if (plainMatch) {
+            for (const lhs of plainMatch[1].split(',').map((s) => s.trim())) {
+              if (lhs) assignedVars.add(lhs);
+            }
+            for (const w of plainMatch[2].match(/\b[a-zA-Z_]\w*\b/g) || []) {
+              readVars.add(w);
+            }
+            continue;
+          }
+
+          for (const w of trimmed.match(/\b[a-zA-Z_]\w*\b/g) || []) {
+            readVars.add(w);
+          }
         }
 
-        const idMatches = codeWithoutStrings.match(/\b[a-zA-Z_]\w*\b/g) || [];
-        for (const w of idMatches) {
-          idCounts[w] = (idCounts[w] || 0) + 1;
-        }
-
-        const opMatches =
-          codeWithoutStrings.match(/\*\*=|\/\/=|\+=|-=|\*=|\/=|%=|\*\*|\/\/|==|!=|>=|<=|[+\-*/%><=]/g) || [];
-        for (const op of opMatches) {
-          opCounts[op] = (opCounts[op] || 0) + 1;
-        }
-
-        return { idCounts, opCounts, hasNewlineEscape, hasTabEscape };
+        return {
+          assignedVars,
+          readVars,
+          tokens,
+          hasCompoundOp,
+          hasArithOp,
+          hasCmpOp,
+          hasLogicOp,
+          hasNewlineEscape,
+          hasTabEscape,
+        };
       };
 
-      const targetStruct = analyzePythonStructure(question.targetCode);
-      const userStruct = analyzePythonStructure(userCodeStr);
+      const target = analyzePythonIntent(question.targetCode);
+      const user = analyzePythonIntent(userCodeStr);
+      const usesInput = target.tokens.has('input');
 
-      for (const [token, reqCount] of Object.entries(targetStruct.idCounts)) {
-        if ((userStruct.idCounts[token] || 0) < reqCount) {
-          return false;
+      // 1. Declared variables must actually be referenced at least once (blocks print("Gold:", 500) hardcoding)
+      if (target.assignedVars.size > 0) {
+        if (user.assignedVars.size === 0) return false;
+        for (const v of Array.from(user.assignedVars)) {
+          if (v !== '_' && !user.readVars.has(v)) return false;
         }
       }
 
-      const exactRequiredOps = ['**=', '//=', '+=', '-=', '*=', '/=', '%=', '**', '//', '==', '!=', '+', '-', '*', '/', '%'];
-      for (const op of exactRequiredOps) {
-        const reqOpCount = targetStruct.opCounts[op] || 0;
-        if (reqOpCount > 0 && (userStruct.opCounts[op] || 0) < reqOpCount) {
-          return false;
+      // 2. Pinpoint core lesson syntax check
+      if (usesInput && !user.tokens.has('input')) return false;
+      if (target.tokens.has('type') && !user.tokens.has('type')) return false;
+      if (target.tokens.has('if') && !user.tokens.has('if')) return false;
+      if (target.hasCompoundOp && !user.hasCompoundOp) return false;
+      if (target.hasNewlineEscape && !user.hasNewlineEscape) return false;
+      if (target.hasTabEscape && !user.hasTabEscape) return false;
+
+      // 3. For constant-only questions (no input() multi-testCases), ensure casting/operators aren't bypassed by raw literals
+      if (!usesInput) {
+        for (const castFn of ['int', 'float', 'str', 'bool']) {
+          if (target.tokens.has(castFn) && !user.tokens.has(castFn)) return false;
         }
+        if (target.hasArithOp && !user.hasArithOp) return false;
+        if (target.hasCmpOp && !user.hasCmpOp) return false;
+        if (!target.tokens.has('if') && target.hasLogicOp && !user.hasLogicOp) return false;
       }
-
-      const reqStrictCmp = (targetStruct.opCounts['>'] || 0) + (targetStruct.opCounts['<'] || 0);
-      const userStrictCmp = (userStruct.opCounts['>'] || 0) + (userStruct.opCounts['<'] || 0);
-      if (reqStrictCmp > 0 && userStrictCmp < reqStrictCmp) return false;
-
-      const reqInclCmp = (targetStruct.opCounts['>='] || 0) + (targetStruct.opCounts['<='] || 0);
-      const userInclCmp = (userStruct.opCounts['>='] || 0) + (userStruct.opCounts['<='] || 0);
-      if (reqInclCmp > 0 && userInclCmp < reqInclCmp) return false;
-
-      if (targetStruct.hasNewlineEscape && !userStruct.hasNewlineEscape) return false;
-      if (targetStruct.hasTabEscape && !userStruct.hasTabEscape) return false;
     }
 
     // Block mode is lenient (conceptual explanation stage)
