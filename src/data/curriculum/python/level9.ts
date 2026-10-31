@@ -228,18 +228,18 @@ export const PYTHON_LEVEL_9: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - 변수명 오타로 인한 NameError 교정
+    // 11단계: 버그 수정 (fix_bug) - 변수명을 따옴표로 감싼 실수 교정
     // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '변수 이름 오타로 인해 발생하는 오류(NameError)를 수정하여 변수 point에 저장된 값 80이 정상 출력되도록 해보세요.',
-      prompt_en: 'Fix the variable name typo causing a NameError so the value 80 stored in point prints cleanly.',
-      hint_ko: '첫째 줄에 선언한 변수 이름은 point인데 둘째 줄 출력문에는 piont라고 잘못 적혀 있습니다.',
-      hint_en: 'The variable declared on line 1 is point, whereas line 2 misspells it as piont.',
-      templateCode: 'point = 80\nprint(piont)',
+      prompt_ko: '글자 point 대신 변수 point에 저장된 값 80이 화면에 출력되도록 잘못된 부분을 수정해보세요.',
+      prompt_en: 'Fix the bug so the value 80 stored in variable point prints instead of the literal word point.',
+      hint_ko: '변수 이름을 따옴표(" ")로 감싸면 문자열 글자 그대로 출력됩니다. 따옴표 없이 변수명 point만 적어보세요.',
+      hint_en: 'Wrapping a variable name in quotes (" ") prints it as plain text. Remove the quotes around point.',
+      templateCode: 'point = 80\nprint("point")',
       targetCode: 'point = 80\nprint(point)',
       expectedVariables: { point: 80 },
       testCases: [
@@ -300,3 +300,4 @@ export const PYTHON_LEVEL_9: PracticeRound = {
     },
   ],
 };
+
