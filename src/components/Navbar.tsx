@@ -9,13 +9,13 @@ import {
   ChevronDown,
   Code2,
   Flame,
+  Keyboard,
   LogOut,
   Menu,
   Settings,
   Trophy,
   User,
   X,
-  Zap,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
@@ -65,9 +65,9 @@ export default function Navbar() {
     (user?.email ? user.email.split('@')[0] : 'Coder');
 
   const currentStreak = profile?.current_streak || 0;
-  const speedLabel =
-    (t.nav as Record<string, string>).speedCoding ||
-    (language === 'ko' ? '스피드 코딩' : 'Speed Coding');
+  const codeTypingLabel =
+    (t.nav as Record<string, string>).codeTyping ||
+    (language === 'ko' ? '코드타자' : 'Code Typing');
 
   const navItems = [
     {
@@ -80,11 +80,11 @@ export default function Navbar() {
         pathname.startsWith('/practice'),
     },
     {
-      label: speedLabel,
-      href: '/speed-coding',
-      icon: Zap,
+      label: codeTypingLabel,
+      href: '/code-typing',
+      icon: Keyboard,
       isActive:
-        pathname.startsWith('/speed-coding') || pathname.startsWith('/challenges'),
+        pathname.startsWith('/code-typing') || pathname.startsWith('/challenges'),
     },
     {
       label: t.nav.problems,

@@ -123,3 +123,4 @@ export function getAvatarPreset(presetId?: string | null): AvatarPresetItem {
   if (!presetId) return AVATAR_PRESETS[0];
   return AVATAR_PRESETS.find((p) => p.id === presetId) || AVATAR_PRESETS[0];
 }
+

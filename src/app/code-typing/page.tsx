@@ -259,7 +259,7 @@ export default function SpeedCodingPage() {
             <span>PURE CODE TYPING ARENA · NO EXECUTION</span>
           </div>
           <h1 style={{ fontSize: '2.05rem', fontWeight: 900, margin: '0 0 6px' }}>
-            {isKo ? '⚡ 스피드 코딩 (타자 연습)' : '⚡ Speed Coding Practice'}
+            {isKo ? '⌨️ 코드타자' : '⌨️ Code Typing'}
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '0.94rem', margin: 0 }}>
             {isKo
@@ -285,7 +285,7 @@ export default function SpeedCodingPage() {
           }}
         >
           <Trophy size={15} />
-          <span>{isKo ? '스피드 코딩 랭킹 보기' : 'View Speed Ranking'}</span>
+          <span>{isKo ? '코드타자 랭킹 보기' : 'View Typing Ranking'}</span>
         </Link>
       </div>
 
@@ -837,3 +837,4 @@ export default function SpeedCodingPage() {
     </div>
   );
 }
+

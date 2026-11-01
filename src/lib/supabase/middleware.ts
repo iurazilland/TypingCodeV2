@@ -5,7 +5,7 @@ import { getSupabaseEnv, isSupabaseConfigured } from './env';
 const PROTECTED_PREFIXES = [
   '/practice',
   '/problems',
-  '/speed-coding',
+  '/code-typing',
   '/challenges',
   '/compiler',
   '/profile',

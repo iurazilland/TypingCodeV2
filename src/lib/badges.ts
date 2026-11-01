@@ -127,10 +127,10 @@ export function evaluateUserBadges(
     {
       id: 'speed_350',
       icon: '⌨️',
-      titleKo: '스피드 코더',
-      titleEn: 'Speed Coder',
-      descKo: '스피드 코딩 최고 타수 350 CPM 돌파',
-      descEn: 'Reach 350+ CPM in Speed Coding',
+      titleKo: '코드타자 달인',
+      titleEn: 'Code Typer',
+      descKo: '코드타자 최고 타수 350 CPM 돌파',
+      descEn: 'Reach 350+ CPM in Code Typing',
       color: '#a78bfa',
       unlocked: speedCpm >= 350,
       progressText: `${Math.min(speedCpm, 350)} / 350`,
@@ -171,3 +171,4 @@ export function getRepresentativeBadge(
     color: '#10b981',
   };
 }
+

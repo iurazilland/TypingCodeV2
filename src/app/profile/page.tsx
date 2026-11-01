@@ -409,7 +409,7 @@ export default function ProfilePage() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#a78bfa', fontSize: '0.82rem', fontWeight: 700 }}>
             <Zap size={16} />
-            <span>{isKo ? '스피드 코딩 최고 타수' : 'Speed Coding Best'}</span>
+            <span>{isKo ? '코드타자 최고 타수' : 'Code Typing Best'}</span>
           </div>
           <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '8px', color: '#ffffff' }}>
             {profile?.best_typing_cpm || 0}
@@ -985,3 +985,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

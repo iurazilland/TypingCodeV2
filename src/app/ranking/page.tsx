@@ -131,8 +131,8 @@ function RankingPageContent() {
               ? '꾸준함이 빛나는 코딩 학습 리더보드'
               : 'Learning, Streak & Problem Leaderboard'
             : isKo
-            ? '스피드 코딩 타자 명예의 전당'
-            : 'Speed Coding CPM Leaderboard'}
+            ? '코드타자 명예의 전당'
+            : 'Code Typing CPM Leaderboard'}
         </h1>
         <p style={{ color: '#94a3b8', fontSize: '1rem', maxWidth: '680px', margin: '0 auto' }}>
           {activeTab === 'learning'
@@ -140,8 +140,8 @@ function RankingPageContent() {
               ? '어디까지 학습을 진행했는지(완료 레벨), 꾸준히 출석했는지(연속·누적 출석), 문제를 얼마나 해결했는지를 종합해 순위를 산정합니다.'
               : 'Ranked by curriculum levels cleared, daily attendance streaks, and coding problems solved.'
             : isKo
-            ? '스피드 코딩 모드에서 측정된 순수 장문 코드 타이핑 최고 타수(CPM)와 정확도 순위입니다.'
-            : 'Top pure code typing speed (CPM) and accuracy recorded in Speed Coding mode.'}
+            ? '코드타자 모드에서 측정된 순수 장문 코드 타이핑 최고 타수(CPM)와 정확도 순위입니다.'
+            : 'Top pure code typing speed (CPM) and accuracy recorded in Code Typing mode.'}
         </p>
       </div>
 
@@ -207,12 +207,12 @@ function RankingPageContent() {
             }}
           >
             <Zap size={15} />
-            <span>{isKo ? '스피드 코딩 타수 랭킹' : 'Speed Coding CPM'}</span>
+            <span>{isKo ? '코드타자 타수 랭킹' : 'Code Typing CPM'}</span>
           </button>
         </div>
 
         <Link
-          href={activeTab === 'learning' ? '/languages' : '/speed-coding'}
+          href={activeTab === 'learning' ? '/languages' : '/code-typing'}
           className="tactile-btn tactile-btn-primary"
           style={{ padding: '10px 18px', fontSize: '0.88rem', textDecoration: 'none' }}
         >
@@ -223,8 +223,8 @@ function RankingPageContent() {
                 ? '학습 이어가고 점수 올리기'
                 : 'Continue Learning'
               : isKo
-              ? '스피드 코딩 도전하기'
-              : 'Play Speed Coding'}
+              ? '코드타자 도전하기'
+              : 'Play Code Typing'}
           </span>
         </Link>
       </div>

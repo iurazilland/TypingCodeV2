@@ -18,7 +18,7 @@ import { ensureUserProfile, syncProgressOnLogin } from '@/lib/progressSync';
 const PROTECTED_PREFIXES = [
   '/practice',
   '/problems',
-  '/speed-coding',
+  '/code-typing',
   '/challenges',
   '/compiler',
   '/profile',

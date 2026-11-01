@@ -6,10 +6,10 @@
 
 ## 1. 한 줄 핵심 요약
 
-> **학습 문제집(파이썬 87레벨 등)과 스피드 코딩 예제(25종)는 앱 코드에 내장되어 0초 만에 열리고, Supabase DB에는 오직 "회원 프로필 · 완료한 레벨 · 출석 · 문제풀이 · 스피드 코딩 기록 · 섹션 설문" 6가지만 저장합니다.**
+> **학습 문제집(파이썬 87레벨 등)과 코드타자 예제(25종)는 앱 코드에 내장되어 0초 만에 열리고, Supabase DB에는 오직 "회원 프로필 · 완료한 레벨 · 출석 · 문제풀이 · 코드타자 기록 · 섹션 설문" 6가지만 저장합니다.**
 
 - **일반 학습(`/practice`)에서는 타수(CPM)와 개별 문제 번호를 저장하지 않습니다.** 하트 5개를 모두 소진하면 1번 문제부터 다시 강제 복습하며, 레벨의 마지막 문제까지 모두 풀었을 때만 해당 레벨을 **완료(`user_cleared_levels`)** 로 기록합니다.
-- **타수(CPM) 측정**은 코드 실행을 제외한 순수 타자 연습 메뉴인 **스피드 코딩(`/speed-coding`)** 에서만 별도로 측정·기록합니다.
+- **타수(CPM) 측정**은 코드 실행을 제외한 순수 타자 연습 메뉴인 **코드타자(`/code-typing`)** 에서만 별도로 측정·기록합니다.
 
 ---
 
@@ -26,7 +26,7 @@
         ├──▶ 2. user_cleared_levels (언어·코스별 완료한 레벨 기록)
         ├──▶ 3. user_problem_solves (문제풀이 /problems 완료 도장판)
         ├──▶ 4. user_attendance     (일일 출석 & 연속 출석일수 스트릭)
-        ├──▶ 5. user_speed_records  (스피드 코딩 /speed-coding 최고 타수)
+        ├──▶ 5. user_speed_records  (코드타자 /code-typing 최고 타수)
         └──▶ 6. section_feedbacks   (섹션 완주 시 별점·난이도·건의 설문)
 
 [Supabase Storage -> avatars 버킷]
@@ -52,7 +52,7 @@
 | `current_streak` / `longest_streak` | 현재 연속 출석일수 / 최장 연속 출석일수 | `7` / `12` |
 | `total_attendance_days` | 누적 출석일수 | `18` |
 | `activity_score` | **종합 학습 리더보드 점수** (`레벨×100 + 문제×150 + 누적출석×30 + 최장연속×50`) | `3690` |
-| `best_typing_cpm` / `best_typing_accuracy` | **스피드 코딩** 최고 타수(CPM) / 정확도(%) | `485` / `99.20` |
+| `best_typing_cpm` / `best_typing_accuracy` | **코드타자** 최고 타수(CPM) / 정확도(%) | `485` / `99.20` |
 
 ---
 
@@ -65,8 +65,8 @@
 ### ④ `user_attendance` — 일일 출석부 (KST 기준)
 한국 시간(`Asia/Seoul`) 기준 하루 1회 자동 출석이 기록되며, 과거 날짜 조작 방지를 위해 **오늘 날짜만 등록 가능**하도록 RLS 보안 규칙이 걸려 있습니다.
 
-### ⑤ `user_speed_records` — 스피드 코딩 예제별 최고 기록
-스피드 코딩(`/speed-coding`)의 25개 언어별 코드 예제(`snippet_id`)마다 본인의 최고 타수(`best_cpm`)와 정확도(`best_accuracy`)를 갱신합니다.
+### ⑤ `user_speed_records` — 코드타자 예제별 최고 기록
+코드타자(`/code-typing`)의 25개 언어별 코드 예제(`snippet_id`)마다 본인의 최고 타수(`best_cpm`)와 정확도(`best_accuracy`)를 갱신합니다.
 
 ### ⑥ `section_feedbacks` — 섹션 완료 마이크로 설문
 각 섹션의 마지막 레벨을 처음 완주했을 때 받는 **별점(`1~5`), 체감 난이도(`easy / just_right / hard`), 빠른 선택 태그(`tags`), 추가 요청사항(`comment`)** 이 저장됩니다. Supabase 대시보드 **Table Editor → `section_feedbacks`** 에서 사용자 피드백을 바로 모아볼 수 있습니다.
@@ -78,7 +78,7 @@
 | 구분 | 경로 | 비로그인 접근 시 동작 |
 | :--- | :--- | :--- |
 | **공개 페이지** | 홈(`/`), 전체 코스 탐색(`/languages`), 리더보드(`/ranking`), 로그인(`/login`) | 자유롭게 열람 가능 |
-| **로그인 필수** | 언어 레벨 목록 및 실습(`/practice/*`), 스피드 코딩(`/speed-coding`), 문제풀이(`/problems`), 자유코딩(`/compiler`), 내 정보(`/profile`) | 자동으로 **`/login?next=원래주소`** 로 이동하며, 로그인(또는 회원가입) 완료 시 원래 페이지로 즉시 연결 |
+| **로그인 필수** | 언어 레벨 목록 및 실습(`/practice/*`), 코드타자(`/code-typing`), 문제풀이(`/problems`), 자유코딩(`/compiler`), 내 정보(`/profile`) | 자동으로 **`/login?next=원래주소`** 로 이동하며, 로그인(또는 회원가입) 완료 시 원래 페이지로 즉시 연결 |
 
 > **회원가입 노출 규칙**: 헤더나 메인에는 `로그인` 버튼만 존재하며, **회원가입은 `/login` 페이지 내부에서만 전환하여 진행**할 수 있습니다.
 
@@ -91,4 +91,4 @@
 - **전용 로그인/회원가입 페이지 & ID 로그인 API**: [src/app/login/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/login/page.tsx), [src/app/api/auth/login/route.ts](file:///d:/Projects/TypingCode_V2/src/app/api/auth/login/route.ts)
 - **내 정보 수정 & 아바타 자동 압축 업로드**: [src/app/profile/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/profile/page.tsx), [src/lib/avatarCompression.ts](file:///d:/Projects/TypingCode_V2/src/lib/avatarCompression.ts), [src/components/UserAvatar.tsx](file:///d:/Projects/TypingCode_V2/src/components/UserAvatar.tsx)
 - **섹션 완료 설문 모달**: [src/components/SectionFeedbackModal.tsx](file:///d:/Projects/TypingCode_V2/src/components/SectionFeedbackModal.tsx)
-- **스피드 코딩(25종 예제 로테이션)**: [src/app/speed-coding/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/speed-coding/page.tsx), [src/data/speedCodingSnippets.ts](file:///d:/Projects/TypingCode_V2/src/data/speedCodingSnippets.ts)
+- **코드타자(25종 예제 로테이션)**: [src/app/code-typing/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/code-typing/page.tsx), [src/data/speedCodingSnippets.ts](file:///d:/Projects/TypingCode_V2/src/data/speedCodingSnippets.ts)

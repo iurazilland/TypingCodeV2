@@ -584,3 +584,4 @@ create policy "avatars_delete_own"
 notify pgrst, 'reload schema';
 
 commit;
+

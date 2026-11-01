@@ -133,3 +133,4 @@ export async function deleteUploadedAvatar(userId: string): Promise<void> {
     .from('avatars')
     .remove([`${userId}/avatar.webp`, `${userId}/avatar.jpg`, `${userId}/avatar.png`]);
 }
+
