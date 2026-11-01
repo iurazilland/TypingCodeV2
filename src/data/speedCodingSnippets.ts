@@ -19,12 +19,12 @@ export const SPEED_CODING_LANGUAGES: Array<{
   badge: string;
   color: string;
 }> = [
-  { id: 'python', labelKo: 'Python', labelEn: 'Python', badge: '🐍', color: '#3b82f6' },
-  { id: 'javascript', labelKo: 'JavaScript', labelEn: 'JavaScript', badge: '🌐', color: '#f59e0b' },
-  { id: 'c', labelKo: 'C언어', labelEn: 'C', badge: '⚡', color: '#06b6d4' },
-  { id: 'java', labelKo: 'Java', labelEn: 'Java', badge: '☕', color: '#ef4444' },
-  { id: 'sql', labelKo: 'SQL', labelEn: 'SQL', badge: '🗄️', color: '#10b981' },
-  { id: 'all', labelKo: '전체 (25)', labelEn: 'All (25)', badge: 'ALL', color: '#38bdf8' },
+  { id: 'python', labelKo: 'Python', labelEn: 'Python', badge: '🐍', color: '#2563eb' },
+  { id: 'javascript', labelKo: 'JavaScript', labelEn: 'JavaScript', badge: '🌐', color: '#d97706' },
+  { id: 'c', labelKo: 'C언어', labelEn: 'C', badge: '⚡', color: '#0891b2' },
+  { id: 'java', labelKo: 'Java', labelEn: 'Java', badge: '☕', color: '#dc2626' },
+  { id: 'sql', labelKo: 'SQL', labelEn: 'SQL', badge: '🗄️', color: '#059669' },
+  { id: 'all', labelKo: '전체 (25)', labelEn: 'All (25)', badge: 'ALL', color: '#0284c7' },
 ];
 
 export const SPEED_CODING_SNIPPETS: SpeedCodingSnippet[] = [

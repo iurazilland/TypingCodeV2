@@ -15,14 +15,14 @@ import UserAvatar from '@/components/UserAvatar';
 
 function getLangColor(lang: string): string {
   const lower = lang.toLowerCase();
-  if (lower.includes('python')) return '#3b82f6';
-  if (lower.includes('web') || lower.includes('js')) return '#f97316';
-  if (lower.includes('c')) return '#06b6d4';
-  if (lower.includes('java')) return '#ef4444';
-  if (lower.includes('rust')) return '#f59e0b';
-  if (lower.includes('go')) return '#10b981';
-  if (lower.includes('sql')) return '#34d399';
-  return '#38bdf8';
+  if (lower.includes('python')) return '#2563eb';
+  if (lower.includes('web') || lower.includes('js')) return '#ea580c';
+  if (lower.includes('c')) return '#0891b2';
+  if (lower.includes('java')) return '#dc2626';
+  if (lower.includes('rust')) return '#d97706';
+  if (lower.includes('go')) return '#059669';
+  if (lower.includes('sql')) return '#059669';
+  return '#0284c7';
 }
 
 function RankingPageContent() {
@@ -104,7 +104,7 @@ function RankingPageContent() {
   const thirdPlace = displayList[2] || null;
 
   return (
-    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '40px 24px 100px', color: '#f8fafc' }}>
+    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '40px 24px 100px', color: '#0f172a' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '36px' }}>
         <div
@@ -113,19 +113,21 @@ function RankingPageContent() {
             alignItems: 'center',
             gap: '8px',
             padding: '6px 18px',
-            borderRadius: '20px',
-            background: 'rgba(245, 158, 11, 0.15)',
-            border: '1px solid rgba(245, 158, 11, 0.3)',
-            color: '#f59e0b',
+            borderRadius: '24px',
+            background: '#ffffff',
+            border: '1.5px solid #cbd5e1',
+            color: '#d97706',
             fontSize: '0.84rem',
             fontWeight: 800,
-            marginBottom: '14px',
+            marginBottom: '16px',
+            letterSpacing: '0.04em',
+            boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
           }}
         >
           <Trophy size={15} />
           <span>HALL OF FAME & LEADERBOARD</span>
         </div>
-        <h1 style={{ fontSize: '2.35rem', fontWeight: 900, marginBottom: '10px' }}>
+        <h1 style={{ fontSize: 'clamp(1.9rem, 3.6vw, 2.45rem)', fontWeight: 900, color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
           {activeTab === 'learning'
             ? isKo
               ? '꾸준함이 빛나는 코딩 학습 리더보드'
@@ -134,7 +136,7 @@ function RankingPageContent() {
             ? '코드타자 명예의 전당'
             : 'Code Typing CPM Leaderboard'}
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '1rem', maxWidth: '680px', margin: '0 auto' }}>
+        <p style={{ color: '#475569', fontSize: '1.02rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontWeight: 500 }}>
           {activeTab === 'learning'
             ? isKo
               ? '어디까지 학습을 진행했는지(완료 레벨), 꾸준히 출석했는지(연속·누적 출석), 문제를 얼마나 해결했는지를 종합해 순위를 산정합니다.'
@@ -162,8 +164,9 @@ function RankingPageContent() {
             gap: '6px',
             padding: '5px',
             borderRadius: '14px',
-            background: 'rgba(15, 23, 42, 0.85)',
-            border: '1px solid rgba(148, 163, 184, 0.18)',
+            background: '#ffffff',
+            border: '1.5px solid #cbd5e1',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.05)',
           }}
         >
           <button
@@ -177,8 +180,8 @@ function RankingPageContent() {
               borderRadius: '10px',
               border: 'none',
               background:
-                activeTab === 'learning' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-              color: activeTab === 'learning' ? '#38bdf8' : '#94a3b8',
+                activeTab === 'learning' ? 'rgba(8, 145, 178, 0.14)' : 'transparent',
+              color: activeTab === 'learning' ? '#0891b2' : '#475569',
               fontWeight: 800,
               fontSize: '0.88rem',
               cursor: 'pointer',
@@ -199,8 +202,8 @@ function RankingPageContent() {
               borderRadius: '10px',
               border: 'none',
               background:
-                activeTab === 'speed' ? 'rgba(167, 139, 250, 0.22)' : 'transparent',
-              color: activeTab === 'speed' ? '#c4b5fd' : '#94a3b8',
+                activeTab === 'speed' ? 'rgba(124, 58, 237, 0.12)' : 'transparent',
+              color: activeTab === 'speed' ? '#7c3aed' : '#475569',
               fontWeight: 800,
               fontSize: '0.88rem',
               cursor: 'pointer',
@@ -240,9 +243,9 @@ function RankingPageContent() {
           }}
         >
           {[
-            { entry: secondPlace, medal: '🥈', rank: 2, border: 'rgba(56, 189, 248, 0.4)', accent: '#38bdf8', order: 1 },
-            { entry: firstPlace, medal: '👑', rank: 1, border: 'rgba(245, 158, 11, 0.65)', accent: '#f59e0b', order: 0 },
-            { entry: thirdPlace, medal: '🥉', rank: 3, border: 'rgba(249, 115, 22, 0.45)', accent: '#fb923c', order: 2 },
+            { entry: secondPlace, medal: '🥈', rank: 2, border: '#38bdf8', accent: '#0284c7', bg: '#ffffff', order: 1 },
+            { entry: firstPlace, medal: '👑', rank: 1, border: '#f59e0b', accent: '#d97706', bg: '#fffdf5', order: 0 },
+            { entry: thirdPlace, medal: '🥉', rank: 3, border: '#fb923c', accent: '#ea580c', bg: '#ffffff', order: 2 },
           ]
             .filter((p) => p.entry !== null)
             .map((podium) => {
@@ -252,12 +255,12 @@ function RankingPageContent() {
                 <div
                   key={u.id}
                   style={{
-                    background: podium.rank === 1 ? '#15223f' : '#131e33',
+                    background: podium.bg,
                     border: `2px solid ${podium.border}`,
                     borderRadius: '24px',
                     padding: podium.rank === 1 ? '32px 24px' : '28px 22px',
                     textAlign: 'center',
-                    boxShadow: '0 14px 36px rgba(0, 0, 0, 0.35)',
+                    boxShadow: '0 8px 26px -4px rgba(15, 23, 42, 0.08)',
                     order: podium.order,
                     display: 'flex',
                     flexDirection: 'column',
@@ -269,13 +272,13 @@ function RankingPageContent() {
                     avatarUrl={u.avatar_url}
                     avatarPreset={u.avatar_preset}
                     size={podium.rank === 1 ? 66 : 58}
-                    borderColor={podium.accent}
+                    borderColor={podium.border}
                     alt={u.display_name}
                   />
-                  <h3 style={{ fontSize: '1.22rem', fontWeight: 800, margin: '12px 0 4px', color: '#ffffff' }}>
+                  <h3 style={{ fontSize: '1.22rem', fontWeight: 800, margin: '12px 0 4px', color: '#0f172a' }}>
                     {u.display_name}
                   </h3>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: repBadge.color, marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 800, color: repBadge.color, marginBottom: '14px' }}>
                     {repBadge.label}
                   </div>
 
@@ -283,9 +286,9 @@ function RankingPageContent() {
                     <>
                       <div style={{ fontSize: '1.9rem', fontWeight: 900, color: podium.accent }}>
                         {u.activity_score.toLocaleString()}{' '}
-                        <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>PT</span>
+                        <span style={{ fontSize: '0.85rem', color: '#64748b' }}>PT</span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '6px' }}>
+                      <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '6px', fontWeight: 600 }}>
                         {isKo
                           ? `${u.cleared_levels_count}레벨 완료 · 🔥 ${u.current_streak}일 연속 · ${u.solved_problems_count}문제`
                           : `${u.cleared_levels_count} lvls · 🔥 ${u.current_streak}d · ${u.solved_problems_count} probs`}
@@ -295,9 +298,9 @@ function RankingPageContent() {
                     <>
                       <div style={{ fontSize: '1.9rem', fontWeight: 900, color: podium.accent }}>
                         {u.best_typing_cpm}{' '}
-                        <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>CPM</span>
+                        <span style={{ fontSize: '0.85rem', color: '#64748b' }}>CPM</span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '6px' }}>
+                      <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '6px', fontWeight: 600 }}>
                         {isKo
                           ? `정확도 ${Number(u.best_typing_accuracy || 0).toFixed(1)}% · ${u.primary_language}`
                           : `Acc ${Number(u.best_typing_accuracy || 0).toFixed(1)}% · ${u.primary_language}`}
@@ -313,10 +316,11 @@ function RankingPageContent() {
       {/* Full Leaderboard Table */}
       <div
         style={{
-          background: 'rgba(15, 23, 42, 0.85)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          background: '#ffffff',
+          border: '1.5px solid #cbd5e1',
           borderRadius: '20px',
           overflowX: 'auto',
+          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
         }}
       >
         {activeTab === 'learning' ? (
@@ -326,11 +330,11 @@ function RankingPageContent() {
                 display: 'grid',
                 gridTemplateColumns: '70px 2.2fr 1fr 1.2fr 1fr 1.1fr',
                 padding: '15px 24px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                background: '#f8fafc',
+                borderBottom: '1px solid #e2e8f0',
                 fontSize: '0.82rem',
-                fontWeight: 700,
-                color: '#94a3b8',
+                fontWeight: 800,
+                color: '#475569',
               }}
             >
               <div>{isKo ? '순위' : 'Rank'}</div>
@@ -342,7 +346,7 @@ function RankingPageContent() {
             </div>
 
             {isLoading ? (
-              <div style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
+              <div style={{ padding: '36px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
                 {isKo ? '리더보드 데이터를 불러오는 중...' : 'Loading leaderboard...'}
               </div>
             ) : (
@@ -358,13 +362,13 @@ function RankingPageContent() {
                       display: 'grid',
                       gridTemplateColumns: '70px 2.2fr 1fr 1.2fr 1fr 1.1fr',
                       padding: '14px 24px',
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                      borderBottom: '1px solid #f1f5f9',
                       alignItems: 'center',
                       fontSize: '0.9rem',
-                      background: isMe ? 'rgba(56, 189, 248, 0.09)' : 'transparent',
+                      background: isMe ? 'rgba(8, 145, 178, 0.08)' : 'transparent',
                     }}
                   >
-                    <div style={{ fontWeight: 900, color: rank <= 3 ? '#f59e0b' : '#64748b' }}>
+                    <div style={{ fontWeight: 900, color: rank <= 3 ? '#d97706' : '#64748b' }}>
                       #{rank}
                     </div>
 
@@ -376,7 +380,7 @@ function RankingPageContent() {
                         alt={entry.display_name}
                       />
                       <div style={{ minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, color: '#0f172a' }}>
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {entry.display_name}
                           </span>
@@ -386,8 +390,8 @@ function RankingPageContent() {
                                 fontSize: '0.66rem',
                                 padding: '1px 6px',
                                 borderRadius: '6px',
-                                background: 'rgba(56, 189, 248, 0.25)',
-                                color: '#38bdf8',
+                                background: 'rgba(8, 145, 178, 0.16)',
+                                color: '#0891b2',
                                 fontWeight: 800,
                               }}
                             >
@@ -395,13 +399,13 @@ function RankingPageContent() {
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: badge.color, fontWeight: 700 }}>
+                        <div style={{ fontSize: '0.75rem', color: badge.color, fontWeight: 800 }}>
                           {badge.label}
                         </div>
                       </div>
                     </div>
 
-                    <div style={{ textAlign: 'right', fontWeight: 800, color: '#e2e8f0' }}>
+                    <div style={{ textAlign: 'right', fontWeight: 800, color: '#334155' }}>
                       {entry.cleared_levels_count} {isKo ? '레벨' : 'lvls'}
                     </div>
 
@@ -412,7 +416,7 @@ function RankingPageContent() {
                         alignItems: 'center',
                         justifyContent: 'flex-end',
                         gap: '5px',
-                        color: entry.current_streak > 0 ? '#fb923c' : '#94a3b8',
+                        color: entry.current_streak > 0 ? '#ea580c' : '#64748b',
                         fontWeight: 700,
                       }}
                     >
@@ -420,17 +424,17 @@ function RankingPageContent() {
                       <span>
                         {entry.current_streak}
                         {isKo ? '일' : 'd'}{' '}
-                        <span style={{ color: '#64748b', fontSize: '0.78rem' }}>
+                        <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: 600 }}>
                           ({isKo ? `누적 ${entry.total_attendance_days}일` : `${entry.total_attendance_days}d`})
                         </span>
                       </span>
                     </div>
 
-                    <div style={{ textAlign: 'right', fontWeight: 700, color: '#34d399' }}>
+                    <div style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
                       {entry.solved_problems_count} {isKo ? '문제' : 'solved'}
                     </div>
 
-                    <div style={{ textAlign: 'right', fontWeight: 900, color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>
+                    <div style={{ textAlign: 'right', fontWeight: 900, color: '#0284c7', fontFamily: 'var(--font-mono)' }}>
                       {entry.activity_score.toLocaleString()} PT
                     </div>
                   </div>
@@ -445,11 +449,11 @@ function RankingPageContent() {
                 display: 'grid',
                 gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
                 padding: '15px 24px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                background: '#f8fafc',
+                borderBottom: '1px solid #e2e8f0',
                 fontSize: '0.82rem',
-                fontWeight: 700,
-                color: '#94a3b8',
+                fontWeight: 800,
+                color: '#475569',
               }}
             >
               <div>{isKo ? '순위' : 'Rank'}</div>
@@ -472,13 +476,13 @@ function RankingPageContent() {
                     display: 'grid',
                     gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
                     padding: '14px 24px',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                    borderBottom: '1px solid #f1f5f9',
                     alignItems: 'center',
                     fontSize: '0.9rem',
-                    background: isMe ? 'rgba(167, 139, 250, 0.1)' : 'transparent',
+                    background: isMe ? 'rgba(124, 58, 237, 0.07)' : 'transparent',
                   }}
                 >
-                  <div style={{ fontWeight: 900, color: rank <= 3 ? '#f59e0b' : '#64748b' }}>
+                  <div style={{ fontWeight: 900, color: rank <= 3 ? '#d97706' : '#64748b' }}>
                     #{rank}
                   </div>
 
@@ -490,7 +494,7 @@ function RankingPageContent() {
                       alt={entry.display_name}
                     />
                     <div>
-                      <div style={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <span>{entry.display_name}</span>
                         {isMe && (
                           <span
@@ -498,8 +502,8 @@ function RankingPageContent() {
                               fontSize: '0.66rem',
                               padding: '1px 6px',
                               borderRadius: '6px',
-                              background: 'rgba(167, 139, 250, 0.25)',
-                              color: '#c4b5fd',
+                              background: 'rgba(124, 58, 237, 0.14)',
+                              color: '#7c3aed',
                               fontWeight: 800,
                             }}
                           >
@@ -507,7 +511,7 @@ function RankingPageContent() {
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: badge.color, fontWeight: 700 }}>
+                      <div style={{ fontSize: '0.75rem', color: badge.color, fontWeight: 800 }}>
                         {badge.label}
                       </div>
                     </div>
@@ -518,22 +522,22 @@ function RankingPageContent() {
                       style={{
                         padding: '3px 10px',
                         borderRadius: '10px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: `1px solid ${langColor}45`,
+                        background: `${langColor}14`,
+                        border: `1px solid ${langColor}40`,
                         color: langColor,
                         fontSize: '0.78rem',
-                        fontWeight: 700,
+                        fontWeight: 800,
                       }}
                     >
                       {entry.primary_language || 'Python'}
                     </span>
                   </div>
 
-                  <div style={{ textAlign: 'right', fontWeight: 900, color: '#c4b5fd', fontFamily: 'var(--font-mono)' }}>
+                  <div style={{ textAlign: 'right', fontWeight: 900, color: '#7c3aed', fontFamily: 'var(--font-mono)' }}>
                     {entry.best_typing_cpm} CPM
                   </div>
 
-                  <div style={{ textAlign: 'right', fontWeight: 700, color: '#34d399' }}>
+                  <div style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
                     {Number(entry.best_typing_accuracy || 0).toFixed(1)}%
                   </div>
                 </div>

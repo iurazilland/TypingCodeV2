@@ -82,8 +82,8 @@
 }
 
 html, body {
-  background-color: var(--bg-base);
-  color: var(--text-main);
+  background-color: #e2eff6;
+  color: #0f172a;
   font-family: var(--font-sans);
   min-height: 100vh;
   overflow-x: hidden;
@@ -91,10 +91,10 @@ html, body {
   word-break: keep-all;
 }
 
-/* Clean, solid dark background */
+/* Unified matte soft ice-cyan editorial background across all pages (dark IDE only in /practice/[lang]/[level]) */
 body {
-  background-color: var(--bg-base);
-  color: var(--text-main);
+  background-color: #e2eff6;
+  color: #0f172a;
   font-family: var(--font-sans);
   min-height: 100vh;
   overflow-x: hidden;

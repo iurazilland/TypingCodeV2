@@ -110,19 +110,20 @@ SELECT name, score FROM students WHERE score >= 90 ORDER BY score DESC;
 <div class="card">
   <h2>✨ 나만의 웹 인터랙션</h2>
   <p>HTML/CSS/JS를 브라우저에서 즉시 렌더링합니다.</p>
-  <button onclick="changeColor()">🎨 배경 색상 바꾸기</button>
+  <button onclick="changeColor()">🎨 포인트 색상 바꾸기</button>
 </div>
 
 <style>
-  body { font-family: sans-serif; background: #0b1329; color: #fff; padding: 20px; }
-  .card { background: rgba(255,255,255,0.08); padding: 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); max-width: 400px; text-align: center; }
-  h2 { color: #38bdf8; margin-bottom: 8px; }
-  button { margin-top: 14px; padding: 10px 18px; border-radius: 8px; border: none; background: #10b981; color: #fff; font-weight: bold; cursor: pointer; }
+  body { font-family: sans-serif; background: #f8fafc; color: #0f172a; padding: 24px; }
+  .card { background: #ffffff; padding: 24px; border-radius: 16px; border: 2px solid #cbd5e1; max-width: 400px; text-align: center; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06); }
+  h2 { color: #0284c7; margin-bottom: 8px; }
+  p { color: #475569; }
+  button { margin-top: 14px; padding: 10px 18px; border-radius: 10px; border: none; background: #10b981; color: #fff; font-weight: bold; cursor: pointer; }
 </style>
 
 <script>
   function changeColor() {
-    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'];
+    const colors = ['#0284c7', '#059669', '#d97706', '#db2777', '#7c3aed'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     document.querySelector('.card').style.borderColor = randomColor;
     document.querySelector('h2').style.color = randomColor;
@@ -225,28 +226,29 @@ export default function CompilerPage() {
   };
 
   return (
-    <div style={{ maxWidth: '1560px', margin: '0 auto', padding: '24px 40px 80px' }}>
+    <div style={{ maxWidth: '1560px', margin: '0 auto', padding: '32px 40px 80px', color: '#0f172a' }}>
       {/* Header Info */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
             <span style={{ fontSize: '1.6rem' }}>⚡</span>
-            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+            <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
               {uiLang === 'ko' ? '자유코딩 (Code Sandbox)' : 'TypingCode Free Sandbox'}
             </h1>
             <span style={{
-              fontSize: '0.72rem',
+              fontSize: '0.73rem',
               fontWeight: 800,
-              padding: '2px 8px',
-              borderRadius: '10px',
-              background: 'rgba(56, 189, 248, 0.2)',
-              color: '#38bdf8',
-              border: '1px solid rgba(56, 189, 248, 0.4)',
+              padding: '4px 10px',
+              borderRadius: '12px',
+              background: '#ffffff',
+              color: '#0284c7',
+              border: '1.5px solid #cbd5e1',
+              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
             }}>
               FREE PLAYGROUND
             </span>
           </div>
-          <p style={{ color: '#94a3b8', fontSize: '0.92rem', margin: 0 }}>
+          <p style={{ color: '#475569', fontSize: '0.96rem', margin: 0, fontWeight: 500 }}>
             {uiLang === 'ko'
               ? '설치 없이 브라우저에서 직접 코드를 자유롭게 작성하고 실시간 런타임(CPython, GCC)으로 즉시 실행하세요.'
               : 'Write and run Python, C, and Web code directly in your browser with real server-side runtimes.'}
@@ -254,15 +256,16 @@ export default function CompilerPage() {
         </div>
 
         {/* Language Tabs & Run Button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           {/* Language Selector */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            background: 'rgba(255, 255, 255, 0.05)',
-            padding: '4px',
-            borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: '#ffffff',
+            padding: '5px',
+            borderRadius: '14px',
+            border: '1.5px solid #cbd5e1',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.05)',
             overflowX: 'auto',
             maxWidth: '750px',
             scrollbarWidth: 'none',
@@ -287,14 +290,14 @@ export default function CompilerPage() {
                 onClick={() => handleLanguageChange(id as SupportedLanguage)}
                 style={{
                   padding: '7px 12px',
-                  borderRadius: '8px',
+                  borderRadius: '9px',
                   border: 'none',
-                  background: selectedLang === id ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
-                  color: selectedLang === id ? '#38bdf8' : '#94a3b8',
-                  fontWeight: selectedLang === id ? 700 : 500,
+                  background: selectedLang === id ? 'rgba(8, 145, 178, 0.14)' : 'transparent',
+                  color: selectedLang === id ? '#0891b2' : '#475569',
+                  fontWeight: selectedLang === id ? 800 : 600,
                   fontSize: '0.84rem',
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease',
+                  transition: 'background-color 0.15s ease, color 0.15s ease',
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -334,13 +337,13 @@ export default function CompilerPage() {
       }}>
         {/* Left: Code Editor Pane */}
         <div style={{
-          background: 'rgba(11, 19, 41, 0.95)',
-          border: '1.5px solid rgba(255, 255, 255, 0.1)',
+          background: '#ffffff',
+          border: '1.5px solid #cbd5e1',
           borderRadius: '20px',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)',
+          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
         }}>
           {/* Editor Header Toolbar */}
           <div style={{
@@ -348,15 +351,15 @@ export default function CompilerPage() {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '12px 18px',
-            background: 'rgba(255, 255, 255, 0.03)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#f8fafc',
+            borderBottom: '1px solid #e2e8f0',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Code2 size={16} color="#38bdf8" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+              <Code2 size={16} color="#0891b2" />
+              <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a', fontFamily: 'var(--font-mono), monospace' }}>
                 main.{selectedLang === 'python' ? 'py' : selectedLang === 'c' ? 'c' : selectedLang === 'vb' ? 'vb' : selectedLang === 'linux' ? 'sh' : 'txt'}
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
                 (자유롭게 편집 가능)
               </span>
             </div>
@@ -365,13 +368,13 @@ export default function CompilerPage() {
               <button
                 onClick={() => setShowStdin(!showStdin)}
                 style={{
-                  padding: '4px 10px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  background: showStdin ? 'rgba(56, 189, 248, 0.15)' : 'transparent',
-                  color: showStdin ? '#38bdf8' : '#94a3b8',
+                  padding: '5px 10px',
+                  borderRadius: '8px',
+                  border: showStdin ? '1px solid rgba(8, 145, 178, 0.4)' : '1px solid #cbd5e1',
+                  background: showStdin ? 'rgba(8, 145, 178, 0.12)' : '#ffffff',
+                  color: showStdin ? '#0891b2' : '#475569',
                   fontSize: '0.78rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   cursor: 'pointer',
                 }}
               >
@@ -380,31 +383,33 @@ export default function CompilerPage() {
               <button
                 onClick={handleCopy}
                 style={{
-                  padding: '4px 8px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  background: 'transparent',
-                  color: '#94a3b8',
+                  padding: '5px 9px',
+                  borderRadius: '8px',
+                  border: '1px solid #cbd5e1',
+                  background: '#ffffff',
+                  color: '#475569',
                   fontSize: '0.78rem',
+                  fontWeight: 600,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px',
                 }}
               >
-                {copied ? <Check size={13} color="#10b981" /> : <Copy size={13} />}
+                {copied ? <Check size={13} color="#059669" /> : <Copy size={13} />}
                 <span>{copied ? '복사됨' : '복사'}</span>
               </button>
               <button
                 onClick={handleReset}
                 title="기본 코드로 초기화"
                 style={{
-                  padding: '4px 8px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  background: 'transparent',
-                  color: '#94a3b8',
+                  padding: '5px 9px',
+                  borderRadius: '8px',
+                  border: '1px solid #cbd5e1',
+                  background: '#ffffff',
+                  color: '#475569',
                   fontSize: '0.78rem',
+                  fontWeight: 600,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -419,8 +424,8 @@ export default function CompilerPage() {
 
           {/* Stdin Area (Optional) */}
           {showStdin && (
-            <div style={{ padding: '10px 18px', background: 'rgba(0, 0, 0, 0.3)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-              <div style={{ fontSize: '0.78rem', color: '#38bdf8', marginBottom: '4px', fontWeight: 600 }}>
+            <div style={{ padding: '10px 18px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: '0.78rem', color: '#0284c7', marginBottom: '4px', fontWeight: 700 }}>
                 표준 입력값 (Standard Input - input() 또는 scanf 호출 시 전달)
               </div>
               <input
@@ -432,11 +437,12 @@ export default function CompilerPage() {
                   width: '100%',
                   padding: '8px 12px',
                   borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  background: 'rgba(15, 23, 42, 0.9)',
-                  color: '#f8fafc',
+                  border: '1.5px solid #cbd5e1',
+                  background: '#ffffff',
+                  color: '#0f172a',
                   fontSize: '0.85rem',
-                  fontFamily: 'monospace',
+                  fontFamily: 'var(--font-mono), monospace',
+                  outline: 'none',
                 }}
               />
             </div>
@@ -458,11 +464,13 @@ export default function CompilerPage() {
               width: '100%',
               minHeight: '480px',
               padding: '20px',
-              background: 'transparent',
-              color: '#f8fafc',
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              background: '#ffffff',
+              color: '#0f172a',
+              fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+              fontVariantLigatures: 'none',
+              fontFeatureSettings: '"liga" 0, "calt" 0',
               fontSize: '0.96rem',
-              lineHeight: 1.6,
+              lineHeight: 1.65,
               border: 'none',
               outline: 'none',
               resize: 'none',
@@ -473,13 +481,13 @@ export default function CompilerPage() {
 
         {/* Right: Live Execution Output Pane */}
         <div style={{
-          background: 'rgba(15, 23, 42, 0.95)',
-          border: '1.5px solid rgba(255, 255, 255, 0.1)',
+          background: '#ffffff',
+          border: '1.5px solid #cbd5e1',
           borderRadius: '20px',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)',
+          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
         }}>
           {/* Terminal Header */}
           <div style={{
@@ -487,23 +495,23 @@ export default function CompilerPage() {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '12px 18px',
-            background: 'rgba(0, 0, 0, 0.35)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#f8fafc',
+            borderBottom: '1px solid #e2e8f0',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <TerminalIcon size={16} color="#10b981" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+              <TerminalIcon size={16} color="#059669" />
+              <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a' }}>
                 실행 결과 터미널 (Terminal Output)
               </span>
             </div>
 
             {executionTime !== null && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem' }}>
-                <span style={{ color: exitCode === 0 ? '#10b981' : '#f43f5e', fontWeight: 700 }}>
+                <span style={{ color: exitCode === 0 ? '#059669' : '#dc2626', fontWeight: 800 }}>
                   {exitCode === 0 ? '● Exit 0' : `● Exit ${exitCode}`}
                 </span>
-                <span style={{ color: '#64748b' }}>·</span>
-                <span style={{ color: '#94a3b8' }}>{executionTime}ms</span>
+                <span style={{ color: '#94a3b8' }}>·</span>
+                <span style={{ color: '#64748b', fontWeight: 600 }}>{executionTime}ms</span>
               </div>
             )}
           </div>
@@ -511,7 +519,7 @@ export default function CompilerPage() {
           {/* Web Preview Mode */}
           {selectedLang === 'web' ? (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.02)', fontSize: '0.75rem', color: '#64748b' }}>
+              <div style={{ padding: '8px 16px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
                 실시간 웹 렌더링 화면 (Sandboxed Iframe)
               </div>
               <iframe
@@ -523,7 +531,7 @@ export default function CompilerPage() {
                   width: '100%',
                   minHeight: '440px',
                   border: 'none',
-                  background: '#0b1329',
+                  background: '#f8fafc',
                 }}
               />
             </div>
@@ -532,19 +540,22 @@ export default function CompilerPage() {
             <div style={{
               flex: 1,
               padding: '20px',
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              background: '#fcfdfe',
+              fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+              fontVariantLigatures: 'none',
+              fontFeatureSettings: '"liga" 0, "calt" 0',
               fontSize: '0.92rem',
-              lineHeight: 1.6,
+              lineHeight: 1.65,
               overflowY: 'auto',
               whiteSpace: 'pre-wrap',
             }}>
               {stdout && (
-                <div style={{ color: '#38bdf8', marginBottom: stderr ? '16px' : 0 }}>
+                <div style={{ color: exitCode === null ? '#64748b' : '#0f172a', fontWeight: exitCode === null ? 500 : 600, marginBottom: stderr ? '16px' : 0 }}>
                   {stdout}
                 </div>
               )}
               {stderr && (
-                <div style={{ color: '#f43f5e', background: 'rgba(244, 63, 94, 0.1)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(244, 63, 94, 0.3)' }}>
+                <div style={{ color: '#dc2626', background: '#fef2f2', padding: '12px 14px', borderRadius: '10px', border: '1px solid #fecaca' }}>
                   <div style={{ fontWeight: 800, marginBottom: '4px' }}>⚠️ 실행 에러 / 경고:</div>
                   {stderr}
                 </div>

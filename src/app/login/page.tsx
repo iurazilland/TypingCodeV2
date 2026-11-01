@@ -385,13 +385,13 @@ function LoginPageContent() {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '12px 14px 12px 42px',
-    background: 'rgba(11, 19, 41, 0.85)',
-    border: '1.5px solid rgba(148, 163, 184, 0.22)',
+    background: '#f8fafc',
+    border: '1.5px solid #cbd5e1',
     borderRadius: '12px',
-    color: '#f8fafc',
+    color: '#0f172a',
     fontSize: '0.92rem',
     outline: 'none',
-    transition: 'border-color 0.15s ease',
+    transition: 'border-color 0.15s ease, background-color 0.15s ease',
   };
 
   return (
@@ -408,13 +408,12 @@ function LoginPageContent() {
         style={{
           width: '100%',
           maxWidth: mode === 'signup' ? '520px' : '460px',
-          background: 'linear-gradient(180deg, #131f37 0%, #0f172a 100%)',
-          border: '1.5px solid rgba(56, 189, 248, 0.28)',
+          background: '#ffffff',
+          border: '1.5px solid #cbd5e1',
           borderRadius: '26px',
           padding: '36px 32px',
-          boxShadow:
-            '0 28px 60px -12px rgba(0, 0, 0, 0.65), 0 0 40px rgba(8, 145, 178, 0.12)',
-          color: '#f8fafc',
+          boxShadow: '0 16px 40px -8px rgba(15, 23, 42, 0.1)',
+          color: '#0f172a',
           transition: 'max-width 0.2s ease',
         }}
       >
@@ -426,9 +425,9 @@ function LoginPageContent() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              color: '#94a3b8',
+              color: '#64748b',
               fontSize: '0.82rem',
-              fontWeight: 600,
+              fontWeight: 700,
               textDecoration: 'none',
             }}
           >
@@ -446,9 +445,9 @@ function LoginPageContent() {
               gap: '6px',
               padding: '4px 12px',
               borderRadius: '16px',
-              background: 'rgba(56, 189, 248, 0.14)',
-              border: '1px solid rgba(56, 189, 248, 0.28)',
-              color: '#38bdf8',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
+              color: '#0284c7',
               fontSize: '0.75rem',
               fontWeight: 800,
               letterSpacing: '0.04em',
@@ -463,7 +462,7 @@ function LoginPageContent() {
             style={{
               fontSize: '1.55rem',
               fontWeight: 800,
-              color: '#ffffff',
+              color: '#0f172a',
               marginBottom: '8px',
             }}
           >
@@ -475,7 +474,7 @@ function LoginPageContent() {
               ? 'TypingCode 무료 회원가입'
               : 'Create Your TypingCode Account'}
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.88rem', lineHeight: 1.5, margin: 0 }}>
+          <p style={{ color: '#475569', fontSize: '0.88rem', lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
             {mode === 'login'
               ? isKo
                 ? '아이디 또는 이메일로 로그인하고 학습 레벨과 연속 출석 기록을 이어가세요.'
@@ -495,15 +494,16 @@ function LoginPageContent() {
               gap: '9px',
               padding: '11px 14px',
               borderRadius: '12px',
-              background: 'rgba(56, 189, 248, 0.12)',
-              border: '1px solid rgba(56, 189, 248, 0.35)',
-              color: '#bae6fd',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
+              color: '#0369a1',
               fontSize: '0.83rem',
+              fontWeight: 600,
               lineHeight: 1.45,
               marginBottom: '18px',
             }}
           >
-            <AlertCircle size={16} style={{ flexShrink: 0, color: '#38bdf8' }} />
+            <AlertCircle size={16} style={{ flexShrink: 0, color: '#0284c7' }} />
             <span>
               {isKo
                 ? '학습 코스 및 실습 기능을 이용하려면 로그인이 필요합니다. 로그인 후 선택한 페이지로 바로 이동합니다.'
@@ -521,15 +521,16 @@ function LoginPageContent() {
               gap: '9px',
               padding: '11px 14px',
               borderRadius: '12px',
-              background: 'rgba(239, 68, 68, 0.14)',
-              border: '1px solid rgba(239, 68, 68, 0.42)',
-              color: '#fecaca',
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              color: '#b91c1c',
               fontSize: '0.83rem',
+              fontWeight: 600,
               lineHeight: 1.45,
               marginBottom: '18px',
             }}
           >
-            <AlertCircle size={16} style={{ flexShrink: 0, color: '#f87171' }} />
+            <AlertCircle size={16} style={{ flexShrink: 0, color: '#dc2626' }} />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -542,15 +543,16 @@ function LoginPageContent() {
               gap: '9px',
               padding: '11px 14px',
               borderRadius: '12px',
-              background: 'rgba(16, 185, 129, 0.14)',
-              border: '1px solid rgba(16, 185, 129, 0.42)',
-              color: '#a7f3d0',
+              background: '#ecfdf5',
+              border: '1px solid #a7f3d0',
+              color: '#047857',
               fontSize: '0.83rem',
+              fontWeight: 600,
               lineHeight: 1.45,
               marginBottom: '18px',
             }}
           >
-            <CheckCircle2 size={16} style={{ flexShrink: 0, color: '#10b981' }} />
+            <CheckCircle2 size={16} style={{ flexShrink: 0, color: '#059669' }} />
             <span>{infoMessage}</span>
           </div>
         )}
@@ -566,7 +568,7 @@ function LoginPageContent() {
                   display: 'block',
                   fontSize: '0.82rem',
                   fontWeight: 700,
-                  color: '#cbd5e1',
+                  color: '#334155',
                   marginBottom: '6px',
                 }}
               >
@@ -587,10 +589,8 @@ function LoginPageContent() {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   style={inputStyle}
-                  onFocus={(e) => (e.target.style.borderColor = '#38bdf8')}
-                  onBlur={(e) =>
-                    (e.target.style.borderColor = 'rgba(148, 163, 184, 0.22)')
-                  }
+                  onFocus={(e) => (e.target.style.borderColor = '#0891b2')}
+                  onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                 />
               </div>
             </div>
@@ -608,7 +608,7 @@ function LoginPageContent() {
                   style={{
                     fontSize: '0.82rem',
                     fontWeight: 700,
-                    color: '#cbd5e1',
+                    color: '#334155',
                   }}
                 >
                   {isKo ? '비밀번호' : 'Password'}
@@ -620,9 +620,9 @@ function LoginPageContent() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#38bdf8',
+                    color: '#0284c7',
                     fontSize: '0.78rem',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     cursor: 'pointer',
                     padding: 0,
                   }}
@@ -643,10 +643,8 @@ function LoginPageContent() {
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   style={inputStyle}
-                  onFocus={(e) => (e.target.style.borderColor = '#38bdf8')}
-                  onBlur={(e) =>
-                    (e.target.style.borderColor = 'rgba(148, 163, 184, 0.22)')
-                  }
+                  onFocus={(e) => (e.target.style.borderColor = '#0891b2')}
+                  onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                 />
               </div>
             </div>
@@ -693,7 +691,7 @@ function LoginPageContent() {
                   display: 'block',
                   fontSize: '0.82rem',
                   fontWeight: 700,
-                  color: '#cbd5e1',
+                  color: '#334155',
                   marginBottom: '6px',
                 }}
               >
@@ -732,11 +730,11 @@ function LoginPageContent() {
                   style={{
                     padding: '0 14px',
                     borderRadius: '12px',
-                    background: 'rgba(56, 189, 248, 0.14)',
-                    border: '1.5px solid rgba(56, 189, 248, 0.35)',
-                    color: '#38bdf8',
+                    background: 'rgba(8, 145, 178, 0.12)',
+                    border: '1.5px solid rgba(8, 145, 178, 0.35)',
+                    color: '#0891b2',
                     fontSize: '0.82rem',
-                    fontWeight: 700,
+                    fontWeight: 800,
                     cursor: loginId.length < 4 ? 'not-allowed' : 'pointer',
                     opacity: loginId.length < 4 ? 0.5 : 1,
                     whiteSpace: 'nowrap',
@@ -752,17 +750,17 @@ function LoginPageContent() {
                 </button>
               </div>
               {idCheckStatus === 'available' && (
-                <div style={{ fontSize: '0.76rem', color: '#34d399', marginTop: '5px', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.76rem', color: '#059669', marginTop: '5px', fontWeight: 700 }}>
                   {isKo ? '✅ 사용 가능한 로그인 ID입니다.' : '✅ This Login ID is available.'}
                 </div>
               )}
               {idCheckStatus === 'taken' && (
-                <div style={{ fontSize: '0.76rem', color: '#f87171', marginTop: '5px', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.76rem', color: '#dc2626', marginTop: '5px', fontWeight: 700 }}>
                   {isKo ? '❌ 이미 사용 중인 ID입니다.' : '❌ This Login ID is already taken.'}
                 </div>
               )}
               {idCheckStatus === 'invalid' && (
-                <div style={{ fontSize: '0.76rem', color: '#fbbf24', marginTop: '5px', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.76rem', color: '#d97706', marginTop: '5px', fontWeight: 700 }}>
                   {isKo
                     ? '영문 소문자, 숫자, 밑줄(_) 4~20자로 입력해 주세요.'
                     : 'Use 4–20 lowercase letters, numbers, or underscores.'}
@@ -777,7 +775,7 @@ function LoginPageContent() {
                   display: 'block',
                   fontSize: '0.82rem',
                   fontWeight: 700,
-                  color: '#cbd5e1',
+                  color: '#334155',
                   marginBottom: '6px',
                 }}
               >
@@ -810,10 +808,10 @@ function LoginPageContent() {
                   marginBottom: '8px',
                 }}
               >
-                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1' }}>
+                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155' }}>
                   {isKo ? '기본 프로필 아이콘 선택' : 'Choose Starter Icon'}
                 </label>
-                <span style={{ fontSize: '0.73rem', color: '#94a3b8' }}>
+                <span style={{ fontSize: '0.73rem', color: '#64748b', fontWeight: 600 }}>
                   {isKo ? '가입 후 내 사진 업로드 가능' : 'Custom upload in Profile'}
                 </span>
               </div>
@@ -824,8 +822,8 @@ function LoginPageContent() {
                   gap: '8px',
                   padding: '10px',
                   borderRadius: '14px',
-                  background: 'rgba(11, 19, 41, 0.7)',
-                  border: '1px solid rgba(148, 163, 184, 0.16)',
+                  background: '#f8fafc',
+                  border: '1.5px solid #e2e8f0',
                 }}
               >
                 {AVATAR_PRESETS.map((preset) => {
@@ -839,10 +837,11 @@ function LoginPageContent() {
                       style={{
                         padding: '6px',
                         borderRadius: '12px',
-                        background: selected ? 'rgba(56, 189, 248, 0.18)' : 'transparent',
+                        boxSizing: 'border-box',
+                        background: selected ? 'rgba(8, 145, 178, 0.14)' : '#ffffff',
                         border: selected
-                          ? '2px solid #38bdf8'
-                          : '2px solid transparent',
+                          ? '2px solid #0891b2'
+                          : '2px solid #e2e8f0',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
@@ -865,7 +864,7 @@ function LoginPageContent() {
                   display: 'block',
                   fontSize: '0.82rem',
                   fontWeight: 700,
-                  color: '#cbd5e1',
+                  color: '#334155',
                   marginBottom: '6px',
                 }}
               >
@@ -896,7 +895,7 @@ function LoginPageContent() {
                     display: 'block',
                     fontSize: '0.82rem',
                     fontWeight: 700,
-                    color: '#cbd5e1',
+                    color: '#334155',
                     marginBottom: '6px',
                   }}
                 >
@@ -926,7 +925,7 @@ function LoginPageContent() {
                     display: 'block',
                     fontSize: '0.82rem',
                     fontWeight: 700,
-                    color: '#cbd5e1',
+                    color: '#334155',
                     marginBottom: '6px',
                   }}
                 >
@@ -957,7 +956,8 @@ function LoginPageContent() {
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '0.8rem',
-                color: '#94a3b8',
+                color: '#475569',
+                fontWeight: 500,
                 cursor: 'pointer',
               }}
             >
@@ -966,7 +966,7 @@ function LoginPageContent() {
                 required
                 checked={agreeTerms}
                 onChange={(e) => setAgreeTerms(e.target.checked)}
-                style={{ accentColor: '#38bdf8' }}
+                style={{ accentColor: '#0891b2' }}
               />
               <span>
                 {isKo
@@ -1017,11 +1017,11 @@ function LoginPageContent() {
               marginBottom: '14px',
             }}
           >
-            <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
+            <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
             <span style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 600 }}>
               {isKo ? '또는 소셜 계정으로 계속하기' : 'Or continue with social'}
             </span>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
+            <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -1032,9 +1032,9 @@ function LoginPageContent() {
               style={{
                 padding: '11px',
                 borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#e2e8f0',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                color: '#0f172a',
                 fontSize: '0.85rem',
                 fontWeight: 700,
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
@@ -1055,9 +1055,9 @@ function LoginPageContent() {
               style={{
                 padding: '11px',
                 borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#e2e8f0',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                color: '#0f172a',
                 fontSize: '0.85rem',
                 fontWeight: 700,
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
@@ -1078,10 +1078,11 @@ function LoginPageContent() {
           style={{
             marginTop: '24px',
             paddingTop: '18px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid #e2e8f0',
             textAlign: 'center',
             fontSize: '0.86rem',
-            color: '#94a3b8',
+            color: '#475569',
+            fontWeight: 500,
           }}
         >
           {mode === 'login' ? (
@@ -1097,7 +1098,7 @@ function LoginPageContent() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#38bdf8',
+                  color: '#0284c7',
                   fontWeight: 800,
                   fontSize: '0.86rem',
                   cursor: 'pointer',
@@ -1121,7 +1122,7 @@ function LoginPageContent() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#38bdf8',
+                  color: '#0284c7',
                   fontWeight: 800,
                   fontSize: '0.86rem',
                   cursor: 'pointer',

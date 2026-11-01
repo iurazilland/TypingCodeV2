@@ -19,11 +19,8 @@ export default function Footer() {
     return null;
   }
 
-  const isLightPage =
-    pathname === '/' ||
-    pathname === '/languages' ||
-    pathname?.startsWith('/learn') ||
-    (pathSegments[0] === 'practice' && pathSegments.length <= 2);
+  // Unified Light Editorial Theme for all pages outside the fullscreen learning studio
+  const isLightPage = true;
 
   const linkColor = isLightPage ? '#475569' : '#94a3b8';
   const mutedColor = isLightPage ? '#64748b' : '#64748b';

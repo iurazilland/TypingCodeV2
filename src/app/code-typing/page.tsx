@@ -18,7 +18,6 @@ import {
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
-import { VSCODE_DARK_PLUS } from '@/components/practice/TypingStage';
 import {
   SPEED_CODING_LANGUAGES,
   SPEED_CODING_SNIPPETS,
@@ -31,13 +30,27 @@ import {
 import type { UserSpeedRecordRow } from '@/lib/supabase/types';
 
 // ============================================================================
-// Multi-Language VS Code Dark+ Line Tokenizer (Python / JS / C / Java / SQL)
-// Matches Practice Studio's TypingStage visual syntax highlighting
+// Multi-Language VS Code Light+ Line Tokenizer (Python / JS / C / Java / SQL)
+// Crisp high-contrast tokens tailored for #ffffff Light Editorial IDE paper
 // ============================================================================
+const VSCODE_LIGHT_PLUS = {
+  keyword: '#7c3aed',
+  constant: '#0284c7',
+  builtin: '#b45309',
+  string: '#c2410c',
+  number: '#059669',
+  comment: '#16a34a',
+  bracket: '#2563eb',
+  operator: '#334155',
+  identifier: '#0f172a',
+  default: '#0f172a',
+  error: '#dc2626',
+} as const;
+
 interface CodeToken {
   start: number;
   end: number;
-  type: keyof typeof VSCODE_DARK_PLUS;
+  type: keyof typeof VSCODE_LIGHT_PLUS;
 }
 
 const MULTI_KEYWORDS = new Set([
@@ -141,7 +154,7 @@ function tokenizeCodeLine(line: string, lang: SpeedCodingLanguage): CodeToken[] 
       }
 
       const upperWord = lang === 'sql' ? word.toUpperCase() : word;
-      let type: keyof typeof VSCODE_DARK_PLUS = 'identifier';
+      let type: keyof typeof VSCODE_LIGHT_PLUS = 'identifier';
       if (MULTI_KEYWORDS.has(word) || (lang === 'sql' && MULTI_KEYWORDS.has(upperWord))) {
         type = 'keyword';
       } else if (MULTI_CONSTANTS.has(word) || (lang === 'sql' && MULTI_CONSTANTS.has(upperWord))) {
@@ -686,8 +699,8 @@ export default function CodeTypingPage() {
           height: calc(100vh - 70px);
           display: grid;
           grid-template-columns: 340px minmax(0, 1fr);
-          background: #090e1a;
-          color: #f8fafc;
+          background: #e2eff6;
+          color: #0f172a;
           overflow: hidden;
         }
         @media (max-width: 960px) {
@@ -708,8 +721,8 @@ export default function CodeTypingPage() {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          background: '#0d1527',
-          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          background: '#f8fafc',
+          borderRight: '1.5px solid #cbd5e1',
           overflow: 'hidden',
         }}
       >
@@ -718,7 +731,8 @@ export default function CodeTypingPage() {
           style={{
             height: '48px',
             padding: '0 16px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#ffffff',
+            borderBottom: '1px solid #e2e8f0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -727,7 +741,7 @@ export default function CodeTypingPage() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '1.05rem' }}>⌨️</span>
-            <span style={{ fontSize: '0.98rem', fontWeight: 900, letterSpacing: '-0.3px' }}>
+            <span style={{ fontSize: '0.98rem', fontWeight: 900, letterSpacing: '-0.3px', color: '#0f172a' }}>
               {isKo ? '코드타자' : 'Code Typing'}
             </span>
           </div>
@@ -740,9 +754,9 @@ export default function CodeTypingPage() {
               gap: '5px',
               padding: '5px 10px',
               borderRadius: '8px',
-              background: 'rgba(245, 158, 11, 0.14)',
-              border: '1px solid rgba(245, 158, 11, 0.35)',
-              color: '#fbbf24',
+              background: '#fffbeb',
+              border: '1px solid #fcd34d',
+              color: '#d97706',
               fontSize: '0.75rem',
               fontWeight: 800,
               textDecoration: 'none',
@@ -757,7 +771,7 @@ export default function CodeTypingPage() {
         <div
           style={{
             padding: '12px 14px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+            borderBottom: '1px solid #e2e8f0',
             flexShrink: 0,
           }}
         >
@@ -785,9 +799,9 @@ export default function CodeTypingPage() {
                     outline: 'none',
                     border: active
                       ? `2px solid ${langTab.color}`
-                      : '2px solid rgba(148, 163, 184, 0.14)',
-                    background: active ? `${langTab.color}22` : 'rgba(9, 14, 26, 0.55)',
-                    color: active ? '#ffffff' : '#94a3b8',
+                      : '2px solid #cbd5e1',
+                    background: active ? `${langTab.color}16` : '#ffffff',
+                    color: active ? langTab.color : '#475569',
                     fontSize: '0.76rem',
                     fontWeight: active ? 800 : 600,
                     cursor: 'pointer',
@@ -811,7 +825,7 @@ export default function CodeTypingPage() {
         <div
           style={{
             padding: '12px 14px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+            borderBottom: '1px solid #e2e8f0',
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '8px',
@@ -820,17 +834,18 @@ export default function CodeTypingPage() {
         >
           <div
             style={{
-              background: '#090e1a',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
+              background: '#ffffff',
+              border: '1.5px solid rgba(2, 132, 199, 0.28)',
               borderRadius: '12px',
               padding: '10px 12px',
+              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.03)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
               <span>{isKo ? '현재 타수' : 'Speed'}</span>
-              <Gauge size={13} color="#38bdf8" />
+              <Gauge size={13} color="#0284c7" />
             </div>
-            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#38bdf8', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0284c7', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
               {stats.cpm}
               <span style={{ fontSize: '0.72rem', color: '#64748b', marginLeft: '3px' }}>CPM</span>
             </div>
@@ -838,17 +853,18 @@ export default function CodeTypingPage() {
 
           <div
             style={{
-              background: '#090e1a',
-              border: '1px solid rgba(16, 185, 129, 0.25)',
+              background: '#ffffff',
+              border: '1.5px solid rgba(5, 150, 105, 0.28)',
               borderRadius: '12px',
               padding: '10px 12px',
+              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.03)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
               <span>{isKo ? '정확도' : 'Accuracy'}</span>
-              <Target size={13} color="#34d399" />
+              <Target size={13} color="#059669" />
             </div>
-            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#34d399', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#059669', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
               {stats.accuracy}
               <span style={{ fontSize: '0.72rem', color: '#64748b', marginLeft: '2px' }}>%</span>
             </div>
@@ -856,34 +872,36 @@ export default function CodeTypingPage() {
 
           <div
             style={{
-              background: '#090e1a',
-              border: '1px solid rgba(167, 139, 250, 0.25)',
+              background: '#ffffff',
+              border: '1.5px solid rgba(124, 58, 237, 0.26)',
               borderRadius: '12px',
               padding: '10px 12px',
+              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.03)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
               <span>{isKo ? '경과 시간' : 'Time'}</span>
-              <Timer size={13} color="#c4b5fd" />
+              <Timer size={13} color="#7c3aed" />
             </div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#c4b5fd', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#7c3aed', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
               {elapsedSec.toFixed(1)}s
             </div>
           </div>
 
           <div
             style={{
-              background: '#090e1a',
-              border: '1px solid rgba(245, 158, 11, 0.25)',
+              background: '#ffffff',
+              border: '1.5px solid rgba(217, 119, 6, 0.3)',
               borderRadius: '12px',
               padding: '10px 12px',
+              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.03)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
               <span>{isKo ? '내 최고 기록' : 'Best'}</span>
-              <Trophy size={13} color="#fbbf24" />
+              <Trophy size={13} color="#d97706" />
             </div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#fbbf24', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#d97706', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
               {personalBest ? `${personalBest.best_cpm}` : '-'}
               {personalBest && (
                 <span style={{ fontSize: '0.7rem', color: '#64748b', marginLeft: '3px' }}>CPM</span>
@@ -896,7 +914,8 @@ export default function CodeTypingPage() {
         <div
           style={{
             padding: '12px 14px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+            background: '#ffffff',
+            borderBottom: '1px solid #e2e8f0',
             flexShrink: 0,
           }}
         >
@@ -905,33 +924,33 @@ export default function CodeTypingPage() {
               style={{
                 padding: '2px 8px',
                 borderRadius: '6px',
-                background: 'rgba(56, 189, 248, 0.16)',
-                color: '#38bdf8',
+                background: 'rgba(8, 145, 178, 0.12)',
+                color: '#0891b2',
                 fontSize: '0.7rem',
                 fontWeight: 800,
               }}
             >
               {currentSnippet.languageLabel}
             </span>
-            <span style={{ fontSize: '0.74rem', color: '#94a3b8', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+            <span style={{ fontSize: '0.74rem', color: '#64748b', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
               {(snippetIndex % pool.length) + 1} / {pool.length}
             </span>
           </div>
 
-          <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
+          <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#0f172a', marginBottom: '4px' }}>
             {isKo ? currentSnippet.titleKo : currentSnippet.titleEn}
           </div>
-          <div style={{ fontSize: '0.76rem', color: '#94a3b8', lineHeight: 1.4, marginBottom: '10px' }}>
+          <div style={{ fontSize: '0.76rem', color: '#475569', lineHeight: 1.4, marginBottom: '10px' }}>
             {isKo ? currentSnippet.descKo : currentSnippet.descEn}
           </div>
 
           {/* Progress Bar */}
-          <div style={{ height: '5px', borderRadius: '3px', background: 'rgba(255, 255, 255, 0.07)', overflow: 'hidden', marginBottom: '10px' }}>
+          <div style={{ height: '6px', borderRadius: '3px', background: '#e2e8f0', overflow: 'hidden', marginBottom: '10px' }}>
             <div
               style={{
                 width: `${stats.progress}%`,
                 height: '100%',
-                background: 'linear-gradient(90deg, #38bdf8, #10b981)',
+                background: 'linear-gradient(90deg, #0891b2, #10b981)',
                 transition: 'width 0.08s linear',
               }}
             />
@@ -946,9 +965,9 @@ export default function CodeTypingPage() {
               style={{
                 height: '32px',
                 borderRadius: '8px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                background: '#f8fafc',
+                border: '1px solid #cbd5e1',
+                color: '#334155',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -964,9 +983,9 @@ export default function CodeTypingPage() {
               style={{
                 height: '32px',
                 borderRadius: '8px',
-                background: 'rgba(56, 189, 248, 0.14)',
-                border: '1px solid rgba(56, 189, 248, 0.35)',
-                color: '#38bdf8',
+                background: 'rgba(8, 145, 178, 0.12)',
+                border: '1px solid rgba(8, 145, 178, 0.35)',
+                color: '#0891b2',
                 fontSize: '0.76rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -986,9 +1005,9 @@ export default function CodeTypingPage() {
               style={{
                 height: '32px',
                 borderRadius: '8px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                background: '#f8fafc',
+                border: '1px solid #cbd5e1',
+                color: '#334155',
                 fontSize: '0.76rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -1009,9 +1028,9 @@ export default function CodeTypingPage() {
               style={{
                 height: '32px',
                 borderRadius: '8px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                background: '#f8fafc',
+                border: '1px solid #cbd5e1',
+                color: '#334155',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -1051,12 +1070,12 @@ export default function CodeTypingPage() {
                   outline: 'none',
                   textAlign: 'left',
                   background: isCurrentItem
-                    ? 'rgba(56, 189, 248, 0.15)'
-                    : 'rgba(9, 14, 26, 0.45)',
+                    ? 'rgba(8, 145, 178, 0.12)'
+                    : '#ffffff',
                   border: isCurrentItem
-                    ? '2px solid rgba(56, 189, 248, 0.65)'
-                    : '2px solid transparent',
-                  color: isCurrentItem ? '#ffffff' : '#cbd5e1',
+                    ? '2px solid #0891b2'
+                    : '2px solid #e2e8f0',
+                  color: isCurrentItem ? '#0f172a' : '#334155',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -1075,7 +1094,7 @@ export default function CodeTypingPage() {
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    <span style={{ color: '#64748b', fontFamily: 'var(--font-mono)', marginRight: '6px' }}>
+                    <span style={{ color: isCurrentItem ? '#0891b2' : '#64748b', fontFamily: 'var(--font-mono)', marginRight: '6px' }}>
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                     {isKo ? snip.titleKo : snip.titleEn}
@@ -1090,8 +1109,8 @@ export default function CodeTypingPage() {
                       fontWeight: 800,
                       padding: '2px 6px',
                       borderRadius: '6px',
-                      background: 'rgba(16, 185, 129, 0.15)',
-                      color: '#34d399',
+                      background: 'rgba(16, 185, 129, 0.14)',
+                      color: '#059669',
                     }}
                   >
                     {rec.best_cpm}
@@ -1104,8 +1123,7 @@ export default function CodeTypingPage() {
       </aside>
 
       {/* ====================================================================
-          RIGHT PANEL (1fr): Authentic 2-Layer IDE Typing Stage + VirtualKeyboard
-          (100% consistent with Practice Studio's Typing Mode)
+          RIGHT PANEL (1fr): Light Editorial 2-Layer IDE Stage + VirtualKeyboard
           ==================================================================== */}
       <section
         onClick={handleStageClick}
@@ -1113,7 +1131,7 @@ export default function CodeTypingPage() {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          background: '#090e1a',
+          background: '#ffffff',
           overflow: 'hidden',
           cursor: 'text',
           position: 'relative',
@@ -1151,9 +1169,9 @@ export default function CodeTypingPage() {
         {/* 1. IDE File Tab Bar */}
         <div
           style={{
-            height: '36px',
-            background: '#0d1527',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            height: '38px',
+            background: '#f1f5f9',
+            borderBottom: '1.5px solid #cbd5e1',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -1166,20 +1184,23 @@ export default function CodeTypingPage() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '6px 14px',
-              background: '#090e1a',
-              borderRadius: '6px 6px 0 0',
-              borderTop: isCompleted ? '2px solid #10b981' : '2px solid #38bdf8',
+              padding: '7px 14px',
+              background: '#ffffff',
+              borderRadius: '8px 8px 0 0',
+              borderTop: isCompleted ? '2.5px solid #10b981' : '2.5px solid #0891b2',
+              borderLeft: '1px solid #cbd5e1',
+              borderRight: '1px solid #cbd5e1',
               fontSize: '0.78rem',
-              color: '#f8fafc',
-              fontWeight: 700,
+              color: '#0f172a',
+              fontWeight: 800,
               fontFamily: 'var(--font-mono)',
+              marginBottom: '-1.5px',
             }}
           >
-            <Code2 size={13} color={isCompleted ? '#10b981' : '#38bdf8'} />
+            <Code2 size={13} color={isCompleted ? '#059669' : '#0891b2'} />
             <span>{currentSnippet.fileName}</span>
             {isCompleted && (
-              <span style={{ fontSize: '0.74rem', color: '#34d399', fontWeight: 800, marginLeft: '6px' }}>
+              <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 800, marginLeft: '6px' }}>
                 {isKo ? '✓ 완주' : '✓ Done'}
               </span>
             )}
@@ -1191,12 +1212,12 @@ export default function CodeTypingPage() {
               alignItems: 'center',
               gap: '12px',
               fontSize: '0.76rem',
-              color: '#94a3b8',
+              color: '#64748b',
               fontFamily: 'var(--font-mono)',
             }}
           >
             {!isFocused && !isCompleted && (
-              <span style={{ color: '#38bdf8', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
+              <span style={{ color: '#0284c7', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
                 {isKo ? '클릭하여 타이핑 계속하기' : 'Click editor to resume typing'}
               </span>
             )}
@@ -1213,12 +1234,13 @@ export default function CodeTypingPage() {
             minHeight: 0,
             overflowY: 'auto',
             padding: '20px 0 28px',
+            background: '#ffffff',
             fontFamily: 'var(--font-mono), monospace',
             fontVariantLigatures: 'none',
             fontFeatureSettings: '"liga" 0, "calt" 0',
             fontSize: '1.22rem',
             lineHeight: 1.85,
-            color: '#f8fafc',
+            color: '#0f172a',
             position: 'relative',
           }}
         >
@@ -1226,6 +1248,7 @@ export default function CodeTypingPage() {
             const targetLineText = targetLines[lineIdx] || '';
             const userLineText = userLines[lineIdx] !== undefined ? userLines[lineIdx] : null;
             const isCursorOnThisLine = !isCompleted && cursorLine === lineIdx;
+            const rowBg = isCursorOnThisLine ? '#f0f9ff' : '#ffffff';
 
             return (
               <div
@@ -1240,9 +1263,9 @@ export default function CodeTypingPage() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  background: isCursorOnThisLine ? 'rgba(255, 255, 255, 0.025)' : 'transparent',
+                  background: rowBg,
                   borderLeft: isCursorOnThisLine
-                    ? '3px solid rgba(56, 189, 248, 0.4)'
+                    ? '3px solid #0891b2'
                     : '3px solid transparent',
                   minHeight: '38px',
                   cursor: 'text',
@@ -1258,13 +1281,15 @@ export default function CodeTypingPage() {
                   style={{
                     width: '54px',
                     minWidth: '54px',
+                    alignSelf: 'stretch',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'flex-end',
                     paddingRight: '14px',
                     userSelect: 'none',
-                    borderRight: '1px solid rgba(255, 255, 255, 0.06)',
-                    color: isCursorOnThisLine ? '#cbd5e1' : '#475569',
+                    background: isCursorOnThisLine ? '#e0f2fe' : '#f8fafc',
+                    borderRight: '1px solid #e2e8f0',
+                    color: isCursorOnThisLine ? '#0284c7' : '#94a3b8',
                     fontSize: '0.86rem',
                     fontWeight: isCursorOnThisLine ? 800 : 600,
                     cursor: 'pointer',
@@ -1288,7 +1313,7 @@ export default function CodeTypingPage() {
                     whiteSpace: 'pre',
                   }}
                 >
-                  {/* Layer 1 (Bottom): Dimmed Ghost Example Code (never pre-lights character 0) */}
+                  {/* Layer 1 (Bottom): Soft Slate Ghost Example Code (never pre-lights character 0) */}
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -1297,7 +1322,7 @@ export default function CodeTypingPage() {
                       hiddenInputRef.current?.focus();
                     }}
                     style={{
-                      color: 'rgba(255, 255, 255, 0.32)',
+                      color: 'rgba(15, 23, 42, 0.28)',
                       userSelect: 'none',
                       whiteSpace: 'pre',
                       fontFamily: 'inherit',
@@ -1343,8 +1368,8 @@ export default function CodeTypingPage() {
                             (t) => colIdx >= t.start && colIdx < t.end
                           );
                           const syntaxColor = token
-                            ? VSCODE_DARK_PLUS[token.type] || VSCODE_DARK_PLUS.default
-                            : VSCODE_DARK_PLUS.default;
+                            ? VSCODE_LIGHT_PLUS[token.type] || VSCODE_LIGHT_PLUS.default
+                            : VSCODE_LIGHT_PLUS.default;
 
                           const targetChar = targetLineText[colIdx];
                           const isCharError =
@@ -1358,9 +1383,8 @@ export default function CodeTypingPage() {
                                     display: 'inline-block',
                                     width: '2px',
                                     height: '1.25em',
-                                    background: '#ffffff',
-                                    boxShadow:
-                                      '0 0 6px rgba(255, 255, 255, 0.9), 0 0 1px #ffffff',
+                                    background: '#0284c7',
+                                    boxShadow: '0 0 5px rgba(2, 132, 199, 0.45)',
                                     animation: 'ideCursorBlink 1s step-end infinite',
                                     verticalAlign: 'middle',
                                     margin: '0 -1px',
@@ -1377,13 +1401,13 @@ export default function CodeTypingPage() {
                                 }}
                                 style={{
                                   display: 'inline-block',
-                                  color: isCharError ? VSCODE_DARK_PLUS.error : syntaxColor,
-                                  background: isCharError ? '#2b1219' : '#090e1a',
+                                  color: isCharError ? VSCODE_LIGHT_PLUS.error : syntaxColor,
+                                  background: isCharError ? '#fee2e2' : rowBg,
                                   fontWeight:
                                     token &&
                                     (token.type === 'keyword' || token.type === 'builtin')
                                       ? 700
-                                      : 500,
+                                      : 600,
                                   borderRadius: '2px',
                                   cursor: 'text',
                                 }}
@@ -1403,9 +1427,8 @@ export default function CodeTypingPage() {
                                 display: 'inline-block',
                                 width: '2px',
                                 height: '1.25em',
-                                background: '#ffffff',
-                                boxShadow:
-                                  '0 0 6px rgba(255, 255, 255, 0.9), 0 0 1px #ffffff',
+                                background: '#0284c7',
+                                boxShadow: '0 0 5px rgba(2, 132, 199, 0.45)',
                                 animation: 'ideCursorBlink 1s step-end infinite',
                                 verticalAlign: 'middle',
                                 marginLeft: userLineText.length === 0 ? '0px' : '-1px',
@@ -1421,11 +1444,11 @@ export default function CodeTypingPage() {
                           userLineText.length >= targetLineText.length && (
                             <span
                               style={{
-                                color: 'rgba(56, 189, 248, 0.75)',
+                                color: '#0284c7',
                                 fontSize: '0.85em',
                                 marginLeft: '4px',
                                 userSelect: 'none',
-                                fontWeight: 700,
+                                fontWeight: 800,
                               }}
                             >
                               ↵
@@ -1446,8 +1469,8 @@ export default function CodeTypingPage() {
             onClick={(e) => e.stopPropagation()}
             style={{
               margin: '0 20px 12px',
-              background: 'linear-gradient(135deg, #13233f 0%, #0f1b31 100%)',
-              border: '1.5px solid rgba(16, 185, 129, 0.5)',
+              background: '#f0fdf4',
+              border: '2px solid #10b981',
               borderRadius: '16px',
               padding: '14px 20px',
               display: 'flex',
@@ -1455,7 +1478,7 @@ export default function CodeTypingPage() {
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: '14px',
-              boxShadow: '0 14px 32px rgba(0, 0, 0, 0.55)',
+              boxShadow: '0 10px 28px -4px rgba(15, 23, 42, 0.12)',
               flexShrink: 0,
             }}
           >
@@ -1465,7 +1488,7 @@ export default function CodeTypingPage() {
                   width: '40px',
                   height: '40px',
                   borderRadius: '12px',
-                  background: 'rgba(16, 185, 129, 0.16)',
+                  background: '#dcfce7',
                   border: '1.5px solid #10b981',
                   display: 'flex',
                   alignItems: 'center',
@@ -1473,11 +1496,11 @@ export default function CodeTypingPage() {
                   flexShrink: 0,
                 }}
               >
-                <CheckCircle2 size={22} color="#10b981" />
+                <CheckCircle2 size={22} color="#059669" />
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '1rem', fontWeight: 900, color: '#ffffff' }}>
+                  <span style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a' }}>
                     {isKo ? '예제 완주 성공!' : 'Snippet Complete!'}
                   </span>
                   {isNewRecord && (
@@ -1488,9 +1511,9 @@ export default function CodeTypingPage() {
                         gap: '4px',
                         padding: '2px 8px',
                         borderRadius: '8px',
-                        background: 'rgba(245, 158, 11, 0.2)',
-                        border: '1px solid rgba(245, 158, 11, 0.45)',
-                        color: '#fbbf24',
+                        background: '#fffbeb',
+                        border: '1px solid #fcd34d',
+                        color: '#d97706',
                         fontSize: '0.7rem',
                         fontWeight: 800,
                       }}
@@ -1500,7 +1523,7 @@ export default function CodeTypingPage() {
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.82rem', color: '#334155', marginTop: '2px', fontWeight: 600 }}>
                   {isKo
                     ? `최종 타수 ${stats.cpm} CPM · 정확도 ${stats.accuracy}% · 소요 시간 ${elapsedSec.toFixed(1)}초`
                     : `${stats.cpm} CPM · ${stats.accuracy}% Accuracy · ${elapsedSec.toFixed(1)}s`}
@@ -1515,9 +1538,9 @@ export default function CodeTypingPage() {
                 style={{
                   padding: '9px 14px',
                   borderRadius: '10px',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.16)',
-                  color: '#e2e8f0',
+                  background: '#ffffff',
+                  border: '1.5px solid #cbd5e1',
+                  color: '#334155',
                   fontSize: '0.82rem',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -1552,7 +1575,7 @@ export default function CodeTypingPage() {
           </div>
         )}
 
-        {/* 3. Lower Area: Compact Virtual Keyboard Dock (Identical to TypingStage) */}
+        {/* 3. Lower Area: Compact Virtual Keyboard Dock (Light Mechanical Theme) */}
         <div
           style={{
             flex: '0 0 auto',
@@ -1560,12 +1583,12 @@ export default function CodeTypingPage() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: '#070b14',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#e2eff6',
+            borderTop: '1.5px solid #cbd5e1',
           }}
         >
           <div style={{ width: '100%', maxWidth: 'clamp(700px, 66vw, 960px)' }}>
-            <VirtualKeyboard nextChar={nextChar} />
+            <VirtualKeyboard nextChar={nextChar} theme="light" />
           </div>
         </div>
       </section>

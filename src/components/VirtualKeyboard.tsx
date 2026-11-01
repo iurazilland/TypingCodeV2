@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 
 interface VirtualKeyboardProps {
   nextChar: string;
+  theme?: 'dark' | 'light';
 }
 
 interface KeyConfig {
@@ -60,7 +61,8 @@ const KEYBOARD_ROWS: KeyConfig[][] = [
   ],
 ];
 
-export default function VirtualKeyboard({ nextChar }: VirtualKeyboardProps) {
+export default function VirtualKeyboard({ nextChar, theme = 'dark' }: VirtualKeyboardProps) {
+  const isLight = theme === 'light';
   const normalizedNext = nextChar.toLowerCase();
   const isShiftNeeded = Boolean(
     SHIFT_MAP[nextChar] || (nextChar.length === 1 && nextChar >= 'A' && nextChar <= 'Z')
@@ -72,10 +74,11 @@ export default function VirtualKeyboard({ nextChar }: VirtualKeyboardProps) {
       style={{
         width: '100%',
         padding: 'clamp(8px, 1.2vh, 12px) clamp(10px, 1.2vw, 16px)',
-        background: 'rgba(15, 23, 42, 0.75)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: isLight ? '#f1f5f9' : 'rgba(15, 23, 42, 0.75)',
+        border: isLight ? '1.5px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: '14px',
         backdropFilter: 'blur(8px)',
+        boxShadow: isLight ? '0 4px 14px -2px rgba(15, 23, 42, 0.06)' : 'none',
         display: 'flex',
         flexDirection: 'column',
         gap: 'clamp(4px, 0.5vh, 6px)',
@@ -125,16 +128,24 @@ export default function VirtualKeyboard({ nextChar }: VirtualKeyboardProps) {
                     fontWeight: isMatch ? 800 : 600,
                     background: isMatch
                       ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                      : isLight
+                      ? '#ffffff'
                       : 'rgba(30, 41, 59, 0.65)',
-                    color: isMatch ? '#ffffff' : '#94a3b8',
+                    color: isMatch ? '#ffffff' : isLight ? '#334155' : '#94a3b8',
                     border: isMatch
-                      ? '1px solid #34d399'
+                      ? '1px solid #059669'
+                      : isLight
+                      ? '1px solid #cbd5e1'
                       : '1px solid rgba(255, 255, 255, 0.06)',
                     boxShadow: isMatch
-                      ? '0 0 18px rgba(16, 185, 129, 0.7)'
+                      ? isLight
+                        ? '0 4px 12px rgba(16, 185, 129, 0.35)'
+                        : '0 0 18px rgba(16, 185, 129, 0.7)'
+                      : isLight
+                      ? '0 2px 0 #cbd5e1'
                       : 'none',
                     transform: isMatch ? 'scale(1.03)' : 'scale(1)',
-                    transition: 'all 0.12s ease',
+                    transition: 'background-color 0.12s ease, border-color 0.12s ease, transform 0.12s ease',
                     boxSizing: 'border-box',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
