@@ -1,22 +1,25 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { BookOpen, Flame, Sparkles, Zap } from 'lucide-react';
+import { BookOpen, Flame, RefreshCw, Sparkles, Zap } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
 import type { UserProfile } from '@/lib/supabase/types';
-import { normalizeProfileRow } from '@/lib/progressSync';
+import {
+  normalizeProfileRow,
+  PROGRESS_SYNCED_EVENT,
+} from '@/lib/progressSync';
 import { getRepresentativeBadge } from '@/lib/badges';
 import UserAvatar from '@/components/UserAvatar';
 
 function getLangColor(lang: string): string {
   const lower = lang.toLowerCase();
   if (lower.includes('python')) return '#2563eb';
-  if (lower.includes('web') || lower.includes('js')) return '#ea580c';
+  if (lower.includes('web') || lower.includes('js') || lower.includes('html')) return '#ea580c';
   if (lower.includes('c')) return '#0891b2';
   if (lower.includes('java')) return '#dc2626';
   if (lower.includes('rust')) return '#d97706';
@@ -28,76 +31,115 @@ function getLangColor(lang: string): string {
 function RankingPageContent() {
   const searchParams = useSearchParams();
   const { language } = useLanguage();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isKo = language === 'ko';
 
   const initialTab = searchParams.get('tab') === 'speed' ? 'speed' : 'learning';
   const [activeTab, setActiveTab] = useState<'learning' | 'speed'>(initialTab);
-  const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  const [learningLeaders, setLearningLeaders] = useState<UserProfile[]>([]);
+  const [speedLeaders, setSpeedLeaders] = useState<UserProfile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [dbError, setDbError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchLeaderboards = useCallback(async (silent = false) => {
     if (!isSupabaseConfigured()) {
       setIsLoading(false);
       return;
     }
 
-    let mounted = true;
-    const fetchProfiles = async () => {
+    if (silent) {
+      setIsRefreshing(true);
+    } else {
       setIsLoading(true);
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase
+    }
+    setDbError(null);
+
+    try {
+      const supabase = createClient();
+
+      const [learningRes, speedRes] = await Promise.all([
+        supabase
           .from('profiles')
           .select('*')
-          .limit(100);
+          .gt('activity_score', 0)
+          .order('activity_score', { ascending: false })
+          .order('cleared_levels_count', { ascending: false })
+          .order('longest_streak', { ascending: false })
+          .order('solved_problems_count', { ascending: false })
+          .limit(100),
+        supabase
+          .from('profiles')
+          .select('*')
+          .gt('best_typing_cpm', 0)
+          .order('best_typing_cpm', { ascending: false })
+          .order('best_typing_accuracy', { ascending: false })
+          .limit(100),
+      ]);
 
-        if (!mounted) return;
-        if (!error && data) {
-          const normalized = (data as Array<Record<string, unknown>>).map((r) =>
-            normalizeProfileRow(r)
-          );
-          setProfiles(normalized);
-        }
-      } catch {
-        // Non-fatal
-      } finally {
-        if (mounted) setIsLoading(false);
+      if (learningRes.error) {
+        throw learningRes.error;
       }
-    };
+      if (speedRes.error) {
+        throw speedRes.error;
+      }
 
-    void fetchProfiles();
-    return () => {
-      mounted = false;
-    };
+      setLearningLeaders(
+        ((learningRes.data as Array<Record<string, unknown>>) || []).map((r) =>
+          normalizeProfileRow(r)
+        )
+      );
+      setSpeedLeaders(
+        ((speedRes.data as Array<Record<string, unknown>>) || []).map((r) =>
+          normalizeProfileRow(r)
+        )
+      );
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : '리더보드 데이터를 불러오지 못했습니다.';
+      setDbError(msg);
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
   }, []);
 
-  const sortedUsers = [...profiles].sort((a, b) => {
-    if (activeTab === 'learning') {
-      if (b.activity_score !== a.activity_score) {
-        return b.activity_score - a.activity_score;
-      }
-      if (b.cleared_levels_count !== a.cleared_levels_count) {
-        return b.cleared_levels_count - a.cleared_levels_count;
-      }
-      if (b.longest_streak !== a.longest_streak) {
-        return b.longest_streak - a.longest_streak;
-      }
-      return b.solved_problems_count - a.solved_problems_count;
-    }
+  useEffect(() => {
+    void fetchLeaderboards(false);
+  }, [fetchLeaderboards]);
 
-    if (b.best_typing_cpm !== a.best_typing_cpm) {
-      return b.best_typing_cpm - a.best_typing_cpm;
-    }
-    return b.best_typing_accuracy - a.best_typing_accuracy;
-  });
+  useEffect(() => {
+    if (typeof window === 'undefined' || !isSupabaseConfigured()) return;
 
-  const displayList =
-    activeTab === 'speed'
-      ? sortedUsers.filter((u) => u.best_typing_cpm > 0).length > 0
-        ? sortedUsers.filter((u) => u.best_typing_cpm > 0)
-        : sortedUsers
-      : sortedUsers;
+    const handleProgressSync = () => {
+      void fetchLeaderboards(true);
+    };
+    window.addEventListener(PROGRESS_SYNCED_EVENT, handleProgressSync);
+
+    const supabase = createClient();
+    const channel = supabase
+      .channel('public-profiles-leaderboard')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profiles' },
+        () => {
+          void fetchLeaderboards(true);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      window.removeEventListener(PROGRESS_SYNCED_EVENT, handleProgressSync);
+      void supabase.removeChannel(channel);
+    };
+  }, [fetchLeaderboards]);
+
+  const displayList = activeTab === 'learning' ? learningLeaders : speedLeaders;
+  const myRankIndex = user
+    ? displayList.findIndex((entry) => entry.id === user.id)
+    : -1;
 
   const firstPlace = displayList[0] || null;
   const secondPlace = displayList[1] || null;
@@ -105,7 +147,7 @@ function RankingPageContent() {
 
   return (
     <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '28px 24px 90px', color: '#0f172a' }}>
-      {/* Minimal Single-Row Header: Title + Mode Switcher + CTA */}
+      {/* Minimal Single-Row Header: Title + Mode Switcher + Refresh + CTA */}
       <div
         style={{
           display: 'flex',
@@ -113,7 +155,7 @@ function RankingPageContent() {
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '14px',
-          marginBottom: '26px',
+          marginBottom: '22px',
         }}
       >
         <h1 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
@@ -177,6 +219,28 @@ function RankingPageContent() {
             </button>
           </div>
 
+          <button
+            type="button"
+            onClick={() => void fetchLeaderboards(true)}
+            disabled={isLoading || isRefreshing}
+            title={isKo ? '새로고침' : 'Refresh'}
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '11px',
+              border: '1.5px solid #cbd5e1',
+              background: '#ffffff',
+              color: '#475569',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: isLoading || isRefreshing ? 'default' : 'pointer',
+              opacity: isLoading || isRefreshing ? 0.6 : 1,
+            }}
+          >
+            <RefreshCw size={15} />
+          </button>
+
           <Link
             href={activeTab === 'learning' ? '/languages' : '/code-typing'}
             className="tactile-btn tactile-btn-primary"
@@ -196,14 +260,73 @@ function RankingPageContent() {
         </div>
       </div>
 
+      {/* Signed-in User Summary Bar */}
+      {user && profile && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+            padding: '12px 20px',
+            marginBottom: '22px',
+            borderRadius: '16px',
+            background: '#ffffff',
+            border: '1.5px solid #cbd5e1',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <UserAvatar
+              avatarUrl={profile.avatar_url}
+              avatarPreset={profile.avatar_preset}
+              size={32}
+              alt={profile.display_name}
+            />
+            <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#0f172a' }}>
+              {profile.display_name}
+            </span>
+            <span
+              style={{
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                padding: '2px 8px',
+                borderRadius: '8px',
+                background: 'rgba(8, 145, 178, 0.12)',
+                color: '#0891b2',
+              }}
+            >
+              {myRankIndex >= 0
+                ? `#${myRankIndex + 1}`
+                : isKo
+                ? '순위 외'
+                : 'Unranked'}
+            </span>
+          </div>
+
+          <div style={{ fontSize: '0.86rem', fontWeight: 800, color: '#334155', fontFamily: 'var(--font-mono)' }}>
+            {activeTab === 'learning'
+              ? isKo
+                ? `${profile.cleared_levels_count}레벨 · ${profile.current_streak}일 연속 · ${profile.solved_problems_count}문제 · ${profile.activity_score.toLocaleString()} PT`
+                : `${profile.cleared_levels_count} lvls · ${profile.current_streak}d · ${profile.solved_problems_count} probs · ${profile.activity_score.toLocaleString()} PT`
+              : profile.best_typing_cpm > 0
+              ? `${profile.best_typing_cpm} CPM · ${Number(profile.best_typing_accuracy || 0).toFixed(1)}%`
+              : isKo
+              ? '코드타자 기록 없음'
+              : 'No record yet'}
+          </div>
+        </div>
+      )}
+
       {/* Top 3 Podium */}
-      {displayList.length > 0 && (
+      {!isLoading && displayList.length > 0 && (
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
             gap: '20px',
-            marginBottom: '30px',
+            marginBottom: '26px',
           }}
         >
           {[
@@ -308,8 +431,16 @@ function RankingPageContent() {
             </div>
 
             {isLoading ? (
-              <div style={{ padding: '36px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
+              <div style={{ padding: '40px 24px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
                 {isKo ? '불러오는 중...' : 'Loading...'}
+              </div>
+            ) : dbError ? (
+              <div style={{ padding: '40px 24px', textAlign: 'center', color: '#dc2626', fontWeight: 600 }}>
+                {dbError}
+              </div>
+            ) : displayList.length === 0 ? (
+              <div style={{ padding: '44px 24px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
+                {isKo ? '등록된 학습 기록이 없습니다.' : 'No learning records yet.'}
               </div>
             ) : (
               displayList.map((entry, idx) => {
@@ -422,86 +553,100 @@ function RankingPageContent() {
               <div style={{ textAlign: 'right' }}>{isKo ? '정확도' : 'Accuracy'}</div>
             </div>
 
-            {displayList.map((entry, idx) => {
-              const rank = idx + 1;
-              const isMe = Boolean(user && entry.id === user.id);
-              const badge = getRepresentativeBadge(entry, isKo);
-              const langColor = getLangColor(entry.primary_language || 'Python');
+            {isLoading ? (
+              <div style={{ padding: '40px 24px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
+                {isKo ? '불러오는 중...' : 'Loading...'}
+              </div>
+            ) : dbError ? (
+              <div style={{ padding: '40px 24px', textAlign: 'center', color: '#dc2626', fontWeight: 600 }}>
+                {dbError}
+              </div>
+            ) : displayList.length === 0 ? (
+              <div style={{ padding: '44px 24px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
+                {isKo ? '등록된 코드타자 기록이 없습니다.' : 'No code typing records yet.'}
+              </div>
+            ) : (
+              displayList.map((entry, idx) => {
+                const rank = idx + 1;
+                const isMe = Boolean(user && entry.id === user.id);
+                const badge = getRepresentativeBadge(entry, isKo);
+                const langColor = getLangColor(entry.primary_language || 'Python');
 
-              return (
-                <div
-                  key={entry.id}
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
-                    padding: '13px 24px',
-                    borderBottom: '1px solid #f1f5f9',
-                    alignItems: 'center',
-                    fontSize: '0.9rem',
-                    background: isMe ? 'rgba(124, 58, 237, 0.07)' : 'transparent',
-                  }}
-                >
-                  <div style={{ fontWeight: 900, color: rank <= 3 ? '#d97706' : '#64748b' }}>
-                    #{rank}
-                  </div>
+                return (
+                  <div
+                    key={entry.id}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
+                      padding: '13px 24px',
+                      borderBottom: '1px solid #f1f5f9',
+                      alignItems: 'center',
+                      fontSize: '0.9rem',
+                      background: isMe ? 'rgba(124, 58, 237, 0.07)' : 'transparent',
+                    }}
+                  >
+                    <div style={{ fontWeight: 900, color: rank <= 3 ? '#d97706' : '#64748b' }}>
+                      #{rank}
+                    </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <UserAvatar
-                      avatarUrl={entry.avatar_url}
-                      avatarPreset={entry.avatar_preset}
-                      size={36}
-                      alt={entry.display_name}
-                    />
-                    <div>
-                      <div style={{ fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span>{entry.display_name}</span>
-                        {isMe && (
-                          <span
-                            style={{
-                              fontSize: '0.66rem',
-                              padding: '1px 6px',
-                              borderRadius: '6px',
-                              background: 'rgba(124, 58, 237, 0.14)',
-                              color: '#7c3aed',
-                              fontWeight: 800,
-                            }}
-                          >
-                            ME
-                          </span>
-                        )}
-                      </div>
-                      <div style={{ fontSize: '0.74rem', color: badge.color, fontWeight: 800 }}>
-                        {badge.label}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <UserAvatar
+                        avatarUrl={entry.avatar_url}
+                        avatarPreset={entry.avatar_preset}
+                        size={36}
+                        alt={entry.display_name}
+                      />
+                      <div>
+                        <div style={{ fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>{entry.display_name}</span>
+                          {isMe && (
+                            <span
+                              style={{
+                                fontSize: '0.66rem',
+                                padding: '1px 6px',
+                                borderRadius: '6px',
+                                background: 'rgba(124, 58, 237, 0.14)',
+                                color: '#7c3aed',
+                                fontWeight: 800,
+                              }}
+                            >
+                              ME
+                            </span>
+                          )}
+                        </div>
+                        <div style={{ fontSize: '0.74rem', color: badge.color, fontWeight: 800 }}>
+                          {badge.label}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <span
-                      style={{
-                        padding: '3px 10px',
-                        borderRadius: '10px',
-                        background: `${langColor}14`,
-                        border: `1px solid ${langColor}40`,
-                        color: langColor,
-                        fontSize: '0.78rem',
-                        fontWeight: 800,
-                      }}
-                    >
-                      {entry.primary_language || 'Python'}
-                    </span>
-                  </div>
+                    <div>
+                      <span
+                        style={{
+                          padding: '3px 10px',
+                          borderRadius: '10px',
+                          background: `${langColor}14`,
+                          border: `1px solid ${langColor}40`,
+                          color: langColor,
+                          fontSize: '0.78rem',
+                          fontWeight: 800,
+                        }}
+                      >
+                        {entry.primary_language || 'Python'}
+                      </span>
+                    </div>
 
-                  <div style={{ textAlign: 'right', fontWeight: 900, color: '#7c3aed', fontFamily: 'var(--font-mono)' }}>
-                    {entry.best_typing_cpm} CPM
-                  </div>
+                    <div style={{ textAlign: 'right', fontWeight: 900, color: '#7c3aed', fontFamily: 'var(--font-mono)' }}>
+                      {entry.best_typing_cpm} CPM
+                    </div>
 
-                  <div style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
-                    {Number(entry.best_typing_accuracy || 0).toFixed(1)}%
+                    <div style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
+                      {Number(entry.best_typing_accuracy || 0).toFixed(1)}%
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         )}
       </div>

@@ -335,7 +335,7 @@ export async function recordLevelCleared(
     if (!user) return;
 
     await recordDailyAttendance(user.id);
-    await supabase.from('user_cleared_levels').upsert(
+    const { error } = await supabase.from('user_cleared_levels').upsert(
       {
         user_id: user.id,
         track_id: trackId,
@@ -343,6 +343,9 @@ export async function recordLevelCleared(
       },
       { onConflict: 'user_id,track_id,level_number' }
     );
+    if (!error) {
+      dispatchProgressSynced();
+    }
   } catch {
     // Non-fatal
   }
@@ -471,7 +474,7 @@ export async function saveSpeedCodingRecord(input: {
       return false;
     }
 
-    await supabase.from('user_speed_records').upsert(
+    const { error } = await supabase.from('user_speed_records').upsert(
       {
         user_id: user.id,
         snippet_id: input.snippetId,
@@ -481,6 +484,8 @@ export async function saveSpeedCodingRecord(input: {
       },
       { onConflict: 'user_id,snippet_id' }
     );
+    if (error) return false;
+    dispatchProgressSynced();
     return true;
   } catch {
     return false;
@@ -521,7 +526,7 @@ export async function recordProblemSolve(
     if (!user) return;
 
     await recordDailyAttendance(user.id);
-    await supabase.from('user_problem_solves').upsert(
+    const { error } = await supabase.from('user_problem_solves').upsert(
       {
         user_id: user.id,
         problem_id: problemId,
@@ -529,6 +534,9 @@ export async function recordProblemSolve(
       },
       { onConflict: 'user_id,problem_id' }
     );
+    if (!error) {
+      dispatchProgressSynced();
+    }
   } catch {
     // Non-fatal
   }

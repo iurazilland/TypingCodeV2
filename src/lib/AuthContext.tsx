@@ -13,7 +13,11 @@ import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
 import type { UserProfile } from '@/lib/supabase/types';
-import { ensureUserProfile, syncProgressOnLogin } from '@/lib/progressSync';
+import {
+  ensureUserProfile,
+  PROGRESS_SYNCED_EVENT,
+  syncProgressOnLogin,
+} from '@/lib/progressSync';
 
 const PROTECTED_PREFIXES = [
   '/practice',
@@ -123,6 +127,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const updated = await ensureUserProfile(user);
     setProfile(updated);
   }, [user]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !user) return;
+    const handleSynced = () => {
+      void refreshProfile();
+    };
+    window.addEventListener(PROGRESS_SYNCED_EVENT, handleSynced);
+    return () => {
+      window.removeEventListener(PROGRESS_SYNCED_EVENT, handleSynced);
+    };
+  }, [user, refreshProfile]);
 
   const signOut = useCallback(async () => {
     if (!isSupabaseConfigured()) return;
