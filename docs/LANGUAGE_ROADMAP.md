@@ -61,6 +61,6 @@ TypingCode V2는 **자체 0ms 로컬 파이썬 AST 실행기**, **브라우저 �
 - [x] **`/languages` 실시간 학습 진도율 연동**: 하드코딩 진도율을 제거하고 `localStorage` 실 클리어 레벨 카운트 연동 완료.
 
 ### 3.2 차기 확장 계획 (Upcoming)
-- [ ] **Python Advanced (`py-advanced`, 20 Lv) V2 커리큘럼 구현**: [`python_advanced_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/content/python_advanced_curriculum.md) 스펙에 맞춘 심화 OOP·데코레이터·제너레이터·모듈 레벨 구축.
+- [ ] **Python Advanced (`py-advanced`, 20 Lv) V2 커리큘럼 구현**: [`docs/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/python_curriculum.md) 하단 심화 경계 스펙에 맞춘 심화 OOP·데코레이터·제너레이터·모듈 레벨 구축.
 - [ ] **Pyodide 선택적 런타임 연동 (`py-bigdata` / `py-ai`)**: 브라우저 내 NumPy, Pandas 데이터 분석 트랙 로컬 실행 지원.
 - [ ] **C / JavaScript / Web 트랙 V2 2-Part 교차 학습 레벨 확장**: 중괄호(`{ }`) 및 태그 기반 시각적 블록 템플릿과 13단계/10단계 표준 문항 구조 확대 적용.

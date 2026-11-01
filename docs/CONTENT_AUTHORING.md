@@ -3,9 +3,8 @@
 이 문서는 **TypingCode V2**의 학습 커리큘럼 및 연습 콘텐츠를 제작, 확장, 검증하는 공식 표준 규격(SSOT)을 설명합니다.
 
 > 📌 **참고 문서 안내**:
-> - 파이썬 베이직(2-Part · 14섹션 · 87레벨 · 1,089문항) 마스터 로드맵: [`docs/content/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/content/python_curriculum.md)
-> - 파이썬 어드밴스(20레벨 심화 과정) 로드맵: [`docs/content/python_advanced_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/content/python_advanced_curriculum.md)
-> - `docs/content/Python Basic Levels/`, `Web Basic Levels/` 등의 구버전 마크다운 폴더는 과거 기획 레퍼런스 보존용 아카이브입니다.
+> - 파이썬 베이직(2-Part · 14섹션 · 87레벨 · 1,089문항) 및 심화(`py-advanced`) 경계 마스터 로드맵: [`docs/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/python_curriculum.md)
+> - 언어별 트랙 및 런타임 로드맵: [`docs/LANGUAGE_ROADMAP.md`](file:///d:/Projects/TypingCode_V2/docs/LANGUAGE_ROADMAP.md)
 
 ---
 

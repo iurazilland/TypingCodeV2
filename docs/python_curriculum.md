@@ -151,4 +151,11 @@
 
 ---
 
-> **심화 연계 (`py-advanced`)**: `super()`·다중 상속·`@property`·`@classmethod`·`@staticmethod`·심화 매직 메서드(`__repr__`, `__len__`, `__eq__`)·추상 클래스(`ABC`), `**kwargs`·딕셔너리/집합 컴프리헨션·클로저·데코레이터(`@`)·제너레이터(`yield`), 사용자 정의 예외 클래스, 컨텍스트 매니저(`with open`)·JSON/CSV, 모듈/패키지(`import`) 및 정규표현식(`re`)은 **파이썬 어드밴스** 과정에서 다룹니다.
+## 🔗 심화 과정 연계 경계 (`py-advanced` · 20레벨 로드맵 요약)
+
+`py-basic`(2-Part · 14섹션 · 87레벨)에서 클래스 기초(`class`, `__init__`, `self`, `__str__`, 단일 상속), 예외 처리 기초(`try-except-else-finally`, `raise`), 리스트 컴프리헨션·삼항식·`*args`·`lambda`까지 모두 완주하므로, 후속 **파이썬 어드밴스(`py-advanced`, 20레벨)** 과정은 다음 4개 중·고급 영역에 집중합니다:
+
+1. **객체지향 아키텍처 심화 (Deep OOP)**: `super().__init__()` 및 다중 상속(MRO), `@property`/세터 캡슐화, `@classmethod`/`@staticmethod`, 심화 매직 메서드(`__repr__`, `__len__`, `__eq__`, `__lt__`, `__getitem__`), 추상 기반 클래스(`abc.ABC`, `@abstractmethod`).
+2. **함수형 프로그래밍 & 컴프리헨션 심화**: 키워드 가변 인자(`**kwargs`) 및 언패킹, 딕셔너리·집합 컴프리헨션(`{k: v for ...}`, `{x for ...}`), 클로저(`nonlocal`)·커스텀 데코레이터(`@decorator`, `functools.wraps`), 이터레이터·제너레이터(`yield`).
+3. **고급 예외 설계 & 컨텍스트 매니저**: 사용자 정의 예외 클래스(`class AppError(Exception):`)·예외 체이닝(`raise ... from e`), 컨텍스트 매니저(`with`, `__enter__`/`__exit__`), 파일 입출력(`with open`)·JSON/CSV·`pathlib`.
+4. **표준 라이브러리 · 모듈/패키지 · 정규표현식**: 모듈 분리(`import`, `__name__ == "__main__"`), `collections`(`Counter`, `defaultdict`, `deque`)·`itertools`·`functools`, 정규표현식(`re`) 및 `datetime`.

@@ -50,13 +50,10 @@ TypingCode_V2/
 │   ├── SYSTEM_DESIGN.md            # 시스템 상세 설계, AST 실행기 및 블록/스냅 엔진 규격
 │   ├── visualizer-system.md        # 블록 코딩, 메모리 비주얼라이저 및 UI 인터랙션 사양서
 │   ├── CONTENT_AUTHORING.md        # 2-Part · 13단계/10단계 커리큘럼 및 프롬프트 작성 표준
+│   ├── python_curriculum.md        # Python Basic (2-Part · 14섹션 · 87레벨 · 1,089문항) 공식 SSOT
+│   ├── html-css-js-course-design.md# Web (HTML/CSS/JS) 코스 설계 사양서
 │   ├── LANGUAGE_ROADMAP.md         # 13개 지원 언어 런타임 및 커리큘럼 현황 로드맵
-│   ├── LEVEL_VERIFICATION_REPORT.md# 커리큘럼 전수 검증 및 정적/실행 게이트 보고서
-│   └── content/
-│       ├── python_curriculum.md            # Python Basic (2-Part · 14섹션 · 87레벨 · 1,089문항) 공식 SSOT
-│       ├── python_advanced_curriculum.md   # Python Advanced (20레벨 심화 경계 재정렬) 로드맵
-│       ├── python_curriculum_v2.md         # [DEPRECATED] 구 설계 아카이브 포인터
-│       └── CHALLENGE_AUTHORING_GUIDE.md    # 종합 문제풀이(챌린지) 레벨 설계 가이드
+│   └── LEVEL_VERIFICATION_REPORT.md# 커리큘럼 전수 검증 및 정적/실행 게이트 보고서
 ├── public/                 # 정적 에셋 (아이콘, 폰트, 파비콘)
 ├── src/
 │   ├── app/
@@ -126,7 +123,7 @@ TypingCode_V2/
 - **연습 문제 데이터**: [`practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) & `src/data/curriculum/python/level1.ts` ~ `level87.ts`
   - **2-Part 아키텍처**: Part 1(`Lv 1~63`, 789문항) 필수 기초 완주 → Part 2(`Lv 64~87`, 300문항) 2회독 나선형 복습 및 부가 함수·기능 확장 (총 **1,089문항**).
   - **문항 표준**: 일반 레벨 **13문항**(홀수 1·3·5·7·9 블록 ⇄ 짝수 2·4·6·8·10 `fill_blank` + 11 `fix_bug` + 12 `one_line` + 13 `predict_output`), 섹션 종합 레벨 **10문항**(`fill_blank` 3 + `fix_bug` 3 + `one_line` 2 + `predict_output` 2).
-  - 상세 작성 규칙은 [`CONTENT_AUTHORING.md`](file:///d:/Projects/TypingCode_V2/docs/CONTENT_AUTHORING.md) 및 [`python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/content/python_curriculum.md)를 따릅니다.
+  - 상세 작성 규칙은 [`CONTENT_AUTHORING.md`](file:///d:/Projects/TypingCode_V2/docs/CONTENT_AUTHORING.md) 및 [`python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/python_curriculum.md)를 따릅니다.
 
 ---
 
