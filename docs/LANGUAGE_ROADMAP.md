@@ -30,7 +30,7 @@ TypingCode V2는 **자체 0ms 로컬 파이썬 AST 실행기**, **브라우저 �
 
 ## 2. 언어별 커리큘럼 체계 ([`src/lib/curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts))
 
-각 언어 트랙은 학습자의 성장 단계에 맞춰 **입문(기초) → 중급(응용) → 심화(실무)** 모듈로 설계되며, `/languages` 페이지([`src/app/languages/page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/languages/page.tsx))에서 브라우저 `localStorage` 기반 실시간 클리어 레벨 진척도와 자동 동기화됩니다.
+각 언어 트랙은 학습자의 성장 단계에 맞춰 **입문(기초) → 중급(응용) → 심화(실무)** 모듈로 설계됩니다. `/languages` 페이지([`src/app/languages/page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/languages/page.tsx))에서는 상단 **1행 언어별 선택 + 2행 학습 방향별 추천(6종)** 버튼으로 전체 커리큘럼을 언어 기준 또는 단계별 추천 순서 기준으로 즉시 전환해 탐색할 수 있으며, 아직 콘텐츠가 준비 중인 모듈은 `isLocked: true` 잠금 처리되어 순차 오픈됩니다.
 
 ### 2.1 주요 트랙 구축 현황
 1. **Python 트랙 (`python`)**:

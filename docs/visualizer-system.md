@@ -1,6 +1,6 @@
 # 🎨 Visual & Interactive System Specification (V2)
 
-이 문서는 **TypingCode V2**의 시각화 및 인터랙티브 학습 인터페이스 사양을 정의합니다. V2는 **Scratch 스타일 SVG 시각적 블록 스튜디오**, **실시간 변수 메모리 박스 & 스텝 디버거**, **제로 변위(`§`) 타이핑 에디터 & 가상 키보드**, **인사이트 카드**, **실시간 WebPreview**가 유기적으로 결합된 하이브리드 비주얼 학습 환경을 제공합니다.
+이 문서는 **TypingCode V2**의 시각화 및 인터랙티브 학습 인터페이스 사양을 정의합니다. V2는 **Scratch 스타일 SVG 시각적 블록 스튜디오**, **실시간 변수 메모리 박스 & 스텝 디버거**, **제로 변위(`§`) 타이핑 에디터 & 가상 키보드**, **1레벨 첫 진입 화면 둘러보기 투어(`SpotlightTour`)**, **실시간 WebPreview**가 유기적으로 결합된 하이브리드 비주얼 학습 환경을 제공합니다.
 
 ---
 
@@ -46,14 +46,16 @@
 
 ---
 
-## 3. 제로 변위(`§`) 타이핑 에디터, 인사이트 카드 & 가상 키보드
+## 3. 제로 변위(`§`) 타이핑 에디터, 화면 둘러보기 투어 & 가상 키보드
 
-### 3.1 `§` 캡슐 빈칸 에디터 & 4지선다 출력 예측 UI
+### 3.1 `§` 캡슐 빈칸 에디터, 붙여넣기 방지 & 4지선다 출력 예측 UI ([`TypingStage.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/TypingStage.tsx))
 - `templateCode` 내 `§` 문자의 개수가 정답 글자 수와 정확히 1:1 매칭되어, 타이핑 중 주변 코드가 밀리지 않는(Zero-displacement) 캡슐 빈칸 박스를 렌더링합니다.
+- 클립보드 붙여넣기(`Ctrl+V`/`Cmd+V`/`Shift+Insert`/`onPaste`) 및 드래그앤드롭 텍스트 주입을 차단하고 에디터 상단 `main.py` 헤더 우측에 2초간 `"직접 타이핑해서 입력해 주세요"` 배지를 표시합니다.
 - `predict_output` (`type: 'quiz'`) 스텝에서는 코드 리더 뷰와 4지선다 선택 카드 UI로 자동 전환되어 실행 전 논리 추론 능력을 훈련합니다.
 
-### 3.2 인사이트 카드 (`InsightCard`) & 가상 키보드 ([`VirtualKeyboard.tsx`](file:///d:/Projects/TypingCode_V2/src/components/VirtualKeyboard.tsx))
-- 글래스모피즘(`rgba(15, 23, 42, 0.95)`, `backdrop-filter: blur(16px)`) 기반 가이드 카드 및 다음 타건 키(`Shift` 조합 포함) 실시간 네온 하이라이트를 제공합니다.
+### 3.2 스포트라이트 화면 둘러보기 ([`SpotlightTour.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/SpotlightTour.tsx)) & 가상 키보드 ([`VirtualKeyboard.tsx`](file:///d:/Projects/TypingCode_V2/src/components/VirtualKeyboard.tsx))
+- 계정별 로컬 키(`typingcode_tour_seen_v2_${user.id}`)를 기준으로 **1레벨 1단계 첫 진입 시에만** 10단계 하이라이트 가이드가 자동 실행되며, 마지막 단계에서 `다시 보지 않기`를 지원합니다.
+- 가상 키보드는 다음 타건 키(`Shift` 조합 포함) 실시간 네온 하이라이트를 제공합니다.
 
 ---
 

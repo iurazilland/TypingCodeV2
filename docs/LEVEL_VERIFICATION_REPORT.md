@@ -16,7 +16,7 @@
 - **0ms 로컬 파이썬 AST 엔진 ([`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts)) & 블록 스튜디오 확장**:
   - 외부 패키지 추가 없이(`0 npm dependencies`) `try / except [Type | (T1, T2) [as e]] / else / finally`, `raise`, `class Name[(Parent)]:`, `__init__`, `self` 속성 읽기/쓰기/복합 대입, 인스턴스 메서드, `__str__`, 단일 상속 및 메서드 오버라이딩, `isinstance()`, `ord()`, `chr()`, `.isalpha()`, `dict(k=v)`, 삼항 조건식, 리스트 컴프리헨션(격리 스코프), `*args`, `lambda`, `sorted/min/max(..., key=...)`, `f-string` 서식(`:.2f`, `:,`, `:,.2f`) 완벽 지원.
   - 블록 캔버스([`CanvasBlockItem.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/CanvasBlockItem.tsx), [`page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/practice/%5Blanguage%5D/%5Blevel%5D/page.tsx))에 `class` C-블록(내부 `def` 메서드 스냅 허용, `class` 중첩은 최상위 가드 유지), `try-except-else-finally` 다단 분기 E-블록, `raise` 블록, 그리고 `isinstance`/`ord`/`chr` 드롭다운 추가.
-- **`/languages` 진척도 실데이터 연동 ([`languages/page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/languages/page.tsx))**: 하드코딩되어 있던 코스 진척도(`'py-basic': 9` 등)를 제거하고 브라우저 `localStorage` (`unlocked_step_*`) 실제 클리어 레벨 집계와 동기화.
+- **`/languages` 진척도 실데이터 연동 ([`languages/page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/languages/page.tsx))**: 하드코딩되어 있던 코스 진척도를 제거하고 `user_cleared_levels` (`cleared_levels_*` 로컬 동기화 캐시) 실제 클리어 레벨 집계 및 6종 학습 방향별 추천 분류 뷰와 연동.
 
 ---
 
