@@ -64,3 +64,4 @@ TypingCode V2는 **자체 0ms 로컬 파이썬 AST 실행기**, **브라우저 �
 - [ ] **Python Advanced (`py-advanced`, 20 Lv) V2 커리큘럼 구현**: [`docs/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/python_curriculum.md) 하단 심화 경계 스펙에 맞춘 심화 OOP·데코레이터·제너레이터·모듈 레벨 구축.
 - [ ] **Pyodide 선택적 런타임 연동 (`py-bigdata` / `py-ai`)**: 브라우저 내 NumPy, Pandas 데이터 분석 트랙 로컬 실행 지원.
 - [ ] **C / JavaScript / Web 트랙 V2 2-Part 교차 학습 레벨 확장**: 중괄호(`{ }`) 및 태그 기반 시각적 블록 템플릿과 13단계/10단계 표준 문항 구조 확대 적용.
+- [ ] **피지컬 AI & 로보틱스 트랙 (`py-physical-ai`, 5섹션 · 25 Lv · 310문항) 구축**: 센서 필터링·PID 제어·기구학/`A*` 경로 계획·ROS 2 `Pub/Sub` 패턴·강화학습/VLA 루프 과정 및 `physical-ai` 학습 방향 추가 (상세 사양: [`docs/PHYSICAL_AI_COURSE_DESIGN.md`](file:///d:/Projects/TypingCode_V2/docs/PHYSICAL_AI_COURSE_DESIGN.md)).
