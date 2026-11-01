@@ -10,9 +10,12 @@ export default function Footer() {
   const { language } = useLanguage();
   const isEn = language === 'en';
 
-  // Do not render footer inside fullscreen practice/coding studio
+  // Do not render footer inside fullscreen practice/coding studio or code-typing arena
   const pathSegments = pathname?.split('/').filter(Boolean) || [];
-  if (pathSegments[0] === 'practice' && pathSegments.length >= 3) {
+  if (
+    (pathSegments[0] === 'practice' && pathSegments.length >= 3) ||
+    pathSegments[0] === 'code-typing'
+  ) {
     return null;
   }
 
