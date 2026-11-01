@@ -15,6 +15,16 @@ export interface CourseModule {
   isLocked?: boolean;
 }
 
+export interface RoadmapStage {
+  id: string;
+  stepNumber: number;
+  title_ko: string;
+  title_en: string;
+  subtitle_ko: string;
+  subtitle_en: string;
+  moduleIds: string[];
+}
+
 export interface LearningRoadmap {
   id: string;
   icon: string;
@@ -25,13 +35,7 @@ export interface LearningRoadmap {
   target_en: string;
   summary_ko: string;
   summary_en: string;
-  moduleIds: string[];
-}
-
-export interface FinderAnswers {
-  experience: 'none' | 'basic' | 'experienced';
-  goal: 'starter' | 'ai-data' | 'frontend' | 'backend' | 'cs-algo' | 'game-mobile';
-  style: 'practical' | 'fundamental';
+  stages: RoadmapStage[];
 }
 
 export const DIFFICULTY_COLORS: Record<'입문' | '중급' | '심화', string> = {
@@ -889,7 +893,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
   },
 ];
 
-// Curated Goal-Based Learning Roadmaps (Ordered STEP 1 -> STEP N)
+// Curated Learning Directions with Stage-by-Stage Re-Classification
 export const LEARNING_ROADMAPS: LearningRoadmap[] = [
   {
     id: 'starter',
@@ -897,11 +901,39 @@ export const LEARNING_ROADMAPS: LearningRoadmap[] = [
     color: '#10b981',
     title_ko: '코딩 첫걸음',
     title_en: 'First Steps in Coding',
-    target_ko: '완전 초보 · 비전공자',
-    target_en: 'Total Beginners',
-    summary_ko: '가장 직관적인 파이썬 기초로 시작해 웹과 데이터 핵심 문법까지 자연스럽게 넓혀갑니다.',
-    summary_en: 'Start with intuitive Python basics, then expand smoothly into web and SQL fundamentals.',
-    moduleIds: ['py-basic', 'web-html', 'js-basic', 'sql-basic'],
+    target_ko: '입문 기초 · 사무 자동화',
+    target_en: 'Total Beginners & Office Basics',
+    summary_ko: '가장 직관적인 파이썬·비주얼 베이직 기초부터 웹과 데이터베이스 핵심까지 순서대로 익힙니다.',
+    summary_en: 'Start with intuitive Python & VB basics, then expand into web and SQL fundamentals.',
+    stages: [
+      {
+        id: 'starter-1',
+        stepNumber: 1,
+        title_ko: '1단계 · 첫 프로그래밍 입문',
+        title_en: 'Stage 1 · Your First Programming Syntax',
+        subtitle_ko: '가장 읽기 쉬운 문법으로 변수, 입출력, 기본 연산 감각을 익힙니다.',
+        subtitle_en: 'Learn variables, basic I/O, and operators with beginner-friendly syntax.',
+        moduleIds: ['py-basic', 'vb-basic'],
+      },
+      {
+        id: 'starter-2',
+        stepNumber: 2,
+        title_ko: '2단계 · 조건·반복 논리와 업무 자동화',
+        title_en: 'Stage 2 · Control Flow & Office Automation',
+        subtitle_ko: '조건 분기, 반복문, 함수 구조화로 자동화 논리를 다집니다.',
+        subtitle_en: 'Build automation logic with conditionals, loops, and modular procedures.',
+        moduleIds: ['vb-control', 'vb-sub'],
+      },
+      {
+        id: 'starter-3',
+        stepNumber: 3,
+        title_ko: '3단계 · 웹 화면과 데이터 기초 넓히기',
+        title_en: 'Stage 3 · Web Pages & Data Query Basics',
+        subtitle_ko: '웹 페이지 구조와 브라우저 동작, 데이터 조회 기초를 체험합니다.',
+        subtitle_en: 'Explore web structure, interactive DOM basics, and simple SQL queries.',
+        moduleIds: ['web-html', 'js-basic', 'sql-basic'],
+      },
+    ],
   },
   {
     id: 'ai-data',
@@ -909,11 +941,39 @@ export const LEARNING_ROADMAPS: LearningRoadmap[] = [
     color: '#3b82f6',
     title_ko: 'AI · 데이터 분석',
     title_en: 'AI & Data Analytics',
-    target_ko: '데이터 · 업무 자동화 · 머신러닝',
-    target_en: 'Data, Automation & ML',
-    summary_ko: '파이썬 문법부터 심화 설계, SQL 데이터 추출, 빅데이터·머신러닝 순서로 학습합니다.',
-    summary_en: 'Progress from Python core syntax to advanced OOP, SQL queries, big data, and ML.',
-    moduleIds: ['py-basic', 'py-advanced', 'sql-basic', 'py-bigdata', 'py-ai'],
+    target_ko: 'SQL · 빅데이터 · 머신러닝',
+    target_en: 'SQL, Big Data & Machine Learning',
+    summary_ko: '파이썬 문법과 심화 설계를 다진 뒤 SQL 쿼리, 빅데이터 정제, 머신러닝 모델로 나아갑니다.',
+    summary_en: 'Master Python core & advanced design, followed by SQL, big data, and ML models.',
+    stages: [
+      {
+        id: 'ai-1',
+        stepNumber: 1,
+        title_ko: '1단계 · 파이썬 핵심 문법과 심화 구조',
+        title_en: 'Stage 1 · Python Core & Advanced Design',
+        subtitle_ko: '데이터와 AI 생태계의 표준 언어인 파이썬을 기초부터 심화까지 완성합니다.',
+        subtitle_en: 'Complete Python from foundational syntax to OOP, decorators, and generators.',
+        moduleIds: ['py-basic', 'py-advanced'],
+      },
+      {
+        id: 'ai-2',
+        stepNumber: 2,
+        title_ko: '2단계 · SQL 데이터 추출과 빅데이터 분석',
+        title_en: 'Stage 2 · SQL Queries & Big Data Processing',
+        subtitle_ko: '관계형 DB에서 데이터를 추출하고 NumPy·Pandas로 정제·집계합니다.',
+        subtitle_en: 'Extract relational data with SQL and clean/aggregate datasets with NumPy & Pandas.',
+        moduleIds: ['sql-basic', 'sql-advanced', 'py-bigdata'],
+      },
+      {
+        id: 'ai-3',
+        stepNumber: 3,
+        title_ko: '3단계 · 인공지능 & 머신러닝 모델링',
+        title_en: 'Stage 3 · AI & Machine Learning Models',
+        subtitle_ko: '텐서 연산, 선형 회귀, 경사하강법, 신경망 기초 모델을 코드로 구현합니다.',
+        subtitle_en: 'Implement tensors, linear regression, gradient descent, and perceptron models.',
+        moduleIds: ['py-ai'],
+      },
+    ],
   },
   {
     id: 'frontend',
@@ -921,11 +981,39 @@ export const LEARNING_ROADMAPS: LearningRoadmap[] = [
     color: '#f97316',
     title_ko: '웹 프론트엔드',
     title_en: 'Web Frontend',
-    target_ko: '웹사이트 · 서비스 UI 제작',
-    target_en: 'Websites & Interactive UI',
-    summary_ko: '웹 구조(HTML)와 디자인(CSS)을 익힌 뒤 자바스크립트, 타입스크립트, React로 확장합니다.',
-    summary_en: 'Learn HTML structure and CSS layout first, then advance through JS, TypeScript, and React.',
-    moduleIds: ['web-html', 'web-css', 'js-basic', 'js-advanced', 'js-ts', 'js-react'],
+    target_ko: 'HTML/CSS · JS · React',
+    target_en: 'HTML/CSS, JavaScript & React',
+    summary_ko: '웹 표준 마크업과 레이아웃부터 자바스크립트 동적 제어, 타입스크립트, React 순서로 학습합니다.',
+    summary_en: 'Progress from HTML/CSS layouts to JavaScript DOM, TypeScript, and React components.',
+    stages: [
+      {
+        id: 'fe-1',
+        stepNumber: 1,
+        title_ko: '1단계 · 웹 표준 구조와 모던 CSS 레이아웃',
+        title_en: 'Stage 1 · Semantic HTML & Modern CSS Layouts',
+        subtitle_ko: '시맨틱 마크업, Flexbox·Grid 정렬, 반응형 뷰포트 UI를 구현합니다.',
+        subtitle_en: 'Build semantic HTML structures, Flexbox/Grid layouts, and responsive UI.',
+        moduleIds: ['web-html', 'web-css', 'web-responsive'],
+      },
+      {
+        id: 'fe-2',
+        stepNumber: 2,
+        title_ko: '2단계 · 자바스크립트 DOM 조작과 비동기 통신',
+        title_en: 'Stage 2 · JavaScript DOM & Async Fetching',
+        subtitle_ko: '이벤트 제어와 Promise·async/await 비동기 데이터 처리를 익힙니다.',
+        subtitle_en: 'Control DOM events and master Promise, async/await, and Fetch APIs.',
+        moduleIds: ['js-basic', 'js-advanced'],
+      },
+      {
+        id: 'fe-3',
+        stepNumber: 3,
+        title_ko: '3단계 · 타입스크립트 & React 모던 프론트엔드',
+        title_en: 'Stage 3 · TypeScript & React Component UI',
+        subtitle_ko: '정적 타입 안정성과 컴포넌트·Hooks 기반 실무 UI 아키텍처를 완성합니다.',
+        subtitle_en: 'Combine static type safety with declarative React components and state hooks.',
+        moduleIds: ['js-ts', 'js-react'],
+      },
+    ],
   },
   {
     id: 'backend',
@@ -933,11 +1021,39 @@ export const LEARNING_ROADMAPS: LearningRoadmap[] = [
     color: '#0891b2',
     title_ko: '백엔드 · 서버',
     title_en: 'Backend & Server',
-    target_ko: 'API 서버 · 데이터베이스 · 인프라',
-    target_en: 'APIs, Databases & Linux',
-    summary_ko: '프로그래밍 기초와 SQL 데이터베이스, 리눅스 터미널, 백엔드 API 순서로 다집니다.',
-    summary_en: 'Build core logic first, followed by SQL databases, Linux CLI, and REST API servers.',
-    moduleIds: ['py-basic', 'sql-basic', 'sql-advanced', 'linux-basic', 'java-spring'],
+    target_ko: 'DB · 리눅스 · API 서버',
+    target_en: 'Databases, Linux & REST APIs',
+    summary_ko: '프로그래밍 기초와 SQL, 리눅스 서버 환경을 익힌 뒤 실무 백엔드 프레임워크로 확장합니다.',
+    summary_en: 'Learn core logic, SQL, and Linux CLI before building production REST API servers.',
+    stages: [
+      {
+        id: 'be-1',
+        stepNumber: 1,
+        title_ko: '1단계 · 서버 프로그래밍 기초와 데이터베이스',
+        title_en: 'Stage 1 · Programming Core & SQL Databases',
+        subtitle_ko: '핵심 로직 작성법과 데이터를 다루는 표준 SQL 쿼리·조인을 익힙니다.',
+        subtitle_en: 'Build core programming logic alongside relational SQL queries and joins.',
+        moduleIds: ['py-basic', 'sql-basic', 'sql-advanced'],
+      },
+      {
+        id: 'be-2',
+        stepNumber: 2,
+        title_ko: '2단계 · 리눅스 서버 터미널과 시스템 운영',
+        title_en: 'Stage 2 · Linux CLI & Server Administration',
+        subtitle_ko: '서버 배포와 운영에 필수인 리눅스 명령어, 파이프라인, 권한·프로세스를 제어합니다.',
+        subtitle_en: 'Master Linux file commands, shell pipelines, permissions, and server processes.',
+        moduleIds: ['linux-basic', 'linux-shell', 'linux-admin'],
+      },
+      {
+        id: 'be-3',
+        stepNumber: 3,
+        title_ko: '3단계 · 실무 REST API & 고성능 백엔드 서버',
+        title_en: 'Stage 3 · Production REST APIs & Cloud Backends',
+        subtitle_ko: 'Node.js, Java Spring, Go, ASP.NET Core로 확장 가능한 API 서버를 구축합니다.',
+        subtitle_en: 'Develop scalable backend APIs across Node.js, Spring Boot, Go, and ASP.NET Core.',
+        moduleIds: ['js-node', 'java-basic', 'java-spring', 'go-basic', 'go-backend', 'go-concurrency', 'cs-dotnet'],
+      },
+    ],
   },
   {
     id: 'cs-algo',
@@ -945,11 +1061,39 @@ export const LEARNING_ROADMAPS: LearningRoadmap[] = [
     color: '#6366f1',
     title_ko: '전공 · 코딩테스트',
     title_en: 'CS & Coding Tests',
-    target_ko: '컴퓨터공학 · 알고리즘 대비',
-    target_en: 'CS Fundamentals & Algorithms',
-    summary_ko: '파이썬 문제 해결력부터 C 메모리·포인터 원리, 자료구조, C++ STL 순서로 완성합니다.',
-    summary_en: 'Start with Python problem solving, then master C pointers, data structures, and C++ STL.',
-    moduleIds: ['py-basic', 'c-basic', 'c-advanced', 'c-datastruct', 'cpp-stl'],
+    target_ko: 'C 포인터 · 자료구조 · STL',
+    target_en: 'Pointers, Data Structures & STL',
+    summary_ko: '파이썬·C언어 기초부터 메모리·포인터, 자료구조, C++ STL과 시스템 언어까지 깊이 있게 다집니다.',
+    summary_en: 'Master Python & C fundamentals, pointers, data structures, C++ STL, and systems programming.',
+    stages: [
+      {
+        id: 'cs-1',
+        stepNumber: 1,
+        title_ko: '1단계 · 문제 해결 기초와 C 메모리·포인터 원리',
+        title_en: 'Stage 1 · Problem Solving & C Memory Pointers',
+        subtitle_ko: '빠른 알고리즘 구현력과 컴퓨터 메모리 주소·포인터의 본질을 이해합니다.',
+        subtitle_en: 'Combine rapid Python problem solving with low-level C memory and pointer mechanics.',
+        moduleIds: ['py-basic', 'c-basic', 'c-advanced'],
+      },
+      {
+        id: 'cs-2',
+        stepNumber: 2,
+        title_ko: '2단계 · 자료구조 구현과 코딩테스트 표준 라이브러리',
+        title_en: 'Stage 2 · Data Structures & Standard Libraries',
+        subtitle_ko: '연결 리스트·트리 구현부터 C++ STL, Java 컬렉션 알고리즘을 마스터합니다.',
+        subtitle_en: 'Build linked lists & trees from scratch and master C++ STL and Java Collections.',
+        moduleIds: ['c-datastruct', 'cpp-basic', 'cpp-stl', 'java-advanced'],
+      },
+      {
+        id: 'cs-3',
+        stepNumber: 3,
+        title_ko: '3단계 · 모던 시스템 프로그래밍 심화',
+        title_en: 'Stage 3 · Modern Systems Programming',
+        subtitle_ko: '스마트 포인터와 Rust 소유권 모델로 메모리 안전한 고성능 코드를 작성합니다.',
+        subtitle_en: 'Write memory-safe, zero-cost systems code with Modern C++20 and Rust ownership.',
+        moduleIds: ['cpp-modern', 'rust-basic', 'rust-advanced', 'rust-systems'],
+      },
+    ],
   },
   {
     id: 'game-mobile',
@@ -957,11 +1101,39 @@ export const LEARNING_ROADMAPS: LearningRoadmap[] = [
     color: '#9333ea',
     title_ko: '게임 · 모바일 앱',
     title_en: 'Games & Mobile Apps',
-    target_ko: 'Unity 게임 · iOS 앱 개발',
-    target_en: 'Unity Games & iOS Apps',
-    summary_ko: 'C# 객체지향과 유니티 스크립팅, Swift 및 SwiftUI 모바일 UI 제작 순서로 익힙니다.',
-    summary_en: 'Learn C# OOP and Unity scripting alongside Swift and declarative SwiftUI app design.',
-    moduleIds: ['cs-basic', 'cs-unity', 'swift-basic', 'swift-swiftui'],
+    target_ko: 'Unity · SwiftUI · 임베디드',
+    target_en: 'Unity, SwiftUI & Embedded',
+    summary_ko: 'C# 유니티 게임 엔진, Swift 네이티브 iOS 앱, 임베디드 하드웨어 제어 과정을 분야별로 익힙니다.',
+    summary_en: 'Build Unity games with C#, native iOS apps with SwiftUI, and embedded C controllers.',
+    stages: [
+      {
+        id: 'gm-1',
+        stepNumber: 1,
+        title_ko: '1단계 · C# 객체지향과 유니티 게임 개발',
+        title_en: 'Stage 1 · C# OOP & Unity Game Scripting',
+        subtitle_ko: 'C# 핵심 문법과 Unity 게임 루프·물리 충돌·고성능 엔진 기초를 익힙니다.',
+        subtitle_en: 'Learn C# OOP properties, Unity MonoBehaviour physics, and modern C++ engine basics.',
+        moduleIds: ['cs-basic', 'cs-unity', 'cpp-modern'],
+      },
+      {
+        id: 'gm-2',
+        stepNumber: 2,
+        title_ko: '2단계 · Swift & SwiftUI 네이티브 iOS 앱 제작',
+        title_en: 'Stage 2 · Swift & Declarative SwiftUI Apps',
+        subtitle_ko: '옵셔널 안전성부터 SwiftUI 선언형 레이아웃, MVVM 비동기 앱 아키텍처를 구현합니다.',
+        subtitle_en: 'Craft native iOS apps with Swift optionals, SwiftUI state stacks, and MVVM networking.',
+        moduleIds: ['swift-basic', 'swift-swiftui', 'swift-ios'],
+      },
+      {
+        id: 'gm-3',
+        stepNumber: 3,
+        title_ko: '3단계 · C 임베디드 & 하드웨어 제어',
+        title_en: 'Stage 3 · C Embedded & Hardware Control',
+        subtitle_ko: '센서 입력과 모터·시리얼 통신을 제어하는 임베디드 펌웨어 기초를 다룹니다.',
+        subtitle_en: 'Control digital pins, analog sensors, PWM motors, and serial hardware I/O.',
+        moduleIds: ['c-basic', 'c-arduino'],
+      },
+    ],
   },
 ];
 
@@ -1016,48 +1188,4 @@ export function findCurriculumModuleBySlug(
 export function isPracticeLanguageUnlocked(rawLang: string): boolean {
   const { module } = findCurriculumModuleBySlug(rawLang);
   return !module.isLocked;
-}
-
-export function recommendRoadmap(answers: FinderAnswers): {
-  roadmap: LearningRoadmap;
-  reason_ko: string;
-  reason_en: string;
-} {
-  let targetId: LearningRoadmap['id'] = answers.goal;
-
-  // Complete beginners aiming for practical quick wins with starter/general interest start best on 'starter'
-  if (answers.experience === 'none' && answers.goal === 'cs-algo' && answers.style === 'practical') {
-    targetId = 'starter';
-  }
-
-  const roadmap =
-    LEARNING_ROADMAPS.find((r) => r.id === targetId) || LEARNING_ROADMAPS[0];
-
-  const expTextKo =
-    answers.experience === 'none'
-      ? '입문자 눈높이에 맞춰'
-      : answers.experience === 'basic'
-      ? '기초 경험을 바탕으로'
-      : '기존 코딩 경험을 살려';
-  const styleTextKo =
-    answers.style === 'practical'
-      ? '직접 타이핑하고 결과를 바로 확인하는 순서로 구성했습니다.'
-      : '기초 원리부터 단계별로 빈틈없이 쌓아가는 순서로 구성했습니다.';
-
-  const expTextEn =
-    answers.experience === 'none'
-      ? 'Tailored for first-time learners,'
-      : answers.experience === 'basic'
-      ? 'Building on your basic syntax knowledge,'
-      : 'Leveraging your prior coding experience,';
-  const styleTextEn =
-    answers.style === 'practical'
-      ? 'ordered for fast hands-on execution and immediate feedback.'
-      : 'ordered step-by-step from core fundamentals upward.';
-
-  return {
-    roadmap,
-    reason_ko: `${expTextKo} ${styleTextKo}`,
-    reason_en: `${expTextEn} ${styleTextEn}`,
-  };
 }
