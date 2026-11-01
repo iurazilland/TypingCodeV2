@@ -842,7 +842,7 @@ export default function CodeTypingPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
-              <span>{isKo ? '현재 타수' : 'Speed'}</span>
+              <span>{isKo ? '타수' : 'Speed'}</span>
               <Gauge size={13} color="#0284c7" />
             </div>
             <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0284c7', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
@@ -880,7 +880,7 @@ export default function CodeTypingPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
-              <span>{isKo ? '경과 시간' : 'Time'}</span>
+              <span>{isKo ? '시간' : 'Time'}</span>
               <Timer size={13} color="#7c3aed" />
             </div>
             <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#7c3aed', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
@@ -898,7 +898,7 @@ export default function CodeTypingPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
-              <span>{isKo ? '내 최고 기록' : 'Best'}</span>
+              <span>{isKo ? '최고 기록' : 'Best'}</span>
               <Trophy size={13} color="#d97706" />
             </div>
             <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#d97706', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
@@ -919,7 +919,7 @@ export default function CodeTypingPage() {
             flexShrink: 0,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
             <span
               style={{
                 padding: '2px 8px',
@@ -937,11 +937,8 @@ export default function CodeTypingPage() {
             </span>
           </div>
 
-          <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#0f172a', marginBottom: '4px' }}>
+          <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
             {isKo ? currentSnippet.titleKo : currentSnippet.titleEn}
-          </div>
-          <div style={{ fontSize: '0.76rem', color: '#475569', lineHeight: 1.4, marginBottom: '10px' }}>
-            {isKo ? currentSnippet.descKo : currentSnippet.descEn}
           </div>
 
           {/* Progress Bar */}
@@ -1218,11 +1215,11 @@ export default function CodeTypingPage() {
           >
             {!isFocused && !isCompleted && (
               <span style={{ color: '#0284c7', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
-                {isKo ? '클릭하여 타이핑 계속하기' : 'Click editor to resume typing'}
+                {isKo ? '에디터 클릭' : 'Click to focus'}
               </span>
             )}
             <span>
-              Ln {String(cursorLine + 1).padStart(2, '0')}/{String(targetLines.length).padStart(2, '0')} · {stats.progress}%
+              Ln {String(cursorLine + 1).padStart(2, '0')}/{String(targetLines.length).padStart(2, '0')}
             </span>
           </div>
         </div>
@@ -1500,8 +1497,8 @@ export default function CodeTypingPage() {
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a' }}>
-                    {isKo ? '예제 완주 성공!' : 'Snippet Complete!'}
+                  <span style={{ fontSize: '0.98rem', fontWeight: 900, color: '#0f172a' }}>
+                    {isKo ? '완주 완료' : 'Complete'}
                   </span>
                   {isNewRecord && (
                     <span
@@ -1519,14 +1516,12 @@ export default function CodeTypingPage() {
                       }}
                     >
                       <Sparkles size={11} />
-                      {isKo ? '최고 기록 경신!' : 'NEW BEST!'}
+                      {isKo ? '신기록' : 'NEW BEST'}
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#334155', marginTop: '2px', fontWeight: 600 }}>
-                  {isKo
-                    ? `최종 타수 ${stats.cpm} CPM · 정확도 ${stats.accuracy}% · 소요 시간 ${elapsedSec.toFixed(1)}초`
-                    : `${stats.cpm} CPM · ${stats.accuracy}% Accuracy · ${elapsedSec.toFixed(1)}s`}
+                <div style={{ fontSize: '0.82rem', color: '#334155', marginTop: '2px', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                  {`${stats.cpm} CPM · ${stats.accuracy}% · ${elapsedSec.toFixed(1)}s`}
                 </div>
               </div>
             </div>
@@ -1550,7 +1545,7 @@ export default function CodeTypingPage() {
                 }}
               >
                 <RotateCcw size={14} />
-                <span>{isKo ? '다시 치기' : 'Retry'}</span>
+                <span>{isKo ? '다시하기' : 'Retry'}</span>
               </button>
 
               <button
@@ -1568,7 +1563,7 @@ export default function CodeTypingPage() {
                   gap: '6px',
                 }}
               >
-                <span>{isKo ? '다음 예제 (Enter)' : 'Next (Enter)'}</span>
+                <span>{isKo ? '다음 (Enter)' : 'Next (Enter)'}</span>
                 <ChevronRight size={15} />
               </button>
             </div>

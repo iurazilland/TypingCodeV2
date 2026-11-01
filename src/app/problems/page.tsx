@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CheckSquare, Play, Sparkles, CheckCircle2, XCircle, ArrowRight, BookOpen, AlertCircle } from 'lucide-react';
+import { Play, CheckCircle2, XCircle } from 'lucide-react';
 import { executeCode } from '@/lib/runner';
 import { useLanguage } from '@/lib/LanguageContext';
 import { fetchSolvedProblemIds, recordProblemSolve } from '@/lib/progressSync';
@@ -158,53 +158,40 @@ export default function ProblemsPage() {
   };
 
   return (
-    <div style={{ maxWidth: '1560px', margin: '0 auto', padding: '32px 40px 80px', color: '#0f172a' }}>
-      {/* Page Header */}
-      <div style={{ marginBottom: '26px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '1.6rem' }}>🎯</span>
-          <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
-            {language === 'ko' ? '알고리즘 & 미션 문제 풀이' : 'Problem Solving & Coding Quizzes'}
-          </h1>
-          <span style={{
-            fontSize: '0.73rem',
-            fontWeight: 800,
-            padding: '4px 10px',
-            borderRadius: '12px',
-            background: '#ffffff',
-            color: '#059669',
-            border: '1.5px solid #cbd5e1',
-            boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
-          }}>
-            PRACTICE MISSIONS
-          </span>
-        </div>
-        <p style={{ color: '#475569', fontSize: '0.96rem', margin: 0, fontWeight: 500 }}>
-          {language === 'ko'
-            ? '문제를 읽고 조건에 맞는 코드를 작성하여 테스트 케이스를 통과시켜보세요. 실전 코딩 사고력을 기를 수 있습니다.'
-            : 'Read problem requirements, write code, and pass test cases to sharpen your programming problem solving.'}
-        </p>
+    <div style={{ maxWidth: '1560px', margin: '0 auto', padding: '28px 40px 80px', color: '#0f172a' }}>
+      {/* Minimal Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <h1 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+          {language === 'ko' ? '문제풀이' : 'Problems'}
+        </h1>
+        <span style={{
+          fontSize: '0.8rem',
+          fontWeight: 800,
+          padding: '5px 12px',
+          borderRadius: '10px',
+          background: '#ffffff',
+          color: '#059669',
+          border: '1.5px solid #cbd5e1',
+        }}>
+          {language === 'ko' ? `${solvedIds.size} / ${PROBLEMS.length} 해결` : `${solvedIds.size} / ${PROBLEMS.length} Solved`}
+        </span>
       </div>
 
       {/* Main Grid: Problem Selector + Problem Detail & Editor */}
-      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '22px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '20px' }}>
         {/* Left: Problem List Sidebar */}
         <div style={{
           background: '#ffffff',
           border: '1.5px solid #cbd5e1',
           borderRadius: '20px',
-          padding: '18px',
+          padding: '16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: '8px',
           maxHeight: '740px',
           overflowY: 'auto',
           boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
         }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#475569', padding: '0 6px 8px', borderBottom: '1px solid #e2e8f0' }}>
-            문제 목록 ({PROBLEMS.length}개)
-          </div>
-
           {PROBLEMS.map((p) => {
             const isSelected = selectedProblem.id === p.id;
             return (
@@ -215,7 +202,8 @@ export default function ProblemsPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '14px 16px',
+                  gap: '10px',
+                  padding: '13px 14px',
                   borderRadius: '12px',
                   boxSizing: 'border-box',
                   border: isSelected ? '2px solid #0891b2' : '2px solid #e2e8f0',
@@ -225,22 +213,20 @@ export default function ProblemsPage() {
                   transition: 'background-color 0.15s ease, border-color 0.15s ease',
                 }}
               >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.92rem', fontWeight: 800, color: isSelected ? '#0e7490' : '#0f172a', marginBottom: '4px' }}>
-                    <span>#{p.id}. {p.title}</span>
-                    {solvedIds.has(p.id) && (
-                      <CheckCircle2 size={14} color="#059669" style={{ flexShrink: 0 }} />
-                    )}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
-                    {p.category}
-                  </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', fontWeight: 800, color: isSelected ? '#0e7490' : '#0f172a', minWidth: 0 }}>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {p.id}. {p.title}
+                  </span>
+                  {solvedIds.has(p.id) && (
+                    <CheckCircle2 size={14} color="#059669" style={{ flexShrink: 0 }} />
+                  )}
                 </div>
 
                 <span style={{
+                  flexShrink: 0,
                   fontSize: '0.72rem',
                   fontWeight: 800,
-                  padding: '3px 8px',
+                  padding: '2px 8px',
                   borderRadius: '8px',
                   background: `${p.diffColor}16`,
                   color: p.diffColor,
@@ -260,17 +246,17 @@ export default function ProblemsPage() {
             background: '#ffffff',
             border: '1.5px solid #cbd5e1',
             borderRadius: '20px',
-            padding: '24px 28px',
+            padding: '22px 26px',
             boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
-              <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                #{selectedProblem.id}. {selectedProblem.title}
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                {selectedProblem.id}. {selectedProblem.title}
               </h2>
               <span style={{
-                fontSize: '0.78rem',
+                fontSize: '0.75rem',
                 fontWeight: 800,
-                padding: '3px 10px',
+                padding: '2px 9px',
                 borderRadius: '8px',
                 background: `${selectedProblem.diffColor}16`,
                 color: selectedProblem.diffColor,
@@ -278,22 +264,19 @@ export default function ProblemsPage() {
               }}>
                 {selectedProblem.difficulty}
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
-                분류: {selectedProblem.category}
-              </span>
             </div>
 
-            <p style={{ color: '#334155', fontSize: '0.98rem', lineHeight: 1.6, marginBottom: '16px', fontWeight: 500 }}>
+            <p style={{ color: '#334155', fontSize: '0.95rem', lineHeight: 1.55, marginBottom: '16px', fontWeight: 500 }}>
               {selectedProblem.description}
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '14px 18px', borderRadius: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '12px 16px', borderRadius: '12px' }}>
               <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0284c7', marginBottom: '4px' }}>예제 입력 1</div>
+                <div style={{ fontSize: '0.76rem', fontWeight: 800, color: '#0284c7', marginBottom: '4px' }}>예제 입력</div>
                 <pre style={{ margin: 0, fontSize: '0.9rem', fontFamily: 'var(--font-mono), monospace', color: '#0f172a', fontWeight: 600 }}>{selectedProblem.sampleInput}</pre>
               </div>
               <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#059669', marginBottom: '4px' }}>예제 출력 1</div>
+                <div style={{ fontSize: '0.76rem', fontWeight: 800, color: '#059669', marginBottom: '4px' }}>예제 출력</div>
                 <pre style={{ margin: 0, fontSize: '0.9rem', fontFamily: 'var(--font-mono), monospace', color: '#0f172a', fontWeight: 600 }}>{selectedProblem.sampleOutput}</pre>
               </div>
             </div>
@@ -314,12 +297,12 @@ export default function ProblemsPage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '12px 20px',
+              padding: '10px 18px',
               background: '#f8fafc',
               borderBottom: '1px solid #e2e8f0',
             }}>
-              <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#0f172a' }}>
-                🐍 Python 3.10 코드 작성
+              <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#0f172a', fontFamily: 'var(--font-mono)' }}>
+                Python
               </span>
 
               <button
@@ -327,16 +310,16 @@ export default function ProblemsPage() {
                 disabled={isGrading}
                 className="tactile-btn tactile-btn-primary"
                 style={{
-                  padding: '9px 20px',
-                  fontSize: '0.9rem',
+                  padding: '8px 18px',
+                  fontSize: '0.88rem',
                   fontWeight: 800,
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '7px',
                 }}
               >
-                <Play size={15} fill="currentColor" />
-                <span>{isGrading ? '채점 진행 중...' : '제출 및 채점하기 (Submit)'}</span>
+                <Play size={14} fill="currentColor" />
+                <span>{isGrading ? '채점 중...' : '채점하기'}</span>
               </button>
             </div>
 
@@ -347,7 +330,7 @@ export default function ProblemsPage() {
               spellCheck={false}
               style={{
                 width: '100%',
-                height: '240px',
+                height: '250px',
                 padding: '18px 20px',
                 background: '#ffffff',
                 color: '#0f172a',
@@ -365,39 +348,28 @@ export default function ProblemsPage() {
             {/* Test Result Grading Banner */}
             {resultStatus !== 'idle' && (
               <div style={{
-                padding: '16px 20px',
+                padding: '13px 18px',
                 borderTop: '1px solid #e2e8f0',
                 background: resultStatus === 'pass' ? '#ecfdf5' : '#fef2f2',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                gap: '10px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  {resultStatus === 'pass' ? (
-                    <>
-                      <CheckCircle2 size={24} color="#059669" />
-                      <div>
-                        <div style={{ fontWeight: 800, color: '#059669', fontSize: '0.95rem' }}>정답입니다! (Accepted 🎉)</div>
-                        <div style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 500 }}>예제 테스트 케이스를 완벽하게 통과했습니다.</div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <XCircle size={24} color="#dc2626" />
-                      <div>
-                        <div style={{ fontWeight: 800, color: '#dc2626', fontSize: '0.95rem' }}>오답 또는 런타임 에러 (Wrong Answer)</div>
-                        <div style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 500 }}>
-                          실제 출력값: <code style={{ color: '#b91c1c', fontWeight: 700 }}>{actualOutput || '(빈 출력)'}</code> | 정답: <code style={{ color: '#0f172a', fontWeight: 700 }}>{selectedProblem.sampleOutput}</code>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {resultStatus === 'pass' && (
-                  <span style={{ fontSize: '0.82rem', color: '#059669', fontWeight: 800 }}>
-                    +100 XP 획득!
-                  </span>
+                {resultStatus === 'pass' ? (
+                  <>
+                    <CheckCircle2 size={20} color="#059669" />
+                    <span style={{ fontWeight: 800, color: '#059669', fontSize: '0.92rem' }}>정답입니다</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle size={20} color="#dc2626" />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', fontSize: '0.86rem' }}>
+                      <span style={{ fontWeight: 800, color: '#dc2626' }}>오답</span>
+                      <span style={{ color: '#475569', fontWeight: 600 }}>
+                        출력: <code style={{ color: '#b91c1c', fontWeight: 700 }}>{actualOutput || '(없음)'}</code> · 정답: <code style={{ color: '#0f172a', fontWeight: 700 }}>{selectedProblem.sampleOutput}</code>
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
             )}

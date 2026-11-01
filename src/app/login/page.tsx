@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   Lock,
   Mail,
-  Sparkles,
   User,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -418,7 +417,7 @@ function LoginPageContent() {
         }}
       >
         {/* Top back link */}
-        <div style={{ marginBottom: '18px' }}>
+        <div style={{ marginBottom: '16px' }}>
           <Link
             href="/"
             style={{
@@ -432,58 +431,28 @@ function LoginPageContent() {
             }}
           >
             <ArrowLeft size={14} />
-            <span>{isKo ? '홈으로 돌아가기' : 'Back to Home'}</span>
+            <span>{isKo ? '홈으로' : 'Home'}</span>
           </Link>
         </div>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '4px 12px',
-              borderRadius: '16px',
-              background: '#f0f9ff',
-              border: '1px solid #bae6fd',
-              color: '#0284c7',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              letterSpacing: '0.04em',
-              marginBottom: '12px',
-            }}
-          >
-            <Sparkles size={13} />
-            <span>TYPINGCODE ACCOUNT</span>
-          </div>
-
-          <h1
-            style={{
-              fontSize: '1.55rem',
-              fontWeight: 800,
-              color: '#0f172a',
-              marginBottom: '8px',
-            }}
-          >
-            {mode === 'login'
-              ? isKo
-                ? 'TypingCode 로그인'
-                : 'Sign In to TypingCode'
-              : isKo
-              ? 'TypingCode 무료 회원가입'
-              : 'Create Your TypingCode Account'}
-          </h1>
-          <p style={{ color: '#475569', fontSize: '0.88rem', lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
-            {mode === 'login'
-              ? isKo
-                ? '아이디 또는 이메일로 로그인하고 학습 레벨과 연속 출석 기록을 이어가세요.'
-                : 'Sign in with your Login ID or email to track your levels and streak.'
-              : isKo
-              ? '나만의 로그인 ID와 프로필 아이콘을 설정하고 코딩 여정을 시작하세요.'
-              : 'Choose your Login ID and starter avatar to begin your coding journey.'}
-          </p>
-        </div>
+        {/* Minimal Header */}
+        <h1
+          style={{
+            fontSize: '1.5rem',
+            fontWeight: 800,
+            color: '#0f172a',
+            margin: '0 0 22px',
+            textAlign: 'center',
+          }}
+        >
+          {mode === 'login'
+            ? isKo
+              ? '로그인'
+              : 'Sign In'
+            : isKo
+            ? '회원가입'
+            : 'Sign Up'}
+        </h1>
 
         {/* Redirect notice when coming from a protected learning page */}
         {safeNext && !errorMessage && !infoMessage && (
@@ -492,22 +461,21 @@ function LoginPageContent() {
               display: 'flex',
               alignItems: 'center',
               gap: '9px',
-              padding: '11px 14px',
+              padding: '10px 14px',
               borderRadius: '12px',
               background: '#f0f9ff',
               border: '1px solid #bae6fd',
               color: '#0369a1',
               fontSize: '0.83rem',
               fontWeight: 600,
-              lineHeight: 1.45,
               marginBottom: '18px',
             }}
           >
             <AlertCircle size={16} style={{ flexShrink: 0, color: '#0284c7' }} />
             <span>
               {isKo
-                ? '학습 코스 및 실습 기능을 이용하려면 로그인이 필요합니다. 로그인 후 선택한 페이지로 바로 이동합니다.'
-                : 'Please sign in to access learning courses. You will be redirected right back after signing in.'}
+                ? '로그인이 필요한 서비스입니다.'
+                : 'Please sign in to continue.'}
             </span>
           </div>
         )}
@@ -572,7 +540,7 @@ function LoginPageContent() {
                   marginBottom: '6px',
                 }}
               >
-                {isKo ? '아이디 또는 이메일' : 'Login ID or Email'}
+                {isKo ? '아이디 또는 이메일' : 'ID or Email'}
               </label>
               <div style={{ position: 'relative' }}>
                 <User
@@ -583,9 +551,7 @@ function LoginPageContent() {
                   type="text"
                   required
                   autoComplete="username"
-                  placeholder={
-                    isKo ? '아이디(예: coder_kim) 또는 이메일 입력' : 'Enter Login ID or email'
-                  }
+                  placeholder={isKo ? '아이디 또는 이메일' : 'ID or email'}
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   style={inputStyle}
@@ -627,7 +593,7 @@ function LoginPageContent() {
                     padding: 0,
                   }}
                 >
-                  {isKo ? '비밀번호 재설정' : 'Forgot password?'}
+                  {isKo ? '비밀번호 재설정' : 'Forgot?'}
                 </button>
               </div>
               <div style={{ position: 'relative' }}>
@@ -639,7 +605,7 @@ function LoginPageContent() {
                   type="password"
                   required
                   autoComplete="current-password"
-                  placeholder={isKo ? '비밀번호 입력' : 'Enter your password'}
+                  placeholder={isKo ? '비밀번호' : 'Password'}
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   style={inputStyle}
@@ -673,7 +639,7 @@ function LoginPageContent() {
                     ? '로그인 중...'
                     : 'Signing in...'
                   : isKo
-                  ? '로그인하기'
+                  ? '로그인'
                   : 'Sign In'}
               </span>
               <ArrowRight size={16} />
@@ -695,7 +661,7 @@ function LoginPageContent() {
                   marginBottom: '6px',
                 }}
               >
-                {isKo ? '로그인 ID (가입 후 변경 불가)' : 'Login ID (permanent)'}
+                {isKo ? '아이디' : 'ID'}
               </label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <div style={{ position: 'relative', flex: 1 }}>
@@ -708,7 +674,7 @@ function LoginPageContent() {
                     required
                     maxLength={20}
                     autoComplete="username"
-                    placeholder={isKo ? '영문 소문자·숫자·_ (4~20자)' : '4-20 chars (a-z, 0-9, _)'}
+                    placeholder={isKo ? '영문 소문자, 숫자, _ (4~20자)' : '4-20 chars (a-z, 0-9, _)'}
                     value={loginId}
                     onChange={(e) => {
                       const next = e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
@@ -746,23 +712,23 @@ function LoginPageContent() {
                       : 'Checking...'
                     : isKo
                     ? '중복 확인'
-                    : 'Check ID'}
+                    : 'Check'}
                 </button>
               </div>
               {idCheckStatus === 'available' && (
                 <div style={{ fontSize: '0.76rem', color: '#059669', marginTop: '5px', fontWeight: 700 }}>
-                  {isKo ? '✅ 사용 가능한 로그인 ID입니다.' : '✅ This Login ID is available.'}
+                  {isKo ? '사용 가능한 아이디입니다.' : 'Available.'}
                 </div>
               )}
               {idCheckStatus === 'taken' && (
                 <div style={{ fontSize: '0.76rem', color: '#dc2626', marginTop: '5px', fontWeight: 700 }}>
-                  {isKo ? '❌ 이미 사용 중인 ID입니다.' : '❌ This Login ID is already taken.'}
+                  {isKo ? '이미 사용 중인 아이디입니다.' : 'Already taken.'}
                 </div>
               )}
               {idCheckStatus === 'invalid' && (
                 <div style={{ fontSize: '0.76rem', color: '#d97706', marginTop: '5px', fontWeight: 700 }}>
                   {isKo
-                    ? '영문 소문자, 숫자, 밑줄(_) 4~20자로 입력해 주세요.'
+                    ? '영문 소문자, 숫자, _ 조합 4~20자로 입력해 주세요.'
                     : 'Use 4–20 lowercase letters, numbers, or underscores.'}
                 </div>
               )}
@@ -779,7 +745,7 @@ function LoginPageContent() {
                   marginBottom: '6px',
                 }}
               >
-                {isKo ? '닉네임 (언제든 수정 가능)' : 'Nickname (editable anytime)'}
+                {isKo ? '닉네임' : 'Nickname'}
               </label>
               <div style={{ position: 'relative' }}>
                 <User
@@ -790,7 +756,7 @@ function LoginPageContent() {
                   type="text"
                   required
                   maxLength={24}
-                  placeholder={isKo ? '리더보드에 표시될 멋진 닉네임' : 'Display nickname'}
+                  placeholder={isKo ? '닉네임' : 'Nickname'}
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   style={inputStyle}
@@ -800,21 +766,9 @@ function LoginPageContent() {
 
             {/* 3. Built-in Default Profile Icon Picker */}
             <div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '8px',
-                }}
-              >
-                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155' }}>
-                  {isKo ? '기본 프로필 아이콘 선택' : 'Choose Starter Icon'}
-                </label>
-                <span style={{ fontSize: '0.73rem', color: '#64748b', fontWeight: 600 }}>
-                  {isKo ? '가입 후 내 사진 업로드 가능' : 'Custom upload in Profile'}
-                </span>
-              </div>
+              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '8px' }}>
+                {isKo ? '프로필 아이콘' : 'Profile Icon'}
+              </label>
               <div
                 style={{
                   display: 'grid',
@@ -868,7 +822,7 @@ function LoginPageContent() {
                   marginBottom: '6px',
                 }}
               >
-                {isKo ? '이메일 주소' : 'Email Address'}
+                {isKo ? '이메일' : 'Email'}
               </label>
               <div style={{ position: 'relative' }}>
                 <Mail
@@ -941,7 +895,7 @@ function LoginPageContent() {
                     required
                     minLength={6}
                     autoComplete="new-password"
-                    placeholder={isKo ? '한 번 더 입력' : 'Re-enter'}
+                    placeholder={isKo ? '비밀번호 확인' : 'Re-enter'}
                     value={signupConfirmPassword}
                     onChange={(e) => setSignupConfirmPassword(e.target.value)}
                     style={{ ...inputStyle, paddingLeft: '38px' }}
@@ -970,8 +924,8 @@ function LoginPageContent() {
               />
               <span>
                 {isKo
-                  ? '서비스 이용약관 및 개인정보 처리방침에 동의합니다.'
-                  : 'I agree to the Terms of Service and Privacy Policy.'}
+                  ? '이용약관 및 개인정보 처리방침 동의'
+                  : 'Agree to Terms & Privacy Policy'}
               </span>
             </label>
 
@@ -996,11 +950,11 @@ function LoginPageContent() {
               <span>
                 {isSubmitting
                   ? isKo
-                    ? '가입 처리 중...'
-                    : 'Creating account...'
+                    ? '처리 중...'
+                    : 'Creating...'
                   : isKo
-                  ? '회원가입 완료하기'
-                  : 'Complete Sign Up'}
+                  ? '회원가입'
+                  : 'Sign Up'}
               </span>
               <ArrowRight size={16} />
             </button>
@@ -1008,18 +962,18 @@ function LoginPageContent() {
         )}
 
         {/* Social OAuth Section */}
-        <div style={{ marginTop: '22px' }}>
+        <div style={{ marginTop: '20px' }}>
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              marginBottom: '14px',
+              marginBottom: '12px',
             }}
           >
             <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
-            <span style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 600 }}>
-              {isKo ? '또는 소셜 계정으로 계속하기' : 'Or continue with social'}
+            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+              {isKo ? '소셜 로그인' : 'Social'}
             </span>
             <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
           </div>
@@ -1073,21 +1027,21 @@ function LoginPageContent() {
           </div>
         </div>
 
-        {/* Mode Switcher Footer (Sign-Up is ONLY exposed inside /login) */}
+        {/* Mode Switcher Footer */}
         <div
           style={{
-            marginTop: '24px',
-            paddingTop: '18px',
+            marginTop: '20px',
+            paddingTop: '16px',
             borderTop: '1px solid #e2e8f0',
             textAlign: 'center',
-            fontSize: '0.86rem',
+            fontSize: '0.85rem',
             color: '#475569',
             fontWeight: 500,
           }}
         >
           {mode === 'login' ? (
             <>
-              <span>{isKo ? '아직 계정이 없으신가요? ' : "Don't have an account? "}</span>
+              <span>{isKo ? '계정이 없으신가요? ' : 'No account? '}</span>
               <button
                 type="button"
                 onClick={() => {
@@ -1100,18 +1054,18 @@ function LoginPageContent() {
                   border: 'none',
                   color: '#0284c7',
                   fontWeight: 800,
-                  fontSize: '0.86rem',
+                  fontSize: '0.85rem',
                   cursor: 'pointer',
                   textDecoration: 'underline',
                   textUnderlineOffset: '3px',
                 }}
               >
-                {isKo ? '무료 회원가입하기' : 'Create an account'}
+                {isKo ? '회원가입' : 'Sign Up'}
               </button>
             </>
           ) : (
             <>
-              <span>{isKo ? '이미 계정이 있으신가요? ' : 'Already have an account? '}</span>
+              <span>{isKo ? '이미 계정이 있으신가요? ' : 'Have an account? '}</span>
               <button
                 type="button"
                 onClick={() => {
@@ -1124,13 +1078,13 @@ function LoginPageContent() {
                   border: 'none',
                   color: '#0284c7',
                   fontWeight: 800,
-                  fontSize: '0.86rem',
+                  fontSize: '0.85rem',
                   cursor: 'pointer',
                   textDecoration: 'underline',
                   textUnderlineOffset: '3px',
                 }}
               >
-                {isKo ? '로그인 화면으로 돌아가기' : 'Back to Sign In'}
+                {isKo ? '로그인' : 'Sign In'}
               </button>
             </>
           )}

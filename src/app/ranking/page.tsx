@@ -3,7 +3,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { BookOpen, Flame, Sparkles, Trophy, Zap } from 'lucide-react';
+import { BookOpen, Flame, Sparkles, Zap } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { createClient } from '@/lib/supabase/client';
@@ -104,50 +104,8 @@ function RankingPageContent() {
   const thirdPlace = displayList[2] || null;
 
   return (
-    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '40px 24px 100px', color: '#0f172a' }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 18px',
-            borderRadius: '24px',
-            background: '#ffffff',
-            border: '1.5px solid #cbd5e1',
-            color: '#d97706',
-            fontSize: '0.84rem',
-            fontWeight: 800,
-            marginBottom: '16px',
-            letterSpacing: '0.04em',
-            boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
-          }}
-        >
-          <Trophy size={15} />
-          <span>HALL OF FAME & LEADERBOARD</span>
-        </div>
-        <h1 style={{ fontSize: 'clamp(1.9rem, 3.6vw, 2.45rem)', fontWeight: 900, color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
-          {activeTab === 'learning'
-            ? isKo
-              ? '꾸준함이 빛나는 코딩 학습 리더보드'
-              : 'Learning, Streak & Problem Leaderboard'
-            : isKo
-            ? '코드타자 명예의 전당'
-            : 'Code Typing CPM Leaderboard'}
-        </h1>
-        <p style={{ color: '#475569', fontSize: '1.02rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontWeight: 500 }}>
-          {activeTab === 'learning'
-            ? isKo
-              ? '어디까지 학습을 진행했는지(완료 레벨), 꾸준히 출석했는지(연속·누적 출석), 문제를 얼마나 해결했는지를 종합해 순위를 산정합니다.'
-              : 'Ranked by curriculum levels cleared, daily attendance streaks, and coding problems solved.'
-            : isKo
-            ? '코드타자 모드에서 측정된 순수 장문 코드 타이핑 최고 타수(CPM)와 정확도 순위입니다.'
-            : 'Top pure code typing speed (CPM) and accuracy recorded in Code Typing mode.'}
-        </p>
-      </div>
-
-      {/* Mode Switcher Tabs + CTA */}
+    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '28px 24px 90px', color: '#0f172a' }}>
+      {/* Minimal Single-Row Header: Title + Mode Switcher + CTA */}
       <div
         style={{
           display: 'flex',
@@ -155,81 +113,87 @@ function RankingPageContent() {
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '14px',
-          marginBottom: '32px',
+          marginBottom: '26px',
         }}
       >
-        <div
-          style={{
-            display: 'inline-flex',
-            gap: '6px',
-            padding: '5px',
-            borderRadius: '14px',
-            background: '#ffffff',
-            border: '1.5px solid #cbd5e1',
-            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.05)',
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('learning')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              padding: '10px 18px',
-              borderRadius: '10px',
-              border: 'none',
-              background:
-                activeTab === 'learning' ? 'rgba(8, 145, 178, 0.14)' : 'transparent',
-              color: activeTab === 'learning' ? '#0891b2' : '#475569',
-              fontWeight: 800,
-              fontSize: '0.88rem',
-              cursor: 'pointer',
-            }}
-          >
-            <BookOpen size={15} />
-            <span>{isKo ? '종합 학습 · 출석 · 문제풀이 랭킹' : 'Learning & Streak'}</span>
-          </button>
+        <h1 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+          {isKo ? '리더보드' : 'Leaderboard'}
+        </h1>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab('speed')}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          <div
             style={{
               display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              padding: '10px 18px',
-              borderRadius: '10px',
-              border: 'none',
-              background:
-                activeTab === 'speed' ? 'rgba(124, 58, 237, 0.12)' : 'transparent',
-              color: activeTab === 'speed' ? '#7c3aed' : '#475569',
-              fontWeight: 800,
-              fontSize: '0.88rem',
-              cursor: 'pointer',
+              gap: '4px',
+              padding: '4px',
+              borderRadius: '13px',
+              background: '#ffffff',
+              border: '1.5px solid #cbd5e1',
+              boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
             }}
           >
-            <Zap size={15} />
-            <span>{isKo ? '코드타자 타수 랭킹' : 'Code Typing CPM'}</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('learning')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 15px',
+                borderRadius: '9px',
+                border: 'none',
+                background:
+                  activeTab === 'learning' ? 'rgba(8, 145, 178, 0.14)' : 'transparent',
+                color: activeTab === 'learning' ? '#0891b2' : '#475569',
+                fontWeight: 800,
+                fontSize: '0.86rem',
+                cursor: 'pointer',
+              }}
+            >
+              <BookOpen size={14} />
+              <span>{isKo ? '학습 랭킹' : 'Learning'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('speed')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 15px',
+                borderRadius: '9px',
+                border: 'none',
+                background:
+                  activeTab === 'speed' ? 'rgba(124, 58, 237, 0.12)' : 'transparent',
+                color: activeTab === 'speed' ? '#7c3aed' : '#475569',
+                fontWeight: 800,
+                fontSize: '0.86rem',
+                cursor: 'pointer',
+              }}
+            >
+              <Zap size={14} />
+              <span>{isKo ? '코드타자 랭킹' : 'Code Typing'}</span>
+            </button>
+          </div>
+
+          <Link
+            href={activeTab === 'learning' ? '/languages' : '/code-typing'}
+            className="tactile-btn tactile-btn-primary"
+            style={{ padding: '9px 16px', fontSize: '0.86rem', textDecoration: 'none' }}
+          >
+            <Sparkles size={14} />
+            <span>
+              {activeTab === 'learning'
+                ? isKo
+                  ? '학습하기'
+                  : 'Learn'
+                : isKo
+                ? '코드타자'
+                : 'Code Typing'}
+            </span>
+          </Link>
         </div>
-
-        <Link
-          href={activeTab === 'learning' ? '/languages' : '/code-typing'}
-          className="tactile-btn tactile-btn-primary"
-          style={{ padding: '10px 18px', fontSize: '0.88rem', textDecoration: 'none' }}
-        >
-          <Sparkles size={15} />
-          <span>
-            {activeTab === 'learning'
-              ? isKo
-                ? '학습 이어가고 점수 올리기'
-                : 'Continue Learning'
-              : isKo
-              ? '코드타자 도전하기'
-              : 'Play Code Typing'}
-          </span>
-        </Link>
       </div>
 
       {/* Top 3 Podium */}
@@ -237,9 +201,9 @@ function RankingPageContent() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '22px',
-            marginBottom: '40px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '20px',
+            marginBottom: '30px',
           }}
         >
           {[
@@ -257,8 +221,8 @@ function RankingPageContent() {
                   style={{
                     background: podium.bg,
                     border: `2px solid ${podium.border}`,
-                    borderRadius: '24px',
-                    padding: podium.rank === 1 ? '32px 24px' : '28px 22px',
+                    borderRadius: '22px',
+                    padding: podium.rank === 1 ? '26px 22px' : '24px 20px',
                     textAlign: 'center',
                     boxShadow: '0 8px 26px -4px rgba(15, 23, 42, 0.08)',
                     order: podium.order,
@@ -267,43 +231,41 @@ function RankingPageContent() {
                     alignItems: 'center',
                   }}
                 >
-                  <div style={{ fontSize: '2.1rem', marginBottom: '10px' }}>{podium.medal}</div>
+                  <div style={{ fontSize: '1.9rem', marginBottom: '8px' }}>{podium.medal}</div>
                   <UserAvatar
                     avatarUrl={u.avatar_url}
                     avatarPreset={u.avatar_preset}
-                    size={podium.rank === 1 ? 66 : 58}
+                    size={podium.rank === 1 ? 62 : 56}
                     borderColor={podium.border}
                     alt={u.display_name}
                   />
-                  <h3 style={{ fontSize: '1.22rem', fontWeight: 800, margin: '12px 0 4px', color: '#0f172a' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '10px 0 3px', color: '#0f172a' }}>
                     {u.display_name}
                   </h3>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 800, color: repBadge.color, marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: repBadge.color, marginBottom: '10px' }}>
                     {repBadge.label}
                   </div>
 
                   {activeTab === 'learning' ? (
                     <>
-                      <div style={{ fontSize: '1.9rem', fontWeight: 900, color: podium.accent }}>
+                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: podium.accent }}>
                         {u.activity_score.toLocaleString()}{' '}
-                        <span style={{ fontSize: '0.85rem', color: '#64748b' }}>PT</span>
+                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>PT</span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '6px', fontWeight: 600 }}>
+                      <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '4px', fontWeight: 600 }}>
                         {isKo
-                          ? `${u.cleared_levels_count}레벨 완료 · 🔥 ${u.current_streak}일 연속 · ${u.solved_problems_count}문제`
+                          ? `${u.cleared_levels_count}레벨 · 🔥 ${u.current_streak}일 · ${u.solved_problems_count}문제`
                           : `${u.cleared_levels_count} lvls · 🔥 ${u.current_streak}d · ${u.solved_problems_count} probs`}
                       </div>
                     </>
                   ) : (
                     <>
-                      <div style={{ fontSize: '1.9rem', fontWeight: 900, color: podium.accent }}>
+                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: podium.accent }}>
                         {u.best_typing_cpm}{' '}
-                        <span style={{ fontSize: '0.85rem', color: '#64748b' }}>CPM</span>
+                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>CPM</span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '6px', fontWeight: 600 }}>
-                        {isKo
-                          ? `정확도 ${Number(u.best_typing_accuracy || 0).toFixed(1)}% · ${u.primary_language}`
-                          : `Acc ${Number(u.best_typing_accuracy || 0).toFixed(1)}% · ${u.primary_language}`}
+                      <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '4px', fontWeight: 600 }}>
+                        {`${Number(u.best_typing_accuracy || 0).toFixed(1)}% · ${u.primary_language}`}
                       </div>
                     </>
                   )}
@@ -324,12 +286,12 @@ function RankingPageContent() {
         }}
       >
         {activeTab === 'learning' ? (
-          <div style={{ minWidth: '720px' }}>
+          <div style={{ minWidth: '680px' }}>
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '70px 2.2fr 1fr 1.2fr 1fr 1.1fr',
-                padding: '15px 24px',
+                gridTemplateColumns: '70px 2.2fr 1fr 1fr 1fr 1.1fr',
+                padding: '14px 24px',
                 background: '#f8fafc',
                 borderBottom: '1px solid #e2e8f0',
                 fontSize: '0.82rem',
@@ -338,16 +300,16 @@ function RankingPageContent() {
               }}
             >
               <div>{isKo ? '순위' : 'Rank'}</div>
-              <div>{isKo ? '코더 (프로필 & 대표 뱃지)' : 'Coder'}</div>
-              <div style={{ textAlign: 'right' }}>{isKo ? '완료 레벨' : 'Cleared'}</div>
-              <div style={{ textAlign: 'right' }}>{isKo ? '출석 (연속/누적)' : 'Attendance'}</div>
+              <div>{isKo ? '사용자' : 'User'}</div>
+              <div style={{ textAlign: 'right' }}>{isKo ? '완료 레벨' : 'Levels'}</div>
+              <div style={{ textAlign: 'right' }}>{isKo ? '연속 출석' : 'Streak'}</div>
               <div style={{ textAlign: 'right' }}>{isKo ? '문제풀이' : 'Problems'}</div>
-              <div style={{ textAlign: 'right' }}>{isKo ? '종합 점수' : 'Total Score'}</div>
+              <div style={{ textAlign: 'right' }}>{isKo ? '점수' : 'Score'}</div>
             </div>
 
             {isLoading ? (
               <div style={{ padding: '36px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
-                {isKo ? '리더보드 데이터를 불러오는 중...' : 'Loading leaderboard...'}
+                {isKo ? '불러오는 중...' : 'Loading...'}
               </div>
             ) : (
               displayList.map((entry, idx) => {
@@ -360,8 +322,8 @@ function RankingPageContent() {
                     key={entry.id}
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: '70px 2.2fr 1fr 1.2fr 1fr 1.1fr',
-                      padding: '14px 24px',
+                      gridTemplateColumns: '70px 2.2fr 1fr 1fr 1fr 1.1fr',
+                      padding: '13px 24px',
                       borderBottom: '1px solid #f1f5f9',
                       alignItems: 'center',
                       fontSize: '0.9rem',
@@ -376,7 +338,7 @@ function RankingPageContent() {
                       <UserAvatar
                         avatarUrl={entry.avatar_url}
                         avatarPreset={entry.avatar_preset}
-                        size={38}
+                        size={36}
                         alt={entry.display_name}
                       />
                       <div style={{ minWidth: 0 }}>
@@ -399,14 +361,14 @@ function RankingPageContent() {
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: badge.color, fontWeight: 800 }}>
+                        <div style={{ fontSize: '0.74rem', color: badge.color, fontWeight: 800 }}>
                           {badge.label}
                         </div>
                       </div>
                     </div>
 
                     <div style={{ textAlign: 'right', fontWeight: 800, color: '#334155' }}>
-                      {entry.cleared_levels_count} {isKo ? '레벨' : 'lvls'}
+                      {entry.cleared_levels_count}
                     </div>
 
                     <div
@@ -415,7 +377,7 @@ function RankingPageContent() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'flex-end',
-                        gap: '5px',
+                        gap: '4px',
                         color: entry.current_streak > 0 ? '#ea580c' : '#64748b',
                         fontWeight: 700,
                       }}
@@ -423,15 +385,12 @@ function RankingPageContent() {
                       <Flame size={14} />
                       <span>
                         {entry.current_streak}
-                        {isKo ? '일' : 'd'}{' '}
-                        <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: 600 }}>
-                          ({isKo ? `누적 ${entry.total_attendance_days}일` : `${entry.total_attendance_days}d`})
-                        </span>
+                        {isKo ? '일' : 'd'}
                       </span>
                     </div>
 
                     <div style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
-                      {entry.solved_problems_count} {isKo ? '문제' : 'solved'}
+                      {entry.solved_problems_count}
                     </div>
 
                     <div style={{ textAlign: 'right', fontWeight: 900, color: '#0284c7', fontFamily: 'var(--font-mono)' }}>
@@ -443,12 +402,12 @@ function RankingPageContent() {
             )}
           </div>
         ) : (
-          <div style={{ minWidth: '660px' }}>
+          <div style={{ minWidth: '640px' }}>
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
-                padding: '15px 24px',
+                padding: '14px 24px',
                 background: '#f8fafc',
                 borderBottom: '1px solid #e2e8f0',
                 fontSize: '0.82rem',
@@ -457,10 +416,10 @@ function RankingPageContent() {
               }}
             >
               <div>{isKo ? '순위' : 'Rank'}</div>
-              <div>{isKo ? '코더 (프로필)' : 'Coder'}</div>
-              <div>{isKo ? '주력 언어' : 'Primary Language'}</div>
-              <div style={{ textAlign: 'right' }}>{isKo ? '최고 타수 (CPM)' : 'Best Speed'}</div>
-              <div style={{ textAlign: 'right' }}>{isKo ? '최고 정확도' : 'Accuracy'}</div>
+              <div>{isKo ? '사용자' : 'User'}</div>
+              <div>{isKo ? '언어' : 'Language'}</div>
+              <div style={{ textAlign: 'right' }}>{isKo ? '최고 타수' : 'Best CPM'}</div>
+              <div style={{ textAlign: 'right' }}>{isKo ? '정확도' : 'Accuracy'}</div>
             </div>
 
             {displayList.map((entry, idx) => {
@@ -475,7 +434,7 @@ function RankingPageContent() {
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
-                    padding: '14px 24px',
+                    padding: '13px 24px',
                     borderBottom: '1px solid #f1f5f9',
                     alignItems: 'center',
                     fontSize: '0.9rem',
@@ -490,7 +449,7 @@ function RankingPageContent() {
                     <UserAvatar
                       avatarUrl={entry.avatar_url}
                       avatarPreset={entry.avatar_preset}
-                      size={38}
+                      size={36}
                       alt={entry.display_name}
                     />
                     <div>
@@ -511,7 +470,7 @@ function RankingPageContent() {
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: badge.color, fontWeight: 800 }}>
+                      <div style={{ fontSize: '0.74rem', color: badge.color, fontWeight: 800 }}>
                         {badge.label}
                       </div>
                     </div>

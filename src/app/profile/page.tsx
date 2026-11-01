@@ -12,7 +12,6 @@ import {
   Flame,
   RotateCcw,
   Save,
-  Sparkles,
   Trophy,
   User,
   Zap,
@@ -118,7 +117,7 @@ export default function ProfilePage() {
     setStatusBanner(null);
     setIsUploadingAvatar(true);
     try {
-      const { publicUrl, compressedBytes } = await uploadCompressedAvatar(
+      const { publicUrl } = await uploadCompressedAvatar(
         user.id,
         file
       );
@@ -135,12 +134,11 @@ export default function ProfilePage() {
       }
 
       await refreshProfile();
-      const kb = (compressedBytes / 1024).toFixed(1);
       setStatusBanner({
         type: 'success',
         text: isKo
-          ? `아바타 이미지를 ${kb}KB WebP로 자동 압축하여 업로드했습니다!`
-          : `Avatar compressed to ${kb}KB WebP and uploaded!`,
+          ? '프로필 이미지가 변경되었습니다.'
+          : 'Profile image updated.',
       });
     } catch (err) {
       setStatusBanner({
@@ -284,70 +282,39 @@ export default function ProfilePage() {
   const unlockedBadgesCount = badges.filter((b) => b.unlocked).length;
 
   return (
-    <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '40px 24px 100px', color: '#0f172a' }}>
-      {/* Page Title */}
-      <div style={{ marginBottom: '32px' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '5px 14px',
-            borderRadius: '18px',
-            background: '#ffffff',
-            border: '1.5px solid #cbd5e1',
-            color: '#0284c7',
-            fontSize: '0.78rem',
-            fontWeight: 800,
-            marginBottom: '12px',
-            boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
-          }}
-        >
-          <Sparkles size={14} />
-          <span>MY PROFILE & ACHIEVEMENTS</span>
-        </div>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', margin: '0 0 8px' }}>
-          {isKo ? '내 정보' : 'My Profile'}
-        </h1>
-        <p style={{ color: '#475569', fontSize: '0.96rem', margin: 0, fontWeight: 500 }}>
-          {isKo
-            ? '프로필 아이콘이나 나만의 아바타 이미지를 설정하고, 연속 출석과 획득한 뱃지를 확인하세요.'
-            : 'Customize your avatar, update your nickname, and track your streak and badges.'}
-        </p>
-      </div>
+    <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '28px 24px 90px', color: '#0f172a' }}>
+      {/* Minimal Header */}
+      <h1 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#0f172a', margin: '0 0 22px', letterSpacing: '-0.02em' }}>
+        {isKo ? '내 정보' : 'My Profile'}
+      </h1>
 
       {/* Top 4 Activity Stat Cards */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '16px',
-          marginBottom: '28px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+          gap: '14px',
+          marginBottom: '24px',
         }}
       >
         <div
           style={{
             background: '#ffffff',
             border: '1.5px solid rgba(234, 88, 12, 0.35)',
-            borderRadius: '20px',
-            padding: '20px 22px',
+            borderRadius: '18px',
+            padding: '18px 20px',
             boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ea580c', fontSize: '0.82rem', fontWeight: 800 }}>
-            <Flame size={16} />
-            <span>{isKo ? '연속 출석일수' : 'Current Streak'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: '#ea580c', fontSize: '0.8rem', fontWeight: 800 }}>
+            <Flame size={15} />
+            <span>{isKo ? '연속 출석' : 'Streak'}</span>
           </div>
-          <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '8px', color: '#0f172a' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: 900, marginTop: '6px', color: '#0f172a' }}>
             {profile?.current_streak || 0}
-            <span style={{ fontSize: '0.95rem', color: '#64748b', marginLeft: '4px' }}>
-              {isKo ? '일 연속' : 'days'}
+            <span style={{ fontSize: '0.9rem', color: '#64748b', marginLeft: '4px' }}>
+              {isKo ? '일' : 'd'}
             </span>
-          </div>
-          <div style={{ fontSize: '0.76rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
-            {isKo
-              ? `최장 연속 ${profile?.longest_streak || 0}일`
-              : `Longest: ${profile?.longest_streak || 0} days`}
           </div>
         </div>
 
@@ -355,25 +322,20 @@ export default function ProfilePage() {
           style={{
             background: '#ffffff',
             border: '1.5px solid rgba(2, 132, 199, 0.32)',
-            borderRadius: '20px',
-            padding: '20px 22px',
+            borderRadius: '18px',
+            padding: '18px 20px',
             boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#0284c7', fontSize: '0.82rem', fontWeight: 800 }}>
-            <Calendar size={16} />
-            <span>{isKo ? '누적 출석일' : 'Total Attendance'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: '#0284c7', fontSize: '0.8rem', fontWeight: 800 }}>
+            <Calendar size={15} />
+            <span>{isKo ? '누적 출석' : 'Attendance'}</span>
           </div>
-          <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '8px', color: '#0f172a' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: 900, marginTop: '6px', color: '#0f172a' }}>
             {profile?.total_attendance_days || 0}
-            <span style={{ fontSize: '0.95rem', color: '#64748b', marginLeft: '4px' }}>
-              {isKo ? '일' : 'days'}
+            <span style={{ fontSize: '0.9rem', color: '#64748b', marginLeft: '4px' }}>
+              {isKo ? '일' : 'd'}
             </span>
-          </div>
-          <div style={{ fontSize: '0.76rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
-            {isKo
-              ? `종합 학습 점수 ${(profile?.activity_score || 0).toLocaleString()}점`
-              : `Activity Score: ${(profile?.activity_score || 0).toLocaleString()} pts`}
           </div>
         </div>
 
@@ -381,25 +343,20 @@ export default function ProfilePage() {
           style={{
             background: '#ffffff',
             border: '1.5px solid rgba(5, 150, 105, 0.32)',
-            borderRadius: '20px',
-            padding: '20px 22px',
+            borderRadius: '18px',
+            padding: '18px 20px',
             boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#059669', fontSize: '0.82rem', fontWeight: 800 }}>
-            <Trophy size={16} />
-            <span>{isKo ? '완료 레벨 & 문제풀이' : 'Levels & Problems'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: '#059669', fontSize: '0.8rem', fontWeight: 800 }}>
+            <Trophy size={15} />
+            <span>{isKo ? '완료 레벨' : 'Cleared'}</span>
           </div>
-          <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '8px', color: '#0f172a' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: 900, marginTop: '6px', color: '#0f172a' }}>
             {profile?.cleared_levels_count || 0}
-            <span style={{ fontSize: '0.95rem', color: '#64748b', marginLeft: '4px' }}>
-              {isKo ? '레벨' : 'lvls'}
+            <span style={{ fontSize: '0.9rem', color: '#64748b', marginLeft: '4px' }}>
+              {isKo ? '개' : 'lvls'}
             </span>
-          </div>
-          <div style={{ fontSize: '0.76rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
-            {isKo
-              ? `코딩 문제풀이 ${profile?.solved_problems_count || 0}문제 해결`
-              : `${profile?.solved_problems_count || 0} problems solved`}
           </div>
         </div>
 
@@ -407,23 +364,18 @@ export default function ProfilePage() {
           style={{
             background: '#ffffff',
             border: '1.5px solid rgba(124, 58, 237, 0.32)',
-            borderRadius: '20px',
-            padding: '20px 22px',
+            borderRadius: '18px',
+            padding: '18px 20px',
             boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#7c3aed', fontSize: '0.82rem', fontWeight: 800 }}>
-            <Zap size={16} />
-            <span>{isKo ? '코드타자 최고 타수' : 'Code Typing Best'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: '#7c3aed', fontSize: '0.8rem', fontWeight: 800 }}>
+            <Zap size={15} />
+            <span>{isKo ? '최고 타수' : 'Best CPM'}</span>
           </div>
-          <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '8px', color: '#0f172a' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: 900, marginTop: '6px', color: '#0f172a' }}>
             {profile?.best_typing_cpm || 0}
-            <span style={{ fontSize: '0.95rem', color: '#64748b', marginLeft: '4px' }}>CPM</span>
-          </div>
-          <div style={{ fontSize: '0.76rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
-            {isKo
-              ? `최고 정확도 ${Number(profile?.best_typing_accuracy || 0).toFixed(1)}%`
-              : `Best Accuracy: ${Number(profile?.best_typing_accuracy || 0).toFixed(1)}%`}
+            <span style={{ fontSize: '0.9rem', color: '#64748b', marginLeft: '4px' }}>CPM</span>
           </div>
         </div>
       </div>
@@ -434,9 +386,9 @@ export default function ProfilePage() {
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
-            padding: '13px 16px',
+            padding: '12px 16px',
             borderRadius: '14px',
-            marginBottom: '22px',
+            marginBottom: '20px',
             background:
               statusBanner.type === 'success'
                 ? '#ecfdf5'
@@ -446,14 +398,14 @@ export default function ProfilePage() {
                 ? '1.5px solid #a7f3d0'
                 : '1.5px solid #fecaca',
             color: statusBanner.type === 'success' ? '#047857' : '#b91c1c',
-            fontSize: '0.88rem',
+            fontSize: '0.86rem',
             fontWeight: 700,
           }}
         >
           {statusBanner.type === 'success' ? (
-            <CheckCircle2 size={18} style={{ color: '#059669', flexShrink: 0 }} />
+            <CheckCircle2 size={17} style={{ color: '#059669', flexShrink: 0 }} />
           ) : (
-            <AlertCircle size={18} style={{ color: '#dc2626', flexShrink: 0 }} />
+            <AlertCircle size={17} style={{ color: '#dc2626', flexShrink: 0 }} />
           )}
           <span>{statusBanner.text}</span>
         </div>
@@ -465,8 +417,8 @@ export default function ProfilePage() {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-          gap: '24px',
-          marginBottom: '36px',
+          gap: '22px',
+          marginBottom: '28px',
         }}
       >
         {/* Left Card: Avatar Preset & Custom Upload */}
@@ -474,13 +426,13 @@ export default function ProfilePage() {
           style={{
             background: '#ffffff',
             border: '1.5px solid #cbd5e1',
-            borderRadius: '24px',
-            padding: '28px',
+            borderRadius: '22px',
+            padding: '24px',
             boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
           }}
         >
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: '0 0 18px' }}>
-            {isKo ? '프로필 아이콘 & 아바타 이미지' : 'Profile Icon & Custom Avatar'}
+          <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: '0 0 16px' }}>
+            {isKo ? '프로필 이미지' : 'Profile Image'}
           </h2>
 
           {/* Current Avatar Preview + Upload Buttons */}
@@ -488,107 +440,90 @@ export default function ProfilePage() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '18px',
-              padding: '16px',
-              borderRadius: '18px',
+              gap: '16px',
+              padding: '14px 16px',
+              borderRadius: '16px',
               background: '#f8fafc',
               border: '1.5px solid #e2e8f0',
-              marginBottom: '20px',
+              marginBottom: '18px',
               flexWrap: 'wrap',
             }}
           >
             <UserAvatar
               avatarUrl={avatarUrl}
               avatarPreset={selectedPreset}
-              size={78}
+              size={64}
               borderColor="#0891b2"
               alt={displayName || 'Avatar'}
             />
 
-            <div style={{ flex: 1, minWidth: '180px' }}>
-              <div style={{ fontSize: '0.86rem', fontWeight: 800, color: '#0f172a', marginBottom: '6px' }}>
-                {avatarUrl
-                  ? isKo
-                    ? '커스텀 이미지 아바타 적용 중'
-                    : 'Using Custom Image Avatar'
-                  : isKo
-                  ? '내장 프로필 아이콘 적용 중'
-                  : 'Using Built-in Profile Icon'}
-              </div>
-              <div style={{ fontSize: '0.76rem', color: '#64748b', lineHeight: 1.45, marginBottom: '12px', fontWeight: 500 }}>
-                {isKo
-                  ? '업로드한 이미지는 256×256 WebP로 자동 압축되어 빠르고 가볍게 저장됩니다.'
-                  : 'Uploaded photos are auto-compressed to 256×256 WebP in your browser.'}
-              </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={(e) => void handleFileChange(e)}
+              style={{ display: 'none' }}
+            />
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
-                onChange={(e) => void handleFileChange(e)}
-                style={{ display: 'none' }}
-              />
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                disabled={isUploadingAvatar}
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 13px',
+                  borderRadius: '10px',
+                  background: 'rgba(8, 145, 178, 0.12)',
+                  border: '1.5px solid rgba(8, 145, 178, 0.35)',
+                  color: '#0891b2',
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  cursor: isUploadingAvatar ? 'not-allowed' : 'pointer',
+                }}
+              >
+                <Camera size={14} />
+                <span>
+                  {isUploadingAvatar
+                    ? isKo
+                      ? '업로드 중...'
+                      : 'Uploading...'
+                    : isKo
+                    ? '이미지 업로드'
+                    : 'Upload'}
+                </span>
+              </button>
 
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  disabled={isUploadingAvatar}
-                  onClick={() => fileInputRef.current?.click()}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 13px',
-                    borderRadius: '10px',
-                    background: 'rgba(8, 145, 178, 0.12)',
-                    border: '1.5px solid rgba(8, 145, 178, 0.35)',
-                    color: '#0891b2',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    cursor: isUploadingAvatar ? 'not-allowed' : 'pointer',
-                  }}
-                >
-                  <Camera size={14} />
-                  <span>
-                    {isUploadingAvatar
-                      ? isKo
-                        ? '압축 및 업로드 중...'
-                        : 'Compressing...'
-                      : isKo
-                      ? '내 이미지 업로드'
-                      : 'Upload Photo'}
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  disabled={!avatarUrl}
-                  onClick={() => void handleResetToPresetAvatar()}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
-                    background: '#ffffff',
-                    border: '1.5px solid #cbd5e1',
-                    color: '#475569',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    opacity: avatarUrl ? 1 : 0.45,
-                    cursor: avatarUrl ? 'pointer' : 'default',
-                  }}
-                >
-                  <RotateCcw size={13} />
-                  <span>{isKo ? '기본 아이콘 사용' : 'Use Built-in Icon'}</span>
-                </button>
-              </div>
+              <button
+                type="button"
+                disabled={!avatarUrl}
+                onClick={() => void handleResetToPresetAvatar()}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  background: '#ffffff',
+                  border: '1.5px solid #cbd5e1',
+                  color: '#475569',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  opacity: avatarUrl ? 1 : 0.45,
+                  cursor: avatarUrl ? 'pointer' : 'default',
+                }}
+              >
+                <RotateCcw size={13} />
+                <span>{isKo ? '초기화' : 'Reset'}</span>
+              </button>
             </div>
           </div>
 
           {/* 12 Built-in Presets Grid (Fixed 2px border -> zero click wobble) */}
-          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '10px' }}>
-            {isKo ? '기본 내장 아이콘 선택 (12종)' : 'Built-in Default Icons (12)'}
+          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', marginBottom: '10px' }}>
+            {isKo ? '기본 아이콘' : 'Default Icons'}
           </div>
           <div
             style={{
@@ -639,8 +574,8 @@ export default function ProfilePage() {
           style={{
             background: '#ffffff',
             border: '1.5px solid #cbd5e1',
-            borderRadius: '24px',
-            padding: '28px',
+            borderRadius: '22px',
+            padding: '24px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -648,19 +583,19 @@ export default function ProfilePage() {
             boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-              {isKo ? '계정 기본 정보' : 'Account Details'}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+              {isKo ? '계정 정보' : 'Account'}
             </h2>
 
             {/* Email (Read-only) */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>
-                {isKo ? '가입 이메일 (변경 불가)' : 'Registered Email'}
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>
+                {isKo ? '이메일' : 'Email'}
               </label>
               <div
                 style={{
-                  padding: '12px 14px',
+                  padding: '11px 14px',
                   borderRadius: '12px',
                   background: '#f1f5f9',
                   border: '1.5px solid #e2e8f0',
@@ -673,30 +608,24 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Login ID (Immutable if already set; 1-time setup if null for OAuth/V1 users) */}
+            {/* Login ID */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                {isKo ? '로그인 ID' : 'Login ID'}
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                {isKo ? '아이디' : 'ID'}
               </label>
               {profile?.username ? (
                 <div
                   style={{
-                    padding: '12px 14px',
+                    padding: '11px 14px',
                     borderRadius: '12px',
                     background: '#f0f9ff',
                     border: '1.5px solid #bae6fd',
                     color: '#0f172a',
                     fontSize: '0.9rem',
                     fontWeight: 800,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
                   }}
                 >
-                  <span>@{profile.username}</span>
-                  <span style={{ fontSize: '0.74rem', color: '#0284c7', fontWeight: 700 }}>
-                    {isKo ? '고정됨' : 'Locked'}
-                  </span>
+                  @{profile.username}
                 </div>
               ) : (
                 <div>
@@ -704,16 +633,12 @@ export default function ProfilePage() {
                     <div style={{ position: 'relative', flex: 1 }}>
                       <AtSign
                         size={16}
-                        style={{ position: 'absolute', left: '13px', top: '14px', color: '#64748b' }}
+                        style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }}
                       />
                       <input
                         type="text"
                         maxLength={20}
-                        placeholder={
-                          isKo
-                            ? '영문 소문자·숫자·_ 4~20자 (선택 · 1회 등록 가능)'
-                            : '4-20 chars (optional 1-time setup)'
-                        }
+                        placeholder={isKo ? '영문 소문자, 숫자, _ (4~20자)' : '4-20 chars'}
                         value={newUsername}
                         onChange={(e) => {
                           setNewUsername(
@@ -723,7 +648,7 @@ export default function ProfilePage() {
                         }}
                         style={{
                           width: '100%',
-                          padding: '12px 14px 12px 38px',
+                          padding: '11px 14px 11px 38px',
                           borderRadius: '12px',
                           background: '#f8fafc',
                           border: '1.5px solid #cbd5e1',
@@ -754,12 +679,12 @@ export default function ProfilePage() {
                   </div>
                   {usernameStatus === 'available' && (
                     <div style={{ fontSize: '0.75rem', color: '#059669', marginTop: '5px', fontWeight: 700 }}>
-                      {isKo ? '✅ 사용 가능한 ID입니다. 저장 시 영구 등록됩니다.' : '✅ Available!'}
+                      {isKo ? '사용 가능한 아이디입니다.' : 'Available.'}
                     </div>
                   )}
                   {usernameStatus === 'taken' && (
                     <div style={{ fontSize: '0.75rem', color: '#dc2626', marginTop: '5px', fontWeight: 700 }}>
-                      {isKo ? '❌ 이미 사용 중인 ID입니다.' : '❌ Already taken.'}
+                      {isKo ? '이미 사용 중인 아이디입니다.' : 'Already taken.'}
                     </div>
                   )}
                 </div>
@@ -768,13 +693,13 @@ export default function ProfilePage() {
 
             {/* Editable Nickname */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                {isKo ? '닉네임 (내 정보 & 리더보드 표시)' : 'Nickname'}
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                {isKo ? '닉네임' : 'Nickname'}
               </label>
               <div style={{ position: 'relative' }}>
                 <User
                   size={16}
-                  style={{ position: 'absolute', left: '14px', top: '14px', color: '#64748b' }}
+                  style={{ position: 'absolute', left: '14px', top: '13px', color: '#64748b' }}
                 />
                 <input
                   type="text"
@@ -784,7 +709,7 @@ export default function ProfilePage() {
                   onChange={(e) => setDisplayName(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '12px 14px 12px 40px',
+                    padding: '11px 14px 11px 40px',
                     borderRadius: '12px',
                     background: '#f8fafc',
                     border: '1.5px solid #cbd5e1',
@@ -799,15 +724,15 @@ export default function ProfilePage() {
 
             {/* Primary Language */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                {isKo ? '주력 프로그래밍 언어' : 'Primary Language'}
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                {isKo ? '주력 언어' : 'Language'}
               </label>
               <select
                 value={primaryLanguage}
                 onChange={(e) => setPrimaryLanguage(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '12px 14px',
+                  padding: '11px 14px',
                   borderRadius: '12px',
                   background: '#f8fafc',
                   border: '1.5px solid #cbd5e1',
@@ -832,8 +757,8 @@ export default function ProfilePage() {
             className="tactile-btn tactile-btn-primary"
             style={{
               width: '100%',
-              padding: '14px 20px',
-              fontSize: '0.96rem',
+              padding: '13px 20px',
+              fontSize: '0.94rem',
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
@@ -843,15 +768,15 @@ export default function ProfilePage() {
               opacity: isSaving ? 0.7 : 1,
             }}
           >
-            <Save size={17} />
+            <Save size={16} />
             <span>
               {isSaving
                 ? isKo
                   ? '저장 중...'
                   : 'Saving...'
                 : isKo
-                ? '내 정보 변경사항 저장하기'
-                : 'Save Profile Changes'}
+                ? '저장'
+                : 'Save'}
             </span>
           </button>
         </div>
@@ -863,16 +788,16 @@ export default function ProfilePage() {
           style={{
             background: '#ffffff',
             border: '1.5px solid #cbd5e1',
-            borderRadius: '24px',
-            padding: '26px 28px',
-            marginBottom: '28px',
+            borderRadius: '22px',
+            padding: '24px',
+            marginBottom: '24px',
             boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
           }}
         >
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: '0 0 16px' }}>
-            {isKo ? '진행 중인 언어 코스 현황' : 'Course Progress'}
+          <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: '0 0 14px' }}>
+            {isKo ? '학습 진도' : 'Progress'}
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '12px' }}>
             {courseSummaries.map((c) => {
               const pct = Math.min(100, Math.round((c.cleared / Math.max(1, c.total)) * 100));
               return (
@@ -880,7 +805,7 @@ export default function ProfilePage() {
                   key={c.id}
                   href={`/practice/${c.id}`}
                   style={{
-                    padding: '14px 16px',
+                    padding: '13px 15px',
                     borderRadius: '14px',
                     background: '#f8fafc',
                     border: '1.5px solid #cbd5e1',
@@ -888,12 +813,12 @@ export default function ProfilePage() {
                     color: '#0f172a',
                   }}
                 >
-                  <div style={{ fontWeight: 800, fontSize: '0.9rem', marginBottom: '8px', color: '#0f172a' }}>
+                  <div style={{ fontWeight: 800, fontSize: '0.88rem', marginBottom: '6px', color: '#0f172a' }}>
                     {c.title}
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#64748b', fontWeight: 600, marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#64748b', fontWeight: 600, marginBottom: '6px' }}>
                     <span>
-                      {c.cleared} / {c.total} {isKo ? '레벨 완료' : 'Cleared'}
+                      {c.cleared} / {c.total}
                     </span>
                     <span style={{ color: '#0284c7', fontWeight: 800 }}>{pct}%</span>
                   </div>
@@ -912,8 +837,8 @@ export default function ProfilePage() {
         style={{
           background: '#ffffff',
           border: '1.5px solid #cbd5e1',
-          borderRadius: '24px',
-          padding: '28px',
+          borderRadius: '22px',
+          padding: '24px',
           boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
         }}
       >
@@ -922,44 +847,44 @@ export default function ProfilePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '20px',
+            marginBottom: '16px',
             flexWrap: 'wrap',
             gap: '10px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Award size={20} style={{ color: '#d97706' }} />
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-              {isKo ? '나의 성취 뱃지 컬렉션' : 'Achievement Badges'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Award size={19} style={{ color: '#d97706' }} />
+            <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+              {isKo ? '뱃지' : 'Badges'}
             </h2>
           </div>
           <span
             style={{
-              padding: '4px 12px',
-              borderRadius: '12px',
+              padding: '4px 10px',
+              borderRadius: '10px',
               background: '#fffbeb',
               border: '1px solid #fcd34d',
               color: '#d97706',
-              fontSize: '0.8rem',
+              fontSize: '0.78rem',
               fontWeight: 800,
             }}
           >
-            {unlockedBadgesCount} / {badges.length} {isKo ? '획득' : 'Unlocked'}
+            {unlockedBadgesCount} / {badges.length}
           </span>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: '14px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
+            gap: '12px',
           }}
         >
           {badges.map((badge) => (
             <div
               key={badge.id}
               style={{
-                padding: '16px',
+                padding: '14px',
                 borderRadius: '16px',
                 boxSizing: 'border-box',
                 userSelect: 'none',
@@ -972,29 +897,29 @@ export default function ProfilePage() {
                 opacity: badge.unlocked ? 1 : 0.65,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '6px',
+                gap: '5px',
                 boxShadow: badge.unlocked ? '0 2px 10px rgba(15, 23, 42, 0.04)' : 'none',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '1.65rem' }}>{badge.icon}</span>
+                <span style={{ fontSize: '1.5rem' }}>{badge.icon}</span>
                 <span
                   style={{
-                    fontSize: '0.72rem',
+                    fontSize: '0.7rem',
                     fontWeight: 800,
-                    padding: '2px 8px',
-                    borderRadius: '8px',
+                    padding: '2px 7px',
+                    borderRadius: '7px',
                     background: badge.unlocked ? `${badge.color}18` : '#e2e8f0',
                     color: badge.unlocked ? badge.color : '#64748b',
                   }}
                 >
-                  {badge.unlocked ? (isKo ? '획득 완료' : 'Unlocked') : badge.progressText}
+                  {badge.unlocked ? (isKo ? '획득' : 'Done') : badge.progressText}
                 </span>
               </div>
-              <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#0f172a' }}>
+              <div style={{ fontWeight: 800, fontSize: '0.88rem', color: '#0f172a' }}>
                 {isKo ? badge.titleKo : badge.titleEn}
               </div>
-              <div style={{ fontSize: '0.76rem', color: '#475569', lineHeight: 1.4, fontWeight: 500 }}>
+              <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.35, fontWeight: 600 }}>
                 {isKo ? badge.descKo : badge.descEn}
               </div>
             </div>
