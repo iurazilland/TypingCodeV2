@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import '@/styles/globals.css';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { AuthProvider } from '@/lib/AuthContext';
 
 export const metadata: Metadata = {
   title: 'TypingCode V2 | 차세대 인터랙티브 코딩 타자 & 샌드박스',
@@ -18,9 +19,11 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <LanguageProvider>
-          <Navbar />
-          <main style={{ paddingTop: '70px' }}>{children}</main>
-          <Footer />
+          <AuthProvider>
+            <Navbar />
+            <main style={{ paddingTop: '70px' }}>{children}</main>
+            <Footer />
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>

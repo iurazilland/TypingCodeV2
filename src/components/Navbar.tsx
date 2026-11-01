@@ -3,15 +3,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CheckSquare, Code2, Trophy, User, Sparkles, Menu, X } from 'lucide-react';
+import { BookOpen, CheckSquare, Code2, Trophy, User, LogOut, Menu, X } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
+  const { user, profile, openAuthModal, signOut } = useAuth();
   const pathname = usePathname();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState<'login' | 'signup'>('login');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Dedicated fullscreen practice studio has its own dedicated top header & controls
@@ -27,11 +26,23 @@ export default function Navbar() {
     pathname?.startsWith('/learn') ||
     (pathSegments[0] === 'practice' && pathSegments.length <= 2);
 
-  const openLogin = () => {
-    setAuthModalTab('login');
-    setIsAuthModalOpen(true);
+  const openLogin = (nextPath?: string) => {
+    openAuthModal({
+      tab: 'login',
+      nextPath: nextPath ?? null,
+      notice: nextPath
+        ? language === 'ko'
+          ? '실습·컴파일러·문제풀이 기능을 이용하려면 로그인이 필요합니다.'
+          : 'Please sign in to access practice, compiler, and coding challenges.'
+        : null,
+    });
     setIsMobileMenuOpen(false);
   };
+
+  const displayName =
+    profile?.display_name ||
+    (typeof user?.user_metadata?.name === 'string' && user.user_metadata.name) ||
+    (user?.email ? user.email.split('@')[0] : 'Coder');
 
   const navItems = [
     {
@@ -39,24 +50,28 @@ export default function Navbar() {
       href: '/languages',
       icon: BookOpen,
       isActive: pathname.startsWith('/languages') || pathname.startsWith('/learn') || pathname.startsWith('/practice'),
+      requiresAuth: false,
     },
     {
       label: t.nav.problems,
       href: '/problems',
       icon: CheckSquare,
       isActive: pathname.startsWith('/problems'),
+      requiresAuth: true,
     },
     {
       label: t.nav.compiler,
       href: '/compiler',
       icon: Code2,
       isActive: pathname.startsWith('/compiler'),
+      requiresAuth: true,
     },
     {
       label: t.nav.ranking,
       href: '/ranking',
       icon: Trophy,
       isActive: pathname.startsWith('/ranking'),
+      requiresAuth: false,
     },
   ];
 
@@ -140,6 +155,12 @@ export default function Navbar() {
                   href={item.href}
                   className={`nav-link-item ${item.isActive ? 'active' : ''}`}
                   title={item.label}
+                  onClick={(e) => {
+                    if (item.requiresAuth && !user) {
+                      e.preventDefault();
+                      openLogin(item.href);
+                    }
+                  }}
                 >
                   <Icon size={16} style={{ flexShrink: 0 }} />
                   <span className="nav-link-text">{item.label}</span>
@@ -149,7 +170,7 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* Right Side: Language Switcher + Login Button + Mobile Toggle */}
+        {/* Right Side: Language Switcher + Login / User Profile + Mobile Toggle */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
           {/* Language Selector: KO / EN */}
           <div
@@ -187,8 +208,6 @@ export default function Navbar() {
                     ? isLightPage
                       ? '#0f172a'
                       : '#ffffff'
-                    : isLightPage
-                    ? '#64748b'
                     : '#64748b',
                 fontWeight: language === 'ko' ? 700 : 500,
                 fontSize: '0.8rem',
@@ -222,8 +241,6 @@ export default function Navbar() {
                     ? isLightPage
                       ? '#0f172a'
                       : '#ffffff'
-                    : isLightPage
-                    ? '#64748b'
                     : '#64748b',
                 fontWeight: language === 'en' ? 700 : 500,
                 fontSize: '0.8rem',
@@ -236,42 +253,112 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Login Button (Responsive: icon-only on narrow screens) */}
-          <button
-            onClick={openLogin}
-            className="tactile-btn login-btn"
-            title={t.nav.login}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              padding: '8px 18px',
-              fontSize: '0.88rem',
-              fontWeight: 700,
-              borderRadius: '12px',
-              background: '#0891b2',
-              border: '1px solid #0891b2',
-              color: '#ffffff',
-              boxShadow: '0 4px 14px rgba(8, 145, 178, 0.35)',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.background = '#0e7490';
-              e.currentTarget.style.boxShadow = '0 6px 18px rgba(8, 145, 178, 0.45)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.background = '#0891b2';
-              e.currentTarget.style.boxShadow = '0 4px 14px rgba(8, 145, 178, 0.35)';
-            }}
-          >
-            <User size={15} style={{ flexShrink: 0 }} />
-            <span className="login-btn-text">{t.nav.login}</span>
-          </button>
+          {user ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <div
+                title={user.email || displayName}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '7px',
+                  padding: '6px 12px',
+                  borderRadius: '11px',
+                  background: isLightPage ? '#ffffff' : 'rgba(56, 189, 248, 0.12)',
+                  border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(56, 189, 248, 0.3)',
+                  color: isLightPage ? '#0f172a' : '#f8fafc',
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  maxWidth: '170px',
+                }}
+              >
+                <span style={{ fontSize: '1rem', lineHeight: 1 }}>
+                  {profile?.avatar_emoji || '🦊'}
+                </span>
+                <span
+                  className="login-btn-text"
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {displayName}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => void signOut()}
+                title={language === 'ko' ? '로그아웃' : 'Sign Out'}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 12px',
+                  borderRadius: '11px',
+                  background: isLightPage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.06)',
+                  border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.12)',
+                  color: isLightPage ? '#475569' : '#cbd5e1',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#ef4444';
+                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.45)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = isLightPage ? '#475569' : '#cbd5e1';
+                  e.currentTarget.style.borderColor = isLightPage
+                    ? '#cbd5e1'
+                    : 'rgba(255, 255, 255, 0.12)';
+                }}
+              >
+                <LogOut size={15} style={{ flexShrink: 0 }} />
+                <span className="login-btn-text">
+                  {language === 'ko' ? '로그아웃' : 'Sign Out'}
+                </span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => openLogin()}
+              className="tactile-btn login-btn"
+              title={t.nav.login}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '8px 18px',
+                fontSize: '0.88rem',
+                fontWeight: 700,
+                borderRadius: '12px',
+                background: '#0891b2',
+                border: '1px solid #0891b2',
+                color: '#ffffff',
+                boxShadow: '0 4px 14px rgba(8, 145, 178, 0.35)',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.background = '#0e7490';
+                e.currentTarget.style.boxShadow = '0 6px 18px rgba(8, 145, 178, 0.45)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.background = '#0891b2';
+                e.currentTarget.style.boxShadow = '0 4px 14px rgba(8, 145, 178, 0.35)';
+              }}
+            >
+              <User size={15} style={{ flexShrink: 0 }} />
+              <span className="login-btn-text">{t.nav.login}</span>
+            </button>
+          )}
 
           {/* Mobile Hamburger Toggle Button (<= 768px) */}
           <button
@@ -285,7 +372,7 @@ export default function Navbar() {
               borderRadius: '10px',
               background: 'rgba(255, 255, 255, 0.06)',
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#f8fafc',
+              color: isLightPage ? '#0f172a' : '#f8fafc',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
@@ -322,7 +409,13 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  if (item.requiresAuth && !user) {
+                    e.preventDefault();
+                    openLogin(item.href);
+                  }
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -342,16 +435,36 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          {user && (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                void signOut();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                fontSize: '0.96rem',
+                fontWeight: 700,
+                color: '#fca5a5',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.25)',
+                cursor: 'pointer',
+              }}
+            >
+              <LogOut size={18} />
+              <span>
+                {displayName} · {language === 'ko' ? '로그아웃' : 'Sign Out'}
+              </span>
+            </button>
+          )}
         </div>
       )}
-
-      {/* Auth Modal (Login / Sign Up) */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        initialTab={authModalTab}
-      />
     </>
   );
 }
-

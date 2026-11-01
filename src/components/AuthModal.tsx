@@ -1,19 +1,66 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Mail, Lock, User, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { X, Mail, Lock, User, Sparkles, CheckCircle2, ArrowRight, AlertCircle } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import { createClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: 'login' | 'signup';
+  nextPath?: string | null;
+  noticeMessage?: string | null;
 }
 
-export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: AuthModalProps) {
+function localizeAuthError(rawMessage: string, isKo: boolean): string {
+  const msg = rawMessage.toLowerCase();
+  if (msg.includes('invalid login credentials')) {
+    return isKo
+      ? '이메일 또는 비밀번호가 일치하지 않습니다.'
+      : 'Invalid email or password.';
+  }
+  if (msg.includes('user already registered') || msg.includes('already been registered')) {
+    return isKo
+      ? '이미 가입된 이메일입니다. 로그인 탭을 이용해 주세요.'
+      : 'This email is already registered. Please sign in instead.';
+  }
+  if (msg.includes('password should be at least')) {
+    return isKo
+      ? '비밀번호는 최소 6자 이상이어야 합니다.'
+      : 'Password must be at least 6 characters.';
+  }
+  if (msg.includes('email not confirmed')) {
+    return isKo
+      ? '이메일 인증이 완료되지 않았습니다. 받은편지함을 확인해 주세요.'
+      : 'Email not confirmed yet. Please check your inbox.';
+  }
+  if (msg.includes('rate limit') || msg.includes('too many requests')) {
+    return isKo
+      ? '요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.'
+      : 'Too many attempts. Please wait a moment and try again.';
+  }
+  return rawMessage;
+}
+
+export default function AuthModal({
+  isOpen,
+  onClose,
+  initialTab = 'login',
+  nextPath = null,
+  noticeMessage = null,
+}: AuthModalProps) {
+  const router = useRouter();
   const { t, language } = useLanguage();
+  const isKo = language === 'ko';
+
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>(initialTab);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,6 +73,9 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
   useEffect(() => {
     setActiveTab(initialTab);
     setIsSuccess(false);
+    setIsSubmitting(false);
+    setErrorMessage(null);
+    setInfoMessage(null);
   }, [initialTab, isOpen]);
 
   // Handle ESC key to close
@@ -41,13 +91,186 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const safeNext =
+    nextPath && nextPath.startsWith('/') && !nextPath.startsWith('//')
+      ? nextPath
+      : null;
+
+  const buildCallbackUrl = () => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    return safeNext
+      ? `${origin}/auth/callback?next=${encodeURIComponent(safeNext)}`
+      : `${origin}/auth/callback`;
+  };
+
+  const finishAuthSuccess = () => {
     setIsSuccess(true);
+    router.refresh();
     setTimeout(() => {
       onClose();
       setIsSuccess(false);
-    }, 1800);
+      if (safeNext) {
+        router.push(safeNext);
+      }
+    }, 700);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    if (!isSupabaseConfigured()) {
+      setErrorMessage(
+        isKo
+          ? '.env.local에 Supabase URL 및 Key 설정이 필요합니다.'
+          : 'Supabase environment variables are not configured in .env.local.'
+      );
+      return;
+    }
+
+    const email = formData.email.trim();
+    const password = formData.password;
+
+    if (activeTab === 'signup') {
+      if (password.length < 6) {
+        setErrorMessage(
+          isKo ? '비밀번호는 최소 6자 이상 입력해 주세요.' : 'Password must be at least 6 characters.'
+        );
+        return;
+      }
+      if (password !== formData.confirmPassword) {
+        setErrorMessage(
+          isKo ? '비밀번호와 비밀번호 확인이 일치하지 않습니다.' : 'Passwords do not match.'
+        );
+        return;
+      }
+    }
+
+    setIsSubmitting(true);
+    try {
+      const supabase = createClient();
+
+      if (activeTab === 'login') {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) {
+          setErrorMessage(localizeAuthError(error.message, isKo));
+          return;
+        }
+        finishAuthSuccess();
+      } else {
+        const displayName = formData.name.trim() || email.split('@')[0] || 'Coder';
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name: displayName,
+              full_name: displayName,
+            },
+            emailRedirectTo: buildCallbackUrl(),
+          },
+        });
+
+        if (error) {
+          setErrorMessage(localizeAuthError(error.message, isKo));
+          return;
+        }
+
+        if (data.session) {
+          finishAuthSuccess();
+        } else {
+          setInfoMessage(
+            isKo
+              ? '인증 이메일을 발송했습니다. 메일함의 확인 링크를 클릭하면 가입이 완료됩니다!'
+              : 'Confirmation email sent! Please click the link in your inbox to complete sign-up.'
+          );
+        }
+      }
+    } catch {
+      setErrorMessage(
+        isKo
+          ? '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+          : 'A network error occurred. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOAuthLogin = async (provider: 'github' | 'google') => {
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    if (!isSupabaseConfigured()) {
+      setErrorMessage(
+        isKo
+          ? '.env.local에 Supabase URL 및 Key 설정이 필요합니다.'
+          : 'Supabase environment variables are not configured.'
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: buildCallbackUrl(),
+        },
+      });
+      if (error) {
+        setErrorMessage(localizeAuthError(error.message, isKo));
+        setIsSubmitting(false);
+      }
+    } catch {
+      setErrorMessage(
+        isKo ? '소셜 로그인 연결에 실패했습니다.' : 'Failed to start social sign-in.'
+      );
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    const email = formData.email.trim();
+    if (!email) {
+      setErrorMessage(
+        isKo
+          ? '비밀번호 재설정 링크를 받을 이메일을 먼저 입력해 주세요.'
+          : 'Please enter your email address above first.'
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: buildCallbackUrl(),
+      });
+      if (error) {
+        setErrorMessage(localizeAuthError(error.message, isKo));
+      } else {
+        setInfoMessage(
+          isKo
+            ? '비밀번호 재설정 링크가 이메일로 전송되었습니다.'
+            : 'Password reset link has been sent to your email.'
+        );
+      }
+    } catch {
+      setErrorMessage(
+        isKo ? '재설정 이메일 전송 중 오류가 발생했습니다.' : 'Failed to send reset email.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -138,16 +361,28 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
               <CheckCircle2 size={36} />
             </div>
             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff', marginBottom: '8px' }}>
-              {activeTab === 'login' ? '로그인 성공!' : '회원가입 완료!'}
+              {activeTab === 'login'
+                ? isKo
+                  ? '로그인 성공!'
+                  : 'Signed In!'
+                : isKo
+                ? '회원가입 완료!'
+                : 'Welcome Aboard!'}
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>
-              {activeTab === 'login' ? '환영합니다! 코딩 타자 모험을 즐겨보세요.' : 'TypingCode의 회원이 되신 것을 축하합니다!'}
+              {activeTab === 'login'
+                ? isKo
+                  ? '환영합니다! 코딩 타자 모험을 즐겨보세요.'
+                  : 'Welcome back! Loading your workspace...'
+                : isKo
+                ? 'TypingCode의 회원이 되신 것을 축하합니다!'
+                : 'Your TypingCode account is ready!'}
             </p>
           </div>
         ) : (
           <>
             {/* Header Title & Badge */}
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
               <div
                 style={{
                   display: 'inline-flex',
@@ -173,6 +408,71 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
               </p>
             </div>
 
+            {/* Protected Route Notice / Error / Info Banners */}
+            {noticeMessage && !errorMessage && !infoMessage && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  background: 'rgba(56, 189, 248, 0.12)',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                  color: '#bae6fd',
+                  fontSize: '0.82rem',
+                  lineHeight: 1.4,
+                  marginBottom: '14px',
+                }}
+              >
+                <AlertCircle size={16} style={{ flexShrink: 0, color: '#38bdf8' }} />
+                <span>{noticeMessage}</span>
+              </div>
+            )}
+
+            {errorMessage && (
+              <div
+                role="alert"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  background: 'rgba(239, 68, 68, 0.14)',
+                  border: '1px solid rgba(239, 68, 68, 0.4)',
+                  color: '#fecaca',
+                  fontSize: '0.82rem',
+                  lineHeight: 1.4,
+                  marginBottom: '14px',
+                }}
+              >
+                <AlertCircle size={16} style={{ flexShrink: 0, color: '#f87171' }} />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
+            {infoMessage && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  background: 'rgba(16, 185, 129, 0.14)',
+                  border: '1px solid rgba(16, 185, 129, 0.4)',
+                  color: '#a7f3d0',
+                  fontSize: '0.82rem',
+                  lineHeight: 1.4,
+                  marginBottom: '14px',
+                }}
+              >
+                <CheckCircle2 size={16} style={{ flexShrink: 0, color: '#10b981' }} />
+                <span>{infoMessage}</span>
+              </div>
+            )}
+
             {/* Tab Switcher: 로그인 | 회원가입 */}
             <div
               style={{
@@ -180,13 +480,17 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                 background: 'rgba(11, 19, 41, 0.7)',
                 borderRadius: '12px',
                 padding: '4px',
-                marginBottom: '22px',
+                marginBottom: '20px',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
               }}
             >
               <button
                 type="button"
-                onClick={() => setActiveTab('login')}
+                onClick={() => {
+                  setActiveTab('login');
+                  setErrorMessage(null);
+                  setInfoMessage(null);
+                }}
                 style={{
                   flex: 1,
                   padding: '9px 0',
@@ -205,7 +509,11 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab('signup')}
+                onClick={() => {
+                  setActiveTab('signup');
+                  setErrorMessage(null);
+                  setInfoMessage(null);
+                }}
                 style={{
                   flex: 1,
                   padding: '9px 0',
@@ -236,6 +544,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                     <input
                       type="text"
                       required
+                      maxLength={40}
                       placeholder={t.auth.namePlaceholder}
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -265,6 +574,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                   <input
                     type="email"
                     required
+                    autoComplete="email"
                     placeholder={t.auth.emailPlaceholder}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -293,6 +603,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                   <input
                     type="password"
                     required
+                    minLength={6}
+                    autoComplete={activeTab === 'login' ? 'current-password' : 'new-password'}
                     placeholder={t.auth.passwordPlaceholder}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -322,6 +634,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                     <input
                       type="password"
                       required
+                      minLength={6}
+                      autoComplete="new-password"
                       placeholder={t.auth.confirmPasswordPlaceholder}
                       value={formData.confirmPassword}
                       onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
@@ -356,7 +670,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                   </label>
                   <button
                     type="button"
-                    onClick={() => alert(language === 'ko' ? '비밀번호 재설정 링크가 이메일로 전송되었습니다.' : 'Password reset link sent!')}
+                    disabled={isSubmitting}
+                    onClick={handleForgotPassword}
                     style={{ background: 'none', border: 'none', color: '#38bdf8', cursor: 'pointer', fontSize: '0.8rem' }}
                   >
                     {t.auth.forgotPassword}
@@ -378,6 +693,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
               {/* Submit Button */}
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="tactile-btn tactile-btn-primary"
                 style={{
                   width: '100%',
@@ -389,9 +705,19 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
+                  opacity: isSubmitting ? 0.7 : 1,
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 }}
               >
-                <span>{activeTab === 'login' ? t.auth.loginBtn : t.auth.signupBtn}</span>
+                <span>
+                  {isSubmitting
+                    ? isKo
+                      ? '처리 중...'
+                      : 'Processing...'
+                    : activeTab === 'login'
+                    ? t.auth.loginBtn
+                    : t.auth.signupBtn}
+                </span>
                 <ArrowRight size={16} />
               </button>
             </form>
@@ -407,7 +733,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <button
                   type="button"
-                  onClick={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
+                  disabled={isSubmitting}
+                  onClick={() => handleOAuthLogin('github')}
                   style={{
                     padding: '10px',
                     borderRadius: '10px',
@@ -416,7 +743,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                     color: '#e2e8f0',
                     fontSize: '0.82rem',
                     fontWeight: 600,
-                    cursor: 'pointer',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -432,7 +759,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
 
                 <button
                   type="button"
-                  onClick={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
+                  disabled={isSubmitting}
+                  onClick={() => handleOAuthLogin('google')}
                   style={{
                     padding: '10px',
                     borderRadius: '10px',
@@ -441,7 +769,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                     color: '#e2e8f0',
                     fontSize: '0.82rem',
                     fontWeight: 600,
-                    cursor: 'pointer',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -473,7 +801,11 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                   <span>{t.auth.noAccount} </span>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('signup')}
+                    onClick={() => {
+                      setActiveTab('signup');
+                      setErrorMessage(null);
+                      setInfoMessage(null);
+                    }}
                     style={{
                       background: 'none',
                       border: 'none',
@@ -485,7 +817,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                       padding: 0,
                     }}
                   >
-                    {t.auth.signupTab}하기
+                    {isKo ? `${t.auth.signupTab}하기` : t.auth.signupTab}
                   </button>
                 </div>
               ) : (
@@ -493,7 +825,11 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                   <span>{t.auth.haveAccount} </span>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('login')}
+                    onClick={() => {
+                      setActiveTab('login');
+                      setErrorMessage(null);
+                      setInfoMessage(null);
+                    }}
                     style={{
                       background: 'none',
                       border: 'none',
@@ -505,7 +841,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
                       padding: 0,
                     }}
                   >
-                    {t.auth.loginTab}하기
+                    {isKo ? `${t.auth.loginTab}하기` : t.auth.loginTab}
                   </button>
                 </div>
               )}

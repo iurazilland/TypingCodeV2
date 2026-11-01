@@ -43,7 +43,16 @@ export type SupportedLanguage =
   | 'linux' | 'vb';
 ```
 
-### 2.2 연습 라운드 및 문항 모델 ([`src/lib/practiceTypes.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceTypes.ts))
+### 2.3 Supabase Auth & V2 Database Schema (`supabase/migrations/20261101000000_v2_initial_schema.sql`)
+- **인증 및 라우트 보호**:
+  - V1 프로젝트의 `auth.users`(이메일/비밀번호, GitHub, Google OAuth)를 100% 보존.
+  - 서버 사이드 `src/middleware.ts`에서 `supabase.auth.getClaims()`로 JWT 서명을 검증하여 `/practice/*`, `/problems`, `/challenges`, `/compiler` 비로그인 접근을 차단(`/?login=required&next=...`)하고, 공개 페이지(`/`, `/languages`, `/learn/*`, `/ranking`)만 비로그인 조회 허용.
+- **V2 핵심 3개 테이블 (전 테이블 RLS 활성화 및 `(select auth.uid())` 정책 적용)**:
+  1. `public.profiles`: `auth.users(id)` 1:1 연동 프로필 및 리더보드 집계(`best_cpm`, `avg_accuracy`, `cleared_levels_count`, `solved_problems_count`).
+  2. `public.user_level_progress`: `(user_id, track_id, level_number)` 복합 PK 기반 레벨·스텝 진척도, 클리어 여부, 하트, 최고 CPM/정확도 저장.
+  3. `public.user_problem_solves`: `(user_id, problem_id)` 복합 PK 기반 `/problems` 해결 기록 저장.
+
+### 2.4 연습 라운드 및 문항 모델 ([`src/lib/practiceTypes.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceTypes.ts))
 ```typescript
 export type ChallengeKind =
   | 'fill_blank'      // § 글자 수 1:1 캡슐 빈칸 채우기

@@ -40,6 +40,7 @@ import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
 import { AssignOperator } from '@/lib/blockGeometry';
 import { evaluateBlocksLocally, evaluatePythonLocally, evaluateBlocksWithTrace, evaluatePythonWithTrace, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
 import TypingStage, { tokenizePythonLine, VSCODE_DARK_PLUS } from '@/components/practice/TypingStage';
+import { saveLevelStepProgress } from '@/lib/progressSync';
 import {
   PuzzleTab,
   PuzzleNotch,
@@ -1642,8 +1643,26 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const [isHeartShaking, setIsHeartShaking] = useState<boolean>(false);
   const [runtimeMemory, setRuntimeMemory] = useState<Record<string, any>>({});
 
+  // Zero-rerender typing telemetry for Supabase CPM & accuracy sync
+  const typingMetricsRef = useRef({
+    startMs: 0,
+    keystrokes: 0,
+    backspaces: 0,
+    prevLen: 0,
+  });
+
   // Stable callback for TypingStage to prevent unnecessary rerenders/resets
   const handleUserCodeChange = useCallback((c: string) => {
+    const m = typingMetricsRef.current;
+    if (m.startMs === 0 && c.length > 0 && c.length !== m.prevLen) {
+      m.startMs = performance.now();
+    }
+    if (c.length > m.prevLen) {
+      m.keystrokes += c.length - m.prevLen;
+    } else if (c.length < m.prevLen && m.startMs > 0) {
+      m.backspaces += 1;
+    }
+    m.prevLen = c.length;
     setUserCode(c);
     setIsErrorShown(false);
   }, []);
@@ -3405,16 +3424,41 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     }
   };
 
-  // Persist completed step progress in production
+  // Reset typing telemetry whenever active step changes
+  useEffect(() => {
+    typingMetricsRef.current = {
+      startMs: 0,
+      keystrokes: 0,
+      backspaces: 0,
+      prevLen: 0,
+    };
+  }, [currentStepIndex]);
+
+  // Persist completed step progress to localStorage & Supabase user_level_progress
   useEffect(() => {
     if (isSuccess && typeof window !== 'undefined') {
-      const key = `unlocked_step_${rawLang}_${levelNum}`;
-      const currentMax = parseInt(localStorage.getItem(key) || '0', 10);
-      if (currentStepIndex + 1 > currentMax) {
-        localStorage.setItem(key, String(currentStepIndex + 1));
+      const m = typingMetricsRef.current;
+      let stepCpm = 0;
+      let stepAcc = 100;
+      if (m.startMs > 0 && m.keystrokes >= 3) {
+        const elapsedMin = Math.max(0.03, (performance.now() - m.startMs) / 60000);
+        stepCpm = Math.min(1500, Math.round(m.keystrokes / elapsedMin));
+        stepAcc = Number(
+          Math.max(50, Math.min(100, (m.keystrokes / (m.keystrokes + m.backspaces)) * 100)).toFixed(2)
+        );
       }
+
+      void saveLevelStepProgress({
+        rawLang,
+        levelNum,
+        unlockedStep: currentStepIndex + 1,
+        totalSteps: totalQuestions,
+        hearts,
+        cpm: stepCpm,
+        accuracy: stepAcc,
+      });
     }
-  }, [isSuccess, currentStepIndex, rawLang, levelNum]);
+  }, [isSuccess, currentStepIndex, rawLang, levelNum, totalQuestions, hearts]);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {

@@ -22,41 +22,55 @@ import LanguageIcon from '@/components/LanguageIcon';
 import { useLanguage } from '@/lib/LanguageContext';
 import { getTrackName, getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
 import { getPracticeRound } from '@/lib/practiceData';
+import { useAuth } from '@/lib/AuthContext';
+import { PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
 
 export default function LanguagesPage() {
   const { language } = useLanguage();
+  const { user, openAuthModal } = useAuth();
   const isEn = language === 'en';
   const [progressByModule, setProgressByModule] = useState<Record<string, number>>({});
 
-  // Load real cleared-level counts from localStorage on client mount
+  // Load real cleared-level counts from synced storage (updates live when cloud DB sync finishes)
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    try {
-      const nextProgress: Record<string, number> = {};
-      for (const track of CURRICULUM_TRACKS) {
-        for (const mod of track.modules) {
-          if (!mod.practiceUrl.startsWith('/practice/')) continue;
-          const rawLang = mod.practiceUrl.replace(/^\/practice\//, '').toLowerCase();
-          let clearedCount = 0;
-          for (let lvl = 1; lvl <= mod.totalLevels; lvl++) {
-            const rawVal = localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`);
-            if (!rawVal) continue;
-            const stepVal = parseInt(rawVal, 10);
-            const lvlRound = getPracticeRound(rawLang, lvl);
-            const requiredSteps =
-              lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
-            if (stepVal >= requiredSteps) {
-              clearedCount++;
+
+    const recomputeProgress = () => {
+      if (!user) {
+        setProgressByModule({});
+        return;
+      }
+      try {
+        const nextProgress: Record<string, number> = {};
+        for (const track of CURRICULUM_TRACKS) {
+          for (const mod of track.modules) {
+            if (!mod.practiceUrl.startsWith('/practice/')) continue;
+            const rawLang = mod.practiceUrl.replace(/^\/practice\//, '').toLowerCase();
+            let clearedCount = 0;
+            for (let lvl = 1; lvl <= mod.totalLevels; lvl++) {
+              const rawVal = localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`);
+              if (!rawVal) continue;
+              const stepVal = parseInt(rawVal, 10);
+              const lvlRound = getPracticeRound(rawLang, lvl);
+              const requiredSteps =
+                lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
+              if (stepVal >= requiredSteps) {
+                clearedCount++;
+              }
+            }
+            if (clearedCount > 0) {
+              nextProgress[mod.id] = clearedCount;
             }
           }
-          if (clearedCount > 0) {
-            nextProgress[mod.id] = clearedCount;
-          }
         }
-      }
-      setProgressByModule(nextProgress);
-    } catch { }
-  }, []);
+        setProgressByModule(nextProgress);
+      } catch { }
+    };
+
+    recomputeProgress();
+    window.addEventListener(PROGRESS_SYNCED_EVENT, recomputeProgress);
+    return () => window.removeEventListener(PROGRESS_SYNCED_EVENT, recomputeProgress);
+  }, [user]);
 
   // Dynamic matte soft ice-cyan body background for glare-free comfort
   useEffect(() => {
@@ -607,6 +621,18 @@ export default function LanguagesPage() {
                       <Link
                         key={module.id}
                         href={module.practiceUrl}
+                        onClick={(e) => {
+                          if (!user && module.practiceUrl.startsWith('/practice')) {
+                            e.preventDefault();
+                            openAuthModal({
+                              tab: 'login',
+                              nextPath: module.practiceUrl,
+                              notice: isEn
+                                ? 'Please sign in to start learning and save your progress.'
+                                : '학습을 시작하고 진도를 저장하려면 로그인이 필요합니다.',
+                            });
+                          }
+                        }}
                         className={`light-mode-card card-diff-${module.difficulty}`}
                         style={{
                           textDecoration: 'none',

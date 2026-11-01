@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckSquare, Play, Sparkles, CheckCircle2, XCircle, ArrowRight, BookOpen, AlertCircle } from 'lucide-react';
 import { executeCode } from '@/lib/runner';
 import { useLanguage } from '@/lib/LanguageContext';
+import { fetchSolvedProblemIds, recordProblemSolve } from '@/lib/progressSync';
 
 interface Problem {
   id: number;
@@ -112,6 +113,15 @@ export default function ProblemsPage() {
   const [isGrading, setIsGrading] = useState<boolean>(false);
   const [resultStatus, setResultStatus] = useState<'idle' | 'pass' | 'fail'>('idle');
   const [actualOutput, setActualOutput] = useState<string>('');
+  const [solvedIds, setSolvedIds] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    fetchSolvedProblemIds().then((ids) => {
+      if (ids.length > 0) {
+        setSolvedIds(new Set(ids));
+      }
+    });
+  }, []);
 
   const handleSelectProblem = (p: Problem) => {
     setSelectedProblem(p);
@@ -134,6 +144,8 @@ export default function ProblemsPage() {
 
       if (cleanedActual === cleanedExpected && res.exitCode === 0) {
         setResultStatus('pass');
+        setSolvedIds((prev) => new Set(prev).add(selectedProblem.id));
+        void recordProblemSolve(selectedProblem.id, 'python');
       } else {
         setResultStatus('fail');
       }
@@ -211,8 +223,11 @@ export default function ProblemsPage() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.92rem', fontWeight: 700, color: isSelected ? '#ffffff' : '#e2e8f0', marginBottom: '4px' }}>
-                    #{p.id}. {p.title}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.92rem', fontWeight: 700, color: isSelected ? '#ffffff' : '#e2e8f0', marginBottom: '4px' }}>
+                    <span>#{p.id}. {p.title}</span>
+                    {solvedIds.has(p.id) && (
+                      <CheckCircle2 size={14} color="#10b981" style={{ flexShrink: 0 }} />
+                    )}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
                     {p.category}

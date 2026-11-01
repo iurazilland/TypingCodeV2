@@ -25,10 +25,11 @@
 - **Library**: React 18.3.1, TypeScript 5.4.5
 - **Styling**: Vanilla CSS (`src/styles/globals.css`, CSS Scopes) — *외부 무거운 CSS 프레임워크 배제, 네이티브 웹 표준 기반 극대화*
 - **Icons**: Lucide React (`lucide-react`)
-- **State Management**: Zustand 4.5.2
+- **State Management & Auth / Cloud Sync**:
   - `useTypingStore` (`src/lib/store.ts`): 타이핑 진행률, WPM, 오타수, 정확도, 스텝 전환, 인사이트 락 관리.
-  - React Context: `LanguageContext` (`src/lib/LanguageContext.tsx`): 전역 한/영 다국어 설정.
-  - LocalStorage: 학습 진도율(`unlocked_step_${lang}_${lvl}`) 영속화 및 `/languages` · `/practice/[language]` 실시간 진척도 동기화.
+  - `LanguageContext` (`src/lib/LanguageContext.tsx`): 전역 한/영 다국어 설정.
+  - `AuthContext` (`src/lib/AuthContext.tsx`) & `@supabase/ssr`: 기존 V1 `auth.users` 계정(Email/Password, GitHub, Google OAuth)을 그대로 연동하고, Next.js 미들웨어(`src/middleware.ts`)의 `supabase.auth.getClaims()` 서명 검증을 통해 실습 라우트(`/practice/*`, `/problems`, `/challenges`, `/compiler`)를 보호.
+  - Hybrid Progress Sync (`src/lib/progressSync.ts`): `localStorage`(`unlocked_step_${lang}_${lvl}`) 즉시 반영(0ms) + Supabase V2 스키마(`public.profiles`, `public.user_level_progress`, `public.user_problem_solves`) 양방향 자동 동기화.
 
 ### 2.2 Execution Runtime (Hybrid Code Sandbox)
 - **0ms Local Python AST & Step-Debugger Engine (`src/lib/blockEvaluator.ts`)**:
