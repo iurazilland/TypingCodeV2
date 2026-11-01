@@ -1682,13 +1682,17 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   // States
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(initialStep);
 
-  // Auto-launch spotlight tour on first entry per user account if not previously seen
+  // Auto-launch spotlight tour ONLY on Level 1 (Step 1) per user account if not previously seen
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (levelNum !== 1) {
+      setIsTourOpen(false);
+      return;
+    }
     try {
       if (isAuthLoading || autoOpenedTourKeyRef.current === tourStorageKey) return;
       const seen = localStorage.getItem(tourStorageKey);
-      if (seen !== 'true') {
+      if (seen !== 'true' && currentStepIndex === 0) {
         const timer = setTimeout(() => {
           autoOpenedTourKeyRef.current = tourStorageKey;
           setIsTourOpen(true);
@@ -1696,15 +1700,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         return () => clearTimeout(timer);
       }
       autoOpenedTourKeyRef.current = tourStorageKey;
-      if (false) {
-        const timer = setTimeout(() => {
-          setIsTourOpen(true);
-        }, 350);
-        return () => clearTimeout(timer);
-      }
-      autoOpenedTourKeyRef.current = tourStorageKey;
     } catch { }
-  }, [isAuthLoading, tourStorageKey]);
+  }, [isAuthLoading, tourStorageKey, levelNum, currentStepIndex]);
 
   const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
@@ -2343,9 +2340,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         const branches = (blk.branches && blk.branches.length > 0)
           ? blk.branches
           : [
-              { id: 'br-try-0', kind: 'try' as const, innerBlocks: blk.innerBlocks || [] },
-              { id: 'br-exc-1', kind: 'except' as const, innerBlocks: [] },
-            ];
+            { id: 'br-try-0', kind: 'try' as const, innerBlocks: blk.innerBlocks || [] },
+            { id: 'br-exc-1', kind: 'except' as const, innerBlocks: [] },
+          ];
         for (const branch of branches) {
           if (branch.kind === 'try') {
             out.push(`${indentStr}try:`);
@@ -3109,26 +3106,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     return true;
   };
 
-  const markStepSolved = (solvedIdx: number) => {
-    setIsSuccess(true);
-    setIsErrorShown(false);
-    setSessionMaxStep((prev) => Math.max(prev, solvedIdx + 1));
-
-    if (solvedIdx >= totalQuestions - 1) {
-      setIsLevelAlreadyCleared(true);
-      setIsForcedReviewRun(false);
-      void recordLevelCleared(rawLang, levelNum);
-
-      const completedSec = findCompletedSectionForLevel(rawLang, levelNum);
-      if (
-        completedSec &&
-        !hasSubmittedSectionFeedbackLocal(rawLang, completedSec.sectionNumber)
-      ) {
-        setPendingSectionSurvey(completedSec);
-      }
-    }
-  };
-
   // Manual Code Execution (Normal Run or Progressive Step Debugging)
   const handleExecuteManual = async () => {
     if (isExecuting || isDebugging) {
@@ -3142,7 +3119,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       return;
     }
 
-    const stepIdxAtRun = currentStepIndex;
     const penalizeHeartOnError = () => {
       // Block mode is a guided learning stage: do not deduct hearts on errors or wrong outputs
       if (mode !== 'typing') return;
@@ -3169,7 +3145,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         if (localRes.scope) setRuntimeMemory(localRes.scope);
         const out = (localRes.stdout || currentQuestion.testCases?.[0]?.expectedOutput || '').replace(/^\r?\n+|\r?\n+$/g, '');
         setTerminalOutput(out);
-        markStepSolved(stepIdxAtRun);
+        setIsSuccess(true);
       } else {
         setTerminalOutput(
           isEn
@@ -3309,7 +3285,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         }
 
         if (passed) {
-          markStepSolved(stepIdxAtRun);
+          setIsSuccess(true);
+          setIsErrorShown(false);
         } else {
           setIsSuccess(false);
           setIsErrorShown(true);
@@ -3454,7 +3431,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             }
 
             if (passed) {
-              markStepSolved(stepIdxAtRun);
+              setIsSuccess(true);
+              setIsErrorShown(false);
             } else {
               setIsSuccess(false);
               setIsErrorShown(true);
@@ -3506,8 +3484,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     if (currentStepIndex < totalQuestions - 1) {
       const nextIdx = currentStepIndex + 1;
       if (!isStepUnlocked(nextIdx)) return;
-      setIsSuccess(false);
-      setIsErrorShown(false);
       setCurrentStepIndex(nextIdx);
     }
   };
@@ -3515,11 +3491,29 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const handlePrevStep = () => {
     if (hearts <= 0 || isGameOver) return;
     if (currentStepIndex > 0) {
-      setIsSuccess(false);
-      setIsErrorShown(false);
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
+
+  // Unlock next step in current session; record level cleared in DB ONLY when final step passes
+  useEffect(() => {
+    if (!isSuccess) return;
+    setSessionMaxStep((prev) => Math.max(prev, currentStepIndex + 1));
+
+    if (currentStepIndex >= totalQuestions - 1) {
+      setIsLevelAlreadyCleared(true);
+      setIsForcedReviewRun(false);
+      void recordLevelCleared(rawLang, levelNum);
+
+      const completedSec = findCompletedSectionForLevel(rawLang, levelNum);
+      if (
+        completedSec &&
+        !hasSubmittedSectionFeedbackLocal(rawLang, completedSec.sectionNumber)
+      ) {
+        setPendingSectionSurvey(completedSec);
+      }
+    }
+  }, [isSuccess, currentStepIndex, totalQuestions, rawLang, levelNum]);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {
@@ -5989,9 +5983,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         const currentBranches: IfBranch[] = b.branches && b.branches.length > 0
           ? b.branches
           : [
-              { id: `br-try-${b.id}`, kind: 'try' as const, innerBlocks: b.innerBlocks || [] },
-              { id: `br-except-${b.id}`, kind: 'except' as const, innerBlocks: [] },
-            ];
+            { id: `br-try-${b.id}`, kind: 'try' as const, innerBlocks: b.innerBlocks || [] },
+            { id: `br-except-${b.id}`, kind: 'except' as const, innerBlocks: [] },
+          ];
         if (branchMode === 'else' && currentBranches.some((br) => br.kind === 'else')) {
           showToast('⚠️ 이미 else 절이 존재합니다.');
           return b;
@@ -6096,15 +6090,15 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       updateAnyBlockInTree(prev, blockId, (b) =>
         option === 'sep'
           ? {
-              ...b,
-              hasSep: enable ? true : undefined,
-              sepVal: enable ? (b.sepVal ?? '" "') : undefined,
-            }
+            ...b,
+            hasSep: enable ? true : undefined,
+            sepVal: enable ? (b.sepVal ?? '" "') : undefined,
+          }
           : {
-              ...b,
-              hasEnd: enable ? true : undefined,
-              endVal: enable ? (b.endVal ?? '"\\n"') : undefined,
-            }
+            ...b,
+            hasEnd: enable ? true : undefined,
+            endVal: enable ? (b.endVal ?? '"\\n"') : undefined,
+          }
       )
     );
     if (option === 'sep') {
@@ -6595,14 +6589,14 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           <div
             id="tour-terminal-console"
             style={{
-            flex: '1 1 52%',
-            display: 'flex',
-            flexDirection: 'column',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            background: '#0b1120',
-            minHeight: 0,
-            overflow: 'hidden',
-          }}>
+              flex: '1 1 52%',
+              display: 'flex',
+              flexDirection: 'column',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              background: '#0b1120',
+              minHeight: 0,
+              overflow: 'hidden',
+            }}>
             <div style={{
               height: '46px',
               padding: '0 12px',
@@ -6915,13 +6909,13 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           <div
             id="tour-memory-visualizer"
             style={{
-            flex: '1 1 48%',
-            display: 'flex',
-            flexDirection: 'column',
-            background: '#0a0f1d',
-            minHeight: 0,
-            overflow: 'hidden',
-          }}>
+              flex: '1 1 48%',
+              display: 'flex',
+              flexDirection: 'column',
+              background: '#0a0f1d',
+              minHeight: 0,
+              overflow: 'hidden',
+            }}>
             <div style={{
               height: '46px',
               padding: '0 16px',
@@ -8355,15 +8349,15 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           <div
             id="tour-col-mission"
             style={{
-            padding: '12px 20px',
-            background: '#0d1527',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            flexShrink: 0,
-            zIndex: 30,
-          }}>
+              padding: '12px 20px',
+              background: '#0d1527',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              flexShrink: 0,
+              zIndex: 30,
+            }}>
             {/* Row 1: Gauge Bar (left to right) + 5 Large Hearts (far right) */}
             <div style={{
               display: 'flex',
@@ -8560,21 +8554,21 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                           gap: '8px',
                         }}
                       >
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          color: '#fbbf24',
-                          fontWeight: 800,
-                          fontSize: '0.86rem',
-                          borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
-                          paddingBottom: '8px',
-                        }}
-                      >
-                        <Lightbulb size={16} color="#fbbf24" />
-                        <span>{isEn ? 'Hint' : '도움말'}</span>
-                      </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            color: '#fbbf24',
+                            fontWeight: 800,
+                            fontSize: '0.86rem',
+                            borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
+                            paddingBottom: '8px',
+                          }}
+                        >
+                          <Lightbulb size={16} color="#fbbf24" />
+                          <span>{isEn ? 'Hint' : '도움말'}</span>
+                        </div>
 
                         <div
                           style={{
@@ -9229,9 +9223,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                           transition: 'background 0.15s ease',
                         }}
                         onMouseEnter={(e) =>
-                          (e.currentTarget.style.background = target.hasSep
-                            ? 'rgba(239, 68, 68, 0.18)'
-                            : 'rgba(59, 130, 246, 0.22)')
+                        (e.currentTarget.style.background = target.hasSep
+                          ? 'rgba(239, 68, 68, 0.18)'
+                          : 'rgba(59, 130, 246, 0.22)')
                         }
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >
@@ -9268,9 +9262,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                           transition: 'background 0.15s ease',
                         }}
                         onMouseEnter={(e) =>
-                          (e.currentTarget.style.background = target.hasEnd
-                            ? 'rgba(239, 68, 68, 0.18)'
-                            : 'rgba(59, 130, 246, 0.22)')
+                        (e.currentTarget.style.background = target.hasEnd
+                          ? 'rgba(239, 68, 68, 0.18)'
+                          : 'rgba(59, 130, 246, 0.22)')
                         }
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >
