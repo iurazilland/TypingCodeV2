@@ -32,6 +32,7 @@ import {
   Compass
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import { useAuth } from '@/lib/AuthContext';
 import { findCurriculumModuleBySlug } from '@/lib/curriculum';
 import SpotlightTour from '@/components/practice/SpotlightTour';
 import { getPracticeRound } from '@/lib/practiceData';
@@ -1640,7 +1641,12 @@ export default function PracticePage(props: PracticePageProps) {
 function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const { language } = useLanguage();
   const isEn = language === 'en';
+  const { user, isLoading: isAuthLoading } = useAuth();
   const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
+  const tourStorageKey = user?.id
+    ? `typingcode_tour_seen_v2_${user.id}`
+    : 'typingcode_tour_seen_v2_guest';
+  const autoOpenedTourKeyRef = useRef<string | null>(null);
 
   const rawLang = params.language || 'python_basic';
   const langKey = rawLang.startsWith('python') ? 'python' : rawLang;
@@ -1676,19 +1682,22 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   // States
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(initialStep);
 
-  // Auto-launch spotlight tour on Level 1, Step 1 if not previously seen
+  // Auto-launch spotlight tour on first entry per user account if not previously seen
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      const seen = localStorage.getItem('typingcode_tour_seen_v1');
-      if (seen !== 'true' && levelNum === 1 && currentStepIndex === 0) {
+      if (isAuthLoading || autoOpenedTourKeyRef.current === tourStorageKey) return;
+      const seen = localStorage.getItem(tourStorageKey);
+      if (seen !== 'true') {
         const timer = setTimeout(() => {
+          autoOpenedTourKeyRef.current = tourStorageKey;
           setIsTourOpen(true);
-        }, 600);
+        }, 350);
         return () => clearTimeout(timer);
       }
+      autoOpenedTourKeyRef.current = tourStorageKey;
     } catch { }
-  }, [levelNum, currentStepIndex]);
+  }, [isAuthLoading, tourStorageKey]);
 
   const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
@@ -10223,6 +10232,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         isOpen={isTourOpen}
         onClose={() => setIsTourOpen(false)}
         language={language}
+        storageKey={tourStorageKey}
       />
     </div>
   );

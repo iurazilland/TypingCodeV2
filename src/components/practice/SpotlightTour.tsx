@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Sparkles, ChevronRight, ChevronLeft, Code2, Play } from 'lucide-react';
+import { Sparkles, ChevronRight, ChevronLeft, Code2, Play, X } from 'lucide-react';
 
 export interface TourStep {
   targetId: string;
@@ -31,10 +31,10 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     targetId: 'tour-progress-bar',
-    title_ko: '3. 라운드 학습 진행도',
-    title_en: '3. Round Progress Bar',
-    description_ko: '현재 라운드의 총 10개 문제 중 전체 진행률을 실시간 게이지 바로 확인합니다.',
-    description_en: 'Displays your real-time learning progress across the 10 steps of the round.',
+    title_ko: '3. 레벨 학습 진행도',
+    title_en: '3. Level Progress Bar',
+    description_ko: '현재 레벨의 전체 문제 중 실시간 학습 진행률을 상단 게이지 바로 확인합니다.',
+    description_en: 'Displays your real-time learning progress across all steps of the current level.',
     placement: 'bottom',
   },
   {
@@ -57,8 +57,8 @@ export const TOUR_STEPS: TourStep[] = [
     targetId: 'tour-col-canvas',
     title_ko: '6. 블록 조립 캔버스 및 타이핑 모드',
     title_en: '6. Assembly Canvas & Typing Mode',
-    description_ko: '1~5단계는 블록을 조립하여 알고리즘 개념을 익히고, 6~10단계는 타이핑 모드로 전환되어 실전 코드를 직접 완성합니다.',
-    description_en: 'Steps 1~5 assemble blocks to learn concepts; steps 6~10 transition to typing mode for hands-on coding.',
+    description_ko: '블록 조립과 실전 코드 타이핑을 교차하며 원리를 익히고, 디버깅·결과 예측 단계로 개념을 완성합니다.',
+    description_en: 'Alternate between block assembly and hands-on code typing, finishing with debugging and output prediction.',
     placement: 'inside-top-right',
   },
   {
@@ -99,9 +99,15 @@ interface SpotlightTourProps {
   isOpen: boolean;
   onClose: () => void;
   language: 'ko' | 'en';
+  storageKey?: string;
 }
 
-export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTourProps) {
+export default function SpotlightTour({
+  isOpen,
+  onClose,
+  language,
+  storageKey = 'typingcode_tour_seen_v2_guest',
+}: SpotlightTourProps) {
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [dontShowAgain, setDontShowAgain] = useState<boolean>(true);
@@ -132,20 +138,35 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
   useEffect(() => {
     if (!isOpen) return;
     updateRect();
+    const rafId = requestAnimationFrame(() => updateRect());
     const handleResize = () => updateRect();
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleResize, true);
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleResize, true);
     };
   }, [isOpen, updateRect]);
 
-  // Keyboard navigation (Arrow keys to navigate)
+  const handleFinish = useCallback(() => {
+    try {
+      if (dontShowAgain) {
+        localStorage.setItem(storageKey, 'true');
+      } else {
+        localStorage.removeItem(storageKey);
+      }
+    } catch { }
+    onClose();
+  }, [dontShowAgain, storageKey, onClose]);
+
+  // Keyboard navigation (Arrow keys / Enter to navigate, Escape to close)
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === 'Enter') {
+      if (e.key === 'Escape') {
+        handleFinish();
+      } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
         if (stepIndex < TOUR_STEPS.length - 1) {
           setStepIndex((prev) => prev + 1);
         } else {
@@ -157,16 +178,7 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, stepIndex, dontShowAgain]);
-
-  const handleFinish = () => {
-    if (dontShowAgain) {
-      try {
-        localStorage.setItem('typingcode_tour_seen_v1', 'true');
-      } catch { }
-    }
-    onClose();
-  };
+  }, [isOpen, stepIndex, handleFinish]);
 
   if (!isOpen) return null;
 
@@ -272,29 +284,52 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
           gap: '14px',
         }}
       >
-        {/* Card Header: Step Badge + Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span
+        {/* Card Header: Step Badge + Title + Close */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 8px',
+                borderRadius: '999px',
+                background: 'rgba(56, 189, 248, 0.15)',
+                border: '1px solid rgba(56, 189, 248, 0.4)',
+                color: '#38bdf8',
+                fontSize: '0.72rem',
+                fontWeight: 900,
+                fontFamily: 'var(--font-mono)',
+                flexShrink: 0,
+              }}
+            >
+              <Sparkles size={11} />
+              {stepIndex + 1} / {TOUR_STEPS.length}
+            </span>
+            <h4 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
+              {isEn ? currentStep.title_en : currentStep.title_ko}
+            </h4>
+          </div>
+          <button
+            type="button"
+            onClick={handleFinish}
+            title={isEn ? 'Close tour (Esc)' : '둘러보기 닫기 (Esc)'}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '4px',
-              padding: '2px 8px',
-              borderRadius: '999px',
-              background: 'rgba(56, 189, 248, 0.15)',
-              border: '1px solid rgba(56, 189, 248, 0.4)',
-              color: '#38bdf8',
-              fontSize: '0.72rem',
-              fontWeight: 900,
-              fontFamily: 'var(--font-mono)',
+              justifyContent: 'center',
+              width: '24px',
+              height: '24px',
+              borderRadius: '6px',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: '#94a3b8',
+              cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
-            <Sparkles size={11} />
-            {stepIndex + 1} / {TOUR_STEPS.length}
-          </span>
-          <h4 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
-            {isEn ? currentStep.title_en : currentStep.title_ko}
-          </h4>
+            <X size={13} />
+          </button>
         </div>
 
         {/* Card Body: Formal Instructional Description */}
@@ -350,7 +385,7 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
                   transition: 'all 0.2s ease',
                 }}
               >
-                {isEn ? '🧩 Steps 1~5: Block Mode' : '🧩 1~5단계: 블록 조립'}
+                {isEn ? '🧩 Block Mode' : '🧩 블록 조립 모드'}
               </button>
               <button
                 type="button"
@@ -368,7 +403,7 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
                   transition: 'all 0.2s ease',
                 }}
               >
-                {isEn ? '⌨️ Steps 6~10: Typing Mode' : '⌨️ 6~10단계: 실전 타이핑'}
+                {isEn ? '⌨️ Typing Mode' : '⌨️ 실전 타이핑 모드'}
               </button>
             </div>
 
@@ -495,32 +530,28 @@ export default function SpotlightTour({ isOpen, onClose, language }: SpotlightTo
             borderTop: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
-          {stepIndex === TOUR_STEPS.length - 1 ? (
-            <label
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '0.76rem',
+              color: '#94a3b8',
+              cursor: 'pointer',
+              userSelect: 'none',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={dontShowAgain}
+              onChange={(e) => setDontShowAgain(e.target.checked)}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '0.76rem',
-                color: '#94a3b8',
+                accentColor: '#38bdf8',
                 cursor: 'pointer',
-                userSelect: 'none',
               }}
-            >
-              <input
-                type="checkbox"
-                checked={dontShowAgain}
-                onChange={(e) => setDontShowAgain(e.target.checked)}
-                style={{
-                  accentColor: '#38bdf8',
-                  cursor: 'pointer',
-                }}
-              />
-              <span>{isEn ? "Don't show again" : '다시 보지 않기'}</span>
-            </label>
-          ) : (
-            <div />
-          )}
+            />
+            <span>{isEn ? "Don't show again" : '다시 보지 않기'}</span>
+          </label>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {stepIndex > 0 && (

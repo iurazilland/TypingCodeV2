@@ -147,6 +147,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setProfile(null);
     syncedUserIdRef.current = null;
 
+    if (typeof window !== 'undefined') {
+      try {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith('cleared_levels_') || k.startsWith('section_feedback_'))) {
+            keysToRemove.push(k);
+          }
+        }
+        keysToRemove.forEach((k) => localStorage.removeItem(k));
+        window.dispatchEvent(new Event(PROGRESS_SYNCED_EVENT));
+      } catch {
+        // Ignore storage errors
+      }
+    }
+
     if (typeof window !== 'undefined' && isProtectedPath(window.location.pathname)) {
       router.push('/');
     }
