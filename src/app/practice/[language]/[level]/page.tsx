@@ -1635,7 +1635,7 @@ export default function PracticePage(props: PracticePageProps) {
     );
   }
 
-  return <PracticePageInner {...props} />;
+  return <PracticePageInner key={`${rawSlug}-${props.params.level || '1'}`} {...props} />;
 }
 
 function PracticePageInner({ params, searchParams }: PracticePageProps) {
@@ -3107,6 +3107,26 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   };
 
   // Manual Code Execution (Normal Run or Progressive Step Debugging)
+  const markStepSolved = (solvedIdx: number) => {
+    setIsSuccess(true);
+    setIsErrorShown(false);
+    setSessionMaxStep((prev) => Math.max(prev, solvedIdx + 1));
+
+    if (solvedIdx >= totalQuestions - 1) {
+      setIsLevelAlreadyCleared(true);
+      setIsForcedReviewRun(false);
+      void recordLevelCleared(rawLang, levelNum);
+
+      const completedSec = findCompletedSectionForLevel(rawLang, levelNum);
+      if (
+        completedSec &&
+        !hasSubmittedSectionFeedbackLocal(rawLang, completedSec.sectionNumber)
+      ) {
+        setPendingSectionSurvey(completedSec);
+      }
+    }
+  };
+
   const handleExecuteManual = async () => {
     if (isExecuting || isDebugging) {
       debugAbortRef.current = true;
@@ -3119,6 +3139,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       return;
     }
 
+    const stepIdxAtRun = currentStepIndex;
     const penalizeHeartOnError = () => {
       // Block mode is a guided learning stage: do not deduct hearts on errors or wrong outputs
       if (mode !== 'typing') return;
@@ -3145,7 +3166,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         if (localRes.scope) setRuntimeMemory(localRes.scope);
         const out = (localRes.stdout || currentQuestion.testCases?.[0]?.expectedOutput || '').replace(/^\r?\n+|\r?\n+$/g, '');
         setTerminalOutput(out);
-        setIsSuccess(true);
+        markStepSolved(stepIdxAtRun);
       } else {
         setTerminalOutput(
           isEn
@@ -3285,7 +3306,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         }
 
         if (passed) {
-          setIsSuccess(true);
+          markStepSolved(stepIdxAtRun);
           setIsErrorShown(false);
         } else {
           setIsSuccess(false);
@@ -3431,7 +3452,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             }
 
             if (passed) {
-              setIsSuccess(true);
+              markStepSolved(stepIdxAtRun);
               setIsErrorShown(false);
             } else {
               setIsSuccess(false);
@@ -3484,6 +3505,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     if (currentStepIndex < totalQuestions - 1) {
       const nextIdx = currentStepIndex + 1;
       if (!isStepUnlocked(nextIdx)) return;
+      setIsSuccess(false);
+      setIsErrorShown(false);
       setCurrentStepIndex(nextIdx);
     }
   };
@@ -3491,6 +3514,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const handlePrevStep = () => {
     if (hearts <= 0 || isGameOver) return;
     if (currentStepIndex > 0) {
+      setIsSuccess(false);
+      setIsErrorShown(false);
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
@@ -3498,7 +3523,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   // Unlock next step in current session; record level cleared in DB ONLY when final step passes
   useEffect(() => {
     if (!isSuccess) return;
-    setSessionMaxStep((prev) => Math.max(prev, currentStepIndex + 1));
+    /* Handled directly in markStepSolved(stepIdxAtRun)
 
     if (currentStepIndex >= totalQuestions - 1) {
       setIsLevelAlreadyCleared(true);
@@ -3513,7 +3538,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         setPendingSectionSurvey(completedSec);
       }
     }
-  }, [isSuccess, currentStepIndex, totalQuestions, rawLang, levelNum]);
+    */
+  }, []);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {
