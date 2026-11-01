@@ -1,298 +1,307 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 17레벨: 논리 연산자 (and, or, not)와 범위 조건식 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (사전 배치 블록 활용)
-// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
-// - [11단계] 버그 수정 (fix_bug)
-// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
-// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
-// ============================================================================
 export const PYTHON_LEVEL_17: PracticeRound = {
-  id: 'py-basic-r17',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 17,
-  title_ko: '17레벨: 논리 연산자 (and, or, not)',
-  title_en: 'Level 17: Logical Operators (and, or, not)',
-  totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable'],
-  questions: [
-    // ------------------------------------------------------------------------
-    // Pair 1 (1~2단계): and 연산자 (두 조건이 모두 참일 때만 True)
-    // ------------------------------------------------------------------------
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      prompt_ko: 'age에 20, ticket에 True를 저장한 뒤, print 블록에 age >= 18 and ticket을 넣어 두 조건이 모두 참인지 확인해보세요.',
-      prompt_en: 'Set age to 20 and ticket to True, then print age >= 18 and ticket to verify both conditions hold (True).',
-      hint_ko: 'and 연산자는 왼쪽 조건(20 >= 18)과 오른쪽 값(True)이 둘 다 참일 때만 True가 됩니다.',
-      hint_en: 'The and operator returns True only when both the left and right sides are True.',
-      targetCode: 'age = 20\nticket = True\nprint(age >= 18 and ticket)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 두 조건을 동시에 만족해야 참이 되는 논리 키워드를 채워 국어와 영어가 모두 80점 이상인지(False) 출력해보세요.',
-      prompt_en: 'Fill in the logical keyword requiring both conditions to be true to check if kor and eng are both >= 80 (False).',
-      hint_ko: '파이썬에서 "그리고(둘 다 참)"를 뜻하는 논리 연산자 키워드는 영단어 and입니다.',
-      hint_en: 'In Python, use the keyword and to require both conditions to be True.',
-      templateCode: 'kor = 85\neng = 75\nprint(kor >= 80 §§§ eng >= 80)',
-      targetCode: 'kor = 85\neng = 75\nprint(kor >= 80 and eng >= 80)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'False',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 2 (3~4단계): or 연산자 (하나라도 참이면 True)
-    // ------------------------------------------------------------------------
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      prompt_ko: 'is_vip에 False, coupon에 True를 저장한 뒤, print에 is_vip or coupon을 넣어 하나라도 참일 때 True가 출력되는지 확인해보세요.',
-      prompt_en: 'Set is_vip to False and coupon to True, then print is_vip or coupon to verify it outputs True.',
-      hint_ko: 'or 연산자는 양쪽 중 하나만 True여도 전체 결과가 True가 됩니다.',
-      hint_en: 'The or operator returns True as soon as at least one side is True.',
-      targetCode: 'is_vip = False\ncoupon = True\nprint(is_vip or coupon)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 둘 중 하나라도 만족하면 참이 되는 논리 키워드를 채워 day("Sun")가 주말("Sat" 또는 "Sun")인지 판별해 True를 출력해보세요.',
-      prompt_en: 'Fill in the logical keyword for either condition to check if day ("Sun") is "Sat" or "Sun" (True).',
-      hint_ko: '파이썬에서 "또는(하나라도 참)"을 뜻하는 논리 연산자 키워드는 두 글자 영단어 or입니다.',
-      hint_en: 'Use the two-letter keyword or to check if at least one condition is True.',
-      templateCode: 'day = "Sun"\nprint(day == "Sat" §§ day == "Sun")',
-      targetCode: 'day = "Sun"\nprint(day == "Sat" or day == "Sun")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 3 (5~6단계): not 연산자 (참과 거짓 반전)
-    // ------------------------------------------------------------------------
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      prompt_ko: '변수 is_locked에 False를 저장하고, print 블록에 not is_locked를 넣어 반전된 결과 True가 출력되는지 확인해보세요.',
-      prompt_en: 'Store False in is_locked and print not is_locked to verify the inverted result True.',
-      hint_ko: 'not 연산자는 True를 False로, False를 True로 정반대로 뒤집어 줍니다.',
-      hint_en: 'The not operator flips True to False and False to True.',
-      targetCode: 'is_locked = False\nprint(not is_locked)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 불리언 값을 반대로 뒤집는 논리 키워드를 채워 rain(True)을 반전시킨 결과 False를 출력해보세요.',
-      prompt_en: 'Fill in the logical negation keyword to invert rain (True) and print False.',
-      hint_ko: '파이썬에서 참/거짓을 반전시킬 때는 느낌표(!)가 아니라 세 글자 영단어 not을 앞에 붙입니다.',
-      hint_en: 'In Python, use the keyword not (instead of !) to negate a boolean value.',
-      templateCode: 'rain = True\nprint(§§§ rain)',
-      targetCode: 'rain = True\nprint(not rain)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'False',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 4 (7~8단계): 구간 범위 조건식과 파이썬 연쇄 비교 (a <= x <= b)
-    // ------------------------------------------------------------------------
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      prompt_ko: 'score에 85를 저장한 뒤, print 블록에 score >= 80 and score < 90을 넣어 80점대 구간인지 판별한 결과 True를 확인해보세요.',
-      prompt_en: 'Store 85 in score and print score >= 80 and score < 90 to verify it falls in the 80s range (True).',
-      hint_ko: '80 이상이면서 동시에 90 미만인지 확인할 때 score >= 80 and score < 90처럼 두 비교식을 and로 묶습니다.',
-      hint_en: 'Combine score >= 80 and score < 90 with and to test whether score is in [80, 90).',
-      targetCode: 'score = 85\nprint(score >= 80 and score < 90)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 비교 기호를 채워 수학 부등식처럼 temp(22)가 18 이상 26 이하 범위 안에 있는지 한 번에 비교해 True를 출력해보세요.',
-      prompt_en: 'Fill in the two comparison operators to check 18 <= temp <= 26 in a chained comparison and print True.',
-      hint_ko: '파이썬에서는 18 <= temp <= 26처럼 비교 연산자를 양쪽에 연달아 적어 구간을 간결하게 검사할 수 있습니다.',
-      hint_en: 'Python supports chained comparisons directly, such as 18 <= temp <= 26.',
-      templateCode: 'temp = 22\nprint(18 §§ temp §§ 26)',
-      targetCode: 'temp = 22\nprint(18 <= temp <= 26)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 5 (9~10단계): 복합 논리식과 괄호를 이용한 우선순위 제어
-    // ------------------------------------------------------------------------
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      prompt_ko: 'card에 False, cash에 True, open_now에 True를 저장하고, (card or cash) and open_now를 출력해 결제 가능 여부 True를 확인해보세요.',
-      prompt_en: 'Set card=False, cash=True, open_now=True, and print (card or cash) and open_now to verify True.',
-      hint_ko: '괄호 안 (card or cash)가 먼저 계산되어 True가 되고, 이어서 True and open_now가 계산되어 True가 됩니다.',
-      hint_en: '(card or cash) evaluates first to True, and True and open_now evaluates to True.',
-      targetCode: 'card = False\ncash = True\nopen_now = True\nprint((card or cash) and open_now)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 논리 키워드를 채워 레벨이 10 이상이면서 동시에 (열쇠가 있거나 VIP인 경우)인지 판별해 True를 출력해보세요.',
-      prompt_en: 'Fill in the two logical keywords to check lv >= 10 while also having either key or vip (True).',
-      hint_ko: '레벨 조건과 괄호 조건을 모두 만족해야 하므로 첫째 빈칸은 and, 열쇠 또는 VIP 중 하나만 있으면 되므로 둘째 빈칸은 or입니다.',
-      hint_en: 'Use and before the parentheses and or inside (key or vip).',
-      templateCode: 'lv = 12\nkey = False\nvip = True\nprint(lv >= 10 §§§ (key §§ vip))',
-      targetCode: 'lv = 12\nkey = False\nvip = True\nprint(lv >= 10 and (key or vip))',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - && 기호 오용 SyntaxError 교정
-    // ------------------------------------------------------------------------
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '파이썬에서 지원하지 않는 논리 기호(&&)를 사용해 발생한 문법 오류(SyntaxError)를 수정하여 True가 출력되도록 해보세요.',
-      prompt_en: 'Fix the SyntaxError caused by using && instead of the Python logical operator so True prints cleanly.',
-      hint_ko: '파이썬에서는 &&나 || 기호 대신 영단어 키워드 and와 or를 사용합니다. &&를 and로 고쳐보세요.',
-      hint_en: 'Python uses the English keywords and / or instead of && / ||. Replace && with and.',
-      templateCode: 'x = 15\nprint(x >= 10 && x <= 20)',
-      targetCode: 'x = 15\nprint(x >= 10 and x <= 20)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 12단계: 예제 아래 한 줄 추가 작성 (one_line)
-    // ------------------------------------------------------------------------
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '변수 n을 선언한 코드 아래에 한 줄을 추가하여 n이 0보다 크면서 동시에 3으로 나눈 나머지가 0인지 판별한 결과 True를 출력해보세요.',
-      prompt_en: 'Type line 1 and add a line below checking whether n > 0 and n % 3 == 0 to print True.',
-      hint_ko: '첫째 줄을 입력하고 Enter를 누른 뒤, 둘째 줄에 print(n > 0 and n % 3 == 0)을 입력하세요.',
-      hint_en: 'Type line 1, press Enter, and write print(n > 0 and n % 3 == 0) on line 2.',
-      templateCode: 'n = 12\n§§§§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'n = 12\nprint(n > 0 and n % 3 == 0)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 13단계: 출력 결과 예측 선택 (predict_output)
-    // ------------------------------------------------------------------------
-    {
-      id: 13,
-      step: 13,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.',
-      prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
-      hint_ko: 'True and False는 둘 다 참이 아니므로 False, True or False는 하나가 참이므로 True, not False는 반전되어 True입니다.',
-      hint_en: 'True and False -> False; True or False -> True; not False -> True.',
-      targetCode: 'a = True\nb = False\nprint(a and b)\nprint(a or b)\nprint(not b)',
-      choices: [
-        'False\nTrue\nTrue',
-        'True\nTrue\nFalse',
-        'False\nFalse\nTrue',
-        'False\nTrue\nFalse',
-      ],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'False\nTrue\nTrue',
-        },
-      ],
-    },
+  "id": "py-basic-r17",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 17,
+  "title_ko": "17레벨: bool() 형변환과 참·거짓(Truthy / Falsy) 기초",
+  "title_en": "Level 17: bool() Casting & Truthy / Falsy Basics",
+  "description_ko": "bool() 형변환을 통해 0, 0.0, 빈 문자열(\"\")의 거짓(Falsy) 성질과 참(Truthy) 값을 구분합니다.",
+  "description_en": "Use bool() casting to distinguish Falsy values (0, 0.0, \"\") from Truthy values.",
+  "totalQuestions": 13,
+  "unlockedBlocks": [
+    "print",
+    "variable",
+    "input",
+    "type"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "prompt_ko": "a에 bool(1), b에 bool(0)을 저장한 뒤 print(a, b)로 정수 1과 0의 참·거짓을 확인해보세요.",
+      "prompt_en": "Store bool(1) in a and bool(0) in b, then print a, b to inspect their boolean values.",
+      "hint_ko": "파이썬에서 숫자 0은 거짓(False)으로, 0이 아닌 숫자는 참(True)으로 변환됩니다.",
+      "hint_en": "In Python, 0 converts to False and any non-zero integer converts to True.",
+      "targetCode": "a = bool(1)\nb = bool(0)\nprint(a, b)",
+      "expectedVariables": {
+        "a": true,
+        "b": false
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True False"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "두 빈칸에 불리언 형변환 함수를 채워 음수 -5와 숫자 0이 각각 참과 거짓 중 무엇이 되는지 출력해보세요.",
+      "prompt_en": "Fill in the boolean casting function in both blanks to convert -5 and 0.",
+      "hint_ko": "음수라도 0이 아니면 참(True)이 됩니다. 값을 불리언으로 바꾸는 내장 함수는 bool입니다.",
+      "hint_en": "Any non-zero number including -5 is Truthy. Use bool() in both blanks.",
+      "templateCode": "x = §§§§(-5)\ny = §§§§(0)\nprint(x)\nprint(y)",
+      "targetCode": "x = bool(-5)\ny = bool(0)\nprint(x)\nprint(y)",
+      "expectedVariables": {
+        "x": true,
+        "y": false
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True\nFalse"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "prompt_ko": "f1에 bool(0.0), f2에 bool(2.5)를 저장하고 한 줄에 출력해 실수의 참·거짓 기준을 확인해보세요.",
+      "prompt_en": "Store bool(0.0) in f1 and bool(2.5) in f2, then print f1, f2.",
+      "hint_ko": "실수에서도 정확히 0.0만 False가 되고, 0.0이 아닌 모든 실수는 True로 변환됩니다.",
+      "hint_en": "Among floats, only 0.0 is False; any non-zero float like 2.5 is True.",
+      "targetCode": "f1 = bool(0.0)\nf2 = bool(2.5)\nprint(f1, f2)",
+      "expectedVariables": {
+        "f1": false,
+        "f2": true
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False True"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "두 빈칸에 불리언 형변환 함수를 채워 실수 0.0과 -0.1의 변환 결과를 나란히 출력해보세요.",
+      "prompt_en": "Fill in the boolean casting function twice to print the truthiness of 0.0 and -0.1.",
+      "hint_ko": "0.0은 False, -0.1은 0.0이 아니므로 True가 됩니다. 빈칸에 모두 bool을 입력하세요.",
+      "hint_en": "Enter bool in both blanks: 0.0 is False and -0.1 is True.",
+      "templateCode": "zero_f = 0.0\nval_f = -0.1\nprint(§§§§(zero_f), §§§§(val_f))",
+      "targetCode": "zero_f = 0.0\nval_f = -0.1\nprint(bool(zero_f), bool(val_f))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False True"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "prompt_ko": "빈 문자열 s1(\"\")과 문자열 s2(\"py\")를 선언하고, bool(s1)과 bool(s2)를 차례로 출력해보세요.",
+      "prompt_en": "Declare empty string s1 (\"\") and s2 (\"py\"), then print bool(s1) and bool(s2).",
+      "hint_ko": "글자가 하나도 없는 빈 문자열(\"\")만 False이고, 한 글자라도 들어 있으면 True가 됩니다.",
+      "hint_en": "Only an empty string \"\" is False; any non-empty string is True.",
+      "targetCode": "s1 = \"\"\ns2 = \"py\"\nprint(bool(s1))\nprint(bool(s2))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False\nTrue"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 정수 변환 함수와 불리언 변환 함수를 채워 문자열 \"0\"과 정수 0의 참·거짓 차이를 출력해보세요.",
+      "prompt_en": "Fill in the integer and boolean casting functions to compare string \"0\" with integer 0.",
+      "hint_ko": "문자열 \"0\"은 비어 있지 않으므로 True이지만, int(s)로 바꾼 정수 0은 bool(n)에서 False가 됩니다.",
+      "hint_en": "String \"0\" is non-empty (True), whereas int(\"0\") is 0 so bool(n) is False.",
+      "templateCode": "s = \"0\"\nn = §§§(s)\nprint(bool(s), §§§§(n))",
+      "targetCode": "s = \"0\"\nn = int(s)\nprint(bool(s), bool(n))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True False"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "prompt_ko": "정수 n을 입력받아 bool(n)을 flag에 저장하고 출력해 0과 0이 아닌 정수를 판별해보세요.",
+      "prompt_en": "Read integer n, store bool(n) in flag, and print flag.",
+      "hint_ko": "n = int(input())으로 받은 뒤 flag = bool(n)을 저장하고 print(flag)로 출력하세요.",
+      "hint_en": "Read n = int(input()), compute flag = bool(n), and print(flag).",
+      "targetCode": "n = int(input())\nflag = bool(n)\nprint(flag)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "False"
+        },
+        {
+          "id": 2,
+          "input": "-3",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 실수 변환 함수와 불리언 변환 함수를 차례로 채워 입력된 실수의 참·거짓을 출력해보세요.",
+      "prompt_en": "Fill in the float and boolean casting functions to print the truthiness of the input float.",
+      "hint_ko": "첫째 줄에는 실수로 바꾸는 float를, 둘째 줄에는 참·거짓으로 바꾸는 bool을 입력하세요.",
+      "hint_en": "Use float on line 1 and bool on line 2.",
+      "templateCode": "f = §§§§§(input())\nprint(§§§§(f))",
+      "targetCode": "f = float(input())\nprint(bool(f))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0.0",
+          "expectedOutput": "False"
+        },
+        {
+          "id": 2,
+          "input": "1.5",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "block",
+      "prompt_ko": "cnt를 0으로 두고 정수 add를 입력받아 cnt += add로 누적한 뒤, cnt와 bool(cnt)를 출력해보세요.",
+      "prompt_en": "Start cnt at 0, read integer add, update cnt += add, and print cnt and bool(cnt).",
+      "hint_ko": "누적된 cnt가 0이면 0 False가, 0이 아니면 누적값과 True가 한 줄에 출력됩니다.",
+      "hint_en": "If cnt stays 0 it prints 0 False; otherwise it prints the new value and True.",
+      "targetCode": "cnt = 0\nadd = int(input())\ncnt += add\nprint(cnt, bool(cnt))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "0 False"
+        },
+        {
+          "id": 2,
+          "input": "4",
+          "expectedOutput": "4 True"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 문자열 변환 함수와 자료형 확인 함수를 채워 n과 s의 불리언 결과 및 자료형을 출력해보세요.",
+      "prompt_en": "Fill in the string-casting and type-checking functions to print bool results and type.",
+      "hint_ko": "숫자를 문자열로 바꾸는 함수는 str이고, 값의 자료형을 확인하는 함수는 type입니다.",
+      "hint_en": "Enter str on line 2 and type on line 3.",
+      "templateCode": "n = int(input())\ns = §§§(n)\nprint(bool(n), bool(s), §§§§(bool(n)))",
+      "targetCode": "n = int(input())\ns = str(n)\nprint(bool(n), bool(s), type(bool(n)))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "False True <class 'bool'>"
+        },
+        {
+          "id": 2,
+          "input": "9",
+          "expectedOutput": "True True <class 'bool'>"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "형변환 함수 이름의 대소문자 오타로 발생한 오류를 수정해 입력 정수의 참·거짓을 출력해보세요.",
+      "prompt_en": "Fix the capitalization typo on the casting function name so the boolean value prints.",
+      "hint_ko": "파이썬 내장 형변환 함수 이름은 모두 소문자인 bool로 작성해야 합니다.",
+      "hint_en": "Built-in function names in Python are lowercase: change Bool to bool.",
+      "templateCode": "n = int(input())\nflag = Bool(n)\nprint(flag)",
+      "targetCode": "n = int(input())\nflag = bool(n)\nprint(flag)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "False"
+        },
+        {
+          "id": 2,
+          "input": "7",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "보너스를 누적하는 코드 아래에 한 줄을 추가하여 score를 불리언으로 변환한 결과를 출력해보세요.",
+      "prompt_en": "Add one line below to convert score to a boolean and print the result.",
+      "hint_ko": "마지막 줄에 print(bool(score))를 입력해 점수가 0인지 아닌지 출력해보세요.",
+      "hint_en": "Write print(bool(score)) on line 4.",
+      "templateCode": "score = 0\nbonus = int(input())\nscore += bonus\n§§§§§§§§§§§§§§§§§§",
+      "targetCode": "score = 0\nbonus = int(input())\nscore += bonus\nprint(bool(score))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "False"
+        },
+        {
+          "id": 2,
+          "input": "15",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output that will be printed when the following Python code runs.",
+      "hint_ko": "정수 a는 0이므로 bool(a)는 False이지만, str(0)으로 만든 b는 글자 \"0\"이 들어 있는 문자열이라 True입니다.",
+      "hint_en": "Integer a is 0 (False), whereas b = str(0) is the non-empty string \"0\" (True).",
+      "targetCode": "a = 0\nb = str(a)\na += 0\nprint(bool(a))\nprint(bool(b))",
+      "choices": [
+        "False\nFalse",
+        "True\nTrue",
+        "False\nTrue",
+        "True\nFalse"
+      ],
+      "correctChoiceIndex": 2,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False\nTrue"
+        }
+      ]
+    }
+  ]
 };
-

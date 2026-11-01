@@ -1,297 +1,311 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 31레벨: f-string 문자열 포맷팅 기초 (13단계 구성)
-// ============================================================================
 export const PYTHON_LEVEL_31: PracticeRound = {
-  id: 'py-basic-r31',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 31,
-  title_ko: '31레벨: f-string 문자열 포맷팅 기초',
-  title_en: 'Level 31: f-string Formatting Basics',
-  totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'input', 'type'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      prompt_ko: '변수 name에 "Minsu"를 저장하고, f-string을 사용해 "Hello, Minsu!"를 출력해보세요.',
-      prompt_en: 'Store "Minsu" in name and use an f-string to print "Hello, Minsu!".',
-      hint_ko: '따옴표 앞에 f를 붙이고 중괄호 안에 변수명을 넣어 f"Hello, {name}!" 형태로 작성하세요.',
-      hint_en: 'Prefix the string with f and place the variable inside braces: f"Hello, {name}!".',
-      targetCode: 'name = "Minsu"\nprint(f"Hello, {name}!")',
-      testCases: [
-        {
-          id: 1,
-          expectedOutput: 'Hello, Minsu!',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '도시 이름 city를 입력받아 f-string 빈칸을 채워 "Welcome to 도시명!"을 출력해보세요.',
-      prompt_en: 'Read city and fill in the f-string blanks to print "Welcome to <city>!".',
-      hint_ko: '따옴표 바로 앞에 f를 붙이고, 중괄호로 감싼 {city}를 넣어 변수 값을 삽입하세요.',
-      hint_en: 'Add f before the opening quote and write {city} inside the string.',
-      templateCode: 'city = input()\nprint(§"Welcome to §§§§§§!")',
-      targetCode: 'city = input()\nprint(f"Welcome to {city}!")',
-      testCases: [
-        {
-          id: 1,
-          input: 'Seoul',
-          expectedOutput: 'Welcome to Seoul!',
-        },
-        {
-          id: 2,
-          input: 'Busan',
-          expectedOutput: 'Welcome to Busan!',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      prompt_ko: 'name에 "Jimin", age에 15를 저장하고 f-string으로 "Jimin is 15"를 출력해보세요.',
-      prompt_en: 'Store "Jimin" in name and 15 in age, then print "Jimin is 15" using an f-string.',
-      hint_ko: '하나의 f-string 안에 {name}과 {age} 두 중괄호를 순서대로 배치할 수 있습니다.',
-      hint_en: 'Place both {name} and {age} inside a single f-string: f"{name} is {age}".',
-      targetCode: 'name = "Jimin"\nage = 15\nprint(f"{name} is {age}")',
-      testCases: [
-        {
-          id: 1,
-          expectedOutput: 'Jimin is 15',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '직업 role과 레벨 lv를 입력받아 빈칸을 채워 "[직업] Lv.레벨" 형식으로 출력해보세요.',
-      prompt_en: 'Read role and integer lv, then fill in the blanks to print "[<role>] Lv.<lv>".',
-      hint_ko: '대괄호 안에는 {role}을, Lv. 뒤에는 {lv}를 중괄호와 함께 입력하세요.',
-      hint_en: 'Write {role} inside the brackets and {lv} right after Lv..',
-      templateCode: 'role = input()\nlv = int(input())\nprint(f"[§§§§§§] Lv.§§§§")',
-      targetCode: 'role = input()\nlv = int(input())\nprint(f"[{role}] Lv.{lv}")',
-      testCases: [
-        {
-          id: 1,
-          input: 'Mage\n12',
-          expectedOutput: '[Mage] Lv.12',
-        },
-        {
-          id: 2,
-          input: 'Tank\n30',
-          expectedOutput: '[Tank] Lv.30',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      prompt_ko: 'a에 12, b에 8을 저장하고 f-string 중괄호 안에서 합을 계산해 "Sum: 20"을 출력해보세요.',
-      prompt_en: 'Store 12 in a and 8 in b, then evaluate their sum inside an f-string to print "Sum: 20".',
-      hint_ko: 'f-string의 중괄호 안에는 {a + b}처럼 산술 연산식을 바로 넣을 수 있습니다.',
-      hint_en: 'You can put arithmetic expressions directly inside braces, like f"Sum: {a + b}".',
-      targetCode: 'a = 12\nb = 8\nprint(f"Sum: {a + b}")',
-      testCases: [
-        {
-          id: 1,
-          expectedOutput: 'Sum: 20',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '가로 w와 세로 h를 정수로 입력받아 f-string 안에서 넓이를 계산해 "Area: 넓이"를 출력해보세요.',
-      prompt_en: 'Read integers w and h, then compute the area inside the f-string to print "Area: <w * h>".',
-      hint_ko: '중괄호 안에 곱셈식 {w * h}를 입력하면 계산된 넓이가 문자열에 바로 삽입됩니다.',
-      hint_en: 'Write {w * h} in the blank so Python evaluates the product inside the f-string.',
-      templateCode: 'w = int(input())\nh = int(input())\nprint(f"Area: §§§§§§§")',
-      targetCode: 'w = int(input())\nh = int(input())\nprint(f"Area: {w * h}")',
-      testCases: [
-        {
-          id: 1,
-          input: '6\n4',
-          expectedOutput: 'Area: 24',
-        },
-        {
-          id: 2,
-          input: '10\n5',
-          expectedOutput: 'Area: 50',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      prompt_ko: '상품명 item, 단가 price, 수량 qty를 입력받아 "상품명: 총액 won" 형식으로 출력해보세요. (예: Pen: 3600 won)',
-      prompt_en: 'Read item, integer price, and integer qty, then print "<item>: <price * qty> won".',
-      hint_ko: 'f"{item}: {price * qty} won" 형태로 변수와 곱셈식을 한 문자열에 담아 출력하세요.',
-      hint_en: 'Combine {item} and {price * qty} inside f"{item}: {price * qty} won".',
-      targetCode: 'item = input()\nprice = int(input())\nqty = int(input())\nprint(f"{item}: {price * qty} won")',
-      testCases: [
-        {
-          id: 1,
-          input: 'Pen\n1200\n3',
-          expectedOutput: 'Pen: 3600 won',
-        },
-        {
-          id: 2,
-          input: 'Note\n2500\n2',
-          expectedOutput: 'Note: 5000 won',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '정수 n을 입력받아 빈칸을 채워 "n x 3 = 결과" 형식의 곱셈식을 출력해보세요. (예: 7 -> 7 x 3 = 21)',
-      prompt_en: 'Read integer n and fill in the blanks to print "<n> x 3 = <n * 3>".',
-      hint_ko: '문자열 앞에는 f를, 등호 뒤 빈칸에는 곱셈식을 감싼 {n * 3}을 입력하세요.',
-      hint_en: 'Put f before the string and {n * 3} after the equals sign.',
-      templateCode: 'n = int(input())\nprint(§"{n} x 3 = §§§§§§§")',
-      targetCode: 'n = int(input())\nprint(f"{n} x 3 = {n * 3}")',
-      testCases: [
-        {
-          id: 1,
-          input: '7',
-          expectedOutput: '7 x 3 = 21',
-        },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '12 x 3 = 36',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      prompt_ko: '실수 rate를 입력받아 소수점 둘째 자리까지 포맷한 문자열을 msg에 저장해 출력해보세요. (예: 3.5 -> Rate: 3.50)',
-      prompt_en: 'Read float rate, store f"Rate: {rate:.2f}" in msg, and print msg.',
-      hint_ko: '중괄호 안에 {rate:.2f}처럼 :.2f를 붙이면 소수점 둘째 자리까지 고정 출력됩니다.',
-      hint_en: 'Use {rate:.2f} inside the f-string to format the float to 2 decimal places.',
-      targetCode: 'rate = float(input())\nmsg = f"Rate: {rate:.2f}"\nprint(msg)',
-      testCases: [
-        {
-          id: 1,
-          input: '3.5',
-          expectedOutput: 'Rate: 3.50',
-        },
-        {
-          id: 2,
-          input: '7.126',
-          expectedOutput: 'Rate: 7.13',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '실수 avg를 입력받아 빈칸에 서식 지정자를 채워 소수점 첫째 자리까지 "Avg: 값"으로 출력해보세요.',
-      prompt_en: 'Read float avg and fill in the format specifier to print "Avg: <avg>" to 1 decimal place.',
-      hint_ko: '변수명 뒤에 콜론과 소수 첫째 자리 실수 서식인 :.1f를 붙여 {avg:.1f}를 완성하세요.',
-      hint_en: 'Write :.1f right after avg inside the braces to form {avg:.1f}.',
-      templateCode: 'avg = float(input())\nprint(f"Avg: {avg§§§§}")',
-      targetCode: 'avg = float(input())\nprint(f"Avg: {avg:.1f}")',
-      testCases: [
-        {
-          id: 1,
-          input: '88.46',
-          expectedOutput: 'Avg: 88.5',
-        },
-        {
-          id: 2,
-          input: '92.0',
-          expectedOutput: 'Avg: 92.0',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '변수와 수식이 치환되지 않고 중괄호 글자가 그대로 출력되는 버그를 수정해 "이름: 합계 pts"가 나오게 해보세요.',
-      prompt_en: 'Fix the bug where braces print literally instead of substituting user and pt + 10.',
-      hint_ko: '일반 문자열에서는 중괄호가 치환되지 않습니다. 따옴표 앞에 f 접두사가 있는지 확인해보세요.',
-      hint_en: 'Regular strings print braces literally; prefix the string literal with f to make it an f-string.',
-      templateCode: 'user = input()\npt = int(input())\nprint("{user}: {pt + 10} pts")',
-      targetCode: 'user = input()\npt = int(input())\nprint(f"{user}: {pt + 10} pts")',
-      testCases: [
-        {
-          id: 1,
-          input: 'Mina\n90',
-          expectedOutput: 'Mina: 100 pts',
-        },
-        {
-          id: 2,
-          input: 'Leo\n45',
-          expectedOutput: 'Leo: 55 pts',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '상품명 item과 개수 cnt를 입력받는 코드 아래에 한 줄을 추가하여 f-string으로 "상품명 x 개수"를 출력해보세요. (예: Apple x 5)',
-      prompt_en: 'Add one line below the inputs to print "<item> x <cnt>" using an f-string.',
-      hint_ko: '셋째 줄에 print(f"{item} x {cnt}")를 작성해 상품명과 개수를 포맷팅하세요.',
-      hint_en: 'Write print(f"{item} x {cnt}") on line 3.',
-      templateCode: 'item = input()\ncnt = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'item = input()\ncnt = int(input())\nprint(f"{item} x {cnt}")',
-      testCases: [
-        {
-          id: 1,
-          input: 'Apple\n5',
-          expectedOutput: 'Apple x 5',
-        },
-        {
-          id: 2,
-          input: 'Milk\n2',
-          expectedOutput: 'Milk x 2',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '다음 f-string 코드의 실행 결과를 예측해보세요.',
-      prompt_en: 'Predict the output of the following f-string code.',
-      hint_ko: '중괄호 {item}에는 "Box"가, {w * h}에는 4 * 3의 계산 결과인 12가 들어갑니다.',
-      hint_en: '{item} becomes "Box" and {w * h} evaluates 4 * 3 = 12.',
-      targetCode: 'item = "Box"\nw = 4\nh = 3\nprint(f"{item}: {w * h}cm2")',
-      choices: ['{item}: {w * h}cm2', 'Box: 12cm2', 'Box: 4 * 3cm2', 'Box: 7cm2'],
-      correctChoiceIndex: 1,
-      testCases: [
-        {
-          id: 1,
-          expectedOutput: 'Box: 12cm2',
-        },
-      ],
-    },
+  "id": "py-basic-r31",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 31,
+  "title_ko": "31레벨: 반복문과 흐름 제어 기초 종합 문제풀이",
+  "title_en": "Level 31: Section 4 Comprehensive Review",
+  "description_ko": "for, range, while, break, continue, 중첩 반복문과 조건 분기를 종합해 실전 문제를 해결합니다.",
+  "description_en": "Synthesize for, range, while, break, continue, nested loops, and conditionals in comprehensive problems.",
+  "totalQuestions": 10,
+  "unlockedBlocks": [
+    "print",
+    "variable",
+    "input",
+    "method",
+    "type",
+    "if",
+    "for_range",
+    "range",
+    "while",
+    "break",
+    "continue"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "음수 간격과 누적 덧셈 연산자를 채워 n부터 1까지 내려가며 3의 배수는 더하고 나머지 짝수는 1씩 뺀 결과를 출력해보세요.",
+      "prompt_en": "Fill in the negative step and compound addition operator to process numbers counting down from n to 1.",
+      "hint_ko": "1씩 감소하는 간격은 -1이며, s에 i를 누적해 더할 때는 +=를 사용합니다.",
+      "hint_en": "Use -1 as the countdown step in range() and += to add multiples of 3 to s.",
+      "templateCode": "n = int(input())\ns = 0\nfor i in range(n, 0, §§):\n    if i % 3 == 0:\n        s §§ i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)",
+      "targetCode": "n = int(input())\ns = 0\nfor i in range(n, 0, -1):\n    if i % 3 == 0:\n        s += i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "6",
+          "expectedOutput": "7"
+        },
+        {
+          "id": 2,
+          "input": "4",
+          "expectedOutput": "1"
+        },
+        {
+          "id": 3,
+          "input": "9",
+          "expectedOutput": "15"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "세 빈칸을 채워 \"quit\"이면 종료하고 음수 값은 건너뛰며 양수 값만 합산해 출력해보세요.",
+      "prompt_en": "Fill in the three blanks to stop on \"quit\", skip negative values, and sum non-negative values.",
+      "hint_ko": "무한 루프 상수 True, 반복을 끝내는 break, 현재 차례를 건너뛰는 continue를 순서대로 입력하세요.",
+      "hint_en": "Use True for the infinite loop, break on \"quit\", and continue when int(num) < 0.",
+      "templateCode": "total = 0\nwhile §§§§:\n    tag, num = input().split()\n    if tag == \"quit\":\n        §§§§§\n    if int(num) < 0:\n        §§§§§§§§\n    total += int(num)\nprint(total)",
+      "targetCode": "total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == \"quit\":\n        break\n    if int(num) < 0:\n        continue\n    total += int(num)\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "item 15\nerr -10\nitem 25\nquit 0",
+          "expectedOutput": "40"
+        },
+        {
+          "id": 2,
+          "input": "err -5\nitem 8\nquit 0",
+          "expectedOutput": "8"
+        },
+        {
+          "id": 3,
+          "input": "item 12\nitem 18\nquit 0",
+          "expectedOutput": "30"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "몫 복합 대입 연산자와 불리언 변환 함수를 채워 n의 자릿수 합 s와 s가 홀수인지 여부를 함께 출력해보세요. (예: 384 -> 15 True)",
+      "prompt_en": "Fill in the floor-division assignment operator and boolean conversion function to print digit sum s and whether s is odd.",
+      "hint_ko": "10으로 나눈 정수 몫 갱신에는 //=를, 나머지(0 또는 1)를 불리언으로 바꿀 때는 bool()을 씁니다.",
+      "hint_en": "Use //= to strip the last digit and bool(s % 2) to convert 1/0 to True/False.",
+      "templateCode": "n = int(input())\ns = 0\nwhile n:\n    s += n % 10\n    n §§§ 10\nprint(s, §§§§(s % 2))",
+      "targetCode": "n = int(input())\ns = 0\nwhile n:\n    s += n % 10\n    n //= 10\nprint(s, bool(s % 2))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "384",
+          "expectedOutput": "15 True"
+        },
+        {
+          "id": 2,
+          "input": "204",
+          "expectedOutput": "6 False"
+        },
+        {
+          "id": 3,
+          "input": "92",
+          "expectedOutput": "11 True"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "반복 끝 범위 버그를 수정해 자기 자신 n을 포함한 모든 약수의 총합이 출력되게 해보세요.",
+      "prompt_en": "Fix the range stop bug so the sum of all divisors of n (including n itself) is printed.",
+      "hint_ko": "range(1, n)은 n 직전까지만 검사하므로 약수 n이 누락됩니다. 끝 범위를 1 늘려주세요.",
+      "hint_en": "range(1, n) excludes n; change stop to n + 1 so n itself is checked.",
+      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n):\n    if n % i == 0:\n        total += i\nprint(total)",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        total += i\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "6",
+          "expectedOutput": "12"
+        },
+        {
+          "id": 2,
+          "input": "10",
+          "expectedOutput": "18"
+        },
+        {
+          "id": 3,
+          "input": "5",
+          "expectedOutput": "6"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "누적 변수 초기화 위치 버그를 고쳐 1부터 n까지 모두 곱한 값(n!)이 정확히 출력되게 해보세요.",
+      "prompt_en": "Fix where the product accumulator is initialized so n! is computed accurately.",
+      "hint_ko": "while문 안에서 매번 누적 변수를 1로 초기화하면 이전까지의 곱셈 결과가 모두 사라집니다.",
+      "hint_en": "Move prod = 1 before the while loop so it is not reset on every iteration.",
+      "templateCode": "n = int(input())\ni = 1\nwhile i <= n:\n    prod = 1\n    prod *= i\n    i += 1\nprint(prod)",
+      "targetCode": "n = int(input())\nprod = 1\ni = 1\nwhile i <= n:\n    prod *= i\n    i += 1\nprint(prod)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "4",
+          "expectedOutput": "24"
+        },
+        {
+          "id": 2,
+          "input": "5",
+          "expectedOutput": "120"
+        },
+        {
+          "id": 3,
+          "input": "3",
+          "expectedOutput": "6"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "안쪽 반복 범위를 고쳐 1층에 1개부터 n층에 n개까지 늘어나는 \"#\" 계단이 출력되게 해보세요.",
+      "prompt_en": "Fix the inner loop range so a staircase of 1 to n \"#\" characters is printed.",
+      "hint_ko": "각 줄에 찍히는 \"#\" 개수는 전체 층수가 아니라 현재 줄 번호를 따라가야 합니다.",
+      "hint_en": "Use the current row variable r instead of n inside the inner range().",
+      "templateCode": "n = int(input())\nfor r in range(1, n + 1):\n    for c in range(n):\n        print(\"#\", end=\"\")\n    print()",
+      "targetCode": "n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print(\"#\", end=\"\")\n    print()",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "3",
+          "expectedOutput": "#\n##\n###"
+        },
+        {
+          "id": 2,
+          "input": "4",
+          "expectedOutput": "#\n##\n###\n####"
+        },
+        {
+          "id": 3,
+          "input": "2",
+          "expectedOutput": "#\n##"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "반복문 아래에 한 줄을 추가하여 1부터 n까지 중 짝수이면서 5의 배수가 아닌 수의 개수 cnt를 출력해보세요.",
+      "prompt_en": "Add one line after the loop to print the count cnt of evens not divisible by 5.",
+      "hint_ko": "반복문이 끝난 뒤 들여쓰기 없이 print(cnt)를 작성하세요.",
+      "hint_en": "At top-level indentation after the loop, write print(cnt).",
+      "templateCode": "n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 5 != 0:\n        cnt += 1\n§§§§§§§§§§",
+      "targetCode": "n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 5 != 0:\n        cnt += 1\nprint(cnt)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "10",
+          "expectedOutput": "4"
+        },
+        {
+          "id": 2,
+          "input": "12",
+          "expectedOutput": "5"
+        },
+        {
+          "id": 3,
+          "input": "6",
+          "expectedOutput": "3"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "안쪽 반복문 직후에 한 줄을 추가하여 한 행의 출력이 끝날 때마다 줄바꿈해 대각선 격자를 완성해보세요. (예: 3 -> 100 / 010 / 001)",
+      "prompt_en": "Add one line right after the inner loop to print a newline at the end of each row.",
+      "hint_ko": "바깥 for문 안쪽(공백 4칸 들여쓰기)에 빈 print()를 작성하세요.",
+      "hint_en": "Indent by 4 spaces inside the outer loop and write print().",
+      "templateCode": "n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print(\"1\", end=\"\")\n        else:\n            print(\"0\", end=\"\")\n    §§§§§§§",
+      "targetCode": "n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print(\"1\", end=\"\")\n        else:\n            print(\"0\", end=\"\")\n    print()",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "3",
+          "expectedOutput": "100\n010\n001"
+        },
+        {
+          "id": 2,
+          "input": "2",
+          "expectedOutput": "10\n01"
+        },
+        {
+          "id": 3,
+          "input": "4",
+          "expectedOutput": "1000\n0100\n0010\n0001"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output produced when the following Python code runs.",
+      "hint_ko": "짝수는 건너뛰고 n=1, 3은 그대로 더해 4가 된 뒤 n=5에서 10이 더해져 s=14입니다. 14 % 2는 0이므로 bool 값은 False입니다.",
+      "hint_en": "Evens skip; n=1 and n=3 add 4, n=5 adds 10 -> s=14, and bool(14 % 2) is False.",
+      "targetCode": "n = 0\ns = 0\nwhile n < 6:\n    n += 1\n    if n % 2 == 0:\n        continue\n    elif n == 5:\n        s += 10\n    else:\n        s += n\nprint(s, bool(s % 2))",
+      "choices": [
+        "14 False",
+        "9 True",
+        "19 True",
+        "14 True"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "14 False"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output produced when the following Python code runs.",
+      "hint_ko": "c=1은 항상 건너뛰고 c > r + 1에서 안쪽 루프만 종료되므로 r=1일 때 c=2(1번), r=2일 때 c=2,3(2번), r=3일 때 c=2,3,4(3번) 실행됩니다.",
+      "hint_en": "c=1 skips and c > r + 1 breaks the inner loop, giving 1 + 2 + 3 = 6 increments.",
+      "targetCode": "cnt = 0\nfor r in range(1, 4):\n    for c in range(1, 5):\n        if c == 1:\n            continue\n        if c > r + 1:\n            break\n        cnt += 1\nprint(cnt)",
+      "choices": [
+        "6",
+        "3",
+        "9",
+        "12"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "6"
+        }
+      ]
+    }
+  ]
 };

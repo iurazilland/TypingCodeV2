@@ -6,31 +6,38 @@ export const PYTHON_LEVEL_48: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 48,
-  "title_ko": "48레벨: 딕셔너리(dict) 생성과 값 조회",
-  "title_en": "Level 48: Dictionary Creation & Lookup",
+  "title_ko": "48레벨: 필수 자료구조 형변환 (list, tuple, set)",
+  "title_en": "Level 48: Essential Collection Casting (list, tuple, set)",
+  "description_ko": "list(), tuple(), set() 함수로 자료구조를 자유롭게 변환하고, 중복 제거 후 오름차순 정렬 패턴을 완성합니다.",
+  "description_en": "Convert freely among collections with list(), tuple(), and set(), including deduplicate-and-sort patterns.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
+    "type",
+    "math",
+    "if",
+    "for_in",
+    "while",
+    "break",
     "input",
-    "method",
-    "math"
+    "method"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "딕셔너리 user에 {\"name\": \"Kim\", \"age\": 20}을 저장하고 \"name\" 키의 값을 출력해보세요.",
-      "prompt_en": "Create dictionary user = {\"name\": \"Kim\", \"age\": 20} and print user[\"name\"].",
-      "hint_ko": "중괄호 {키: 값} 형태로 user를 만들고 user[\"name\"]으로 값을 조회해 출력하세요.",
-      "hint_en": "Define user with {\"name\": \"Kim\", \"age\": 20} and access user[\"name\"].",
-      "targetCode": "user = {\"name\": \"Kim\", \"age\": 20}\nprint(user[\"name\"])",
+      "prompt_ko": "문자열 \"ABC\"를 list(\"ABC\")로 형변환해 한 글자씩 담긴 리스트 chars를 만들고 chars와 길이를 출력해보세요.",
+      "prompt_en": "Convert string \"ABC\" into a character list with chars = list(\"ABC\") and print chars and len(chars).",
+      "hint_ko": "문자열에 list()를 씌우면 각 글자가 순서대로 분리된 새 리스트가 만들어집니다.",
+      "hint_en": "Calling list(\"ABC\") splits the string into ['A', 'B', 'C'].",
+      "targetCode": "chars = list(\"ABC\")\nprint(chars, len(chars))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Kim"
+          "expectedOutput": "['A', 'B', 'C'] 3"
         }
       ]
     },
@@ -39,17 +46,17 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸에 문자열 키를 채워 딕셔너리 book의 제목과 가격을 차례대로 출력해보세요.",
-      "prompt_en": "Fill in the two string keys to print the title and price from dictionary book.",
-      "hint_ko": "대괄호 안에 따옴표를 포함한 키 이름 \"title\"과 \"price\"를 각각 입력하세요.",
-      "hint_en": "Enter \"title\" and \"price\" inside the square brackets.",
-      "templateCode": "book = {§§§§§§§: \"Python\", §§§§§§§: 18000}\nprint(book[\"title\"], book[\"price\"])",
-      "targetCode": "book = {\"title\": \"Python\", \"price\": 18000}\nprint(book[\"title\"], book[\"price\"])",
+      "prompt_ko": "리스트 nums를 변경 불가능한 튜플로 변환하도록 빈칸에 형변환 함수를 채워 출력해보세요.",
+      "prompt_en": "Fill in the casting function to convert list nums into an immutable tuple and print it.",
+      "hint_ko": "리스트나 집합을 튜플 자료형으로 바꿀 때는 tuple() 함수를 사용합니다.",
+      "hint_en": "Use tuple(nums) to convert the list into a tuple.",
+      "templateCode": "nums = [10, 20, 30]\nfixed = §§§§§(nums)\nprint(fixed)",
+      "targetCode": "nums = [10, 20, 30]\nfixed = tuple(nums)\nprint(fixed)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Python 18000"
+          "expectedOutput": "(10, 20, 30)"
         }
       ]
     },
@@ -57,16 +64,16 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "딕셔너리 scores = {\"kor\": 85, \"eng\": 95}를 만들고 두 과목 점수의 합을 출력해보세요.",
-      "prompt_en": "Create dictionary scores = {\"kor\": 85, \"eng\": 95} and print the sum of the two scores.",
-      "hint_ko": "scores[\"kor\"] + scores[\"eng\"] 수식을 print() 안에 넣어 합계를 출력하세요.",
-      "hint_en": "Add scores[\"kor\"] and scores[\"eng\"] inside print().",
-      "targetCode": "scores = {\"kor\": 85, \"eng\": 95}\nprint(scores[\"kor\"] + scores[\"eng\"])",
+      "prompt_ko": "튜플 pt = (10, 20)을 list(pt)로 바꿔 30을 .append()한 뒤, 다시 tuple()로 변환해 출력해보세요.",
+      "prompt_en": "Convert pt = (10, 20) to a list, append 30, convert back with tuple(), and print (10, 20, 30).",
+      "hint_ko": "튜플은 직접 수정할 수 없으므로 list()로 변환해 요소를 추가한 다음 다시 tuple()로 감싸줍니다.",
+      "hint_en": "Cast tmp = list(pt), call tmp.append(30), then set pt3 = tuple(tmp) and print(pt3).",
+      "targetCode": "pt = (10, 20)\ntmp = list(pt)\ntmp.append(30)\npt3 = tuple(tmp)\nprint(pt3)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "180"
+          "expectedOutput": "(10, 20, 30)"
         }
       ]
     },
@@ -75,17 +82,17 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 버거 1개와 탄산음료 2개의 총 주문 금액 total을 계산해 출력해보세요.",
-      "prompt_en": "Fill in the blanks to compute total for 1 burger and 2 sodas, then print total.",
-      "hint_ko": "menu[\"burger\"]와 menu[\"soda\"]로 각 가격을 꺼내 수식을 완성하세요.",
-      "hint_en": "Look up menu[\"burger\"] and menu[\"soda\"] to calculate the total price.",
-      "templateCode": "menu = {\"burger\": 5000, \"soda\": 2000}\ntotal = §§§§§§§§§§§§§§ + §§§§§§§§§§§§ * 2\nprint(total)",
-      "targetCode": "menu = {\"burger\": 5000, \"soda\": 2000}\ntotal = menu[\"burger\"] + menu[\"soda\"] * 2\nprint(total)",
+      "prompt_ko": "중복을 먼저 제거한 뒤 정렬 가능한 리스트로 변환하도록 두 빈칸을 채워 [10, 20, 30]을 출력해보세요.",
+      "prompt_en": "Fill in the two casting functions to deduplicate nums and convert it to a list for .sort().",
+      "hint_ko": "안쪽에서 set(nums)로 중복을 없애고 바깥쪽에서 list(...)로 감싸면 .sort()로 정렬할 수 있습니다.",
+      "hint_en": "Wrap set(nums) inside list(...) as list(set(nums)) so uniq.sort() can sort it.",
+      "templateCode": "nums = [30, 10, 20, 10, 30]\nuniq = §§§§(§§§(nums))\nuniq.sort()\nprint(uniq)",
+      "targetCode": "nums = [30, 10, 20, 10, 30]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "9000"
+          "expectedOutput": "[10, 20, 30]"
         }
       ]
     },
@@ -93,16 +100,21 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "학용품 딕셔너리 bag = {\"pen\": 3, \"note\": 2, \"ruler\": 1}의 키-값 쌍 개수를 출력해보세요.",
-      "prompt_en": "Create bag = {\"pen\": 3, \"note\": 2, \"ruler\": 1} and print how many key-value pairs it has.",
-      "hint_ko": "딕셔너리에 len(bag)을 사용하면 저장된 키-값 쌍의 개수를 구할 수 있습니다.",
-      "hint_en": "Use len(bag) to count the number of key-value pairs in the dictionary.",
-      "targetCode": "bag = {\"pen\": 3, \"note\": 2, \"ruler\": 1}\nprint(len(bag))",
+      "prompt_ko": "공백으로 입력된 단어들의 중복을 제거하고 오름차순 정렬한 뒤, 튜플로 변환해 출력해보세요.",
+      "prompt_en": "Deduplicate input words via list(set(words)), sort them with .sort(), and print tuple(uniq).",
+      "hint_ko": "uniq = list(set(words)) 다음에 uniq.sort()로 정렬하고 res = tuple(uniq)를 출력하세요.",
+      "hint_en": "Run uniq = list(set(words)), uniq.sort(), and res = tuple(uniq), then print(res).",
+      "targetCode": "words = input().split()\nuniq = list(set(words))\nuniq.sort()\nres = tuple(uniq)\nprint(res)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "3"
+          "input": "pear apple pear banana",
+          "expectedOutput": "('apple', 'banana', 'pear')"
+        },
+        {
+          "id": 2,
+          "input": "b a b",
+          "expectedOutput": "('a', 'b')"
         }
       ]
     },
@@ -111,17 +123,22 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 딕셔너리 team의 전체 항목 개수와 \"lead\"의 이름을 나란히 출력해보세요.",
-      "prompt_en": "Fill in the blank to print the number of items in team followed by team[\"lead\"].",
-      "hint_ko": "내장 함수 len(team)으로 딕셔너리의 항목 수를 구할 수 있습니다.",
-      "hint_en": "Call len(team) to get the pair count.",
-      "templateCode": "team = {\"lead\": \"Lee\", \"dev\": \"Park\"}\nprint(§§§§§§§§§, team[\"lead\"])",
-      "targetCode": "team = {\"lead\": \"Lee\", \"dev\": \"Park\"}\nprint(len(team), team[\"lead\"])",
+      "prompt_ko": "입력 단어의 중복 글자를 없애고 오름차순 정렬하여 고유 글자 수와 첫 글자를 출력해보세요. (출력 예: 3:a)",
+      "prompt_en": "Deduplicate and sort the characters of input word, then print count and first letter (e.g., 3:a).",
+      "hint_ko": "list(set(word))로 고유 글자 리스트를 만든 뒤 .sort()로 알파벳순 정렬을 수행합니다.",
+      "hint_en": "Use list(set(word)) and letters.sort() to get unique characters in alphabetical order.",
+      "templateCode": "word = input()\nletters = §§§§(§§§(word))\nletters.§§§§()\nprint(f\"{len(letters)}:{letters[0]}\")",
+      "targetCode": "word = input()\nletters = list(set(word))\nletters.sort()\nprint(f\"{len(letters)}:{letters[0]}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "2 Lee"
+          "input": "banana",
+          "expectedOutput": "3:a"
+        },
+        {
+          "id": 2,
+          "input": "zoom",
+          "expectedOutput": "3:m"
         }
       ]
     },
@@ -129,16 +146,16 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "user = {\"name\": \"Han\"}에서 없는 키 \"city\"를 .get()으로 기본값 없이 한 번, \"Seoul\" 기본값으로 한 번 출력해보세요.",
-      "prompt_en": "On user = {\"name\": \"Han\"}, print user.get(\"city\") and then user.get(\"city\", \"Seoul\").",
-      "hint_ko": "없는 키를 .get(\"city\")로 조회하면 None이 나오고, 두 번째 인자로 \"Seoul\"을 주면 기본값이 반환됩니다.",
-      "hint_en": "user.get(\"city\") returns None, while user.get(\"city\", \"Seoul\") returns \"Seoul\".",
-      "targetCode": "user = {\"name\": \"Han\"}\nprint(user.get(\"city\"))\nprint(user.get(\"city\", \"Seoul\"))",
+      "prompt_ko": "user = {\"id\": \"neo\", \"badges\": [3, 1, 3, 2]}의 배지 중복을 제거·정렬해 다시 저장하고 출력해보세요.",
+      "prompt_en": "Deduplicate and sort user[\"badges\"], store it back into user[\"badges\"], and print id and badges.",
+      "hint_ko": "clean = list(set(user[\"badges\"])) 후 clean.sort()를 실행하고 user[\"badges\"] = clean으로 갱신하세요.",
+      "hint_en": "Build clean = list(set(user[\"badges\"])), call clean.sort(), and assign user[\"badges\"] = clean.",
+      "targetCode": "user = {\"id\": \"neo\", \"badges\": [3, 1, 3, 2]}\nclean = list(set(user[\"badges\"]))\nclean.sort()\nuser[\"badges\"] = clean\nprint(user[\"id\"], user[\"badges\"])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "None\nSeoul"
+          "expectedOutput": "neo [1, 2, 3]"
         }
       ]
     },
@@ -147,17 +164,17 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸에 .get() 호출을 채워 있는 키 \"theme\"(기본값 \"light\")와 없는 키 \"font\"(기본값 \"sans\")를 출력해보세요.",
-      "prompt_en": "Fill in the .get() calls to look up \"theme\" (default \"light\") and \"font\" (default \"sans\").",
-      "hint_ko": "키가 있으면 원래 값이, 없으면 두 번째 인자로 넘긴 기본값이 반환됩니다.",
-      "hint_en": "Use get(\"theme\", \"light\") on line 2 and get(\"font\", \"sans\") on line 3.",
-      "templateCode": "cfg = {\"theme\": \"dark\"}\nprint(cfg.§§§§§§§§§§§§§§§§§§§§§)\nprint(cfg.§§§§§§§§§§§§§§§§§§§)",
-      "targetCode": "cfg = {\"theme\": \"dark\"}\nprint(cfg.get(\"theme\", \"light\"))\nprint(cfg.get(\"font\", \"sans\"))",
+      "prompt_ko": "중복 점수를 제거해 정렬한 뒤 튜플로 변환·언패킹하여 최저점과 최고점을 출력해보세요. (출력 예: Low:80 High:95)",
+      "prompt_en": "Deduplicate and sort raw, cast to a tuple to unpack low and high, and print (e.g., Low:80 High:95).",
+      "hint_ko": "첫 빈칸에는 정렬을 위한 리스트 변환 함수를, 둘째 빈칸에는 튜플 변환 함수를 적어주세요.",
+      "hint_en": "Use list(set(raw)) on line 2 and tuple(pair) on line 4.",
+      "templateCode": "raw = [95, 80, 95, 80]\npair = §§§§(set(raw))\npair.sort()\nlow, high = §§§§§(pair)\nprint(f\"Low:{low} High:{high}\")",
+      "targetCode": "raw = [95, 80, 95, 80]\npair = list(set(raw))\npair.sort()\nlow, high = tuple(pair)\nprint(f\"Low:{low} High:{high}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "dark\nsans"
+          "expectedOutput": "Low:80 High:95"
         }
       ]
     },
@@ -165,26 +182,21 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "과일 이름 item을 입력받아 stock = {\"apple\": 12, \"pear\": 5}에서 재고를 조회하고, 없으면 0을 출력해보세요.",
-      "prompt_en": "Read fruit name item and print its stock from {\"apple\": 12, \"pear\": 5}, or 0 if missing.",
-      "hint_ko": "item = input()으로 입력받은 뒤 stock.get(item, 0)을 출력하면 없는 과일도 오류 없이 0이 출력됩니다.",
-      "hint_en": "Read item = input() and print stock.get(item, 0).",
-      "targetCode": "stock = {\"apple\": 12, \"pear\": 5}\nitem = input()\nprint(stock.get(item, 0))",
+      "prompt_ko": "while문으로 입력 숫자들을 정수 리스트에 담은 뒤, 중복 제거·정렬한 리스트 uniq와 실수 평균을 출력해보세요.",
+      "prompt_en": "Convert input tokens to ints with while, deduplicate and sort into uniq, and print uniq and float mean.",
+      "hint_ko": "uniq = list(set(nums))와 uniq.sort() 후 avg = float(sum(uniq)) / len(uniq)를 계산하세요.",
+      "hint_en": "Deduplicate with list(set(nums)), sort, and compute float(sum(uniq)) / len(uniq).",
+      "targetCode": "raw = input().split()\nnums = []\ni = 0\nwhile i < len(raw):\n    nums.append(int(raw[i]))\n    i += 1\nuniq = list(set(nums))\nuniq.sort()\navg = float(sum(uniq)) / len(uniq)\nprint(uniq, avg)",
       "testCases": [
         {
           "id": 1,
-          "input": "apple",
-          "expectedOutput": "12"
+          "input": "20 10 20 30",
+          "expectedOutput": "[10, 20, 30] 20.0"
         },
         {
           "id": 2,
-          "input": "grape",
-          "expectedOutput": "0"
-        },
-        {
-          "id": 3,
-          "input": "pear",
-          "expectedOutput": "5"
+          "input": "5 15 5",
+          "expectedOutput": "[5, 15] 10.0"
         }
       ]
     },
@@ -193,27 +205,17 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 입력받은 등급 k의 평점을 조회하되, 사전에 없는 등급이면 0을 출력해보세요.",
-      "prompt_en": "Fill in the blank to print the grade point for input k, defaulting to 0 when k is not found.",
-      "hint_ko": "딕셔너리 뒤에 .get(k, 0)을 붙여 안전하게 값을 조회하세요.",
-      "hint_en": "Use .get(k, 0) on dictionary grade.",
-      "templateCode": "grade = {\"A\": 4, \"B\": 3, \"C\": 2}\nk = input()\nprint(grade§§§§§§§§§§)",
-      "targetCode": "grade = {\"A\": 4, \"B\": 3, \"C\": 2}\nk = input()\nprint(grade.get(k, 0))",
+      "prompt_ko": "수량이 0보다 큰 아이템 이름만 모아 비어 있지 않으면 튜플로 변환해 출력하도록 빈칸을 채워보세요.",
+      "prompt_en": "Collect item keys with quantity > 0 and convert active to a tuple if non-empty (else None).",
+      "hint_ko": ".items()로 순회하고 초기값 None에서 active에 요소가 있으면 tuple(active)로 변환합니다.",
+      "hint_en": "Use inv.items(), initialize res = None, and convert with tuple(active).",
+      "templateCode": "inv = {\"potion\": 2, \"key\": 0, \"map\": 1}\nactive = []\nfor k, v in inv.§§§§§():\n    if v > 0:\n        active.append(k)\nres = §§§§\nif len(active) > 0:\n    res = §§§§§(active)\nprint(res)",
+      "targetCode": "inv = {\"potion\": 2, \"key\": 0, \"map\": 1}\nactive = []\nfor k, v in inv.items():\n    if v > 0:\n        active.append(k)\nres = None\nif len(active) > 0:\n    res = tuple(active)\nprint(res)",
       "testCases": [
         {
           "id": 1,
-          "input": "A",
-          "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "F",
-          "expectedOutput": "0"
-        },
-        {
-          "id": 3,
-          "input": "B",
-          "expectedOutput": "3"
+          "input": "",
+          "expectedOutput": "('potion', 'map')"
         }
       ]
     },
@@ -222,22 +224,17 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "등록되지 않은 코인 이름이 입력되면 KeyError가 발생합니다. 없는 키일 때 0을 출력하도록 수정해보세요.",
-      "prompt_en": "Fix the KeyError when an unknown coin name is entered so that missing keys safely print 0.",
-      "hint_ko": "대괄호 조회는 없는 키에서 에러를 발생시킵니다. 기본값 0을 지정할 수 있는 조회 메서드로 바꿔보세요.",
-      "hint_en": "Replace square-bracket indexing with .get() and a default value of 0.",
-      "templateCode": "coins = {\"gold\": 50, \"silver\": 20}\nk = input()\nprint(coins[k])",
-      "targetCode": "coins = {\"gold\": 50, \"silver\": 20}\nk = input()\nprint(coins.get(k, 0))",
+      "prompt_ko": "집합(set)에는 정렬 메서드가 없어 발생한 오류(AttributeError)를 리스트 형변환을 추가해 수정해보세요.",
+      "prompt_en": "Fix the AttributeError from calling .sort() on a set by wrapping it in a list conversion.",
+      "hint_ko": "집합은 순서가 없어 직접 .sort()를 호출할 수 없습니다. set(nums)를 list()로 한 번 더 감싸주세요.",
+      "hint_en": "Sets have no .sort() method; convert set(nums) to a list with list(set(nums)).",
+      "templateCode": "nums = [4, 1, 4, 2]\nuniq = set(nums)\nuniq.sort()\nprint(uniq)",
+      "targetCode": "nums = [4, 1, 4, 2]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)",
       "testCases": [
         {
           "id": 1,
-          "input": "bronze",
-          "expectedOutput": "0"
-        },
-        {
-          "id": 2,
-          "input": "gold",
-          "expectedOutput": "50"
+          "input": "",
+          "expectedOutput": "[1, 2, 4]"
         }
       ]
     },
@@ -246,22 +243,17 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "통화 코드 cur를 입력받는 코드 아래에 한 줄을 추가하여 환율을 출력하고, 없으면 -1을 출력해보세요.",
-      "prompt_en": "Add one line below cur = input() to print the exchange rate from rates, or -1 if missing.",
-      "hint_ko": "rates.get(cur, -1)을 print()로 감싸 출력하면 없는 통화 코드일 때 -1이 출력됩니다.",
-      "hint_en": "Write print(rates.get(cur, -1)) on the final line.",
-      "templateCode": "rates = {\"USD\": 1350, \"JPY\": 9}\ncur = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "rates = {\"USD\": 1350, \"JPY\": 9}\ncur = input()\nprint(rates.get(cur, -1))",
+      "prompt_ko": "중복을 제거하고 정렬한 리스트 아래에 한 줄을 추가하여 uniq를 튜플로 변환한 결과를 출력해보세요.",
+      "prompt_en": "Add one line below uniq.sort() to print uniq converted into a tuple.",
+      "hint_ko": "마지막 줄에 print(tuple(uniq))를 작성하여 튜플 형태로 출력하세요.",
+      "hint_en": "Write print(tuple(uniq)) on the fourth line.",
+      "templateCode": "tags = [\"py\", \"ai\", \"py\"]\nuniq = list(set(tags))\nuniq.sort()\n§§§§§§§§§§§§§§§§§§",
+      "targetCode": "tags = [\"py\", \"ai\", \"py\"]\nuniq = list(set(tags))\nuniq.sort()\nprint(tuple(uniq))",
       "testCases": [
         {
           "id": 1,
-          "input": "USD",
-          "expectedOutput": "1350"
-        },
-        {
-          "id": 2,
-          "input": "EUR",
-          "expectedOutput": "-1"
+          "input": "",
+          "expectedOutput": "('ai', 'py')"
         }
       ]
     },
@@ -270,23 +262,23 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
       "prompt_en": "Select the exact output produced when the following Python code runs.",
-      "hint_ko": "\"a\"는 존재하므로 x=10, \"c\"는 없으므로 기본값 y=5가 되며 .get()은 원본 d를 바꾸지 않아 길이는 2입니다.",
-      "hint_en": "x is 10, y falls back to 5, and .get() does not mutate d so len(d) stays 2.",
-      "targetCode": "d = {\"a\": 10, \"b\": 20}\nx = d.get(\"a\", 5)\ny = d.get(\"c\", 5)\nprint(x + y, len(d))",
+      "hint_ko": "\"level\"의 고유 글자는 e, l, v 3개이며 알파벳순 정렬 후 첫 요소는 e, 마지막 요소는 v가 됩니다.",
+      "hint_en": "Unique letters of \"level\" sorted are ['e', 'l', 'v'], so len is 3, first is e, last is v.",
+      "targetCode": "word = \"level\"\nuniq = list(set(word))\nuniq.sort()\nt = tuple(uniq)\nprint(len(t), t[0], t[-1])",
       "choices": [
-        "15 3",
-        "10 2",
-        "15 2",
-        "35 2"
+        "3 e v",
+        "5 l l",
+        "3 l v",
+        "4 e v"
       ],
-      "correctChoiceIndex": 2,
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "15 2"
+          "expectedOutput": "3 e v"
         }
       ]
     }

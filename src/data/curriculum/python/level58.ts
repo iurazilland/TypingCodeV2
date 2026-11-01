@@ -1,43 +1,59 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 58레벨: 실용 내장 함수 1 — 수학과 순서 묶기 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (abs, round, enumerate, zip)
-// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
-// - [11단계] 버그 수정 (fix_bug)
-// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
-// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
-// ============================================================================
 export const PYTHON_LEVEL_58: PracticeRound = {
   "id": "py-basic-r58",
   "language": "python",
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 58,
-  "title_ko": "58레벨: 실용 내장 함수 1 — 수학과 순서 묶기",
-  "title_en": "Level 58: Built-ins 1: abs, round, enumerate, zip",
-  "totalQuestions": 13,
+  "title_ko": "58레벨: 예외 처리 필수 기초 종합 문제풀이",
+  "title_en": "Level 58: Section 9 Comprehensive Review",
+  "description_ko": "try - except 기본 구조, 4대 핵심 에러 분기, while True 재입력 루프, 안전 도우미 함수를 종합 점검합니다.",
+  "description_en": "Comprehensive Section 9 review synthesizing try - except, 4 core exception types, retry loops, and safe functions.",
+  "totalQuestions": 10,
   "unlockedBlocks": [
     "print",
     "variable",
+    "input",
+    "type",
     "math",
-    "iter",
-    "for_in"
+    "method",
+    "if",
+    "for_range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "def",
+    "try"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
-      "type": "block",
-      "prompt_ko": "두 위치 a = 12, b = 27을 선언하고, abs(a - b)로 두 수 사이의 거리(절댓값)를 출력해보세요.",
-      "prompt_en": "Declare a = 12 and b = 27, then print the absolute difference abs(a - b).",
-      "hint_ko": "abs() 함수는 음수 부호를 뗀 절댓값을 돌려주므로 a - b가 음수여도 양수 거리가 나옵니다.",
-      "hint_en": "Pass a - b inside abs() and print the result.",
-      "targetCode": "a = 12\nb = 27\nprint(abs(a - b))",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "정수 변환 실패와 0 나눗셈 에러를 각각 구분해 안내문을 출력하도록 두 에러 타입 이름을 순서대로 채워보세요.",
+      "prompt_en": "Fill in the two exception types to catch invalid integer input and division by zero separately.",
+      "hint_ko": "변환 오류는 ValueError, 0 나눗셈 오류는 ZeroDivisionError로 분기합니다.",
+      "hint_en": "Write ValueError first and ZeroDivisionError second.",
+      "templateCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept §§§§§§§§§§:\n    print(\"Err:Val\")\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"Err:Zero\")",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept ValueError:\n    print(\"Err:Val\")\nexcept ZeroDivisionError:\n    print(\"Err:Zero\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "15"
+          "input": "30",
+          "expectedOutput": "Ans:4"
+        },
+        {
+          "id": 2,
+          "input": "abc",
+          "expectedOutput": "Err:Val"
+        },
+        {
+          "id": 3,
+          "input": "0",
+          "expectedOutput": "Err:Zero"
         }
       ]
     },
@@ -46,32 +62,41 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 내장 함수를 채워 -18의 절댓값과 10 - 25의 절댓값을 나란히 출력해보세요.",
-      "prompt_en": "Fill in the built-in function name to compute the absolute values of -18 and 10 - 25.",
-      "hint_ko": "숫자의 절댓값(absolute value)을 구하는 세 글자 내장 함수는 abs입니다.",
-      "hint_en": "Use abs on both lines 1 and 2.",
-      "templateCode": "d1 = §§§(-18)\nd2 = §§§(10 - 25)\nprint(d1, d2)",
-      "targetCode": "d1 = abs(-18)\nd2 = abs(10 - 25)\nprint(d1, d2)",
+      "prompt_ko": "메뉴판 딕셔너리에 있는 이름을 입력할 때까지 재시도하도록 반복 탈출 키워드와 키 에러 타입을 채워보세요. (출력 예: pie:4500)",
+      "prompt_en": "Break out of the retry loop when k is found in prices, or catch missing keys to print NoMenu.",
+      "hint_ko": "가격 조회 성공 직후 break로 탈출하고, 없는 메뉴 키는 KeyError로 잡아 재시도합니다.",
+      "hint_en": "Write break inside try and KeyError after except.",
+      "templateCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().strip()\n    try:\n        cost = prices[k]\n        §§§§§\n    except §§§§§§§§:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
+      "targetCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().strip()\n    try:\n        cost = prices[k]\n        break\n    except KeyError:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "18 15"
+          "input": "milk\npie",
+          "expectedOutput": "NoMenu\npie:4500"
+        },
+        {
+          "id": 2,
+          "input": "tea",
+          "expectedOutput": "tea:3000"
         }
       ]
     },
     {
       "id": 3,
       "step": 3,
-      "type": "block",
-      "prompt_ko": "pi = 3.1415를 선언하고, 정수로 반올림한 round(pi)와 소수 둘째 자리까지 반올림한 round(pi, 2)를 출력해보세요.",
-      "prompt_en": "Set pi = 3.1415, then print round(pi) and round(pi, 2).",
-      "hint_ko": "round(숫자)는 가장 가까운 정수로, round(숫자, 자릿수)는 지정한 소수 자릿수까지 반올림합니다.",
-      "hint_en": "Call round(pi) on line 2 and round(pi, 2) on line 3.",
-      "targetCode": "pi = 3.1415\nprint(round(pi))\nprint(round(pi, 2))",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "리스트 범위를 벗어나면 값 없음 상수를 반환하도록 에러 타입과 반환 상수를 두 빈칸에 채워보세요. (출력 예: True Gold)",
+      "prompt_en": "Catch out-of-bounds list indexing and return the null constant.",
+      "hint_ko": "리스트 범위 초과 에러는 IndexError이며, 값이 없음을 뜻하는 반환 상수는 None입니다.",
+      "hint_en": "Write IndexError in except and None after return.",
+      "templateCode": "def pick_item(box, idx):\n    try:\n        return box[idx]\n    except §§§§§§§§§§:\n        return §§§§\nitems = [\"Gold\", \"Gem\"]\nres = pick_item(items, 4)\nprint(res is None, pick_item(items, 0))",
+      "targetCode": "def pick_item(box, idx):\n    try:\n        return box[idx]\n    except IndexError:\n        return None\nitems = [\"Gold\", \"Gem\"]\nres = pick_item(items, 4)\nprint(res is None, pick_item(items, 0))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "3\n3.14"
+          "input": "",
+          "expectedOutput": "True Gold"
         }
       ]
     },
@@ -79,33 +104,42 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       "id": 4,
       "step": 4,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 3.6을 정수로 반올림한 값과 2.678을 소수 첫째 자리까지 반올림한 값을 출력해보세요.",
-      "prompt_en": "Fill in the blanks to round 3.6 to an integer and 2.678 to 1 decimal place.",
-      "hint_ko": "반올림 함수 round를 적고, 소수 첫째 자리까지 반올림하려면 두 번째 인자로 1을 전달합니다.",
-      "hint_en": "Enter round on line 1 and round(2.678, 1) on line 2.",
-      "templateCode": "a = §§§§§(3.6)\nb = §§§§§§§§§§§§§§§\nprint(a, b)",
-      "targetCode": "a = round(3.6)\nb = round(2.678, 1)\nprint(a, b)",
+      "kind": "fix_bug",
+      "prompt_ko": "딕셔너리에 없는 국가 코드를 조회했을 때 예외를 잡지 못해 멈춥니다. 상황에 맞는 에러 타입으로 수정해보세요.",
+      "prompt_en": "Fix the uncaught exception when looking up a missing country code in dictionary caps.",
+      "hint_ko": "딕셔너리 caps[code]에 키가 없을 때 발생하는 에러는 ValueError가 아니라 KeyError입니다.",
+      "hint_en": "Replace except ValueError: with except KeyError:.",
+      "templateCode": "caps = {\"KR\": \"Seoul\", \"JP\": \"Tokyo\"}\ncode = input()\ntry:\n    print(caps[code])\nexcept ValueError:\n    print(\"Unknown\")",
+      "targetCode": "caps = {\"KR\": \"Seoul\", \"JP\": \"Tokyo\"}\ncode = input()\ntry:\n    print(caps[code])\nexcept KeyError:\n    print(\"Unknown\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "4 2.7"
+          "input": "KR",
+          "expectedOutput": "Seoul"
+        },
+        {
+          "id": 2,
+          "input": "US",
+          "expectedOutput": "Unknown"
         }
       ]
     },
     {
       "id": 5,
       "step": 5,
-      "type": "block",
-      "prompt_ko": "items = [\"Pen\", \"Book\"]을 enumerate(items)로 순회하며 0번부터 인덱스 idx와 값 val을 출력해보세요.",
-      "prompt_en": "Iterate over items = [\"Pen\", \"Book\"] with enumerate(items) and print idx and val.",
-      "hint_ko": "for idx, val in enumerate(items): 블록 안에서 print(idx, val)을 실행하세요.",
-      "hint_en": "Use enumerate(items) in a for_in loop with loop variables idx, val.",
-      "targetCode": "items = [\"Pen\", \"Book\"]\nfor idx, val in enumerate(items):\n    print(idx, val)",
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "리스트 순회 중 정수 변환 코드가 예외 감시 블록 바깥에 있어 에러로 중단됩니다. 변환 코드를 블록 안으로 옮겨보세요.",
+      "prompt_en": "Fix the crash during list filtering by moving n = int(s) inside the try block.",
+      "hint_ko": "\"err\"를 만났을 때 except ValueError:가 작동하려면 n = int(s)가 try: 안에 들어 있어야 합니다.",
+      "hint_en": "Move n = int(s) inside try: above valid.append(n).",
+      "templateCode": "raw = [\"15\", \"err\", \"25\"]\nvalid = []\nfor s in raw:\n    n = int(s)\n    try:\n        valid.append(n)\n    except ValueError:\n        continue\nprint(sum(valid))",
+      "targetCode": "raw = [\"15\", \"err\", \"25\"]\nvalid = []\nfor s in raw:\n    try:\n        n = int(s)\n        valid.append(n)\n    except ValueError:\n        continue\nprint(sum(valid))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "0 Pen\n1 Book"
+          "input": "",
+          "expectedOutput": "40"
         }
       ]
     },
@@ -113,33 +147,42 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       "id": 6,
       "step": 6,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 colors 리스트의 인덱스와 색상을 0:Red 형식의 f-string으로 출력해보세요.",
-      "prompt_en": "Fill in the blanks to print each index and color from colors as f\"{i}:{c}\".",
-      "hint_ko": "순서 번호와 요소를 동시에 꺼내려면 for i, c in enumerate(colors): 구문을 사용합니다.",
-      "hint_en": "Enter i, c and enumerate on line 2.",
-      "templateCode": "colors = [\"Red\", \"Blue\", \"Gold\"]\nfor §§§§ in §§§§§§§§§(colors):\n    print(f\"{i}:{c}\")",
-      "targetCode": "colors = [\"Red\", \"Blue\", \"Gold\"]\nfor i, c in enumerate(colors):\n    print(f\"{i}:{c}\")",
+      "kind": "fix_bug",
+      "prompt_ko": "변환 실패 시 기본값을 반환하지 않고 화면에 출력만 하여 덧셈 연산에서 에러가 발생합니다. 기본값을 반환하도록 고쳐보세요.",
+      "prompt_en": "Fix the TypeError in addition caused by printing default instead of returning it in except.",
+      "hint_ko": "호출한 곳의 덧셈식이 숫자를 받을 수 있도록 except 블록에서도 print(default) 대신 return default를 써야 합니다.",
+      "hint_en": "Change print(default) to return default inside except ValueError:.",
+      "templateCode": "def to_num(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        print(default)\nans = to_num(\"10\") + to_num(\"bad\", default=5)\nprint(ans)",
+      "targetCode": "def to_num(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        return default\nans = to_num(\"10\") + to_num(\"bad\", default=5)\nprint(ans)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "0:Red\n1:Blue\n2:Gold"
+          "input": "",
+          "expectedOutput": "15"
         }
       ]
     },
     {
       "id": 7,
       "step": 7,
-      "type": "block",
-      "prompt_ko": "medal = [\"Gold\", \"Silver\", \"Bronze\"]를 enumerate(medal, 1)로 순회해 1번부터 순위와 메달을 출력해보세요.",
-      "prompt_en": "Loop over medal with enumerate(medal, 1) to print 1-based rank and medal name.",
-      "hint_ko": "enumerate의 두 번째 인자로 시작 번호 1을 주면 인덱스가 0 대신 1부터 시작합니다.",
-      "hint_en": "Pass 1 as the second argument: enumerate(medal, 1).",
-      "targetCode": "medal = [\"Gold\", \"Silver\", \"Bronze\"]\nfor rank, m in enumerate(medal, 1):\n    print(rank, m)",
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "0 나눗셈 안전 함수와 입력 코드 아래에 한 줄을 추가하여 x와 y를 정수로 변환해 함수에 전달한 반환값을 출력해보세요.",
+      "prompt_en": "Add one line below x, y = input().split() to call safe_ratio(int(x), int(y)) and print the result.",
+      "hint_ko": "x, y를 각각 int()로 감싸 print(safe_ratio(int(x), int(y)))를 마지막 줄에 작성합니다.",
+      "hint_en": "Write print(safe_ratio(int(x), int(y))) on the last line.",
+      "templateCode": "def safe_ratio(a, b, fallback=-1):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return fallback\nx, y = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "def safe_ratio(a, b, fallback=-1):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return fallback\nx, y = input().split()\nprint(safe_ratio(int(x), int(y)))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "1 Gold\n2 Silver\n3 Bronze"
+          "input": "20 5",
+          "expectedOutput": "4"
+        },
+        {
+          "id": 2,
+          "input": "20 0",
+          "expectedOutput": "-1"
         }
       ]
     },
@@ -147,111 +190,73 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       "id": 8,
       "step": 8,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 players 리스트를 1번부터 번호 매겨 #1 Min, #2 Ara 형식으로 출력해보세요.",
-      "prompt_en": "Fill in the blanks using 1-based enumerate so players print as #1 Min and #2 Ara.",
-      "hint_ko": "1번부터 번호가 시작되도록 enumerate(players, 1)을 완성하세요.",
-      "hint_en": "Write enumerate(players, 1) in the for loop header.",
-      "templateCode": "players = [\"Min\", \"Ara\"]\nfor num, p in §§§§§§§§§§§§§§§§§§§§§:\n    print(f\"#{num} {p}\")",
-      "targetCode": "players = [\"Min\", \"Ara\"]\nfor num, p in enumerate(players, 1):\n    print(f\"#{num} {p}\")",
+      "kind": "one_line",
+      "prompt_ko": "유효한 학생 이름을 입력받을 때까지 반복하는 코드 아래에 한 줄을 추가하여 이름과 점수를 등호(=)로 이어 출력해보세요. (출력 예: Lee=95)",
+      "prompt_en": "Add one line after the retry loop to print f\"{name}={pt}\".",
+      "hint_ko": "루프 탈출 후 확정된 name과 pt를 이용해 print(f\"{name}={pt}\")를 작성합니다.",
+      "hint_en": "Write print(f\"{name}={pt}\") on the last line.",
+      "templateCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    except KeyError:\n        print(\"Retry\")\n§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    except KeyError:\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "#1 Min\n#2 Ara"
+          "input": "Park\nLee",
+          "expectedOutput": "Retry\nLee=95"
+        },
+        {
+          "id": 2,
+          "input": "Kim",
+          "expectedOutput": "Kim=80"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "prompt_ko": "names = [\"Kim\", \"Lee\"]와 scores = [95, 88]을 zip(names, scores)로 묶어 순회하며 이름과 점수를 출력해보세요.",
-      "prompt_en": "Pair names = [\"Kim\", \"Lee\"] and scores = [95, 88] with zip() and print each name and score.",
-      "hint_ko": "zip(names, scores)는 두 리스트의 같은 위치 요소끼리 짝지어 차례대로 꺼내줍니다.",
-      "hint_en": "Use for name, score in zip(names, scores): and print(name, score).",
-      "targetCode": "names = [\"Kim\", \"Lee\"]\nscores = [95, 88]\nfor name, score in zip(names, scores):\n    print(name, score)",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "딕셔너리·리스트 조회와 나눗셈 예외 분기가 결합된 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output produced by the three calls to calc_item below.",
+      "hint_ko": "r1은 30//5=6, r2는 30//0으로 0이며, r3은 store[\"c\"]를 먼저 평가해 KeyError가 발생하므로 -10이 반환됩니다.",
+      "hint_en": "r1 = 6, r2 = 0 (ZeroDivisionError), and r3 evaluates store[\"c\"] first, raising KeyError -> -10.",
+      "targetCode": "def calc_item(store, nums, k, i):\n    try:\n        return store[k] // nums[i]\n    except KeyError:\n        return -10\n    except IndexError:\n        return -20\n    except ZeroDivisionError:\n        return 0\nst = {\"a\": 30, \"b\": 15}\narr = [5, 0]\nr1 = calc_item(st, arr, \"a\", 0)\nr2 = calc_item(st, arr, \"a\", 1)\nr3 = calc_item(st, arr, \"c\", 9)\nprint(r1, r2, r3)",
+      "choices": [
+        "6 0 -20",
+        "6 -20 -10",
+        "5 0 -10",
+        "6 0 -10"
+      ],
+      "correctChoiceIndex": 3,
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Kim 95\nLee 88"
+          "input": "",
+          "expectedOutput": "6 0 -10"
         }
       ]
     },
     {
       "id": 10,
       "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 메뉴 리스트 menus와 가격 리스트 prices를 나란히 묶어 Tea=3000 형식으로 출력해보세요.",
-      "prompt_en": "Fill in the blanks to iterate over menus and prices in parallel using zip.",
-      "hint_ko": "두 리스트를 병렬로 묶어주는 zip(menus, prices)와 반복 변수 m, p를 채워주세요.",
-      "hint_en": "Enter m, p and zip(menus, prices) on line 3.",
-      "templateCode": "menus = [\"Tea\", \"Cake\"]\nprices = [3000, 5500]\nfor §§§§ in §§§§§§§§§§§§§§§§§§:\n    print(f\"{m}={p}\")",
-      "targetCode": "menus = [\"Tea\", \"Cake\"]\nprices = [3000, 5500]\nfor m, p in zip(menus, prices):\n    print(f\"{m}={p}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "expectedOutput": "Tea=3000\nCake=5500"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "1. Todo와 2. Done 순서로 출력하려 하지만 번호와 항목 위치가 뒤바뀌어 나옵니다. 코드를 수정해보세요.",
-      "prompt_en": "Fix the variable unpacking order so the output prints 1. Todo and 2. Done.",
-      "hint_ko": "enumerate는 항상 (순서 번호, 요소 값) 순서로 쌍을 꺼내므로 for 뒤의 두 변수 순서를 확인해보세요.",
-      "hint_en": "enumerate yields (index, element) first and second respectively.",
-      "templateCode": "tasks = [\"Todo\", \"Done\"]\nfor task, no in enumerate(tasks, 1):\n    print(f\"{no}. {task}\")",
-      "targetCode": "tasks = [\"Todo\", \"Done\"]\nfor no, task in enumerate(tasks, 1):\n    print(f\"{no}. {task}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "expectedOutput": "1. Todo\n2. Done"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "코드 마지막에 한 줄을 추가하여 a - b의 절댓값을 소수 첫째 자리까지 반올림해 출력해보세요.",
-      "prompt_en": "Add one line at the end to print abs(a - b) rounded to 1 decimal place.",
-      "hint_ko": "abs(a - b)를 round(..., 1)로 감싸고 print()로 출력해보세요.",
-      "hint_en": "Write print(round(abs(a - b), 1)) on the last line.",
-      "templateCode": "a = 3.25\nb = 8.91\n§§§§§§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "a = 3.25\nb = 8.91\nprint(round(abs(a - b), 1))",
-      "testCases": [
-        {
-          "id": 1,
-          "expectedOutput": "5.7"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "Predict the output of the following code.",
-      "hint_ko": "zip은 두 리스트 중 더 짧은 길이(2개)까지만 묶어 순회하며, abs(-10)은 10이 됩니다.",
-      "hint_en": "zip stops at the shorter list length (2 pairs), and abs(-10) evaluates to 10.",
-      "targetCode": "tags = [\"A\", \"B\", \"C\"]\npts = [-10, 25]\nfor t, p in zip(tags, pts):\n    print(t, abs(p))",
+      "prompt_ko": "안전 변환 함수와 집합(set)을 함께 사용하는 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "Select the output of the following code combining parse_even and a set of unique values.",
+      "hint_ko": "유효한 짝수는 6과 4뿐이며 마지막 \"6\"은 이미 집합 seen에 들어 있어 제외되므로 개수는 2, 합계는 10입니다.",
+      "hint_en": "Valid distinct evens are 6 and 4 (duplicate 6 is skipped), so len(seen) is 2 and total is 10.",
+      "targetCode": "def parse_even(s):\n    try:\n        n = int(s)\n        if n % 2 == 0:\n            return n\n        return None\n    except ValueError:\n        return None\nitems = [\"6\", \"3\", \"py\", \"4\", \"6\"]\nseen = set()\ntotal = 0\nfor s in items:\n    v = parse_even(s)\n    if v is not None and v not in seen:\n        seen.add(v)\n        total += v\nprint(len(seen), total)",
       "choices": [
-        "A 10\nB 25",
-        "A -10\nB 25",
-        "A 10\nB 25\nC 0",
-        "Error"
+        "2 10",
+        "3 16",
+        "2 16",
+        "3 13"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "A 10\nB 25"
+          "input": "",
+          "expectedOutput": "2 10"
         }
       ]
     }

@@ -1,45 +1,50 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 56레벨: return으로 결과값 반환하기 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (return 반환, 수식 활용, 다중 반환)
-// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
-// - [11단계] 버그 수정 (fix_bug)
-// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
-// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
-// ============================================================================
 export const PYTHON_LEVEL_56: PracticeRound = {
   "id": "py-basic-r56",
   "language": "python",
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 56,
-  "title_ko": "56레벨: return으로 결과값 반환하기",
-  "title_en": "Level 56: Returning Values with return",
+  "title_ko": "56레벨: 대표 에러 타입별 분기 처리",
+  "title_en": "Level 56: Handling Specific Exception Types",
+  "description_ko": "ValueError, ZeroDivisionError, IndexError, KeyError 등 에러 원인별로 except 분기를 나누어 정확히 대응합니다.",
+  "description_en": "Branch on specific exception types—ValueError, ZeroDivisionError, IndexError, and KeyError.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
     "input",
     "type",
-    "def",
+    "math",
+    "method",
     "if",
-    "math"
+    "for_range",
+    "for_in",
+    "while",
+    "def",
+    "try"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "두 수의 합 a + b를 return으로 반환하는 add 함수를 만들고, add(3, 5)를 res에 저장해 출력해보세요.",
-      "prompt_en": "Define add(a, b) returning a + b, store add(3, 5) in res, and print res.",
-      "hint_ko": "def add(a, b):의 return 칸에 a + b를 적고, 밖에서 res = add(3, 5)와 print(res)를 작성하세요.",
-      "hint_en": "Return a + b from add(a, b), assign res = add(3, 5), and print(res).",
-      "targetCode": "def add(a, b):\n    return a + b\nres = add(3, 5)\nprint(res)",
+      "prompt_ko": "입력값을 정수로 바꾸어 10을 곱해 출력하고, 값 변환 실패(ValueError) 시 \"NotInt\"를 출력해보세요.",
+      "prompt_en": "Convert input to int and print n * 10, catching ValueError specifically to print \"NotInt\".",
+      "hint_ko": "except ValueError:를 지정하면 숫자 형태가 아닌 문자열을 int()에 넣었을 때만 정확히 잡아냅니다.",
+      "hint_en": "Use except ValueError: to catch invalid integer strings.",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(n * 10)\nexcept ValueError:\n    print(\"NotInt\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "8"
+          "input": "4",
+          "expectedOutput": "40"
+        },
+        {
+          "id": 2,
+          "input": "py",
+          "expectedOutput": "NotInt"
         }
       ]
     },
@@ -48,16 +53,22 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 w * h를 반환하는 get_area 함수를 완성하고, get_area(6, 4)의 반환값을 출력해보세요.",
-      "prompt_en": "Fill in the blanks so get_area(w, h) returns w * h and its result for (6, 4) is printed.",
-      "hint_ko": "함수 결과를 호출한 곳으로 돌려줄 때는 return 키워드를 사용합니다.",
-      "hint_en": "Use return on line 2 and get_area(6, 4) on line 3.",
-      "templateCode": "def get_area(w, h):\n    §§§§§§ w * h\narea = §§§§§§§§§§§§§§\nprint(area)",
-      "targetCode": "def get_area(w, h):\n    return w * h\narea = get_area(6, 4)\nprint(area)",
+      "prompt_ko": "문자열을 실수로 변환할 수 없을 때 발생하는 값 변환 에러 타입을 빈칸에 채워 BadFloat가 출력되도록 해보세요.",
+      "prompt_en": "Fill in the exception type raised when float(s) receives invalid text.",
+      "hint_ko": "int()나 float()에 알맞지 않은 값 문자열이 들어오면 ValueError가 발생합니다.",
+      "hint_en": "Write ValueError after except.",
+      "templateCode": "s = input()\ntry:\n    w = float(s)\n    print(w + 1.5)\nexcept §§§§§§§§§§:\n    print(\"BadFloat\")",
+      "targetCode": "s = input()\ntry:\n    w = float(s)\n    print(w + 1.5)\nexcept ValueError:\n    print(\"BadFloat\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "24"
+          "input": "2.5",
+          "expectedOutput": "4.0"
+        },
+        {
+          "id": 2,
+          "input": "kg",
+          "expectedOutput": "BadFloat"
         }
       ]
     },
@@ -65,15 +76,21 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "n * 3을 반환하는 triple(n) 함수를 정의하고, triple(2) + triple(4)의 결과를 total에 담아 출력해보세요.",
-      "prompt_en": "Define triple(n) returning n * 3, then store and print triple(2) + triple(4).",
-      "hint_ko": "return으로 반환된 값은 숫자처럼 덧셈 수식(triple(2) + triple(4))에 바로 사용할 수 있습니다.",
-      "hint_en": "Assign total = triple(2) + triple(4) and print(total).",
-      "targetCode": "def triple(n):\n    return n * 3\ntotal = triple(2) + triple(4)\nprint(total)",
+      "prompt_ko": "정수 입력 n으로 60 // n을 출력하되, 0으로 나눌 때(ZeroDivisionError) \"ZeroDiv\"를 출력해보세요.",
+      "prompt_en": "Print 60 // n for integer input n, catching ZeroDivisionError to print \"ZeroDiv\".",
+      "hint_ko": "except ZeroDivisionError: 블록을 사용하면 0으로 나누는 오류를 명확히 구분해 처리합니다.",
+      "hint_en": "Catch ZeroDivisionError and print(\"ZeroDiv\").",
+      "targetCode": "n = int(input())\ntry:\n    print(60 // n)\nexcept ZeroDivisionError:\n    print(\"ZeroDiv\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "18"
+          "input": "15",
+          "expectedOutput": "4"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "ZeroDiv"
         }
       ]
     },
@@ -82,16 +99,22 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 a + b를 반환하는 add 함수를 이용해 add(1, 2) + add(3, 4)의 계산 결과를 출력해보세요.",
-      "prompt_en": "Fill in the blanks to return a + b and print add(1, 2) + add(3, 4).",
-      "hint_ko": "둘째 줄에 return을 적고, 셋째 줄 print 안에서 두 함수 호출 결과를 +로 더하세요.",
-      "hint_en": "Enter return on line 2 and add(3, 4) on line 3.",
-      "templateCode": "def add(a, b):\n    §§§§§§ a + b\nprint(add(1, 2) + §§§§§§§§§)",
-      "targetCode": "def add(a, b):\n    return a + b\nprint(add(1, 2) + add(3, 4))",
+      "prompt_ko": "두 번째 숫자가 0이어서 나눗셈을 할 수 없을 때 발생하는 에러 타입 이름을 빈칸에 채워보세요.",
+      "prompt_en": "Fill in the specific exception type raised when dividing by zero.",
+      "hint_ko": "0으로 나누려 할 때 파이썬이 발생시키는 에러 이름은 ZeroDivisionError입니다.",
+      "hint_en": "Write ZeroDivisionError after except.",
+      "templateCode": "a, b = input().split()\ntry:\n    print(int(a) // int(b))\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"DivByZero\")",
+      "targetCode": "a, b = input().split()\ntry:\n    print(int(a) // int(b))\nexcept ZeroDivisionError:\n    print(\"DivByZero\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "10"
+          "input": "20 4",
+          "expectedOutput": "5"
+        },
+        {
+          "id": 2,
+          "input": "20 0",
+          "expectedOutput": "DivByZero"
         }
       ]
     },
@@ -99,21 +122,21 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 n이 짝수면 True, 아니면 False를 반환하는 is_even(n) 함수를 만들고 입력 정수의 결과를 출력해보세요.",
-      "prompt_en": "Define is_even(n) returning True if even else False, and print the result for int(input()).",
-      "hint_ko": "if n % 2 == 0: 분기에는 return True를, else: 분기에는 return False를 넣으세요.",
-      "hint_en": "Return True when n % 2 == 0 and return False in the else branch.",
-      "targetCode": "def is_even(n):\n    if n % 2 == 0:\n        return True\n    else:\n        return False\nx = int(input())\nprint(is_even(x))",
+      "prompt_ko": "리스트 [10, 20, 30]에서 입력 인덱스 idx 위치를 출력하고, 범위를 벗어나면(IndexError) \"NoIndex\"를 출력해보세요.",
+      "prompt_en": "Print nums[idx] from [10, 20, 30], catching IndexError to print \"NoIndex\".",
+      "hint_ko": "리스트 길이보다 큰 인덱스를 조회할 때는 IndexError가 발생합니다.",
+      "hint_en": "Use except IndexError: to handle out-of-bounds list access.",
+      "targetCode": "nums = [10, 20, 30]\nidx = int(input())\ntry:\n    print(nums[idx])\nexcept IndexError:\n    print(\"NoIndex\")",
       "testCases": [
         {
           "id": 1,
-          "input": "8",
-          "expectedOutput": "True"
+          "input": "2",
+          "expectedOutput": "30"
         },
         {
           "id": 2,
           "input": "5",
-          "expectedOutput": "False"
+          "expectedOutput": "NoIndex"
         }
       ]
     },
@@ -122,22 +145,22 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 두 수 중 더 큰 값을 즉시 반환하는 bigger 함수를 완성하고 입력값과 50을 비교해 출력해보세요.",
-      "prompt_en": "Fill in the blanks so bigger(a, b) returns the larger value using early return.",
-      "hint_ko": "if 조건이 참이면 return a로 즉시 함수가 종료되므로, 그 아래에는 return b를 적어줍니다.",
-      "hint_en": "Write return a inside the if block and return b right after it.",
-      "templateCode": "def bigger(a, b):\n    if a >= b:\n        §§§§§§§§\n    §§§§§§§§\nn = int(input())\nprint(bigger(n, 50))",
-      "targetCode": "def bigger(a, b):\n    if a >= b:\n        return a\n    return b\nn = int(input())\nprint(bigger(n, 50))",
+      "prompt_ko": "딕셔너리에 존재하지 않는 키를 조회할 때 발생하는 에러 타입 이름을 빈칸에 채워 NoKey를 출력해보세요.",
+      "prompt_en": "Fill in the exception type raised when looking up a missing dictionary key.",
+      "hint_ko": "딕셔너리에서 없는 키를 대괄호 scores[key]로 찾으면 KeyError가 발생합니다.",
+      "hint_en": "Write KeyError after except.",
+      "templateCode": "scores = {\"Kim\": 90, \"Lee\": 85}\nkey = input()\ntry:\n    print(scores[key])\nexcept §§§§§§§§:\n    print(\"NoKey\")",
+      "targetCode": "scores = {\"Kim\": 90, \"Lee\": 85}\nkey = input()\ntry:\n    print(scores[key])\nexcept KeyError:\n    print(\"NoKey\")",
       "testCases": [
         {
           "id": 1,
-          "input": "72",
-          "expectedOutput": "72"
+          "input": "Kim",
+          "expectedOutput": "90"
         },
         {
           "id": 2,
-          "input": "30",
-          "expectedOutput": "50"
+          "input": "Park",
+          "expectedOutput": "NoKey"
         }
       ]
     },
@@ -145,15 +168,26 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "몫(a // b)과 나머지(a % b)를 함께 반환하는 div_mod 함수를 만들고, div_mod(10, 3)을 q, r로 받아 출력해보세요.",
-      "prompt_en": "Define div_mod(a, b) returning a // b, a % b, unpack div_mod(10, 3) into q, r, and print them.",
-      "hint_ko": "return a // b, a % b처럼 쉼표로 나열하면 튜플로 반환되어 q, r = div_mod(10, 3)으로 언패킹할 수 있습니다.",
-      "hint_en": "Return a // b, a % b and unpack with q, r = div_mod(10, 3).",
-      "targetCode": "def div_mod(a, b):\n    return a // b, a % b\nq, r = div_mod(10, 3)\nprint(q, r)",
+      "prompt_ko": "입력값을 정수로 바꿔 100 // n을 출력하되, ValueError면 \"ValErr\", ZeroDivisionError면 \"ZeroErr\"를 각각 출력해보세요.",
+      "prompt_en": "Print 100 // int(s), handling ValueError with \"ValErr\" and ZeroDivisionError with \"ZeroErr\".",
+      "hint_ko": "하나의 try 아래에 except 블록을 여러 개 나란히 두면 에러 종류별로 다른 안내문을 출력할 수 있습니다.",
+      "hint_en": "Attach two except branches—except ValueError: and except ZeroDivisionError:—to one try.",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(100 // n)\nexcept ValueError:\n    print(\"ValErr\")\nexcept ZeroDivisionError:\n    print(\"ZeroErr\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "3 1"
+          "input": "20",
+          "expectedOutput": "5"
+        },
+        {
+          "id": 2,
+          "input": "abc",
+          "expectedOutput": "ValErr"
+        },
+        {
+          "id": 3,
+          "input": "0",
+          "expectedOutput": "ZeroErr"
         }
       ]
     },
@@ -162,16 +196,27 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 리스트의 최솟값과 최댓값을 함께 반환하는 min_max 함수를 완성하고 lo, hi에 언패킹해보세요.",
-      "prompt_en": "Fill in the blanks to return min(nums), max(nums) and unpack the result into lo, hi.",
-      "hint_ko": "return 뒤에 min(nums), max(nums)를 적고, 셋째 줄 좌변에 lo, hi를 적으세요.",
-      "hint_en": "Enter min(nums), max(nums) on line 2 and lo, hi on line 3.",
-      "templateCode": "def min_max(nums):\n    return §§§§§§§§§§§§§§§§§§§§\n§§§§§§ = min_max([15, 4, 28, 9])\nprint(lo, hi)",
-      "targetCode": "def min_max(nums):\n    return min(nums), max(nums)\nlo, hi = min_max([15, 4, 28, 9])\nprint(lo, hi)",
+      "prompt_ko": "정수 변환 실패와 리스트 범위 초과를 각각 구분해 안내하도록 두 에러 타입 이름을 순서대로 채워보세요.",
+      "prompt_en": "Fill in the two exception types to distinguish invalid integer input from out-of-range index access.",
+      "hint_ko": "숫자 변환 실패는 ValueError, 리스트 인덱스 초과 조회는 IndexError로 각각 잡아냅니다.",
+      "hint_en": "Write ValueError in the first except and IndexError in the second except.",
+      "templateCode": "ranks = [\"Gold\", \"Silver\", \"Bronze\"]\ns = input()\ntry:\n    i = int(s)\n    print(ranks[i])\nexcept §§§§§§§§§§:\n    print(\"NeedNum\")\nexcept §§§§§§§§§§:\n    print(\"OutRange\")",
+      "targetCode": "ranks = [\"Gold\", \"Silver\", \"Bronze\"]\ns = input()\ntry:\n    i = int(s)\n    print(ranks[i])\nexcept ValueError:\n    print(\"NeedNum\")\nexcept IndexError:\n    print(\"OutRange\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "4 28"
+          "input": "1",
+          "expectedOutput": "Silver"
+        },
+        {
+          "id": 2,
+          "input": "one",
+          "expectedOutput": "NeedNum"
+        },
+        {
+          "id": 3,
+          "input": "9",
+          "expectedOutput": "OutRange"
         }
       ]
     },
@@ -179,15 +224,16 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "리스트 scores의 정수 평균 sum(scores) // len(scores)를 반환하는 avg_int 함수를 만들고 [80, 90, 100]을 넣어 출력해보세요.",
-      "prompt_en": "Define avg_int(scores) returning sum(scores) // len(scores) and print its result for [80, 90, 100].",
-      "hint_ko": "함수 안에서 sum(scores) // len(scores)를 반환하고 print(avg_int(data))로 결과를 출력하세요.",
-      "hint_en": "Return sum(scores) // len(scores) and pass data = [80, 90, 100] into avg_int.",
-      "targetCode": "def avg_int(scores):\n    return sum(scores) // len(scores)\ndata = [80, 90, 100]\nprint(avg_int(data))",
+      "prompt_ko": "pts[k] // cnts[k]를 반환하되 키가 없으면 -1, 0으로 나누면 0을 반환하는 avg_pt 함수를 정의해 \"A\", \"B\", \"C\" 결과를 출력해보세요.",
+      "prompt_en": "Define avg_pt(pts, cnts, k) returning pts[k] // cnts[k], -1 on KeyError, or 0 on ZeroDivisionError.",
+      "hint_ko": "함수 안의 try에서 pts[k] // cnts[k]를 반환하고 KeyError와 ZeroDivisionError마다 다른 숫자를 반환합니다.",
+      "hint_en": "Catch KeyError -> return -1 and ZeroDivisionError -> return 0 inside avg_pt.",
+      "targetCode": "def avg_pt(pts, cnts, k):\n    try:\n        return pts[k] // cnts[k]\n    except KeyError:\n        return -1\n    except ZeroDivisionError:\n        return 0\np = {\"A\": 90, \"B\": 50}\nc = {\"A\": 3, \"B\": 0}\nprint(avg_pt(p, c, \"A\"), avg_pt(p, c, \"B\"))\nprint(avg_pt(p, c, \"C\"))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "90"
+          "input": "",
+          "expectedOutput": "30 0\n-1"
         }
       ]
     },
@@ -196,16 +242,17 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 첫 요소와 끝 요소의 합을 반환하는 edge_sum(items)를 완성하고 edge_sum(nums)를 출력해보세요.",
-      "prompt_en": "Fill in the blanks so edge_sum(items) returns first + last, and print edge_sum(nums).",
-      "hint_ko": "첫 요소는 items[0], 마지막 요소는 음수 인덱스 items[-1]로 가져와 return 합니다.",
-      "hint_en": "Use items[0] + items[-1] after return and call edge_sum(nums).",
-      "templateCode": "def edge_sum(items):\n    return §§§§§§§§§§§§§§§§§§§§\nnums = [10, 25, 30, 45]\nprint(§§§§§§§§§§§§§§)",
-      "targetCode": "def edge_sum(items):\n    return items[0] + items[-1]\nnums = [10, 25, 30, 45]\nprint(edge_sum(nums))",
+      "prompt_ko": "장바구니 품목이 가격표 딕셔너리에 없을 때의 에러만 잡아 건너뛰고 합계를 출력하도록 빈칸을 채워보세요. (출력 예: Total:5000)",
+      "prompt_en": "Catch the missing dictionary key exception while summing cart item prices.",
+      "hint_ko": "\"jam\"처럼 가격표 딕셔너리에 없는 키를 조회할 때 발생하는 KeyError를 잡아냅니다.",
+      "hint_en": "Write KeyError after except.",
+      "templateCode": "prices = {\"milk\": 2000, \"egg\": 3000}\ncart = [\"milk\", \"jam\", \"egg\"]\ntotal = 0\nfor item in cart:\n    try:\n        total += prices[item]\n    except §§§§§§§§:\n        total += 0\nprint(f\"Total:{total}\")",
+      "targetCode": "prices = {\"milk\": 2000, \"egg\": 3000}\ncart = [\"milk\", \"jam\", \"egg\"]\ntotal = 0\nfor item in cart:\n    try:\n        total += prices[item]\n    except KeyError:\n        total += 0\nprint(f\"Total:{total}\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "55"
+          "input": "",
+          "expectedOutput": "Total:5000"
         }
       ]
     },
@@ -214,16 +261,22 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "함수 계산 결과에 10을 더해 30만 출력하려 하지만 반환값이 없어 오류가 발생합니다. 함수를 고쳐보세요.",
-      "prompt_en": "Fix the function so mul(4, 5) + 10 evaluates to 30 without a TypeError.",
-      "hint_ko": "함수 안에서 화면에 출력만 하면 None이 돌려져 덧셈할 수 없습니다. 값을 반환하는 키워드로 바꿔보세요.",
-      "hint_en": "printing inside mul returns None; return the product instead of printing it.",
-      "templateCode": "def mul(a, b):\n    print(a * b)\ntotal = mul(4, 5) + 10\nprint(total)",
-      "targetCode": "def mul(a, b):\n    return a * b\ntotal = mul(4, 5) + 10\nprint(total)",
+      "prompt_ko": "리스트 범위를 벗어났을 때를 처리하려 했지만 딕셔너리용 에러 타입이 적혀 있어 멈춥니다. 알맞은 에러 타입으로 고쳐보세요.",
+      "prompt_en": "Fix the uncaught crash by replacing the dictionary exception type with the list index exception type.",
+      "hint_ko": "리스트 nums[idx]에서 범위를 벗어날 때 발생하는 에러는 KeyError가 아니라 IndexError입니다.",
+      "hint_en": "Change except KeyError: to except IndexError:.",
+      "templateCode": "nums = [100, 200]\nidx = int(input())\ntry:\n    print(nums[idx])\nexcept KeyError:\n    print(\"Out of range\")",
+      "targetCode": "nums = [100, 200]\nidx = int(input())\ntry:\n    print(nums[idx])\nexcept IndexError:\n    print(\"Out of range\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "30"
+          "input": "1",
+          "expectedOutput": "200"
+        },
+        {
+          "id": 2,
+          "input": "5",
+          "expectedOutput": "Out of range"
         }
       ]
     },
@@ -232,22 +285,22 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "코드 마지막에 한 줄을 추가하여 입력받은 정수 x를 cube 함수에 넣은 반환값을 출력해보세요.",
-      "prompt_en": "Add one line at the end to print the value returned by cube(x).",
-      "hint_ko": "print() 안에 함수 호출식 cube(x)를 넣어 반환값을 출력하세요.",
-      "hint_en": "Write print(cube(x)) on the last line.",
-      "templateCode": "def cube(n):\n    return n ** 3\nx = int(input())\n§§§§§§§§§§§§§§",
-      "targetCode": "def cube(n):\n    return n ** 3\nx = int(input())\nprint(cube(x))",
+      "prompt_ko": "딕셔너리 안전 조회 코드 아래에 한 줄을 추가하여 입력 키 k와 조회 결과 ans를 콜론(:)으로 이어 출력해보세요. (출력 예: pen:5)",
+      "prompt_en": "Add one line at the bottom to print f\"{k}:{ans}\".",
+      "hint_ko": "f-string을 사용해 print(f\"{k}:{ans}\")를 마지막 줄에 작성합니다.",
+      "hint_en": "Write print(f\"{k}:{ans}\") on the last line.",
+      "templateCode": "stock = {\"pen\": 5, \"book\": 2}\nk = input()\ntry:\n    ans = stock[k]\nexcept KeyError:\n    ans = 0\n§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "stock = {\"pen\": 5, \"book\": 2}\nk = input()\ntry:\n    ans = stock[k]\nexcept KeyError:\n    ans = 0\nprint(f\"{k}:{ans}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "3",
-          "expectedOutput": "27"
+          "input": "pen",
+          "expectedOutput": "pen:5"
         },
         {
           "id": 2,
-          "input": "4",
-          "expectedOutput": "64"
+          "input": "eraser",
+          "expectedOutput": "eraser:0"
         }
       ]
     },
@@ -256,22 +309,23 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "Predict the output of the following code.",
-      "hint_ko": "step(3)은 if 조건이 거짓이라 3 + 10을, step(7)은 참이라 7 * 2를 반환합니다.",
-      "hint_en": "step(3) returns 13 and step(7) returns 14, then print outputs a + b.",
-      "targetCode": "def step(n):\n    if n > 5:\n        return n * 2\n    return n + 10\na = step(3)\nb = step(7)\nprint(a + b)",
+      "prompt_ko": "여러 개의 except 분기가 동작하는 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "Select the exact list output produced by the multi-except loop below.",
+      "hint_ko": "\"0\"은 12//12=1, \"1\"은 12//0으로 Z, \"x\"는 int 변환 실패로 V, \"5\"는 인덱스 초과로 I가 기록됩니다.",
+      "hint_en": "\"0\" -> \"1\", \"1\" -> ZeroDivisionError (\"Z\"), \"x\" -> ValueError (\"V\"), \"5\" -> IndexError (\"I\").",
+      "targetCode": "nums = [12, 0, 4]\nidxs = [\"0\", \"1\", \"x\", \"5\"]\nlog = []\nfor s in idxs:\n    try:\n        v = 12 // nums[int(s)]\n        log.append(str(v))\n    except ValueError:\n        log.append(\"V\")\n    except ZeroDivisionError:\n        log.append(\"Z\")\n    except IndexError:\n        log.append(\"I\")\nprint(log)",
       "choices": [
-        "10",
-        "20",
-        "27",
-        "30"
+        "['1', 'Z', 'I', 'V']",
+        "['1', 'Z', 'V', 'I']",
+        "['1', '0', 'V', 'I']",
+        "['12', 'Z', 'V', 'I']"
       ],
-      "correctChoiceIndex": 2,
+      "correctChoiceIndex": 1,
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "27"
+          "input": "",
+          "expectedOutput": "['1', 'Z', 'V', 'I']"
         }
       ]
     }

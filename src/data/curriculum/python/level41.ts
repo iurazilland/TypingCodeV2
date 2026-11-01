@@ -6,30 +6,41 @@ export const PYTHON_LEVEL_41: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 41,
-  "title_ko": "41레벨: 리스트 요소 삭제",
-  "title_en": "Level 41: Removing List Elements (.pop, .remove)",
+  "title_ko": "41레벨: 리스트 for 순회와 조건 필터링",
+  "title_en": "Level 41: List for Iteration & Conditional Filtering",
+  "description_ko": "for 반복문과 in / not in 연산자로 리스트를 순회하며 조건 필터링 및 공백 구분 정수 입력 변환을 구현합니다.",
+  "description_en": "Iterate over lists with for, check membership with in/not in, filter elements, and parse space-separated integers.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
+    "input",
+    "type",
+    "math",
     "method",
-    "if"
+    "if",
+    "for_in",
+    "for_range",
+    "range",
+    "while",
+    "break",
+    "continue"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": ".pop() 메서드로 nums = [10, 20, 30]의 마지막 요소를 삭제하고 리스트를 출력해보세요.",
-      "prompt_en": "Use .pop() to remove the last element from nums = [10, 20, 30] and print nums.",
-      "hint_ko": "인자 없이 nums.pop()을 호출하면 맨 끝 요소 30이 제거됩니다. 그 뒤 print(nums)를 실행하세요.",
-      "hint_en": "Call nums.pop() with no arguments to remove 30, then print(nums).",
-      "targetCode": "nums = [10, 20, 30]\nnums.pop()\nprint(nums)",
+      "prompt_ko": "for 반복문으로 리스트 nums = [10, 20, 30]의 요소를 처음부터 끝까지 한 줄에 하나씩 출력해보세요.",
+      "prompt_en": "Use a for loop to print each element of nums = [10, 20, 30] on its own line.",
+      "hint_ko": "for x in nums: 블록 안에 print(x)를 배치하면 각 요소가 차례대로 출력됩니다.",
+      "hint_en": "Put print(x) inside for x in nums: to print every item.",
+      "targetCode": "nums = [10, 20, 30]\nfor x in nums:\n    print(x)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 20]"
+          "expectedOutput": "10\n20\n30"
         }
       ]
     },
@@ -38,17 +49,17 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 stack 리스트의 맨 마지막 요소를 제거하고 남은 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the blank to pop the last element from stack and print the remaining list.",
-      "hint_ko": "마지막 요소를 꺼내 제거할 때는 괄호를 비운 pop()을 호출합니다.",
-      "hint_en": "Call pop() with empty parentheses to remove the last item.",
-      "templateCode": "stack = [\"A\", \"B\", \"C\"]\nstack.§§§§§\nprint(stack)",
-      "targetCode": "stack = [\"A\", \"B\", \"C\"]\nstack.pop()\nprint(stack)",
+      "prompt_ko": "리스트의 모든 가격을 순서대로 순회하며 total에 누적해 총합을 출력해보세요. (출력 예: Total:2500)",
+      "prompt_en": "Iterate through prices, accumulate each value into total, and print Total:2500.",
+      "hint_ko": "리스트 순회 구문과 기존 변수에 값을 더하는 복합 대입 연산자를 빈칸에 채워보세요.",
+      "hint_en": "Use for p in prices: and total += p to accumulate the total.",
+      "templateCode": "prices = [500, 1200, 800]\ntotal = 0\n§§§ p §§ prices:\n    total §§ p\nprint(f\"Total:{total}\")",
+      "targetCode": "prices = [500, 1200, 800]\ntotal = 0\nfor p in prices:\n    total += p\nprint(f\"Total:{total}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['A', 'B']"
+          "expectedOutput": "Total:2500"
         }
       ]
     },
@@ -56,16 +67,16 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "nums = [10, 20, 30]에서 .pop()으로 꺼낸 마지막 값을 변수 last에 저장해 출력해보세요.",
-      "prompt_en": "Store the popped last value of nums = [10, 20, 30] in last and print last.",
-      "hint_ko": ".pop()은 삭제한 요소를 반환합니다. last = nums.pop()으로 받아 print(last)로 출력하세요.",
-      "hint_en": ".pop() returns the removed item. Set last = nums.pop() and print(last).",
-      "targetCode": "nums = [10, 20, 30]\nlast = nums.pop()\nprint(last)",
+      "prompt_ko": "roles = [\"user\", \"vip\", \"admin\"]에 \"vip\"가 포함되어 있는지와 \"guest\"가 없는지를 각각 출력해보세요.",
+      "prompt_en": "Print whether \"vip\" is in roles = [\"user\", \"vip\", \"admin\"] and whether \"guest\" is not in roles.",
+      "hint_ko": "\"vip\" in roles와 \"guest\" not in roles는 각각 True/False 논리값을 반환합니다.",
+      "hint_en": "Print \"vip\" in roles on line 2 and \"guest\" not in roles on line 3.",
+      "targetCode": "roles = [\"user\", \"vip\", \"admin\"]\nprint(\"vip\" in roles)\nprint(\"guest\" not in roles)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "30"
+          "expectedOutput": "True\nTrue"
         }
       ]
     },
@@ -74,17 +85,17 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 마지막 요소를 꺼내 done에 담고, done과 남은 tasks를 함께 출력해보세요.",
-      "prompt_en": "Fill in the blanks to pop the last item into done and print done and tasks.",
-      "hint_ko": "tasks 리스트에서 .pop()을 호출해 반환된 값을 done에 저장하세요.",
-      "hint_en": "Call tasks.pop() and assign its return value to done.",
-      "templateCode": "tasks = [\"eat\", \"code\"]\ndone = §§§§§.§§§§§\nprint(done, tasks)",
-      "targetCode": "tasks = [\"eat\", \"code\"]\ndone = tasks.pop()\nprint(done, tasks)",
+      "prompt_ko": "raw 리스트를 순회하며 uniq에 아직 들어 있지 않은 문자만 차례로 추가해 중복 없는 리스트를 출력해보세요.",
+      "prompt_en": "Loop over raw and add characters not yet present in uniq, then print uniq.",
+      "hint_ko": "포함되지 않음을 검사하는 두 단어 연산자와 리스트 끝에 추가하는 메서드를 채우세요.",
+      "hint_en": "Check non-membership with not in and add new items with .append().",
+      "templateCode": "raw = [\"A\", \"B\", \"A\", \"C\"]\nuniq = []\nfor ch in raw:\n    if ch §§§ §§ uniq:\n        uniq.§§§§§§(ch)\nprint(uniq)",
+      "targetCode": "raw = [\"A\", \"B\", \"A\", \"C\"]\nuniq = []\nfor ch in raw:\n    if ch not in uniq:\n        uniq.append(ch)\nprint(uniq)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "code ['eat']"
+          "expectedOutput": "['A', 'B', 'C']"
         }
       ]
     },
@@ -92,16 +103,16 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": ".pop(0)을 사용해 nums = [10, 20, 30]의 첫 번째 요소(0번 인덱스)를 삭제하고 출력해보세요.",
-      "prompt_en": "Use .pop(0) to remove the first element (index 0) of nums = [10, 20, 30] and print nums.",
-      "hint_ko": ".pop()의 괄호 안에 인덱스 0을 넣으면 맨 앞 요소가 삭제됩니다.",
-      "hint_en": "Pass index 0 to nums.pop(0) to remove the first element.",
-      "targetCode": "nums = [10, 20, 30]\nnums.pop(0)\nprint(nums)",
+      "prompt_ko": "scores = [65, 85, 90, 72]를 순회하며 80 이상인 점수만 빈 리스트 passed에 모아 출력해보세요.",
+      "prompt_en": "Filter values >= 80 from scores = [65, 85, 90, 72] into passed and print passed.",
+      "hint_ko": "for s in scores: 안에 if s >= 80: 조건을 두고 passed.append(s)를 실행하세요.",
+      "hint_en": "Inside for s in scores:, check if s >= 80: and call passed.append(s).",
+      "targetCode": "scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s >= 80:\n        passed.append(s)\nprint(passed)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[20, 30]"
+          "expectedOutput": "[85, 90]"
         }
       ]
     },
@@ -110,17 +121,17 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "del 키워드를 사용해 nums 리스트의 1번 인덱스 요소를 삭제하고 출력해보세요.",
-      "prompt_en": "Use the del keyword to delete index 1 of nums and print the list.",
-      "hint_ko": "del 리스트[인덱스] 문법으로 특정 위치의 요소를 바로 지울 수 있습니다.",
-      "hint_en": "Use del nums[1] to delete the element at index 1.",
-      "templateCode": "nums = [10, 20, 30, 40]\n§§§ nums§§§\nprint(nums)",
-      "targetCode": "nums = [10, 20, 30, 40]\ndel nums[1]\nprint(nums)",
+      "prompt_ko": "각 문자열의 양쪽 공백을 제거한 뒤 글자 수가 3 이상인 단어만 longs 리스트에 모아 출력해보세요.",
+      "prompt_en": "Strip whitespace from each string in raw, collect words of length >= 3 into longs, and print longs.",
+      "hint_ko": "리스트를 순회하면서 양끝 공백 제거 메서드를 호출한 뒤 길이를 비교하세요.",
+      "hint_en": "Loop with for w in raw: and clean whitespace using w.strip().",
+      "templateCode": "raw = [\" py \", \"hi\", \" code \"]\nlongs = []\n§§§ w §§ raw:\n    clean = w.§§§§§()\n    if len(clean) >= 3:\n        longs.append(clean)\nprint(longs)",
+      "targetCode": "raw = [\" py \", \"hi\", \" code \"]\nlongs = []\nfor w in raw:\n    clean = w.strip()\n    if len(clean) >= 3:\n        longs.append(clean)\nprint(longs)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 30, 40]"
+          "expectedOutput": "['code']"
         }
       ]
     },
@@ -128,16 +139,21 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": ".remove(\"B\")로 items = [\"A\", \"B\", \"C\", \"B\"]에서 첫 번째 \"B\"만 삭제하고 출력해보세요.",
-      "prompt_en": "Use .remove(\"B\") on items = [\"A\", \"B\", \"C\", \"B\"] to remove the first \"B\" and print items.",
-      "hint_ko": ".remove(값)는 앞에서부터 탐색해 가장 먼저 일치하는 값 하나만 제거합니다.",
-      "hint_en": ".remove(\"B\") deletes only the first matching occurrence of \"B\".",
-      "targetCode": "items = [\"A\", \"B\", \"C\", \"B\"]\nitems.remove(\"B\")\nprint(items)",
+      "prompt_ko": "한 줄에 공백으로 입력된 숫자 문자열들을 순회하며 각각 정수로 변환해 nums 리스트에 담고 출력해보세요.",
+      "prompt_en": "Iterate over input().split(), convert each token to int, append to nums, and print nums.",
+      "hint_ko": "for s in input().split(): 안에서 nums.append(int(s))를 호출하면 정수 리스트가 완성됩니다.",
+      "hint_en": "Loop with for s in input().split(): and call nums.append(int(s)).",
+      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(nums)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "['A', 'C', 'B']"
+          "input": "10 20 30",
+          "expectedOutput": "[10, 20, 30]"
+        },
+        {
+          "id": 2,
+          "input": "5 15",
+          "expectedOutput": "[5, 15]"
         }
       ]
     },
@@ -146,17 +162,22 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 scores 리스트에서 값 50을 찾아 삭제하고 출력해보세요.",
-      "prompt_en": "Fill in the blanks to remove the value 50 from scores and print scores.",
-      "hint_ko": "인덱스가 아닌 특정 값을 찾아 지울 때는 .remove(50)을 사용합니다.",
-      "hint_en": "Use .remove(50) to delete an element by value rather than by index.",
-      "templateCode": "scores = [70, 50, 90]\nscores.§§§§§§(§§)\nprint(scores)",
-      "targetCode": "scores = [70, 50, 90]\nscores.remove(50)\nprint(scores)",
+      "prompt_ko": "공백으로 구분된 입력 숫자들을 정수로 바꾸고 그중 짝수만 evens 리스트에 모아 출력해보세요. (출력 예: Evens:[8, 12])",
+      "prompt_en": "Parse space-separated integers from input, filter even numbers into evens, and print Evens.",
+      "hint_ko": "문자열 분리 메서드, 정수형 변환 함수, 리스트 끝 추가 메서드를 차례대로 채워보세요.",
+      "hint_en": "Use .split() on input(), int(s) for conversion, and evens.append(n) for matches.",
+      "templateCode": "evens = []\nfor s in input().§§§§§():\n    n = §§§(s)\n    if n % 2 == 0:\n        evens.§§§§§§(n)\nprint(f\"Evens:{evens}\")",
+      "targetCode": "evens = []\nfor s in input().split():\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(f\"Evens:{evens}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[70, 90]"
+          "input": "3 8 5 12",
+          "expectedOutput": "Evens:[8, 12]"
+        },
+        {
+          "id": 2,
+          "input": "2 7 4",
+          "expectedOutput": "Evens:[2, 4]"
         }
       ]
     },
@@ -164,16 +185,16 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": ".clear() 메서드를 사용해 nums = [10, 20, 30]의 모든 요소를 비우고 출력해보세요.",
-      "prompt_en": "Use .clear() to empty all elements from nums = [10, 20, 30] and print nums.",
-      "hint_ko": "nums.clear()를 실행하면 리스트 안의 모든 요소가 제거되어 빈 리스트 []가 됩니다.",
-      "hint_en": "Call nums.clear() to remove all elements, leaving an empty list [].",
-      "targetCode": "nums = [10, 20, 30]\nnums.clear()\nprint(nums)",
+      "prompt_ko": "logs = [10, -5, 20, 0, 30]에서 음수는 건너뛰고 0이 나오면 즉시 중단하며 양수 합계를 출력해보세요. (출력 예: Valid:30)",
+      "prompt_en": "Loop over logs = [10, -5, 20, 0, 30]; skip negatives, stop at 0, and print Valid:30.",
+      "hint_ko": "x < 0이면 continue로 건너뛰고, x == 0이면 break로 반복문을 빠져나오세요.",
+      "hint_en": "Use continue when x < 0 and break when x == 0 before adding total += x.",
+      "targetCode": "logs = [10, -5, 20, 0, 30]\ntotal = 0\nfor x in logs:\n    if x < 0:\n        continue\n    if x == 0:\n        break\n    total += x\nprint(f\"Valid:{total}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[]"
+          "expectedOutput": "Valid:30"
         }
       ]
     },
@@ -182,17 +203,22 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 bag 안에 \"trap\"이 있을 때만 안전하게 제거하고 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the blanks to safely remove \"trap\" only if it exists in bag, then print bag.",
-      "hint_ko": "in 연산자로 포함 여부를 먼저 확인한 뒤 .remove()를 호출하면 오류를 예방할 수 있습니다.",
-      "hint_en": "Check membership with in before calling bag.remove(\"trap\").",
-      "templateCode": "bag = [\"gem\", \"trap\", \"key\"]\nif \"trap\" §§ bag:\n    bag.§§§§§§(\"trap\")\nprint(bag)",
-      "targetCode": "bag = [\"gem\", \"trap\", \"key\"]\nif \"trap\" in bag:\n    bag.remove(\"trap\")\nprint(bag)",
+      "prompt_ko": "입력 정수 중 음수는 건너뛰고 99가 나오면 반복을 멈추어 모은 리스트 개수와 내용을 출력해보세요. (출력 예: Count:2,Data:[4, 7])",
+      "prompt_en": "Read integers; skip negatives, stop when 99 appears, and print Count and Data.",
+      "hint_ko": "이번 차례만 건너뛰는 제어 키워드와 반복문 자체를 즉시 종료하는 제어 키워드를 각각 입력하세요.",
+      "hint_en": "Use continue to skip negative numbers and break to exit on 99.",
+      "templateCode": "nums = []\nfor s in input().split():\n    val = int(s)\n    if val < 0:\n        §§§§§§§§\n    if val == 99:\n        §§§§§\n    nums.append(val)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
+      "targetCode": "nums = []\nfor s in input().split():\n    val = int(s)\n    if val < 0:\n        continue\n    if val == 99:\n        break\n    nums.append(val)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "['gem', 'key']"
+          "input": "4 -2 7 99 10",
+          "expectedOutput": "Count:2,Data:[4, 7]"
+        },
+        {
+          "id": 2,
+          "input": "-1 5 99",
+          "expectedOutput": "Count:1,Data:[5]"
         }
       ]
     },
@@ -201,17 +227,17 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "인덱스 오류가 발생하는 삭제 코드를 수정하여 값 50을 제거한 [10, 90]을 출력해보세요.",
-      "prompt_en": "Fix the IndexError in the deletion code so value 50 is removed and [10, 90] prints.",
-      "hint_ko": ".pop()은 인덱스 번호를 받으므로 50을 넣으면 범위를 벗어납니다. 값으로 삭제하는 메서드로 고쳐보세요.",
-      "hint_en": ".pop() expects an index, causing an IndexError for 50. Use the value-removal method instead.",
-      "templateCode": "nums = [10, 50, 90]\nnums.pop(50)\nprint(nums)",
-      "targetCode": "nums = [10, 50, 90]\nnums.remove(50)\nprint(nums)",
+      "prompt_ko": "반복할 때마다 결과 리스트가 새로 비워지는 위치 버그를 수정하여 [25, 30]이 출력되도록 고쳐보세요.",
+      "prompt_en": "Fix the placement bug that resets big on every iteration so [25, 30] is printed.",
+      "hint_ko": "빈 리스트 초기화가 for 반복문 안에 있으면 매번 이전 값이 사라집니다. 반복문 바깥 위쪽으로 옮기세요.",
+      "hint_en": "Move big = [] above the for loop so accumulated items are preserved.",
+      "templateCode": "nums = [10, 25, 30]\nfor x in nums:\n    big = []\n    if x >= 20:\n        big.append(x)\nprint(big)",
+      "targetCode": "nums = [10, 25, 30]\nbig = []\nfor x in nums:\n    if x >= 20:\n        big.append(x)\nprint(big)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 90]"
+          "expectedOutput": "[25, 30]"
         }
       ]
     },
@@ -220,17 +246,22 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "리스트 아래에 한 줄을 추가하여 맨 앞(0번) 요소를 꺼내면서 동시에 출력해보세요.",
-      "prompt_en": "Add one line below the list to pop and print the first element (index 0).",
-      "hint_ko": "둘째 줄에 print(queue.pop(0))을 작성하면 꺼낸 첫 요소가 바로 출력됩니다.",
-      "hint_en": "Write print(queue.pop(0)) on line 2 to pop and print the first item.",
-      "templateCode": "queue = [\"first\", \"second\", \"third\"]\n§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "queue = [\"first\", \"second\", \"third\"]\nprint(queue.pop(0))",
+      "prompt_ko": "금지어 조건문 아래에 들여쓰기에 맞춰 한 줄을 추가하여 통과한 단어를 형식에 맞게 출력해보세요. (출력 예: OK:hello)",
+      "prompt_en": "Add one indented line under the if check to print allowed words as OK:word.",
+      "hint_ko": "if 블록 안쪽(공백 8칸 들여쓰기)에 print(f\"OK:{w}\")를 작성해보세요.",
+      "hint_en": "Indent by 8 spaces and write print(f\"OK:{w}\").",
+      "templateCode": "bans = [\"spam\", \"ad\"]\nfor w in input().split():\n    if w not in bans:\n        §§§§§§§§§§§§§§§§",
+      "targetCode": "bans = [\"spam\", \"ad\"]\nfor w in input().split():\n    if w not in bans:\n        print(f\"OK:{w}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "first"
+          "input": "hello spam code",
+          "expectedOutput": "OK:hello\nOK:code"
+        },
+        {
+          "id": 2,
+          "input": "ad news",
+          "expectedOutput": "OK:news"
         }
       ]
     },
@@ -241,21 +272,21 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
       "prompt_en": "Select the exact output printed when the following Python code runs.",
-      "hint_ko": "remove(20)은 앞쪽의 첫 20만 지워 [10, 30, 20]이 되고, 그 뒤 pop()이 맨 끝 20을 꺼냅니다.",
-      "hint_en": "remove(20) deletes the first 20 leaving [10, 30, 20], then pop() removes and returns the last 20.",
-      "targetCode": "arr = [10, 20, 30, 20]\narr.remove(20)\nx = arr.pop()\nprint(x, arr)",
+      "hint_ko": "2는 이미 seen에 있고 0은 건너뛰므로 5와 4만 새로 추가되어 seen은 [2, 5, 4](길이 3), total은 9가 됩니다.",
+      "hint_en": "Only 5 and 4 are newly added (2 is already in seen, 0 is skipped), so len(seen) is 3 and total is 9.",
+      "targetCode": "seen = [2]\ntotal = 0\nfor s in \"2 5 0 4 5\".split():\n    n = int(s)\n    if n == 0:\n        continue\n    if n not in seen:\n        seen.append(n)\n        total += n\nprint(f\"{len(seen)}:{total}\")",
       "choices": [
-        "30 [10, 20]",
-        "20 [10, 30, 20]",
-        "30 [10]",
-        "20 [10, 30]"
+        "3:9",
+        "4:14",
+        "3:11",
+        "4:16"
       ],
-      "correctChoiceIndex": 3,
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "20 [10, 30]"
+          "expectedOutput": "3:9"
         }
       ]
     }

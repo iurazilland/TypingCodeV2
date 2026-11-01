@@ -55,7 +55,7 @@ export interface CanvasBlockItemProps {
   onContentChange: (val: string, blockId: string, parentBlockId?: string, cIdx?: number, branchId?: string) => void;
   onVarNameChange?: (val: string, blockId: string, parentBlockId?: string, cIdx?: number, branchId?: string) => void;
   onBranchConditionChange?: (blockId: string, branchId: string, val: string) => void;
-  onAddBranch?: (blockId: string, kind: 'elif' | 'else') => void;
+  onAddBranch?: (blockId: string, kind: 'elif' | 'else' | 'except' | 'finally') => void;
   onRemoveBranch?: (blockId: string, branchId: string) => void;
   onToggleDefReturn?: (blockId: string, show: boolean) => void;
   executingBlockId?: string | null;
@@ -149,8 +149,13 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   } = props;
 
   const theme = BLOCK_THEMES[block.type] || BLOCK_THEMES.print;
-  const isCBlock = block.type === 'for_range' || block.type === 'for_in' || block.type === 'while' || block.type === 'def';
-  const isIfBlock = block.type === 'if';
+  const isCBlock =
+    block.type === 'for_range' ||
+    block.type === 'for_in' ||
+    block.type === 'while' ||
+    block.type === 'def' ||
+    block.type === 'class';
+  const isIfBlock = block.type === 'if' || block.type === 'try';
   const isChainDragged = draggedChainIds ? draggedChainIds.has(block.id) : false;
   const isArgSlotTarget = activeSnapTarget?.type === 'arg_slot' && activeSnapTarget.targetBlockId === block.id;
 
@@ -524,6 +529,72 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               />
               <span>:</span>
             </>
+          ) : block.type === 'class' ? (
+            <>
+              <span style={{ color: '#ffffff' }}>class</span>
+              <input
+                type="text"
+                value={block.varName ?? 'MyClass'}
+                placeholder=""
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onFocus={handleInputFocusSelect}
+                onClick={handleInputClickSelect}
+                onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+                style={{
+                  width: `${getBlockInputWidth(block.varName ?? 'MyClass')}px`,
+                  height: '20px',
+                  padding: '1px 5px',
+                  borderRadius: '6px',
+                  background: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid rgba(0, 0, 0, 0.3)',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.78rem',
+                  textAlign: 'left',
+                  outline: 'none',
+                  cursor: 'text',
+                  boxSizing: 'border-box',
+                }}
+              />
+              {block.content !== undefined ? (
+                <>
+                  <span>(</span>
+                  <input
+                    type="text"
+                    value={block.content}
+                    placeholder=""
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onFocus={handleInputFocusSelect}
+                    onClick={handleInputClickSelect}
+                    onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+                    style={{
+                      width: `${getBlockInputWidth(block.content)}px`,
+                      height: '20px',
+                      padding: '1px 5px',
+                      borderRadius: '6px',
+                      background: '#ffffff',
+                      color: '#0f172a',
+                      border: '1px solid rgba(0, 0, 0, 0.3)',
+                      fontWeight: 800,
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.78rem',
+                      textAlign: 'left',
+                      outline: 'none',
+                      cursor: 'text',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                  <span>):</span>
+                </>
+              ) : (
+                <span>:</span>
+              )}
+            </>
           ) : (
             <>
               <span style={{ color: '#ffffff' }}>def</span>
@@ -716,23 +787,36 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   }
 
   // ============================================================================
-  // 2. MULTI-BRANCH CONDITIONAL E/C-SHAPE (if, elif, else 블록)
+  // 2. MULTI-BRANCH CONDITIONAL / EXCEPTION E/C-SHAPE (if/elif/else & try/except/else/finally 블록)
   // ============================================================================
   if (isIfBlock) {
+    const isTryBlock = block.type === 'try';
     const isTopConnected = isNested ? true : !!block.prevBlockId;
     const tabLeft = isNested ? BLOCK_GEOMETRY.TAB_LEFT_INNER : BLOCK_GEOMETRY.TAB_LEFT_ROOT;
     const spineW = BLOCK_GEOMETRY.SPINE_WIDTH;
-    const branches = (block.branches && block.branches.length > 0)
+    const branches: IfBranch[] = (block.branches && block.branches.length > 0)
       ? block.branches
+      : isTryBlock
+      ? [
+          {
+            id: `br-try-${block.id}`,
+            kind: 'try',
+            innerBlocks: block.innerBlocks || [],
+          },
+          {
+            id: `br-except-${block.id}`,
+            kind: 'except',
+            innerBlocks: [],
+          },
+        ]
       : [
           {
             id: `br-if-${block.id}`,
-            kind: 'if' as const,
+            kind: 'if',
             condition: block.content || 'False',
             innerBlocks: block.innerBlocks || [],
           },
         ];
-    const hasElseBranch = branches.some((br) => br.kind === 'else');
 
     return (
       <div
@@ -762,9 +846,15 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         {branches.map((branch, brIdx) => {
           const isFirst = brIdx === 0;
           const branchTheme = theme;
-          const condVal = branch.condition !== undefined ? branch.condition : 'False';
+          const condVal = branch.kind === 'except'
+            ? (branch.condition ?? '')
+            : (branch.condition !== undefined ? branch.condition : 'False');
           const dynamicCondWidth = getBlockInputWidth(condVal);
           const branchInnerBlocks = branch.innerBlocks || [];
+          const showBranchCondInput =
+            branch.kind === 'elif' || (branch.kind === 'except' && branch.condition !== undefined);
+          const canRemoveBranch =
+            branch.kind !== 'if' && branch.kind !== 'try' && (!isTryBlock || branches.length > 2);
 
           return (
             <div
@@ -812,38 +902,44 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                       pointerEvents: 'none',
                     }}
                   />
-                  <span style={{ color: '#ffffff' }}>if</span>
-                  <input
-                    type="text"
-                    value={condVal}
-                    placeholder=""
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onFocus={handleInputFocusSelect}
-                    onClick={handleInputClickSelect}
-                    onChange={(e) => onBranchConditionChange?.(block.id, branch.id, e.target.value)}
-                    style={{
-                      width: `${dynamicCondWidth}px`,
-                      height: '20px',
-                      padding: '1px 5px',
-                      borderRadius: '6px',
-                      background: '#ffffff',
-                      color: '#0f172a',
-                      border: '1px solid rgba(0, 0, 0, 0.3)',
-                      fontWeight: 800,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      outline: 'none',
-                      cursor: 'text',
-                      boxSizing: 'border-box',
-                    }}
-                  />
-                  <span>:</span>
+                  {isTryBlock ? (
+                    <span style={{ color: '#ffffff' }}>try:</span>
+                  ) : (
+                    <>
+                      <span style={{ color: '#ffffff' }}>if</span>
+                      <input
+                        type="text"
+                        value={condVal}
+                        placeholder=""
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                        onFocus={handleInputFocusSelect}
+                        onClick={handleInputClickSelect}
+                        onChange={(e) => onBranchConditionChange?.(block.id, branch.id, e.target.value)}
+                        style={{
+                          width: `${dynamicCondWidth}px`,
+                          height: '20px',
+                          padding: '1px 5px',
+                          borderRadius: '6px',
+                          background: '#ffffff',
+                          color: '#0f172a',
+                          border: '1px solid rgba(0, 0, 0, 0.3)',
+                          fontWeight: 800,
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.78rem',
+                          textAlign: 'left',
+                          outline: 'none',
+                          cursor: 'text',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                      <span>:</span>
+                    </>
+                  )}
                 </div>
               ) : (
-                /* Intermediate Branch Arm (elif / else) */
+                /* Intermediate Branch Arm (elif / else / except / finally) */
                 <div
                   style={{
                     display: 'flex',
@@ -890,7 +986,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   />
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <span style={{ color: '#ffffff' }}>{branch.kind}</span>
-                    {branch.kind !== 'else' ? (
+                    {showBranchCondInput ? (
                       <>
                         <input
                           type="text"
@@ -927,7 +1023,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto' }}>
-                    {branch.kind !== 'if' && (
+                    {canRemoveBranch && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -1458,7 +1554,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
-      ) : ['type', 'int', 'float', 'str', 'bool'].includes(block.type) ? (
+      ) : ['type', 'int', 'float', 'str', 'bool', 'isinstance', 'ord', 'chr'].includes(block.type) ? (
         <>
           <div
             onMouseDown={(e) => e.stopPropagation()}
@@ -1504,6 +1600,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               <option value="float">float</option>
               <option value="str">str</option>
               <option value="bool">bool</option>
+              <option value="isinstance">isinstance</option>
+              <option value="ord">ord</option>
+              <option value="chr">chr</option>
             </select>
           </div>
           <span>(</span>
@@ -1742,9 +1841,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             </>
           )}
         </>
-      ) : block.type === 'return' ? (
+      ) : block.type === 'return' || block.type === 'raise' ? (
         <>
-          <span>return</span>
+          <span>{block.type}</span>
           <input
             type="text"
             value={block.content || ''}

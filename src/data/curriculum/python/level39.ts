@@ -6,28 +6,36 @@ export const PYTHON_LEVEL_39: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 39,
-  "title_ko": "39레벨: 리스트 요소 값 변경과 슬라이싱",
-  "title_en": "Level 39: List Element Mutation & Slicing",
+  "title_ko": "39레벨: 리스트 요소 값 변경과 기본 슬라이싱·연결",
+  "title_en": "Level 39: List Element Update, Slicing & Concatenation",
+  "description_ko": "인덱스로 리스트 요소 값을 수정하고 기본 슬라이싱과 리스트 연결(+), 반복(*) 연산을 연습합니다.",
+  "description_en": "Practice updating list elements by index, basic list slicing, concatenation (+), and repetition (*).",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
-    "variable"
+    "variable",
+    "input",
+    "type",
+    "math",
+    "method",
+    "if",
+    "while"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "리스트 nums = [10, 20, 30]의 1번 인덱스 값을 99로 변경한 뒤 출력해보세요.",
-      "prompt_en": "Change index 1 of nums = [10, 20, 30] to 99, then print the list.",
-      "hint_ko": "변수 대입 블록의 왼쪽에 nums[1], 오른쪽에 99를 입력한 뒤 print(nums)로 출력하세요.",
-      "hint_en": "Assign nums[1] = 99 using a variable block, then print(nums).",
-      "targetCode": "nums = [10, 20, 30]\nnums[1] = 99\nprint(nums)",
+      "prompt_ko": "리스트 nums = [10, 20, 30]에서 1번 인덱스 값을 50으로 바꾸고 0번 인덱스 값에 5를 더한 뒤 출력해보세요.",
+      "prompt_en": "Set index 1 of nums = [10, 20, 30] to 50, add 5 to index 0, and print nums.",
+      "hint_ko": "nums[1] = 50으로 값을 교체하고 nums[0] += 5로 기존 값에 5를 더한 뒤 print(nums)를 실행하세요.",
+      "hint_en": "Assign nums[1] = 50 and nums[0] += 5, then run print(nums).",
+      "targetCode": "nums = [10, 20, 30]\nnums[1] = 50\nnums[0] += 5\nprint(nums)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 99, 30]"
+          "expectedOutput": "[15, 50, 30]"
         }
       ]
     },
@@ -36,17 +44,17 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 items 리스트의 첫 번째 요소를 \"Z\"로 바꾼 결과를 출력해보세요.",
-      "prompt_en": "Fill in the blank to replace the first element of items with \"Z\" and print items.",
-      "hint_ko": "첫 번째 요소를 가리키는 items[0]을 등호(=) 왼쪽에 작성하세요.",
-      "hint_en": "Write items[0] on the left side of = to update the first element.",
-      "templateCode": "items = [\"A\", \"B\", \"C\"]\n§§§§§§§§ = \"Z\"\nprint(items)",
-      "targetCode": "items = [\"A\", \"B\", \"C\"]\nitems[0] = \"Z\"\nprint(items)",
+      "prompt_ko": "첫 번째 체력에서 20을 차감하고 음수 인덱스로 마지막 체력을 100으로 변경해 리스트를 출력해보세요.",
+      "prompt_en": "Subtract 20 from the first HP value, set the last HP value to 100 via negative index, and print hp.",
+      "hint_ko": "첫 요소는 인덱스 0에 -= 연산자를 쓰고, 마지막 요소는 인덱스 -1로 접근합니다.",
+      "hint_en": "Use index 0 with -= for the first item and index -1 for the last item.",
+      "templateCode": "hp = [100, 80, 60]\nhp[§] §§ 20\nhp[§§] = 100\nprint(hp)",
+      "targetCode": "hp = [100, 80, 60]\nhp[0] -= 20\nhp[-1] = 100\nprint(hp)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['Z', 'B', 'C']"
+          "expectedOutput": "[80, 80, 100]"
         }
       ]
     },
@@ -54,16 +62,16 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "음수 인덱스를 사용해 nums = [5, 10, 15]의 마지막 요소를 0으로 바꾸고 출력해보세요.",
-      "prompt_en": "Use a negative index to change the last element of nums = [5, 10, 15] to 0 and print it.",
-      "hint_ko": "nums[-1] = 0으로 마지막 값을 수정한 뒤 print(nums)를 실행해보세요.",
-      "hint_en": "Set nums[-1] = 0, then print(nums).",
-      "targetCode": "nums = [5, 10, 15]\nnums[-1] = 0\nprint(nums)",
+      "prompt_ko": "nums = [10, 20, 30, 40]에서 [20, 30] 구간을 잘라 mid에, 앞의 2개 요소를 잘라 head에 담아 각각 출력해보세요.",
+      "prompt_en": "Slice [20, 30] into mid and the first 2 items into head from nums = [10, 20, 30, 40], then print both.",
+      "hint_ko": "1번부터 2번 인덱스까지는 nums[1:3], 처음부터 2개는 nums[:2]로 슬라이싱합니다.",
+      "hint_en": "Use nums[1:3] for indices 1..2 and nums[:2] for the first two items.",
+      "targetCode": "nums = [10, 20, 30, 40]\nmid = nums[1:3]\nhead = nums[:2]\nprint(mid)\nprint(head)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[5, 10, 0]"
+          "expectedOutput": "[20, 30]\n[10, 20]"
         }
       ]
     },
@@ -72,17 +80,17 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "복합 대입 연산자를 채워 첫 번째 요소에 50을 더한 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the compound assignment to add 50 to the first element and print pts.",
-      "hint_ko": "기존 요소 값에 50을 더하려면 += 연산자와 숫자 50을 입력하세요.",
-      "hint_en": "Use += and 50 to add 50 directly to pts[0].",
-      "templateCode": "pts = [100, 200]\npts[0] §§ §§\nprint(pts)",
-      "targetCode": "pts = [100, 200]\npts[0] += 50\nprint(pts)",
+      "prompt_ko": "슬라이싱을 채워 첫 줄에는 앞의 2개 요소를, 둘째 줄에는 2번 인덱스부터 끝까지의 요소를 출력해보세요.",
+      "prompt_en": "Fill in the slices to print the first 2 elements on line 1 and elements from index 2 onward on line 2.",
+      "hint_ko": "처음부터 자를 때는 시작 인덱스를 생략(:2)하고, 끝까지 자를 때는 끝 인덱스를 생략(2:)합니다.",
+      "hint_en": "Omit start (:2) for the prefix and omit stop (2:) for the suffix.",
+      "templateCode": "tags = [\"a\", \"b\", \"c\", \"d\"]\nprint(tags[§§])\nprint(tags[§§])",
+      "targetCode": "tags = [\"a\", \"b\", \"c\", \"d\"]\nprint(tags[:2])\nprint(tags[2:])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[150, 200]"
+          "expectedOutput": "['a', 'b']\n['c', 'd']"
         }
       ]
     },
@@ -90,16 +98,16 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "슬라이싱을 사용해 nums = [10, 20, 30, 40]에서 [20, 30] 부분만 잘라 출력해보세요.",
-      "prompt_en": "Use slicing on nums = [10, 20, 30, 40] to print the sublist [20, 30].",
-      "hint_ko": "1번 인덱스부터 3번 인덱스 직전(2번)까지 자르려면 nums[1:3]을 출력하세요.",
-      "hint_en": "Slice from index 1 up to (not including) index 3 with nums[1:3].",
-      "targetCode": "nums = [10, 20, 30, 40]\nprint(nums[1:3])",
+      "prompt_ko": "0이 3번 반복된 리스트 base와 extra = [1, 2]를 이어 붙인 merged 리스트를 만들어 출력해보세요.",
+      "prompt_en": "Create base with three 0s using *, concatenate it with extra = [1, 2] into merged, and print merged.",
+      "hint_ko": "base = [0] * 3으로 반복 리스트를 만들고 base + extra로 두 리스트를 연결하세요.",
+      "hint_en": "Set base = [0] * 3 and merged = base + extra, then print(merged).",
+      "targetCode": "base = [0] * 3\nextra = [1, 2]\nmerged = base + extra\nprint(merged)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[20, 30]"
+          "expectedOutput": "[0, 0, 0, 1, 2]"
         }
       ]
     },
@@ -108,17 +116,17 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "슬라이싱 빈칸을 채워 앞에서부터 2개의 요소만 담긴 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the slice to print a list containing only the first 2 elements.",
-      "hint_ko": "처음부터 2번 인덱스 직전까지 자르는 :2를 대괄호 안에 입력하세요.",
-      "hint_en": "Enter :2 inside the brackets to slice from the beginning up to index 2.",
-      "templateCode": "letters = [\"a\", \"b\", \"c\", \"d\"]\nprint(letters[§§])",
-      "targetCode": "letters = [\"a\", \"b\", \"c\", \"d\"]\nprint(letters[:2])",
+      "prompt_ko": "연산자 빈칸을 채워 \"-\"가 2개 반복된 slots를 items 뒤에 이어 붙이고 길이와 첫 요소를 출력해보세요. (출력 예: Size:3,First:gem)",
+      "prompt_en": "Fill in the operators to repeat [\"-\"] twice, concatenate after items, and print size and first item.",
+      "hint_ko": "리스트 반복에는 곱셈(*) 연산자를, 리스트끼리 이어 붙일 때는 덧셈(+) 연산자를 사용합니다.",
+      "hint_en": "Use * to repeat a list and + to concatenate two lists.",
+      "templateCode": "slots = [\"-\"] § 2\nitems = [\"gem\"]\nbag = items § slots\nprint(f\"Size:{len(bag)},First:{bag[0]}\")",
+      "targetCode": "slots = [\"-\"] * 2\nitems = [\"gem\"]\nbag = items + slots\nprint(f\"Size:{len(bag)},First:{bag[0]}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['a', 'b']"
+          "expectedOutput": "Size:3,First:gem"
         }
       ]
     },
@@ -126,16 +134,16 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "리스트 a = [1, 2]와 b = [3, 4]를 + 연산자로 이어 붙인 결과를 출력해보세요.",
-      "prompt_en": "Concatenate a = [1, 2] and b = [3, 4] with + and print the combined list.",
-      "hint_ko": "두 리스트를 만든 뒤 print(a + b)를 실행하면 하나의 리스트로 연결되어 출력됩니다.",
-      "hint_en": "Create lists a and b, then run print(a + b).",
-      "targetCode": "a = [1, 2]\nb = [3, 4]\nprint(a + b)",
+      "prompt_ko": "문자열 code = \"PY-2026\"의 앞 2글자와 리스트 parts = [\"PY\", \"JS\", \"GO\"]의 앞 2요소를 각각 슬라이싱해 출력해보세요.",
+      "prompt_en": "Slice and print the first 2 chars of code = \"PY-2026\" and the first 2 items of parts = [\"PY\", \"JS\", \"GO\"].",
+      "hint_ko": "문자열 슬라이싱 code[:2]는 문자열을, 리스트 슬라이싱 parts[:2]는 새 리스트를 반환합니다.",
+      "hint_en": "code[:2] returns a string while parts[:2] returns a list.",
+      "targetCode": "code = \"PY-2026\"\nparts = [\"PY\", \"JS\", \"GO\"]\nprint(code[:2])\nprint(parts[:2])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[1, 2, 3, 4]"
+          "expectedOutput": "PY\n['PY', 'JS']"
         }
       ]
     },
@@ -144,17 +152,17 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 연산자를 채워 두 리스트를 하나로 합친 full 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the operator to combine front and back into full and print it.",
-      "hint_ko": "리스트끼리 이어 붙일 때는 덧셈(+) 연산자를 사용합니다.",
-      "hint_en": "Use the + operator to concatenate two lists.",
-      "templateCode": "front = [\"A\", \"B\"]\nback = [\"C\"]\nfull = front § back\nprint(full)",
-      "targetCode": "front = [\"A\", \"B\"]\nback = [\"C\"]\nfull = front + back\nprint(full)",
+      "prompt_ko": "문자열의 2~3번 인덱스 글자와 공백 분리 리스트의 1~2번 인덱스 요소를 각각 슬라이싱해 출력해보세요. (출력 예: Str:TH)",
+      "prompt_en": "Slice indices 2..3 of word and indices 1..2 of the split langs list, then print both.",
+      "hint_ko": "슬라이싱 끝 번호는 포함되지 않으므로 2~3번은 2:4, 1~2번은 1:3으로 지정합니다.",
+      "hint_en": "Since stop is exclusive, use 2:4 for indices 2..3 and 1:3 for indices 1..2.",
+      "templateCode": "word = \"PYTHON\"\nlangs = \"PY JS GO RUST\".§§§§§()\nprint(f\"Str:{word[§:§]}\")\nprint(langs[§:§])",
+      "targetCode": "word = \"PYTHON\"\nlangs = \"PY JS GO RUST\".split()\nprint(f\"Str:{word[2:4]}\")\nprint(langs[1:3])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['A', 'B', 'C']"
+          "expectedOutput": "Str:TH\n['JS', 'GO']"
         }
       ]
     },
@@ -162,16 +170,21 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "* 연산자로 0이 4개 반복된 리스트 zeros를 만들고 출력해보세요.",
-      "prompt_en": "Use the * operator to create a list zeros of four 0s and print it.",
-      "hint_ko": "변수 블록에 변수명 zeros와 값 [0] * 4를 입력한 뒤 print(zeros)로 출력하세요.",
-      "hint_en": "Assign zeros = [0] * 4 and print(zeros).",
-      "targetCode": "zeros = [0] * 4\nprint(zeros)",
+      "prompt_ko": "실수 입력 bonus가 0보다 크면 rates = [1.5, 2.5, 3.5]의 첫 요소에 더하고, 아니면 1.25로 바꾼 뒤 앞 2개를 출력해보세요. (출력 예: Head:[1.75, 2.5])",
+      "prompt_en": "Read float bonus; if > 0 add to rates[0], else set rates[0] = 1.25, then print Head with rates[:2].",
+      "hint_ko": "bonus = float(input())을 받은 뒤 if bonus > 0: 분기에서 rates[0] += bonus, else:에서 rates[0] = 1.25를 실행하세요.",
+      "hint_en": "Use float(input()), branch on bonus > 0 to update rates[0], then print f\"Head:{rates[:2]}\".",
+      "targetCode": "rates = [1.5, 2.5, 3.5]\nbonus = float(input())\nif bonus > 0:\n    rates[0] += bonus\nelse:\n    rates[0] = 1.25\nprint(f\"Head:{rates[:2]}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[0, 0, 0, 0]"
+          "input": "0.25",
+          "expectedOutput": "Head:[1.75, 2.5]"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "Head:[1.25, 2.5]"
         }
       ]
     },
@@ -180,17 +193,22 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 base 리스트의 요소가 3번 반복된 새 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the blanks to repeat base 3 times and print the new list.",
-      "hint_ko": "리스트에 * 3을 곱하면 요소 패턴이 3번 반복된 리스트가 만들어집니다.",
-      "hint_en": "Multiply the list by * 3 to repeat its elements three times.",
-      "templateCode": "base = [1, 2]\nrep = base § §\nprint(rep)",
-      "targetCode": "base = [1, 2]\nrep = base * 3\nprint(rep)",
+      "prompt_ko": "실수 입력 fee가 5.0 이상이면 마지막 가격에, 아니면 첫 가격에 더한 뒤 앞 2개 요소에 [99.5]를 이어 붙여 출력해보세요.",
+      "prompt_en": "Convert input to float; add fee to last item if >= 5.0 else first item, then print prices[:2] + [99.5].",
+      "hint_ko": "실수 변환 함수는 float이며, 마지막 요소 음수 인덱스는 -1, 리스트 연결 연산자는 +입니다.",
+      "hint_en": "Use float() for conversion, index -1 for the last element, else: for fallback, and + to concatenate.",
+      "templateCode": "prices = [10.5, 20.5, 30.5]\nfee = §§§§§(input())\nif fee >= 5.0:\n    prices[§§] += fee\n§§§§:\n    prices[0] += fee\nprint(prices[:2] § [99.5])",
+      "targetCode": "prices = [10.5, 20.5, 30.5]\nfee = float(input())\nif fee >= 5.0:\n    prices[-1] += fee\nelse:\n    prices[0] += fee\nprint(prices[:2] + [99.5])",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[1, 2, 1, 2, 1, 2]"
+          "input": "2.0",
+          "expectedOutput": "[12.5, 20.5, 99.5]"
+        },
+        {
+          "id": 2,
+          "input": "5.0",
+          "expectedOutput": "[10.5, 20.5, 99.5]"
         }
       ]
     },
@@ -199,17 +217,17 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "슬라이싱 범위를 수정하여 [20, 30, 40] 세 요소가 모두 출력되도록 고쳐보세요.",
-      "prompt_en": "Fix the slice range so all three elements [20, 30, 40] are printed.",
-      "hint_ko": "슬라이싱 [시작:끝]에서 끝 인덱스는 포함되지 않습니다. 3번 인덱스 값(40)까지 포함하려면 끝 값을 1 늘려보세요.",
-      "hint_en": "The stop index in [start:stop] is exclusive. Increase the stop index by 1 to include 40.",
-      "templateCode": "nums = [10, 20, 30, 40, 50]\nprint(nums[1:3])",
-      "targetCode": "nums = [10, 20, 30, 40, 50]\nprint(nums[1:4])",
+      "prompt_ko": "슬라이싱 끝 범위 버그를 수정하여 20, 30, 40 세 요소가 모두 잘려 출력되도록 고쳐보세요. (출력 예: Count:3,Data:[20, 30, 40])",
+      "prompt_en": "Fix the exclusive stop index bug in the slice so all three items [20, 30, 40] are included.",
+      "hint_ko": "슬라이싱에서 끝 인덱스는 포함되지 않으므로 3번 인덱스 값(40)까지 담으려면 끝 번호를 1 늘려야 합니다.",
+      "hint_en": "Stop index is exclusive; increase the stop index by 1 to include index 3 (40).",
+      "templateCode": "nums = [10, 20, 30, 40, 50]\nsub = nums[1:3]\nprint(f\"Count:{len(sub)},Data:{sub}\")",
+      "targetCode": "nums = [10, 20, 30, 40, 50]\nsub = nums[1:4]\nprint(f\"Count:{len(sub)},Data:{sub}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[20, 30, 40]"
+          "expectedOutput": "Count:3,Data:[20, 30, 40]"
         }
       ]
     },
@@ -218,17 +236,17 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "코드 아래에 한 줄을 추가하여 앞에서부터 3개의 요소를 슬라이싱해 출력해보세요.",
-      "prompt_en": "Add one line below to slice and print the first 3 elements of arr.",
-      "hint_ko": "셋째 줄에 print(arr[:3])을 입력하면 변경된 첫 요소를 포함한 앞의 3개가 출력됩니다.",
-      "hint_en": "Write print(arr[:3]) on line 3 to print the first three elements.",
-      "templateCode": "arr = [10, 20, 30, 40]\narr[0] = 99\n§§§§§§§§§§§§§§",
-      "targetCode": "arr = [10, 20, 30, 40]\narr[0] = 99\nprint(arr[:3])",
+      "prompt_ko": "주어진 코드 아래에 한 줄을 추가하여 리스트 a의 앞 2개 요소와 리스트 b를 이어 붙인 결과를 출력해보세요.",
+      "prompt_en": "Add one line below to print the first 2 elements of list a concatenated with list b.",
+      "hint_ko": "마지막 줄에 print(a[:2] + b)를 작성하면 [10, 2, 0, 0]이 출력됩니다.",
+      "hint_en": "Write print(a[:2] + b) on the final line.",
+      "templateCode": "a = [1, 2, 3]\nb = [0] * 2\na[0] += 9\n§§§§§§§§§§§§§§§§",
+      "targetCode": "a = [1, 2, 3]\nb = [0] * 2\na[0] += 9\nprint(a[:2] + b)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[99, 20, 30]"
+          "expectedOutput": "[10, 2, 0, 0]"
         }
       ]
     },
@@ -239,21 +257,21 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
       "prompt_en": "Select the exact output printed when the following Python code runs.",
-      "hint_ko": "nums가 [1, 20, 3, 4]로 바뀐 뒤 nums[1:3]인 [20, 3]에 [9]가 이어 붙습니다.",
-      "hint_en": "nums becomes [1, 20, 3, 4], so nums[1:3] is [20, 3], and + [9] gives [20, 3, 9].",
-      "targetCode": "nums = [1, 2, 3, 4]\nnums[1] = 20\nprint(nums[1:3] + [9])",
+      "hint_ko": "[1, 2, 1, 2]에서 앞의 두 요소에 10씩 더해져 [11, 12, 1, 2]가 된 뒤 nums[1:3]인 [12, 1]에 [9]가 연결됩니다.",
+      "hint_en": "nums becomes [11, 12, 1, 2]; nums[1:3] is [12, 1], and + [9] produces [12, 1, 9].",
+      "targetCode": "nums = [1, 2] * 2\ni = 0\nwhile i < 2:\n    nums[i] += 10\n    i += 1\nprint(nums[1:3] + [9])",
       "choices": [
-        "[2, 3, 9]",
-        "[20, 3, 4, 9]",
-        "[20, 3, 9]",
-        "[1, 20, 9]"
+        "[12, 1, 9]",
+        "[11, 12, 9]",
+        "[12, 2, 9]",
+        "[2, 1, 9]"
       ],
-      "correctChoiceIndex": 2,
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[20, 3, 9]"
+          "expectedOutput": "[12, 1, 9]"
         }
       ]
     }

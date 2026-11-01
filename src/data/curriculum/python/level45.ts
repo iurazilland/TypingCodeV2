@@ -6,30 +6,38 @@ export const PYTHON_LEVEL_45: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 45,
-  "title_ko": "45레벨: 2차원 리스트 기초",
-  "title_en": "Level 45: 2D Nested Lists Basics",
+  "title_ko": "45레벨: 딕셔너리(dict) 생성, 키 조회와 값 추가·수정",
+  "title_en": "Level 45: Dictionary Creation, Key Lookup & Mutation",
+  "description_ko": "키(Key)와 값(Value) 쌍으로 이루어진 딕셔너리를 만들고, 키로 값을 조회하거나 새 항목을 추가·수정하는 법을 익힙니다.",
+  "description_en": "Create key-value dictionaries, look up values by key, and insert or update entries.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
+    "type",
+    "math",
+    "if",
     "for_in",
-    "math"
+    "while",
+    "break",
+    "input",
+    "method"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "2차원 리스트 grid = [[1, 2], [3, 4]]를 만들고 첫 번째 행(grid[0])을 출력해보세요.",
-      "prompt_en": "Create the 2D list grid = [[1, 2], [3, 4]] and print its first row (grid[0]).",
-      "hint_ko": "리스트 블록의 두 칸에 각각 [1, 2]와 [3, 4]를 입력해 2차원 리스트를 만든 뒤 print(grid[0])을 실행하세요.",
-      "hint_en": "Enter [1, 2] and [3, 4] into the list block slots for grid, then print(grid[0]).",
-      "targetCode": "grid = [[1, 2], [3, 4]]\nprint(grid[0])",
+      "prompt_ko": "딕셔너리 menu = {\"apple\": 1000, \"milk\": 1500}을 만들고 menu[\"apple\"]과 len(menu)를 출력해보세요.",
+      "prompt_en": "Create menu = {\"apple\": 1000, \"milk\": 1500} and print menu[\"apple\"] and len(menu).",
+      "hint_ko": "중괄호 {키: 값} 형태로 딕셔너리를 만들고 대괄호 안에 키를 넣어 값을 꺼냅니다.",
+      "hint_en": "Define key-value pairs inside {} and look up a value with menu[\"apple\"].",
+      "targetCode": "menu = {\"apple\": 1000, \"milk\": 1500}\nprint(menu[\"apple\"], len(menu))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[1, 2]"
+          "expectedOutput": "1000 2"
         }
       ]
     },
@@ -38,17 +46,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 2차원 좌석 리스트를 완성하고 두 번째 행을 출력해보세요.",
-      "prompt_en": "Fill in the blanks to complete the 2D list seats and print its second row.",
-      "hint_ko": "안쪽 리스트도 대괄호 [ ]로 감싸며, 두 번째 행은 인덱스 1로 접근합니다.",
-      "hint_en": "Wrap the inner row in [ ] and use index 1 for the second row.",
-      "templateCode": "seats = [[\"A1\", \"A2\"], §\"B1\", \"B2\"§]\nprint(seats[§])",
-      "targetCode": "seats = [[\"A1\", \"A2\"], [\"B1\", \"B2\"]]\nprint(seats[1])",
+      "prompt_ko": "빈칸에 우유와 빵의 문자열 키를 차례대로 채워 두 상품 가격의 합계(3000)를 출력해보세요.",
+      "prompt_en": "Fill in the string keys for milk and bread to print the sum of their prices (3000).",
+      "hint_ko": "첫째 줄 딕셔너리에 정의된 두 키를 큰따옴표로 감싸 대괄호 안에 순서대로 적어주세요.",
+      "hint_en": "Write the two quoted string keys defined in prices inside the square brackets.",
+      "templateCode": "prices = {§§§§§§: 1200, §§§§§§§: 1800}\ntotal = prices[\"milk\"] + prices[\"bread\"]\nprint(total)",
+      "targetCode": "prices = {\"milk\": 1200, \"bread\": 1800}\ntotal = prices[\"milk\"] + prices[\"bread\"]\nprint(total)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['B1', 'B2']"
+          "expectedOutput": "3000"
         }
       ]
     },
@@ -56,16 +64,16 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "2차원 리스트 grid = [[10, 20], [30, 40]]에서 1번 행 0번 열 값(30)을 출력해보세요.",
-      "prompt_en": "Print the element at row 1, col 0 (30) from grid = [[10, 20], [30, 40]].",
-      "hint_ko": "2차원 리스트의 개별 값은 grid[행][열] 형태로 꺼냅니다. print(grid[1][0])을 작성하세요.",
-      "hint_en": "Access 2D elements with grid[row][col]: write print(grid[1][0]).",
-      "targetCode": "grid = [[10, 20], [30, 40]]\nprint(grid[1][0])",
+      "prompt_ko": "빈 딕셔너리 bag = {}을 만든 뒤 \"coin\"에 50, \"gem\"에 3을 추가하고 bag과 len(bag)을 출력해보세요.",
+      "prompt_en": "Create an empty dict bag = {}, add \"coin\": 50 and \"gem\": 3, then print bag and len(bag).",
+      "hint_ko": "빈 중괄호 {}는 빈 딕셔너리를 만들며, bag[\"coin\"] = 50처럼 새 키에 값을 대입하면 항목이 추가됩니다.",
+      "hint_en": "Use {} for an empty dict and assign bag[\"coin\"] = 50 and bag[\"gem\"] = 3.",
+      "targetCode": "bag = {}\nbag[\"coin\"] = 50\nbag[\"gem\"] = 3\nprint(bag, len(bag))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "30"
+          "expectedOutput": "{'coin': 50, 'gem': 3} 2"
         }
       ]
     },
@@ -74,17 +82,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "행과 열 인덱스를 채워 0번 행 1번 열의 요소(\"X\")를 출력해보세요.",
-      "prompt_en": "Fill in the row and column indices to print the element at row 0, col 1 (\"X\").",
-      "hint_ko": "첫 번째 행(0번)의 두 번째 열(1번)이므로 [0][1]을 연속해서 붙입니다.",
-      "hint_en": "Chain the row and column brackets as board[0][1].",
-      "templateCode": "board = [[\"O\", \"X\"], [\"X\", \"O\"]]\nprint(board§§§§§§)",
-      "targetCode": "board = [[\"O\", \"X\"], [\"X\", \"O\"]]\nprint(board[0][1])",
+      "prompt_ko": "딕셔너리 shop에 아래 출력문에서 조회하는 새 과일 키를 등록하고 가격 1500을 저장해 출력해보세요.",
+      "prompt_en": "Insert the new fruit key queried on line 3 with price 1500 into shop and print the result.",
+      "hint_ko": "셋째 줄 shop[\"pear\"]가 정상 조회되도록 대괄호 안에 새 키를 적고 우변에 1500을 대입하세요.",
+      "hint_en": "Assign price 1500 to the new key queried in shop[\"pear\"] on line 3.",
+      "templateCode": "shop = {\"apple\": 1000}\nshop[§§§§§§] = §§§§\nprint(shop[\"pear\"], len(shop))",
+      "targetCode": "shop = {\"apple\": 1000}\nshop[\"pear\"] = 1500\nprint(shop[\"pear\"], len(shop))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "X"
+          "expectedOutput": "1500 2"
         }
       ]
     },
@@ -92,16 +100,16 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "grid = [[1, 2], [3, 4]]의 0번 행 1번 열 값을 99로 변경하고 전체 grid를 출력해보세요.",
-      "prompt_en": "Update row 0, col 1 of grid = [[1, 2], [3, 4]] to 99 and print grid.",
-      "hint_ko": "변수 블록 왼쪽에 grid[0][1], 오른쪽에 99를 입력한 뒤 print(grid)를 실행하세요.",
-      "hint_en": "Assign grid[0][1] = 99 and then print(grid).",
-      "targetCode": "grid = [[1, 2], [3, 4]]\ngrid[0][1] = 99\nprint(grid)",
+      "prompt_ko": "hero = {\"hp\": 100, \"mp\": 40}에서 복합 대입으로 \"hp\"를 25 늘린 뒤 지정 형식으로 출력해보세요. (출력 예: HP:125)",
+      "prompt_en": "Increase \"hp\" by 25 on hero = {\"hp\": 100, \"mp\": 40} and print it formatted as HP:125.",
+      "hint_ko": "hero[\"hp\"] += 25로 체력을 올리고 hp = hero[\"hp\"]를 꺼내 print(f\"HP:{hp}\")로 출력하세요.",
+      "hint_en": "Update hero[\"hp\"] += 25, store hp = hero[\"hp\"], and print(f\"HP:{hp}\").",
+      "targetCode": "hero = {\"hp\": 100, \"mp\": 40}\nhero[\"hp\"] += 25\nhp = hero[\"hp\"]\nprint(f\"HP:{hp}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[[1, 99], [3, 4]]"
+          "expectedOutput": "HP:125"
         }
       ]
     },
@@ -110,17 +118,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 1번 행 1번 열(오른쪽 아래) 값을 0으로 바꾼 뒤 mat를 출력해보세요.",
-      "prompt_en": "Fill in the indices to set row 1, col 1 (bottom-right) to 0 and print mat.",
-      "hint_ko": "두 번째 행의 두 번째 열은 [1][1] 인덱스로 지정해 값을 변경합니다.",
-      "hint_en": "Use mat[1][1] = 0 to update the bottom-right element.",
-      "templateCode": "mat = [[5, 5], [5, 5]]\nmat§§§§§§ = 0\nprint(mat)",
-      "targetCode": "mat = [[5, 5], [5, 5]]\nmat[1][1] = 0\nprint(mat)",
+      "prompt_ko": "사과 단가를 200 올리고 수량(qty)을 1 줄이도록 빈칸을 채워 총액을 출력해보세요. (출력 예: Total:2400)",
+      "prompt_en": "Fill in the compound assignments to add 200 to apple and subtract 1 from qty (e.g., Total:2400).",
+      "hint_ko": "딕셔너리의 기존 숫자 값에도 += 연산자와 -= 연산자를 그대로 사용할 수 있습니다.",
+      "hint_en": "Use += 200 to increase the price and -= 1 to decrease the quantity.",
+      "templateCode": "cart = {\"apple\": 1000, \"qty\": 3}\ncart[\"apple\"] §§ §§§\ncart[\"qty\"] §§ §\ntotal = cart[\"apple\"] * cart[\"qty\"]\nprint(f\"Total:{total}\")",
+      "targetCode": "cart = {\"apple\": 1000, \"qty\": 3}\ncart[\"apple\"] += 200\ncart[\"qty\"] -= 1\ntotal = cart[\"apple\"] * cart[\"qty\"]\nprint(f\"Total:{total}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[[5, 5], [5, 0]]"
+          "expectedOutput": "Total:2400"
         }
       ]
     },
@@ -128,16 +136,21 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "for 반복문으로 grid = [[10, 20], [30, 40]]의 각 행 합계를 한 줄씩 출력해보세요.",
-      "prompt_en": "Use a for loop to print the sum of each row in grid = [[10, 20], [30, 40]].",
-      "hint_ko": "for row in grid:로 각 행 리스트를 꺼내고 그 안에서 print(sum(row))를 실행하세요.",
-      "hint_en": "Loop with for row in grid: and call print(sum(row)) inside.",
-      "targetCode": "grid = [[10, 20], [30, 40]]\nfor row in grid:\n    print(sum(row))",
+      "prompt_ko": "rates = {\"A\": 100, \"B\": 80, \"C\": 60}에서 입력받은 등급(grade)의 점수를 조회해 출력해보세요. (출력 예: A=100)",
+      "prompt_en": "Read grade from input(), look up its score in rates, and print it formatted as A=100.",
+      "hint_ko": "grade = input()으로 받은 문자열 변수를 rates[grade] 대괄호 안에 넣어 값을 꺼내세요.",
+      "hint_en": "Read grade = input(), set score = rates[grade], and print(f\"{grade}={score}\").",
+      "targetCode": "rates = {\"A\": 100, \"B\": 80, \"C\": 60}\ngrade = input()\nscore = rates[grade]\nprint(f\"{grade}={score}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "30\n70"
+          "input": "A",
+          "expectedOutput": "A=100"
+        },
+        {
+          "id": 2,
+          "input": "C",
+          "expectedOutput": "C=60"
         }
       ]
     },
@@ -146,17 +159,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸에 행 변수 row를 채워 각 팀(행)의 첫 번째 멤버 이름만 한 줄씩 출력해보세요.",
-      "prompt_en": "Fill in both blanks with row variable row to print only the first member of each team.",
-      "hint_ko": "for row in teams:로 각 행을 꺼내면 row[0]이 해당 행의 첫 번째 요소가 됩니다.",
-      "hint_en": "Iterate over each sublist row in teams and print(row[0]).",
-      "templateCode": "teams = [[\"Kim\", \"Lee\"], [\"Park\", \"Choi\"]]\nfor §§§ in teams:\n    print(§§§[0])",
-      "targetCode": "teams = [[\"Kim\", \"Lee\"], [\"Park\", \"Choi\"]]\nfor row in teams:\n    print(row[0])",
+      "prompt_ko": "딕셔너리 안의 점수 리스트 끝에 100을 추가하고 총합을 구해 이름과 총점을 출력해보세요.",
+      "prompt_en": "Append 100 to the scores list inside st and compute its sum to print the name and total.",
+      "hint_ko": "st[\"scores\"]는 리스트이므로 리스트 추가 메서드와 합계 내장 함수를 그대로 연결할 수 있습니다.",
+      "hint_en": "Call .append(100) on st[\"scores\"] and use sum(st[\"scores\"]) to add all scores.",
+      "templateCode": "st = {\"name\": \"Min\", \"scores\": [80, 90]}\nst[\"scores\"].§§§§§§(100)\ntotal = §§§(st[\"scores\"])\nprint(st[\"name\"], total)",
+      "targetCode": "st = {\"name\": \"Min\", \"scores\": [80, 90]}\nst[\"scores\"].append(100)\ntotal = sum(st[\"scores\"])\nprint(st[\"name\"], total)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Kim\nPark"
+          "expectedOutput": "Min 270"
         }
       ]
     },
@@ -164,16 +177,21 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "중첩 for 반복문으로 grid = [[1, 2], [3, 4]]의 모든 숫자를 더해 총합을 출력해보세요.",
-      "prompt_en": "Use nested for loops to sum every number in grid = [[1, 2], [3, 4]] and print total.",
-      "hint_ko": "바깥 for row in grid: 안에 안쪽 for val in row:를 넣고 total += val로 누적한 뒤 print(total)을 실행하세요.",
-      "hint_en": "Nest for val in row: inside for row in grid:, accumulate total += val, and print(total).",
-      "targetCode": "grid = [[1, 2], [3, 4]]\ntotal = 0\nfor row in grid:\n    for val in row:\n        total += val\nprint(total)",
+      "prompt_ko": "while문으로 두 줄에 걸쳐 상품명과 가격을 입력받아 store에 저장한 뒤 \"pen\"과 \"note\" 가격 합을 출력해보세요.",
+      "prompt_en": "Use a while loop to read 2 item-price lines into store, then print store[\"pen\"] + store[\"note\"].",
+      "hint_ko": "k, v = input().split()으로 나눈 뒤 store[k] = int(v)로 정수 가격을 저장하고 i += 1로 반복하세요.",
+      "hint_en": "Unpack k, v = input().split(), store store[k] = int(v), and increment i += 1.",
+      "targetCode": "store = {}\ni = 0\nwhile i < 2:\n    k, v = input().split()\n    store[k] = int(v)\n    i += 1\nprint(store[\"pen\"] + store[\"note\"])",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "10"
+          "input": "pen 500\nnote 1200",
+          "expectedOutput": "1700"
+        },
+        {
+          "id": 2,
+          "input": "note 2000\npen 800",
+          "expectedOutput": "2800"
         }
       ]
     },
@@ -182,17 +200,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "중첩 반복문의 빈칸을 채워 2차원 리스트 box의 전체 합(20)을 출력해보세요.",
-      "prompt_en": "Fill in the nested loop blanks to print the total sum (20) of all numbers in box.",
-      "hint_ko": "안쪽 반복문은 바깥에서 꺼낸 행 변수 row를 순회하며 total += n으로 값을 누적합니다.",
-      "hint_en": "Loop over row in the inner for loop and add each n with total += n.",
-      "templateCode": "box = [[2, 4], [6, 8]]\ntotal = 0\nfor row in box:\n    for n in §§§:\n        total §§ §\nprint(total)",
-      "targetCode": "box = [[2, 4], [6, 8]]\ntotal = 0\nfor row in box:\n    for n in row:\n        total += n\nprint(total)",
+      "prompt_ko": "문자열 배율을 실수로 변환해 10을 곱하고, 태그가 비어 있으면 \"OK\"로 수정해 출력해보세요. (출력 예: OK:15.0)",
+      "prompt_en": "Convert the rate string to a float times 10, set tag to \"OK\" if None, and print (e.g., OK:15.0).",
+      "hint_ko": "실수 형변환 함수로 cfg[\"rate\"]를 감싸고, None 판별 연산자로 cfg[\"tag\"]가 비어 있는지 확인하세요.",
+      "hint_en": "Use float(cfg[\"rate\"]) for conversion and is None to check cfg[\"tag\"].",
+      "templateCode": "cfg = {\"rate\": \"1.5\", \"tag\": None}\nval = §§§§§(cfg[\"rate\"]) * 10\nif cfg[\"tag\"] §§ §§§§:\n    cfg[\"tag\"] = \"OK\"\ntag = cfg[\"tag\"]\nprint(f\"{tag}:{val}\")",
+      "targetCode": "cfg = {\"rate\": \"1.5\", \"tag\": None}\nval = float(cfg[\"rate\"]) * 10\nif cfg[\"tag\"] is None:\n    cfg[\"tag\"] = \"OK\"\ntag = cfg[\"tag\"]\nprint(f\"{tag}:{val}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "20"
+          "expectedOutput": "OK:15.0"
         }
       ]
     },
@@ -201,17 +219,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "행과 열 인덱스가 바뀌어 발생한 오류를 수정하여 둘째 행 마지막 값 6을 출력해보세요.",
-      "prompt_en": "Fix the swapped row/column indices so the last value of the second row (6) prints.",
-      "hint_ko": "행이 2개, 열이 3개인 리스트입니다. [행][열] 순서에 맞게 둘째 행(1), 셋째 열(2)로 수정하세요.",
-      "hint_en": "This 2x3 grid has 2 rows (0..1) and 3 cols (0..2). Access row 1, col 2 in [row][col] order.",
-      "templateCode": "grid = [[1, 2, 3], [4, 5, 6]]\nprint(grid[2][1])",
-      "targetCode": "grid = [[1, 2, 3], [4, 5, 6]]\nprint(grid[1][2])",
+      "prompt_ko": "딕셔너리를 리스트처럼 인덱스 번호 0으로 조회해 발생한 오류(KeyError)를 고쳐 이름과 회복량을 출력해보세요.",
+      "prompt_en": "Fix the KeyError caused by indexing the dictionary with 0 instead of its name key.",
+      "hint_ko": "딕셔너리는 순서 번호가 아니라 등록된 키 문자열로 값을 조회해야 합니다.",
+      "hint_en": "Look up the item name using its string key rather than numeric index 0.",
+      "templateCode": "item = {\"name\": \"Potion\", \"heal\": 50}\nprint(item[0], item[\"heal\"])",
+      "targetCode": "item = {\"name\": \"Potion\", \"heal\": 50}\nprint(item[\"name\"], item[\"heal\"])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "6"
+          "expectedOutput": "Potion 50"
         }
       ]
     },
@@ -220,17 +238,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "2차원 리스트 아래에 한 줄을 추가하여 첫 행 첫 값(10)과 둘째 행 끝 값(60)의 합을 출력해보세요.",
-      "prompt_en": "Add one line below to print the sum of row 0 col 0 (10) and row 1 col 2 (60).",
-      "hint_ko": "둘째 줄에 print(grid[0][0] + grid[1][2])를 작성해보세요.",
-      "hint_en": "Write print(grid[0][0] + grid[1][2]) on the second line.",
-      "templateCode": "grid = [[10, 20, 30], [40, 50, 60]]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "grid = [[10, 20, 30], [40, 50, 60]]\nprint(grid[0][0] + grid[1][2])",
+      "prompt_ko": "보너스를 합산한 코드 아래에 한 줄을 추가하여 지갑의 갱신된 골드 보유량(350)을 출력해보세요.",
+      "prompt_en": "Add one line below the bonus addition to print the updated gold value (350) in wallet.",
+      "hint_ko": "마지막 줄에 print(wallet[\"gold\"])를 작성하여 갱신된 값을 출력하세요.",
+      "hint_en": "Write print(wallet[\"gold\"]) on the third line.",
+      "templateCode": "wallet = {\"gold\": 300, \"bonus\": 50}\nwallet[\"gold\"] += wallet[\"bonus\"]\n§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "wallet = {\"gold\": 300, \"bonus\": 50}\nwallet[\"gold\"] += wallet[\"bonus\"]\nprint(wallet[\"gold\"])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "70"
+          "expectedOutput": "350"
         }
       ]
     },
@@ -239,23 +257,23 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
-      "prompt_en": "Select the exact output printed when the following Python code runs.",
-      "hint_ko": "2차원 리스트의 len(m)은 행의 개수(3)이며, m[1]은 [30, 4]로 바뀌어 합계가 34가 됩니다.",
-      "hint_en": "len(m) counts the 3 rows, and m[1] becomes [30, 4] whose sum is 34.",
-      "targetCode": "m = [[1, 2], [3, 4], [5, 6]]\nm[1][0] = 30\nprint(len(m), sum(m[1]))",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output produced when the following Python code runs.",
+      "hint_ko": "내부 리스트에 30이 추가되어 합계는 60, 곱셈 결과는 120이지만 data 딕셔너리의 키 개수는 그대로 2개입니다.",
+      "hint_en": "sum([10, 20, 30]) * 2 is 120, while len(data) counts top-level keys in data (still 2).",
+      "targetCode": "data = {\"scores\": [10, 20], \"mult\": 2}\ndata[\"scores\"].append(30)\nans = sum(data[\"scores\"]) * data[\"mult\"]\nprint(len(data), ans)",
       "choices": [
-        "2 34",
-        "3 7",
-        "6 34",
-        "3 34"
+        "2 120",
+        "3 120",
+        "2 60",
+        "3 60"
       ],
-      "correctChoiceIndex": 3,
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "3 34"
+          "expectedOutput": "2 120"
         }
       ]
     }

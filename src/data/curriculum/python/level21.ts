@@ -1,418 +1,397 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 21레벨: 복합 조건문과 중첩 if문 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (복합 논리식 및 중첩 if 블록 사전 배치)
-// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
-// - [11단계] 버그 수정 (fix_bug)
-// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
-// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
-// ============================================================================
 export const PYTHON_LEVEL_21: PracticeRound = {
-  id: 'py-basic-r21',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 21,
-  title_ko: '21레벨: 복합 조건문과 중첩 if문',
-  title_en: 'Level 21: Compound Conditions & Nested if Statements',
-  totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'input', 'method', 'type', 'if'],
-  questions: [
-    // ------------------------------------------------------------------------
-    // Pair 1 (1~2단계): if + and 이중 조건 동시 통과 판별
-    // ------------------------------------------------------------------------
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      prompt_ko: '공백으로 입력된 두 점수를 a, b로 나눠 정수 kor, eng에 저장하고, kor >= 60 and eng >= 60이면 "Pass", 아니면 "Fail"을 출력해보세요. (예: 75 80 -> Pass)',
-      prompt_en: 'Split the input into a, b, convert to integers kor and eng, and print "Pass" if kor >= 60 and eng >= 60, else "Fail".',
-      hint_ko: '두 과목 모두 60점 이상이어야 통과하므로 if 조건 칸에 kor >= 60 and eng >= 60을 입력하세요.',
-      hint_en: 'Both subjects must be at least 60, so use kor >= 60 and eng >= 60 in the if condition.',
-      targetCode: 'a, b = input().split()\nkor = int(a)\neng = int(b)\nif kor >= 60 and eng >= 60:\n    print("Pass")\nelse:\n    print("Fail")',
-      testCases: [
-        {
-          id: 1,
-          input: '75 80',
-          expectedOutput: 'Pass',
-        },
-        {
-          id: 2,
-          input: '90 50',
-          expectedOutput: 'Fail',
-        },
-        {
-          id: 3,
-          input: '55 55',
-          expectedOutput: 'Fail',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 논리 키워드를 채워 나이(age)가 10세 이상이면서 키(h)가 130 이상일 때만 Ride를, 아니면 Wait을 출력해보세요.',
-      prompt_en: 'Fill in the logical keyword so Ride prints only when age >= 10 and h >= 130, otherwise Wait.',
-      hint_ko: '나이와 키 두 조건을 동시에 만족해야 하므로 논리 연산자 and를 입력하세요.',
-      hint_en: 'Enter and so both age >= 10 and h >= 130 are required.',
-      templateCode: 'age = int(input())\nh = int(input())\nif age >= 10 §§§ h >= 130:\n    print("Ride")\nelse:\n    print("Wait")',
-      targetCode: 'age = int(input())\nh = int(input())\nif age >= 10 and h >= 130:\n    print("Ride")\nelse:\n    print("Wait")',
-      testCases: [
-        {
-          id: 1,
-          input: '12\n140',
-          expectedOutput: 'Ride',
-        },
-        {
-          id: 2,
-          input: '12\n120',
-          expectedOutput: 'Wait',
-        },
-        {
-          id: 3,
-          input: '8\n135',
-          expectedOutput: 'Wait',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 2 (3~4단계): if + or 하나라도 만족할 때 분기하기
-    // ------------------------------------------------------------------------
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      prompt_ko: '요일 day를 입력받아 day == "Sat" or day == "Sun"이면 "Weekend", 아니면 "Weekday"를 출력해보세요. (예: Sun -> Weekend)',
-      prompt_en: 'Read string day; print "Weekend" if day == "Sat" or day == "Sun", else "Weekday".',
-      hint_ko: '토요일("Sat") 또는 일요일("Sun") 둘 중 하나만 일치해도 주말이므로 두 비교식을 or로 연결하세요.',
-      hint_en: 'Connect day == "Sat" and day == "Sun" with or.',
-      targetCode: 'day = input()\nif day == "Sat" or day == "Sun":\n    print("Weekend")\nelse:\n    print("Weekday")',
-      testCases: [
-        {
-          id: 1,
-          input: 'Sun',
-          expectedOutput: 'Weekend',
-        },
-        {
-          id: 2,
-          input: 'Mon',
-          expectedOutput: 'Weekday',
-        },
-        {
-          id: 3,
-          input: 'Sat',
-          expectedOutput: 'Weekend',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 논리 키워드를 채워 나이(age)가 8세 미만이거나 65세 이상이면 Free를, 그 외에는 Paid를 출력해보세요. (예: 70 -> Free)',
-      prompt_en: 'Fill in the logical keyword to print Free when age < 8 or age >= 65, and Paid otherwise.',
-      hint_ko: '어린이(< 8) 또는 경로 우대(>= 65) 중 하나만 해당해도 무료이므로 두 글자 키워드 or를 입력하세요.',
-      hint_en: 'Use or so either age < 8 or age >= 65 qualifies for Free.',
-      templateCode: 'age = int(input())\nif age < 8 §§ age >= 65:\n    print("Free")\nelse:\n    print("Paid")',
-      targetCode: 'age = int(input())\nif age < 8 or age >= 65:\n    print("Free")\nelse:\n    print("Paid")',
-      testCases: [
-        {
-          id: 1,
-          input: '70',
-          expectedOutput: 'Free',
-        },
-        {
-          id: 2,
-          input: '6',
-          expectedOutput: 'Free',
-        },
-        {
-          id: 3,
-          input: '30',
-          expectedOutput: 'Paid',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 3 (5~6단계): 연쇄 비교 범위 조건문 (a <= x <= b)
-    // ------------------------------------------------------------------------
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      prompt_ko: '온도 temp를 정수로 입력받아 18 <= temp <= 26 범위이면 "Good", 범위를 벗어나면 "Adjust"를 출력해보세요. (예: 22 -> Good / 30 -> Adjust)',
-      prompt_en: 'Read integer temp; print "Good" if 18 <= temp <= 26, otherwise print "Adjust".',
-      hint_ko: 'if 조건 칸에 18 <= temp <= 26(또는 temp >= 18 and temp <= 26)을 입력해보세요.',
-      hint_en: 'Write 18 <= temp <= 26 in the if condition.',
-      targetCode: 'temp = int(input())\nif 18 <= temp <= 26:\n    print("Good")\nelse:\n    print("Adjust")',
-      testCases: [
-        {
-          id: 1,
-          input: '22',
-          expectedOutput: 'Good',
-        },
-        {
-          id: 2,
-          input: '30',
-          expectedOutput: 'Adjust',
-        },
-        {
-          id: 3,
-          input: '15',
-          expectedOutput: 'Adjust',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 비교 기호를 채워 시각(h)이 9시 이상 17시 이하 영업시간일 때 Open을, 그 외에는 Closed를 출력해보세요. (예: 14 -> Open)',
-      prompt_en: 'Fill in the two comparison operators so 9 <= h <= 17 prints Open and other hours print Closed.',
-      hint_ko: '양쪽 경계값(9와 17)을 모두 포함하는 연쇄 비교식 9 <= h <= 17이 되도록 <=를 두 빈칸에 입력하세요.',
-      hint_en: 'Enter <= in both blanks to form 9 <= h <= 17.',
-      templateCode: 'h = int(input())\nif 9 §§ h §§ 17:\n    print("Open")\nelse:\n    print("Closed")',
-      targetCode: 'h = int(input())\nif 9 <= h <= 17:\n    print("Open")\nelse:\n    print("Closed")',
-      testCases: [
-        {
-          id: 1,
-          input: '14',
-          expectedOutput: 'Open',
-        },
-        {
-          id: 2,
-          input: '20',
-          expectedOutput: 'Closed',
-        },
-        {
-          id: 3,
-          input: '9',
-          expectedOutput: 'Open',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 4 (7~8단계): 중첩 if문 (if 안에 또 다른 if - else)
-    // ------------------------------------------------------------------------
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      prompt_ko: '정수 n을 입력받아 n > 0이면 안쪽 if-else로 짝수일 때 "Plus Even", 홀수일 때 "Plus Odd"를, 0 이하면 "Zero or Minus"를 출력해보세요.',
-      prompt_en: 'Read integer n; if n > 0, check n % 2 == 0 inside to print "Plus Even" or "Plus Odd", else print "Zero or Minus".',
-      hint_ko: '바깥 if 조건에 n > 0, 안쪽 중첩 if 조건에 n % 2 == 0을 넣고 세 출력 칸을 순서대로 채워보세요.',
-      hint_en: 'Put n > 0 on the outer if and n % 2 == 0 on the nested inner if.',
-      targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print("Plus Even")\n    else:\n        print("Plus Odd")\nelse:\n    print("Zero or Minus")',
-      testCases: [
-        {
-          id: 1,
-          input: '8',
-          expectedOutput: 'Plus Even',
-        },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'Plus Odd',
-        },
-        {
-          id: 3,
-          input: '-2',
-          expectedOutput: 'Zero or Minus',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '넷째 줄 두 빈칸을 채워 아이디가 "admin"일 때 안쪽에서 비밀번호가 "1234"인지 한 번 더 검사하는 중첩 조건문을 완성해보세요.',
-      prompt_en: 'Fill in the two blanks on line 4 to nest an inner check testing pw == "1234" when id_ok == "admin".',
-      hint_ko: '4칸 들여쓰기된 안쪽 조건문도 동일하게 if로 시작하고 조건 끝에 콜론(:)을 붙이며, 그 실행문은 8칸 들여씁니다.',
-      hint_en: 'Start the nested check with if and end with a colon (:); its body is indented by 8 spaces.',
-      templateCode: 'id_ok = input()\npw = input()\nif id_ok == "admin":\n    §§ pw == "1234"§\n        print("Admin OK")\n    else:\n        print("Wrong PW")\nelse:\n    print("No User")',
-      targetCode: 'id_ok = input()\npw = input()\nif id_ok == "admin":\n    if pw == "1234":\n        print("Admin OK")\n    else:\n        print("Wrong PW")\nelse:\n    print("No User")',
-      testCases: [
-        {
-          id: 1,
-          input: 'admin\n1234',
-          expectedOutput: 'Admin OK',
-        },
-        {
-          id: 2,
-          input: 'admin\n0000',
-          expectedOutput: 'Wrong PW',
-        },
-        {
-          id: 3,
-          input: 'guest\n1234',
-          expectedOutput: 'No User',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 5 (9~10단계): 복합 논리식 + 다중 분기 응용 (FizzBuzz & 괄호 조건)
-    // ------------------------------------------------------------------------
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      prompt_ko: '정수 n을 입력받아 3과 5의 공배수면 "FizzBuzz", 3의 배수면 "Fizz", 5의 배수면 "Buzz", 모두 아니면 n을 출력해보세요. (예: 15 -> FizzBuzz)',
-      prompt_en: 'Read integer n; print "FizzBuzz" if divisible by both 3 and 5, "Fizz" if by 3, "Buzz" if by 5, else n.',
-      hint_ko: '두 조건을 모두 만족하는 공배수 조건(n % 3 == 0 and n % 5 == 0)을 가장 첫 번째 if에서 먼저 검사해야 합니다.',
-      hint_en: 'Test the combined condition (n % 3 == 0 and n % 5 == 0) first before testing 3 or 5 individually.',
-      targetCode: 'n = int(input())\nif n % 3 == 0 and n % 5 == 0:\n    print("FizzBuzz")\nelif n % 3 == 0:\n    print("Fizz")\nelif n % 5 == 0:\n    print("Buzz")\nelse:\n    print(n)',
-      testCases: [
-        {
-          id: 1,
-          input: '15',
-          expectedOutput: 'FizzBuzz',
-        },
-        {
-          id: 2,
-          input: '9',
-          expectedOutput: 'Fizz',
-        },
-        {
-          id: 3,
-          input: '10',
-          expectedOutput: 'Buzz',
-        },
-        {
-          id: 4,
-          input: '7',
-          expectedOutput: '7',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 논리 키워드를 채워 레벨(lv)이 10 이상이면서 동시에 (vip가 "Y"이거나 lv이 30 이상)일 때 Enter를, 아니면 Deny를 출력해보세요.',
-      prompt_en: 'Fill in the two logical keywords so lv >= 10 together with (vip == "Y" or lv >= 30) prints Enter, else Deny.',
-      hint_ko: '필수 조건(lv >= 10)과 괄호 조건을 연결하는 첫째 빈칸에는 and를, 괄호 안 선택 조건에는 or를 입력하세요.',
-      hint_en: 'Use and outside the parentheses and or inside (vip == "Y" or lv >= 30).',
-      templateCode: 'lv = int(input())\nvip = input()\nif lv >= 10 §§§ (vip == "Y" §§ lv >= 30):\n    print("Enter")\nelse:\n    print("Deny")',
-      targetCode: 'lv = int(input())\nvip = input()\nif lv >= 10 and (vip == "Y" or lv >= 30):\n    print("Enter")\nelse:\n    print("Deny")',
-      testCases: [
-        {
-          id: 1,
-          input: '15\nY',
-          expectedOutput: 'Enter',
-        },
-        {
-          id: 2,
-          input: '35\nN',
-          expectedOutput: 'Enter',
-        },
-        {
-          id: 3,
-          input: '15\nN',
-          expectedOutput: 'Deny',
-        },
-        {
-          id: 4,
-          input: '5\nY',
-          expectedOutput: 'Deny',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - 구간 판별에서 or를 잘못 쓴 논리 버그 교정
-    // ------------------------------------------------------------------------
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: 'n이 10 이상 20 이하 구간일 때만 In이 출력되어야 하는데 25를 입력해도 In이 나오는 논리 오류를 수정해보세요. (예: 25 -> Out / 15 -> In)',
-      prompt_en: 'Fix the logic bug where 25 prints In so that only numbers from 10 through 20 print In (and others print Out).',
-      hint_ko: 'n >= 10 or n <= 20은 모든 숫자가 하나 이상 만족해 항상 참이 됩니다. 두 범위를 동시에 만족하도록 or를 and로 고치세요.',
-      hint_en: 'Every number is either >= 10 or <= 20! Replace or with and so both bounds must hold.',
-      templateCode: 'n = int(input())\nif n >= 10 or n <= 20:\n    print("In")\nelse:\n    print("Out")',
-      targetCode: 'n = int(input())\nif n >= 10 and n <= 20:\n    print("In")\nelse:\n    print("Out")',
-      testCases: [
-        {
-          id: 1,
-          input: '25',
-          expectedOutput: 'Out',
-        },
-        {
-          id: 2,
-          input: '15',
-          expectedOutput: 'In',
-        },
-        {
-          id: 3,
-          input: '5',
-          expectedOutput: 'Out',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 12단계: 예제 아래 한 줄 추가 작성 (one_line)
-    // ------------------------------------------------------------------------
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '중첩된 안쪽 if n >= 100: 아래에 8칸 들여쓰기에 맞춰 한 줄을 추가하여 세 자리 이상 양수일 때 Big을 출력해보세요. (예: 150 -> Big)',
-      prompt_en: 'Type the nested if headers and add an 8-space indented line below if n >= 100: to print Big.',
-      hint_ko: '안쪽 if n >= 100: 다음 줄에서 공백 8칸을 들여쓴 뒤 print("Big")을 입력하세요.',
-      hint_en: 'Indent by 8 spaces on line 4 and write print("Big").',
-      templateCode: 'n = int(input())\nif n > 0:\n    if n >= 100:\n        §§§§§§§§§§§§',
-      targetCode: 'n = int(input())\nif n > 0:\n    if n >= 100:\n        print("Big")',
-      testCases: [
-        {
-          id: 1,
-          input: '150',
-          expectedOutput: 'Big',
-        },
-        {
-          id: 2,
-          input: '100',
-          expectedOutput: 'Big',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 13단계: 출력 결과 예측 선택 (predict_output)
-    // ------------------------------------------------------------------------
-    {
-      id: 13,
-      step: 13,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '입력값으로 18이 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.',
-      prompt_en: 'When 18 is given as input, select the exact output of the following Python code.',
-      hint_ko: '18 > 0이 참이므로 바깥 if 안으로 들어가고, 18 % 6 == 0이 참이므로 A만 출력된 뒤 안쪽 elif는 건너뜁니다.',
-      hint_en: '18 > 0 enters the outer if, and 18 % 6 == 0 is True so A prints and the inner elif is skipped.',
-      targetCode: 'n = int(input())\nif n > 0:\n    if n % 6 == 0:\n        print("A")\n    elif n % 3 == 0:\n        print("B")\nelse:\n    print("C")',
-      choices: ['A', 'B', 'A\nB', 'C'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '18',
-          expectedOutput: 'A',
-        },
-      ],
-    },
+  "id": "py-basic-r21",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 21,
+  "title_ko": "21레벨: if - elif - else 다중 조건 분기",
+  "title_en": "Level 21: if - elif - else Multi-Way Branching",
+  "description_ko": "세 가지 이상의 조건을 위에서부터 차례대로 검사해 분기하는 if - elif - else 구조를 익힙니다.",
+  "description_en": "Chain multiple conditions cleanly from top to bottom using if - elif - else.",
+  "totalQuestions": 13,
+  "unlockedBlocks": [
+    "print",
+    "variable",
+    "input",
+    "method",
+    "type",
+    "if"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "prompt_ko": "정수 n을 입력받아 0보다 크면 \"Positive\", 0과 같으면 \"Zero\", 그 외에는 \"Negative\"를 출력해보세요.",
+      "prompt_en": "Read integer n; print \"Positive\" (>0), \"Zero\" (==0), or \"Negative\" (otherwise).",
+      "hint_ko": "첫째 if 조건이 거짓일 때 추가 조건을 검사하는 두 번째 가지가 elif입니다.",
+      "hint_en": "Use elif n == 0: for the second check and else: for negative numbers.",
+      "targetCode": "n = int(input())\nif n > 0:\n    print(\"Positive\")\nelif n == 0:\n    print(\"Zero\")\nelse:\n    print(\"Negative\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "7",
+          "expectedOutput": "Positive"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "Zero"
+        },
+        {
+          "id": 3,
+          "input": "-3",
+          "expectedOutput": "Negative"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "넷째 줄 빈칸에 추가 조건 분기 키워드와 콜론을 채워 Plus, Zero, Minus 중 하나를 출력해보세요.",
+      "prompt_en": "Fill in the additional-condition keyword and colon on line 4.",
+      "hint_ko": "파이썬에서 \"그렇지 않고 만약 ~라면\"은 네 글자 키워드 elif로 적고 조건 끝에 콜론(:)을 붙입니다.",
+      "hint_en": "Write elif at the start of line 4 and : at the end.",
+      "templateCode": "n = int(input())\nif n > 0:\n    print(\"Plus\")\n§§§§ n == 0§\n    print(\"Zero\")\nelse:\n    print(\"Minus\")",
+      "targetCode": "n = int(input())\nif n > 0:\n    print(\"Plus\")\nelif n == 0:\n    print(\"Zero\")\nelse:\n    print(\"Minus\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "Zero"
+        },
+        {
+          "id": 2,
+          "input": "5",
+          "expectedOutput": "Plus"
+        },
+        {
+          "id": 3,
+          "input": "-2",
+          "expectedOutput": "Minus"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "prompt_ko": "점수 score를 입력받아 90 이상은 \"A\", 80 이상은 \"B\", 70 이상은 \"C\", 미만은 \"F\"를 출력해보세요.",
+      "prompt_en": "Read integer score and print \"A\" (>=90), \"B\" (>=80), \"C\" (>=70), or \"F\" (<70).",
+      "hint_ko": "높은 기준부터 순서대로 검사하면 맨 처음 참이 된 학점 하나만 출력되고 분기가 종료됩니다.",
+      "hint_en": "Test thresholds from highest (90) down to lowest (70).",
+      "targetCode": "score = int(input())\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelif score >= 70:\n    print(\"C\")\nelse:\n    print(\"F\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "85",
+          "expectedOutput": "B"
+        },
+        {
+          "id": 2,
+          "input": "92",
+          "expectedOutput": "A"
+        },
+        {
+          "id": 3,
+          "input": "74",
+          "expectedOutput": "C"
+        },
+        {
+          "id": 4,
+          "input": "60",
+          "expectedOutput": "F"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "두 빈칸에 분기 키워드를 채워 명령어가 \"start\"면 Run, \"stop\"이면 Halt, 나머지는 Wait을 출력해보세요.",
+      "prompt_en": "Fill in the two branching keywords to dispatch \"start\", \"stop\", and fallback commands.",
+      "hint_ko": "조건식이 뒤따르는 넷째 줄에는 elif를, 조건식 없는 여섯째 줄에는 else를 입력하세요.",
+      "hint_en": "Enter elif on line 4 and else on line 6.",
+      "templateCode": "cmd = input()\nif cmd == \"start\":\n    print(\"Run\")\n§§§§ cmd == \"stop\":\n    print(\"Halt\")\n§§§§:\n    print(\"Wait\")",
+      "targetCode": "cmd = input()\nif cmd == \"start\":\n    print(\"Run\")\nelif cmd == \"stop\":\n    print(\"Halt\")\nelse:\n    print(\"Wait\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "stop",
+          "expectedOutput": "Halt"
+        },
+        {
+          "id": 2,
+          "input": "start",
+          "expectedOutput": "Run"
+        },
+        {
+          "id": 3,
+          "input": "idle",
+          "expectedOutput": "Wait"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "prompt_ko": "레벨 lv를 입력받아 50 이상이면 \"Master\", 20 이상이면 \"Pro\", 미만이면 \"Rookie\"를 rank에 담아 출력해보세요.",
+      "prompt_en": "Read integer lv, set rank to \"Master\" (>=50), \"Pro\" (>=20), or \"Rookie\", and print rank.",
+      "hint_ko": "각 분기에서는 rank 변수에 등급 문자열만 저장하고, 맨 마지막 줄에서 print(rank)로 출력합니다.",
+      "hint_en": "Assign rank inside each branch and print(rank) once after the block.",
+      "targetCode": "lv = int(input())\nif lv >= 50:\n    rank = \"Master\"\nelif lv >= 20:\n    rank = \"Pro\"\nelse:\n    rank = \"Rookie\"\nprint(rank)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "25",
+          "expectedOutput": "Pro"
+        },
+        {
+          "id": 2,
+          "input": "60",
+          "expectedOutput": "Master"
+        },
+        {
+          "id": 3,
+          "input": "10",
+          "expectedOutput": "Rookie"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 미만 비교 기호와 추가 조건 키워드를 채워 8세 미만은 0, 20세 미만은 1000, 이상은 2000을 출력해보세요.",
+      "prompt_en": "Fill in the less-than symbol and branching keyword to compute the age-based fee.",
+      "hint_ko": "미만 비교에는 <를 쓰고, 두 번째 나이 구간 검사에는 elif를 사용합니다.",
+      "hint_en": "Enter < on line 2 and elif on line 4.",
+      "templateCode": "age = int(input())\nif age § 8:\n    fee = 0\n§§§§ age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)",
+      "targetCode": "age = int(input())\nif age < 8:\n    fee = 0\nelif age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "15",
+          "expectedOutput": "1000"
+        },
+        {
+          "id": 2,
+          "input": "6",
+          "expectedOutput": "0"
+        },
+        {
+          "id": 3,
+          "input": "25",
+          "expectedOutput": "2000"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "prompt_ko": "정수 n을 입력받아 6의 배수면 \"6x\", 2의 배수면 \"2x\", 3의 배수면 \"3x\", 모두 아니면 \"None\"을 출력해보세요.",
+      "prompt_en": "Read integer n; print \"6x\" (%6==0), \"2x\" (%2==0), \"3x\" (%3==0), or \"None\".",
+      "hint_ko": "12처럼 2와 3의 공배수일 때 \"6x\"가 나오려면 가장 좁은 조건인 n % 6 == 0을 맨 먼저 검사해야 합니다.",
+      "hint_en": "Check n % 6 == 0 first before checking n % 2 == 0 or n % 3 == 0.",
+      "targetCode": "n = int(input())\nif n % 6 == 0:\n    print(\"6x\")\nelif n % 2 == 0:\n    print(\"2x\")\nelif n % 3 == 0:\n    print(\"3x\")\nelse:\n    print(\"None\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "12",
+          "expectedOutput": "6x"
+        },
+        {
+          "id": 2,
+          "input": "8",
+          "expectedOutput": "2x"
+        },
+        {
+          "id": 3,
+          "input": "9",
+          "expectedOutput": "3x"
+        },
+        {
+          "id": 4,
+          "input": "7",
+          "expectedOutput": "None"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 반전 논리 키워드와 이하 비교 기호를 채워 체력이 0이면 Dead, 30 이하면 Low, 초과면 Safe를 출력해보세요.",
+      "prompt_en": "Fill in the logical negation keyword and less-or-equal operator to classify hp.",
+      "hint_ko": "hp가 0일 때 참이 되도록 not hp를 쓰고, 30 이하 조건에는 <=를 입력하세요.",
+      "hint_en": "Use not on line 2 and <= on line 4.",
+      "templateCode": "hp = int(input())\nif §§§ hp:\n    state = \"Dead\"\nelif hp §§ 30:\n    state = \"Low\"\nelse:\n    state = \"Safe\"\nprint(state)",
+      "targetCode": "hp = int(input())\nif not hp:\n    state = \"Dead\"\nelif hp <= 30:\n    state = \"Low\"\nelse:\n    state = \"Safe\"\nprint(state)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "0",
+          "expectedOutput": "Dead"
+        },
+        {
+          "id": 2,
+          "input": "20",
+          "expectedOutput": "Low"
+        },
+        {
+          "id": 3,
+          "input": "80",
+          "expectedOutput": "Safe"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "block",
+      "prompt_ko": "체온 temp를 실수(float)로 입력받아 37.5 이상은 \"Fever\", 36.0 이상은 \"Normal\", 미만은 \"Low\"를 출력해보세요.",
+      "prompt_en": "Read float temp and print \"Fever\" (>=37.5), \"Normal\" (>=36.0), or \"Low\".",
+      "hint_ko": "temp = float(input())으로 실수를 입력받은 뒤 37.5와 36.0 순서로 비교하세요.",
+      "hint_en": "Use float(input()) and compare against 37.5 in if and 36.0 in elif.",
+      "targetCode": "temp = float(input())\nif temp >= 37.5:\n    print(\"Fever\")\nelif temp >= 36.0:\n    print(\"Normal\")\nelse:\n    print(\"Low\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "38.1",
+          "expectedOutput": "Fever"
+        },
+        {
+          "id": 2,
+          "input": "36.5",
+          "expectedOutput": "Normal"
+        },
+        {
+          "id": 3,
+          "input": "35.4",
+          "expectedOutput": "Low"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "두 빈칸에 복합 대입 기호를 채워 30000 이상은 5000 차감, 15000 이상은 2000 차감, 미만은 2500 추가 후 출력해보세요.",
+      "prompt_en": "Fill in the compound operators to apply tiered discounts or add a 2500 shipping fee.",
+      "hint_ko": "금액을 뺄 때는 -=를, 배송비를 더할 때는 +=를 사용합니다.",
+      "hint_en": "Enter -= on line 3 and += on line 7.",
+      "templateCode": "price = int(input())\nif price >= 30000:\n    price §§ 5000\nelif price >= 15000:\n    price -= 2000\nelse:\n    price §§ 2500\nprint(price)",
+      "targetCode": "price = int(input())\nif price >= 30000:\n    price -= 5000\nelif price >= 15000:\n    price -= 2000\nelse:\n    price += 2500\nprint(price)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "35000",
+          "expectedOutput": "30000"
+        },
+        {
+          "id": 2,
+          "input": "20000",
+          "expectedOutput": "18000"
+        },
+        {
+          "id": 3,
+          "input": "10000",
+          "expectedOutput": "12500"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "다중 조건 키워드를 두 단어로 잘못 적어 발생한 문법 오류를 수정해 무게 등급을 출력해보세요.",
+      "prompt_en": "Fix the SyntaxError caused by writing the multi-way branch keyword as two words.",
+      "hint_ko": "파이썬에서는 else if 대신 네 글자로 줄인 단일 키워드 elif를 사용합니다.",
+      "hint_en": "Replace else if on line 4 with elif.",
+      "templateCode": "w = float(input())\nif w >= 10.0:\n    print(\"Heavy\")\nelse if w >= 5.0:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
+      "targetCode": "w = float(input())\nif w >= 10.0:\n    print(\"Heavy\")\nelif w >= 5.0:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "7.5",
+          "expectedOutput": "Mid"
+        },
+        {
+          "id": 2,
+          "input": "12.0",
+          "expectedOutput": "Heavy"
+        },
+        {
+          "id": 3,
+          "input": "2.5",
+          "expectedOutput": "Light"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "실수 점수 구간에 따라 포인트를 누적하는 코드 아래에 한 줄을 추가하여 최종 pts를 출력해보세요.",
+      "prompt_en": "Add one line at the end to print the final accumulated pts.",
+      "hint_ko": "들여쓰기 없이 맨 아래 줄에 print(pts)를 작성하면 모든 분기가 끝난 뒤 점수가 출력됩니다.",
+      "hint_en": "Write print(pts) without indentation on the last line.",
+      "templateCode": "s = float(input())\npts = 10\nif s >= 9.0:\n    pts += 5\nelif s >= 7.0:\n    pts += 2\n§§§§§§§§§§",
+      "targetCode": "s = float(input())\npts = 10\nif s >= 9.0:\n    pts += 5\nelif s >= 7.0:\n    pts += 2\nprint(pts)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "9.5",
+          "expectedOutput": "15"
+        },
+        {
+          "id": 2,
+          "input": "7.5",
+          "expectedOutput": "12"
+        },
+        {
+          "id": 3,
+          "input": "5.0",
+          "expectedOutput": "10"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "입력값으로 3.5가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "When 3.5 is given as input, select the exact output of the following Python code.",
+      "hint_ko": "첫 묶음에서 3.5 >= 2.0이 참이라 fee는 2500이 되고 elif는 건너뜁니다. 아래 독립 if 3.5 >= 3.0도 참이라 300이 빠져 2200입니다.",
+      "hint_en": "t >= 2.0 adds 1500 (2500) and skips elif; the separate if t >= 3.0 subtracts 300 -> 2200.",
+      "targetCode": "t = float(input())\nfee = 1000\nif t >= 2.0:\n    fee += 1500\nelif t >= 1.0:\n    fee += 500\nif t >= 3.0:\n    fee -= 300\nprint(fee)",
+      "choices": [
+        "2500",
+        "2700",
+        "2200",
+        "1200"
+      ],
+      "correctChoiceIndex": 2,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "3.5",
+          "expectedOutput": "2200"
+        }
+      ]
+    }
+  ]
 };
-

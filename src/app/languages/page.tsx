@@ -21,10 +21,42 @@ import { CURRICULUM_TRACKS, LanguageTrack, CourseModule, DIFFICULTY_COLORS, DIFF
 import LanguageIcon from '@/components/LanguageIcon';
 import { useLanguage } from '@/lib/LanguageContext';
 import { getTrackName, getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
+import { getPracticeRound } from '@/lib/practiceData';
 
 export default function LanguagesPage() {
   const { language } = useLanguage();
   const isEn = language === 'en';
+  const [progressByModule, setProgressByModule] = useState<Record<string, number>>({});
+
+  // Load real cleared-level counts from localStorage on client mount
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const nextProgress: Record<string, number> = {};
+      for (const track of CURRICULUM_TRACKS) {
+        for (const mod of track.modules) {
+          if (!mod.practiceUrl.startsWith('/practice/')) continue;
+          const rawLang = mod.practiceUrl.replace(/^\/practice\//, '').toLowerCase();
+          let clearedCount = 0;
+          for (let lvl = 1; lvl <= mod.totalLevels; lvl++) {
+            const rawVal = localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`);
+            if (!rawVal) continue;
+            const stepVal = parseInt(rawVal, 10);
+            const lvlRound = getPracticeRound(rawLang, lvl);
+            const requiredSteps =
+              lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
+            if (stepVal >= requiredSteps) {
+              clearedCount++;
+            }
+          }
+          if (clearedCount > 0) {
+            nextProgress[mod.id] = clearedCount;
+          }
+        }
+      }
+      setProgressByModule(nextProgress);
+    } catch { }
+  }, []);
 
   // Dynamic matte soft ice-cyan body background for glare-free comfort
   useEffect(() => {
@@ -563,14 +595,11 @@ export default function LanguagesPage() {
                 {[...track.modules]
                   .sort((a, b) => (DIFFICULTY_ORDER[a.difficulty] || 99) - (DIFFICULTY_ORDER[b.difficulty] || 99))
                   .map((module) => {
-                    // Simulated or stored progress: py-basic 9, web-html 5, c-basic 2, etc.
-                    const defaultProgress: Record<string, number> = {
-                      'py-basic': 9,
-                      'web-html': 5,
-                      'c-basic': 2,
-                    };
-                    const completedLevels = defaultProgress[module.id] || 0;
-                    const progressPercent = Math.round((completedLevels / module.totalLevels) * 100);
+                    const completedLevels = progressByModule[module.id] || 0;
+                    const progressPercent = Math.min(
+                      100,
+                      Math.round((completedLevels / Math.max(1, module.totalLevels)) * 100)
+                    );
                     const isStarted = progressPercent > 0;
                     const diffColor = DIFFICULTY_COLORS[module.difficulty] || '#10b981';
 

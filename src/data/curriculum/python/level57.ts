@@ -1,41 +1,52 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 57레벨: 기본값 매개변수와 변수의 유효 범위 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (기본값 매개변수, 키워드 인자, 지역·전역 변수)
-// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
-// - [11단계] 버그 수정 (fix_bug)
-// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
-// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
-// ============================================================================
 export const PYTHON_LEVEL_57: PracticeRound = {
   "id": "py-basic-r57",
   "language": "python",
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 57,
-  "title_ko": "57레벨: 기본값 매개변수와 변수의 유효 범위",
-  "title_en": "Level 57: Default Parameters & Variable Scope",
+  "title_ko": "57레벨: 반복문(while)·함수(def)와 안전한 입력·변환 패턴",
+  "title_en": "Level 57: Safe Input & Conversion with while and def",
+  "description_ko": "올바른 값이 들어올 때까지 재시도하는 while True + try 패턴과 안전 조회·변환 도우미 함수 패턴을 익힙니다.",
+  "description_en": "Master the while True + try retry loop, skipping bad list items, and safe helper functions.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
-    "def"
+    "input",
+    "type",
+    "math",
+    "method",
+    "if",
+    "for_range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "def",
+    "try"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "기본값이 name=\"Guest\"인 greet 함수를 만들어 f\"Hello, {name}\"을 출력하고, 인자 없이 한 번, \"Yuna\"로 한 번 호출해보세요.",
-      "prompt_en": "Define greet(name=\"Guest\") printing f\"Hello, {name}\", then call greet() and greet(\"Yuna\").",
-      "hint_ko": "매개변수 칸에 name=\"Guest\"를 적으면 인자 없이 greet()로 호출할 때 자동으로 \"Guest\"가 사용됩니다.",
-      "hint_en": "Set name=\"Guest\" in the def header, then call greet() and greet(\"Yuna\").",
-      "targetCode": "def greet(name=\"Guest\"):\n    print(f\"Hello, {name}\")\ngreet()\ngreet(\"Yuna\")",
+      "prompt_ko": "while True 안에서 정수를 입력받아 성공하면 break로 탈출해 2배를 출력하고, ValueError면 \"Retry\"를 출력해 재시도해보세요.",
+      "prompt_en": "Loop with while True to read int(input()) and break on success, or print \"Retry\" on ValueError; then print n * 2.",
+      "hint_ko": "try 블록의 n = int(input()) 바로 다음 줄에 break를 두면 정상 정수가 입력된 순간에만 반복이 끝납니다.",
+      "hint_en": "Place break right after n = int(input()) inside try:, and print(\"Retry\") in except ValueError:.",
+      "targetCode": "while True:\n    try:\n        n = int(input())\n        break\n    except ValueError:\n        print(\"Retry\")\nprint(n * 2)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Hello, Guest\nHello, Yuna"
+          "input": "abc\n15",
+          "expectedOutput": "Retry\n30"
+        },
+        {
+          "id": 2,
+          "input": "x\ny\n7",
+          "expectedOutput": "Retry\nRetry\n14"
         }
       ]
     },
@@ -44,16 +55,22 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 기본값 role=\"Member\"인 badge 함수를 완성하고 인자 없는 badge()를 먼저 호출해보세요.",
-      "prompt_en": "Fill in the blanks so role defaults to \"Member\" in badge and call badge() with no arguments.",
-      "hint_ko": "매개변수 뒤에 =\"Member\"로 기본값을 지정하고, 셋째 줄에서는 인자 없이 badge()를 호출하세요.",
-      "hint_en": "Write role=\"Member\" on line 1 and badge() on line 3.",
-      "templateCode": "def badge(§§§§§§§§§§§§§):\n    print(f\"[{role}]\")\n§§§§§§§\nbadge(\"Admin\")",
-      "targetCode": "def badge(role=\"Member\"):\n    print(f\"[{role}]\")\nbadge()\nbadge(\"Admin\")",
+      "prompt_ko": "실수 입력에 성공하면 즉시 반복을 종료하고, 변환 에러 시 Again을 출력해 재시도하도록 두 빈칸을 채워보세요. (출력 예: W:4.5)",
+      "prompt_en": "Exit the retry loop upon valid float conversion and catch invalid text to print Again.",
+      "hint_ko": "변환 직후 break로 루프를 빠져나오고, 변환 실패는 except ValueError:로 잡아냅니다.",
+      "hint_en": "Write break in try and ValueError in except.",
+      "templateCode": "while True:\n    try:\n        w = float(input())\n        §§§§§\n    except §§§§§§§§§§:\n        print(\"Again\")\nprint(f\"W:{w}\")",
+      "targetCode": "while True:\n    try:\n        w = float(input())\n        break\n    except ValueError:\n        print(\"Again\")\nprint(f\"W:{w}\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "[Member]\n[Admin]"
+          "input": "ten\n4.5",
+          "expectedOutput": "Again\nW:4.5"
+        },
+        {
+          "id": 2,
+          "input": "2.0",
+          "expectedOutput": "W:2.0"
         }
       ]
     },
@@ -61,15 +78,21 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "지수 기본값이 exp=2인 power(base, exp=2) 함수에서 base ** exp를 반환하고, power(5)와 power(2, 3)을 출력해보세요.",
-      "prompt_en": "Define power(base, exp=2) returning base ** exp, then print power(5) and power(2, 3).",
-      "hint_ko": "power(5)는 기본값 exp=2가 적용되어 25를, power(2, 3)은 exp=3이 적용되어 8을 반환합니다.",
-      "hint_en": "Use base, exp=2 as parameters and return base ** exp.",
-      "targetCode": "def power(base, exp=2):\n    return base ** exp\nprint(power(5))\nprint(power(2, 3))",
+      "prompt_ko": "0이 아닌 정수가 입력될 때까지 반복하며 100 // d를 구하고, 문자면 \"NeedInt\", 0이면 \"NoZero\"를 출력한 뒤 결과를 출력해보세요.",
+      "prompt_en": "Retry until 100 // int(input()) succeeds, printing \"NeedInt\" on ValueError and \"NoZero\" on ZeroDivisionError.",
+      "hint_ko": "ans = 100 // d까지 에러 없이 통과했을 때만 break가 실행되므로 0과 문자를 모두 걸러내고 재입력받습니다.",
+      "hint_en": "Compute ans = 100 // d before break, and handle both ValueError and ZeroDivisionError.",
+      "targetCode": "while True:\n    try:\n        d = int(input())\n        ans = 100 // d\n        break\n    except ValueError:\n        print(\"NeedInt\")\n    except ZeroDivisionError:\n        print(\"NoZero\")\nprint(ans)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "25\n8"
+          "input": "hi\n0\n25",
+          "expectedOutput": "NeedInt\nNoZero\n4"
+        },
+        {
+          "id": 2,
+          "input": "0\n10",
+          "expectedOutput": "NoZero\n10"
         }
       ]
     },
@@ -78,16 +101,22 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 기본값 fee=3000인 total_pay 함수를 완성하고 둘째 호출에는 10000, 0을 전달해보세요.",
-      "prompt_en": "Fill in fee=3000 in total_pay and pass 10000, 0 in the second call.",
-      "hint_ko": "첫 줄 매개변수에 fee=3000을 적고, 넷째 줄에서는 배송비 0원을 두 번째 인자로 전달하세요.",
-      "hint_en": "Enter fee=3000 on line 1 and total_pay(10000, 0) on line 4.",
-      "templateCode": "def total_pay(price, §§§§§§§§):\n    return price + fee\nprint(total_pay(10000))\nprint(total_pay(§§§§§§§§))",
-      "targetCode": "def total_pay(price, fee=3000):\n    return price + fee\nprint(total_pay(10000))\nprint(total_pay(10000, 0))",
+      "prompt_ko": "유효한 메뉴 번호를 입력받을 때까지 Err를 출력하며 재시도하도록 탈출 키워드와 범위 초과 에러 타입을 채워보세요.",
+      "prompt_en": "Fill in the loop exit keyword and out-of-range exception type to retry until a valid menu index is entered.",
+      "hint_ko": "menus[idx] 조회에 성공하면 break로 탈출하고, 범위를 벗어난 번호는 IndexError로 잡습니다.",
+      "hint_en": "Write break inside try and IndexError in the second except.",
+      "templateCode": "menus = [\"Tea\", \"Cake\", \"Juice\"]\nwhile True:\n    try:\n        idx = int(input())\n        pick = menus[idx]\n        §§§§§\n    except ValueError:\n        print(\"Err\")\n    except §§§§§§§§§§:\n        print(\"Err\")\nprint(pick)",
+      "targetCode": "menus = [\"Tea\", \"Cake\", \"Juice\"]\nwhile True:\n    try:\n        idx = int(input())\n        pick = menus[idx]\n        break\n    except ValueError:\n        print(\"Err\")\n    except IndexError:\n        print(\"Err\")\nprint(pick)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "13000\n10000"
+          "input": "a\n9\n1",
+          "expectedOutput": "Err\nErr\nCake"
+        },
+        {
+          "id": 2,
+          "input": "5\n0",
+          "expectedOutput": "Err\nTea"
         }
       ]
     },
@@ -95,15 +124,16 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "calc(base, rate=2, bonus=0)에서 base * rate + bonus를 반환하고, calc(10, 3)과 calc(10, 3, 5)를 출력해보세요.",
-      "prompt_en": "Define calc(base, rate=2, bonus=0) and print calc(10, 3) and calc(10, 3, 5).",
-      "hint_ko": "인자를 앞에서부터 순서대로 넘기면 전달한 개수만큼 기본값이 새 값으로 바뀌고 나머지는 기본값을 씁니다.",
-      "hint_en": "calc(10, 3) uses bonus=0 by default, while calc(10, 3, 5) overrides both defaults.",
-      "targetCode": "def calc(base, rate=2, bonus=0):\n    return base * rate + bonus\nprint(calc(10, 3))\nprint(calc(10, 3, 5))",
+      "prompt_ko": "[\"10\", \"bad\", \"25\", \"--\", \"5\"]를 순회하며 정상 정수만 nums에 추가하고 실패 항목은 continue로 건너뛴 뒤 nums와 합계를 출력해보세요.",
+      "prompt_en": "Collect valid integers from [\"10\", \"bad\", \"25\", \"--\", \"5\"] into nums, skipping ValueError items, then print nums and sum(nums).",
+      "hint_ko": "try 안에서 nums.append(int(s))를 실행하고 except ValueError: 안에서 continue로 다음 항목으로 넘어갑니다.",
+      "hint_en": "Append int(s) in try:, continue on ValueError, then print(nums, sum(nums)).",
+      "targetCode": "raw = [\"10\", \"bad\", \"25\", \"--\", \"5\"]\nnums = []\nfor s in raw:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        continue\nprint(nums, sum(nums))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "30\n35"
+          "input": "",
+          "expectedOutput": "[10, 25, 5] 40"
         }
       ]
     },
@@ -112,16 +142,22 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "첫 빈칸에 기본값 tag=\"INFO\"를, 둘째 빈칸에 호출 인자 \"ALERT\", \"!\"를 채워 make_msg를 완성해보세요.",
-      "prompt_en": "Fill in default tag=\"INFO\" on line 1 and arguments \"ALERT\", \"!\" on line 4.",
-      "hint_ko": "첫 줄에 기본값 tag=\"INFO\"를 채우고, 넷째 줄에 \"ALERT\", \"!\"를 순서대로 전달하세요.",
-      "hint_en": "Enter tag=\"INFO\" on line 1 and \"ALERT\", \"!\" on line 4.",
-      "templateCode": "def make_msg(text, §§§§§§§§§§, mark=\".\"):\n    return f\"[{tag}] {text}{mark}\"\nprint(make_msg(\"Ready\"))\nprint(make_msg(\"Warn\", §§§§§§§§§§§§))",
-      "targetCode": "def make_msg(text, tag=\"INFO\", mark=\".\"):\n    return f\"[{tag}] {text}{mark}\"\nprint(make_msg(\"Ready\"))\nprint(make_msg(\"Warn\", \"ALERT\", \"!\"))",
+      "prompt_ko": "쉼표로 구분된 입력에서 정상 정수만 리스트에 추가하고 변환 실패 항목은 건너뛰도록 두 빈칸을 채워보세요.",
+      "prompt_en": "Append valid stripped integers to valid and skip invalid tokens on conversion error.",
+      "hint_ko": "리스트 끝에 추가하는 .append(n) 메서드와 값 변환 에러 ValueError를 각각 입력하세요.",
+      "hint_en": "Use append on line 6 and ValueError on line 7.",
+      "templateCode": "tokens = input().split(\",\")\nvalid = []\nfor s in tokens:\n    try:\n        n = int(s.strip())\n        valid.§§§§§§(n)\n    except §§§§§§§§§§:\n        continue\nprint(valid)",
+      "targetCode": "tokens = input().split(\",\")\nvalid = []\nfor s in tokens:\n    try:\n        n = int(s.strip())\n        valid.append(n)\n    except ValueError:\n        continue\nprint(valid)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "[INFO] Ready.\n[ALERT] Warn!"
+          "input": "10, x, 20, 30",
+          "expectedOutput": "[10, 20, 30]"
+        },
+        {
+          "id": 2,
+          "input": "bad, 7, 8",
+          "expectedOutput": "[7, 8]"
         }
       ]
     },
@@ -129,15 +165,16 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "전역 변수 x = 10을 만든 뒤, change 함수 안에서 지역 변수 x = 99를 선언해 출력하고 함수 밖에서도 x를 출력해보세요.",
-      "prompt_en": "Set x = 10 globally, set and print local x = 99 inside change(), then call change() and print outer x.",
-      "hint_ko": "함수 안에서 만든 x = 99는 지역 변수이므로 함수 바깥의 전역 변수 x(10)를 덮어쓰지 않습니다.",
-      "hint_en": "Local assignment x = 99 inside change() does not alter the global x = 10.",
-      "targetCode": "x = 10\ndef change():\n    x = 99\n    print(x)\nchange()\nprint(x)",
+      "prompt_ko": "딕셔너리 d에서 키 k를 조회해 반환하되 KeyError가 나면 None을 반환하는 safe_get(d, k)를 정의하고 \"lv\"와 \"age\" 결과를 확인해보세요.",
+      "prompt_en": "Define safe_get(d, k) returning d[k] or None on KeyError, then test \"lv\" and safe_get(user, \"age\") is None.",
+      "hint_ko": "자주 쓰는 try - except 조회 로직을 safe_get 함수로 묶어두면 어디서든 안전하게 키를 꺼낼 수 있습니다.",
+      "hint_en": "Wrap return d[k] in try: and return None in except KeyError:.",
+      "targetCode": "def safe_get(d, k):\n    try:\n        return d[k]\n    except KeyError:\n        return None\nuser = {\"id\": \"kim\", \"lv\": 5}\nprint(safe_get(user, \"lv\"))\nprint(safe_get(user, \"age\") is None)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "99\n10"
+          "input": "",
+          "expectedOutput": "5\nTrue"
         }
       ]
     },
@@ -146,16 +183,17 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 test_hp() 안에서 지역 변수 hp = 50을 선언하고, test_hp()를 호출해 전역 hp와 비교해보세요.",
-      "prompt_en": "Fill in the blanks to print local hp = 50 inside test_hp() and global hp = 100 outside.",
-      "hint_ko": "함수 안에서는 지역 변수 hp = 50이, 함수가 끝난 뒤 밖에서는 전역 변수 hp = 100이 참조됩니다.",
-      "hint_en": "Assign hp = 50 on line 3, call test_hp() on line 5, and print(\"out:\", hp) on line 6.",
-      "templateCode": "hp = 100\ndef test_hp():\n    §§§§§§§\n    print(\"in:\", hp)\n§§§§§§§§§\nprint(\"out:\", hp)",
-      "targetCode": "hp = 100\ndef test_hp():\n    hp = 50\n    print(\"in:\", hp)\ntest_hp()\nprint(\"out:\", hp)",
+      "prompt_ko": "정수 변환 성공 시 변환값을 돌려주고 실패 시 기본값을 돌려주는 안전 변환 함수를 완성해보세요. (출력 예: 42 -1)",
+      "prompt_en": "Complete safe_int(s, default=0) to return int(s) on success or default on conversion failure.",
+      "hint_ko": "성공하면 return int(s)를 실행하고, ValueError가 나면 default 매개변수 값을 반환합니다.",
+      "hint_en": "Write return in try and ValueError in except.",
+      "templateCode": "def safe_int(s, default=0):\n    try:\n        §§§§§§ int(s)\n    except §§§§§§§§§§:\n        return default\nprint(safe_int(\"42\"), safe_int(\"no\", default=-1))",
+      "targetCode": "def safe_int(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        return default\nprint(safe_int(\"42\"), safe_int(\"no\", default=-1))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "in: 50\nout: 100"
+          "input": "",
+          "expectedOutput": "42 -1"
         }
       ]
     },
@@ -163,15 +201,16 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "전역 상수 TAX = 100을 선언하고, add_tax(price) 함수 안에서 price + TAX를 반환해 add_tax(900)을 출력해보세요.",
-      "prompt_en": "Declare TAX = 100, define add_tax(price) returning price + TAX, and print add_tax(900).",
-      "hint_ko": "함수 바깥에 선언된 전역 상수(TAX)는 함수 내부 수식에서 자유롭게 읽어서 사용할 수 있습니다.",
-      "hint_en": "Read the global constant TAX directly inside return price + TAX.",
-      "targetCode": "TAX = 100\ndef add_tax(price):\n    return price + TAX\nprint(add_tax(900))",
+      "prompt_ko": "시퀀스 items에서 idx 위치를 반환하되 IndexError면 None을 반환하는 safe_at(items, idx)에 튜플 (\"Py\", \"JS\", \"Go\")를 전달해보세요.",
+      "prompt_en": "Define safe_at(items, idx) returning items[idx] or None on IndexError, and test indices 1 and 9 on (\"Py\", \"JS\", \"Go\").",
+      "hint_ko": "튜플 역시 인덱싱 범위를 벗어나면 IndexError가 발생하므로 동일한 도우미 함수로 안전하게 조회됩니다.",
+      "hint_en": "Return items[idx] inside try: and return None inside except IndexError:.",
+      "targetCode": "def safe_at(items, idx):\n    try:\n        return items[idx]\n    except IndexError:\n        return None\ntags = (\"Py\", \"JS\", \"Go\")\nprint(safe_at(tags, 1), safe_at(tags, 9))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "1000"
+          "input": "",
+          "expectedOutput": "JS None"
         }
       ]
     },
@@ -180,16 +219,17 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 전역 상수 BONUS를 더한 값을 반환하는 final_score(pt)를 완성하고 final_score(200)을 출력해보세요.",
-      "prompt_en": "Fill in the blanks so final_score(pt) returns pt + BONUS and print final_score(200).",
-      "hint_ko": "함수 안에서 전역 상수 BONUS를 더한 값을 return 하고 final_score(200)을 출력하세요.",
-      "hint_en": "Return pt + BONUS on line 3 and call final_score(200) on line 4.",
-      "templateCode": "BONUS = 50\ndef final_score(pt):\n    return §§§§§§§§§§\nprint(§§§§§§§§§§§§§§§§)",
-      "targetCode": "BONUS = 50\ndef final_score(pt):\n    return pt + BONUS\nprint(final_score(200))",
+      "prompt_ko": "딕셔너리의 키-값 쌍을 순회하며 정수로 변환 가능한 값만 모아 오름차순 정렬해 반환하도록 두 빈칸을 채워보세요.",
+      "prompt_en": "Iterate over key-value pairs of raw_map, collect valid integers, and return the sorted list.",
+      "hint_ko": "딕셔너리 쌍 순회는 .items(), 변환 실패 예외는 ValueError로 처리합니다.",
+      "hint_en": "Use items on line 3 and ValueError on line 7.",
+      "templateCode": "def clean_scores(raw_map):\n    res = []\n    for k, v in raw_map.§§§§§():\n        try:\n            if k != \"\":\n                res.append(int(v))\n        except §§§§§§§§§§:\n            continue\n    res.sort()\n    return res\nd = {\"A\": \"90\", \"B\": \"err\", \"C\": \"75\"}\nprint(clean_scores(d))",
+      "targetCode": "def clean_scores(raw_map):\n    res = []\n    for k, v in raw_map.items():\n        try:\n            if k != \"\":\n                res.append(int(v))\n        except ValueError:\n            continue\n    res.sort()\n    return res\nd = {\"A\": \"90\", \"B\": \"err\", \"C\": \"75\"}\nprint(clean_scores(d))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "250"
+          "input": "",
+          "expectedOutput": "[75, 90]"
         }
       ]
     },
@@ -198,16 +238,22 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "잔 수 2만 전달해 기본 차 종류로 Green x2를 출력하려 하지만 매개변수 오류가 납니다. 함수 정의를 고쳐보세요.",
-      "prompt_en": "Fix the parameter order in make_tea so make_tea(2) prints Green x2.",
-      "hint_ko": "기본값이 없는 필수 매개변수는 항상 기본값이 지정된 매개변수보다 앞에 위치해야 합니다.",
-      "hint_en": "Place the required parameter without a default before the parameter with a default value.",
-      "templateCode": "def make_tea(kind=\"Green\", cups):\n    return f\"{kind} x{cups}\"\nprint(make_tea(2))",
-      "targetCode": "def make_tea(cups, kind=\"Green\"):\n    return f\"{kind} x{cups}\"\nprint(make_tea(2))",
+      "prompt_ko": "반복 탈출문이 예외 블록 안에 잘못 들어가 있어 잘못된 입력일 때 루프가 끝나버립니다. 정상 입력일 때 탈출하도록 위치를 고쳐보세요.",
+      "prompt_en": "Fix the retry loop where break is misplaced inside except ValueError instead of after valid conversion.",
+      "hint_ko": "break는 n = int(input())이 성공한 직후인 try 블록 마지막 줄에 있어야 올바른 입력에서 탈출합니다.",
+      "hint_en": "Move break from except ValueError: into try: right below n = int(input()).",
+      "templateCode": "while True:\n    try:\n        n = int(input())\n    except ValueError:\n        print(\"Retry\")\n        break\nprint(n + 5)",
+      "targetCode": "while True:\n    try:\n        n = int(input())\n        break\n    except ValueError:\n        print(\"Retry\")\nprint(n + 5)",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Green x2"
+          "input": "bad\n20",
+          "expectedOutput": "Retry\n25"
+        },
+        {
+          "id": 2,
+          "input": "10",
+          "expectedOutput": "15"
         }
       ]
     },
@@ -216,16 +262,22 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "코드 마지막에 한 줄을 추가하여 boost 함수에 10, 3, 7 세 인자를 전달한 반환값을 출력해보세요.",
-      "prompt_en": "Add one line at the end to print boost called with arguments 10, 3, and 7.",
-      "hint_ko": "기본값 mul=2, flat=0을 모두 덮어쓰도록 boost(10, 3, 7)을 print() 안에서 호출하세요.",
-      "hint_en": "Write print(boost(10, 3, 7)) on the last line.",
-      "templateCode": "def boost(atk, mul=2, flat=0):\n    return atk * mul + flat\n§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "def boost(atk, mul=2, flat=0):\n    return atk * mul + flat\nprint(boost(10, 3, 7))",
+      "prompt_ko": "안전 나눗셈 함수와 입력 분리 코드 아래에 한 줄을 추가하여 x, y를 정수로 변환해 함수에 전달한 결과를 출력해보세요.",
+      "prompt_en": "Add one line below x, y = input().split() to print safe_div(int(x), int(y)).",
+      "hint_ko": "문자열 x와 y에 각각 int()를 씌워 print(safe_div(int(x), int(y)))로 호출합니다.",
+      "hint_en": "Write print(safe_div(int(x), int(y))) on the last line.",
+      "templateCode": "def safe_div(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return None\nx, y = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "def safe_div(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return None\nx, y = input().split()\nprint(safe_div(int(x), int(y)))",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "37"
+          "input": "15 3",
+          "expectedOutput": "5"
+        },
+        {
+          "id": 2,
+          "input": "15 0",
+          "expectedOutput": "None"
         }
       ]
     },
@@ -234,22 +286,23 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "Predict the output of the following code.",
-      "hint_ko": "update() 안의 val = 20은 지역 변수이고 기본값 n=3이 더해져 반환되며, 바깥의 val은 그대로 5입니다.",
-      "hint_en": "update() uses local val = 20 and default n = 3 (returning 23), while global val stays 5.",
-      "targetCode": "val = 5\ndef update(n=3):\n    val = 20\n    return val + n\nprint(update())\nprint(val)",
+      "prompt_ko": "안전 변환 도우미 함수를 활용해 양수만 모으는 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "Select the output of the following code filtering positive integers via parse_pos.",
+      "hint_ko": "\"-3\"과 \"0\"은 n > 0이 아니어서 None, \"hi\"는 ValueError로 None이 되어 12와 8만 리스트에 담깁니다.",
+      "hint_en": "Only \"12\" and \"8\" return positive integers, so out is [12, 8] and sum(out) is 20.",
+      "targetCode": "def parse_pos(s):\n    try:\n        n = int(s)\n        if n > 0:\n            return n\n        return None\n    except ValueError:\n        return None\nraw = [\"-3\", \"hi\", \"12\", \"0\", \"8\"]\nout = []\nfor item in raw:\n    v = parse_pos(item)\n    if v is not None:\n        out.append(v)\nprint(out, sum(out))",
       "choices": [
-        "23\n20",
-        "8\n5",
-        "23\n5",
-        "20\n5"
+        "[-3, 12, 0, 8] 17",
+        "[12, 0, 8] 20",
+        "[12, 8] 20",
+        "[12, 8] 2"
       ],
       "correctChoiceIndex": 2,
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "23\n5"
+          "input": "",
+          "expectedOutput": "[12, 8] 20"
         }
       ]
     }

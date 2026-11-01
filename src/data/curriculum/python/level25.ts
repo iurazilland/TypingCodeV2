@@ -1,326 +1,339 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 25레벨: for 반복문과 누적 연산 (13단계 표준 구성)
-// ============================================================================
 export const PYTHON_LEVEL_25: PracticeRound = {
-  id: 'py-basic-r25',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 25,
-  title_ko: '25레벨: for 반복문과 누적 연산',
-  title_en: 'Level 25: for Loops & Accumulator Pattern',
-  totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'input', 'type', 'for_range', 'range'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      prompt_ko: 'total을 0으로 초기화하고 1부터 5까지 누적해 더한 합(15)을 출력해보세요.',
-      prompt_en: 'Initialize total to 0, accumulate 1 through 5, and print the sum (15).',
-      hint_ko: '반복문 전에 total = 0을 만들고, range(1, 6) 안에서 total += i를 실행한 뒤 밖에서 출력하세요.',
-      hint_en: 'Set total = 0 before the loop, run total += i inside range(1, 6), then print total.',
-      targetCode: 'total = 0\nfor i in range(1, 6):\n    total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '15',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸을 채워 1부터 10까지의 합(55)을 누적 계산해 출력해보세요.',
-      prompt_en: 'Fill in both blanks to accumulate and print the sum of 1 through 10 (55).',
-      hint_ko: '덧셈 누적 변수의 초기값은 0이고, 값을 누적할 때는 복합 대입 연산자 +=를 사용합니다.',
-      hint_en: 'Start a sum accumulator at 0 and add each i with +=.',
-      templateCode: 'total = §\nfor i in range(1, 11):\n    total §§ i\nprint(total)',
-      targetCode: 'total = 0\nfor i in range(1, 11):\n    total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '55',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      prompt_ko: '정수 n을 입력받아 1부터 n까지의 총합을 구해 출력해보세요.',
-      prompt_en: 'Read integer n and print the total sum from 1 through n.',
-      hint_ko: 'range(1, n + 1)로 1부터 n까지 순회하며 total += i로 합산하세요.',
-      hint_en: 'Loop with range(1, n + 1) and accumulate total += i.',
-      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '4',
-          expectedOutput: '10',
-        },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '55',
-        },
-        {
-          id: 3,
-          input: '6',
-          expectedOutput: '21',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 2부터 입력받은 n 이하 짝수들의 총합을 출력해보세요.',
-      prompt_en: 'Fill in the blank to print the sum of even numbers from 2 up to n.',
-      hint_ko: 'total 변수에 현재 짝수 i를 더하는 += i를 입력하세요.',
-      hint_en: 'Use += i to add each even i to total.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    total §§§§\nprint(total)',
-      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '6',
-          expectedOutput: '12',
-        },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '30',
-        },
-        {
-          id: 3,
-          input: '4',
-          expectedOutput: '6',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      prompt_ko: 'prod를 1로 시작해 1부터 4까지 차례대로 곱한 결과(24)를 출력해보세요.',
-      prompt_en: 'Start prod at 1, multiply by 1 through 4 in order, and print 24.',
-      hint_ko: '곱셈 누적은 초기값을 1로 두고 range(1, 5) 안에서 prod *= i를 실행합니다.',
-      hint_en: 'Initialize prod = 1 and run prod *= i inside range(1, 5).',
-      targetCode: 'prod = 1\nfor i in range(1, 5):\n    prod *= i\nprint(prod)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '24',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸을 채워 1부터 n까지 모두 곱한 값(n!)을 출력해보세요.',
-      prompt_en: 'Fill in both blanks to compute and print n factorial (1 * 2 * ... * n).',
-      hint_ko: '곱셈 누적의 초기값은 1이며, 곱셈 복합 대입 연산자는 *=입니다.',
-      hint_en: 'Initialize product accumulators to 1 and multiply using *=.',
-      templateCode: 'n = int(input())\nprod = §\nfor i in range(1, n + 1):\n    prod §§ i\nprint(prod)',
-      targetCode: 'n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    prod *= i\nprint(prod)',
-      testCases: [
-        {
-          id: 1,
-          input: '5',
-          expectedOutput: '120',
-        },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '6',
-        },
-        {
-          id: 3,
-          input: '4',
-          expectedOutput: '24',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      prompt_ko: 'range(2, 11, 2)가 반복되는 횟수를 cnt에 1씩 세어 출력해보세요.',
-      prompt_en: 'Count how many times range(2, 11, 2) repeats by adding 1 to cnt and print cnt.',
-      hint_ko: 'cnt = 0으로 시작해 반복할 때마다 cnt += 1을 실행한 뒤 cnt를 출력하세요.',
-      hint_en: 'Start with cnt = 0, run cnt += 1 each iteration, then print cnt.',
-      targetCode: 'cnt = 0\nfor i in range(2, 11, 2):\n    cnt += 1\nprint(cnt)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '5',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 1부터 n 사이에 있는 3의 배수의 개수를 출력해보세요.',
-      prompt_en: 'Fill in the blank to count and print how many multiples of 3 are in 1..n.',
-      hint_ko: '개수를 셀 때는 반복할 때마다 1씩 증가하도록 += 1을 입력합니다.',
-      hint_en: 'Increment the counter by 1 on each step using += 1.',
-      templateCode: 'n = int(input())\ncnt = 0\nfor i in range(3, n + 1, 3):\n    cnt §§§§\nprint(cnt)',
-      targetCode: 'n = int(input())\ncnt = 0\nfor i in range(3, n + 1, 3):\n    cnt += 1\nprint(cnt)',
-      testCases: [
-        {
-          id: 1,
-          input: '10',
-          expectedOutput: '3',
-        },
-        {
-          id: 2,
-          input: '15',
-          expectedOutput: '5',
-        },
-        {
-          id: 3,
-          input: '5',
-          expectedOutput: '1',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      prompt_ko: '3번 반복하며 정수 x를 입력받아 모두 더한 합계를 출력해보세요.',
-      prompt_en: 'Loop 3 times, reading an integer x each time, and print their sum.',
-      hint_ko: 'range(3) 반복문 안에서 x = int(input())과 total += x를 차례로 실행하세요.',
-      hint_en: 'Inside range(3), read x = int(input()) and add total += x.',
-      targetCode: 'total = 0\nfor i in range(3):\n    x = int(input())\n    total += x\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '10\n20\n30',
-          expectedOutput: '60',
-        },
-        {
-          id: 2,
-          input: '5\n7\n8',
-          expectedOutput: '20',
-        },
-        {
-          id: 3,
-          input: '1\n2\n3',
-          expectedOutput: '6',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 개수 n을 먼저 입력받고 이어지는 n개 정수의 합을 출력해보세요.',
-      prompt_en: 'Fill in the blank to read count n followed by n integers and print their sum.',
-      hint_ko: '매 반복마다 입력받은 정수 x를 total에 누적하는 += x를 입력하세요.',
-      hint_en: 'Accumulate each input integer x into total with += x.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(n):\n    x = int(input())\n    total §§§§\nprint(total)',
-      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(n):\n    x = int(input())\n    total += x\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '3\n4\n5\n6',
-          expectedOutput: '15',
-        },
-        {
-          id: 2,
-          input: '2\n10\n25',
-          expectedOutput: '35',
-        },
-        {
-          id: 3,
-          input: '4\n1\n1\n1\n1',
-          expectedOutput: '4',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '초기값 버그를 고쳐 1부터 4까지의 곱셈 결과 24가 출력되도록 수정해보세요.',
-      prompt_en: 'Fix the initial value bug so the product of 1 through 4 prints 24.',
-      hint_ko: '곱셈 누적 변수를 0으로 시작하면 무엇을 곱해도 0이 됩니다. 초기값을 확인하세요.',
-      hint_en: 'Starting a multiplication accumulator at 0 makes every product 0.',
-      templateCode: 'prod = 0\nfor i in range(1, 5):\n    prod *= i\nprint(prod)',
-      targetCode: 'prod = 1\nfor i in range(1, 5):\n    prod *= i\nprint(prod)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '24',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '반복문 아래에 한 줄을 추가하여 누적된 최종 합계 total을 한 번만 출력해보세요.',
-      prompt_en: 'Add one line after the loop to print the final accumulated total once.',
-      hint_ko: '반복문이 끝난 뒤 들여쓰기 없이 print(total)을 작성하세요.',
-      hint_en: 'Without indentation after the loop, write print(total).',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\n§§§§§§§§§§§§',
-      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '5',
-          expectedOutput: '15',
-        },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '6',
-        },
-        {
-          id: 3,
-          input: '10',
-          expectedOutput: '55',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.',
-      prompt_en: 'Select the exact output produced when the following Python code runs.',
-      hint_ko: '초기값 10에 i=1, 2, 3일 때의 i * 2 값(2, 4, 6)이 차례대로 더해집니다.',
-      hint_en: 'Starting from 10, i * 2 for i = 1, 2, 3 adds 2, 4, and 6.',
-      targetCode: 'res = 10\nfor i in range(1, 4):\n    res += i * 2\nprint(res)',
-      choices: ['12', '16', '22', '26'],
-      correctChoiceIndex: 2,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '22',
-        },
-      ],
-    },
+  "id": "py-basic-r25",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 25,
+  "title_ko": "25레벨: range(시작, 끝)과 간격(step) 활용",
+  "title_en": "Level 25: range(start, stop, step) Patterns",
+  "description_ko": "range(시작, 끝)과 증감 간격(step), 음수 간격을 활용한 카운트다운 반복을 익힙니다.",
+  "description_en": "Master range(start, stop), custom step intervals, and countdown loops with negative steps.",
+  "totalQuestions": 13,
+  "unlockedBlocks": [
+    "print",
+    "variable",
+    "input",
+    "method",
+    "type",
+    "if",
+    "for_range",
+    "range"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "prompt_ko": "range(1, 5)를 사용해 1부터 4까지의 정수를 순서대로 출력해보세요.",
+      "prompt_en": "Use range(1, 5) to print integers from 1 through 4 in order.",
+      "hint_ko": "range(1, 5)는 시작값 1부터 끝값 5 직전(4)까지 순서대로 생성합니다.",
+      "hint_en": "range(1, 5) starts at 1 and stops right before 5 (at 4).",
+      "targetCode": "for i in range(1, 5):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1\n2\n3\n4"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 끝 범위 식을 채워 1부터 입력받은 정수 n까지(n 포함) 순서대로 출력해보세요.",
+      "prompt_en": "Fill in the stop expression so integers from 1 through n inclusive are printed.",
+      "hint_ko": "끝값은 포함되지 않으므로 n까지 출력하려면 n보다 1 큰 식을 넣어야 합니다.",
+      "hint_en": "Since stop is excluded, write n + 1 as the second argument of range().",
+      "templateCode": "n = int(input())\nfor i in range(1, §§§§§):\n    print(i)",
+      "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "3",
+          "expectedOutput": "1\n2\n3"
+        },
+        {
+          "id": 2,
+          "input": "5",
+          "expectedOutput": "1\n2\n3\n4\n5"
+        },
+        {
+          "id": 3,
+          "input": "2",
+          "expectedOutput": "1\n2"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "prompt_ko": "range(2, 11, 2)를 사용해 2부터 10까지의 짝수를 순서대로 출력해보세요.",
+      "prompt_en": "Use range(2, 11, 2) to print even numbers from 2 through 10.",
+      "hint_ko": "세 번째 인자 2는 숫자가 한 번에 2씩 커지는 증가 간격(step)을 의미합니다.",
+      "hint_en": "The third argument 2 sets the step increment to 2.",
+      "targetCode": "for i in range(2, 11, 2):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2\n4\n6\n8\n10"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 음수 간격을 채워 5부터 1까지 1씩 줄어드는 카운트다운을 출력해보세요.",
+      "prompt_en": "Fill in the negative step to count down from 5 to 1 by 1.",
+      "hint_ko": "5에서 1까지 1씩 감소해야 하므로 세 번째 인자에 -1을 입력하세요.",
+      "hint_en": "Pass -1 as the third argument to decrease by 1 each iteration.",
+      "templateCode": "for i in range(5, 0, §§):\n    print(i)",
+      "targetCode": "for i in range(5, 0, -1):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "5\n4\n3\n2\n1"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "prompt_ko": "정수 n을 입력받아 n부터 1까지 거꾸로 공백으로 이어 한 줄에 출력해보세요. (예: 4 -> 4 3 2 1)",
+      "prompt_en": "Read integer n and count down from n to 1 on one line separated by spaces.",
+      "hint_ko": "for i in range(n, 0, -1): 안에서 print(i, end=\" \")를 실행하세요.",
+      "hint_en": "Run print(i, end=\" \") inside for i in range(n, 0, -1):.",
+      "targetCode": "n = int(input())\nfor i in range(n, 0, -1):\n    print(i, end=\" \")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "4",
+          "expectedOutput": "4 3 2 1"
+        },
+        {
+          "id": 2,
+          "input": "3",
+          "expectedOutput": "3 2 1"
+        },
+        {
+          "id": 3,
+          "input": "5",
+          "expectedOutput": "5 4 3 2 1"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 공백 분리 메서드를 채워 한 줄에 입력된 a부터 b까지의 모든 정수를 출력해보세요. (예: 3 6 -> 3 / 4 / 5 / 6)",
+      "prompt_en": "Fill in the string-splitting method to print every integer from a through b.",
+      "hint_ko": "한 줄에 공백으로 구분된 두 입력을 나눌 때는 input().split()을 사용합니다.",
+      "hint_en": "Use input().split() to unpack two space-separated tokens into a and b.",
+      "templateCode": "a, b = input().§§§§§()\nfor i in range(int(a), int(b) + 1):\n    print(i)",
+      "targetCode": "a, b = input().split()\nfor i in range(int(a), int(b) + 1):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "3 6",
+          "expectedOutput": "3\n4\n5\n6"
+        },
+        {
+          "id": 2,
+          "input": "1 3",
+          "expectedOutput": "1\n2\n3"
+        },
+        {
+          "id": 3,
+          "input": "5 5",
+          "expectedOutput": "5"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "prompt_ko": "range(1, 5)와 거듭제곱 연산자(**)를 사용해 2의 1제곱부터 2의 4제곱까지 출력해보세요.",
+      "prompt_en": "Use range(1, 5) and ** to print powers of 2 from 2**1 through 2**4.",
+      "hint_ko": "for i in range(1, 5): 안에서 print(2 ** i)를 실행하면 2, 4, 8, 16이 출력됩니다.",
+      "hint_en": "Inside for i in range(1, 5):, run print(2 ** i) to print 2, 4, 8, 16.",
+      "targetCode": "for i in range(1, 5):\n    print(2 ** i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2\n4\n8\n16"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "두 빈칸에 거듭제곱과 정수 몫 연산자를 채워 2부터 n 이하 짝수 i의 제곱과 절반 몫을 출력해보세요. (예: 4 -> 4 1 / 16 2)",
+      "prompt_en": "Fill in the exponent and floor-division operators to print i squared and i floor-divided by 2.",
+      "hint_ko": "거듭제곱은 ** 연산자를, 소수점 없는 정수 나눗셈 몫은 // 연산자를 사용합니다.",
+      "hint_en": "Use ** for exponentiation and // for integer floor division.",
+      "templateCode": "n = int(input())\nfor i in range(2, n + 1, 2):\n    print(i §§ 2, i §§ 2)",
+      "targetCode": "n = int(input())\nfor i in range(2, n + 1, 2):\n    print(i ** 2, i // 2)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "4",
+          "expectedOutput": "4 1\n16 2"
+        },
+        {
+          "id": 2,
+          "input": "6",
+          "expectedOutput": "4 1\n16 2\n36 3"
+        },
+        {
+          "id": 3,
+          "input": "2",
+          "expectedOutput": "4 1"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "block",
+      "prompt_ko": "한 줄에 시작값 a, 끝값 b, 간격 s를 공백으로 입력받아 range(int(a), int(b), int(s))의 각 값을 출력해보세요.",
+      "prompt_en": "Read space-separated a, b, s and print each value in range(int(a), int(b), int(s)).",
+      "hint_ko": "a, b, s = input().split()으로 받은 뒤 정수로 변환해 range의 세 인자에 넣으세요.",
+      "hint_en": "Unpack a, b, s = input().split() and pass int(a), int(b), int(s) to range().",
+      "targetCode": "a, b, s = input().split()\nfor i in range(int(a), int(b), int(s)):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "1 10 3",
+          "expectedOutput": "1\n4\n7"
+        },
+        {
+          "id": 2,
+          "input": "10 2 -3",
+          "expectedOutput": "10\n7\n4"
+        },
+        {
+          "id": 3,
+          "input": "2 8 2",
+          "expectedOutput": "2\n4\n6"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 불리언 변환 함수를 채워 3부터 0까지 감소하는 각 정수와 참/거짓 판정 결과를 함께 출력해보세요.",
+      "prompt_en": "Fill in the boolean conversion function to print each integer from 3 down to 0 with its truth value.",
+      "hint_ko": "0이 아닌 정수는 True, 0은 False로 변환하는 내장 함수는 bool()입니다.",
+      "hint_en": "Use bool(i) to convert non-zero integers to True and 0 to False.",
+      "templateCode": "for i in range(3, -1, -1):\n    print(i, §§§§(i))",
+      "targetCode": "for i in range(3, -1, -1):\n    print(i, bool(i))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "3 True\n2 True\n1 True\n0 False"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "간격 부호 버그를 고쳐 입력받은 n부터 1까지 1씩 감소하며 출력되도록 코드를 수정해보세요.",
+      "prompt_en": "Fix the step sign bug so the loop counts down from n to 1.",
+      "hint_ko": "큰 수 n에서 작은 수 1까지 내려가려면 range의 세 번째 인자(간격)가 음수여야 합니다.",
+      "hint_en": "When counting down toward a smaller stop value, the step argument must be negative.",
+      "templateCode": "n = int(input())\nfor i in range(n, 0, 1):\n    print(i)",
+      "targetCode": "n = int(input())\nfor i in range(n, 0, -1):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "4",
+          "expectedOutput": "4\n3\n2\n1"
+        },
+        {
+          "id": 2,
+          "input": "2",
+          "expectedOutput": "2\n1"
+        },
+        {
+          "id": 3,
+          "input": "3",
+          "expectedOutput": "3\n2\n1"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "반복문 안에 한 줄을 추가하여 a부터 b 이하까지 2씩 건너뛰며 나오는 정수를 순서대로 출력해보세요.",
+      "prompt_en": "Add one line inside the loop to print integers stepping by 2 from a up to b.",
+      "hint_ko": "공백 4칸 들여쓰기 후 print(i)를 작성하세요.",
+      "hint_en": "Indent by 4 spaces and write print(i).",
+      "templateCode": "a, b = input().split()\nfor i in range(int(a), int(b) + 1, 2):\n    §§§§§§§§",
+      "targetCode": "a, b = input().split()\nfor i in range(int(a), int(b) + 1, 2):\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "1 7",
+          "expectedOutput": "1\n3\n5\n7"
+        },
+        {
+          "id": 2,
+          "input": "2 8",
+          "expectedOutput": "2\n4\n6\n8"
+        },
+        {
+          "id": 3,
+          "input": "3 6",
+          "expectedOutput": "3\n5"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output produced when the following Python code runs.",
+      "hint_ko": "i는 6, 3, 0 순서로 변합니다. 각 i에 대해 정수 몫 i // 2는 3, 1, 0이고 bool(0)만 False입니다.",
+      "hint_en": "i takes 6, 3, 0; i // 2 gives 3, 1, 0 and bool(i) is True except at 0 (False).",
+      "targetCode": "for i in range(6, -1, -3):\n    print(i // 2, bool(i))",
+      "choices": [
+        "3 True\n1 True\n0 False",
+        "3 True\n1.5 True\n0 False",
+        "3 True\n1 True",
+        "3 True\n1 True\n0 True"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "3 True\n1 True\n0 False"
+        }
+      ]
+    }
+  ]
 };

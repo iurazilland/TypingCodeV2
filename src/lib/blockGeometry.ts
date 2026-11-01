@@ -26,9 +26,13 @@ export type BlockType =
   | 'all'
   | 'any'
   | 'reversed'
+  | 'ord'
+  | 'chr'
+  | 'isinstance'
   | 'def'
   | 'return'
   | 'call'
+  | 'class'
   // 메서드
   | 'method'
   // 반복 (루프)
@@ -37,10 +41,14 @@ export type BlockType =
   | 'while'
   | 'break'
   | 'continue'
-  // 논리 (조건)
+  // 논리 (조건) 및 예외 처리
   | 'if'
   | 'elif'
   | 'else'
+  | 'try'
+  | 'except'
+  | 'finally'
+  | 'raise'
   // 변수 / 자료형
   | 'variable'
   | 'list'
@@ -57,7 +65,7 @@ export interface DictPair {
 
 export interface IfBranch {
   id: string;
-  kind: 'if' | 'elif' | 'else';
+  kind: 'if' | 'elif' | 'else' | 'try' | 'except' | 'finally';
   condition?: string;
   innerBlocks: CanvasBlock[];
 }
@@ -136,10 +144,14 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   all: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   any: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   reversed: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  ord: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  chr: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  isinstance: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   call: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  class: { bg: '#0891b2', shadow: '#0e7490', border: '#22d3ee' },
   method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
   for_range: { bg: '#059669', shadow: '#047857', border: '#10b981' },
   for_in: { bg: '#059669', shadow: '#047857', border: '#10b981' },
@@ -149,6 +161,10 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   if: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
   elif: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
   else: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
+  try: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
+  except: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
+  finally: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
+  raise: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
   variable: { bg: '#ea580c', shadow: '#c2410c', border: '#f97316' },
   list: { bg: '#0d9488', shadow: '#0f766e', border: '#14b8a6' },
   tuple: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },

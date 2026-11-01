@@ -82,6 +82,9 @@ type BlockType =
   | 'float'
   | 'str'
   | 'type'
+  | 'isinstance'
+  | 'ord'
+  | 'chr'
   | 'round'
   | 'abs'
   | 'sum'
@@ -102,6 +105,8 @@ type BlockType =
   | 'def'
   | 'return'
   | 'call'
+  // 클래스 (객체지향)
+  | 'class'
   // 메서드
   | 'method'
   // 반복 (루프)
@@ -110,10 +115,14 @@ type BlockType =
   | 'while'
   | 'break'
   | 'continue'
-  // 논리 (조건)
+  // 논리 (조건) 및 예외 처리
   | 'if'
   | 'elif'
   | 'else'
+  | 'try'
+  | 'except'
+  | 'finally'
+  | 'raise'
   // 변수 / 자료형
   | 'variable'
   | 'list'
@@ -130,7 +139,7 @@ interface DictPair {
 
 interface IfBranch {
   id: string;
-  kind: 'if' | 'elif' | 'else';
+  kind: 'if' | 'elif' | 'else' | 'try' | 'except' | 'finally';
   condition?: string;
   innerBlocks: CanvasBlock[];
 }
@@ -186,6 +195,9 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   float: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   type: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  isinstance: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  ord: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  chr: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   round: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   sum: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
@@ -207,6 +219,9 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   call: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
 
+  // 클래스 (시안/틸 계열)
+  class: { bg: '#0891b2', shadow: '#0e7490', border: '#06b6d4' },
+
   // 메서드 (보라/바이올렛 계열)
   method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
 
@@ -221,6 +236,12 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   if: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
   elif: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
   else: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
+
+  // 예외 처리 (로즈/크림슨 계열)
+  try: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
+  except: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
+  finally: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
+  raise: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
 
   // 변수 (주황/보라 계열)
   variable: { bg: '#ea580c', shadow: '#c2410c', border: '#f97316' },
@@ -287,6 +308,9 @@ const FUNC_PARAM_HELPS: Record<string, string> = {
   print: 'print(*values, sep=" ", end="\\n")',
   input: 'input(prompt="")',
   type: 'type(object)',
+  isinstance: 'isinstance(object, classinfo)',
+  ord: 'ord(c)  # 문자 -> 유니코드 정수',
+  chr: 'chr(i)  # 유니코드 정수 -> 문자',
   int: 'int(x=0, base=10)',
   float: 'float(x=0.0)',
   str: 'str(object="")',
@@ -515,11 +539,15 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
     !unlockedList || unlockedList.length === 0 || unlockedList.includes(paletteKey);
 
   const paletteKeyForFn = (fn: string): string => {
-    if (['type', 'int', 'float', 'str', 'bool'].includes(fn)) return 'type';
+    if (['type', 'int', 'float', 'str', 'bool', 'isinstance', 'ord', 'chr'].includes(fn)) return 'type';
     if (['len', 'round', 'abs', 'sum', 'min', 'max'].includes(fn)) return 'math';
     if (['enumerate', 'zip', 'all', 'any', 'reversed'].includes(fn)) return 'iter';
     return fn;
   };
+
+  const KNOWN_BUILTIN_METHODS = new Set(
+    METHOD_CATEGORIES.flatMap((c) => c.methods.map((m) => m.name))
+  );
 
   const derived: CanvasBlock[] = [];
   const extraMethodBlocks: CanvasBlock[] = [];
@@ -710,7 +738,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
     const matchSingleCall = (expr: string): { fn: BlockType; inner: string } | null => {
       const s = expr.trim();
       const m = s.match(
-        /^(type|int|float|str|bool|input|len|round|abs|sum|min|max|range|sorted|reversed|all|any|enumerate|zip|map)\s*\(/
+        /^(type|int|float|str|bool|isinstance|ord|chr|input|len|round|abs|sum|min|max|range|sorted|reversed|all|any|enumerate|zip|map)\s*\(/
       );
       if (!m) return null;
       if (!isPaletteAllowed(paletteKeyForFn(m[1]))) return null;
@@ -748,9 +776,9 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
 
       if (isPaletteAllowed('method')) {
         const mCall = matchPostfixMethod(s);
-        if (mCall) {
+        if (mCall && KNOWN_BUILTIN_METHODS.has(mCall.methodName)) {
           let baseBlk = tryBuildArgBlock(mCall.receiver);
-          if (!baseBlk && /^[a-zA-Z_]\w*$/.test(mCall.receiver) && isPaletteAllowed('variable')) {
+          if (!baseBlk && /^[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*$/.test(mCall.receiver) && isPaletteAllowed('variable')) {
             baseBlk = {
               id: nextId('var'),
               type: 'variable',
@@ -836,7 +864,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
         }
 
         const retMatch = trimmed.match(/^return(?:\s+([\s\S]+))?$/);
-        if (retMatch && isPaletteAllowed('def')) {
+        if (retMatch && (isPaletteAllowed('def') || isPaletteAllowed('class'))) {
           suiteBlocks.push({
             id: nextId('return'),
             type: 'return',
@@ -848,8 +876,41 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
           continue;
         }
 
+        const raiseMatch = trimmed.match(/^raise(?:\s+([\s\S]+))?$/);
+        if (raiseMatch && (isPaletteAllowed('raise') || isPaletteAllowed('try'))) {
+          suiteBlocks.push({
+            id: nextId('raise'),
+            type: 'raise',
+            content: '',
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        const classMatch = trimmed.match(/^class\s+([a-zA-Z_]\w*)(?:\s*\(([\s\S]*)\))?\s*:$/);
+        if (classMatch && isPaletteAllowed('class')) {
+          const bodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const classBody = parseSuite(i + 1, bodyIndent);
+          const hasParent = classMatch[2] !== undefined && classMatch[2].trim().length > 0;
+          suiteBlocks.push({
+            id: nextId('class'),
+            type: 'class',
+            varName: '',
+            content: hasParent ? '' : undefined,
+            innerBlocks: classBody.blocks,
+            x: 40,
+            y: 66,
+          });
+          i = classBody.nextIdx;
+          continue;
+        }
+
         const defMatch = trimmed.match(/^def\s+([a-zA-Z_]\w*)\s*\(([\s\S]*)\)\s*:$/);
-        if (defMatch && isPaletteAllowed('def')) {
+        if (defMatch && (isPaletteAllowed('def') || isPaletteAllowed('class'))) {
           const bodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
             ? parsedLines[i + 1].indent
             : indent + 4;
@@ -872,6 +933,73 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             y: 66,
           });
           i = defBody.nextIdx;
+          continue;
+        }
+
+        if (/^try\s*:$/.test(trimmed) && isPaletteAllowed('try')) {
+          const branches: IfBranch[] = [];
+          const firstBodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const tryBody = parseSuite(i + 1, firstBodyIndent);
+          branches.push({
+            id: nextId('br-try'),
+            kind: 'try',
+            innerBlocks: tryBody.blocks,
+          });
+          i = tryBody.nextIdx;
+
+          while (i < parsedLines.length && parsedLines[i].indent === indent) {
+            const brTrimmed = parsedLines[i].trimmed;
+            const excMatch = brTrimmed.match(/^except(?:\s+([\s\S]+?))?\s*:$/);
+            if (excMatch) {
+              const excIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+                ? parsedLines[i + 1].indent
+                : indent + 4;
+              const excBody = parseSuite(i + 1, excIndent);
+              branches.push({
+                id: nextId('br-except'),
+                kind: 'except',
+                condition: excMatch[1] ? '' : undefined,
+                innerBlocks: excBody.blocks,
+              });
+              i = excBody.nextIdx;
+            } else if (/^else\s*:$/.test(brTrimmed)) {
+              const elseIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+                ? parsedLines[i + 1].indent
+                : indent + 4;
+              const elseBody = parseSuite(i + 1, elseIndent);
+              branches.push({
+                id: nextId('br-else'),
+                kind: 'else',
+                innerBlocks: elseBody.blocks,
+              });
+              i = elseBody.nextIdx;
+            } else if (/^finally\s*:$/.test(brTrimmed)) {
+              const finIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+                ? parsedLines[i + 1].indent
+                : indent + 4;
+              const finBody = parseSuite(i + 1, finIndent);
+              branches.push({
+                id: nextId('br-finally'),
+                kind: 'finally',
+                innerBlocks: finBody.blocks,
+              });
+              i = finBody.nextIdx;
+              break;
+            } else {
+              break;
+            }
+          }
+
+          suiteBlocks.push({
+            id: nextId('try'),
+            type: 'try',
+            content: '',
+            branches,
+            x: 40,
+            y: 66,
+          });
           continue;
         }
 
@@ -1041,7 +1169,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
 
           if (isSimpleVar && isPaletteAllowed('variable')) {
             const listWrap = isWrappedBy(rhsExpr, '[', ']');
-            if (listWrap.wraps) {
+            if (listWrap.wraps && !/\bfor\b[\s\S]+\bin\b/.test(rhsExpr.slice(1, -1))) {
               const inner = rhsExpr.slice(1, -1).trim();
               const itemSlots = inner ? splitTopLevelArgs(inner).map(() => '') : [''];
               suiteBlocks.push({
@@ -1118,7 +1246,13 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
         }
 
         const stmtMethod = matchPostfixMethod(trimmed);
-        if (stmtMethod && /^[a-zA-Z_]\w*$/.test(stmtMethod.receiver) && isPaletteAllowed('method') && isPaletteAllowed('variable')) {
+        if (
+          stmtMethod &&
+          KNOWN_BUILTIN_METHODS.has(stmtMethod.methodName) &&
+          /^[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*$/.test(stmtMethod.receiver) &&
+          isPaletteAllowed('method') &&
+          isPaletteAllowed('variable')
+        ) {
           const hostId = nextId('var');
           const mId = nextId('method');
           suiteBlocks.push({
@@ -1157,8 +1291,8 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
           continue;
         }
 
-        const userCallMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*\(([\s\S]*)\)$/);
-        if (userCallMatch && isPaletteAllowed('def')) {
+        const userCallMatch = trimmed.match(/^([a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*)\s*\(([\s\S]*)\)$/);
+        if (userCallMatch && (isPaletteAllowed('def') || isPaletteAllowed('class'))) {
           suiteBlocks.push({
             id: nextId('call'),
             type: 'call',
@@ -1430,14 +1564,14 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     }
     // Legacy fallback: show all blocks
     return [
-      'print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def',
-      'if', 'for_range', 'for_in', 'while', 'break', 'continue', 'variable', 'comment'
+      'print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def', 'class',
+      'if', 'for_range', 'for_in', 'while', 'break', 'continue', 'try', 'raise', 'variable', 'comment'
     ];
   }, [round.unlockedBlocks, levelNum]);
 
   const isBlockUnlocked = (key: string) => unlockedBlocks.includes(key);
-  const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def'].some(k => isBlockUnlocked(k));
-  const hasControlBlocks = ['if', 'for_range', 'for_in', 'while', 'break', 'continue'].some(k => isBlockUnlocked(k));
+  const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def', 'class'].some(k => isBlockUnlocked(k));
+  const hasControlBlocks = ['if', 'for_range', 'for_in', 'while', 'break', 'continue', 'try', 'raise'].some(k => isBlockUnlocked(k));
   const hasVariableBlocks = isBlockUnlocked('variable');
   const hasCommentBlocks = isBlockUnlocked('comment');
 
@@ -1877,6 +2011,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         }
         const funcTypes = [
           'print', 'input', 'len', 'int', 'float', 'str', 'bool', 'type',
+          'isinstance', 'ord', 'chr',
           'round', 'abs', 'sum', 'min', 'max', 'open',
           'range', 'map', 'sorted', 'enumerate', 'zip', 'all', 'any', 'reversed'
         ];
@@ -1963,6 +2098,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         out.push(`${indentStr}iter(${content})${mSuffix}`);
       } else if ([
         'print', 'input', 'len', 'int', 'float', 'str', 'bool', 'type',
+        'isinstance', 'ord', 'chr',
         'round', 'abs', 'sum', 'min', 'max', 'open',
         'range', 'map', 'sorted', 'enumerate', 'zip', 'all', 'any', 'reversed'
       ].includes(blk.type)) {
@@ -2079,6 +2215,50 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         } else {
           out.push(`${indentStr}    pass`);
         }
+      } else if (blk.type === 'class') {
+        const cName = (blk.varName || 'MyClass').trim();
+        const parent = blk.content !== undefined ? blk.content.trim() : '';
+        out.push(
+          blk.content !== undefined
+            ? `${indentStr}class ${cName}(${parent}):`
+            : `${indentStr}class ${cName}:`
+        );
+        if (blk.innerBlocks && blk.innerBlocks.length > 0) {
+          for (const child of blk.innerBlocks) {
+            out.push(...generateBlockLines(child, currentIndentLevel + 1));
+          }
+        } else {
+          out.push(`${indentStr}    pass`);
+        }
+      } else if (blk.type === 'raise') {
+        const content = (blk.content || '').trim();
+        out.push(content ? `${indentStr}raise ${content}` : `${indentStr}raise`);
+      } else if (blk.type === 'try') {
+        const branches = (blk.branches && blk.branches.length > 0)
+          ? blk.branches
+          : [
+              { id: 'br-try-0', kind: 'try' as const, innerBlocks: blk.innerBlocks || [] },
+              { id: 'br-exc-1', kind: 'except' as const, innerBlocks: [] },
+            ];
+        for (const branch of branches) {
+          if (branch.kind === 'try') {
+            out.push(`${indentStr}try:`);
+          } else if (branch.kind === 'except') {
+            const cond = (branch.condition || '').trim();
+            out.push(cond ? `${indentStr}except ${cond}:` : `${indentStr}except:`);
+          } else if (branch.kind === 'finally') {
+            out.push(`${indentStr}finally:`);
+          } else {
+            out.push(`${indentStr}else:`);
+          }
+          if (branch.innerBlocks && branch.innerBlocks.length > 0) {
+            for (const child of branch.innerBlocks) {
+              out.push(...generateBlockLines(child, currentIndentLevel + 1));
+            }
+          } else {
+            out.push(`${indentStr}    pass`);
+          }
+        }
       }
 
       return out;
@@ -2185,6 +2365,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         } else if (val instanceof Set) {
           valType = 'set';
           cleanVal = val.size === 0 ? 'set()' : `{${Array.from(val).map((v: any) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}}`;
+        } else if (typeof val === 'object' && val !== null && (val as any).__isInstance) {
+          valType = (val as any).__className || 'object';
+          const attrPairs = Object.entries((val as any).__attrs || {})
+            .map(([ak, av]) => `${ak}=${typeof av === 'string' ? `'${av}'` : JSON.stringify(av)}`)
+            .join(', ');
+          cleanVal = `${valType}(${attrPairs})`;
         } else if (typeof val === 'object' && val !== null) {
           valType = 'dict';
           cleanVal = JSON.stringify(val);
@@ -2708,6 +2894,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       if (target.tokens.has('while') && !user.tokens.has('while')) return false;
       if (target.tokens.has('def') && !user.tokens.has('def')) return false;
       if (target.tokens.has('return') && !user.tokens.has('return')) return false;
+      if (target.tokens.has('try') && !user.tokens.has('try')) return false;
+      if (target.tokens.has('except') && !user.tokens.has('except')) return false;
+      if (target.tokens.has('finally') && !user.tokens.has('finally')) return false;
+      if (target.tokens.has('raise') && !user.tokens.has('raise')) return false;
+      if (target.tokens.has('class') && !user.tokens.has('class')) return false;
+      if (target.tokens.has('lambda') && !user.tokens.has('lambda')) return false;
       if (target.hasFString && !user.hasFString) return false;
       if (target.hasCompoundOp && !user.hasCompoundOp) return false;
       if (target.hasNewlineEscape && !user.hasNewlineEscape) return false;
@@ -3475,7 +3667,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       bType === 'for_in' ||
       bType === 'while' ||
       bType === 'if' ||
-      bType === 'def';
+      bType === 'try' ||
+      bType === 'def' ||
+      bType === 'class';
 
     const defaultWidth = isC ? 170 : (bType === 'method' ? 160 : 140);
     const width = toolboxWidth || defaultWidth;
@@ -3505,6 +3699,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     }
     const draggedType = draggedBlock?.type || draggingInfoRef.current?.blockType;
     const isDefBlock = draggedType === 'def';
+    const isClassBlock = draggedType === 'class';
     const canvasRect = workspaceRef.current.getBoundingClientRect();
 
     // 드래그 중인 블록 및 하위 연결된 모든 자손 블록은 스냅 대상에서 제외 (순환 결합 및 자가 스냅 원천 차단)
@@ -3606,6 +3801,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     // 0.5. Argument Slot Snapping (함수/변수 인자 슬롯에 다른 함수/변수 블록 스냅)
     const ALL_FUNC_TYPES = [
       'print', 'input', 'len', 'int', 'float', 'str', 'bool', 'type',
+      'isinstance', 'ord', 'chr',
       'math', 'round', 'abs', 'sum', 'min', 'max', 'open',
       'range', 'map', 'sorted', 'iter', 'enumerate', 'zip', 'all', 'any', 'reversed'
     ];
@@ -3683,19 +3879,23 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         draggedType === 'for_in' ||
         draggedType === 'while' ||
         draggedType === 'if' ||
-        draggedType === 'def';
+        draggedType === 'try' ||
+        draggedType === 'def' ||
+        draggedType === 'class';
 
       for (const b of list) {
         if (excludedIds.has(b.id)) continue;
 
-        if (b.type === 'for_range' || b.type === 'for_in' || b.type === 'while' || b.type === 'def') {
+        if (b.type === 'for_range' || b.type === 'for_in' || b.type === 'while' || b.type === 'def' || b.type === 'class') {
           // Check deeper nested innerBlocks FIRST so deepest mouth gets priority
           if (b.innerBlocks && b.innerBlocks.length > 0) {
             const innerSnap = checkMouthsRecursive(b.innerBlocks);
             if (innerSnap) return innerSnap;
           }
 
-          const mouthEl = document.getElementById(`mouth-${b.id}`);
+          // def blocks are allowed ONLY inside class mouths; class blocks are top-level only
+          const canEnterThisMouth = !isClassBlock && (!isDefBlock || b.type === 'class');
+          const mouthEl = canEnterThisMouth ? document.getElementById(`mouth-${b.id}`) : null;
           if (mouthEl) {
             const mRect = mouthEl.getBoundingClientRect();
             const mLeft = mRect.left - canvasRect.left;
@@ -3756,7 +3956,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           }
         }
 
-        if (b.type === 'if' && b.branches) {
+        if ((b.type === 'if' || b.type === 'try') && b.branches) {
           for (const br of b.branches) {
             // Check deeper nested innerBlocks FIRST so deepest mouth gets priority
             if (br.innerBlocks && br.innerBlocks.length > 0) {
@@ -3764,7 +3964,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               if (innerSnap) return innerSnap;
             }
 
-            const mouthEl = document.getElementById(`mouth-${b.id}-${br.id}`);
+            const mouthEl = (!isClassBlock && !isDefBlock) ? document.getElementById(`mouth-${b.id}-${br.id}`) : null;
             if (mouthEl) {
               const mRect = mouthEl.getBoundingClientRect();
               const mLeft = mRect.left - canvasRect.left;
@@ -3830,8 +4030,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       return null;
     };
 
-    // def 블록은 최상위 함수 정의이므로 다른 루프/조건문/함수 내부(mouth)에 삽입되는 것을 차단
-    const mouthSnap = isDefBlock ? null : checkMouthsRecursive(blocksList);
+    // class 블록은 최상위 전용이며, def 블록은 오직 class 블록 내부(메서드)에만 삽입 허용
+    const mouthSnap = isClassBlock ? null : checkMouthsRecursive(blocksList);
     if (mouthSnap) return mouthSnap;
 
     // 2. Scratch Connection Snapping (실행 블록 및 하단 탭 스냅)
@@ -3844,7 +4044,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       draggedType === 'for_in' ||
       draggedType === 'while' ||
       draggedType === 'if' ||
-      draggedType === 'def';
+      draggedType === 'try' ||
+      draggedType === 'def' ||
+      draggedType === 'class';
     const draggedH = isDraggingC ? draggedDim.totalHeight : draggedDim.height;
     const snapMarkerWidth = isDraggingC ? Math.max(draggedDim.headerWidth, draggedDim.width) : draggedDim.width;
     const snapMarkerHeight = draggedH;
@@ -3998,10 +4200,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         bType === 'variable' ? 'x' :
           bType === 'for_range' ? 'i' :
             bType === 'for_in' ? 'item' :
-              (bType === 'def' || bType === 'call') ? 'my_func' : undefined
+              bType === 'class' ? 'MyClass' :
+                (bType === 'def' || bType === 'call') ? 'my_func' : undefined
       );
-      const isLoopOrDef = bType === 'for_range' || bType === 'for_in' || bType === 'while' || bType === 'def';
+      const isLoopOrDef = bType === 'for_range' || bType === 'for_in' || bType === 'while' || bType === 'def' || bType === 'class';
       const isIf = bType === 'if';
+      const isTry = bType === 'try';
       const defaultContent = blockInfo.content || (
         bType === 'for_range' ? '5' :
           bType === 'for_in' ? 'items' :
@@ -4015,7 +4219,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         isIfElse: isIfElse ? true : undefined,
         varName,
         methodName: bType === 'method' ? 'method' : undefined,
-        content: defaultContent,
+        content: bType === 'class' ? blockInfo.content : defaultContent,
         argBlock: bType === 'for_range' ? {
           id: `range-${Date.now() + 1}`,
           type: 'range',
@@ -4035,7 +4239,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             : [
               { id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] },
             ]
-          : undefined,
+          : isTry
+            ? [
+              { id: `br-try-${Date.now()}`, kind: 'try', innerBlocks: [] },
+              { id: `br-except-${Date.now() + 1}`, kind: 'except', innerBlocks: [] },
+            ]
+            : undefined,
         x: dropX,
         y: dropY,
         zIndex: (maxCanvasZIndexRef.current += 20),
@@ -4164,8 +4373,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       }
     }
 
-    // CASE 1: Snap into C-block or If-branch mouth (def 블록은 내부 삽입 차단)
-    if (snap && snap.type === 'mouth' && baseBlock.type !== 'def') {
+    // CASE 1: Snap into C-block or branch mouth (class는 내부 삽입 차단, def는 class 내부에만 허용)
+    const mouthTargetBlk = snap && snap.type === 'mouth' ? findBlockInTree(currentBlocks, snap.targetBlockId) : null;
+    const allowMouthCommit =
+      baseBlock.type !== 'class' &&
+      (baseBlock.type !== 'def' || (mouthTargetBlk?.type === 'class' && !snap?.branchId));
+    if (snap && snap.type === 'mouth' && allowMouthCommit) {
       const childToAdd: CanvasBlock = {
         ...baseBlock,
         x: 0,
@@ -4254,7 +4467,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           headId = baseBlock.id;
           tailId = baseBlock.id;
           draggedIds = [baseBlock.id];
-          const isLoopOrDef = baseBlock.type === 'for_range' || baseBlock.type === 'for_in' || baseBlock.type === 'while' || baseBlock.type === 'def';
+          const isLoopOrDef = baseBlock.type === 'for_range' || baseBlock.type === 'for_in' || baseBlock.type === 'while' || baseBlock.type === 'def' || baseBlock.type === 'class' || baseBlock.type === 'try';
           chainHeight = isLoopOrDef ? 72 : 40;
         }
 
@@ -4379,7 +4592,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           headId = baseBlock.id;
           tailId = baseBlock.id;
           draggedIds = [baseBlock.id];
-          const isLoopOrDef = baseBlock.type === 'for_range' || baseBlock.type === 'for_in' || baseBlock.type === 'while' || baseBlock.type === 'def';
+          const isLoopOrDef = baseBlock.type === 'for_range' || baseBlock.type === 'for_in' || baseBlock.type === 'while' || baseBlock.type === 'def' || baseBlock.type === 'class' || baseBlock.type === 'try';
           chainHeight = isLoopOrDef ? 72 : 40;
         }
 
@@ -5664,13 +5877,66 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     showToast('✨ else 조건문 가지(E자 완성)가 추가되었습니다.');
   };
 
+  const handleAddTryBranch = (blockId: string, branchMode: 'except' | 'except_typed' | 'else' | 'finally') => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => {
+        const currentBranches: IfBranch[] = b.branches && b.branches.length > 0
+          ? b.branches
+          : [
+              { id: `br-try-${b.id}`, kind: 'try' as const, innerBlocks: b.innerBlocks || [] },
+              { id: `br-except-${b.id}`, kind: 'except' as const, innerBlocks: [] },
+            ];
+        if (branchMode === 'else' && currentBranches.some((br) => br.kind === 'else')) {
+          showToast('⚠️ 이미 else 절이 존재합니다.');
+          return b;
+        }
+        if (branchMode === 'finally' && currentBranches.some((br) => br.kind === 'finally')) {
+          showToast('⚠️ 이미 finally 절이 존재합니다.');
+          return b;
+        }
+        const updated = [...currentBranches];
+        if (branchMode === 'except' || branchMode === 'except_typed') {
+          const newBr: IfBranch = {
+            id: `br-except-${Date.now()}`,
+            kind: 'except',
+            condition: branchMode === 'except_typed' ? 'ValueError' : undefined,
+            innerBlocks: [],
+          };
+          const tailIdx = updated.findIndex((br) => br.kind === 'else' || br.kind === 'finally');
+          if (tailIdx >= 0) updated.splice(tailIdx, 0, newBr);
+          else updated.push(newBr);
+        } else if (branchMode === 'else') {
+          const newBr: IfBranch = { id: `br-else-${Date.now()}`, kind: 'else', innerBlocks: [] };
+          const finIdx = updated.findIndex((br) => br.kind === 'finally');
+          if (finIdx >= 0) updated.splice(finIdx, 0, newBr);
+          else updated.push(newBr);
+        } else {
+          updated.push({ id: `br-finally-${Date.now()}`, kind: 'finally', innerBlocks: [] });
+        }
+        return { ...b, branches: updated };
+      })
+    );
+    showToast('✨ 예외 처리 가지가 추가되었습니다.');
+  };
+
+  const handleToggleClassParent = (blockId: string, enable: boolean) => {
+    setCanvasBlocks((prev) =>
+      updateAnyBlockInTree(prev, blockId, (b) => ({
+        ...b,
+        content: enable ? (b.content || 'Parent') : undefined,
+      }))
+    );
+    showToast(enable ? '✨ 상속 부모 클래스 슬롯이 추가되었습니다.' : '🗑️ 상속 부모 클래스 슬롯이 제거되었습니다.');
+  };
+
   const handleRemoveBranch = (blockId: string, branchId: string) => {
     setCanvasBlocks((prev) =>
       updateAnyBlockInTree(prev, blockId, (b) => {
         if (!b.branches) return b;
         const target = b.branches.find((br) => br.id === branchId);
-        // Only if branch cannot be deleted; elif and else can be removed
-        if (target?.kind === 'if') return b;
+        // Top header branches ('if', 'try') cannot be deleted; 'try' must keep at least 1 handler branch
+        if (target?.kind === 'if' || target?.kind === 'try') return b;
+        if (b.type === 'try' && b.branches.length <= 2) return b;
         const remaining = b.branches.filter((br) => br.id !== branchId);
         const hasElse = remaining.some((br) => br.kind === 'else');
         return {
@@ -5972,7 +6238,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     currentDraggedType === 'for_in' ||
     currentDraggedType === 'while' ||
     currentDraggedType === 'if' ||
-    currentDraggedType === 'def';
+    currentDraggedType === 'try' ||
+    currentDraggedType === 'def' ||
+    currentDraggedType === 'class';
 
   const draggedDim = getDraggedBlockDimensions(undefined, currentDraggedType);
   const cBlockMouthHeight = draggedDim.mouthHeight;
@@ -7158,8 +7426,68 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   </div>
                 )}
 
+                {/* class 클래스 정의 ㄷ자 블록 */}
+                {isBlockUnlocked('class') && (
+                  <div
+                    draggable
+                    onDragStart={(e) => handleDragStartFromToolbox(e, 'class')}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: 'fit-content',
+                      minWidth: '120px',
+                      cursor: 'grab',
+                      userSelect: 'none',
+                      fontFamily: 'var(--font-mono)',
+                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                    }}
+                    title="class 클래스 정의 ㄷ자 블록 (내부에 def 메서드 블록 삽입 가능)"
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '5px 10px',
+                        borderRadius: '6px 6px 6px 0',
+                        background: BLOCK_THEMES.class.bg,
+                        border: `1px solid ${BLOCK_THEMES.class.border}`,
+                        borderBottom: 'none',
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        fontSize: '0.80rem',
+                        position: 'relative',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      <PuzzleNotch borderColor={BLOCK_THEMES.class.border} />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: '18px',
+                          right: '5px',
+                          bottom: 0,
+                          height: '1px',
+                          background: BLOCK_THEMES.class.border,
+                          pointerEvents: 'none',
+                        }}
+                      />
+                      <span style={{ color: '#ffffff' }}>class</span>
+                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>MyClass</span>
+                      <span>:</span>
+                    </div>
+                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
+                      <div style={{ width: '18px', background: BLOCK_THEMES.class.bg, borderLeft: `1px solid ${BLOCK_THEMES.class.border}`, borderRight: `1px solid ${BLOCK_THEMES.class.border}`, flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
+                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.class.border} bg={BLOCK_THEMES.class.bg} />
+                      </div>
+                    </div>
+                    <SvgBottomClosingArm theme={BLOCK_THEMES.class} />
+                  </div>
+                )}
+
                 {/* def 함수정의 ㄷ자 블록 */}
-                {isBlockUnlocked('def') && (
+                {(isBlockUnlocked('def') || isBlockUnlocked('class')) && (
                   <div
                     draggable
                     onDragStart={(e) => handleDragStartFromToolbox(e, 'def')}
@@ -7221,7 +7549,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 )}
 
                 {/* 함수 호출 call 블록 */}
-                {isBlockUnlocked('def') && (
+                {(isBlockUnlocked('def') || isBlockUnlocked('class')) && (
                   <div
                     draggable
                     onDragStart={(e) => handleDragStartFromToolbox(e, 'call')}
@@ -7255,7 +7583,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 )}
 
                 {/* return 반환 블록 */}
-                {isBlockUnlocked('def') && (
+                {(isBlockUnlocked('def') || isBlockUnlocked('class')) && (
                   <div
                     draggable
                     onDragStart={(e) => handleDragStartFromToolbox(e, 'return')}
@@ -7636,6 +7964,107 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     <PuzzleNotch borderColor={BLOCK_THEMES.continue.border} />
                     <PuzzleTab borderColor={BLOCK_THEMES.continue.border} bg={BLOCK_THEMES.continue.bg} />
                     <span>continue</span>
+                  </div>
+                )}
+
+                {/* try - except 예외 처리 E자 블록 */}
+                {isBlockUnlocked('try') && (
+                  <div
+                    draggable
+                    onDragStart={(e) => handleDragStartFromToolbox(e, 'try')}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: 'fit-content',
+                      minWidth: '120px',
+                      cursor: 'grab',
+                      userSelect: 'none',
+                      fontFamily: 'var(--font-mono)',
+                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
+                    }}
+                    title="try - except 예외 처리 블록 (우클릭으로 에러 타입 지정, else/finally 확장 가능)"
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        whiteSpace: 'nowrap',
+                        gap: '4px',
+                        padding: '5px 10px',
+                        borderRadius: '6px 6px 6px 0',
+                        background: BLOCK_THEMES.try.bg,
+                        border: `1px solid ${BLOCK_THEMES.try.border}`,
+                        borderBottom: 'none',
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        fontSize: '0.80rem',
+                        position: 'relative',
+                      }}
+                    >
+                      <PuzzleNotch borderColor={BLOCK_THEMES.try.border} />
+                      <span>try:</span>
+                    </div>
+                    <div style={{ display: 'flex', minHeight: '16px', marginTop: '-1px' }}>
+                      <div style={{ width: '18px', background: BLOCK_THEMES.try.bg, borderLeft: `1px solid ${BLOCK_THEMES.try.border}`, borderRight: `1px solid ${BLOCK_THEMES.try.border}`, flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: '70px' }} />
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        whiteSpace: 'nowrap',
+                        gap: '4px',
+                        padding: '4px 10px',
+                        borderRadius: '0 6px 6px 0',
+                        background: BLOCK_THEMES.try.bg,
+                        borderTop: `1px solid ${BLOCK_THEMES.try.border}`,
+                        borderRight: `1px solid ${BLOCK_THEMES.try.border}`,
+                        borderLeft: `1px solid ${BLOCK_THEMES.try.border}`,
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        fontSize: '0.78rem',
+                      }}
+                    >
+                      <span>except:</span>
+                    </div>
+                    <div style={{ display: 'flex', minHeight: '16px', marginTop: '-1px' }}>
+                      <div style={{ width: '18px', background: BLOCK_THEMES.try.bg, borderLeft: `1px solid ${BLOCK_THEMES.try.border}`, borderRight: `1px solid ${BLOCK_THEMES.try.border}`, flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: '70px' }} />
+                    </div>
+                    <SvgBottomClosingArm theme={BLOCK_THEMES.try} />
+                  </div>
+                )}
+
+                {/* raise 예외 발생 블록 */}
+                {isBlockUnlocked('raise') && (
+                  <div
+                    draggable
+                    onDragStart={(e) => handleDragStartFromToolbox(e, 'raise')}
+                    style={{
+                      display: 'inline-flex',
+                      width: 'fit-content',
+                      alignItems: 'center',
+                      whiteSpace: 'nowrap',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px',
+                      background: BLOCK_THEMES.raise.bg,
+                      boxShadow: `0 2px 0 ${BLOCK_THEMES.raise.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                      border: `1px solid ${BLOCK_THEMES.raise.border}`,
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      fontFamily: 'var(--font-mono)',
+                      cursor: 'grab',
+                      userSelect: 'none',
+                      position: 'relative',
+                    }}
+                    title="raise 의도적 예외 발생 블록"
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.raise.border} />
+                    <PuzzleTab borderColor={BLOCK_THEMES.raise.border} bg={BLOCK_THEMES.raise.bg} />
+                    <span>raise</span>
+                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                   </div>
                 )}
               </div>
@@ -8224,7 +8653,12 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                       onAssignOpChange={handleAssignOpChange}
                       onBranchConditionChange={handleBranchConditionChange}
                       onAddBranch={(blockId, kind) => {
-                        if (kind === 'elif') {
+                        const blk = findBlockInTree(canvasBlocks, blockId);
+                        if (blk?.type === 'try') {
+                          if (kind === 'except') handleAddTryBranch(blockId, 'except');
+                          else if (kind === 'finally') handleAddTryBranch(blockId, 'finally');
+                          else handleAddTryBranch(blockId, 'else');
+                        } else if (kind === 'elif') {
                           handleAddElifBranch(blockId);
                         } else {
                           handleAddElseBranch(blockId);
@@ -8657,8 +9091,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
               const isPrintBlock = target?.type === 'print';
               const isIfBlock = target?.type === 'if';
+              const isTryBlock = target?.type === 'try';
               const isDefBlock = target?.type === 'def';
+              const isClassBlock = target?.type === 'class';
               const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
+              const hasFinallyBranch = target?.branches?.some((br) => br.kind === 'finally') ?? false;
 
               return (
                 <>
@@ -8804,6 +9241,148 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                           <span>else 조건문 가지 추가</span>
                         </button>
                       )}
+                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                    </>
+                  )}
+
+                  {/* Try Block Special Actions: +except, +except ErrorType, +else, +finally */}
+                  {isTryBlock && target && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleAddTryBranch(target.id, 'except');
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: '#fecdd3',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                        }}
+                      >
+                        <Plus size={14} color="#fb7185" />
+                        <span>except 기본 가지 추가</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleAddTryBranch(target.id, 'except_typed');
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: '#fecdd3',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                        }}
+                      >
+                        <Plus size={14} color="#fb7185" />
+                        <span>except 에러타입 가지 추가</span>
+                      </button>
+                      {!hasElseBranch && (
+                        <button
+                          onClick={() => {
+                            handleAddTryBranch(target.id, 'else');
+                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#fecdd3',
+                            fontSize: '0.82rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                          }}
+                        >
+                          <Plus size={14} color="#fb7185" />
+                          <span>else 예외 없음 가지 추가</span>
+                        </button>
+                      )}
+                      {!hasFinallyBranch && (
+                        <button
+                          onClick={() => {
+                            handleAddTryBranch(target.id, 'finally');
+                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#fecdd3',
+                            fontSize: '0.82rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                          }}
+                        >
+                          <Plus size={14} color="#fb7185" />
+                          <span>finally 마무리 가지 추가</span>
+                        </button>
+                      )}
+                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                    </>
+                  )}
+
+                  {/* Class Block Special Actions: Parent Class Inheritance Toggle */}
+                  {isClassBlock && target && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleToggleClassParent(target.id, target.content === undefined);
+                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: 'transparent',
+                          color: '#a5f3fc',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                        }}
+                      >
+                        {target.content !== undefined ? (
+                          <>
+                            <Trash2 size={14} color="#22d3ee" />
+                            <span>상속 부모 클래스 제거</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus size={14} color="#22d3ee" />
+                            <span>상속 부모 클래스 (Parent) 추가</span>
+                          </>
+                        )}
+                      </button>
                       <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
                     </>
                   )}

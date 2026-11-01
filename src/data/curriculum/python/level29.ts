@@ -1,306 +1,372 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 29레벨: 중첩 for 반복문 기초 (13단계 표준 구성)
-// ============================================================================
 export const PYTHON_LEVEL_29: PracticeRound = {
-  id: 'py-basic-r29',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 29,
-  title_ko: '29레벨: 중첩 for 반복문 기초',
-  title_en: 'Level 29: Nested for Loops',
-  totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'input', 'type', 'for_range', 'range'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      prompt_ko: '바깥 r은 range(2), 안쪽 c는 range(3)으로 중첩해 좌표 r, c를 출력해보세요.',
-      prompt_en: 'Nest c in range(3) inside r in range(2) and print each pair r, c.',
-      hint_ko: '바깥 for문이 1번 돌 때마다 안쪽 for문이 0, 1, 2 세 번씩 실행됩니다.',
-      hint_en: 'For each outer iteration of r, the inner loop runs c through 0, 1, 2.',
-      targetCode: 'for r in range(2):\n    for c in range(3):\n        print(r, c)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '0 0\n0 1\n0 2\n1 0\n1 1\n1 2',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 반복 키워드를 채워 (1, 1)부터 (2, 3)까지의 행·열 쌍을 출력해보세요.',
-      prompt_en: 'Fill in the loop keyword to print row-column pairs from (1, 1) to (2, 3).',
-      hint_ko: '바깥 반복문 안에 또 다른 for 반복문을 중첩하려면 키워드 for를 입력하세요.',
-      hint_en: 'Enter for to start the inner nested loop.',
-      templateCode: 'for r in range(1, 3):\n    §§§ c in range(1, 4):\n        print(r, c)',
-      targetCode: 'for r in range(1, 3):\n    for c in range(1, 4):\n        print(r, c)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '1 1\n1 2\n1 3\n2 1\n2 2\n2 3',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      prompt_ko: '2단과 3단의 1~3 곱셈 결과를 dan, i, dan * i 형태로 출력해보세요.',
-      prompt_en: 'Print multiplication results for 2 and 3 times 1..3 as dan, i, dan * i.',
-      hint_ko: '바깥은 range(2, 4), 안쪽은 range(1, 4)로 두고 print(dan, i, dan * i)를 실행하세요.',
-      hint_en: 'Use range(2, 4) outer and range(1, 4) inner, printing dan, i, dan * i.',
-      targetCode: 'for dan in range(2, 4):\n    for i in range(1, 4):\n        print(dan, i, dan * i)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '2 1 2\n2 2 4\n2 3 6\n3 1 3\n3 2 6\n3 3 9',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈식을 채워 2단부터 d단까지 각 단의 *1, *2 결과를 출력해보세요.',
-      prompt_en: 'Fill in the product expression to print dan * 1 and dan * 2 for 2..d.',
-      hint_ko: '단 번호 dan과 곱하는 수 i의 곱셈식 dan * i를 입력하세요.',
-      hint_en: 'Type dan * i inside print().',
-      templateCode: 'd = int(input())\nfor dan in range(2, d + 1):\n    for i in range(1, 3):\n        print(§§§§§§§)',
-      targetCode: 'd = int(input())\nfor dan in range(2, d + 1):\n    for i in range(1, 3):\n        print(dan * i)',
-      testCases: [
-        {
-          id: 1,
-          input: '3',
-          expectedOutput: '2\n4\n3\n6',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '2\n4\n3\n6\n4\n8',
-        },
-        {
-          id: 3,
-          input: '2',
-          expectedOutput: '2\n4',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      prompt_ko: '중첩 for문과 end="" 옵션을 사용해 2줄 4칸짜리 별(*) 직사각형을 출력해보세요.',
-      prompt_en: 'Use nested for loops and end="" to print a 2-row by 4-column star (*) rectangle.',
-      hint_ko: '안쪽 루프에서는 print("*", end="")로 가로 출력하고, 안쪽 루프 직후 print()로 줄바꿈하세요.',
-      hint_en: 'Print "*" with end="" in the inner loop, then call print() in the outer loop.',
-      targetCode: 'for r in range(2):\n    for c in range(4):\n        print("*", end="")\n    print()',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '****\n****',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 줄바꿈 방지 옵션을 채워 세로 h줄, 가로 w칸의 "#" 사각형을 출력해보세요.',
-      prompt_en: 'Fill in the end option to print an h-by-w rectangle of "#" characters.',
-      hint_ko: '한 줄에 이어서 찍히도록 end="" 옵션을 입력하세요.',
-      hint_en: 'Pass end="" so characters on the same row stay on one line.',
-      templateCode: 'h = int(input())\nw = int(input())\nfor r in range(h):\n    for c in range(w):\n        print("#", §§§§§§)\n    print()',
-      targetCode: 'h = int(input())\nw = int(input())\nfor r in range(h):\n    for c in range(w):\n        print("#", end="")\n    print()',
-      testCases: [
-        {
-          id: 1,
-          input: '2\n3',
-          expectedOutput: '###\n###',
-        },
-        {
-          id: 2,
-          input: '3\n2',
-          expectedOutput: '##\n##\n##',
-        },
-        {
-          id: 3,
-          input: '1\n4',
-          expectedOutput: '####',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      prompt_ko: '안쪽 반복 횟수를 range(r)로 두어 1개부터 4개까지 늘어나는 별("*") 계단을 출력해보세요.',
-      prompt_en: 'Set the inner loop to range(r) to print a staircase of 1 to 4 stars.',
-      hint_ko: '바깥 r이 range(1, 5)로 커질 때 안쪽을 range(r)로 두면 줄마다 별이 r개씩 찍힙니다.',
-      hint_en: 'With r in range(1, 5), range(r) prints r stars on row r.',
-      targetCode: 'for r in range(1, 5):\n    for c in range(r):\n        print("*", end="")\n    print()',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '*\n**\n***\n****',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 1층부터 입력받은 n층까지 별이 1개씩 늘어나는 삼각형을 출력해보세요.',
-      prompt_en: 'Fill in the blank to print a right triangle of stars from 1 up to n rows.',
-      hint_ko: '현재 층 번호 r만큼 별을 찍어야 하므로 안쪽 range에 r을 입력하세요.',
-      hint_en: 'Pass r into the inner range() so row r prints r stars.',
-      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(§):\n        print("*", end="")\n    print()',
-      targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print("*", end="")\n    print()',
-      testCases: [
-        {
-          id: 1,
-          input: '3',
-          expectedOutput: '*\n**\n***',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '*\n**\n***\n****',
-        },
-        {
-          id: 3,
-          input: '2',
-          expectedOutput: '*\n**',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      prompt_ko: '바깥 3번, 안쪽 4번 중첩 반복이 총 몇 번 실행되는지 cnt에 세어 출력해보세요.',
-      prompt_en: 'Count the total inner executions of a 3-by-4 nested loop in cnt and print it.',
-      hint_ko: '안쪽 루프에서 cnt += 1을 실행하면 총 3 * 4 = 12번 증가합니다.',
-      hint_en: 'Incrementing cnt += 1 inside the inner loop runs 3 * 4 = 12 times.',
-      targetCode: 'cnt = 0\nfor i in range(3):\n    for j in range(4):\n        cnt += 1\nprint(cnt)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '12',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈식을 채워 모든 (i, j) 쌍의 곱을 누적한 총합을 출력해보세요.',
-      prompt_en: 'Fill in the product expression to accumulate i * j across all pairs (i, j).',
-      hint_ko: '바깥 변수 i와 안쪽 변수 j를 곱하는 수식 i * j를 입력하세요.',
-      hint_en: 'Enter i * j to add each pair product to total.',
-      templateCode: 'a = int(input())\nb = int(input())\ntotal = 0\nfor i in range(1, a + 1):\n    for j in range(1, b + 1):\n        total += §§§§§\nprint(total)',
-      targetCode: 'a = int(input())\nb = int(input())\ntotal = 0\nfor i in range(1, a + 1):\n    for j in range(1, b + 1):\n        total += i * j\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '2\n3',
-          expectedOutput: '18',
-        },
-        {
-          id: 2,
-          input: '2\n2',
-          expectedOutput: '9',
-        },
-        {
-          id: 3,
-          input: '3\n3',
-          expectedOutput: '36',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '줄바꿈 위치를 수정해 한 줄에 별 3개씩 총 2줄이 출력되도록 고쳐보세요.',
-      prompt_en: 'Fix the newline placement so 2 rows of 3 stars each are printed.',
-      hint_ko: '빈 print()는 안쪽 반복문이 한 줄의 별을 다 찍은 직후(바깥 반복문 위치)에 실행되어야 합니다.',
-      hint_en: 'Unindent print() by one level so it runs once per row, not once per star.',
-      templateCode: 'for r in range(2):\n    for c in range(3):\n        print("*", end="")\n        print()',
-      targetCode: 'for r in range(2):\n    for c in range(3):\n        print("*", end="")\n    print()',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '***\n***',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '중첩 반복문 아래에 한 줄을 추가하여 총 실행 횟수 cnt(n*n)를 출력해보세요.',
-      prompt_en: 'Add one line after the nested loops to print the total count cnt.',
-      hint_ko: '모든 반복이 끝난 뒤 들여쓰기 없이 print(cnt)를 작성하세요.',
-      hint_en: 'At top-level indentation after the loops, write print(cnt).',
-      templateCode: 'n = int(input())\ncnt = 0\nfor i in range(n):\n    for j in range(n):\n        cnt += 1\n§§§§§§§§§§',
-      targetCode: 'n = int(input())\ncnt = 0\nfor i in range(n):\n    for j in range(n):\n        cnt += 1\nprint(cnt)',
-      testCases: [
-        {
-          id: 1,
-          input: '3',
-          expectedOutput: '9',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '16',
-        },
-        {
-          id: 3,
-          input: '2',
-          expectedOutput: '4',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.',
-      prompt_en: 'Select the exact output produced when the following Python code runs.',
-      hint_ko: 'i가 1, 2, 3으로 커질 때 안쪽 루프는 1부터 i까지의 숫자를 한 줄에 이어서 출력합니다.',
-      hint_en: 'As i grows 1, 2, 3, the inner loop prints 1..i on each line.',
-      targetCode: 'for i in range(1, 4):\n    for j in range(1, i + 1):\n        print(j, end="")\n    print()',
-      choices: ['1\n12\n123', '1\n22\n333', '123\n123\n123', '1\n12\n123\n1234'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '1\n12\n123',
-        },
-      ],
-    },
+  "id": "py-basic-r29",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 29,
+  "title_ko": "29레벨: break와 continue 반복 제어",
+  "title_en": "Level 29: Loop Control with break & continue",
+  "description_ko": "break로 반복을 즉시 종료하고 continue로 특정 차례를 건너뛰며, while True 무한 루프를 제어합니다.",
+  "description_en": "Exit loops early with break, skip turns with continue, and control while True sentinel loops.",
+  "totalQuestions": 13,
+  "unlockedBlocks": [
+    "print",
+    "variable",
+    "input",
+    "method",
+    "type",
+    "if",
+    "for_range",
+    "range",
+    "while",
+    "break",
+    "continue"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "prompt_ko": "1부터 6까지 반복하다가 i == 4가 되면 break로 즉시 멈추고 1부터 3까지만 출력해보세요.",
+      "prompt_en": "Loop from 1 to 6, break immediately when i == 4, and print only 1 through 3.",
+      "hint_ko": "print(i)보다 앞에 if i == 4: 조건을 두고 그 안에 break 블록을 배치하세요.",
+      "hint_en": "Place if i == 4: with break inside before print(i).",
+      "targetCode": "for i in range(1, 7):\n    if i == 4:\n        break\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1\n2\n3"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 반복 종료 키워드를 채워 2 이상의 정수 n의 가장 작은 약수(1 제외) 하나만 출력하고 멈춰보세요.",
+      "prompt_en": "Fill in the loop-termination keyword to print only the smallest divisor of n greater than 1.",
+      "hint_ko": "첫 약수를 출력한 직후 반복문을 즉시 빠져나가도록 break를 입력하세요.",
+      "hint_en": "Enter break right after print(i) to exit the loop on the first match.",
+      "templateCode": "n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        §§§§§",
+      "targetCode": "n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        break",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "15",
+          "expectedOutput": "3"
+        },
+        {
+          "id": 2,
+          "input": "12",
+          "expectedOutput": "2"
+        },
+        {
+          "id": 3,
+          "input": "7",
+          "expectedOutput": "7"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "prompt_ko": "1부터 5까지 반복하며 i == 3일 때만 continue로 건너뛰어 1, 2, 4, 5를 출력해보세요.",
+      "prompt_en": "From 1 to 5, use continue when i == 3 to skip 3 and print 1, 2, 4, 5.",
+      "hint_ko": "if i == 3: 안에 continue를 넣으면 아래 print(i)를 건너뛰고 다음 숫자로 넘어갑니다.",
+      "hint_en": "Inside if i == 3:, run continue to skip print(i) for that iteration.",
+      "targetCode": "for i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1\n2\n4\n5"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "빈칸에 건너뛰기 키워드를 채워 1부터 n까지 중 3의 배수는 제외하고 나머지 수의 합을 출력해보세요.",
+      "prompt_en": "Fill in the skip keyword to exclude multiples of 3 and sum the remaining numbers in 1..n.",
+      "hint_ko": "현재 차례만 건너뛰고 다음 반복을 계속 진행하는 키워드 continue를 입력하세요.",
+      "hint_en": "Use continue so total += i is skipped whenever i % 3 == 0.",
+      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§\n    total += i\nprint(total)",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        continue\n    total += i\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "5",
+          "expectedOutput": "12"
+        },
+        {
+          "id": 2,
+          "input": "6",
+          "expectedOutput": "12"
+        },
+        {
+          "id": 3,
+          "input": "4",
+          "expectedOutput": "7"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "prompt_ko": "while True 무한 반복에서 문자열을 입력받아 \"q\"이면 break로 종료하고, 아니면 \"Run:\" + cmd를 출력해보세요.",
+      "prompt_en": "In a while True loop, read cmd and break on \"q\"; otherwise print \"Run:\" + cmd.",
+      "hint_ko": "while True: 안에서 cmd = input()을 받고 if cmd == \"q\":일 때 break한 뒤 print(\"Run:\" + cmd)를 실행하세요.",
+      "hint_en": "Read cmd = input(), break if cmd == \"q\", then print(\"Run:\" + cmd).",
+      "targetCode": "while True:\n    cmd = input()\n    if cmd == \"q\":\n        break\n    print(\"Run:\" + cmd)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "go\ntest\nq",
+          "expectedOutput": "Run:go\nRun:test"
+        },
+        {
+          "id": 2,
+          "input": "build\nq",
+          "expectedOutput": "Run:build"
+        },
+        {
+          "id": 3,
+          "input": "a\nb\nq",
+          "expectedOutput": "Run:a\nRun:b"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "무한 루프 상수와 종료 키워드를 채워 0이 입력될 때까지 들어온 모든 정수의 합을 출력해보세요.",
+      "prompt_en": "Fill in the infinite-loop boolean and exit keyword to sum integers until 0 is entered.",
+      "hint_ko": "항상 참인 불리언 상수 True로 반복을 열고 x == 0일 때 break로 빠져나갑니다.",
+      "hint_en": "Write True after while and break when x == 0.",
+      "templateCode": "total = 0\nwhile §§§§:\n    x = int(input())\n    if x == 0:\n        §§§§§\n    total += x\nprint(total)",
+      "targetCode": "total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "10\n20\n0",
+          "expectedOutput": "30"
+        },
+        {
+          "id": 2,
+          "input": "5\n-2\n7\n0",
+          "expectedOutput": "10"
+        },
+        {
+          "id": 3,
+          "input": "8\n0",
+          "expectedOutput": "8"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "prompt_ko": "while True 반복에서 0이 입력되면 break로 멈추고, 음수(x < 0)는 continue로 건너뛰어 양수만의 합을 출력해보세요.",
+      "prompt_en": "In a while True loop, break on 0, skip negatives with continue, and print the sum of positives.",
+      "hint_ko": "if x == 0:에서 break, if x < 0:에서 continue를 차례로 검사한 뒤 total += x를 실행하세요.",
+      "hint_en": "Check if x == 0: break, then if x < 0: continue, before total += x.",
+      "targetCode": "total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    if x < 0:\n        continue\n    total += x\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "5\n-3\n7\n0",
+          "expectedOutput": "12"
+        },
+        {
+          "id": 2,
+          "input": "10\n-1\n4\n0",
+          "expectedOutput": "14"
+        },
+        {
+          "id": 3,
+          "input": "-5\n8\n0",
+          "expectedOutput": "8"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "실수 변환 함수와 종료 키워드를 채워 음수가 입력되기 전까지 들어온 실수 점수들의 평균을 출력해보세요.",
+      "prompt_en": "Fill in the float conversion function and exit keyword to print the average of non-negative float inputs.",
+      "hint_ko": "실수 입력에는 float()를 사용하고 음수(s < 0)가 들어오면 break로 반복을 마칩니다.",
+      "hint_en": "Parse each input with float() and break as soon as s < 0.",
+      "templateCode": "total = 0.0\ncnt = 0\nwhile True:\n    s = §§§§§(input())\n    if s < 0:\n        §§§§§\n    total += s\n    cnt += 1\nprint(total / cnt)",
+      "targetCode": "total = 0.0\ncnt = 0\nwhile True:\n    s = float(input())\n    if s < 0:\n        break\n    total += s\n    cnt += 1\nprint(total / cnt)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "80.0\n90.0\n-1.0",
+          "expectedOutput": "85.0"
+        },
+        {
+          "id": 2,
+          "input": "10.0\n20.0\n30.0\n-5.0",
+          "expectedOutput": "20.0"
+        },
+        {
+          "id": 3,
+          "input": "7.5\n2.5\n-0.1",
+          "expectedOutput": "5.0"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "block",
+      "prompt_ko": "1부터 차례로 더하다가 total >= limit가 되는 순간 break로 멈추고 str(i) + \":\" + str(total)을 출력해보세요. (예: 10 -> 4:10)",
+      "prompt_en": "Add 1, 2, 3... in a while True loop, break when total >= limit, and print str(i) + \":\" + str(total).",
+      "hint_ko": "total += i 직후 if total >= limit:일 때 break하고, 아니면 i += 1로 다음 수를 준비하세요.",
+      "hint_en": "Right after total += i, break if total >= limit; otherwise increment i += 1.",
+      "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile True:\n    total += i\n    if total >= limit:\n        break\n    i += 1\nprint(str(i) + \":\" + str(total))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "10",
+          "expectedOutput": "4:10"
+        },
+        {
+          "id": 2,
+          "input": "12",
+          "expectedOutput": "5:15"
+        },
+        {
+          "id": 3,
+          "input": "6",
+          "expectedOutput": "3:6"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "공백 분리 메서드와 건너뛰기 키워드를 채워 \"end\"면 종료하고 \"skip\"이면 건너뛰며 값들을 합산해보세요.",
+      "prompt_en": "Fill in the split method and skip keyword to sum values until \"end\" while ignoring \"skip\" lines.",
+      "hint_ko": "명령어와 숫자를 공백으로 나눌 때는 split()을, 합산을 건너뛸 때는 continue를 씁니다.",
+      "hint_en": "Use split() to unpack cmd, val and continue when cmd == \"skip\".",
+      "templateCode": "total = 0\nwhile True:\n    cmd, val = input().§§§§§()\n    if cmd == \"end\":\n        break\n    if cmd == \"skip\":\n        §§§§§§§§\n    total += int(val)\nprint(total)",
+      "targetCode": "total = 0\nwhile True:\n    cmd, val = input().split()\n    if cmd == \"end\":\n        break\n    if cmd == \"skip\":\n        continue\n    total += int(val)\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "add 10\nskip 50\nadd 25\nend 0",
+          "expectedOutput": "35"
+        },
+        {
+          "id": 2,
+          "input": "skip 9\nadd 8\nend 0",
+          "expectedOutput": "8"
+        },
+        {
+          "id": 3,
+          "input": "add 4\nadd 6\nskip 3\nend 0",
+          "expectedOutput": "10"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "반복 제어 키워드 버그를 고쳐 짝수만 건너뛰고 1부터 n까지의 모든 홀수 합이 출력되게 해보세요.",
+      "prompt_en": "Fix the loop-control keyword bug so even numbers are skipped and all odds in 1..n are summed.",
+      "hint_ko": "짝수를 만났을 때 반복 전체를 끝내면 뒤의 홀수를 더할 수 없습니다. 현재 차례만 건너뛰게 고치세요.",
+      "hint_en": "Terminating on the first even stops at 2; skip just the current turn instead.",
+      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        break\n    total += i\nprint(total)",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        continue\n    total += i\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "5",
+          "expectedOutput": "9"
+        },
+        {
+          "id": 2,
+          "input": "6",
+          "expectedOutput": "9"
+        },
+        {
+          "id": 3,
+          "input": "7",
+          "expectedOutput": "16"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "종료 조건 블록 아래에 한 줄을 추가하여 \"stop\"이 아닌 입력 단어 word를 그대로 출력해보세요.",
+      "prompt_en": "Add one line below the break block to print each input word before \"stop\".",
+      "hint_ko": "while 블록 안쪽(공백 4칸 들여쓰기)에 print(word)를 작성하세요.",
+      "hint_en": "Indent by 4 spaces inside the while loop and write print(word).",
+      "templateCode": "while True:\n    word = input()\n    if word == \"stop\":\n        break\n    §§§§§§§§§§§",
+      "targetCode": "while True:\n    word = input()\n    if word == \"stop\":\n        break\n    print(word)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "hi\nok\nstop",
+          "expectedOutput": "hi\nok"
+        },
+        {
+          "id": 2,
+          "input": "one\nstop",
+          "expectedOutput": "one"
+        },
+        {
+          "id": 3,
+          "input": "a\nb\nc\nstop",
+          "expectedOutput": "a\nb\nc"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
+      "prompt_en": "Select the exact output produced when the following Python code runs.",
+      "hint_ko": "짝수는 continue로 건너뛰므로 s에는 1, 3, 5가 더해져 9가 되고, i=6은 건너뛴 뒤 i=7에서 break됩니다.",
+      "hint_en": "Evens hit continue (including i=6), so s = 1+3+5 = 9 and the loop breaks when i reaches 7.",
+      "targetCode": "i = 0\ns = 0\nwhile True:\n    i += 1\n    if i % 2 == 0:\n        continue\n    if i > 6:\n        break\n    s += i\nprint(i, s)",
+      "choices": [
+        "7 9",
+        "6 9",
+        "7 16",
+        "5 9"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "7 9"
+        }
+      ]
+    }
+  ]
 };

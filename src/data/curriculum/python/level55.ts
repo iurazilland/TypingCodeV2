@@ -1,44 +1,45 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 55레벨: 매개변수가 있는 함수 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (단일·다중 매개변수와 인자 전달)
-// - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
-// - [11단계] 버그 수정 (fix_bug)
-// - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
-// - [13단계] 출력 결과 예측 4지선다 퀴즈 (predict_output)
-// ============================================================================
 export const PYTHON_LEVEL_55: PracticeRound = {
   "id": "py-basic-r55",
   "language": "python",
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 55,
-  "title_ko": "55레벨: 매개변수가 있는 함수",
-  "title_en": "Level 55: Functions with Parameters",
+  "title_ko": "55레벨: 런타임 에러의 이해와 try - except 기본 구조",
+  "title_en": "Level 55: Runtime Errors & Basic try - except",
+  "description_ko": "실행 중 발생하는 런타임 에러로 프로그램이 멈추지 않도록 try - except 기본 구조로 안전하게 흐름을 이어갑니다.",
+  "description_en": "Prevent runtime crashes like division by zero or invalid conversions using basic try - except blocks.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
     "input",
     "type",
+    "math",
+    "method",
+    "if",
+    "for_range",
+    "for_in",
+    "while",
     "def",
-    "if"
+    "try"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "매개변수 name을 받아 f\"Hi, {name}\"을 출력하는 greet 함수를 정의하고, \"Mina\"를 넣어 호출해보세요.",
-      "prompt_en": "Define greet(name) to print f\"Hi, {name}\", then call greet(\"Mina\").",
-      "hint_ko": "def greet(name): 내부에 print(f\"Hi, {name}\")을 넣고, 아래에서 greet(\"Mina\")를 호출하세요.",
-      "hint_en": "Write name in the def parameter slot and pass \"Mina\" when calling greet.",
-      "targetCode": "def greet(name):\n    print(f\"Hi, {name}\")\ngreet(\"Mina\")",
+      "prompt_ko": "try 블록 안에서 10 // 0을 출력 시도하고, 에러가 발생하면 except 블록에서 \"Error\"를 출력해보세요.",
+      "prompt_en": "Try printing 10 // 0 inside a try block and catch the crash in except to print \"Error\".",
+      "hint_ko": "0으로 나누면 런타임 에러가 발생하지만 try - except로 감싸면 멈추지 않고 except 블록이 실행됩니다.",
+      "hint_en": "Place print(10 // 0) inside try: and print(\"Error\") inside except:.",
+      "targetCode": "try:\n    print(10 // 0)\nexcept:\n    print(\"Error\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Hi, Mina"
+          "input": "",
+          "expectedOutput": "Error"
         }
       ]
     },
@@ -47,16 +48,17 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 user를 받아 f\"Welcome, {user}!\"를 출력하는 welcome 함수를 완성하고 \"Jun\"으로 호출해보세요.",
-      "prompt_en": "Fill in the blanks so welcome(user) prints f\"Welcome, {user}!\" and call it with \"Jun\".",
-      "hint_ko": "첫 줄 괄호 안에 매개변수 이름 user를, 셋째 줄 괄호 안에 전달할 문자열 \"Jun\"을 입력하세요.",
-      "hint_en": "Put user as the parameter on line 1 and \"Jun\" as the argument on line 3.",
-      "templateCode": "def welcome(§§§§):\n    print(f\"Welcome, {user}!\")\nwelcome(§§§§§)",
-      "targetCode": "def welcome(user):\n    print(f\"Welcome, {user}!\")\nwelcome(\"Jun\")",
+      "prompt_ko": "문자열 \"abc\"를 정수로 변환하다 에러가 나더라도 멈추지 않고 Invalid를 출력하도록 두 키워드를 채워보세요.",
+      "prompt_en": "Fill in the two exception-handling keywords so converting \"abc\" prints Invalid instead of crashing.",
+      "hint_ko": "위험한 코드는 try: 블록 안에, 에러 발생 시 대체 동작은 except: 블록 안에 작성합니다.",
+      "hint_en": "Write try on line 1 and except on line 4.",
+      "templateCode": "§§§:\n    n = int(\"abc\")\n    print(n)\n§§§§§§:\n    print(\"Invalid\")",
+      "targetCode": "try:\n    n = int(\"abc\")\n    print(n)\nexcept:\n    print(\"Invalid\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Welcome, Jun!"
+          "input": "",
+          "expectedOutput": "Invalid"
         }
       ]
     },
@@ -64,15 +66,16 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "숫자 n을 매개변수로 받아 n * 2를 출력하는 double 함수를 만들고, 7과 15로 각각 호출해보세요.",
-      "prompt_en": "Define double(n) to print n * 2, then call double(7) and double(15).",
-      "hint_ko": "def double(n): 안에 print(n * 2)를 넣고, 밖에서 double(7)과 double(15)를 차례로 호출하세요.",
-      "hint_en": "Define double(n) once and invoke it with 7 and then 15.",
-      "targetCode": "def double(n):\n    print(n * 2)\ndouble(7)\ndouble(15)",
+      "prompt_ko": "try에서 100 // 0을 시도하고 except에서 \"Skip\"을 출력한 뒤, 블록 바깥 마지막 줄에서 \"Done\"이 이어서 출력되게 해보세요.",
+      "prompt_en": "Catch 100 // 0 to print \"Skip\", then print \"Done\" after the try - except block finishes.",
+      "hint_ko": "예외가 처리되면 프로그램이 강제 종료되지 않고 try - except 아래의 print(\"Done\")까지 정상 진행됩니다.",
+      "hint_en": "After except prints \"Skip\", execution continues normally to print(\"Done\").",
+      "targetCode": "try:\n    res = 100 // 0\n    print(res)\nexcept:\n    print(\"Skip\")\nprint(\"Done\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "14\n30"
+          "input": "",
+          "expectedOutput": "Skip\nDone"
         }
       ]
     },
@@ -81,16 +84,17 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 숫자 x의 제곱(x ** 2)을 출력하는 square 함수를 완성하고 6을 넣어 호출해보세요.",
-      "prompt_en": "Fill in the blanks to print x ** 2 in square(x) and call square(6).",
-      "hint_ko": "거듭제곱 연산자 **를 채우고, 마지막 줄에서 square(6)을 호출하세요.",
-      "hint_en": "Enter ** on line 2 and square(6) on line 3.",
-      "templateCode": "def square(x):\n    print(x §§ 2)\n§§§§§§§§§",
-      "targetCode": "def square(x):\n    print(x ** 2)\nsquare(6)",
+      "prompt_ko": "정상 변환될 때는 계산 결과만 출력하고 예외 블록을 건너뛴 뒤 End가 출력되도록 두 키워드를 채워보세요.",
+      "prompt_en": "Fill in the two keywords so valid code prints 50, skips Fail, and prints End.",
+      "hint_ko": "try 블록 안에서 에러가 발생하지 않으면 except 블록은 실행되지 않고 건너뜁니다.",
+      "hint_en": "Use try and except to wrap the conversion.",
+      "templateCode": "§§§:\n    n = int(\"25\")\n    print(n * 2)\n§§§§§§:\n    print(\"Fail\")\nprint(\"End\")",
+      "targetCode": "try:\n    n = int(\"25\")\n    print(n * 2)\nexcept:\n    print(\"Fail\")\nprint(\"End\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "36"
+          "input": "",
+          "expectedOutput": "50\nEnd"
         }
       ]
     },
@@ -98,15 +102,21 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "두 매개변수 a, b를 받아 a + b를 출력하는 show_sum 함수를 정의하고 12, 8을 전달해 호출해보세요.",
-      "prompt_en": "Define show_sum(a, b) to print a + b, then call show_sum(12, 8).",
-      "hint_ko": "매개변수가 두 개일 때는 쉼표로 구분해 a, b를 적고, 호출할 때도 12, 8처럼 두 인자를 전달합니다.",
-      "hint_en": "Separate the two parameters with a comma: def show_sum(a, b):.",
-      "targetCode": "def show_sum(a, b):\n    print(a + b)\nshow_sum(12, 8)",
+      "prompt_ko": "입력값을 정수로 변환해 10을 더한 값을 출력하고, 숫자가 아닌 입력이면 \"NaN\"을 출력해보세요.",
+      "prompt_en": "Convert input() to int and print n + 10 inside try, or print \"NaN\" in except if conversion fails.",
+      "hint_ko": "try 블록 안에 n = int(raw)와 print(n + 10)을 넣고 except 블록에 print(\"NaN\")을 배치하세요.",
+      "hint_en": "Wrap n = int(raw) and print(n + 10) in try:, with print(\"NaN\") in except:.",
+      "targetCode": "raw = input()\ntry:\n    n = int(raw)\n    print(n + 10)\nexcept:\n    print(\"NaN\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "20"
+          "input": "15",
+          "expectedOutput": "25"
+        },
+        {
+          "id": 2,
+          "input": "ten",
+          "expectedOutput": "NaN"
         }
       ]
     },
@@ -115,16 +125,22 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 item, cnt를 받아 출력하는 report 함수를 완성하고 report(\"Apple\", 5)를 호출해보세요.",
-      "prompt_en": "Fill in the blanks so report(item, cnt) prints f\"{item}: {cnt}\" for \"Apple\" and 5.",
-      "hint_ko": "함수 정의 괄호 안에는 item, cnt를, 호출 괄호 안에는 \"Apple\", 5를 쉼표로 구분해 적으세요.",
-      "hint_en": "Enter item, cnt on line 1 and \"Apple\", 5 on line 3.",
-      "templateCode": "def report(§§§§§§§§§):\n    print(f\"{item}: {cnt}\")\nreport(§§§§§§§§§§)",
-      "targetCode": "def report(item, cnt):\n    print(f\"{item}: {cnt}\")\nreport(\"Apple\", 5)",
+      "prompt_ko": "입력 문자열을 실수로 변환 시도하고 실패하면 0.0으로 대체해 출력하도록 세 빈칸을 채워보세요. (출력 예: Rate:3.5)",
+      "prompt_en": "Try converting s to a float, fall back to 0.0 on error, and print Rate:{rate}.",
+      "hint_ko": "try: 블록 안에서 float(s)로 실수 변환을 시도하고, 실패 시 except: 블록에서 0.0을 대입합니다.",
+      "hint_en": "Fill in try, float, and except.",
+      "templateCode": "s = input()\n§§§:\n    rate = §§§§§(s)\n§§§§§§:\n    rate = 0.0\nprint(f\"Rate:{rate}\")",
+      "targetCode": "s = input()\ntry:\n    rate = float(s)\nexcept:\n    rate = 0.0\nprint(f\"Rate:{rate}\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Apple: 5"
+          "input": "3.5",
+          "expectedOutput": "Rate:3.5"
+        },
+        {
+          "id": 2,
+          "input": "bad",
+          "expectedOutput": "Rate:0.0"
         }
       ]
     },
@@ -132,15 +148,26 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "점수 s가 60 이상이면 \"Pass\", 아니면 \"Fail\"을 출력하는 judge(s) 함수를 만들고 75와 40으로 호출해보세요.",
-      "prompt_en": "Define judge(s) to print \"Pass\" if s >= 60 else \"Fail\", then call judge(75) and judge(40).",
-      "hint_ko": "def judge(s): 내부에 if s >= 60: ~ else: 블록을 넣어 조건에 따라 출력하게 하세요.",
-      "hint_en": "Nest an if-else block checking s >= 60 inside def judge(s):.",
-      "targetCode": "def judge(s):\n    if s >= 60:\n        print(\"Pass\")\n    else:\n        print(\"Fail\")\njudge(75)\njudge(40)",
+      "prompt_ko": "입력값을 정수로 바꾸어 100 // d 결과를 Ans:결과 형식으로 출력하고, 에러 발생 시 \"Cannot divide\"를 출력해보세요. (출력 예: Ans:4)",
+      "prompt_en": "Convert input to int d and print f\"Ans:{100 // d}\" in try, or \"Cannot divide\" in except.",
+      "hint_ko": "문자가 입력되거나 0이 입력되어 나눗셈 에러가 나면 모두 except 블록이 받아 처리합니다.",
+      "hint_en": "Both invalid text and 0 trigger except:, printing \"Cannot divide\".",
+      "targetCode": "s = input()\ntry:\n    d = int(s)\n    print(f\"Ans:{100 // d}\")\nexcept:\n    print(\"Cannot divide\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Pass\nFail"
+          "input": "25",
+          "expectedOutput": "Ans:4"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "Cannot divide"
+        },
+        {
+          "id": 3,
+          "input": "zero",
+          "expectedOutput": "Cannot divide"
         }
       ]
     },
@@ -149,16 +176,22 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 짝수면 \"Even\", 홀수면 \"Odd\"를 출력하는 check_num(n)을 완성하고 check_num(9)를 호출해보세요.",
-      "prompt_en": "Fill in the blanks in check_num(n) to print \"Even\" or \"Odd\", then call check_num(9).",
-      "hint_ko": "2로 나눈 나머지가 0인지 비교하도록 n % 2 == 0의 빈칸을 채우고 check_num(9)를 호출하세요.",
-      "hint_en": "Use % 2 == 0 in the if condition and call check_num(9) on the last line.",
-      "templateCode": "def check_num(n):\n    if n §§§§§§§§:\n        print(\"Even\")\n    else:\n        print(\"Odd\")\n§§§§§§§§§§§§",
-      "targetCode": "def check_num(n):\n    if n % 2 == 0:\n        print(\"Even\")\n    else:\n        print(\"Odd\")\ncheck_num(9)",
+      "prompt_ko": "정수 변환에 성공하면 count에 더하고, 에러가 발생하면 count에 -1을 저장하도록 두 키워드를 채워보세요. (출력 예: Count:12)",
+      "prompt_en": "Add int(s) to count on success or set count = -1 on error using exception handling keywords.",
+      "hint_ko": "int(s)에서 에러가 나는 즉시 아랫줄 count += val은 건너뛰고 except 블록으로 이동합니다.",
+      "hint_en": "Use try and except around the conversion and addition.",
+      "templateCode": "s = input()\ncount = 0\n§§§:\n    val = int(s)\n    count += val\n§§§§§§:\n    count = -1\nprint(f\"Count:{count}\")",
+      "targetCode": "s = input()\ncount = 0\ntry:\n    val = int(s)\n    count += val\nexcept:\n    count = -1\nprint(f\"Count:{count}\")",
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "Odd"
+          "input": "12",
+          "expectedOutput": "Count:12"
+        },
+        {
+          "id": 2,
+          "input": "err",
+          "expectedOutput": "Count:-1"
         }
       ]
     },
@@ -166,21 +199,16 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "age >= 20이면 \"Adult\", 아니면 \"Minor\"를 출력하는 check_age(age) 함수를 만들고 입력받은 정수를 전달해보세요.",
-      "prompt_en": "Define check_age(age) to print \"Adult\" (>= 20) or \"Minor\", and call it with int(input()).",
-      "hint_ko": "num = int(input())으로 정수를 입력받은 뒤 check_age(num)으로 함수에 전달하세요.",
-      "hint_en": "Store int(input()) in num and pass num to check_age(num).",
-      "targetCode": "def check_age(age):\n    if age >= 20:\n        print(\"Adult\")\n    else:\n        print(\"Minor\")\nnum = int(input())\ncheck_age(num)",
+      "prompt_ko": "리스트 [\"10\", \"x\", \"25\", \"y\"]를 순회하며 정수로 변환 가능한 값만 total에 누적해 합계 35를 출력해보세요.",
+      "prompt_en": "Loop over [\"10\", \"x\", \"25\", \"y\"], add int(s) to total inside try, add 0 in except, and print total.",
+      "hint_ko": "for 반복문 안에 try - except를 넣으면 중간에 \"x\"가 나와도 멈추지 않고 끝까지 합계를 구합니다.",
+      "hint_en": "Put try: total += int(s) and except: total += 0 inside for s in items:.",
+      "targetCode": "items = [\"10\", \"x\", \"25\", \"y\"]\ntotal = 0\nfor s in items:\n    try:\n        total += int(s)\n    except:\n        total += 0\nprint(total)",
       "testCases": [
         {
           "id": 1,
-          "input": "22",
-          "expectedOutput": "Adult"
-        },
-        {
-          "id": 2,
-          "input": "15",
-          "expectedOutput": "Minor"
+          "input": "",
+          "expectedOutput": "35"
         }
       ]
     },
@@ -189,22 +217,17 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 입력받은 문자열 word와 정수 cnt를 repeat_word 함수에 전달해 반복 문자열을 출력해보세요.",
-      "prompt_en": "Fill in the blanks to pass input string word and integer cnt into repeat_word(w, k).",
-      "hint_ko": "함수 정의에는 매개변수 w, k를 적고, 마지막 줄 호출에는 입력 변수 word, cnt를 전달하세요.",
-      "hint_en": "Put w, k on line 1 and word, cnt in the call on line 5.",
-      "templateCode": "def repeat_word(§§§§):\n    print(w * k)\nword = input()\ncnt = int(input())\nrepeat_word(§§§§§§§§§)",
-      "targetCode": "def repeat_word(w, k):\n    print(w * k)\nword = input()\ncnt = int(input())\nrepeat_word(word, cnt)",
+      "prompt_ko": "리스트 인덱스 조회 중 에러가 나면 Out을 출력하는 함수가 되도록 두 예외 처리 키워드를 채워보세요. (출력 예: Val:20)",
+      "prompt_en": "Fill in the two exception-handling keywords inside show_at so out-of-range indices print Out.",
+      "hint_ko": "함수 본문 안에서도 try:와 except:로 감싸 인덱스 범위 초과 에러를 안전하게 처리할 수 있습니다.",
+      "hint_en": "Write try and except inside def show_at(nums, idx):.",
+      "templateCode": "def show_at(nums, idx):\n    §§§:\n        print(f\"Val:{nums[idx]}\")\n    §§§§§§:\n        print(\"Out\")\narr = [10, 20]\nshow_at(arr, 1)\nshow_at(arr, 5)",
+      "targetCode": "def show_at(nums, idx):\n    try:\n        print(f\"Val:{nums[idx]}\")\n    except:\n        print(\"Out\")\narr = [10, 20]\nshow_at(arr, 1)\nshow_at(arr, 5)",
       "testCases": [
         {
           "id": 1,
-          "input": "Go\n3",
-          "expectedOutput": "GoGoGo"
-        },
-        {
-          "id": 2,
-          "input": "Hi\n2",
-          "expectedOutput": "HiHi"
+          "input": "",
+          "expectedOutput": "Val:20\nOut"
         }
       ]
     },
@@ -213,22 +236,22 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "입력받은 가로 a와 세로 b로 넓이를 출력하려 하지만 인자 개수 오류가 발생합니다. 코드를 고쳐보세요.",
-      "prompt_en": "Fix the argument count error so show_area prints the product of inputs a and b.",
-      "hint_ko": "show_area 함수는 매개변수 2개(w, h)를 요구하므로 호출할 때도 두 변수 a와 b를 모두 전달해야 합니다.",
-      "hint_en": "show_area expects two arguments (w, h), so pass both a and b when calling it.",
-      "templateCode": "def show_area(w, h):\n    print(w * h)\na = int(input())\nb = int(input())\nshow_area(a)",
-      "targetCode": "def show_area(w, h):\n    print(w * h)\na = int(input())\nb = int(input())\nshow_area(a, b)",
+      "prompt_ko": "정수 변환 코드가 예외 감시 블록 바깥에 놓여 있어 문자를 입력하면 에러로 멈춥니다. 변환 코드를 블록 안으로 옮겨보세요.",
+      "prompt_en": "Fix the crash on non-numeric input by moving n = int(s) inside the try block.",
+      "hint_ko": "에러가 발생할 수 있는 n = int(s)가 try: 아래에 들여쓰기 되어 있어야 except가 에러를 잡을 수 있습니다.",
+      "hint_en": "Move n = int(s) inside try: right above print(n * 3).",
+      "templateCode": "s = input()\nn = int(s)\ntry:\n    print(n * 3)\nexcept:\n    print(\"Bad input\")",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(n * 3)\nexcept:\n    print(\"Bad input\")",
       "testCases": [
         {
           "id": 1,
-          "input": "4\n5",
-          "expectedOutput": "20"
+          "input": "7",
+          "expectedOutput": "21"
         },
         {
           "id": 2,
-          "input": "3\n7",
-          "expectedOutput": "21"
+          "input": "abc",
+          "expectedOutput": "Bad input"
         }
       ]
     },
@@ -237,22 +260,22 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "코드 마지막에 한 줄을 추가하여 입력받은 역할 r과 이름 u로 tag_user 함수를 호출해보세요.",
-      "prompt_en": "Add one line at the end to call tag_user with inputs r and u.",
-      "hint_ko": "매개변수 순서(role, name)에 맞춰 r과 u를 쉼표로 구분해 전달하세요.",
-      "hint_en": "Call tag_user(r, u) on the last line.",
-      "templateCode": "def tag_user(role, name):\n    print(f\"[{role}] {name}\")\nr = input()\nu = input()\n§§§§§§§§§§§§§§",
-      "targetCode": "def tag_user(role, name):\n    print(f\"[{role}] {name}\")\nr = input()\nu = input()\ntag_user(r, u)",
+      "prompt_ko": "안전하게 나눗셈을 수행하는 예외 처리 코드 아래에 한 줄을 추가하여 ans를 지정된 형식으로 출력해보세요. (출력 예: Result:5)",
+      "prompt_en": "Add one line below the try - except block to print f\"Result:{ans}\".",
+      "hint_ko": "f-string을 이용해 print(f\"Result:{ans}\")를 맨 마지막 줄에 작성합니다.",
+      "hint_en": "Write print(f\"Result:{ans}\") on the last line.",
+      "templateCode": "raw = input()\ntry:\n    ans = 50 // int(raw)\nexcept:\n    ans = -1\n§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "raw = input()\ntry:\n    ans = 50 // int(raw)\nexcept:\n    ans = -1\nprint(f\"Result:{ans}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "Admin\nSora",
-          "expectedOutput": "[Admin] Sora"
+          "input": "10",
+          "expectedOutput": "Result:5"
         },
         {
           "id": 2,
-          "input": "Guest\nLeo",
-          "expectedOutput": "[Guest] Leo"
+          "input": "0",
+          "expectedOutput": "Result:-1"
         }
       ]
     },
@@ -261,22 +284,23 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "Predict the output of the following code.",
-      "hint_ko": "첫 호출은 10 > 4가 참이라 뺄셈이, 둘째 호출은 3 > 8이 거짓이라 덧셈이 실행됩니다.",
-      "hint_en": "In calc(10, 4), a > b is True (10 - 4); in calc(3, 8), a > b is False (3 + 8).",
-      "targetCode": "def calc(a, b):\n    if a > b:\n        print(a - b)\n    else:\n        print(a + b)\ncalc(10, 4)\ncalc(3, 8)",
+      "prompt_ko": "반복문 안에서 예외 처리를 수행하는 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "Select the exact list printed after running the following loop with try - except.",
+      "hint_ko": "\"4\"는 2, \"0\"은 0 나눗셈 에러로 -1, \"hi\"는 변환 에러로 -1, \"2\"는 4가 리스트에 추가됩니다.",
+      "hint_en": "\"4\" -> 2, \"0\" -> crash -> -1, \"hi\" -> crash -> -1, \"2\" -> 4.",
+      "targetCode": "data = [\"4\", \"0\", \"hi\", \"2\"]\nres = []\nfor s in data:\n    try:\n        v = 8 // int(s)\n        res.append(v)\n    except:\n        res.append(-1)\nprint(res)",
       "choices": [
-        "14\n11",
-        "6\n11",
-        "6\n-5",
-        "14\n-5"
+        "[2, -1, -1, 4]",
+        "[2, 0, -1, 4]",
+        "[2, -1, 4]",
+        "[2, -1, -1, 2]"
       ],
-      "correctChoiceIndex": 1,
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
-          "expectedOutput": "6\n11"
+          "input": "",
+          "expectedOutput": "[2, -1, -1, 4]"
         }
       ]
     }

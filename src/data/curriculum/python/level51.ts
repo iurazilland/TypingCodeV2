@@ -6,32 +6,39 @@ export const PYTHON_LEVEL_51: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 51,
-  "title_ko": "51레벨: 집합(set) 기초와 중복 제거",
-  "title_en": "Level 51: Sets & Removing Duplicates",
+  "title_ko": "51레벨: 매개변수가 있는 함수",
+  "title_en": "Level 51: Functions with Parameters",
+  "description_ko": "매개변수를 통해 숫자, 문자열은 물론 리스트·딕셔너리·집합·튜플 데이터를 함수에 전달해 처리합니다.",
+  "description_en": "Pass numbers, strings, lists, dicts, sets, and tuples as arguments into parameterized functions.",
   "totalQuestions": 13,
   "unlockedBlocks": [
     "print",
     "variable",
-    "method",
+    "input",
+    "type",
     "math",
-    "sorted",
-    "if"
+    "method",
+    "if",
+    "for_range",
+    "for_in",
+    "while",
+    "def"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "집합 s = {1, 2, 2, 3}을 만들고 중복 제거 후 개수 len(s)와 정렬된 sorted(s)를 출력해보세요.",
-      "prompt_en": "Create set s = {1, 2, 2, 3} and print len(s) and sorted(s).",
-      "hint_ko": "집합은 중복된 2를 하나로 합치므로 len(s)는 3, sorted(s)는 [1, 2, 3]이 출력됩니다.",
-      "hint_en": "Sets automatically remove duplicates; print len(s) and sorted(s).",
-      "targetCode": "s = {1, 2, 2, 3}\nprint(len(s), sorted(s))",
+      "prompt_ko": "매개변수 name을 받아 인사말을 출력하는 greet(name) 함수를 만들고 \"Mina\"를 전달해 호출해보세요. (출력 예: Hi, Mina!)",
+      "prompt_en": "Define greet(name) to print f\"Hi, {name}!\" and call greet(\"Mina\").",
+      "hint_ko": "def greet(name): 안에서 f\"Hi, {name}!\"를 출력하고 아래에서 greet(\"Mina\")를 호출합니다.",
+      "hint_en": "Accept name in def greet(name): and pass \"Mina\" when calling greet(\"Mina\").",
+      "targetCode": "def greet(name):\n    print(f\"Hi, {name}!\")\ngreet(\"Mina\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "3 [1, 2, 3]"
+          "expectedOutput": "Hi, Mina!"
         }
       ]
     },
@@ -40,17 +47,17 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 10, 20, 10, 30을 중괄호 집합 nums로 선언하고 고유 원소의 개수를 출력해보세요.",
-      "prompt_en": "Fill in the set literal {10, 20, 10, 30} for nums and print its unique item count.",
-      "hint_ko": "콜론 없이 중괄호 안에 {10, 20, 10, 30}을 작성하면 중복이 제거된 집합이 생성됩니다.",
-      "hint_en": "Write {10, 20, 10, 30} using curly braces.",
-      "templateCode": "nums = §§§§§§§§§§§§§§§§\nprint(len(nums))",
-      "targetCode": "nums = {10, 20, 10, 30}\nprint(len(nums))",
+      "prompt_ko": "전달받은 매개변수를 자기 자신과 곱해 제곱값을 출력하도록 두 빈칸을 채워보세요. (출력 예: 36)",
+      "prompt_en": "Fill in both blanks with the parameter name to print its square (36).",
+      "hint_ko": "함수 선언부 괄호 안에 적힌 매개변수 num을 그대로 곱셈식에 사용합니다.",
+      "hint_en": "Multiply num * num inside print().",
+      "templateCode": "def square(num):\n    print(§§§ * §§§)\nsquare(6)",
+      "targetCode": "def square(num):\n    print(num * num)\nsquare(6)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "3"
+          "expectedOutput": "36"
         }
       ]
     },
@@ -58,16 +65,16 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "빈 집합 s = set()을 만들고 10을 두 번 .add()한 뒤 집합 s와 길이를 출력해보세요.",
-      "prompt_en": "Create an empty set s = set(), call s.add(10) twice, and print s and len(s).",
-      "hint_ko": "빈 집합은 반드시 set()으로 만들며, 같은 값 10을 두 번 추가해도 하나만 유지됩니다.",
-      "hint_en": "Initialize s = set(), call s.add(10) twice, then print(s, len(s)).",
-      "targetCode": "s = set()\ns.add(10)\ns.add(10)\nprint(s, len(s))",
+      "prompt_ko": "두 매개변수 a, b를 받아 두 수의 합을 출력하는 show_add(a, b) 함수를 정의하고 15와 25로 호출해보세요.",
+      "prompt_en": "Define show_add(a, b) to print a + b, then call show_add(15, 25).",
+      "hint_ko": "매개변수가 여러 개일 때는 def show_add(a, b):처럼 쉼표로 구분해 작성합니다.",
+      "hint_en": "Separate parameters with a comma in def show_add(a, b): and pass 15, 25.",
+      "targetCode": "def show_add(a, b):\n    print(a + b)\nshow_add(15, 25)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "{10} 1"
+          "expectedOutput": "40"
         }
       ]
     },
@@ -76,17 +83,17 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 빈 집합 visited를 생성하고 두 도시를 추가한 뒤 정렬된 리스트를 출력해보세요.",
-      "prompt_en": "Fill in the blanks to create empty set visited, add two cities, and print sorted(visited).",
-      "hint_ko": "빈 집합 생성에는 set()을, 집합에 단일 원소를 추가할 때는 .add() 메서드를 사용합니다.",
-      "hint_en": "Use set() on line 1 and add on line 3.",
-      "templateCode": "visited = §§§§§\nvisited.§§§(\"Seoul\")\nvisited.add(\"Busan\")\nprint(sorted(visited))",
-      "targetCode": "visited = set()\nvisited.add(\"Seoul\")\nvisited.add(\"Busan\")\nprint(sorted(visited))",
+      "prompt_ko": "출력문에서 사용하는 두 매개변수 이름을 순서대로 선언부 빈칸에 채워 함수를 완성해보세요. (출력 예: Seoul-2026)",
+      "prompt_en": "Fill in the two parameter names used in the f-string so Seoul-2026 is printed.",
+      "hint_ko": "본문의 f\"{city}-{year}\"에 맞춰 첫째 인자는 city, 둘째 인자는 year로 받습니다.",
+      "hint_en": "Write city and year inside def intro(city, year):.",
+      "templateCode": "def intro(§§§§, §§§§):\n    print(f\"{city}-{year}\")\nintro(\"Seoul\", 2026)",
+      "targetCode": "def intro(city, year):\n    print(f\"{city}-{year}\")\nintro(\"Seoul\", 2026)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['Busan', 'Seoul']"
+          "expectedOutput": "Seoul-2026"
         }
       ]
     },
@@ -94,16 +101,21 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "s = {10, 20, 30}에서 10은 .remove()로, 없는 값 99는 .discard()로 지운 뒤 sorted(s)를 출력해보세요.",
-      "prompt_en": "On s = {10, 20, 30}, call s.remove(10) and s.discard(99), then print sorted(s).",
-      "hint_ko": ".discard(99)는 집합에 없는 원소를 전달해도 에러 없이 안전하게 넘어갑니다.",
-      "hint_en": "Remove 10 with s.remove(10), safely ignore 99 with s.discard(99), and print sorted(s).",
-      "targetCode": "s = {10, 20, 30}\ns.remove(10)\ns.discard(99)\nprint(sorted(s))",
+      "prompt_ko": "실수 온도 t를 받아 30.0 이상이면 Hot, 아니면 Cool을 출력하는 check_temp(t)를 만들고 실수 입력값을 전달해보세요.",
+      "prompt_en": "Define check_temp(t) printing Hot if t >= 30.0 else Cool, then pass float(input()) to it.",
+      "hint_ko": "val = float(input())으로 실수를 입력받은 뒤 check_temp(val)로 함수에 넘겨줍니다.",
+      "hint_en": "Read val = float(input()) and call check_temp(val).",
+      "targetCode": "def check_temp(t):\n    if t >= 30.0:\n        print(\"Hot\")\n    else:\n        print(\"Cool\")\nval = float(input())\ncheck_temp(val)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[20, 30]"
+          "input": "31.5",
+          "expectedOutput": "Hot"
+        },
+        {
+          "id": 2,
+          "input": "24.0",
+          "expectedOutput": "Cool"
         }
       ]
     },
@@ -112,17 +124,22 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 있는 원소 \"B\"는 remove로, 없는 원소 \"Z\"는 에러가 나지 않는 discard로 삭제해보세요.",
-      "prompt_en": "Fill in remove for existing element \"B\" and discard for missing element \"Z\".",
-      "hint_ko": "둘째 줄에는 remove를, 셋째 줄에는 없는 값도 안전하게 무시하는 discard를 입력하세요.",
-      "hint_en": "Write remove on line 2 and discard on line 3.",
-      "templateCode": "keys = {\"A\", \"B\", \"C\"}\nkeys.§§§§§§(\"B\")\nkeys.§§§§§§§(\"Z\")\nprint(sorted(keys))",
-      "targetCode": "keys = {\"A\", \"B\", \"C\"}\nkeys.remove(\"B\")\nkeys.discard(\"Z\")\nprint(sorted(keys))",
+      "prompt_ko": "반복 횟수 매개변수와 입력받은 단어 변수를 각 빈칸에 채워 번호와 단어를 출력해보세요. (출력 예: 1:Cat)",
+      "prompt_en": "Fill in the repeat count parameter and the input word variable to print numbered lines.",
+      "hint_ko": "range 안에는 두 번째 매개변수 cnt를, 마지막 줄 호출에는 입력 변수 w를 전달합니다.",
+      "hint_en": "Use cnt inside range(cnt) and pass w as the first argument in show_twice(w, 2).",
+      "templateCode": "def show_twice(word, cnt):\n    for i in range(§§§):\n        print(f\"{i + 1}:{word}\")\nw = input()\nshow_twice(§, 2)",
+      "targetCode": "def show_twice(word, cnt):\n    for i in range(cnt):\n        print(f\"{i + 1}:{word}\")\nw = input()\nshow_twice(w, 2)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "['A', 'C']"
+          "input": "Cat",
+          "expectedOutput": "1:Cat\n2:Cat"
+        },
+        {
+          "id": 2,
+          "input": "Dog",
+          "expectedOutput": "1:Dog\n2:Dog"
         }
       ]
     },
@@ -130,16 +147,16 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "집합 vip = {\"Kim\", \"Lee\"}에 \"Kim\"이 포함되어 있으면 \"Allow\", 아니면 \"Deny\"를 출력해보세요.",
-      "prompt_en": "If \"Kim\" is in set vip = {\"Kim\", \"Lee\"}, print \"Allow\", otherwise print \"Deny\".",
-      "hint_ko": "if \"Kim\" in vip: 조건문을 사용하면 집합 안에 원소가 있는지 빠르게 확인할 수 있습니다.",
-      "hint_en": "Check membership with if \"Kim\" in vip:.",
-      "targetCode": "vip = {\"Kim\", \"Lee\"}\nif \"Kim\" in vip:\n    print(\"Allow\")\nelse:\n    print(\"Deny\")",
+      "prompt_ko": "리스트를 매개변수 nums로 받아 길이와 합계를 한 줄에 출력하는 list_info(nums)를 만들고 [10, 20, 30]을 전달해보세요.",
+      "prompt_en": "Define list_info(nums) to print len(nums) and sum(nums), then pass [10, 20, 30].",
+      "hint_ko": "리스트 변수 scores = [10, 20, 30]을 만든 뒤 list_info(scores)로 리스트 전체를 전달하세요.",
+      "hint_en": "Pass scores = [10, 20, 30] into list_info(scores) and print len(nums), sum(nums).",
+      "targetCode": "def list_info(nums):\n    print(len(nums), sum(nums))\nscores = [10, 20, 30]\nlist_info(scores)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Allow"
+          "expectedOutput": "3 60"
         }
       ]
     },
@@ -148,22 +165,17 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 입력받은 아이디 uid가 차단 집합 banned에 없는지(True/False) 출력해보세요.",
-      "prompt_en": "Fill in the membership operator to print True when uid is not in banned, else False.",
-      "hint_ko": "집합에 포함되어 있지 않은지 검사할 때는 not in 연산자를 사용합니다.",
-      "hint_en": "Use not in between uid and banned.",
-      "templateCode": "banned = {\"bot\", \"spam\"}\nuid = input()\nprint(uid §§§§§§ banned)",
-      "targetCode": "banned = {\"bot\", \"spam\"}\nuid = input()\nprint(uid not in banned)",
+      "prompt_ko": "딕셔너리에 찾는 키가 있는지 확인해 해당 가격을 출력하도록 두 빈칸을 채워보세요. (출력 예: 4500)",
+      "prompt_en": "Check whether the key exists in the dictionary parameter and print its value (4500).",
+      "hint_ko": "if key in menu:로 키 존재 여부를 검사하고 menu[key]로 값을 조회합니다.",
+      "hint_en": "Use in for membership checking and key inside menu[key].",
+      "templateCode": "def show_price(menu, key):\n    if key §§ menu:\n        print(menu[§§§])\n    else:\n        print(\"None\")\nitems = {\"tea\": 3000, \"pie\": 4500}\nshow_price(items, \"pie\")",
+      "targetCode": "def show_price(menu, key):\n    if key in menu:\n        print(menu[key])\n    else:\n        print(\"None\")\nitems = {\"tea\": 3000, \"pie\": 4500}\nshow_price(items, \"pie\")",
       "testCases": [
         {
           "id": 1,
-          "input": "neo",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "spam",
-          "expectedOutput": "False"
+          "input": "",
+          "expectedOutput": "4500"
         }
       ]
     },
@@ -171,16 +183,16 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "중복이 섞인 리스트 nums = [4, 2, 4, 1, 2]의 중복을 제거하고 오름차순 정렬해 출력해보세요.",
-      "prompt_en": "Remove duplicates from nums = [4, 2, 4, 1, 2] and print the ascending sorted list.",
-      "hint_ko": "set(nums)로 중복을 없앤 뒤 sorted(set(nums))로 감싸 정렬된 리스트를 출력하세요.",
-      "hint_en": "Wrap set(nums) inside sorted() and print it.",
-      "targetCode": "nums = [4, 2, 4, 1, 2]\nprint(sorted(set(nums)))",
+      "prompt_ko": "집합 vips와 이름 user를 받아 집합에 있으면 이름:VIP, 없으면 이름:Guest를 출력하는 check_vip 함수를 호출해보세요.",
+      "prompt_en": "Define check_vip(vips, user) to check membership in set vips and print user:VIP or user:Guest.",
+      "hint_ko": "club = {\"Kim\", \"Park\"} 집합과 \"Kim\"을 check_vip(club, \"Kim\")으로 전달하세요.",
+      "hint_en": "Check if user in vips: inside check_vip and call check_vip(club, \"Kim\").",
+      "targetCode": "def check_vip(vips, user):\n    if user in vips:\n        print(f\"{user}:VIP\")\n    else:\n        print(f\"{user}:Guest\")\nclub = {\"Kim\", \"Park\"}\ncheck_vip(club, \"Kim\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[1, 2, 4]"
+          "expectedOutput": "Kim:VIP"
         }
       ]
     },
@@ -189,22 +201,17 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 입력된 단어 리스트 raw의 중복을 제거하고 정렬한 clean의 개수와 내용을 출력해보세요.",
-      "prompt_en": "Fill in the blank to deduplicate and sort raw into clean, then print its length and items.",
-      "hint_ko": "set(raw)로 중복을 제거하고 바깥에 sorted(...)를 씌워 정렬된 리스트를 만드세요.",
-      "hint_en": "Write sorted(set(raw)) on line 2.",
-      "templateCode": "raw = input().split()\nclean = §§§§§§§§§§§§§§§§\nprint(len(clean), clean)",
-      "targetCode": "raw = input().split()\nclean = sorted(set(raw))\nprint(len(clean), clean)",
+      "prompt_ko": "전달받은 좌표 튜플을 x, y로 언패킹하고 마지막 줄에서 함수를 호출하도록 두 빈칸을 채워보세요. (출력 예: X=12,Y=35)",
+      "prompt_en": "Unpack the tuple parameter into x, y and call the function with pos on the last line.",
+      "hint_ko": "함수 안에서는 매개변수 pt를 언패킹하고, 아래에서는 print_point(pos) 형태로 호출합니다.",
+      "hint_en": "Assign x, y = pt and call print_point(pos).",
+      "templateCode": "def print_point(pt):\n    x, y = §§\n    print(f\"X={x},Y={y}\")\npos = (12, 35)\n§§§§§§§§§§§(pos)",
+      "targetCode": "def print_point(pt):\n    x, y = pt\n    print(f\"X={x},Y={y}\")\npos = (12, 35)\nprint_point(pos)",
       "testCases": [
         {
           "id": 1,
-          "input": "b a b c a",
-          "expectedOutput": "3 ['a', 'b', 'c']"
-        },
-        {
-          "id": 2,
-          "input": "x x y",
-          "expectedOutput": "2 ['x', 'y']"
+          "input": "",
+          "expectedOutput": "X=12,Y=35"
         }
       ]
     },
@@ -213,17 +220,17 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "빈 집합을 만들어 원소를 추가하려다 AttributeError가 발생했습니다. 빈 집합이 되도록 고쳐보세요.",
-      "prompt_en": "Fix the AttributeError on line 1 so s starts as an empty set and prints [10, 20].",
-      "hint_ko": "빈 중괄호 {}는 집합이 아니라 빈 딕셔너리를 만듭니다. 빈 집합 생성 함수를 사용해보세요.",
-      "hint_en": "{} creates an empty dict, not a set; initialize an empty set using the built-in constructor.",
-      "templateCode": "s = {}\ns.add(10)\ns.add(20)\nprint(sorted(s))",
-      "targetCode": "s = set()\ns.add(10)\ns.add(20)\nprint(sorted(s))",
+      "prompt_ko": "호출 시 리스트와 품목 2개를 전달하지만 함수 선언부에 매개변수가 1개뿐이어서 에러가 발생합니다. 선언부를 고쳐보세요.",
+      "prompt_en": "Fix the TypeError caused by declaring only 1 parameter when 2 arguments are passed.",
+      "hint_ko": "본문의 bag.append(item)에서 사용하는 두 번째 매개변수 item을 선언부 괄호에 함께 적어주세요.",
+      "hint_en": "Update the header to def add_item(bag, item): so both arguments are accepted.",
+      "templateCode": "def add_item(bag):\n    bag.append(item)\ncart = [\"bread\"]\nadd_item(cart, \"milk\")\nprint(cart)",
+      "targetCode": "def add_item(bag, item):\n    bag.append(item)\ncart = [\"bread\"]\nadd_item(cart, \"milk\")\nprint(cart)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 20]"
+          "expectedOutput": "['bread', 'milk']"
         }
       ]
     },
@@ -232,17 +239,17 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "중복 기록 리스트 logs 아래에 한 줄을 추가하여 중복을 제거하고 오름차순 정렬한 리스트를 출력해보세요.",
-      "prompt_en": "Add one line below logs to print the deduplicated, ascending-sorted list.",
-      "hint_ko": "set(logs)를 sorted()에 넣어 print(sorted(set(logs)))를 작성하세요.",
-      "hint_en": "Write print(sorted(set(logs))) on line 2.",
-      "templateCode": "logs = [30, 10, 30, 20, 10]\n§§§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "logs = [30, 10, 30, 20, 10]\nprint(sorted(set(logs)))",
+      "prompt_ko": "재고 출력 함수와 딕셔너리 inv 아래에 한 줄을 추가하여 inv와 \"pen\"을 인자로 함수를 호출해보세요. (출력 예: pen:12)",
+      "prompt_en": "Add one line below inv to call show_stock with inv and \"pen\" so pen:12 is printed.",
+      "hint_ko": "show_stock 함수에 첫째 인자로 inv, 둘째 인자로 \"pen\"을 순서대로 전달합니다.",
+      "hint_en": "Write show_stock(inv, \"pen\") on the last line.",
+      "templateCode": "def show_stock(store, name):\n    print(f\"{name}:{store[name]}\")\ninv = {\"pen\": 12, \"note\": 5}\n§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "def show_stock(store, name):\n    print(f\"{name}:{store[name]}\")\ninv = {\"pen\": 12, \"note\": 5}\nshow_stock(inv, \"pen\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 20, 30]"
+          "expectedOutput": "pen:12"
         }
       ]
     },
@@ -251,23 +258,23 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
-      "prompt_en": "Select the exact output produced when the following Python code runs.",
-      "hint_ko": "{1, 2, 3}에서 2 추가는 변화 없고, 없는 5 discard는 무시되며, 1을 지우면 원소 2개 [2, 3]이 남습니다.",
-      "hint_en": "s starts with {1, 2, 3}; add(2) and discard(5) leave it unchanged, and remove(1) leaves [2, 3].",
-      "targetCode": "s = {3, 1, 3, 2}\ns.add(2)\ns.discard(5)\ns.remove(1)\nprint(len(s), sorted(s))",
+      "prompt_ko": "리스트와 집합을 인자로 전달하는 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "Select the output when passing a list and a set into the following function.",
+      "hint_ko": "words의 5개 원소 중 skip 집합 {\"b\", \"d\"}에 속하지 않는 원소는 \"a\"와 \"c\" 총 2개입니다.",
+      "hint_en": "Among [\"a\", \"b\", \"c\", \"b\", \"d\"], only \"a\" and \"c\" are not in {\"b\", \"d\"}, so cnt is 2.",
+      "targetCode": "def filter_count(items, banned):\n    cnt = 0\n    for x in items:\n        if x not in banned:\n            cnt += 1\n    print(cnt)\nwords = [\"a\", \"b\", \"c\", \"b\", \"d\"]\nskip = {\"b\", \"d\"}\nfilter_count(words, skip)",
       "choices": [
-        "3 [1, 2, 3]",
-        "2 [2, 3]",
-        "2 [1, 3]",
-        "KeyError"
+        "2",
+        "3",
+        "4",
+        "5"
       ],
-      "correctChoiceIndex": 1,
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "2 [2, 3]"
+          "expectedOutput": "2"
         }
       ]
     }
