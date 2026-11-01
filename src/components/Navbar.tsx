@@ -1,20 +1,53 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CheckSquare, Code2, Trophy, User, LogOut, Menu, X } from 'lucide-react';
+import {
+  BookOpen,
+  CheckSquare,
+  ChevronDown,
+  Code2,
+  Flame,
+  LogOut,
+  Menu,
+  Settings,
+  Trophy,
+  User,
+  X,
+  Zap,
+} from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
+import UserAvatar from '@/components/UserAvatar';
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
-  const { user, profile, openAuthModal, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
-  // Dedicated fullscreen practice studio has its own dedicated top header & controls
-  // Only hide the global Navbar when inside an active practice/coding room (e.g. /practice/[language]/[level])
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(e.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setIsProfileMenuOpen(false);
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Hide global Navbar inside fullscreen practice studio (/practice/[language]/[level])
   const pathSegments = pathname?.split('/').filter(Boolean) || [];
   if (pathSegments[0] === 'practice' && pathSegments.length >= 3) {
     return null;
@@ -26,54 +59,57 @@ export default function Navbar() {
     pathname?.startsWith('/learn') ||
     (pathSegments[0] === 'practice' && pathSegments.length <= 2);
 
-  const openLogin = (nextPath?: string) => {
-    openAuthModal({
-      tab: 'login',
-      nextPath: nextPath ?? null,
-      notice: nextPath
-        ? language === 'ko'
-          ? '실습·컴파일러·문제풀이 기능을 이용하려면 로그인이 필요합니다.'
-          : 'Please sign in to access practice, compiler, and coding challenges.'
-        : null,
-    });
-    setIsMobileMenuOpen(false);
-  };
-
   const displayName =
     profile?.display_name ||
     (typeof user?.user_metadata?.name === 'string' && user.user_metadata.name) ||
     (user?.email ? user.email.split('@')[0] : 'Coder');
+
+  const currentStreak = profile?.current_streak || 0;
+  const speedLabel =
+    (t.nav as Record<string, string>).speedCoding ||
+    (language === 'ko' ? '스피드 코딩' : 'Speed Coding');
 
   const navItems = [
     {
       label: t.nav.learn,
       href: '/languages',
       icon: BookOpen,
-      isActive: pathname.startsWith('/languages') || pathname.startsWith('/learn') || pathname.startsWith('/practice'),
-      requiresAuth: false,
+      isActive:
+        pathname.startsWith('/languages') ||
+        pathname.startsWith('/learn') ||
+        pathname.startsWith('/practice'),
+    },
+    {
+      label: speedLabel,
+      href: '/speed-coding',
+      icon: Zap,
+      isActive:
+        pathname.startsWith('/speed-coding') || pathname.startsWith('/challenges'),
     },
     {
       label: t.nav.problems,
       href: '/problems',
       icon: CheckSquare,
       isActive: pathname.startsWith('/problems'),
-      requiresAuth: true,
     },
     {
       label: t.nav.compiler,
       href: '/compiler',
       icon: Code2,
       isActive: pathname.startsWith('/compiler'),
-      requiresAuth: true,
     },
     {
       label: t.nav.ranking,
       href: '/ranking',
       icon: Trophy,
       isActive: pathname.startsWith('/ranking'),
-      requiresAuth: false,
     },
   ];
+
+  const loginHref =
+    pathname && pathname !== '/' && pathname !== '/login'
+      ? `/login?next=${encodeURIComponent(pathname)}`
+      : '/login';
 
   return (
     <>
@@ -91,7 +127,7 @@ export default function Navbar() {
             : undefined
         }
       >
-        {/* Left Side: Brand Logo & Title (Clean & Simple) */}
+        {/* Left Side: Brand Logo */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
             <div
@@ -124,7 +160,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Center: Main Navigation Menus (학습하기, 문제풀이, 자유코딩, 리더보드) */}
+        {/* Center: Main Navigation Menus */}
         <nav
           className="desktop-nav-center"
           style={{
@@ -139,7 +175,7 @@ export default function Navbar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '5px',
               background: isLightPage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
               border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.08)',
               padding: '5px 8px',
@@ -155,12 +191,6 @@ export default function Navbar() {
                   href={item.href}
                   className={`nav-link-item ${item.isActive ? 'active' : ''}`}
                   title={item.label}
-                  onClick={(e) => {
-                    if (item.requiresAuth && !user) {
-                      e.preventDefault();
-                      openLogin(item.href);
-                    }
-                  }}
                 >
                   <Icon size={16} style={{ flexShrink: 0 }} />
                   <span className="nav-link-text">{item.label}</span>
@@ -170,7 +200,7 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* Right Side: Language Switcher + Login / User Profile + Mobile Toggle */}
+        {/* Right Side: Language Switcher + Login / User Profile Dropdown */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
           {/* Language Selector: KO / EN */}
           <div
@@ -189,7 +219,7 @@ export default function Navbar() {
               onClick={() => setLanguage('ko')}
               aria-label="한국어로 변경"
               style={{
-                padding: '5px 11px',
+                padding: '5px 10px',
                 borderRadius: '7px',
                 border:
                   language === 'ko'
@@ -212,8 +242,6 @@ export default function Navbar() {
                 fontWeight: language === 'ko' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
-                boxShadow: language === 'ko' && isLightPage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
-                transition: 'all 0.15s ease',
               }}
             >
               KO
@@ -222,7 +250,7 @@ export default function Navbar() {
               onClick={() => setLanguage('en')}
               aria-label="Switch to English"
               style={{
-                padding: '5px 11px',
+                padding: '5px 10px',
                 borderRadius: '7px',
                 border:
                   language === 'en'
@@ -245,8 +273,6 @@ export default function Navbar() {
                 fontWeight: language === 'en' ? 700 : 500,
                 fontSize: '0.8rem',
                 cursor: 'pointer',
-                boxShadow: language === 'en' && isLightPage ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
-                transition: 'all 0.15s ease',
               }}
             >
               EN
@@ -254,29 +280,40 @@ export default function Navbar() {
           </div>
 
           {user ? (
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-              <div
-                title={user.email || displayName}
+            <div ref={profileMenuRef} style={{ position: 'relative', flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '7px',
-                  padding: '6px 12px',
-                  borderRadius: '11px',
-                  background: isLightPage ? '#ffffff' : 'rgba(56, 189, 248, 0.12)',
-                  border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(56, 189, 248, 0.3)',
+                  gap: '8px',
+                  padding: '5px 11px 5px 6px',
+                  borderRadius: '13px',
+                  background: isLightPage ? '#ffffff' : 'rgba(15, 23, 42, 0.78)',
+                  border: isLightPage
+                    ? '1.5px solid #cbd5e1'
+                    : '1.5px solid rgba(56, 189, 248, 0.32)',
                   color: isLightPage ? '#0f172a' : '#f8fafc',
                   fontSize: '0.84rem',
                   fontWeight: 700,
-                  maxWidth: '170px',
+                  cursor: 'pointer',
+                  boxShadow: isLightPage
+                    ? '0 2px 6px rgba(15, 23, 42, 0.05)'
+                    : '0 4px 12px rgba(0, 0, 0, 0.25)',
+                  transition: 'all 0.15s ease',
                 }}
               >
-                <span style={{ fontSize: '1rem', lineHeight: 1 }}>
-                  {profile?.avatar_emoji || '🦊'}
-                </span>
+                <UserAvatar
+                  avatarUrl={profile?.avatar_url}
+                  avatarPreset={profile?.avatar_preset}
+                  size={28}
+                  alt={displayName}
+                />
                 <span
                   className="login-btn-text"
                   style={{
+                    maxWidth: '115px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -284,47 +321,202 @@ export default function Navbar() {
                 >
                   {displayName}
                 </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => void signOut()}
-                title={language === 'ko' ? '로그아웃' : 'Sign Out'}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '7px 12px',
-                  borderRadius: '11px',
-                  background: isLightPage ? '#f1f5f9' : 'rgba(255, 255, 255, 0.06)',
-                  border: isLightPage ? '1px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.12)',
-                  color: isLightPage ? '#475569' : '#cbd5e1',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#ef4444';
-                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.45)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = isLightPage ? '#475569' : '#cbd5e1';
-                  e.currentTarget.style.borderColor = isLightPage
-                    ? '#cbd5e1'
-                    : 'rgba(255, 255, 255, 0.12)';
-                }}
-              >
-                <LogOut size={15} style={{ flexShrink: 0 }} />
-                <span className="login-btn-text">
-                  {language === 'ko' ? '로그아웃' : 'Sign Out'}
-                </span>
+                {currentStreak > 0 && (
+                  <span
+                    title={
+                      language === 'ko'
+                        ? `${currentStreak}일 연속 출석 중`
+                        : `${currentStreak}-day streak`
+                    }
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '2px',
+                      padding: '2px 6px',
+                      borderRadius: '8px',
+                      background: 'rgba(249, 115, 22, 0.15)',
+                      color: '#f97316',
+                      fontSize: '0.73rem',
+                      fontWeight: 800,
+                    }}
+                  >
+                    <Flame size={12} />
+                    {currentStreak}
+                  </span>
+                )}
+                <ChevronDown
+                  size={14}
+                  style={{
+                    color: '#94a3b8',
+                    transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none',
+                    transition: 'transform 0.15s ease',
+                  }}
+                />
               </button>
+
+              {isProfileMenuOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: '240px',
+                    borderRadius: '16px',
+                    background: '#131f37',
+                    border: '1.5px solid rgba(56, 189, 248, 0.28)',
+                    boxShadow: '0 20px 44px rgba(0, 0, 0, 0.55)',
+                    padding: '10px',
+                    zIndex: 1100,
+                    color: '#f8fafc',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '8px 10px 12px',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      marginBottom: '6px',
+                    }}
+                  >
+                    <UserAvatar
+                      avatarUrl={profile?.avatar_url}
+                      avatarPreset={profile?.avatar_preset}
+                      size={38}
+                      alt={displayName}
+                    />
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div
+                        style={{
+                          fontWeight: 800,
+                          fontSize: '0.9rem',
+                          color: '#ffffff',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {displayName}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.74rem',
+                          color: '#94a3b8',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {profile?.username ? `@${profile.username}` : user.email}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '6px',
+                      padding: '4px 6px 10px',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      marginBottom: '6px',
+                      fontSize: '0.74rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        borderRadius: '9px',
+                        padding: '7px 8px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ color: '#94a3b8' }}>
+                        {language === 'ko' ? '완료 레벨' : 'Cleared'}
+                      </div>
+                      <div style={{ fontWeight: 800, color: '#38bdf8', fontSize: '0.88rem' }}>
+                        {profile?.cleared_levels_count || 0}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        borderRadius: '9px',
+                        padding: '7px 8px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ color: '#94a3b8' }}>
+                        {language === 'ko' ? '연속 출석' : 'Streak'}
+                      </div>
+                      <div style={{ fontWeight: 800, color: '#fb923c', fontSize: '0.88rem' }}>
+                        🔥 {profile?.current_streak || 0}
+                        {language === 'ko' ? '일' : 'd'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsProfileMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '9px',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      color: '#e2e8f0',
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                      textDecoration: 'none',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = 'rgba(56, 189, 248, 0.14)')
+                    }
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <Settings size={15} style={{ color: '#38bdf8' }} />
+                    <span>{language === 'ko' ? '내 정보 수정 & 뱃지' : 'My Profile & Badges'}</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsProfileMenuOpen(false);
+                      void signOut();
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '9px',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      background: 'transparent',
+                      border: 'none',
+                      color: '#fca5a5',
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      marginTop: '2px',
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.14)')
+                    }
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <LogOut size={15} />
+                    <span>{language === 'ko' ? '로그아웃' : 'Sign Out'}</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
-            <button
-              onClick={() => openLogin()}
+            <Link
+              href={loginHref}
               className="tactile-btn login-btn"
               title={t.nav.login}
               style={{
@@ -339,28 +531,18 @@ export default function Navbar() {
                 border: '1px solid #0891b2',
                 color: '#ffffff',
                 boxShadow: '0 4px 14px rgba(8, 145, 178, 0.35)',
-                cursor: 'pointer',
+                textDecoration: 'none',
                 transition: 'all 0.15s ease',
                 whiteSpace: 'nowrap',
                 flexShrink: 0,
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.background = '#0e7490';
-                e.currentTarget.style.boxShadow = '0 6px 18px rgba(8, 145, 178, 0.45)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.background = '#0891b2';
-                e.currentTarget.style.boxShadow = '0 4px 14px rgba(8, 145, 178, 0.35)';
-              }}
             >
               <User size={15} style={{ flexShrink: 0 }} />
               <span className="login-btn-text">{t.nav.login}</span>
-            </button>
+            </Link>
           )}
 
-          {/* Mobile Hamburger Toggle Button (<= 768px) */}
+          {/* Mobile Hamburger Toggle */}
           <button
             className="mobile-menu-btn"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -384,7 +566,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Slide-down Drawer (<= 768px) */}
+      {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div
           style={{
@@ -400,7 +582,6 @@ export default function Navbar() {
             display: 'flex',
             flexDirection: 'column',
             gap: '10px',
-            animation: 'slideUp 0.2s ease',
           }}
         >
           {navItems.map((item) => {
@@ -409,13 +590,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={(e) => {
-                  setIsMobileMenuOpen(false);
-                  if (item.requiresAuth && !user) {
-                    e.preventDefault();
-                    openLogin(item.href);
-                  }
-                }}
+                onClick={() => setIsMobileMenuOpen(false)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -425,8 +600,12 @@ export default function Navbar() {
                   fontSize: '1rem',
                   fontWeight: 700,
                   color: item.isActive ? '#38bdf8' : '#cbd5e1',
-                  background: item.isActive ? 'rgba(56, 189, 248, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                  border: item.isActive ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid transparent',
+                  background: item.isActive
+                    ? 'rgba(56, 189, 248, 0.15)'
+                    : 'rgba(255, 255, 255, 0.03)',
+                  border: item.isActive
+                    ? '1px solid rgba(56, 189, 248, 0.4)'
+                    : '1px solid transparent',
                   textDecoration: 'none',
                 }}
               >
@@ -436,32 +615,75 @@ export default function Navbar() {
             );
           })}
 
-          {user && (
-            <button
-              type="button"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                void signOut();
-              }}
+          {user ? (
+            <>
+              <Link
+                href="/profile"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  fontSize: '0.96rem',
+                  fontWeight: 700,
+                  color: '#e2e8f0',
+                  background: 'rgba(56, 189, 248, 0.1)',
+                  border: '1px solid rgba(56, 189, 248, 0.25)',
+                  textDecoration: 'none',
+                }}
+              >
+                <Settings size={18} style={{ color: '#38bdf8' }} />
+                <span>{language === 'ko' ? '내 정보 수정 & 뱃지' : 'My Profile & Badges'}</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  void signOut();
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  fontSize: '0.96rem',
+                  fontWeight: 700,
+                  color: '#fca5a5',
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.25)',
+                  cursor: 'pointer',
+                }}
+              >
+                <LogOut size={18} />
+                <span>
+                  {displayName} · {language === 'ko' ? '로그아웃' : 'Sign Out'}
+                </span>
+              </button>
+            </>
+          ) : (
+            <Link
+              href={loginHref}
+              onClick={() => setIsMobileMenuOpen(false)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
+                justifyContent: 'center',
+                gap: '8px',
                 padding: '12px 16px',
                 borderRadius: '12px',
                 fontSize: '0.96rem',
-                fontWeight: 700,
-                color: '#fca5a5',
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                cursor: 'pointer',
+                fontWeight: 800,
+                color: '#ffffff',
+                background: '#0891b2',
+                textDecoration: 'none',
               }}
             >
-              <LogOut size={18} />
-              <span>
-                {displayName} · {language === 'ko' ? '로그아웃' : 'Sign Out'}
-              </span>
-            </button>
+              <User size={18} />
+              <span>{t.nav.login}</span>
+            </Link>
           )}
         </div>
       )}

@@ -5,3 +5,4 @@ export function createClient() {
   const { url, key } = getSupabaseEnv();
   return createBrowserClient(url, key);
 }
+

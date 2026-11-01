@@ -14,8 +14,7 @@ import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum
 import LanguageIcon from '@/components/LanguageIcon';
 import { getCategoryName } from '@/lib/curriculumTranslations';
 import { getCourseSections, LevelSection, LevelItem } from '@/lib/curriculumSections';
-import { getPracticeRound } from '@/lib/practiceData';
-import { PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
+import { getClearedLevelsLocal, PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
 
 interface StageSelectPageProps {
   params: {
@@ -86,13 +85,11 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     return sections.reduce((sum, s) => sum + s.levels.length, 0);
   }, [sections]);
 
-  // User learning DB progress loaded from localStorage
+  // User cleared-level progress synced with Supabase user_cleared_levels
   const [userProgress, setUserProgress] = useState<{
     clearedLevels: Set<number>;
-    highestUnlockedLevel: number;
   }>({
-    clearedLevels: new Set([1]), // 1레벨 기본 완료 처리
-    highestUnlockedLevel: 2,
+    clearedLevels: new Set(),
   });
   const [isProgressLoaded, setIsProgressLoaded] = useState(false);
   const activeLevelRowRef = useRef<HTMLDivElement | null>(null);
@@ -105,35 +102,9 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
     const loadProgress = () => {
       try {
-        const cleared = new Set<number>([1]); // 1레벨 기본 완료 처리
-        let maxUnlocked = 2;
-
-        const round1 = getPracticeRound(rawLang, 1);
-        const lvl1Total = round1 && round1.roundNumber === 1 ? round1.questions.length : 10;
-
-        // 1레벨이 localStorage에 없다면 완료 상태로 기록
-        if (!localStorage.getItem(`unlocked_step_${rawLang}_1`)) {
-          localStorage.setItem(`unlocked_step_${rawLang}_1`, String(lvl1Total));
-        }
-
-        // Scan per-level steps dynamically against each level's actual question count
-        const scanMaxLevel = Math.max(50, totalLevelsCount);
-        for (let lvl = 1; lvl <= scanMaxLevel; lvl++) {
-          const stepVal = parseInt(localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`) || '0', 10);
-          const lvlRound = getPracticeRound(rawLang, lvl);
-          const requiredSteps = lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
-          if (stepVal >= requiredSteps) {
-            cleared.add(lvl);
-            maxUnlocked = Math.max(maxUnlocked, lvl + 1);
-          }
-        }
-
-        const savedUnlocked = parseInt(localStorage.getItem(`unlocked_level_${rawLang}`) || '2', 10);
-        maxUnlocked = Math.max(maxUnlocked, savedUnlocked);
-
+        const clearedList = getClearedLevelsLocal(rawLang);
         setUserProgress({
-          clearedLevels: cleared,
-          highestUnlockedLevel: maxUnlocked,
+          clearedLevels: new Set(clearedList),
         });
       } catch (e) {
         console.error(e);

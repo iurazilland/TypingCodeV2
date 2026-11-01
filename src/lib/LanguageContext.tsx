@@ -204,6 +204,7 @@ export const translations = {
     nav: {
       subtitle: '학생부터 시작하는 실전 코딩 타자',
       learn: '학습하기',
+      speedCoding: '스피드 코딩',
       problems: '문제풀이',
       compiler: '자유코딩',
       ranking: '리더보드',
@@ -302,6 +303,7 @@ export const translations = {
     nav: {
       subtitle: 'Real Coding for Everyone Through Typing',
       learn: 'Learn',
+      speedCoding: 'Speed Coding',
       problems: 'Problems',
       compiler: 'Free Code',
       ranking: 'Leaderboard',

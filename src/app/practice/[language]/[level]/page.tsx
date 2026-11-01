@@ -40,7 +40,16 @@ import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
 import { AssignOperator } from '@/lib/blockGeometry';
 import { evaluateBlocksLocally, evaluatePythonLocally, evaluateBlocksWithTrace, evaluatePythonWithTrace, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
 import TypingStage, { tokenizePythonLine, VSCODE_DARK_PLUS } from '@/components/practice/TypingStage';
-import { saveLevelStepProgress } from '@/lib/progressSync';
+import {
+  hasSubmittedSectionFeedbackLocal,
+  isLevelClearedLocal,
+  PROGRESS_SYNCED_EVENT,
+  recordLevelCleared,
+} from '@/lib/progressSync';
+import SectionFeedbackModal, {
+  CompletedSectionInfo,
+  findCompletedSectionForLevel,
+} from '@/components/SectionFeedbackModal';
 import {
   PuzzleTab,
   PuzzleNotch,
@@ -1596,45 +1605,40 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     } catch { }
   }, [levelNum, currentStepIndex]);
 
-  // Sync step if searchParams changes
-  useEffect(() => {
-    if (searchParams?.step) {
-      const s = parseInt(searchParams.step, 10) - 1;
-      if (!isNaN(s) && s >= 0 && s < round.questions.length) {
-        setCurrentStepIndex(s);
-      }
-    }
-  }, [searchParams?.step, round.questions.length]);
-
   const [hearts, setHearts] = useState<number>(5);
   const [showHint, setShowHint] = useState<boolean>(false);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
 
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  const isHeartsLoadedRef = useRef(false);
+  const [isLevelAlreadyCleared, setIsLevelAlreadyCleared] = useState<boolean>(false);
+  const [isForcedReviewRun, setIsForcedReviewRun] = useState<boolean>(false);
+  const [sessionMaxStep, setSessionMaxStep] = useState<number>(0);
+  const [pendingSectionSurvey, setPendingSectionSurvey] = useState<CompletedSectionInfo | null>(null);
 
-  // Sync saved hearts from localStorage after client hydration (prevents SSR hydration error)
+  // Sync cleared status from user_cleared_levels cache; allow ?step= jump ONLY if level is already cleared
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(`hearts_${rawLang}_${levelNum}`);
-      if (saved !== null) {
-        const parsed = parseInt(saved, 10);
-        if (!isNaN(parsed) && parsed >= 0 && parsed <= 5) {
-          setHearts(parsed);
-          if (parsed === 0) setIsGameOver(true);
+    const syncClearedState = () => {
+      const cleared = isLevelClearedLocal(rawLang, levelNum);
+      setIsLevelAlreadyCleared(cleared);
+      if (cleared && searchParams?.step) {
+        const s = parseInt(searchParams.step, 10) - 1;
+        if (!isNaN(s) && s >= 0 && s < round.questions.length) {
+          setCurrentStepIndex(s);
         }
       }
-    } catch { }
-    isHeartsLoadedRef.current = true;
-  }, [rawLang, levelNum]);
+    };
+    setHearts(5);
+    setIsGameOver(false);
+    setIsForcedReviewRun(false);
+    setSessionMaxStep(0);
+    setPendingSectionSurvey(null);
+    syncClearedState();
 
-  // Persist hearts in localStorage so refreshing doesn't refill lost hearts
-  useEffect(() => {
-    if (!isHeartsLoadedRef.current) return;
-    try {
-      localStorage.setItem(`hearts_${rawLang}_${levelNum}`, String(hearts));
-    } catch { }
-  }, [hearts, rawLang, levelNum]);
+    if (typeof window !== 'undefined') {
+      window.addEventListener(PROGRESS_SYNCED_EVENT, syncClearedState);
+      return () => window.removeEventListener(PROGRESS_SYNCED_EVENT, syncClearedState);
+    }
+  }, [rawLang, levelNum, round.questions.length, searchParams?.step]);
 
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [terminalOutput, setTerminalOutput] = useState<string>('');
@@ -1643,26 +1647,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
   const [isHeartShaking, setIsHeartShaking] = useState<boolean>(false);
   const [runtimeMemory, setRuntimeMemory] = useState<Record<string, any>>({});
 
-  // Zero-rerender typing telemetry for Supabase CPM & accuracy sync
-  const typingMetricsRef = useRef({
-    startMs: 0,
-    keystrokes: 0,
-    backspaces: 0,
-    prevLen: 0,
-  });
-
-  // Stable callback for TypingStage to prevent unnecessary rerenders/resets
+  // Stable callback for TypingStage (regular curriculum does NOT measure typing speed/CPM)
   const handleUserCodeChange = useCallback((c: string) => {
-    const m = typingMetricsRef.current;
-    if (m.startMs === 0 && c.length > 0 && c.length !== m.prevLen) {
-      m.startMs = performance.now();
-    }
-    if (c.length > m.prevLen) {
-      m.keystrokes += c.length - m.prevLen;
-    } else if (c.length < m.prevLen && m.startMs > 0) {
-      m.backspaces += 1;
-    }
-    m.prevLen = c.length;
     setUserCode(c);
     setIsErrorShown(false);
   }, []);
@@ -3385,80 +3371,51 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   });
 
-  // Check whether a step is unlocked (free navigation in local dev, locked via DB/storage in production)
+  // Step navigation rule:
+  // - Cleared level (while hearts > 0 and not in forced-review run): all steps navigable
+  // - Active/uncleared level (while hearts > 0): navigable up to sessionMaxStep (completed steps in current run)
+  // - All 5 hearts depleted: locked & forced back to Step 1
   const isStepUnlocked = (stepIdx: number): boolean => {
-    if (process.env.NODE_ENV !== 'production') {
-      return true;
-    }
-    if (stepIdx === 0) return true;
-    if (typeof window !== 'undefined') {
-      const key = `unlocked_step_${rawLang}_${levelNum}`;
-      const maxUnlocked = parseInt(localStorage.getItem(key) || '0', 10);
-      return stepIdx <= maxUnlocked;
-    }
-    return false;
+    if (stepIdx <= 0) return true;
+    if (hearts <= 0 || isGameOver) return false;
+    if (isLevelAlreadyCleared && !isForcedReviewRun) return true;
+    return stepIdx <= sessionMaxStep;
   };
 
   const handleNextStep = () => {
     if (currentStepIndex < totalQuestions - 1) {
       const nextIdx = currentStepIndex + 1;
-      if (typeof window !== 'undefined') {
-        const key = `unlocked_step_${rawLang}_${levelNum}`;
-        const currentMax = parseInt(localStorage.getItem(key) || '0', 10);
-        if (nextIdx > currentMax) {
-          localStorage.setItem(key, String(nextIdx));
-        }
-        window.history.replaceState(null, '', `?step=${nextIdx + 1}`);
-      }
+      if (!isStepUnlocked(nextIdx)) return;
       setCurrentStepIndex(nextIdx);
     }
   };
 
   const handlePrevStep = () => {
+    if (hearts <= 0 || isGameOver) return;
     if (currentStepIndex > 0) {
-      const prevIdx = currentStepIndex - 1;
-      setCurrentStepIndex(prevIdx);
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', `?step=${prevIdx + 1}`);
-      }
+      setCurrentStepIndex(currentStepIndex - 1);
     }
   };
 
-  // Reset typing telemetry whenever active step changes
+  // Unlock next step in current session; record level cleared in DB ONLY when final step passes
   useEffect(() => {
-    typingMetricsRef.current = {
-      startMs: 0,
-      keystrokes: 0,
-      backspaces: 0,
-      prevLen: 0,
-    };
-  }, [currentStepIndex]);
+    if (!isSuccess) return;
+    setSessionMaxStep((prev) => Math.max(prev, currentStepIndex + 1));
 
-  // Persist completed step progress to localStorage & Supabase user_level_progress
-  useEffect(() => {
-    if (isSuccess && typeof window !== 'undefined') {
-      const m = typingMetricsRef.current;
-      let stepCpm = 0;
-      let stepAcc = 100;
-      if (m.startMs > 0 && m.keystrokes >= 3) {
-        const elapsedMin = Math.max(0.03, (performance.now() - m.startMs) / 60000);
-        stepCpm = Math.min(1500, Math.round(m.keystrokes / elapsedMin));
-        stepAcc = Number(
-          Math.max(50, Math.min(100, (m.keystrokes / (m.keystrokes + m.backspaces)) * 100)).toFixed(2)
-        );
+    if (currentStepIndex >= totalQuestions - 1) {
+      setIsLevelAlreadyCleared(true);
+      setIsForcedReviewRun(false);
+      void recordLevelCleared(rawLang, levelNum);
+
+      const completedSec = findCompletedSectionForLevel(rawLang, levelNum);
+      if (
+        completedSec &&
+        !hasSubmittedSectionFeedbackLocal(rawLang, completedSec.sectionNumber)
+      ) {
+        setPendingSectionSurvey(completedSec);
       }
-
-      void saveLevelStepProgress({
-        rawLang,
-        levelNum,
-        unlockedStep: currentStepIndex + 1,
-        totalSteps: totalQuestions,
-        hearts,
-        cpm: stepCpm,
-        accuracy: stepAcc,
-      });
     }
-  }, [isSuccess, currentStepIndex, rawLang, levelNum, totalQuestions, hearts]);
+  }, [isSuccess, currentStepIndex, totalQuestions, rawLang, levelNum]);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {
@@ -3502,12 +3459,13 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     return () => window.removeEventListener('keydown', handleQuizKey);
   }, [isQuiz, isSuccess, isGameOver, currentQuestion, selectedChoiceIndex]);
 
-  const handleResetRound = () => {
+  const handleResetRound = (forceReviewLock = false) => {
     lastExecutedCodeRef.current = '';
-    setHearts(5);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(`hearts_${rawLang}_${levelNum}`, '5');
+    if (forceReviewLock || isGameOver || hearts <= 0) {
+      setIsForcedReviewRun(true);
     }
+    setSessionMaxStep(0);
+    setHearts(5);
     setCurrentStepIndex(0);
     setIsGameOver(false);
     setCanvasBlocks(createInitialCanvasBlocks(round.questions[0]));
@@ -6415,7 +6373,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             {/* Prev Step Button */}
             <button
               onClick={handlePrevStep}
-              disabled={currentStepIndex <= 0}
+              disabled={currentStepIndex <= 0 || hearts <= 0 || isGameOver}
               title={
                 currentStepIndex > 0
                   ? (isEn ? 'Previous Problem' : '이전 문제')
@@ -6467,7 +6425,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 currentStepIndex >= totalQuestions - 1
                   ? (isEn ? 'This is the last problem' : '마지막 문제입니다')
                   : !isStepUnlocked(currentStepIndex + 1)
-                    ? (isEn ? 'Complete previous problem to unlock' : '이전 문제를 완료해야 이동할 수 있습니다 (배포 잠금)')
+                    ? (isEn ? 'Complete current problem to advance' : '현재 문제를 완료해야 다음 문제로 이동할 수 있습니다')
                     : (isEn ? 'Next Problem' : '다음 문제')
               }
               style={{
@@ -9738,47 +9696,81 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               )}
             </p>
 
-            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-              <button
-                onClick={handleResetRound}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '10px',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  color: '#e2e8f0',
-                  fontSize: '0.88rem',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                }}
-              >
-                {isEn ? 'Retry Round' : '다시 풀기'}
-              </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
               <Link
-                href={`/practice/${rawLang}`}
+                href={`/practice/${rawLang}/${levelNum + 1}`}
                 className="tactile-btn tactile-btn-green"
                 style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '10px',
-                  fontSize: '0.88rem',
+                  width: '100%',
+                  padding: '13px',
+                  borderRadius: '11px',
+                  fontSize: '0.92rem',
                   fontWeight: 800,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  gap: '6px',
                   textDecoration: 'none',
                 }}
               >
-                {isEn ? 'Back to Levels' : '단계 목록으로'}
+                <span>{isEn ? 'Next Level' : '다음 레벨 도전하기'}</span>
+                <ChevronRight size={16} />
               </Link>
+              <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                <button
+                  onClick={() => handleResetRound(false)}
+                  style={{
+                    flex: 1,
+                    padding: '11px',
+                    borderRadius: '10px',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    color: '#e2e8f0',
+                    fontSize: '0.85rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {isEn ? 'Retry Round' : '다시 풀기'}
+                </button>
+                <Link
+                  href={`/practice/${rawLang}`}
+                  style={{
+                    flex: 1,
+                    padding: '11px',
+                    borderRadius: '10px',
+                    background: 'rgba(56, 189, 248, 0.14)',
+                    border: '1px solid rgba(56, 189, 248, 0.35)',
+                    color: '#38bdf8',
+                    fontSize: '0.85rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {isEn ? 'Back to Levels' : '단계 목록으로'}
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       )}
 
+      {/* Section-End Micro-Survey Modal (opens automatically when final level of a section is cleared) */}
+      {pendingSectionSurvey && (
+        <SectionFeedbackModal
+          isOpen={Boolean(pendingSectionSurvey)}
+          isEn={isEn}
+          rawLang={rawLang}
+          sectionInfo={pendingSectionSurvey}
+          onClose={() => setPendingSectionSurvey(null)}
+        />
+      )}
+
       {/* ====================================================================
-          7. GAME OVER MODAL (Hearts depleted)
+          7. GAME OVER MODAL (Hearts depleted -> Forced Review from Step 1)
           ==================================================================== */}
       {isGameOver && (
         <div style={{
@@ -9817,18 +9809,18 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             </div>
 
             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginBottom: '8px' }}>
-              {isEn ? 'All Hearts Depleted!' : '모든 하트를 소진했습니다!'}
+              {isEn ? 'All 5 Hearts Depleted!' : '하트 5개를 모두 소진했습니다!'}
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '24px' }}>
               {isEn ? (
-                <>You have used all 5 hearts with incorrect attempts.<br />Try again from Step 1 to master the skills!</>
+                <>All 5 hearts have been depleted.<br />Step skipping is locked—review carefully from Step 1!</>
               ) : (
-                <>5번의 오답으로 하트가 모두 소모되었습니다.<br />1단계부터 다시 도전하여 실력을 다져보세요!</>
+                <>하트를 모두 소진하여 1번 문제부터 강제 복습이 시작됩니다.<br />이전 문제 건너뛰기가 잠기며, 처음부터 차근차근 완성해보세요!</>
               )}
             </p>
 
             <button
-              onClick={handleResetRound}
+              onClick={() => handleResetRound(true)}
               className="tactile-btn tactile-btn-primary"
               style={{
                 width: '100%',
@@ -9838,7 +9830,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               }}
             >
               <RotateCcw size={16} />
-              <span>{isEn ? 'Retry from Step 1' : '1단계부터 다시 도전하기'}</span>
+              <span>{isEn ? 'Start Forced Review from Step 1' : '1번 문제부터 다시 복습하기'}</span>
             </button>
           </div>
         </div>

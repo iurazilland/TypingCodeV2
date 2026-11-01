@@ -1,8 +1,12 @@
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
-import type { UserLevelProgressRow, UserProfile } from '@/lib/supabase/types';
-import { getPracticeRound } from '@/lib/practiceData';
+import type {
+  SectionDifficultyRating,
+  UserClearedLevelRow,
+  UserProfile,
+  UserSpeedRecordRow,
+} from '@/lib/supabase/types';
 
 export const PROGRESS_SYNCED_EVENT = 'typingcode-progress-synced';
 
@@ -10,6 +14,27 @@ function dispatchProgressSynced() {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new Event(PROGRESS_SYNCED_EVENT));
   }
+}
+
+export function normalizeTrackKey(rawLang: string): string {
+  const clean = rawLang.trim().toLowerCase();
+  if (clean === 'python' || clean === 'python_basic') return 'py-basic';
+  if (clean === 'c') return 'c-basic';
+  if (clean === 'web') return 'web-html';
+  return clean;
+}
+
+function getTodayKstDateString(): string {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const y = parts.find((p) => p.type === 'year')?.value || '2026';
+  const m = parts.find((p) => p.type === 'month')?.value || '01';
+  const d = parts.find((p) => p.type === 'day')?.value || '01';
+  return `${y}-${m}-${d}`;
 }
 
 export function deriveDisplayName(user: User): string {
@@ -23,21 +48,67 @@ export function deriveDisplayName(user: User): string {
   return raw.slice(0, 40);
 }
 
+export function normalizeProfileRow(
+  raw: Record<string, unknown>,
+  fallbackUser?: User
+): UserProfile {
+  const cleared = Number(raw.cleared_levels_count ?? 0) || 0;
+  const solved = Number(raw.solved_problems_count ?? 0) || 0;
+  const totalDays = Number(raw.total_attendance_days ?? 0) || 0;
+  const longestStreak = Number(raw.longest_streak ?? 0) || 0;
+  const computedScore =
+    Number(raw.activity_score ?? 0) ||
+    cleared * 100 + solved * 150 + totalDays * 30 + longestStreak * 50;
+
+  return {
+    id: String(raw.id || fallbackUser?.id || ''),
+    username: typeof raw.username === 'string' ? raw.username : null,
+    display_name:
+      typeof raw.display_name === 'string' && raw.display_name.trim()
+        ? raw.display_name
+        : fallbackUser
+        ? deriveDisplayName(fallbackUser)
+        : 'Coder',
+    avatar_preset:
+      typeof raw.avatar_preset === 'string' && raw.avatar_preset.trim()
+        ? raw.avatar_preset
+        : 'fox',
+    avatar_url: typeof raw.avatar_url === 'string' ? raw.avatar_url : null,
+    primary_language:
+      typeof raw.primary_language === 'string' && raw.primary_language.trim()
+        ? raw.primary_language
+        : 'Python',
+    cleared_levels_count: cleared,
+    solved_problems_count: solved,
+    current_streak: Number(raw.current_streak ?? 0) || 0,
+    longest_streak: longestStreak,
+    total_attendance_days: totalDays,
+    last_attended_date:
+      typeof raw.last_attended_date === 'string' ? raw.last_attended_date : null,
+    activity_score: computedScore,
+    best_typing_cpm: Number(raw.best_typing_cpm ?? raw.best_cpm ?? 0) || 0,
+    best_typing_accuracy: Number(raw.best_typing_accuracy ?? raw.avg_accuracy ?? 0) || 0,
+    created_at:
+      typeof raw.created_at === 'string'
+        ? raw.created_at
+        : fallbackUser?.created_at || new Date().toISOString(),
+    updated_at:
+      typeof raw.updated_at === 'string' ? raw.updated_at : new Date().toISOString(),
+  };
+}
+
 export function buildFallbackProfile(user: User): UserProfile {
   const meta = user.user_metadata || {};
-  return {
-    id: user.id,
-    display_name: deriveDisplayName(user),
-    avatar_emoji: '🦊',
-    avatar_url: typeof meta.avatar_url === 'string' ? meta.avatar_url : null,
-    primary_language: 'Python',
-    best_cpm: 0,
-    avg_accuracy: 100,
-    cleared_levels_count: 0,
-    solved_problems_count: 0,
-    created_at: user.created_at || new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
+  return normalizeProfileRow(
+    {
+      id: user.id,
+      username: typeof meta.login_id === 'string' ? meta.login_id : null,
+      display_name: deriveDisplayName(user),
+      avatar_preset: typeof meta.avatar_preset === 'string' ? meta.avatar_preset : 'fox',
+      avatar_url: typeof meta.avatar_url === 'string' ? meta.avatar_url : null,
+    },
+    user
+  );
 }
 
 export async function ensureUserProfile(user: User): Promise<UserProfile> {
@@ -53,10 +124,9 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
     .maybeSingle();
 
   if (!error && data) {
-    return data as UserProfile;
+    return normalizeProfileRow(data as Record<string, unknown>, user);
   }
 
-  // If user existed in V1 auth.users before trigger or needs profile row created
   const fallback = buildFallbackProfile(user);
   const { data: inserted, error: insertError } = await supabase
     .from('profiles')
@@ -72,112 +142,163 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
     .maybeSingle();
 
   if (!insertError && inserted) {
-    return inserted as UserProfile;
+    return normalizeProfileRow(inserted as Record<string, unknown>, user);
   }
 
   return fallback;
 }
 
 /**
- * Bidirectional sync between Supabase `user_level_progress` and browser `localStorage`
- * so existing local progress is preserved and cloud progress hydrates all UI screens.
+ * Records today's attendance (KST) once per day for the signed-in user.
+ */
+export async function recordDailyAttendance(userId: string): Promise<void> {
+  if (typeof window === 'undefined' || !isSupabaseConfigured()) return;
+
+  const todayKst = getTodayKstDateString();
+  const cacheKey = `attendance_checked_${userId}_${todayKst}`;
+  if (localStorage.getItem(cacheKey) === '1') return;
+
+  try {
+    const supabase = createClient();
+    const { error } = await supabase.from('user_attendance').upsert(
+      {
+        user_id: userId,
+        attended_date: todayKst,
+      },
+      { onConflict: 'user_id,attended_date', ignoreDuplicates: true }
+    );
+
+    if (!error) {
+      localStorage.setItem(cacheKey, '1');
+    }
+  } catch {
+    // Non-fatal if migration SQL is not applied yet
+  }
+}
+
+export function getClearedLevelsLocal(rawLang: string): number[] {
+  if (typeof window === 'undefined') return [];
+  const trackId = normalizeTrackKey(rawLang);
+  try {
+    const raw = localStorage.getItem(`cleared_levels_${trackId}`);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((n) => Number(n))
+      .filter((n) => Number.isInteger(n) && n >= 1)
+      .sort((a, b) => a - b);
+  } catch {
+    return [];
+  }
+}
+
+function setClearedLevelsLocal(trackId: string, levels: Iterable<number>): void {
+  if (typeof window === 'undefined') return;
+  const uniqueSorted = Array.from(new Set(levels))
+    .filter((n) => Number.isInteger(n) && n >= 1)
+    .sort((a, b) => a - b);
+  localStorage.setItem(`cleared_levels_${trackId}`, JSON.stringify(uniqueSorted));
+}
+
+export function isLevelClearedLocal(rawLang: string, levelNum: number): boolean {
+  return getClearedLevelsLocal(rawLang).includes(levelNum);
+}
+
+function purgeLegacyStepKeys(): void {
+  if (typeof window === 'undefined') return;
+  const keysToRemove: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key) continue;
+    if (
+      key.startsWith('unlocked_step_') ||
+      key.startsWith('hearts_') ||
+      key.startsWith('unlocked_level_')
+    ) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach((k) => localStorage.removeItem(k));
+}
+
+/**
+ * Syncs `public.user_cleared_levels`, `public.section_feedbacks`, and today's attendance on login.
  */
 export async function syncProgressOnLogin(user: User): Promise<void> {
   if (typeof window === 'undefined' || !isSupabaseConfigured()) return;
 
   try {
+    purgeLegacyStepKeys();
     await ensureUserProfile(user);
+    await recordDailyAttendance(user.id);
+
     const supabase = createClient();
 
+    // 1) Sync cleared levels bidirectionally
     const { data: cloudRows, error } = await supabase
-      .from('user_level_progress')
-      .select('*')
+      .from('user_cleared_levels')
+      .select('user_id, track_id, level_number, cleared_at')
       .eq('user_id', user.id);
 
-    if (error) {
-      return;
-    }
+    if (!error && cloudRows) {
+      const byTrack = new Map<string, Set<number>>();
 
-    const cloudMap = new Map<string, UserLevelProgressRow>();
-    for (const row of (cloudRows || []) as UserLevelProgressRow[]) {
-      const mapKey = `${row.track_id}:${row.level_number}`;
-      cloudMap.set(mapKey, row);
-
-      const storageKey = `unlocked_step_${row.track_id}_${row.level_number}`;
-      const localStep = parseInt(localStorage.getItem(storageKey) || '0', 10);
-      if (row.unlocked_step > localStep) {
-        localStorage.setItem(storageKey, String(row.unlocked_step));
+      for (const row of cloudRows as UserClearedLevelRow[]) {
+        const tKey = normalizeTrackKey(row.track_id);
+        if (!byTrack.has(tKey)) byTrack.set(tKey, new Set());
+        byTrack.get(tKey)!.add(row.level_number);
       }
 
-      const heartsKey = `hearts_${row.track_id}_${row.level_number}`;
-      if (!localStorage.getItem(heartsKey) && typeof row.hearts === 'number') {
-        localStorage.setItem(heartsKey, String(row.hearts));
+      const rowsToPush: Array<{
+        user_id: string;
+        track_id: string;
+        level_number: number;
+      }> = [];
+
+      const prefix = 'cleared_levels_';
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith(prefix)) continue;
+        const trackId = normalizeTrackKey(key.slice(prefix.length));
+        const localNums = getClearedLevelsLocal(trackId);
+        const cloudSet = byTrack.get(trackId) || new Set<number>();
+
+        for (const lvl of localNums) {
+          if (!cloudSet.has(lvl)) {
+            rowsToPush.push({
+              user_id: user.id,
+              track_id: trackId,
+              level_number: lvl,
+            });
+            cloudSet.add(lvl);
+          }
+        }
+        byTrack.set(trackId, cloudSet);
       }
-    }
 
-    // Collect local progress entries that exceed cloud progress and push them up
-    const rowsToPush: Array<{
-      user_id: string;
-      track_id: string;
-      level_number: number;
-      unlocked_step: number;
-      total_steps: number;
-      is_cleared: boolean;
-      hearts: number;
-      best_cpm: number;
-      best_accuracy: number;
-    }> = [];
+      byTrack.forEach((lvlSet, trackId) => {
+        setClearedLevelsLocal(trackId, lvlSet);
+      });
 
-    const prefix = 'unlocked_step_';
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key || !key.startsWith(prefix)) continue;
-
-      const rest = key.slice(prefix.length);
-      const lastUnderscore = rest.lastIndexOf('_');
-      if (lastUnderscore <= 0) continue;
-
-      const trackId = rest.slice(0, lastUnderscore).toLowerCase();
-      const levelNum = parseInt(rest.slice(lastUnderscore + 1), 10);
-      if (!trackId || !Number.isFinite(levelNum) || levelNum < 1) continue;
-
-      const localStep = parseInt(localStorage.getItem(key) || '0', 10);
-      if (!Number.isFinite(localStep) || localStep <= 0) continue;
-
-      // Skip auto-seeded default Level 1 unless user actually progressed beyond or cloud is missing
-      const round = getPracticeRound(trackId, levelNum);
-      const totalSteps =
-        round && round.roundNumber === levelNum ? round.questions.length : 10;
-
-      const existingCloud = cloudMap.get(`${trackId}:${levelNum}`);
-      if (!existingCloud || localStep > existingCloud.unlocked_step) {
-        const mergedStep = Math.max(localStep, existingCloud?.unlocked_step || 0);
-        const savedHearts = parseInt(
-          localStorage.getItem(`hearts_${trackId}_${levelNum}`) || '5',
-          10
-        );
-        const hearts = Number.isFinite(savedHearts)
-          ? Math.min(5, Math.max(0, savedHearts))
-          : 5;
-
-        rowsToPush.push({
-          user_id: user.id,
-          track_id: trackId,
-          level_number: levelNum,
-          unlocked_step: mergedStep,
-          total_steps: totalSteps,
-          is_cleared: mergedStep >= totalSteps,
-          hearts,
-          best_cpm: existingCloud?.best_cpm || 0,
-          best_accuracy: existingCloud?.best_accuracy ?? 100,
-        });
+      if (rowsToPush.length > 0) {
+        await supabase
+          .from('user_cleared_levels')
+          .upsert(rowsToPush, { onConflict: 'user_id,track_id,level_number' });
       }
     }
 
-    if (rowsToPush.length > 0) {
-      await supabase
-        .from('user_level_progress')
-        .upsert(rowsToPush, { onConflict: 'user_id,track_id,level_number' });
+    // 2) Cache which section surveys this user already submitted so we never re-prompt
+    const { data: feedbackRows } = await supabase
+      .from('section_feedbacks')
+      .select('track_id, section_number')
+      .eq('user_id', user.id);
+
+    if (feedbackRows) {
+      for (const fb of feedbackRows as Array<{ track_id: string; section_number: number }>) {
+        const tKey = normalizeTrackKey(fb.track_id);
+        localStorage.setItem(`section_feedback_${tKey}_${fb.section_number}`, '1');
+      }
     }
 
     dispatchProgressSynced();
@@ -186,29 +307,20 @@ export async function syncProgressOnLogin(user: User): Promise<void> {
   }
 }
 
-export interface SaveStepProgressInput {
-  rawLang: string;
-  levelNum: number;
-  unlockedStep: number;
-  totalSteps: number;
-  hearts?: number;
-  cpm?: number;
-  accuracy?: number;
-}
-
-export async function saveLevelStepProgress(input: SaveStepProgressInput): Promise<void> {
-  const trackId = input.rawLang.toLowerCase();
-  const levelNum = input.levelNum;
-  const totalSteps = Math.max(1, input.totalSteps);
-
-  let nextUnlockedStep = Math.max(0, input.unlockedStep);
+/**
+ * Records a completely cleared level (only called when all questions of a level are solved).
+ */
+export async function recordLevelCleared(
+  rawLang: string,
+  levelNum: number
+): Promise<void> {
+  const trackId = normalizeTrackKey(rawLang);
+  if (levelNum < 1) return;
 
   if (typeof window !== 'undefined') {
-    const key = `unlocked_step_${trackId}_${levelNum}`;
-    const currentLocal = parseInt(localStorage.getItem(key) || '0', 10);
-    nextUnlockedStep = Math.max(currentLocal, nextUnlockedStep);
-    if (nextUnlockedStep > currentLocal) {
-      localStorage.setItem(key, String(nextUnlockedStep));
+    const existing = getClearedLevelsLocal(trackId);
+    if (!existing.includes(levelNum)) {
+      setClearedLevelsLocal(trackId, [...existing, levelNum]);
     }
     dispatchProgressSynced();
   }
@@ -222,49 +334,156 @@ export async function saveLevelStepProgress(input: SaveStepProgressInput): Promi
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { data: existing } = await supabase
-      .from('user_level_progress')
-      .select('unlocked_step, is_cleared, best_cpm, best_accuracy, hearts')
-      .eq('user_id', user.id)
-      .eq('track_id', trackId)
-      .eq('level_number', levelNum)
-      .maybeSingle();
-
-    const mergedStep = Math.max(nextUnlockedStep, existing?.unlocked_step || 0);
-    const mergedCleared = Boolean(existing?.is_cleared) || mergedStep >= totalSteps;
-    const incomingCpm = Math.min(3000, Math.max(0, Math.round(input.cpm || 0)));
-    const mergedCpm = Math.max(incomingCpm, existing?.best_cpm || 0);
-    const incomingAcc =
-      typeof input.accuracy === 'number'
-        ? Math.min(100, Math.max(0, Number(input.accuracy.toFixed(2))))
-        : null;
-    const mergedAccuracy =
-      incomingAcc !== null
-        ? existing?.best_cpm && incomingCpm < existing.best_cpm
-          ? Math.max(incomingAcc, Number(existing.best_accuracy ?? 100))
-          : incomingAcc
-        : Number(existing?.best_accuracy ?? 100);
-    const mergedHearts =
-      typeof input.hearts === 'number'
-        ? Math.min(5, Math.max(0, input.hearts))
-        : existing?.hearts ?? 5;
-
-    await supabase.from('user_level_progress').upsert(
+    await recordDailyAttendance(user.id);
+    await supabase.from('user_cleared_levels').upsert(
       {
         user_id: user.id,
         track_id: trackId,
         level_number: levelNum,
-        unlocked_step: mergedStep,
-        total_steps: totalSteps,
-        is_cleared: mergedCleared,
-        hearts: mergedHearts,
-        best_cpm: mergedCpm,
-        best_accuracy: mergedAccuracy,
       },
       { onConflict: 'user_id,track_id,level_number' }
     );
   } catch {
-    // Non-fatal background sync
+    // Non-fatal
+  }
+}
+
+export function hasSubmittedSectionFeedbackLocal(
+  rawLang: string,
+  sectionNumber: number
+): boolean {
+  if (typeof window === 'undefined') return false;
+  const trackId = normalizeTrackKey(rawLang);
+  return localStorage.getItem(`section_feedback_${trackId}_${sectionNumber}`) === '1';
+}
+
+export interface SubmitSectionFeedbackInput {
+  rawLang: string;
+  sectionNumber: number;
+  rating: number;
+  difficulty: SectionDifficultyRating;
+  tags: string[];
+  comment?: string;
+}
+
+export async function submitSectionFeedback(
+  input: SubmitSectionFeedbackInput
+): Promise<boolean> {
+  const trackId = normalizeTrackKey(input.rawLang);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(`section_feedback_${trackId}_${input.sectionNumber}`, '1');
+  }
+
+  if (!isSupabaseConfigured()) return true;
+
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return false;
+
+    const cleanComment = input.comment?.trim()
+      ? input.comment.trim().slice(0, 500)
+      : null;
+
+    const { error } = await supabase.from('section_feedbacks').upsert(
+      {
+        user_id: user.id,
+        track_id: trackId,
+        section_number: input.sectionNumber,
+        rating: Math.min(5, Math.max(1, Math.round(input.rating))),
+        difficulty: input.difficulty,
+        tags: input.tags,
+        comment: cleanComment,
+      },
+      { onConflict: 'user_id,track_id,section_number' }
+    );
+
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+export async function fetchUserSpeedRecords(): Promise<
+  Record<string, UserSpeedRecordRow>
+> {
+  if (!isSupabaseConfigured()) return {};
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return {};
+
+    const { data, error } = await supabase
+      .from('user_speed_records')
+      .select('*')
+      .eq('user_id', user.id);
+
+    if (error || !data) return {};
+    const map: Record<string, UserSpeedRecordRow> = {};
+    for (const row of data as UserSpeedRecordRow[]) {
+      map[row.snippet_id] = row;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
+export async function saveSpeedCodingRecord(input: {
+  snippetId: string;
+  language: string;
+  cpm: number;
+  accuracy: number;
+}): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return false;
+
+    await recordDailyAttendance(user.id);
+
+    const safeCpm = Math.min(3000, Math.max(0, Math.round(input.cpm)));
+    const safeAcc = Math.min(100, Math.max(0, Number(input.accuracy.toFixed(2))));
+
+    const { data: existing } = await supabase
+      .from('user_speed_records')
+      .select('best_cpm, best_accuracy')
+      .eq('user_id', user.id)
+      .eq('snippet_id', input.snippetId)
+      .maybeSingle();
+
+    const prevCpm = Number(existing?.best_cpm ?? 0);
+    const prevAcc = Number(existing?.best_accuracy ?? 0);
+
+    const isNewBest =
+      !existing ||
+      safeCpm > prevCpm ||
+      (safeCpm === prevCpm && safeAcc > prevAcc);
+
+    if (!isNewBest) {
+      return false;
+    }
+
+    await supabase.from('user_speed_records').upsert(
+      {
+        user_id: user.id,
+        snippet_id: input.snippetId,
+        language: input.language,
+        best_cpm: safeCpm,
+        best_accuracy: safeAcc,
+      },
+      { onConflict: 'user_id,snippet_id' }
+    );
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -301,6 +520,7 @@ export async function recordProblemSolve(
     } = await supabase.auth.getUser();
     if (!user) return;
 
+    await recordDailyAttendance(user.id);
     await supabase.from('user_problem_solves').upsert(
       {
         user_id: user.id,

@@ -1,7 +1,6 @@
 'use client';
 
 import React, {
-  Suspense,
   createContext,
   useCallback,
   useContext,
@@ -9,16 +8,21 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
 import type { UserProfile } from '@/lib/supabase/types';
 import { ensureUserProfile, syncProgressOnLogin } from '@/lib/progressSync';
-import { useLanguage } from '@/lib/LanguageContext';
-import AuthModal from '@/components/AuthModal';
 
-const PROTECTED_PREFIXES = ['/practice', '/problems', '/challenges', '/compiler'];
+const PROTECTED_PREFIXES = [
+  '/practice',
+  '/problems',
+  '/speed-coding',
+  '/challenges',
+  '/compiler',
+  '/profile',
+];
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PREFIXES.some(
@@ -26,73 +30,24 @@ function isProtectedPath(pathname: string): boolean {
   );
 }
 
-interface OpenAuthModalOptions {
-  tab?: 'login' | 'signup';
-  nextPath?: string | null;
-  notice?: string | null;
-}
-
 interface AuthContextValue {
   user: User | null;
   profile: UserProfile | null;
   isLoading: boolean;
-  openAuthModal: (options?: OpenAuthModalOptions) => void;
-  closeAuthModal: () => void;
+  redirectToLogin: (nextPath?: string | null) => void;
+  refreshSessionAndProfile: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-function AuthQueryListener({
-  onRequireLogin,
-  onLoginError,
-}: {
-  onRequireLogin: (nextPath: string | null) => void;
-  onLoginError: () => void;
-}) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const loginFlag = searchParams.get('login');
-    if (!loginFlag) return;
-
-    const nextParam = searchParams.get('next');
-    const safeNext =
-      nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//')
-        ? nextParam
-        : null;
-
-    if (loginFlag === 'required') {
-      onRequireLogin(safeNext);
-    } else if (loginFlag === 'error') {
-      onLoginError();
-    }
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('login');
-    params.delete('next');
-    const rest = params.toString();
-    router.replace(`${pathname}${rest ? `?${rest}` : ''}`, { scroll: false });
-  }, [searchParams, pathname, router, onRequireLogin, onLoginError]);
-
-  return null;
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { language } = useLanguage();
 
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState<'login' | 'signup'>('login');
-  const [authModalNextPath, setAuthModalNextPath] = useState<string | null>(null);
-  const [authModalNotice, setAuthModalNotice] = useState<string | null>(null);
 
   const syncedUserIdRef = useRef<string | null>(null);
 
@@ -143,41 +98,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [hydrateUserAndProfile]);
 
-  const handleRequireLogin = useCallback(
-    (safeNext: string | null) => {
-      setAuthModalTab('login');
-      setAuthModalNextPath(safeNext);
-      setAuthModalNotice(
-        language === 'ko'
-          ? '실습·컴파일러·문제풀이 기능을 이용하려면 로그인이 필요합니다.'
-          : 'Please sign in to access practice, compiler, and coding challenges.'
+  const redirectToLogin = useCallback(
+    (nextPath?: string | null) => {
+      const safeNext =
+        nextPath && nextPath.startsWith('/') && !nextPath.startsWith('//')
+          ? nextPath
+          : null;
+      router.push(
+        safeNext ? `/login?next=${encodeURIComponent(safeNext)}` : '/login'
       );
-      setIsAuthModalOpen(true);
     },
-    [language]
+    [router]
   );
 
-  const handleLoginError = useCallback(() => {
-    setAuthModalTab('login');
-    setAuthModalNotice(
-      language === 'ko'
-        ? '소셜/이메일 인증 처리 중 문제가 발생했습니다. 다시 로그인해 주세요.'
-        : 'Authentication could not be completed. Please try signing in again.'
-    );
-    setIsAuthModalOpen(true);
-  }, [language]);
-
-  const openAuthModal = useCallback((options?: OpenAuthModalOptions) => {
-    setAuthModalTab(options?.tab ?? 'login');
-    setAuthModalNextPath(options?.nextPath ?? null);
-    setAuthModalNotice(options?.notice ?? null);
-    setIsAuthModalOpen(true);
-  }, []);
-
-  const closeAuthModal = useCallback(() => {
-    setIsAuthModalOpen(false);
-    setAuthModalNotice(null);
-  }, []);
+  const refreshSessionAndProfile = useCallback(async () => {
+    if (!isSupabaseConfigured()) return;
+    const supabase = createClient();
+    const { data } = await supabase.auth.getUser();
+    await hydrateUserAndProfile(data.user ?? null);
+  }, [hydrateUserAndProfile]);
 
   const refreshProfile = useCallback(async () => {
     if (!user) return;
@@ -205,26 +144,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         profile,
         isLoading,
-        openAuthModal,
-        closeAuthModal,
+        redirectToLogin,
+        refreshSessionAndProfile,
         refreshProfile,
         signOut,
       }}
     >
-      <Suspense fallback={null}>
-        <AuthQueryListener
-          onRequireLogin={handleRequireLogin}
-          onLoginError={handleLoginError}
-        />
-      </Suspense>
       {children}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={closeAuthModal}
-        initialTab={authModalTab}
-        nextPath={authModalNextPath}
-        noticeMessage={authModalNotice}
-      />
     </AuthContext.Provider>
   );
 }

@@ -5,7 +5,7 @@ import { getSupabaseEnv } from '@/lib/supabase/env';
 
 function sanitizeNextPath(rawNext: string | null): string {
   if (!rawNext || !rawNext.startsWith('/') || rawNext.startsWith('//')) {
-    return '/';
+    return '/languages';
   }
   return rawNext;
 }
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   const nextPath = sanitizeNextPath(searchParams.get('next'));
 
   const redirectTo = new URL(nextPath, origin);
-  let response = NextResponse.redirect(redirectTo);
+  const response = NextResponse.redirect(redirectTo);
 
   const { url, key } = getSupabaseEnv();
   const supabase = createServerClient(url, key, {
@@ -52,6 +52,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const errorUrl = new URL('/?login=error', origin);
+  const errorUrl = new URL('/login?error=oauth', origin);
   return NextResponse.redirect(errorUrl);
 }

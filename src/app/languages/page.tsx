@@ -21,13 +21,12 @@ import { CURRICULUM_TRACKS, LanguageTrack, CourseModule, DIFFICULTY_COLORS, DIFF
 import LanguageIcon from '@/components/LanguageIcon';
 import { useLanguage } from '@/lib/LanguageContext';
 import { getTrackName, getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
-import { getPracticeRound } from '@/lib/practiceData';
 import { useAuth } from '@/lib/AuthContext';
-import { PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
+import { getClearedLevelsLocal, PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
 
 export default function LanguagesPage() {
   const { language } = useLanguage();
-  const { user, openAuthModal } = useAuth();
+  const { user } = useAuth();
   const isEn = language === 'en';
   const [progressByModule, setProgressByModule] = useState<Record<string, number>>({});
 
@@ -46,18 +45,9 @@ export default function LanguagesPage() {
           for (const mod of track.modules) {
             if (!mod.practiceUrl.startsWith('/practice/')) continue;
             const rawLang = mod.practiceUrl.replace(/^\/practice\//, '').toLowerCase();
-            let clearedCount = 0;
-            for (let lvl = 1; lvl <= mod.totalLevels; lvl++) {
-              const rawVal = localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`);
-              if (!rawVal) continue;
-              const stepVal = parseInt(rawVal, 10);
-              const lvlRound = getPracticeRound(rawLang, lvl);
-              const requiredSteps =
-                lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
-              if (stepVal >= requiredSteps) {
-                clearedCount++;
-              }
-            }
+            const clearedCount = getClearedLevelsLocal(rawLang).filter(
+              (lvl) => lvl >= 1 && lvl <= mod.totalLevels
+            ).length;
             if (clearedCount > 0) {
               nextProgress[mod.id] = clearedCount;
             }
@@ -621,18 +611,6 @@ export default function LanguagesPage() {
                       <Link
                         key={module.id}
                         href={module.practiceUrl}
-                        onClick={(e) => {
-                          if (!user && module.practiceUrl.startsWith('/practice')) {
-                            e.preventDefault();
-                            openAuthModal({
-                              tab: 'login',
-                              nextPath: module.practiceUrl,
-                              notice: isEn
-                                ? 'Please sign in to start learning and save your progress.'
-                                : '학습을 시작하고 진도를 저장하려면 로그인이 필요합니다.',
-                            });
-                          }
-                        }}
                         className={`light-mode-card card-diff-${module.difficulty}`}
                         style={{
                           textDecoration: 'none',
