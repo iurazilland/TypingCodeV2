@@ -9,7 +9,6 @@ import {
   RotateCcw,
   Terminal as TerminalIcon,
   Code,
-  Layers,
   Play,
   CheckCircle2,
   Trash2,
@@ -20,13 +19,9 @@ import {
   Copy,
   Edit3,
   Plus,
-  CornerDownRight,
-  Sparkles,
-  Key,
   X,
   Zap,
   Bug,
-  Loader2,
   Square,
   AlertCircle,
   Compass
@@ -282,27 +277,6 @@ const createDefaultStartBlock = (): CanvasBlock => ({
   y: 30,
   zIndex: 10,
 });
-
-const EMPTY_BLOCK_INPUT_WIDTH = 26; // 빈 입력창 표준 너비 (툴박스와 캔버스 완벽 일치: 26px x 20px)
-
-// Seamless Scratch Puzzle Tab & Notch Components (암수 결합부 너비 20px 균일 일치 및 안정적인 와이드 결합)
-const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {
-  const str = val ?? '';
-  if (str.length === 0) {
-    return EMPTY_BLOCK_INPUT_WIDTH;
-  }
-  let units = 0;
-  for (let i = 0; i < str.length; i++) {
-    const code = str.charCodeAt(i);
-    if ((code >= 0x1100 && code <= 0x11ff) || (code >= 0x3130 && code <= 0x318f) || (code >= 0xac00 && code <= 0xd7af)) {
-      units += 2;
-    } else {
-      units += 1;
-    }
-  }
-  const effectiveLen = Math.max(minChars, units);
-  return Math.round(effectiveLen * 7.5 + 13);
-};
 
 // Puzzle notch & tab components are imported from @/components/practice/BlockPuzzleShapes
 
@@ -1757,7 +1731,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const debugSpeedRef = useRef<number>(debugSpeed);
   debugSpeedRef.current = debugSpeed;
   const [isDebugging, setIsDebugging] = useState<boolean>(false);
-  const [debugStepInfo, setDebugStepInfo] = useState<{ current: number; total: number } | null>(null);
   const [executingBlockId, setExecutingBlockId] = useState<string | null>(null);
   const [executingLineIndex, setExecutingLineIndex] = useState<number | null>(null);
   const [highlightedMemoryKeys, setHighlightedMemoryKeys] = useState<Set<string>>(new Set());
@@ -3134,7 +3107,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       setIsExecuting(false);
       setExecutingBlockId(null);
       setExecutingLineIndex(null);
-      setDebugStepInfo(null);
       setHighlightedMemoryKeys(new Set());
       return;
     }
@@ -3186,7 +3158,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       setRuntimeMemory({});
       setHighlightedMemoryKeys(new Set());
       setIsSuccess(false);
-      setDebugStepInfo(null);
       return;
     }
 
@@ -3343,8 +3314,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           const trace = evaluateBlocksWithTrace(activeBlocks, primaryStdin);
           finalDebugScope = trace.scope;
           const steps = trace.steps;
-          const totalSteps = Math.max(1, steps.length);
-          setDebugStepInfo({ current: 0, total: totalSteps });
 
           if (steps.length === 0) {
             actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
@@ -3354,7 +3323,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             for (let i = 0; i < steps.length; i++) {
               if (debugAbortRef.current) break;
               const step = steps[i];
-              setDebugStepInfo({ current: i + 1, total: totalSteps });
               if (step.blockId) setExecutingBlockId(step.blockId);
 
               const changedKeys = getChangedMemoryKeys(prevScope, step.scope);
@@ -3380,8 +3348,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           const trace = evaluatePythonWithTrace(codeToRun, primaryStdin);
           finalDebugScope = trace.scope;
           const steps = trace.steps;
-          const totalSteps = Math.max(1, steps.length);
-          setDebugStepInfo({ current: 0, total: totalSteps });
 
           if (steps.length === 0) {
             actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
@@ -3391,7 +3357,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             for (let i = 0; i < steps.length; i++) {
               if (debugAbortRef.current) break;
               const step = steps[i];
-              setDebugStepInfo({ current: i + 1, total: totalSteps });
               if (step.lineIndex !== undefined) setExecutingLineIndex(step.lineIndex);
 
               const changedKeys = getChangedMemoryKeys(prevScope, step.scope);
@@ -3472,7 +3437,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         setIsDebugging(false);
         setExecutingBlockId(null);
         setExecutingLineIndex(null);
-        setDebugStepInfo(null);
         setHighlightedMemoryKeys(new Set());
       }
     }
@@ -3519,27 +3483,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
-
-  // Unlock next step in current session; record level cleared in DB ONLY when final step passes
-  useEffect(() => {
-    if (!isSuccess) return;
-    /* Handled directly in markStepSolved(stepIdxAtRun)
-
-    if (currentStepIndex >= totalQuestions - 1) {
-      setIsLevelAlreadyCleared(true);
-      setIsForcedReviewRun(false);
-      void recordLevelCleared(rawLang, levelNum);
-
-      const completedSec = findCompletedSectionForLevel(rawLang, levelNum);
-      if (
-        completedSec &&
-        !hasSubmittedSectionFeedbackLocal(rawLang, completedSec.sectionNumber)
-      ) {
-        setPendingSectionSurvey(completedSec);
-      }
-    }
-    */
-  }, []);
 
   // Enter key shortcut to advance to next step when Success Modal is open
   useEffect(() => {
@@ -3654,52 +3597,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     setDraggedBlockType(blockType);
     setIsDraggingBlock(true);
   };
-
-  const handleBlockDragEnd = () => {
-    setIsDraggingBlock(false);
-    setIsTrashHovered(false);
-    setActiveSnapTarget(null);
-    draggingInfoRef.current = null;
-    setDraggedBlockType(null);
-  };
-
-  const handleDragStartFromInner = (
-    e: React.DragEvent,
-    child: CanvasBlock,
-    parentBlockId: string,
-    childIdx: number,
-    branchId?: string
-  ) => {
-    e.stopPropagation();
-    const targetEl = e.currentTarget as HTMLElement;
-    const rect = targetEl.getBoundingClientRect();
-    const grabX = e.clientX - rect.left;
-    const grabY = e.clientY - rect.top;
-
-    const payload = {
-      source: 'inner' as const,
-      blockType: child.type,
-      id: child.id,
-      parentBlockId,
-      childIdx,
-      branchId,
-      content: child.content,
-      varName: child.varName,
-      grabX,
-      grabY,
-      initialWidth: Math.round(rect.width),
-      initialHeight: Math.round(rect.height),
-    };
-    draggingInfoRef.current = payload;
-    try {
-      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
-    } catch { }
-    e.dataTransfer.effectAllowed = 'all';
-    setIsDraggingBlock(true);
-    setDraggingBlockId(child.id);
-  };
-
-
 
   // Bring entire connected stack on canvas to front layer with ordered zIndex (root > downstream)
   const bringStackToFront = (blockId: string, blocks: CanvasBlock[]): CanvasBlock[] => {
@@ -4182,7 +4079,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       // 메서드 블록 및 가로 결합 블록은 상하(below/above) 수직 스냅 대상에서 원천 제외
       if (b.type === 'method' || b.attachedToBlockId) continue;
       const bEl = document.getElementById(`block-${b.id}`);
-      const bW = bEl ? bEl.offsetWidth : (b.type === 'start' ? 160 : 140);
       const bH = bEl ? bEl.offsetHeight : (b.type === 'start' ? 38 : 34);
 
       const bBottom = b.y + bH;
@@ -5950,12 +5846,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     );
   };
 
-  const handleBlockVarNameChange = (blockId: string, val: string) => {
-    setCanvasBlocks((prev) =>
-      prev.map((b) => (b.id === blockId ? { ...b, varName: val } : b))
-    );
-  };
-
   // C-Shape & E-Shape Branch / Slot Handlers
   const handleAddElifBranch = (blockId: string) => {
     setCanvasBlocks((prev) =>
@@ -6189,76 +6079,11 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     );
   };
 
-  // Add child block into loop slot (recursive tree support)
-  const handleAddBlockToLoop = (loopBlockId: string, childType: BlockType = 'print') => {
-    const isLoopOrDef = childType === 'for_range' || childType === 'for_in' || childType === 'while' || childType === 'def';
-    const isIf = childType === 'if';
-    const childBlock: CanvasBlock = {
-      id: `${childType}-${Date.now()}`,
-      type: childType,
-      varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
-      content: childType === 'for_range' ? '3' : childType === 'for_in' ? 'items' : childType === 'while' ? 'False' : '',
-      argBlock: childType === 'for_range' ? {
-        id: `range-${Date.now() + 1}`,
-        type: 'range',
-        content: '3',
-        x: 0,
-        y: 0,
-      } : undefined,
-      innerBlocks: isLoopOrDef ? [] : undefined,
-      branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
-      x: 0,
-      y: 0,
-    };
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, loopBlockId, (b) => ({
-        ...b,
-        innerBlocks: [...(b.innerBlocks || []), childBlock],
-      }))
-    );
-  };
-
   const handleRemoveInnerBlockFromLoop = (loopBlockId: string, childIdx: number) => {
     setCanvasBlocks((prev) =>
       updateAnyBlockInTree(prev, loopBlockId, (b) => {
         if (!b.innerBlocks) return b;
         return { ...b, innerBlocks: b.innerBlocks.filter((_, idx) => idx !== childIdx) };
-      })
-    );
-  };
-
-  // Add child block into if branch slot
-  const handleAddBlockToBranch = (ifBlockId: string, branchId: string, childType: BlockType = 'print') => {
-    const isLoopOrDef = childType === 'for_range' || childType === 'for_in' || childType === 'while' || childType === 'def';
-    const isIf = childType === 'if';
-    const childBlock: CanvasBlock = {
-      id: `${childType}-${Date.now()}`,
-      type: childType,
-      varName: childType === 'variable' ? 'x' : childType === 'for_range' ? 'j' : childType === 'for_in' ? 'item' : childType === 'def' ? 'sub_func' : undefined,
-      content: childType === 'for_range' ? '3' : childType === 'for_in' ? 'items' : childType === 'while' ? 'False' : '',
-      argBlock: childType === 'for_range' ? {
-        id: `range-${Date.now() + 1}`,
-        type: 'range',
-        content: '3',
-        x: 0,
-        y: 0,
-      } : undefined,
-      innerBlocks: isLoopOrDef ? [] : undefined,
-      branches: isIf ? [{ id: `br-if-${Date.now()}`, kind: 'if', condition: 'False', innerBlocks: [] }] : undefined,
-      x: 0,
-      y: 0,
-    };
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, ifBlockId, (b) => {
-        if (!b.branches) return b;
-        return {
-          ...b,
-          branches: b.branches.map((br) =>
-            br.id === branchId
-              ? { ...br, innerBlocks: [...(br.innerBlocks || []), childBlock] }
-              : br
-          ),
-        };
       })
     );
   };
@@ -6277,46 +6102,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         };
       })
     );
-  };
-
-  const handleLoopInnerInputChange = (loopBlockId: string, childIdx: number, val: string) => {
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, loopBlockId, (b) => {
-        if (!b.innerBlocks) return b;
-        const newInner = [...b.innerBlocks];
-        if (newInner[childIdx]) {
-          newInner[childIdx] = { ...newInner[childIdx], content: val };
-        }
-        return { ...b, innerBlocks: newInner };
-      })
-    );
-  };
-
-  const handleBranchInnerInputChange = (ifBlockId: string, branchId: string, childIdx: number, val: string) => {
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, ifBlockId, (b) => {
-        if (!b.branches) return b;
-        return {
-          ...b,
-          branches: b.branches.map((br) => {
-            if (br.id !== branchId || !br.innerBlocks) return br;
-            const newInner = [...br.innerBlocks];
-            if (newInner[childIdx]) {
-              newInner[childIdx] = { ...newInner[childIdx], content: val };
-            }
-            return { ...br, innerBlocks: newInner };
-          }),
-        };
-      })
-    );
-  };
-
-  // 블록 섹션 클릭 시 자동 부착 기능 제거됨: 캔버스로 드래그 앤 드롭으로만 배치
-  const handleAddBlockFromToolbox = (
-    _kind: BlockType,
-    _extra?: { varName?: string; withElse?: boolean }
-  ) => {
-    // No-op
   };
 
   const handleMethodNameChange = (blockId: string, val: string) => {

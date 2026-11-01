@@ -411,7 +411,6 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>('ko');
-  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     // 1. Check saved user preference in localStorage
@@ -419,7 +418,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (saved === 'ko' || saved === 'en') {
       setLanguageState(saved);
       document.documentElement.lang = saved;
-      setIsInitialized(true);
       return;
     }
 
@@ -430,7 +428,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       setLanguageState(detected);
       document.documentElement.lang = detected;
     }
-    setIsInitialized(true);
   }, []);
 
   const setLanguage = (lang: Language) => {

@@ -419,11 +419,6 @@ export default function TypingStage({
   const maxLineCount = Math.max(targetLines.length, userLines.length);
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
 
-  // Precompute tokens for each line of the target code
-  const targetLinesTokens = useMemo(() => {
-    return targetLines.map((line) => tokenizePythonLine(line));
-  }, [targetLines]);
-
   const activeLineRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll editor container to keep active typing line in view

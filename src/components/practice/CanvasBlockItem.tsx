@@ -5,7 +5,6 @@ import {
   BlockType,
   AssignOperator,
   IfBranch,
-  DictPair,
   BLOCK_GEOMETRY,
   BLOCK_THEMES,
   getBlockInputWidth,
@@ -125,13 +124,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     onContentChange,
     onVarNameChange,
     onBranchConditionChange,
-    onAddBranch,
     onRemoveBranch,
     onToggleDefReturn,
     onDefReturnValChange,
     onPrintOptionChange,
     onAssignOpChange,
-    onRemoveInnerBlock,
     onMethodNameChange,
     onBlockTypeChange,
     onAddItem,
@@ -142,7 +139,6 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     onDictKeyChange,
     onDictValChange,
     methodCategories = [],
-    getMethodSelectWidth = (s: string) => Math.max(60, s.length * 8 + 30),
     renderSpeechBubble,
     handleInputFocusSelect,
     handleInputClickSelect,
@@ -167,7 +163,6 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   const isDescendantExecuting = Boolean(
     !isExecutingThisBlock && isDebugging && executingBlockId && hasDescendant(block, executingBlockId)
   );
-  const isDimmed = Boolean(isDebugging && executingBlockId && !isExecutingThisBlock && !isDescendantExecuting);
 
   const debugStyle: React.CSSProperties = !isDebugging || !executingBlockId
     ? { transition: 'opacity 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease' }

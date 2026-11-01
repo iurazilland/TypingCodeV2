@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Play, RotateCcw, CheckCircle2, AlertTriangle, Clock } from 'lucide-react';
+import { Play, RotateCcw, CheckCircle2, Clock } from 'lucide-react';
 import { ExecutionResult } from '@/lib/types';
 
 interface TerminalProps {
