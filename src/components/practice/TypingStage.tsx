@@ -242,9 +242,30 @@ export default function TypingStage({
   // User's typed code text and cursor position
   const [typedCode, setTypedCode] = useState<string>('');
   const [cursorIndex, setCursorIndex] = useState<number>(0);
+  const [showPasteNotice, setShowPasteNotice] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const hiddenInputRef = useRef<HTMLTextAreaElement>(null);
+  const pasteNoticeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const triggerPasteBlockedNotice = () => {
+    if (pasteNoticeTimerRef.current) {
+      clearTimeout(pasteNoticeTimerRef.current);
+    }
+    setShowPasteNotice(true);
+    pasteNoticeTimerRef.current = setTimeout(() => {
+      setShowPasteNotice(false);
+      pasteNoticeTimerRef.current = null;
+    }, 2000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (pasteNoticeTimerRef.current) {
+        clearTimeout(pasteNoticeTimerRef.current);
+      }
+    };
+  }, []);
 
   // IME (Korean/CJK) composition tracking
   const composingStartIndexRef = useRef<number | null>(null);
@@ -259,6 +280,7 @@ export default function TypingStage({
   useEffect(() => {
     setTypedCode('');
     setCursorIndex(0);
+    setShowPasteNotice(false);
     composingStartIndexRef.current = null;
     lastComposingLenRef.current = 0;
     if (hiddenInputRef.current) {
@@ -333,6 +355,17 @@ export default function TypingStage({
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     if (val && composingStartIndexRef.current === null) {
+      const inputType = (e.nativeEvent as InputEvent).inputType || '';
+      if (
+        inputType === 'insertFromPaste' ||
+        inputType === 'insertFromDrop' ||
+        inputType === 'insertFromYank' ||
+        Array.from(val).length > 1
+      ) {
+        e.target.value = '';
+        triggerPasteBlockedNotice();
+        return;
+      }
       setTypedCode((prev) => {
         const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
         return prev.slice(0, safeIdx) + val + prev.slice(safeIdx);
@@ -401,6 +434,16 @@ export default function TypingStage({
   // Handle typing input and keyboard cursor navigation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (isExecuting) return;
+
+    // Block paste shortcuts (Ctrl+V / Cmd+V / Shift+Insert)
+    if (
+      ((e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')) ||
+      (e.shiftKey && e.key === 'Insert')
+    ) {
+      e.preventDefault();
+      triggerPasteBlockedNotice();
+      return;
+    }
 
     // While IME is actively composing (e.g. Korean / CJK), let browser IME handle it
     if (e.nativeEvent.isComposing || e.key === 'Process' || e.key === 'HangulMode') {
@@ -609,6 +652,15 @@ export default function TypingStage({
     <div
       ref={containerRef}
       onClick={handleStageClick}
+      onPaste={(e) => {
+        e.preventDefault();
+        triggerPasteBlockedNotice();
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        triggerPasteBlockedNotice();
+      }}
+      onDragOver={(e) => e.preventDefault()}
       style={{
         flex: 1,
         display: 'flex',
@@ -634,14 +686,11 @@ export default function TypingStage({
         spellCheck={false}
         onPaste={(e) => {
           e.preventDefault();
-          const text = e.clipboardData.getData('text');
-          if (text) {
-            setTypedCode((prev) => {
-              const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
-              return prev.slice(0, safeIdx) + text + prev.slice(safeIdx);
-            });
-            setCursorIndex((prev) => prev + text.length);
-          }
+          triggerPasteBlockedNotice();
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          triggerPasteBlockedNotice();
         }}
         autoFocus
         style={{
@@ -676,6 +725,7 @@ export default function TypingStage({
             borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             padding: '0 16px',
             flexShrink: 0,
           }}
@@ -703,6 +753,24 @@ export default function TypingStage({
               </span>
             )}
           </div>
+
+          {showPasteNotice && (
+            <span
+              style={{
+                padding: '2px 10px',
+                borderRadius: '999px',
+                background: 'rgba(245, 158, 11, 0.14)',
+                border: '1px solid rgba(245, 158, 11, 0.42)',
+                color: '#fbbf24',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                lineHeight: 1.4,
+                userSelect: 'none',
+              }}
+            >
+              {isEn ? 'Please type the code directly' : '직접 타이핑해서 입력해 주세요'}
+            </span>
+          )}
         </div>
 
         {/* IDE Code Area */}
