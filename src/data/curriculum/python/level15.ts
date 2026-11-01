@@ -47,22 +47,22 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 형변환 함수 이름을 채워 입력받은 정수 n에 1을 더한 값을 "Next: " 뒤에 이어 출력해보세요. (예: 9 입력 시 Next: 10)',
-      prompt_en: 'Fill in the two casting functions to add 1 to input integer n and concatenate it after "Next: " (e.g., 9 -> Next: 10).',
+      prompt_ko: '두 빈칸에 형변환 함수 이름을 채워 입력받은 정수 n에 1을 더한 값을 "No." 뒤에 이어 출력해보세요. (예: 9 입력 시 No.10)',
+      prompt_en: 'Fill in the two casting functions to add 1 to input integer n and concatenate it after "No." (e.g., 9 -> No.10).',
       hint_ko: '첫째 줄에서는 입력을 정수로 바꾸는 int를, 둘째 줄에서는 계산된 숫자(n + 1)를 문자열로 바꾸는 str을 사용하세요.',
       hint_en: 'Use int on line 1 to parse the input, and str on line 2 to convert (n + 1) back to text for +.',
-      templateCode: 'n = §§§(input())\nprint("Next: " + §§§(n + 1))',
-      targetCode: 'n = int(input())\nprint("Next: " + str(n + 1))',
+      templateCode: 'n = §§§(input())\nprint("No." + §§§(n + 1))',
+      targetCode: 'n = int(input())\nprint("No." + str(n + 1))',
       testCases: [
         {
           id: 1,
           input: '9',
-          expectedOutput: 'Next: 10',
+          expectedOutput: 'No.10',
         },
         {
           id: 2,
           input: '19',
-          expectedOutput: 'Next: 20',
+          expectedOutput: 'No.20',
         },
       ],
     },
@@ -259,3 +259,4 @@ export const PYTHON_LEVEL_15: PracticeRound = {
     },
   ],
 };
+

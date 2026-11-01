@@ -26,6 +26,16 @@ export interface TraceEvaluationResult {
   steps: ExecutionStep[];
 }
 
+export function makeTuple(arr: any[]): any[] {
+  const t = [...arr];
+  Object.defineProperty(t, '__isTuple', { value: true, enumerable: false });
+  return t;
+}
+
+export function isTuple(val: any): boolean {
+  return Array.isArray(val) && Boolean((val as any).__isTuple);
+}
+
 export function splitTopLevelArgs(str: string): string[] {
   const result: string[] = [];
   let current = '';
@@ -130,6 +140,7 @@ export function stripPythonComment(line: string): string {
 function findBalancedOuterCall(expr: string): { fnName: string; argsStr: string } | null {
   const head = expr.match(/^([a-zA-Z_]\w*)\s*\(/);
   if (!head || !expr.endsWith(')')) return null;
+  if (PYTHON_RESERVED_WORDS.has(head[1])) return null;
   const openIdx = head[0].length - 1;
   let depth = 0;
   let q: string | null = null;
@@ -173,7 +184,7 @@ function hasTopLevelOperator(str: string): boolean {
     if (ch === '{') { c++; continue; }
     if (ch === '}') { c = Math.max(0, c - 1); continue; }
     if (p === 0 && b === 0 && c === 0) {
-      if (/[+\-*/%<>=!,]/.test(ch)) return true;
+      if (/[+\-*/%<>=!,&|^]/.test(ch)) return true;
       if (/\b(?:and|or|not|in|is)\b/.test(str.slice(i))) {
         const prev = i > 0 ? str[i - 1] : ' ';
         if (!/[a-zA-Z0-9_.]/.test(prev)) {
@@ -217,10 +228,45 @@ function findBalancedMethodCall(expr: string): { receiver: string; methodName: s
   if (!dotMatch) return null;
   const receiver = dotMatch[1].trim();
   if (!receiver || hasTopLevelOperator(receiver)) return null;
+  if (/^[+-]?\d+$/.test(receiver)) return null; // float literal like 3.14 is not a method receiver
   return {
     receiver,
     methodName: dotMatch[2],
     argsStr: expr.slice(lastTopOpenParen + 1, -1),
+  };
+}
+
+function findBalancedPostfixBracket(expr: string): { receiver: string; bracketContent: string } | null {
+  if (!expr.endsWith(']')) return null;
+  let q: string | null = null;
+  let p = 0, b = 0, c = 0;
+  let lastTopOpenBracket = -1;
+  for (let i = 0; i < expr.length; i++) {
+    const ch = expr[i];
+    if (q) {
+      if (ch === '\\' && i + 1 < expr.length) { i++; continue; }
+      if (ch === q) q = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") { q = ch; continue; }
+    if (ch === '(') { p++; continue; }
+    if (ch === ')') { p--; if (p < 0) return null; continue; }
+    if (ch === '{') { c++; continue; }
+    if (ch === '}') { c--; if (c < 0) return null; continue; }
+    if (ch === '[') {
+      if (p === 0 && b === 0 && c === 0) lastTopOpenBracket = i;
+      b++;
+    } else if (ch === ']') {
+      b--;
+      if (b < 0) return null;
+    }
+  }
+  if (b !== 0 || q || lastTopOpenBracket <= 0) return null;
+  const receiver = expr.slice(0, lastTopOpenBracket).trim();
+  if (!receiver || hasTopLevelOperator(receiver)) return null;
+  return {
+    receiver,
+    bracketContent: expr.slice(lastTopOpenBracket + 1, -1),
   };
 }
 
@@ -256,6 +302,7 @@ function validateRawPythonExprSyntax(expr: string): void {
   let q: string | null = null;
   let p = 0, b = 0, c = 0;
   let stripped = '';
+  const strippedDepths: number[] = [];
   for (let i = 0; i < expr.length; i++) {
     const ch = expr[i];
     if (q) {
@@ -266,19 +313,20 @@ function validateRawPythonExprSyntax(expr: string): void {
     if (ch === '"' || ch === "'") {
       q = ch;
       stripped += '""';
+      strippedDepths.push(p, p);
       continue;
     }
     if (ch === '(') p++;
-    else if (ch === ')') { p--; if (p < 0) throw new Error('SyntaxError: unmatched \')\''); }
+    else if (ch === ')') { p--; if (p < 0) throw new Error("SyntaxError: unmatched ')'"); }
     else if (ch === '[') b++;
-    else if (ch === ']') { b--; if (b < 0) throw new Error('SyntaxError: unmatched \']\''); }
+    else if (ch === ']') { b--; if (b < 0) throw new Error("SyntaxError: unmatched ']'"); }
     else if (ch === '{') c++;
-    else if (ch === '}') { c--; if (c < 0) throw new Error('SyntaxError: unmatched \'}\''); }
+    else if (ch === '}') { c--; if (c < 0) throw new Error("SyntaxError: unmatched '}'"); }
     stripped += ch;
+    strippedDepths.push(p);
   }
   if (q) throw new Error('SyntaxError: EOL while scanning string literal');
   if (p !== 0 || b !== 0 || c !== 0) throw new Error('SyntaxError: invalid syntax');
-  // Disallow C/JS logical/equality operators and standalone assignment '=' inside expressions
   if (/&&|\|\||===|!==/.test(stripped)) {
     throw new Error('SyntaxError: invalid syntax');
   }
@@ -286,7 +334,7 @@ function validateRawPythonExprSyntax(expr: string): void {
     if (stripped[i] === '!' && stripped[i + 1] !== '=') {
       throw new Error('SyntaxError: invalid syntax');
     }
-    if (stripped[i] === '=') {
+    if (stripped[i] === '=' && strippedDepths[i] === 0) {
       const prev = i > 0 ? stripped[i - 1] : '';
       const next = i + 1 < stripped.length ? stripped[i + 1] : '';
       if (next !== '=' && !/[!<>=]/.test(prev)) {
@@ -296,178 +344,45 @@ function validateRawPythonExprSyntax(expr: string): void {
   }
 }
 
-function replaceEqualityOpsOutsideStrings(js: string): string {
-  let out = '';
+function splitTopLevelColon(str: string): string[] | null {
+  const parts: string[] = [];
   let q: string | null = null;
-  for (let i = 0; i < js.length; i++) {
-    const ch = js[i];
-    if (q) {
-      if (ch === '\\' && i + 1 < js.length) {
-        out += ch + js[i + 1];
-        i++;
-        continue;
-      }
-      out += ch;
-      if (ch === q) q = null;
-      continue;
-    }
-    if (ch === '"' || ch === "'") {
-      q = ch;
-      out += ch;
-      continue;
-    }
-    if (ch === '=' && js[i + 1] === '=' && js[i + 2] !== '=') {
-      out += '===';
-      i++;
-      continue;
-    }
-    if (ch === '!' && js[i + 1] === '=' && js[i + 2] !== '=') {
-      out += '!==';
-      i++;
-      continue;
-    }
-    out += ch;
-  }
-  return out;
-}
-
-function expandChainedComparisons(js: string): string {
-  // Recursively expand inner parenthesized expressions first
-  let expanded = '';
-  let q: string | null = null;
-  let i = 0;
-  while (i < js.length) {
-    const ch = js[i];
-    if (q) {
-      if (ch === '\\' && i + 1 < js.length) {
-        expanded += ch + js[i + 1];
-        i += 2;
-        continue;
-      }
-      expanded += ch;
-      if (ch === q) q = null;
-      i++;
-      continue;
-    }
-    if (ch === '"' || ch === "'") {
-      q = ch;
-      expanded += ch;
-      i++;
-      continue;
-    }
-    if (ch === '(') {
-      let depth = 1;
-      let k = i + 1;
-      let innerQ: string | null = null;
-      while (k < js.length && depth > 0) {
-        const kc = js[k];
-        if (innerQ) {
-          if (kc === '\\' && k + 1 < js.length) { k += 2; continue; }
-          if (kc === innerQ) innerQ = null;
-        } else if (kc === '"' || kc === "'") {
-          innerQ = kc;
-        } else if (kc === '(') depth++;
-        else if (kc === ')') depth--;
-        k++;
-      }
-      const innerContent = js.slice(i + 1, k - 1);
-      expanded += '(' + expandChainedComparisons(innerContent) + ')';
-      i = k;
-      continue;
-    }
-    expanded += ch;
-    i++;
-  }
-
-  // Split at top-level && and ||
-  const clauses: string[] = [];
-  const logicOps: string[] = [];
-  let start = 0;
   let p = 0, b = 0, c = 0;
-  q = null;
-  for (let idx = 0; idx < expanded.length; idx++) {
-    const ch = expanded[idx];
+  let start = 0;
+  let foundColon = false;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
     if (q) {
-      if (ch === '\\' && idx + 1 < expanded.length) { idx++; continue; }
+      if (ch === '\\' && i + 1 < str.length) { i++; continue; }
       if (ch === q) q = null;
       continue;
     }
     if (ch === '"' || ch === "'") { q = ch; continue; }
     if (ch === '(') p++;
-    else if (ch === ')') p--;
+    else if (ch === ')') p = Math.max(0, p - 1);
     else if (ch === '[') b++;
-    else if (ch === ']') b--;
+    else if (ch === ']') b = Math.max(0, b - 1);
     else if (ch === '{') c++;
-    else if (ch === '}') c--;
-    else if (p === 0 && b === 0 && c === 0) {
-      if ((ch === '&' && expanded[idx + 1] === '&') || (ch === '|' && expanded[idx + 1] === '|')) {
-        clauses.push(expanded.slice(start, idx));
-        logicOps.push(expanded.slice(idx, idx + 2));
-        idx++;
-        start = idx + 1;
-      }
+    else if (ch === '}') c = Math.max(0, c - 1);
+    else if (ch === ':' && p === 0 && b === 0 && c === 0) {
+      foundColon = true;
+      parts.push(str.slice(start, i));
+      start = i + 1;
     }
   }
-  clauses.push(expanded.slice(start));
-
-  const rewriteClause = (clause: string): string => {
-    const parts: string[] = [];
-    const ops: string[] = [];
-    let cStart = 0;
-    let cp = 0, cb = 0, cc = 0;
-    let cq: string | null = null;
-    for (let k = 0; k < clause.length; k++) {
-      const ch = clause[k];
-      if (cq) {
-        if (ch === '\\' && k + 1 < clause.length) { k++; continue; }
-        if (ch === cq) cq = null;
-        continue;
-      }
-      if (ch === '"' || ch === "'") { cq = ch; continue; }
-      if (ch === '(') cp++;
-      else if (ch === ')') cp--;
-      else if (ch === '[') cb++;
-      else if (ch === ']') cb--;
-      else if (ch === '{') cc++;
-      else if (ch === '}') cc--;
-      else if (cp === 0 && cb === 0 && cc === 0) {
-        if ((ch === '=' || ch === '!') && clause[k + 1] === '=' && clause[k + 2] === '=') {
-          parts.push(clause.slice(cStart, k).trim());
-          ops.push(clause.slice(k, k + 3));
-          k += 2;
-          cStart = k + 1;
-        } else if ((ch === '<' || ch === '>') && clause[k + 1] === '=') {
-          parts.push(clause.slice(cStart, k).trim());
-          ops.push(clause.slice(k, k + 2));
-          k += 1;
-          cStart = k + 1;
-        } else if (ch === '<' || ch === '>') {
-          parts.push(clause.slice(cStart, k).trim());
-          ops.push(ch);
-          cStart = k + 1;
-        }
-      }
-    }
-    if (ops.length < 2) return clause;
-    parts.push(clause.slice(cStart).trim());
-    const pairs: string[] = [];
-    for (let m = 0; m < ops.length; m++) {
-      pairs.push(`(${parts[m]} ${ops[m]} ${parts[m + 1]})`);
-    }
-    return `(${pairs.join(' && ')})`;
-  };
-
-  let result = rewriteClause(clauses[0]);
-  for (let m = 0; m < logicOps.length; m++) {
-    result += ` ${logicOps[m]} ${rewriteClause(clauses[m + 1])}`;
-  }
-  return result;
+  if (!foundColon) return null;
+  parts.push(str.slice(start));
+  return parts;
 }
+
+type ReturnSignal = { __isReturn: true; value: any };
+type LoopOrReturnSignal = 'break' | 'continue' | ReturnSignal | void;
 
 // 0ms Safe Local Block AST Evaluator with trace generation, stdin, and loop cycling support
 export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): TraceEvaluationResult {
   try {
     const scope: Record<string, any> = {};
+    let currentScope: Record<string, any> = scope;
     const floatVars = new Set<string>();
     const functions: Record<string, any> = {};
     let stdoutBuffer = '';
@@ -475,6 +390,13 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
     const steps: ExecutionStep[] = [];
     const stdinLines = stdin.length > 0 ? stdin.replace(/\r\n/g, '\n').split('\n') : [];
     let stdinIdx = 0;
+
+    const hasVar = (name: string): boolean =>
+      Object.prototype.hasOwnProperty.call(currentScope, name) ||
+      Object.prototype.hasOwnProperty.call(scope, name);
+
+    const getVar = (name: string): any =>
+      Object.prototype.hasOwnProperty.call(currentScope, name) ? currentScope[name] : scope[name];
 
     const readInputLine = (promptArg?: any): string => {
       if (promptArg !== undefined && promptArg !== null && promptArg !== '') {
@@ -495,6 +417,86 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
       return Boolean(val);
     };
 
+    const isNumOrBool = (val: any): boolean =>
+      typeof val === 'number' || typeof val === 'boolean';
+
+    const pyEquals = (a: any, b: any): boolean => {
+      if (isNumOrBool(a) && isNumOrBool(b)) return Number(a) === Number(b);
+      if (typeof a !== typeof b) return false;
+      if (a === null || b === null || a === undefined || b === undefined) return a === b;
+      if (Array.isArray(a) && Array.isArray(b)) {
+        if (isTuple(a) !== isTuple(b)) return false;
+        if (a.length !== b.length) return false;
+        for (let i = 0; i < a.length; i++) {
+          if (!pyEquals(a[i], b[i])) return false;
+        }
+        return true;
+      }
+      if (a instanceof Set && b instanceof Set) {
+        if (a.size !== b.size) return false;
+        const bArr = Array.from(b);
+        return Array.from(a).every((x) => bArr.some((y) => pyEquals(x, y)));
+      }
+      if (typeof a === 'object' && typeof b === 'object') {
+        const ka = Object.keys(a);
+        const kb = Object.keys(b);
+        if (ka.length !== kb.length) return false;
+        return ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && pyEquals(a[k], b[k]));
+      }
+      return a === b;
+    };
+
+    const pyCompare = (a: any, b: any, op: '<' | '<=' | '>' | '>='): boolean => {
+      let cmp = 0;
+      if (isNumOrBool(a) && isNumOrBool(b)) {
+        const na = Number(a), nb = Number(b);
+        cmp = na < nb ? -1 : na > nb ? 1 : 0;
+      } else if (typeof a === 'string' && typeof b === 'string') {
+        cmp = a < b ? -1 : a > b ? 1 : 0;
+      } else if (Array.isArray(a) && Array.isArray(b) && isTuple(a) === isTuple(b)) {
+        const minL = Math.min(a.length, b.length);
+        for (let i = 0; i < minL; i++) {
+          if (!pyEquals(a[i], b[i])) {
+            return pyCompare(a[i], b[i], op);
+          }
+        }
+        cmp = a.length < b.length ? -1 : a.length > b.length ? 1 : 0;
+      } else {
+        throw new Error(`TypeError: '${op}' not supported between instances of '${typeof a}' and '${typeof b}'`);
+      }
+      if (op === '<') return cmp < 0;
+      if (op === '<=') return cmp <= 0;
+      if (op === '>') return cmp > 0;
+      return cmp >= 0;
+    };
+
+    const pyIn = (item: any, container: any): boolean => {
+      if (typeof container === 'string') {
+        if (typeof item !== 'string') {
+          throw new Error("TypeError: 'in <string>' requires string as left operand");
+        }
+        return container.includes(item);
+      }
+      if (Array.isArray(container)) {
+        return container.some((el) => pyEquals(item, el));
+      }
+      if (container instanceof Set) {
+        return Array.from(container).some((el) => pyEquals(item, el));
+      }
+      if (container && typeof container === 'object') {
+        return Object.prototype.hasOwnProperty.call(container, String(item));
+      }
+      throw new Error('TypeError: argument is not iterable');
+    };
+
+    const toIterableArray = (val: any): any[] => {
+      if (Array.isArray(val)) return [...val];
+      if (typeof val === 'string') return val.split('');
+      if (val instanceof Set) return Array.from(val);
+      if (val && typeof val === 'object') return Object.keys(val);
+      throw new Error(`TypeError: '${typeof val}' object is not iterable`);
+    };
+
     const isExprFloat = (rawExpr: string, val: any): boolean => {
       if (typeof val !== 'number') return false;
       if (!Number.isInteger(val)) return true;
@@ -507,9 +509,11 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
       if (/\bfloat\s*\(/.test(stripped)) return true;
       if (/(?:^|[^\w.])\d+\.\d*(?:[^\w.]|$)/.test(stripped)) return true;
       if (/(^|[^/])\/([^/]|$)/.test(stripped)) return true;
-      const floatVarList = Array.from(floatVars);
-      for (let fIdx = 0; fIdx < floatVarList.length; fIdx++) {
-        if (new RegExp(`\\b${floatVarList[fIdx]}\\b`).test(stripped)) return true;
+      if (currentScope === scope) {
+        const floatVarList = Array.from(floatVars);
+        for (let fIdx = 0; fIdx < floatVarList.length; fIdx++) {
+          if (new RegExp(`\\b${floatVarList[fIdx]}\\b`).test(stripped)) return true;
+        }
       }
       return false;
     };
@@ -523,6 +527,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           : "<class 'int'>";
       }
       if (typeof val === 'string') return "<class 'str'>";
+      if (isTuple(val)) return "<class 'tuple'>";
       if (Array.isArray(val)) return "<class 'list'>";
       if (val instanceof Set) return "<class 'set'>";
       if (typeof val === 'object') return "<class 'dict'>";
@@ -537,10 +542,16 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
         if (forceFloat || (rawExpr && isExprFloat(rawExpr, val))) return val.toFixed(1);
         return String(val);
       }
+      if (isTuple(val)) {
+        const items = val.map((v: any) => (typeof v === 'string' ? `'${v}'` : formatPythonValue(v)));
+        if (items.length === 1) return `(${items[0]},)`;
+        return `(${items.join(', ')})`;
+      }
       if (Array.isArray(val)) {
         return `[${val.map((v) => (typeof v === 'string' ? `'${v}'` : formatPythonValue(v))).join(', ')}]`;
       }
       if (val instanceof Set) {
+        if (val.size === 0) return 'set()';
         return `{${Array.from(val).map((v) => (typeof v === 'string' ? `'${v}'` : formatPythonValue(v))).join(', ')}}`;
       }
       if (typeof val === 'object') {
@@ -550,8 +561,18 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
       return String(val);
     };
 
-    const pyInt = (target: any): number => {
+    const pyInt = (target: any, base?: number): number => {
       if (target === undefined) return 0;
+      if (base !== undefined) {
+        if (typeof target !== 'string') {
+          throw new Error("TypeError: int() can't convert non-string with explicit base");
+        }
+        const parsed = parseInt(target.trim(), base);
+        if (Number.isNaN(parsed)) {
+          throw new Error(`ValueError: invalid literal for int() with base ${base}: '${target}'`);
+        }
+        return parsed;
+      }
       if (typeof target === 'boolean') return target ? 1 : 0;
       if (typeof target === 'number') return Math.trunc(target);
       if (typeof target === 'string') {
@@ -578,7 +599,8 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
       const res: Record<string, any> = {};
       for (const k of Object.keys(s)) {
         const val = s[k];
-        if (Array.isArray(val)) res[k] = [...val];
+        if (isTuple(val)) res[k] = makeTuple(val);
+        else if (Array.isArray(val)) res[k] = [...val];
         else if (val instanceof Set) res[k] = new Set(val);
         else if (val !== null && typeof val === 'object') res[k] = { ...val };
         else res[k] = val;
@@ -587,21 +609,457 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
     };
 
     const recordStep = (b: any) => {
+      const merged = currentScope === scope
+        ? cloneScope(scope)
+        : { ...cloneScope(scope), ...cloneScope(currentScope) };
       steps.push({
         blockId: b.id,
         lineIndex: b.lineIndex,
-        scope: cloneScope(scope),
+        scope: merged,
         stdout: stdoutBuffer.replace(/\r?\n$/, ''),
       });
+    };
+
+    const evalNonEmpty = (sub: string): any => {
+      const t = (sub || '').trim();
+      if (!t) throw new Error('SyntaxError: invalid syntax');
+      return evalExpr(t);
+    };
+
+    const pySortArray = (arr: any[], reverse: boolean = false): any[] => {
+      arr.sort((a, b) => {
+        if (pyEquals(a, b)) return 0;
+        const lt = pyCompare(a, b, '<');
+        return lt ? -1 : 1;
+      });
+      if (reverse) arr.reverse();
+      return arr;
+    };
+
+    const evalBracketOperation = (target: any, bracketContent: string): any => {
+      const sliceParts = splitTopLevelColon(bracketContent);
+      if (sliceParts) {
+        if (sliceParts.length > 3) throw new Error('SyntaxError: invalid syntax');
+        if (typeof target !== 'string' && !Array.isArray(target)) {
+          throw new Error(`TypeError: '${typeof target}' object is not subscriptable`);
+        }
+        const len = target.length;
+        const step = sliceParts.length === 3 && sliceParts[2].trim() !== ''
+          ? pyInt(evalNonEmpty(sliceParts[2]))
+          : 1;
+        if (step === 0) throw new Error('ValueError: slice step cannot be zero');
+
+        const out: any[] = [];
+        if (step > 0) {
+          let start = sliceParts[0].trim() === '' ? 0 : pyInt(evalNonEmpty(sliceParts[0]));
+          let stop = sliceParts[1].trim() === '' ? len : pyInt(evalNonEmpty(sliceParts[1]));
+          start = start < 0 ? Math.max(0, len + start) : Math.min(len, start);
+          stop = stop < 0 ? Math.max(0, len + stop) : Math.min(len, stop);
+          for (let idx = start; idx < stop; idx += step) {
+            out.push(target[idx]);
+          }
+        } else {
+          let start = sliceParts[0].trim() === '' ? len - 1 : pyInt(evalNonEmpty(sliceParts[0]));
+          if (start < 0) start = len + start;
+          if (start >= len) start = len - 1;
+          let stop: number;
+          if (sliceParts[1].trim() === '') {
+            stop = -1;
+          } else {
+            stop = pyInt(evalNonEmpty(sliceParts[1]));
+            if (stop < 0) stop = len + stop;
+          }
+          const lowerBound = Math.max(-1, stop);
+          for (let idx = start; idx > lowerBound; idx += step) {
+            if (idx >= 0 && idx < len) out.push(target[idx]);
+          }
+        }
+        if (typeof target === 'string') return out.join('');
+        if (isTuple(target)) return makeTuple(out);
+        return out;
+      }
+
+      const keyVal = evalNonEmpty(bracketContent);
+      if (typeof target === 'string' || Array.isArray(target)) {
+        if (typeof keyVal !== 'number' || !Number.isInteger(keyVal)) {
+          throw new Error('TypeError: indices must be integers or slices');
+        }
+        const idx = keyVal < 0 ? target.length + keyVal : keyVal;
+        if (idx < 0 || idx >= target.length) {
+          throw new Error('IndexError: index out of range');
+        }
+        return target[idx];
+      }
+      if (target && typeof target === 'object' && !(target instanceof Set)) {
+        const k = String(keyVal);
+        if (!Object.prototype.hasOwnProperty.call(target, k)) {
+          throw new Error(`KeyError: '${k}'`);
+        }
+        return target[k];
+      }
+      throw new Error(`TypeError: '${typeof target}' object is not subscriptable`);
+    };
+
+    const applyMethodCall = (targetVal: any, mName: string, rawArgsStr: string): any => {
+      const rawArgs = splitTopLevelArgs(rawArgsStr);
+
+      if (typeof targetVal === 'string') {
+        const mArgs = rawArgs.map((a) => evalNonEmpty(a));
+        if (mName === 'split') {
+          const maxSplit = mArgs.length >= 2 && mArgs[1] !== null ? pyInt(mArgs[1]) : undefined;
+          if (mArgs.length === 0 || mArgs[0] === null) {
+            const trimmedStr = targetVal.trim();
+            if (trimmedStr.length === 0) return [];
+            if (maxSplit !== undefined && maxSplit >= 0) {
+              const parts: string[] = [];
+              let rest = trimmedStr;
+              for (let c = 0; c < maxSplit; c++) {
+                const m = rest.match(/\s+/);
+                if (!m || m.index === undefined) break;
+                parts.push(rest.slice(0, m.index));
+                rest = rest.slice(m.index + m[0].length);
+              }
+              parts.push(rest);
+              return parts;
+            }
+            return trimmedStr.split(/\s+/);
+          }
+          const sep = String(mArgs[0]);
+          if (sep === '') throw new Error('ValueError: empty separator');
+          if (maxSplit !== undefined && maxSplit >= 0) {
+            const allParts = targetVal.split(sep);
+            if (allParts.length <= maxSplit + 1) return allParts;
+            return [...allParts.slice(0, maxSplit), allParts.slice(maxSplit).join(sep)];
+          }
+          return targetVal.split(sep);
+        }
+        if (mName === 'strip' || mName === 'lstrip' || mName === 'rstrip') {
+          if (mArgs.length === 0 || mArgs[0] === null) {
+            if (mName === 'lstrip') return targetVal.trimStart();
+            if (mName === 'rstrip') return targetVal.trimEnd();
+            return targetVal.trim();
+          }
+          const chars = new Set(String(mArgs[0]).split(''));
+          let s = 0, e = targetVal.length;
+          if (mName !== 'rstrip') while (s < e && chars.has(targetVal[s])) s++;
+          if (mName !== 'lstrip') while (e > s && chars.has(targetVal[e - 1])) e--;
+          return targetVal.slice(s, e);
+        }
+        if (mName === 'upper') return targetVal.toUpperCase();
+        if (mName === 'lower') return targetVal.toLowerCase();
+        if (mName === 'capitalize') {
+          return targetVal.length > 0 ? targetVal[0].toUpperCase() + targetVal.slice(1).toLowerCase() : '';
+        }
+        if (mName === 'title') {
+          return targetVal.replace(/[a-zA-Z]+/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase());
+        }
+        if (mName === 'swapcase') {
+          return targetVal.split('').map((c) => (c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase())).join('');
+        }
+        if (mName === 'replace') {
+          const oldSub = String(mArgs[0] ?? '');
+          const newSub = String(mArgs[1] ?? '');
+          if (mArgs.length >= 3 && typeof mArgs[2] === 'number') {
+            let count = pyInt(mArgs[2]);
+            if (count <= 0) return targetVal;
+            let res = targetVal;
+            let searchFrom = 0;
+            while (count-- > 0) {
+              const idx = res.indexOf(oldSub, searchFrom);
+              if (idx === -1) break;
+              res = res.slice(0, idx) + newSub + res.slice(idx + oldSub.length);
+              searchFrom = idx + newSub.length;
+            }
+            return res;
+          }
+          return targetVal.replaceAll(oldSub, newSub);
+        }
+        if (mName === 'count') {
+          const sub = String(mArgs[0] ?? '');
+          return sub ? targetVal.split(sub).length - 1 : targetVal.length + 1;
+        }
+        if (mName === 'find') {
+          const sub = String(mArgs[0] ?? '');
+          const start = mArgs.length >= 2 ? pyInt(mArgs[1]) : 0;
+          return targetVal.indexOf(sub, start);
+        }
+        if (mName === 'index') {
+          const sub = String(mArgs[0] ?? '');
+          const start = mArgs.length >= 2 ? pyInt(mArgs[1]) : 0;
+          const idx = targetVal.indexOf(sub, start);
+          if (idx === -1) throw new Error('ValueError: substring not found');
+          return idx;
+        }
+        if (mName === 'startswith') return targetVal.startsWith(String(mArgs[0] ?? ''));
+        if (mName === 'endswith') return targetVal.endsWith(String(mArgs[0] ?? ''));
+        if (mName === 'isdigit') return targetVal.length > 0 && /^[0-9]+$/.test(targetVal);
+        if (mName === 'isalpha') return targetVal.length > 0 && /^[a-zA-Z\uac00-\ud7a3]+$/.test(targetVal);
+        if (mName === 'isalnum') return targetVal.length > 0 && /^[a-zA-Z0-9\uac00-\ud7a3]+$/.test(targetVal);
+        if (mName === 'islower') return /[a-z]/.test(targetVal) && targetVal === targetVal.toLowerCase();
+        if (mName === 'isupper') return /[A-Z]/.test(targetVal) && targetVal === targetVal.toUpperCase();
+        if (mName === 'isspace') return targetVal.length > 0 && /^\s+$/.test(targetVal);
+        if (mName === 'join') {
+          const seq = toIterableArray(mArgs[0]);
+          return seq.map((v) => {
+            if (typeof v !== 'string') throw new Error('TypeError: sequence item: expected str instance');
+            return v;
+          }).join(targetVal);
+        }
+        throw new Error(`AttributeError: 'str' object has no attribute '${mName}'`);
+      }
+
+      if (Array.isArray(targetVal)) {
+        if (mName === 'index') {
+          const needle = evalNonEmpty(rawArgs[0] || '');
+          const foundIdx = targetVal.findIndex((item) => pyEquals(item, needle));
+          if (foundIdx === -1) throw new Error('ValueError: value is not in sequence');
+          return foundIdx;
+        }
+        if (mName === 'count') {
+          const needle = evalNonEmpty(rawArgs[0] || '');
+          return targetVal.filter((item) => pyEquals(item, needle)).length;
+        }
+        if (isTuple(targetVal)) {
+          throw new Error(`AttributeError: 'tuple' object has no attribute '${mName}'`);
+        }
+        if (mName === 'sort') {
+          let rev = false;
+          for (const ra of rawArgs) {
+            const kw = ra.match(/^reverse\s*=(?!=)\s*([\s\S]+)$/);
+            if (kw) rev = isPythonTruthy(evalNonEmpty(kw[1]));
+            else throw new Error('TypeError: sort() takes no positional arguments');
+          }
+          pySortArray(targetVal, rev);
+          return null;
+        }
+        const mArgs = rawArgs.map((a) => evalNonEmpty(a));
+        if (mName === 'append') {
+          if (mArgs.length !== 1) throw new Error('TypeError: list.append() takes exactly one argument');
+          targetVal.push(mArgs[0]);
+          return null;
+        }
+        if (mName === 'insert') {
+          if (mArgs.length !== 2) throw new Error('TypeError: insert expected 2 arguments');
+          let idx = pyInt(mArgs[0]);
+          idx = idx < 0 ? Math.max(0, targetVal.length + idx) : Math.min(targetVal.length, idx);
+          targetVal.splice(idx, 0, mArgs[1]);
+          return null;
+        }
+        if (mName === 'extend') {
+          if (mArgs.length !== 1) throw new Error('TypeError: list.extend() takes exactly one argument');
+          targetVal.push(...toIterableArray(mArgs[0]));
+          return null;
+        }
+        if (mName === 'pop') {
+          if (targetVal.length === 0) throw new Error('IndexError: pop from empty list');
+          if (mArgs.length === 0) return targetVal.pop();
+          let idx = pyInt(mArgs[0]);
+          if (idx < 0) idx = targetVal.length + idx;
+          if (idx < 0 || idx >= targetVal.length) throw new Error('IndexError: pop index out of range');
+          return targetVal.splice(idx, 1)[0];
+        }
+        if (mName === 'remove') {
+          if (mArgs.length !== 1) throw new Error('TypeError: list.remove() takes exactly one argument');
+          const foundIdx = targetVal.findIndex((item) => pyEquals(item, mArgs[0]));
+          if (foundIdx === -1) throw new Error('ValueError: list.remove(x): x not in list');
+          targetVal.splice(foundIdx, 1);
+          return null;
+        }
+        if (mName === 'reverse') {
+          targetVal.reverse();
+          return null;
+        }
+        if (mName === 'clear') {
+          targetVal.length = 0;
+          return null;
+        }
+        if (mName === 'copy') {
+          return [...targetVal];
+        }
+        throw new Error(`AttributeError: 'list' object has no attribute '${mName}'`);
+      }
+
+      if (targetVal instanceof Set) {
+        const mArgs = rawArgs.map((a) => evalNonEmpty(a));
+        if (mName === 'add') {
+          if (mArgs.length !== 1) throw new Error('TypeError: set.add() takes exactly one argument');
+          if (!Array.from(targetVal).some((x) => pyEquals(x, mArgs[0]))) {
+            targetVal.add(mArgs[0]);
+          }
+          return null;
+        }
+        if (mName === 'remove') {
+          if (mArgs.length !== 1) throw new Error('TypeError: set.remove() takes exactly one argument');
+          const existing = Array.from(targetVal).find((x) => pyEquals(x, mArgs[0]));
+          if (existing === undefined && !targetVal.has(mArgs[0])) {
+            throw new Error(`KeyError: ${formatPythonValue(mArgs[0])}`);
+          }
+          targetVal.delete(existing !== undefined ? existing : mArgs[0]);
+          return null;
+        }
+        if (mName === 'discard') {
+          if (mArgs.length !== 1) throw new Error('TypeError: set.discard() takes exactly one argument');
+          const existing = Array.from(targetVal).find((x) => pyEquals(x, mArgs[0]));
+          if (existing !== undefined) targetVal.delete(existing);
+          else targetVal.delete(mArgs[0]);
+          return null;
+        }
+        if (mName === 'pop') {
+          if (targetVal.size === 0) throw new Error("KeyError: 'pop from an empty set'");
+          const first = Array.from(targetVal)[0];
+          targetVal.delete(first);
+          return first;
+        }
+        if (mName === 'clear') {
+          targetVal.clear();
+          return null;
+        }
+        if (mName === 'copy') {
+          return new Set(targetVal);
+        }
+        if (mName === 'union') {
+          const other = toIterableArray(mArgs[0]);
+          const out = new Set(targetVal);
+          for (const item of other) {
+            if (!Array.from(out).some((x) => pyEquals(x, item))) out.add(item);
+          }
+          return out;
+        }
+        if (mName === 'intersection') {
+          const other = toIterableArray(mArgs[0]);
+          return new Set(Array.from(targetVal).filter((x) => other.some((y) => pyEquals(x, y))));
+        }
+        if (mName === 'difference') {
+          const other = toIterableArray(mArgs[0]);
+          return new Set(Array.from(targetVal).filter((x) => !other.some((y) => pyEquals(x, y))));
+        }
+        throw new Error(`AttributeError: 'set' object has no attribute '${mName}'`);
+      }
+
+      if (targetVal && typeof targetVal === 'object') {
+        const mArgs = rawArgs.map((a) => evalNonEmpty(a));
+        if (mName === 'get') {
+          if (mArgs.length < 1) throw new Error('TypeError: get expected at least 1 argument');
+          const k = String(mArgs[0]);
+          if (Object.prototype.hasOwnProperty.call(targetVal, k)) return targetVal[k];
+          return mArgs.length >= 2 ? mArgs[1] : null;
+        }
+        if (mName === 'keys') return Object.keys(targetVal);
+        if (mName === 'values') return Object.values(targetVal);
+        if (mName === 'items') return Object.entries(targetVal).map(([k, v]) => makeTuple([k, v]));
+        if (mName === 'pop') {
+          if (mArgs.length < 1) throw new Error('TypeError: pop expected at least 1 argument');
+          const k = String(mArgs[0]);
+          if (Object.prototype.hasOwnProperty.call(targetVal, k)) {
+            const v = targetVal[k];
+            delete targetVal[k];
+            return v;
+          }
+          if (mArgs.length >= 2) return mArgs[1];
+          throw new Error(`KeyError: '${k}'`);
+        }
+        if (mName === 'update') {
+          if (mArgs[0] && typeof mArgs[0] === 'object' && !Array.isArray(mArgs[0]) && !(mArgs[0] instanceof Set)) {
+            Object.assign(targetVal, mArgs[0]);
+            return null;
+          }
+          throw new Error('TypeError: cannot convert dictionary update sequence');
+        }
+        if (mName === 'clear') {
+          for (const k of Object.keys(targetVal)) delete targetVal[k];
+          return null;
+        }
+        if (mName === 'copy') return { ...targetVal };
+        throw new Error(`AttributeError: 'dict' object has no attribute '${mName}'`);
+      }
+
+      throw new Error(`AttributeError: '${typeof targetVal}' object has no attribute '${mName}'`);
+    };
+
+    const evalFStringContent = (body: string): string => {
+      let out = '';
+      let idx = 0;
+      let litChunk = '';
+      while (idx < body.length) {
+        const ch = body[idx];
+        if (ch === '{') {
+          if (body[idx + 1] === '{') {
+            litChunk += '{';
+            idx += 2;
+            continue;
+          }
+          out += unescapePythonString(litChunk);
+          litChunk = '';
+          let braceDepth = 1;
+          let k = idx + 1;
+          let q: string | null = null;
+          while (k < body.length && braceDepth > 0) {
+            const kc = body[k];
+            if (q) {
+              if (kc === '\\' && k + 1 < body.length) { k += 2; continue; }
+              if (kc === q) q = null;
+            } else if (kc === '"' || kc === "'") {
+              q = kc;
+            } else if (kc === '{') {
+              braceDepth++;
+            } else if (kc === '}') {
+              braceDepth--;
+              if (braceDepth === 0) break;
+            }
+            k++;
+          }
+          if (braceDepth !== 0) {
+            throw new Error("SyntaxError: f-string: expecting '}'");
+          }
+          const rawField = body.slice(idx + 1, k).trim();
+          if (!rawField) {
+            throw new Error('SyntaxError: f-string: empty expression not allowed');
+          }
+          const fieldParts = splitTopLevelColon(rawField);
+          const fieldExpr = fieldParts ? fieldParts[0].trim() : rawField;
+          const fmtSpec = fieldParts ? fieldParts.slice(1).join(':').trim() : '';
+          const val = evalNonEmpty(fieldExpr);
+          if (fmtSpec) {
+            const floatFmt = fmtSpec.match(/^\.(\d+)f$/);
+            const padIntFmt = fmtSpec.match(/^0(\d+)d$/);
+            if (floatFmt) {
+              out += Number(val).toFixed(parseInt(floatFmt[1], 10));
+            } else if (padIntFmt) {
+              out += String(pyInt(val)).padStart(parseInt(padIntFmt[1], 10), '0');
+            } else {
+              out += formatPythonValue(val, fieldExpr);
+            }
+          } else {
+            out += formatPythonValue(val, fieldExpr);
+          }
+          idx = k + 1;
+          continue;
+        }
+        if (ch === '}') {
+          if (body[idx + 1] === '}') {
+            litChunk += '}';
+            idx += 2;
+            continue;
+          }
+          throw new Error("SyntaxError: f-string: single '}' is not allowed");
+        }
+        litChunk += ch;
+        idx++;
+      }
+      if (litChunk) out += unescapePythonString(litChunk);
+      return out;
     };
 
     const evalExpr = (rawExpr: string): any => {
       const expr = (rawExpr || '').trim();
       if (!expr) return null;
 
-      // Unwrap balanced outer parentheses (excluding tuples with top-level commas)
+      // Empty tuple ()
+      if (expr === '()') return makeTuple([]);
+
+      // Parenthesized expressions & Tuple literals
       if (expr.startsWith('(') && expr.endsWith(')')) {
-        let depth = 0;
+        let pDepth = 0, bDepth = 0, cDepth = 0;
         let q: string | null = null;
         let hasTopComma = false;
         let wrapsAll = true;
@@ -612,20 +1070,28 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
             if (c === q) q = null;
           } else if (c === '"' || c === "'") {
             q = c;
-          } else if (c === '(') {
-            depth++;
+          } else if (c === '[') bDepth++;
+          else if (c === ']') bDepth = Math.max(0, bDepth - 1);
+          else if (c === '{') cDepth++;
+          else if (c === '}') cDepth = Math.max(0, cDepth - 1);
+          else if (c === '(') {
+            pDepth++;
           } else if (c === ')') {
-            depth--;
-            if (depth === 0 && k < expr.length - 1) {
+            pDepth--;
+            if (pDepth === 0 && k < expr.length - 1) {
               wrapsAll = false;
               break;
             }
-          } else if (c === ',' && depth === 1) {
+          } else if (c === ',' && pDepth === 1 && bDepth === 0 && cDepth === 0) {
             hasTopComma = true;
           }
         }
-        if (wrapsAll && depth === 0 && !q && !hasTopComma) {
-          return evalExpr(expr.slice(1, -1));
+        if (wrapsAll && pDepth === 0 && !q) {
+          const inner = expr.slice(1, -1).trim();
+          if (hasTopComma) {
+            return makeTuple(splitTopLevelArgs(inner).map((s) => evalNonEmpty(s)));
+          }
+          return evalNonEmpty(inner);
         }
       }
 
@@ -655,109 +1121,390 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           return unescapePythonString(expr.slice(1, -1));
         }
       }
+
+      // Standalone f-string literals: f"..." or f'...'
+      if (
+        expr.length >= 3 &&
+        (expr[0] === 'f' || expr[0] === 'F') &&
+        (expr[1] === '"' || expr[1] === "'") &&
+        expr[expr.length - 1] === expr[1]
+      ) {
+        const quoteChar = expr[1];
+        let k = 2;
+        let closedAt = -1;
+        let braceDepth = 0;
+        let innerQ: string | null = null;
+        while (k < expr.length) {
+          const kc = expr[k];
+          if (braceDepth > 0) {
+            if (innerQ) {
+              if (kc === '\\' && k + 1 < expr.length) { k += 2; continue; }
+              if (kc === innerQ) innerQ = null;
+            } else if (kc === '"' || kc === "'") {
+              innerQ = kc;
+            } else if (kc === '{') {
+              braceDepth++;
+            } else if (kc === '}') {
+              braceDepth--;
+            }
+            k++;
+            continue;
+          }
+          if (kc === '\\' && k + 1 < expr.length) {
+            k += 2;
+            continue;
+          }
+          if (kc === '{' && expr[k + 1] !== '{') {
+            braceDepth = 1;
+            k++;
+            continue;
+          }
+          if (kc === '{' && expr[k + 1] === '{') {
+            k += 2;
+            continue;
+          }
+          if (kc === quoteChar) {
+            closedAt = k;
+            break;
+          }
+          k++;
+        }
+        if (closedAt === expr.length - 1) {
+          return evalFStringContent(expr.slice(2, -1));
+        }
+      }
+
       if (expr === '\\n') return '\n';
       if (expr === '\\t') return '\t';
       if (expr === 'True') return true;
       if (expr === 'False') return false;
       if (expr === 'None') return null;
 
-      // Numbers
-      if (/^[+-]?\d+$/.test(expr)) return parseInt(expr, 10);
-      if (/^[+-]?\d+\.\d+$/.test(expr)) return parseFloat(expr);
+      // Pure positive numeric literals
+      if (/^\d+$/.test(expr)) return parseInt(expr, 10);
+      if (/^(?:\d+\.\d*|\.\d+)$/.test(expr)) return parseFloat(expr);
 
-      // Python string concatenation (+) and repetition (*) with strict TypeError checking
-      const mayContainString =
-        expr.includes('"') ||
-        expr.includes("'") ||
-        /\b(?:str|input|type)\s*\(/.test(expr) ||
-        Object.keys(scope).some((vn) => typeof scope[vn] === 'string' && new RegExp(`\\b${vn}\\b`).test(expr));
+      // Validate raw Python expression syntax (rejects &&, ||, ===, !==, standalone !, top-level =, unmatched quotes/brackets)
+      validateRawPythonExprSyntax(expr);
 
-      if (mayContainString) {
+      // Helper to scan top-level characters (outside quotes, parens, brackets, braces)
+      const scanTopLevel = (
+        visitor: (ch: string, idx: number) => boolean | void
+      ) => {
         let q: string | null = null;
-        let pDepth = 0, bDepth = 0, cDepth = 0;
-        let hasTopCompareOrLogic = false;
-        const addSplits: { idx: number; op: '+' | '-' }[] = [];
-        const mulSplits: number[] = [];
-
-        for (let k = 0; k < expr.length; k++) {
-          const c = expr[k];
+        let p = 0, b = 0, c = 0;
+        for (let i = 0; i < expr.length; i++) {
+          const ch = expr[i];
           if (q) {
-            if (c === '\\' && k + 1 < expr.length) { k++; continue; }
-            if (c === q) q = null;
+            if (ch === '\\' && i + 1 < expr.length) { i++; continue; }
+            if (ch === q) q = null;
             continue;
           }
-          if (c === '"' || c === "'") { q = c; continue; }
-          if (c === '(') { pDepth++; continue; }
-          if (c === ')') { pDepth = Math.max(0, pDepth - 1); continue; }
-          if (c === '[') { bDepth++; continue; }
-          if (c === ']') { bDepth = Math.max(0, bDepth - 1); continue; }
-          if (c === '{') { cDepth++; continue; }
-          if (c === '}') { cDepth = Math.max(0, cDepth - 1); continue; }
-
-          if (pDepth === 0 && bDepth === 0 && cDepth === 0) {
-            if (c === '=' || c === '<' || c === '>' || c === '!' || c === '&' || c === '|') {
-              hasTopCompareOrLogic = true;
-              break;
-            }
-            const prevCh = k > 0 ? expr[k - 1] : ' ';
-            if (!/[a-zA-Z0-9_.]/.test(prevCh) && /^(?:and|or|not|in|is)\b/.test(expr.slice(k))) {
-              hasTopCompareOrLogic = true;
-              break;
-            }
-            if (c === '+' || c === '-') {
-              const prevNonSpace = expr.slice(0, k).trimEnd().slice(-1);
-              const isUnary = !prevNonSpace || /[+\-*/%(,[:]/.test(prevNonSpace);
-              if (!isUnary) {
-                addSplits.push({ idx: k, op: c });
-              }
-            } else if (c === '*' && expr[k + 1] !== '*' && expr[k - 1] !== '*') {
-              mulSplits.push(k);
-            }
+          if (ch === '"' || ch === "'") { q = ch; continue; }
+          if (ch === '(') { p++; continue; }
+          if (ch === ')') { p--; continue; }
+          if (ch === '[') { b++; continue; }
+          if (ch === ']') { b--; continue; }
+          if (ch === '{') { c++; continue; }
+          if (ch === '}') { c--; continue; }
+          if (p === 0 && b === 0 && c === 0) {
+            if (visitor(ch, i) === true) return;
           }
         }
+      };
 
-        if (q) {
-          throw new Error('SyntaxError: EOL while scanning string literal');
+      const isWordBoundaryBefore = (idx: number) =>
+        idx === 0 || !/[a-zA-Z0-9_.]/.test(expr[idx - 1]);
+      const isWordBoundaryAfter = (endIdx: number) =>
+        endIdx >= expr.length || !/[a-zA-Z0-9_]/.test(expr[endIdx]);
+
+      // 1. Boolean 'or' (lowest precedence, short-circuit)
+      const orIndices: number[] = [];
+      scanTopLevel((ch, i) => {
+        if (ch === 'o' && expr.slice(i, i + 2) === 'or' && isWordBoundaryBefore(i) && isWordBoundaryAfter(i + 2)) {
+          orIndices.push(i);
         }
+      });
+      if (orIndices.length > 0) {
+        let start = 0;
+        for (const idx of orIndices) {
+          const val = evalNonEmpty(expr.slice(start, idx));
+          if (isPythonTruthy(val)) return val;
+          start = idx + 2;
+        }
+        return evalNonEmpty(expr.slice(start));
+      }
 
-        if (!hasTopCompareOrLogic && addSplits.length > 0) {
-          let acc = evalExpr(expr.slice(0, addSplits[0].idx));
-          for (let s = 0; s < addSplits.length; s++) {
-            const nextEnd = s + 1 < addSplits.length ? addSplits[s + 1].idx : expr.length;
-            const rhs = evalExpr(expr.slice(addSplits[s].idx + 1, nextEnd));
-            if (addSplits[s].op === '+') {
-              if (typeof acc === 'string' && typeof rhs === 'string') acc = acc + rhs;
-              else if (typeof acc === 'number' && typeof rhs === 'number') acc = acc + rhs;
-              else if (Array.isArray(acc) && Array.isArray(rhs)) acc = [...acc, ...rhs];
-              else throw new Error('TypeError: can only concatenate str (not "int") to str');
+      // 2. Boolean 'and' (short-circuit)
+      const andIndices: number[] = [];
+      scanTopLevel((ch, i) => {
+        if (ch === 'a' && expr.slice(i, i + 3) === 'and' && isWordBoundaryBefore(i) && isWordBoundaryAfter(i + 3)) {
+          andIndices.push(i);
+        }
+      });
+      if (andIndices.length > 0) {
+        let start = 0;
+        for (const idx of andIndices) {
+          const val = evalNonEmpty(expr.slice(start, idx));
+          if (!isPythonTruthy(val)) return val;
+          start = idx + 3;
+        }
+        return evalNonEmpty(expr.slice(start));
+      }
+
+      // 3. Boolean prefix 'not'
+      const notPrefixMatch = expr.match(/^not(?![a-zA-Z0-9_])\s*([\s\S]*)$/);
+      if (notPrefixMatch) {
+        return !isPythonTruthy(evalNonEmpty(notPrefixMatch[1]));
+      }
+
+      // 4. Comparisons & Chained Comparisons (==, !=, <=, >=, <, >, in, not in, is, is not)
+      const cmpTokens: { start: number; end: number; op: string }[] = [];
+      let skipUntil = -1;
+      scanTopLevel((ch, i) => {
+        if (i < skipUntil) return;
+        if ((ch === '=' || ch === '!' || ch === '<' || ch === '>') && expr[i + 1] === '=') {
+          cmpTokens.push({ start: i, end: i + 2, op: expr.slice(i, i + 2) });
+          skipUntil = i + 2;
+        } else if (ch === '<' || ch === '>') {
+          cmpTokens.push({ start: i, end: i + 1, op: ch });
+        } else if (ch === 'n' && isWordBoundaryBefore(i)) {
+          const m = expr.slice(i).match(/^not\s+in(?![a-zA-Z0-9_])/);
+          if (m) {
+            cmpTokens.push({ start: i, end: i + m[0].length, op: 'not in' });
+            skipUntil = i + m[0].length;
+          }
+        } else if (ch === 'i' && isWordBoundaryBefore(i)) {
+          const isNotM = expr.slice(i).match(/^is\s+not(?![a-zA-Z0-9_])/);
+          if (isNotM) {
+            cmpTokens.push({ start: i, end: i + isNotM[0].length, op: 'is not' });
+            skipUntil = i + isNotM[0].length;
+          } else if (expr.slice(i, i + 2) === 'in' && isWordBoundaryAfter(i + 2)) {
+            cmpTokens.push({ start: i, end: i + 2, op: 'in' });
+            skipUntil = i + 2;
+          } else if (expr.slice(i, i + 2) === 'is' && isWordBoundaryAfter(i + 2)) {
+            cmpTokens.push({ start: i, end: i + 2, op: 'is' });
+            skipUntil = i + 2;
+          }
+        }
+      });
+      if (cmpTokens.length > 0) {
+        let leftVal = evalNonEmpty(expr.slice(0, cmpTokens[0].start));
+        for (let cIdx = 0; cIdx < cmpTokens.length; cIdx++) {
+          const nextEnd = cIdx + 1 < cmpTokens.length ? cmpTokens[cIdx + 1].start : expr.length;
+          const rightVal = evalNonEmpty(expr.slice(cmpTokens[cIdx].end, nextEnd));
+          const op = cmpTokens[cIdx].op;
+          let ok = false;
+          if (op === '==') ok = pyEquals(leftVal, rightVal);
+          else if (op === '!=') ok = !pyEquals(leftVal, rightVal);
+          else if (op === '<' || op === '<=' || op === '>' || op === '>=') ok = pyCompare(leftVal, rightVal, op);
+          else if (op === 'in') ok = pyIn(leftVal, rightVal);
+          else if (op === 'not in') ok = !pyIn(leftVal, rightVal);
+          else if (op === 'is') ok = leftVal === rightVal;
+          else if (op === 'is not') ok = leftVal !== rightVal;
+          if (!ok) return false;
+          leftVal = rightVal;
+        }
+        return true;
+      }
+
+      // 5. Set / Bitwise OR '|'
+      const bitOrIndices: number[] = [];
+      scanTopLevel((ch, i) => {
+        if (ch === '|' && expr[i - 1] !== '|' && expr[i + 1] !== '|') bitOrIndices.push(i);
+      });
+      if (bitOrIndices.length > 0) {
+        let acc = evalNonEmpty(expr.slice(0, bitOrIndices[0]));
+        for (let s = 0; s < bitOrIndices.length; s++) {
+          const nextEnd = s + 1 < bitOrIndices.length ? bitOrIndices[s + 1] : expr.length;
+          const rhs = evalNonEmpty(expr.slice(bitOrIndices[s] + 1, nextEnd));
+          if (acc instanceof Set && rhs instanceof Set) {
+            const out = new Set(acc);
+            for (const item of Array.from(rhs)) {
+              if (!Array.from(out).some((x) => pyEquals(x, item))) out.add(item);
+            }
+            acc = out;
+          } else if (isNumOrBool(acc) && isNumOrBool(rhs)) {
+            acc = Number(acc) | Number(rhs);
+          } else {
+            throw new Error("TypeError: unsupported operand type(s) for |");
+          }
+        }
+        return acc;
+      }
+
+      // 6. Set / Bitwise XOR '^'
+      const bitXorIndices: number[] = [];
+      scanTopLevel((ch, i) => {
+        if (ch === '^') bitXorIndices.push(i);
+      });
+      if (bitXorIndices.length > 0) {
+        let acc = evalNonEmpty(expr.slice(0, bitXorIndices[0]));
+        for (let s = 0; s < bitXorIndices.length; s++) {
+          const nextEnd = s + 1 < bitXorIndices.length ? bitXorIndices[s + 1] : expr.length;
+          const rhs = evalNonEmpty(expr.slice(bitXorIndices[s] + 1, nextEnd));
+          if (acc instanceof Set && rhs instanceof Set) {
+            const out = new Set<any>();
+            for (const x of Array.from(acc)) if (!Array.from(rhs).some((y) => pyEquals(x, y))) out.add(x);
+            for (const y of Array.from(rhs)) if (!Array.from(acc).some((x) => pyEquals(x, y))) out.add(y);
+            acc = out;
+          } else if (isNumOrBool(acc) && isNumOrBool(rhs)) {
+            acc = Number(acc) ^ Number(rhs);
+          } else {
+            throw new Error("TypeError: unsupported operand type(s) for ^");
+          }
+        }
+        return acc;
+      }
+
+      // 7. Set / Bitwise AND '&'
+      const bitAndIndices: number[] = [];
+      scanTopLevel((ch, i) => {
+        if (ch === '&' && expr[i - 1] !== '&' && expr[i + 1] !== '&') bitAndIndices.push(i);
+      });
+      if (bitAndIndices.length > 0) {
+        let acc = evalNonEmpty(expr.slice(0, bitAndIndices[0]));
+        for (let s = 0; s < bitAndIndices.length; s++) {
+          const nextEnd = s + 1 < bitAndIndices.length ? bitAndIndices[s + 1] : expr.length;
+          const rhs = evalNonEmpty(expr.slice(bitAndIndices[s] + 1, nextEnd));
+          if (acc instanceof Set && rhs instanceof Set) {
+            const rhsArr = Array.from(rhs);
+            acc = new Set(Array.from(acc).filter((x) => rhsArr.some((y) => pyEquals(x, y))));
+          } else if (isNumOrBool(acc) && isNumOrBool(rhs)) {
+            acc = Number(acc) & Number(rhs);
+          } else {
+            throw new Error("TypeError: unsupported operand type(s) for &");
+          }
+        }
+        return acc;
+      }
+
+      // 8. Additive '+' and '-' (binary only)
+      const addSplits: { idx: number; op: '+' | '-' }[] = [];
+      scanTopLevel((ch, i) => {
+        if (ch === '+' || ch === '-') {
+          const prevNonSpace = expr.slice(0, i).trimEnd().slice(-1);
+          const isUnary = !prevNonSpace || /[+\-*/%(,[:]/.test(prevNonSpace);
+          if (!isUnary) {
+            addSplits.push({ idx: i, op: ch });
+          }
+        }
+      });
+      if (addSplits.length > 0) {
+        let acc = evalNonEmpty(expr.slice(0, addSplits[0].idx));
+        for (let s = 0; s < addSplits.length; s++) {
+          const nextEnd = s + 1 < addSplits.length ? addSplits[s + 1].idx : expr.length;
+          const rhs = evalNonEmpty(expr.slice(addSplits[s].idx + 1, nextEnd));
+          if (addSplits[s].op === '+') {
+            if (typeof acc === 'string' && typeof rhs === 'string') acc = acc + rhs;
+            else if (isNumOrBool(acc) && isNumOrBool(rhs)) acc = Number(acc) + Number(rhs);
+            else if (Array.isArray(acc) && Array.isArray(rhs) && isTuple(acc) === isTuple(rhs)) {
+              acc = isTuple(acc) ? makeTuple([...acc, ...rhs]) : [...acc, ...rhs];
+            } else if (typeof acc === 'string' || typeof rhs === 'string') {
+              throw new Error('TypeError: can only concatenate str (not "int") to str');
             } else {
-              if (typeof acc === 'number' && typeof rhs === 'number') acc = acc - rhs;
-              else throw new Error('TypeError: unsupported operand type(s) for -');
+              throw new Error('TypeError: unsupported operand type(s) for +');
+            }
+          } else {
+            if (isNumOrBool(acc) && isNumOrBool(rhs)) acc = Number(acc) - Number(rhs);
+            else if (acc instanceof Set && rhs instanceof Set) {
+              const rhsArr = Array.from(rhs);
+              acc = new Set(Array.from(acc).filter((x) => !rhsArr.some((y) => pyEquals(x, y))));
+            } else {
+              throw new Error('TypeError: unsupported operand type(s) for -');
             }
           }
-          return acc;
         }
+        return acc;
+      }
 
-        if (!hasTopCompareOrLogic && mulSplits.length > 0) {
-          let acc = evalExpr(expr.slice(0, mulSplits[0]));
-          for (let s = 0; s < mulSplits.length; s++) {
-            const nextEnd = s + 1 < mulSplits.length ? mulSplits[s + 1] : expr.length;
-            const rhs = evalExpr(expr.slice(mulSplits[s] + 1, nextEnd));
-            if (typeof acc === 'string' && typeof rhs === 'number' && Number.isInteger(rhs)) {
-              acc = acc.repeat(Math.max(0, rhs));
-            } else if (typeof acc === 'number' && Number.isInteger(acc) && typeof rhs === 'string') {
-              acc = rhs.repeat(Math.max(0, acc));
-            } else if (typeof acc === 'number' && typeof rhs === 'number') {
-              acc = acc * rhs;
+      // 9. Multiplicative '*', '/', '//', '%'
+      const mulSplits: { start: number; end: number; op: '*' | '/' | '//' | '%' }[] = [];
+      let mulSkip = -1;
+      scanTopLevel((ch, i) => {
+        if (i < mulSkip) return;
+        if (ch === '*' && expr[i + 1] !== '*' && expr[i - 1] !== '*') {
+          mulSplits.push({ start: i, end: i + 1, op: '*' });
+        } else if (ch === '/' && expr[i + 1] === '/') {
+          mulSplits.push({ start: i, end: i + 2, op: '//' });
+          mulSkip = i + 2;
+        } else if (ch === '/' && expr[i + 1] !== '/' && expr[i - 1] !== '/') {
+          mulSplits.push({ start: i, end: i + 1, op: '/' });
+        } else if (ch === '%') {
+          mulSplits.push({ start: i, end: i + 1, op: '%' });
+        }
+      });
+      if (mulSplits.length > 0) {
+        let acc = evalNonEmpty(expr.slice(0, mulSplits[0].start));
+        for (let s = 0; s < mulSplits.length; s++) {
+          const nextEnd = s + 1 < mulSplits.length ? mulSplits[s + 1].start : expr.length;
+          const rhs = evalNonEmpty(expr.slice(mulSplits[s].end, nextEnd));
+          const op = mulSplits[s].op;
+          if (op === '*') {
+            if (isNumOrBool(acc) && isNumOrBool(rhs)) {
+              acc = Number(acc) * Number(rhs);
+            } else if (typeof acc === 'string' && isNumOrBool(rhs) && Number.isInteger(Number(rhs))) {
+              acc = acc.repeat(Math.max(0, Number(rhs)));
+            } else if (isNumOrBool(acc) && Number.isInteger(Number(acc)) && typeof rhs === 'string') {
+              acc = rhs.repeat(Math.max(0, Number(acc)));
+            } else if (Array.isArray(acc) && isNumOrBool(rhs) && Number.isInteger(Number(rhs))) {
+              const count = Math.max(0, Number(rhs));
+              const out: any[] = [];
+              for (let r = 0; r < count; r++) out.push(...acc);
+              acc = isTuple(acc) ? makeTuple(out) : out;
+            } else if (isNumOrBool(acc) && Number.isInteger(Number(acc)) && Array.isArray(rhs)) {
+              const count = Math.max(0, Number(acc));
+              const out: any[] = [];
+              for (let r = 0; r < count; r++) out.push(...rhs);
+              acc = isTuple(rhs) ? makeTuple(out) : out;
             } else {
               throw new Error("TypeError: can't multiply sequence by non-int");
             }
+          } else if (op === '/') {
+            if (!isNumOrBool(acc) || !isNumOrBool(rhs)) throw new Error('TypeError: unsupported operand type(s) for /');
+            if (Number(rhs) === 0) throw new Error('ZeroDivisionError: division by zero');
+            acc = Number(acc) / Number(rhs);
+          } else if (op === '//') {
+            if (!isNumOrBool(acc) || !isNumOrBool(rhs)) throw new Error('TypeError: unsupported operand type(s) for //');
+            if (Number(rhs) === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
+            acc = Math.floor(Number(acc) / Number(rhs));
+          } else if (op === '%') {
+            if (!isNumOrBool(acc) || !isNumOrBool(rhs)) throw new Error('TypeError: unsupported operand type(s) for %');
+            const nb = Number(rhs);
+            if (nb === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
+            acc = ((Number(acc) % nb) + nb) % nb;
           }
-          return acc;
         }
+        return acc;
       }
 
-      // List literals: [1, 2, 3]
+      // 10. Unary '+' / '-' (lower precedence than '**' so -2 ** 2 == -4)
+      if (expr[0] === '+' || expr[0] === '-') {
+        const innerVal = evalNonEmpty(expr.slice(1));
+        if (!isNumOrBool(innerVal)) {
+          throw new Error(`TypeError: bad operand type for unary ${expr[0]}`);
+        }
+        return expr[0] === '-' ? -Number(innerVal) : +Number(innerVal);
+      }
+
+      // 11. Power '**' (right-associative: split at FIRST top-level '**')
+      let firstPowIdx = -1;
+      scanTopLevel((ch, i) => {
+        if (ch === '*' && expr[i + 1] === '*') {
+          firstPowIdx = i;
+          return true;
+        }
+      });
+      if (firstPowIdx !== -1) {
+        const base = evalNonEmpty(expr.slice(0, firstPowIdx));
+        const exp = evalNonEmpty(expr.slice(firstPowIdx + 2));
+        if (!isNumOrBool(base) || !isNumOrBool(exp)) {
+          throw new Error('TypeError: unsupported operand type(s) for **');
+        }
+        return Math.pow(Number(base), Number(exp));
+      }
+
+      // 12. List literals: [1, 2, 3]
       if (expr.startsWith('[') && expr.endsWith(']')) {
         let bDepth = 0;
         let q: string | null = null;
@@ -777,56 +1524,61 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
         if (wrapsList && bDepth === 0 && !q) {
           const inner = expr.slice(1, -1).trim();
           if (!inner) return [];
-          return splitTopLevelArgs(inner).map((s) => evalExpr(s));
+          return splitTopLevelArgs(inner).map((s) => evalNonEmpty(s));
         }
       }
 
-      // Tuple literals: (1, 2, 3)
-      if (expr.startsWith('(') && expr.endsWith(')') && expr.includes(',')) {
-        let pDepth = 0;
+      // 13. Dict / Set literals: {...}
+      if (expr.startsWith('{') && expr.endsWith('}')) {
+        let cDepth = 0;
         let q: string | null = null;
-        let wrapsTuple = true;
-        let hasTopComma = false;
+        let wrapsBraces = true;
         for (let k = 0; k < expr.length; k++) {
           const ch = expr[k];
           if (q) {
             if (ch === '\\' && k + 1 < expr.length) { k++; continue; }
             if (ch === q) q = null;
           } else if (ch === '"' || ch === "'") q = ch;
-          else if (ch === '(') pDepth++;
-          else if (ch === ')') {
-            pDepth--;
-            if (pDepth === 0 && k < expr.length - 1) { wrapsTuple = false; break; }
-          } else if (ch === ',' && pDepth === 1) hasTopComma = true;
+          else if (ch === '{') cDepth++;
+          else if (ch === '}') {
+            cDepth--;
+            if (cDepth === 0 && k < expr.length - 1) { wrapsBraces = false; break; }
+          }
         }
-        if (wrapsTuple && hasTopComma && pDepth === 0 && !q) {
+        if (wrapsBraces && cDepth === 0 && !q) {
           const inner = expr.slice(1, -1).trim();
-          return splitTopLevelArgs(inner).map((s) => evalExpr(s));
-        }
-      }
-
-      // Dict / Set literals: {...}
-      if (expr.startsWith('{') && expr.endsWith('}')) {
-        const inner = expr.slice(1, -1).trim();
-        if (!inner) return {};
-        if (inner.includes(':')) {
-          const dictObj: Record<string, any> = {};
-          const pairs = splitTopLevelArgs(inner);
-          for (const p of pairs) {
-            const colonIdx = p.indexOf(':');
-            if (colonIdx > 0) {
-              const k = evalExpr(p.slice(0, colonIdx).trim());
-              const v = evalExpr(p.slice(colonIdx + 1).trim());
+          if (!inner) return {};
+          const items = splitTopLevelArgs(inner);
+          const firstColon = splitTopLevelColon(items[0]);
+          if (firstColon) {
+            const dictObj: Record<string, any> = {};
+            for (const p of items) {
+              const kv = splitTopLevelColon(p);
+              if (!kv || kv.length !== 2) throw new Error('SyntaxError: invalid syntax');
+              const k = evalNonEmpty(kv[0]);
+              const v = evalNonEmpty(kv[1]);
               dictObj[String(k)] = v;
             }
+            return dictObj;
+          } else {
+            const outSet = new Set<any>();
+            for (const s of items) {
+              const itemVal = evalNonEmpty(s);
+              if (!Array.from(outSet).some((x) => pyEquals(x, itemVal))) outSet.add(itemVal);
+            }
+            return outSet;
           }
-          return dictObj;
-        } else {
-          return new Set(splitTopLevelArgs(inner).map((s) => evalExpr(s)));
         }
       }
 
-      // Function calls: len(x), int(x), float(x), str(x), bool(x), type(x), input(), etc.
+      // 14. Postfix Indexing / Slicing: receiver[idx] or receiver[a:b:c]
+      const postfixBracket = findBalancedPostfixBracket(expr);
+      if (postfixBracket) {
+        const targetVal = evalNonEmpty(postfixBracket.receiver);
+        return evalBracketOperation(targetVal, postfixBracket.bracketContent);
+      }
+
+      // 15. Function calls: len(x), int(x), map(int, ...), sorted(...), user_fn(...), etc.
       const outerCall = findBalancedOuterCall(expr);
       if (outerCall) {
         const fnName = outerCall.fnName;
@@ -834,18 +1586,55 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
 
         if (fnName === 'type') {
           if (rawArgs.length !== 1) throw new Error('TypeError: type() takes 1 argument');
-          const argVal = evalExpr(rawArgs[0]);
+          const argVal = evalNonEmpty(rawArgs[0]);
           return getPythonTypeString(argVal, rawArgs[0]);
         }
         if (fnName === 'str') {
           if (rawArgs.length === 0) return '';
-          const argVal = evalExpr(rawArgs[0]);
+          const argVal = evalNonEmpty(rawArgs[0]);
           return formatPythonValue(argVal, rawArgs[0]);
         }
+        if (fnName === 'sorted') {
+          if (rawArgs.length < 1) throw new Error('TypeError: sorted expected 1 argument, got 0');
+          let rev = false;
+          for (let aIdx = 1; aIdx < rawArgs.length; aIdx++) {
+            const kw = rawArgs[aIdx].match(/^reverse\s*=(?!=)\s*([\s\S]+)$/);
+            if (kw) rev = isPythonTruthy(evalNonEmpty(kw[1]));
+            else throw new Error('TypeError: sorted() takes 1 positional argument');
+          }
+          const arr = toIterableArray(evalNonEmpty(rawArgs[0]));
+          return pySortArray(arr, rev);
+        }
+        if (fnName === 'map') {
+          if (rawArgs.length < 2) throw new Error('TypeError: map() must have at least two arguments');
+          const mapperName = rawArgs[0].trim();
+          const seqs = rawArgs.slice(1).map((a) => toIterableArray(evalNonEmpty(a)));
+          const minLen = Math.min(...seqs.map((s) => s.length));
+          const mapped: any[] = [];
+          for (let idx = 0; idx < minLen; idx++) {
+            const rowArgs = seqs.map((s) => s[idx]);
+            if (mapperName === 'int') mapped.push(pyInt(rowArgs[0]));
+            else if (mapperName === 'float') mapped.push(pyFloat(rowArgs[0]));
+            else if (mapperName === 'str') mapped.push(formatPythonValue(rowArgs[0]));
+            else if (mapperName === 'bool') mapped.push(isPythonTruthy(rowArgs[0]));
+            else if (mapperName === 'len') mapped.push(toIterableArray(rowArgs[0]).length);
+            else if (mapperName === 'abs') mapped.push(Math.abs(Number(rowArgs[0])));
+            else if (mapperName in functions) mapped.push(executeFunction(functions[mapperName], rowArgs));
+            else throw new Error(`NameError: name '${mapperName}' is not defined`);
+          }
+          return mapped;
+        }
 
-        const fnArgs = rawArgs.map((a) => evalExpr(a));
+        if (fnName in functions) {
+          const hasKw = rawArgs.some((a) => findStandaloneAssignIndex(a) > 0);
+          const posArgs = hasKw ? [] : rawArgs.map((a) => evalNonEmpty(a));
+          return executeFunction(functions[fnName], posArgs, rawArgs);
+        }
+
+        const fnArgs = rawArgs.map((a) => evalNonEmpty(a));
 
         if (fnName === 'len') {
+          if (fnArgs.length !== 1) throw new Error('TypeError: len() takes exactly one argument');
           const target = fnArgs[0];
           if (typeof target === 'string' || Array.isArray(target)) return target.length;
           if (target instanceof Set) return target.size;
@@ -853,7 +1642,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           throw new Error(`TypeError: object of type '${typeof target}' has no len()`);
         }
         if (fnName === 'int') {
-          return pyInt(fnArgs[0]);
+          return fnArgs.length >= 2 ? pyInt(fnArgs[0], pyInt(fnArgs[1])) : pyInt(fnArgs[0]);
         }
         if (fnName === 'float') {
           return pyFloat(fnArgs[0]);
@@ -862,9 +1651,11 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           return fnArgs.length === 0 ? false : isPythonTruthy(fnArgs[0]);
         }
         if (fnName === 'abs') {
+          if (fnArgs.length !== 1) throw new Error('TypeError: abs() takes exactly one argument');
           return Math.abs(Number(fnArgs[0]));
         }
         if (fnName === 'round') {
+          if (fnArgs.length < 1) throw new Error('TypeError: round() missing required argument');
           const num = Number(fnArgs[0]);
           if (fnArgs.length >= 2 && typeof fnArgs[1] === 'number') {
             const factor = Math.pow(10, fnArgs[1]);
@@ -872,36 +1663,41 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           }
           return Math.round(num);
         }
-        if (fnName === 'min') {
-          const arr = fnArgs.length === 1 && Array.isArray(fnArgs[0]) ? fnArgs[0] : fnArgs;
-          return Math.min(...arr.map(Number));
-        }
-        if (fnName === 'max') {
-          const arr = fnArgs.length === 1 && Array.isArray(fnArgs[0]) ? fnArgs[0] : fnArgs;
-          return Math.max(...arr.map(Number));
+        if (fnName === 'min' || fnName === 'max') {
+          const arr = fnArgs.length === 1 && (Array.isArray(fnArgs[0]) || fnArgs[0] instanceof Set)
+            ? toIterableArray(fnArgs[0])
+            : fnArgs;
+          if (arr.length === 0) throw new Error(`ValueError: ${fnName}() arg is an empty sequence`);
+          let best = arr[0];
+          for (let idx = 1; idx < arr.length; idx++) {
+            if (pyCompare(arr[idx], best, fnName === 'min' ? '<' : '>')) best = arr[idx];
+          }
+          return best;
         }
         if (fnName === 'input') {
           return readInputLine(fnArgs[0]);
         }
         if (fnName === 'range') {
+          if (fnArgs.length === 0) throw new Error('TypeError: range expected at least 1 argument, got 0');
           let start = 0, stop = 0, step = 1;
           if (fnArgs.length === 1) {
-            stop = Number(fnArgs[0]) || 0;
+            stop = pyInt(fnArgs[0]);
           } else if (fnArgs.length === 2) {
-            start = Number(fnArgs[0]) || 0;
-            stop = Number(fnArgs[1]) || 0;
-          } else if (fnArgs.length >= 3) {
-            start = Number(fnArgs[0]) || 0;
-            stop = Number(fnArgs[1]) || 0;
-            step = Number(fnArgs[2]) || 1;
+            start = pyInt(fnArgs[0]);
+            stop = pyInt(fnArgs[1]);
+          } else {
+            start = pyInt(fnArgs[0]);
+            stop = pyInt(fnArgs[1]);
+            step = pyInt(fnArgs[2]);
           }
+          if (step === 0) throw new Error('ValueError: range() arg 3 must not be zero');
           const rList: number[] = [];
           if (step > 0) {
             for (let i = start; i < stop; i += step) {
               if (rList.length >= 500) break;
               rList.push(i);
             }
-          } else if (step < 0) {
+          } else {
             for (let i = start; i > stop; i += step) {
               if (rList.length >= 500) break;
               rList.push(i);
@@ -910,343 +1706,173 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           return rList;
         }
         if (fnName === 'sum') {
-          const list = Array.isArray(fnArgs[0]) ? fnArgs[0] : [];
-          return list.reduce((acc: number, cur: any) => acc + (Number(cur) || 0), 0);
+          if (fnArgs.length < 1) throw new Error('TypeError: sum() takes at least 1 positional argument');
+          const list = toIterableArray(fnArgs[0]);
+          const init = fnArgs.length >= 2 ? Number(fnArgs[1]) : 0;
+          return list.reduce((acc: number, cur: any) => acc + Number(cur), init);
+        }
+        if (fnName === 'list') {
+          return fnArgs.length === 0 ? [] : [...toIterableArray(fnArgs[0])];
+        }
+        if (fnName === 'tuple') {
+          return fnArgs.length === 0 ? makeTuple([]) : makeTuple(toIterableArray(fnArgs[0]));
+        }
+        if (fnName === 'set') {
+          if (fnArgs.length === 0) return new Set();
+          const out = new Set<any>();
+          for (const item of toIterableArray(fnArgs[0])) {
+            if (!Array.from(out).some((x) => pyEquals(x, item))) out.add(item);
+          }
+          return out;
+        }
+        if (fnName === 'dict') {
+          if (fnArgs.length === 0) return {};
+          const obj: Record<string, any> = {};
+          for (const pair of toIterableArray(fnArgs[0])) {
+            const arr = toIterableArray(pair);
+            if (arr.length !== 2) throw new Error('ValueError: dictionary update sequence element has length != 2');
+            obj[String(arr[0])] = arr[1];
+          }
+          return obj;
+        }
+        if (fnName === 'reversed') {
+          if (fnArgs.length !== 1) throw new Error('TypeError: reversed() takes exactly one argument');
+          return [...toIterableArray(fnArgs[0])].reverse();
+        }
+        if (fnName === 'enumerate') {
+          if (fnArgs.length < 1) throw new Error('TypeError: enumerate() missing required argument');
+          const startIdx = fnArgs.length >= 2 ? pyInt(fnArgs[1]) : 0;
+          return toIterableArray(fnArgs[0]).map((v, idx) => makeTuple([startIdx + idx, v]));
+        }
+        if (fnName === 'zip') {
+          if (fnArgs.length === 0) return [];
+          const seqs = fnArgs.map((a) => toIterableArray(a));
+          const minLen = Math.min(...seqs.map((s) => s.length));
+          return Array.from({ length: minLen }, (_, idx) => makeTuple(seqs.map((s) => s[idx])));
+        }
+        if (fnName === 'all') {
+          if (fnArgs.length !== 1) throw new Error('TypeError: all() takes exactly one argument');
+          return toIterableArray(fnArgs[0]).every(isPythonTruthy);
+        }
+        if (fnName === 'any') {
+          if (fnArgs.length !== 1) throw new Error('TypeError: any() takes exactly one argument');
+          return toIterableArray(fnArgs[0]).some(isPythonTruthy);
+        }
+        if (fnName === 'chr') {
+          return String.fromCodePoint(pyInt(fnArgs[0]));
+        }
+        if (fnName === 'ord') {
+          const s = String(fnArgs[0]);
+          if (s.length !== 1) throw new Error('TypeError: ord() expected a character');
+          return s.codePointAt(0);
         }
         if (fnName in functions) {
-          return executeFunction(functions[fnName], fnArgs);
+          return executeFunction(functions[fnName], fnArgs, rawArgs);
         }
         throw new Error(`NameError: name '${fnName}' is not defined`);
       }
 
-      // Method call: "hello".split(), input().split(), or my_list.append(10)
+      // 16. Method call: "hello".split(), input().split(), my_list.append(10), etc.
       const methodCall = findBalancedMethodCall(expr);
       if (methodCall) {
-        const targetVal = evalExpr(methodCall.receiver);
-        const mName = methodCall.methodName;
-        const mArgs = splitTopLevelArgs(methodCall.argsStr).map((a) => evalExpr(a));
-
-        if (typeof targetVal === 'string') {
-          if (mName === 'split') {
-            if (mArgs[0] !== undefined && mArgs[0] !== null) {
-              return targetVal.split(String(mArgs[0]));
-            }
-            const trimmedStr = targetVal.trim();
-            return trimmedStr.length === 0 ? [] : trimmedStr.split(/\s+/);
-          }
-          if (mName === 'upper') return targetVal.toUpperCase();
-          if (mName === 'lower') return targetVal.toLowerCase();
-          if (mName === 'strip') return targetVal.trim();
-          if (mName === 'replace') return targetVal.replaceAll(String(mArgs[0] ?? ''), String(mArgs[1] ?? ''));
-          if (mName === 'count') {
-            const sub = String(mArgs[0] ?? '');
-            return sub ? targetVal.split(sub).length - 1 : targetVal.length + 1;
-          }
-        }
-        if (Array.isArray(targetVal)) {
-          if (mName === 'append') {
-            targetVal.push(mArgs[0]);
-            return null;
-          }
-          if (mName === 'pop') return targetVal.pop();
-        }
+        const targetVal = evalNonEmpty(methodCall.receiver);
+        return applyMethodCall(targetVal, methodCall.methodName, methodCall.argsStr);
       }
 
-      // Variable reference
+      // 17. Variable reference
       if (/^[a-zA-Z_]\w*$/.test(expr)) {
-        if (expr in scope) return scope[expr];
+        if (hasVar(expr)) return getVar(expr);
         throw new Error(`NameError: name '${expr}' is not defined`);
       }
 
-      // Validate raw Python expression syntax (rejects &&, ||, standalone !, standalone =, unmatched quotes/parens)
-      validateRawPythonExprSyntax(expr);
-
-      // Resolve inline builtin/function calls inside compound arithmetic or boolean expressions
-      // e.g. int(a) + int(b), len(pw) >= 4 and pw != "0000", int(input()) * 2
-      const resolveInlineCalls = (src: string): string => {
-        let out = '';
-        let q: string | null = null;
-        let idx = 0;
-        const inlineBuiltins = new Set([
-          'int', 'float', 'str', 'bool', 'len', 'type', 'input',
-          'abs', 'round', 'sum', 'min', 'max', ...Object.keys(functions),
-        ]);
-        while (idx < src.length) {
-          const ch = src[idx];
-          if (q) {
-            if (ch === '\\' && idx + 1 < src.length) {
-              out += ch + src[idx + 1];
-              idx += 2;
-              continue;
-            }
-            out += ch;
-            if (ch === q) q = null;
-            idx++;
-            continue;
-          }
-          if (ch === '"' || ch === "'") {
-            q = ch;
-            out += ch;
-            idx++;
-            continue;
-          }
-          const prevCh = idx > 0 ? src[idx - 1] : ' ';
-          if (/[a-zA-Z_]/.test(ch) && !/[a-zA-Z0-9_.]/.test(prevCh)) {
-            const idMatch = src.slice(idx).match(/^([a-zA-Z_]\w*)(\s*)\(/);
-            if (idMatch && inlineBuiltins.has(idMatch[1])) {
-              const openParenIdx = idx + idMatch[0].length - 1;
-              let depth = 0;
-              let k = openParenIdx;
-              let cq: string | null = null;
-              while (k < src.length) {
-                const kc = src[k];
-                if (cq) {
-                  if (kc === '\\' && k + 1 < src.length) { k += 2; continue; }
-                  if (kc === cq) cq = null;
-                } else if (kc === '"' || kc === "'") cq = kc;
-                else if (kc === '(') depth++;
-                else if (kc === ')') {
-                  depth--;
-                  if (depth === 0) break;
-                }
-                k++;
-              }
-              if (depth === 0 && k < src.length) {
-                const callSubstr = src.slice(idx, k + 1);
-                const val = evalExpr(callSubstr);
-                const lit =
-                  val === null || val === undefined
-                    ? 'None'
-                    : typeof val === 'boolean'
-                    ? (val ? 'True' : 'False')
-                    : typeof val === 'string'
-                    ? JSON.stringify(val)
-                    : typeof val === 'object'
-                    ? JSON.stringify(val)
-                    : String(val);
-                out += lit;
-                idx = k + 1;
-                continue;
-              }
-            }
-          }
-          out += ch;
-          idx++;
-        }
-        return out;
-      };
-
-      const exprWithResolvedCalls = resolveInlineCalls(expr);
-
-      // Transform Python tokens & variables ONLY outside string literals
-      const transformOutsideQuotes = (src: string, fn: (chunk: string) => string): string => {
-        let out = '';
-        let chunkStart = 0;
-        let q: string | null = null;
-        for (let idx = 0; idx < src.length; idx++) {
-          const ch = src[idx];
-          if (q) {
-            if (ch === '\\' && idx + 1 < src.length) { idx++; continue; }
-            if (ch === q) {
-              out += src.slice(chunkStart, idx + 1);
-              chunkStart = idx + 1;
-              q = null;
-            }
-          } else if (ch === '"' || ch === "'") {
-            if (idx > chunkStart) {
-              out += fn(src.slice(chunkStart, idx));
-            }
-            chunkStart = idx;
-            q = ch;
-          }
-        }
-        if (chunkStart < src.length) {
-          out += q ? src.slice(chunkStart) : fn(src.slice(chunkStart));
-        }
-        return out;
-      };
-
-      let js = transformOutsideQuotes(exprWithResolvedCalls, (chunk) => {
-        const withOps = chunk
-          .replace(/\/\//g, ' ___INTDIV___ ')
-          .replace(/\*\*/g, ' ___POW___ ');
-
-        return withOps.replace(/\b([a-zA-Z_]\w*)\b/g, (ident) => {
-          if (ident === '___INTDIV___' || ident === '___POW___') return ident;
-          if (ident === 'True') return 'true';
-          if (ident === 'False') return 'false';
-          if (ident === 'None') return 'null';
-          if (ident === 'and') return '&&';
-          if (ident === 'or') return '||';
-          if (ident === 'not') return '___PYNOT___';
-          if (Object.prototype.hasOwnProperty.call(scope, ident)) {
-            const val = scope[ident];
-            return typeof val === 'object'
-              ? JSON.stringify(val)
-              : typeof val === 'string'
-              ? JSON.stringify(val)
-              : String(val);
-          }
-          return ident;
-        });
-      });
-
-      js = replaceEqualityOpsOutsideStrings(js);
-      js = expandChainedComparisons(js);
-
-      // Rewrite Python 'not <comparison>' with lower precedence than comparisons (e.g. not x == 0 -> !__truthy(x === 0))
-      const applyPythonNot = (src: string): string => {
-        if (!src.includes('___PYNOT___')) return src;
-        // Recursively process parenthesized groups first
-        let pOut = '';
-        let q: string | null = null;
-        let idx = 0;
-        while (idx < src.length) {
-          const ch = src[idx];
-          if (q) {
-            if (ch === '\\' && idx + 1 < src.length) { pOut += ch + src[idx + 1]; idx += 2; continue; }
-            pOut += ch;
-            if (ch === q) q = null;
-            idx++;
-            continue;
-          }
-          if (ch === '"' || ch === "'") { q = ch; pOut += ch; idx++; continue; }
-          if (ch === '(') {
-            let depth = 1;
-            let k = idx + 1;
-            let iq: string | null = null;
-            while (k < src.length && depth > 0) {
-              const kc = src[k];
-              if (iq) {
-                if (kc === '\\' && k + 1 < src.length) { k += 2; continue; }
-                if (kc === iq) iq = null;
-              } else if (kc === '"' || kc === "'") iq = kc;
-              else if (kc === '(') depth++;
-              else if (kc === ')') depth--;
-              k++;
-            }
-            pOut += '(' + applyPythonNot(src.slice(idx + 1, k - 1)) + ')';
-            idx = k;
-            continue;
-          }
-          pOut += ch;
-          idx++;
-        }
-
-        // Split at top-level && and || so ___PYNOT___ wraps the entire comparison clause
-        const parts: string[] = [];
-        const ops: string[] = [];
-        let start = 0;
-        let p = 0, b = 0, c = 0;
-        q = null;
-        for (let k = 0; k < pOut.length; k++) {
-          const ch = pOut[k];
-          if (q) {
-            if (ch === '\\' && k + 1 < pOut.length) { k++; continue; }
-            if (ch === q) q = null;
-            continue;
-          }
-          if (ch === '"' || ch === "'") { q = ch; continue; }
-          if (ch === '(') p++;
-          else if (ch === ')') p--;
-          else if (ch === '[') b++;
-          else if (ch === ']') b--;
-          else if (ch === '{') c++;
-          else if (ch === '}') c--;
-          else if (p === 0 && b === 0 && c === 0) {
-            if ((ch === '&' && pOut[k + 1] === '&') || (ch === '|' && pOut[k + 1] === '|')) {
-              parts.push(pOut.slice(start, k));
-              ops.push(pOut.slice(k, k + 2));
-              k++;
-              start = k + 1;
-            }
-          }
-        }
-        parts.push(pOut.slice(start));
-
-        const wrapNotClause = (cl: string): string => {
-          const m = cl.match(/^(\s*)___PYNOT___\s*([\s\S]+)$/);
-          if (!m) return cl;
-          return `${m[1]}(!__truthy(${wrapNotClause(m[2])}))`;
-        };
-
-        let res = wrapNotClause(parts[0]);
-        for (let m = 0; m < ops.length; m++) {
-          res += ` ${ops[m]} ${wrapNotClause(parts[m + 1])}`;
-        }
-        return res;
-      };
-
-      js = applyPythonNot(js);
-
-      let powGuard = 20;
-      while (js.includes('___POW___') && powGuard-- > 0) {
-        const nextJs = js.replace(
-          /(\([^()]+\)|[a-zA-Z0-9_.]+)\s*___POW___\s*(\([^()]+\)|-?[a-zA-Z0-9_.]+)/,
-          'Math.pow($1, $2)'
-        );
-        if (nextJs === js) break;
-        js = nextJs;
-      }
-      let divGuard = 20;
-      while (js.includes('___INTDIV___') && divGuard-- > 0) {
-        const nextJs = js.replace(
-          /(\([^()]+\)|Math\.pow\([^()]+\)|[a-zA-Z0-9_.]+)\s*___INTDIV___\s*(\([^()]+\)|Math\.pow\([^()]+\)|-?[a-zA-Z0-9_.]+)/,
-          'Math.floor(($1) / ($2))'
-        );
-        if (nextJs === js) break;
-        js = nextJs;
-      }
-
-      // Strip string literals to validate remaining code syntax safely
-      const codeWithoutStrings = js.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""');
-
-      // Check for undefined identifiers outside string literals
-      const identMatches = codeWithoutStrings.match(/\b([a-zA-Z_]\w*)\b/g) || [];
-      for (const word of identMatches) {
-        if (!['Math', 'true', 'false', 'null', 'floor', 'pow', '__truthy'].includes(word)) {
-          if (/\d\s+[a-zA-Z_]/.test(codeWithoutStrings) || /[a-zA-Z_]\s+\d/.test(codeWithoutStrings) || codeWithoutStrings.includes(':')) {
-            throw new Error(`SyntaxError: invalid syntax`);
-          }
-          throw new Error(`NameError: name '${word}' is not defined`);
-        }
-      }
-
-      if (!/^[0-9+\-*/%().\s,Mathfloorpow_truefalsny"'[\]{}><=!&|]+$/.test(codeWithoutStrings)) {
-        throw new Error(`SyntaxError: invalid syntax`);
-      }
-
-      try {
-        const fn = new Function('__truthy', `"use strict"; return (${js})`);
-        const evaluated = fn(isPythonTruthy);
-        // Python boolean operators 'and'/'or' with booleans or comparisons return boolean
-        return evaluated;
-      } catch {
-        throw new Error(`SyntaxError: invalid syntax`);
-      }
+      throw new Error('SyntaxError: invalid syntax');
     };
 
-    const executeFunction = (fnDef: any, callArgs: any[]): any => {
-      const localScope = { ...scope };
-      const paramNames = fnDef.args.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
-      paramNames.forEach((name: string, idx: number) => {
-        localScope[name] = callArgs[idx] ?? null;
-      });
+    const executeFunction = (fnDef: any, callArgs: any[], rawCallArgs?: string[]): any => {
+      const fnLocalScope: Record<string, any> = {};
+      const paramSpecs = splitTopLevelArgs(fnDef.args || '');
+      const parsedParams: { name: string; defaultExpr?: string }[] = [];
 
-      if (fnDef.innerBlocks) {
-        for (const child of fnDef.innerBlocks) {
-          if (child.type === 'return') {
-            return evalExpr(child.content || '');
-          }
-          if (child.type === 'print') {
-            stdoutBuffer += (evalExpr(child.content || '') ?? '') + '\n';
-          }
+      for (const spec of paramSpecs) {
+        const eqIdx = findStandaloneAssignIndex(spec);
+        if (eqIdx > 0) {
+          const pName = spec.slice(0, eqIdx).trim();
+          const pDef = spec.slice(eqIdx + 1).trim();
+          if (!isValidPythonIdentifier(pName) || !pDef) throw new Error('SyntaxError: invalid syntax');
+          parsedParams.push({ name: pName, defaultExpr: pDef });
+        } else {
+          const pName = spec.trim();
+          if (!isValidPythonIdentifier(pName)) throw new Error('SyntaxError: invalid syntax');
+          parsedParams.push({ name: pName });
         }
       }
-      if (fnDef.hasReturn && fnDef.returnVal) {
-        return evalExpr(fnDef.returnVal);
+
+      // Bind positional and keyword arguments
+      const kwBound = new Set<string>();
+      let posIdx = 0;
+      if (rawCallArgs && rawCallArgs.some((a) => findStandaloneAssignIndex(a) > 0)) {
+        let seenKw = false;
+        for (const ra of rawCallArgs) {
+          const eqIdx = findStandaloneAssignIndex(ra);
+          if (eqIdx > 0) {
+            seenKw = true;
+            const kName = ra.slice(0, eqIdx).trim();
+            const kVal = evalNonEmpty(ra.slice(eqIdx + 1));
+            if (!parsedParams.some((p) => p.name === kName)) {
+              throw new Error(`TypeError: unexpected keyword argument '${kName}'`);
+            }
+            fnLocalScope[kName] = kVal;
+            kwBound.add(kName);
+          } else {
+            if (seenKw) throw new Error('SyntaxError: positional argument follows keyword argument');
+            if (posIdx >= parsedParams.length) {
+              throw new Error('TypeError: too many positional arguments');
+            }
+            fnLocalScope[parsedParams[posIdx].name] = evalNonEmpty(ra);
+            posIdx++;
+          }
+        }
+      } else {
+        if (callArgs.length > parsedParams.length) {
+          throw new Error(`TypeError: function takes ${parsedParams.length} positional arguments but ${callArgs.length} were given`);
+        }
+        for (let idx = 0; idx < callArgs.length; idx++) {
+          fnLocalScope[parsedParams[idx].name] = callArgs[idx];
+        }
+        posIdx = callArgs.length;
       }
-      return null;
+
+      for (let idx = posIdx; idx < parsedParams.length; idx++) {
+        const p = parsedParams[idx];
+        if (kwBound.has(p.name)) continue;
+        if (p.defaultExpr !== undefined) {
+          fnLocalScope[p.name] = evalNonEmpty(p.defaultExpr);
+        } else {
+          throw new Error(`TypeError: missing required positional argument: '${p.name}'`);
+        }
+      }
+
+      const prevScope = currentScope;
+      currentScope = fnLocalScope;
+      try {
+        if (fnDef.innerBlocks && fnDef.innerBlocks.length > 0) {
+          const sig = runBlockList(fnDef.innerBlocks);
+          if (sig && typeof sig === 'object' && sig.__isReturn) {
+            return sig.value;
+          }
+        }
+        if (fnDef.hasReturn) {
+          const rawRet = (fnDef.returnVal ?? '').trim();
+          if (!rawRet) throw new Error('SyntaxError: invalid syntax');
+          const parts = splitTopLevelArgs(rawRet);
+          return parts.length > 1
+            ? makeTuple(parts.map((p) => evalNonEmpty(p)))
+            : evalNonEmpty(rawRet);
+        }
+        return null;
+      } finally {
+        currentScope = prevScope;
+      }
     };
 
     const evalBlockAsExpr = (b: any): any => {
@@ -1256,14 +1882,14 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
         const inner = b.argBlock
           ? evalBlockAsExpr(b.argBlock)
           : (b.content || '').trim()
-          ? evalExpr(b.content)
+          ? evalNonEmpty(b.content)
           : undefined;
         val = pyInt(inner);
       } else if (b.type === 'float') {
         const inner = b.argBlock
           ? evalBlockAsExpr(b.argBlock)
           : (b.content || '').trim()
-          ? evalExpr(b.content)
+          ? evalNonEmpty(b.content)
           : undefined;
         val = pyFloat(inner);
       } else if (b.type === 'str') {
@@ -1272,7 +1898,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           val = formatPythonValue(inner, undefined, b.argBlock.type === 'float');
         } else {
           const rawStr = (b.content || '').trim();
-          val = rawStr ? formatPythonValue(evalExpr(rawStr), rawStr) : '';
+          val = rawStr ? formatPythonValue(evalNonEmpty(rawStr), rawStr) : '';
         }
       } else if (b.type === 'type') {
         if (b.argBlock) {
@@ -1281,149 +1907,193 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
         } else {
           const rawArg = (b.content || '').trim();
           if (!rawArg) throw new Error('TypeError: type() takes 1 argument');
-          const inner = evalExpr(rawArg);
+          const inner = evalNonEmpty(rawArg);
           val = getPythonTypeString(inner, rawArg);
         }
       } else if (b.type === 'round') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0');
-        val = Math.round(Number(inner) || 0);
+        if (b.argBlock) {
+          val = Math.round(Number(evalBlockAsExpr(b.argBlock)));
+        } else {
+          val = evalNonEmpty(`round(${b.content || ''})`);
+        }
       } else if (b.type === 'abs') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '0');
-        val = Math.abs(Number(inner) || 0);
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalNonEmpty(b.content || '');
+        val = Math.abs(Number(inner));
       } else if (b.type === 'sum') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        if (Array.isArray(inner)) val = inner.reduce((acc: number, cur: any) => acc + (Number(cur) || 0), 0);
-        else val = Number(inner) || 0;
-      } else if (b.type === 'min') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        if (Array.isArray(inner) && inner.length > 0) val = Math.min(...inner.map(Number));
-        else val = Number(inner) || 0;
-      } else if (b.type === 'max') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        if (Array.isArray(inner) && inner.length > 0) val = Math.max(...inner.map(Number));
-        else val = Number(inner) || 0;
+        if (b.argBlock) {
+          const inner = toIterableArray(evalBlockAsExpr(b.argBlock));
+          val = inner.reduce((acc: number, cur: any) => acc + Number(cur), 0);
+        } else {
+          val = evalNonEmpty(`sum(${b.content || ''})`);
+        }
+      } else if (b.type === 'min' || b.type === 'max') {
+        if (b.argBlock) {
+          const arr = toIterableArray(evalBlockAsExpr(b.argBlock));
+          if (arr.length === 0) throw new Error(`ValueError: ${b.type}() arg is an empty sequence`);
+          let best = arr[0];
+          for (let idx = 1; idx < arr.length; idx++) {
+            if (pyCompare(arr[idx], best, b.type === 'min' ? '<' : '>')) best = arr[idx];
+          }
+          val = best;
+        } else {
+          val = evalNonEmpty(`${b.type}(${b.content || ''})`);
+        }
       } else if (b.type === 'input') {
         const promptArg = b.argBlock
           ? evalBlockAsExpr(b.argBlock)
           : (b.content || '').trim()
-          ? evalExpr(b.content)
+          ? evalNonEmpty(b.content)
           : undefined;
         val = readInputLine(promptArg);
       } else if (b.type === 'len') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalNonEmpty(b.content || '');
         if (typeof inner === 'string' || Array.isArray(inner)) val = inner.length;
+        else if (inner instanceof Set) val = inner.size;
         else if (inner && typeof inner === 'object') val = Object.keys(inner).length;
-        else val = 0;
+        else throw new Error(`TypeError: object of type '${typeof inner}' has no len()`);
       } else if (b.type === 'print') {
         val = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '');
       } else if (b.type === 'variable') {
-        val = b.varName in scope ? scope[b.varName] : evalExpr(b.content || '0');
+        const vn = (b.varName || '').trim();
+        if (!vn) throw new Error('SyntaxError: invalid syntax');
+        val = hasVar(vn) ? getVar(vn) : evalNonEmpty(vn);
+      } else if (b.type === 'call') {
+        const fnName = (b.varName || '').trim();
+        if (!isValidPythonIdentifier(fnName)) throw new Error('SyntaxError: invalid syntax');
+        if (b.argBlock) {
+          const argVal = evalBlockAsExpr(b.argBlock);
+          if (fnName in functions) val = executeFunction(functions[fnName], [argVal]);
+          else throw new Error(`NameError: name '${fnName}' is not defined`);
+        } else {
+          val = evalNonEmpty(`${fnName}(${(b.content || '').trim()})`);
+        }
       } else if (b.type === 'bool') {
         if (b.argBlock) {
           val = isPythonTruthy(evalBlockAsExpr(b.argBlock));
         } else {
           const rawB = (b.content || '').trim();
-          val = rawB ? isPythonTruthy(evalExpr(rawB)) : false;
+          val = rawB ? isPythonTruthy(evalNonEmpty(rawB)) : false;
         }
       } else if (b.type === 'range') {
-        const raw = b.argBlock ? evalBlockAsExpr(b.argBlock) : (b.content || '0');
-        const parts = String(raw).split(',').map((s) => parseInt(s.trim(), 10)).filter((n) => !isNaN(n));
-        let start = 0, stop = 0, step = 1;
-        if (parts.length === 1) stop = parts[0];
-        else if (parts.length === 2) { start = parts[0]; stop = parts[1]; }
-        else if (parts.length >= 3) { start = parts[0]; stop = parts[1]; step = parts[2]; }
-        const rList: number[] = [];
-        if (step > 0) {
-          for (let i = start; i < stop; i += step) rList.push(i);
-        } else if (step < 0) {
-          for (let i = start; i > stop; i += step) rList.push(i);
-        }
-        val = rList;
-      } else if (b.type === 'sorted') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        if (Array.isArray(inner)) {
-          val = [...inner].sort((a, b) => (typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b))));
+        if (b.argBlock) {
+          const stop = pyInt(evalBlockAsExpr(b.argBlock));
+          const rList: number[] = [];
+          for (let i = 0; i < stop && rList.length < 500; i++) rList.push(i);
+          val = rList;
         } else {
-          val = [];
+          const rawR = (b.content || '').trim();
+          if (!rawR) throw new Error('TypeError: range expected at least 1 argument, got 0');
+          val = evalNonEmpty(`range(${rawR})`);
+        }
+      } else if (b.type === 'sorted') {
+        if (b.argBlock) {
+          val = pySortArray(toIterableArray(evalBlockAsExpr(b.argBlock)), false);
+        } else {
+          val = evalNonEmpty(`sorted(${b.content || ''})`);
         }
       } else if (b.type === 'reversed') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        val = Array.isArray(inner) ? [...inner].reverse() : [];
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalNonEmpty(b.content || '');
+        val = [...toIterableArray(inner)].reverse();
       } else if (b.type === 'all') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        val = Array.isArray(inner) ? inner.every(isPythonTruthy) : isPythonTruthy(inner);
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalNonEmpty(b.content || '');
+        val = toIterableArray(inner).every(isPythonTruthy);
       } else if (b.type === 'any') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        val = Array.isArray(inner) ? inner.some(isPythonTruthy) : isPythonTruthy(inner);
+        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalNonEmpty(b.content || '');
+        val = toIterableArray(inner).some(isPythonTruthy);
       } else if (b.type === 'enumerate') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        val = Array.isArray(inner) ? inner.map((item, idx) => [idx, item]) : [];
+        if (b.argBlock) {
+          val = toIterableArray(evalBlockAsExpr(b.argBlock)).map((item, idx) => makeTuple([idx, item]));
+        } else {
+          val = evalNonEmpty(`enumerate(${b.content || ''})`);
+        }
       } else if (b.type === 'zip') {
-        const inner = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
-        val = Array.isArray(inner) ? inner : [];
+        if (b.argBlock) {
+          val = toIterableArray(evalBlockAsExpr(b.argBlock)).map((item) => makeTuple([item]));
+        } else {
+          val = evalNonEmpty(`zip(${b.content || ''})`);
+        }
       } else if (b.type === 'map') {
-        val = b.argBlock ? evalBlockAsExpr(b.argBlock) : evalExpr(b.content || '[]');
+        val = evalNonEmpty(`map(${b.content || ''})`);
       } else if (b.type === 'math') {
-        val = null;
+        throw new Error('SyntaxError: select a math function from the dropdown');
       } else {
         val = evalExpr(b.content || '');
       }
 
-      if (b.attachedMethodId) {
-        const m = blocks.find((item: any) => item.id === b.attachedMethodId);
-        if (m && m.type === 'method') {
-          const mName = m.methodName || 'method';
-          if (mName === 'split') {
-            const strVal = String(val ?? '');
-            const sepRaw = (m.content || '').trim();
-            if (sepRaw) {
-              const sepVal = evalExpr(sepRaw);
-              val = strVal.split(String(sepVal));
-            } else {
-              const t = strVal.trim();
-              val = t.length === 0 ? [] : t.split(/\s+/);
-            }
-          } else if (mName === 'strip') {
-            val = String(val ?? '').trim();
-          } else if (mName === 'upper') {
-            val = String(val ?? '').toUpperCase();
-          } else if (mName === 'lower') {
-            val = String(val ?? '').toLowerCase();
-          } else if (mName === 'replace') {
-            const parts = splitTopLevelArgs(m.content || '').map((s: string) => String(evalExpr(s) ?? ''));
-            val = String(val ?? '').replaceAll(parts[0] || '', parts[1] || '');
-          } else if (mName === 'join') {
-            const sep = String(val ?? '');
-            const arg = (m.content || '').trim();
-            const listVal = scope[arg] || evalExpr(arg);
-            val = Array.isArray(listVal) ? listVal.join(sep) : '';
-          } else if (mName === 'count') {
-            const subRaw = (m.content || '').trim();
-            const sub = subRaw ? String(evalExpr(subRaw)) : '';
-            if (typeof val === 'string') val = sub ? val.split(sub).length - 1 : val.length + 1;
-            else if (Array.isArray(val)) val = val.filter((x) => String(x) === sub).length;
-          } else if (mName === 'append') {
-            const item = evalExpr(m.content || '0');
-            if (Array.isArray(val)) val.push(item);
-          } else if (mName === 'pop') {
-            if (Array.isArray(val)) val = val.pop();
-          } else if (mName === 'reverse') {
-            if (Array.isArray(val)) val.reverse();
-          } else if (mName === 'sort') {
-            if (Array.isArray(val)) val.sort((a, b) => (typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b))));
-          } else if (mName === 'keys') {
-            if (val && typeof val === 'object') val = Object.keys(val);
-          } else if (mName === 'values') {
-            if (val && typeof val === 'object') val = Object.values(val);
-          } else if (mName === 'items') {
-            if (val && typeof val === 'object') val = Object.entries(val);
-          }
+      // Traverse chained horizontal method blocks
+      let currMId = b.attachedMethodId;
+      const visitedM = new Set<string>();
+      while (currMId && !visitedM.has(currMId)) {
+        visitedM.add(currMId);
+        const m = blocks.find((item: any) => item.id === currMId);
+        if (!m || m.type !== 'method') break;
+        const mName = m.methodName || 'method';
+        if (mName === 'method') {
+          throw new Error('SyntaxError: select a method from the dropdown');
         }
+        val = applyMethodCall(val, mName, m.content || '');
+        currMId = m.attachedMethodId;
       }
       return val;
     };
 
-    const runBlockList = (list: any[]): 'break' | 'continue' | void => {
+    const applyCompoundValue = (lhsVal: any, op: string, rhsVal: any): any => {
+      if (op === '+=') {
+        if (typeof lhsVal === 'string' && typeof rhsVal === 'string') return lhsVal + rhsVal;
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) return Number(lhsVal) + Number(rhsVal);
+        if (Array.isArray(lhsVal) && Array.isArray(rhsVal) && isTuple(lhsVal) === isTuple(rhsVal)) {
+          return isTuple(lhsVal) ? makeTuple([...lhsVal, ...rhsVal]) : [...lhsVal, ...rhsVal];
+        }
+        throw new Error('TypeError: unsupported operand type(s) for +=');
+      }
+      if (op === '-=') {
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) return Number(lhsVal) - Number(rhsVal);
+        if (lhsVal instanceof Set && rhsVal instanceof Set) {
+          const rhsArr = Array.from(rhsVal);
+          return new Set(Array.from(lhsVal).filter((x) => !rhsArr.some((y) => pyEquals(x, y))));
+        }
+        throw new Error('TypeError: unsupported operand type(s) for -=');
+      }
+      if (op === '*=') {
+        if (typeof lhsVal === 'string' && isNumOrBool(rhsVal) && Number.isInteger(Number(rhsVal))) {
+          return lhsVal.repeat(Math.max(0, Number(rhsVal)));
+        }
+        if (isNumOrBool(lhsVal) && Number.isInteger(Number(lhsVal)) && typeof rhsVal === 'string') {
+          return rhsVal.repeat(Math.max(0, Number(lhsVal)));
+        }
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) return Number(lhsVal) * Number(rhsVal);
+        throw new Error('TypeError: unsupported operand type(s) for *=');
+      }
+      if (op === '/=') {
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) {
+          if (Number(rhsVal) === 0) throw new Error('ZeroDivisionError: float division by zero');
+          return Number(lhsVal) / Number(rhsVal);
+        }
+        throw new Error('TypeError: unsupported operand type(s) for /=');
+      }
+      if (op === '//=') {
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) {
+          if (Number(rhsVal) === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
+          return Math.floor(Number(lhsVal) / Number(rhsVal));
+        }
+        throw new Error('TypeError: unsupported operand type(s) for //=');
+      }
+      if (op === '%=') {
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) {
+          const nb = Number(rhsVal);
+          if (nb === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
+          return ((Number(lhsVal) % nb) + nb) % nb;
+        }
+        throw new Error('TypeError: unsupported operand type(s) for %=');
+      }
+      if (op === '**=') {
+        if (isNumOrBool(lhsVal) && isNumOrBool(rhsVal)) return Math.pow(Number(lhsVal), Number(rhsVal));
+        throw new Error('TypeError: unsupported operand type(s) for **=');
+      }
+      throw new Error('SyntaxError: invalid assignment operator');
+    };
+
+    const runBlockList = (list: any[]): LoopOrReturnSignal => {
       for (const blk of list) {
         if (!blk || blk.type === 'start' || blk.attachedToBlockId) continue;
         if (--maxSteps <= 0) {
@@ -1433,7 +2103,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
 
         if (blk.type === 'variable') {
           if (blk._isExprStmt) {
-            evalExpr(blk.content || '');
+            evalNonEmpty(blk.content || '');
             recordStep(blk);
             continue;
           }
@@ -1446,13 +2116,20 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
             throw new Error('SyntaxError: invalid syntax');
           }
 
+          // Pure method call statement via horizontal method block on variable: e.g. nums.append(10)
+          if (op === '=' && blk.attachedMethodId && !blk.argBlock && !rawRhs) {
+            evalBlockAsExpr(blk);
+            recordStep(blk);
+            continue;
+          }
+
           // Multiple assignment / tuple unpacking: a, b = 10, 20 or a, b = input().split()
-          if (rawVarName.includes(',')) {
+          const topLhsParts = splitTopLevelArgs(rawVarName);
+          if (topLhsParts.length > 1) {
             if (op !== '=') {
               throw new Error('SyntaxError: illegal expression for augmented assignment');
             }
-            const targetNames = rawVarName.split(',').map((s: string) => s.trim());
-            for (const tn of targetNames) {
+            for (const tn of topLhsParts) {
               if (!isValidPythonIdentifier(tn)) {
                 throw new Error('SyntaxError: invalid syntax');
               }
@@ -1460,61 +2137,46 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
 
             let unpackedItems: { val: any; isFloat: boolean }[] = [];
             if (blk.argBlock) {
-              const res = evalBlockAsExpr(blk.argBlock);
-              if (Array.isArray(res)) {
-                unpackedItems = res.map((v) => ({ val: v, isFloat: typeof v === 'number' && !Number.isInteger(v) }));
-              } else if (typeof res === 'string') {
-                unpackedItems = res.split('').map((c) => ({ val: c, isFloat: false }));
-              } else {
-                throw new Error(`TypeError: cannot unpack non-iterable ${typeof res} object`);
-              }
+              const res = toIterableArray(evalBlockAsExpr(blk.argBlock));
+              unpackedItems = res.map((v) => ({ val: v, isFloat: typeof v === 'number' && !Number.isInteger(v) }));
             } else {
               if (!rawRhs) throw new Error('SyntaxError: invalid syntax');
               const rhsParts = splitTopLevelArgs(rawRhs);
               if (rhsParts.length > 1) {
-                // Evaluate ALL RHS items before mutating scope (enables x, y = y, x swap!)
                 unpackedItems = rhsParts.map((part) => {
-                  const val = evalExpr(part);
+                  const val = evalNonEmpty(part);
                   return { val, isFloat: isExprFloat(part, val) };
                 });
               } else {
-                const singleVal = evalExpr(rhsParts[0]);
-                if (Array.isArray(singleVal)) {
-                  unpackedItems = singleVal.map((v) => ({
-                    val: v,
-                    isFloat: typeof v === 'number' && !Number.isInteger(v),
-                  }));
-                } else if (typeof singleVal === 'string') {
-                  unpackedItems = singleVal.split('').map((c) => ({ val: c, isFloat: false }));
-                } else {
-                  throw new Error(`TypeError: cannot unpack non-iterable ${typeof singleVal} object`);
-                }
+                const singleVal = toIterableArray(evalNonEmpty(rhsParts[0]));
+                unpackedItems = singleVal.map((v) => ({
+                  val: v,
+                  isFloat: typeof v === 'number' && !Number.isInteger(v),
+                }));
               }
             }
 
-            if (unpackedItems.length < targetNames.length) {
+            if (unpackedItems.length < topLhsParts.length) {
               throw new Error(
-                `ValueError: not enough values to unpack (expected ${targetNames.length}, got ${unpackedItems.length})`
+                `ValueError: not enough values to unpack (expected ${topLhsParts.length}, got ${unpackedItems.length})`
               );
             }
-            if (unpackedItems.length > targetNames.length) {
-              throw new Error(`ValueError: too many values to unpack (expected ${targetNames.length})`);
+            if (unpackedItems.length > topLhsParts.length) {
+              throw new Error(`ValueError: too many values to unpack (expected ${topLhsParts.length})`);
             }
 
-            targetNames.forEach((tn: string, idx: number) => {
-              scope[tn] = unpackedItems[idx].val;
-              if (unpackedItems[idx].isFloat) floatVars.add(tn);
-              else floatVars.delete(tn);
+            topLhsParts.forEach((tn: string, idx: number) => {
+              currentScope[tn] = unpackedItems[idx].val;
+              if (currentScope === scope) {
+                if (unpackedItems[idx].isFloat) floatVars.add(tn);
+                else floatVars.delete(tn);
+              }
             });
             recordStep(blk);
             continue;
           }
 
-          // Single variable assignment or compound assignment
-          if (!isValidPythonIdentifier(rawVarName)) {
-            throw new Error('SyntaxError: invalid syntax');
-          }
-
+          // Evaluate RHS (supporting unparenthesized comma tuple like t = 10, 20)
           let rhsVal: any;
           let rhsIsFloat = false;
           if (blk.argBlock) {
@@ -1524,98 +2186,133 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
               (typeof rhsVal === 'number' && !Number.isInteger(rhsVal));
           } else {
             if (!rawRhs) throw new Error('SyntaxError: invalid syntax');
-            rhsVal = evalExpr(rawRhs);
-            rhsIsFloat = isExprFloat(rawRhs, rhsVal);
+            const rhsParts = splitTopLevelArgs(rawRhs);
+            if (rhsParts.length > 1) {
+              rhsVal = makeTuple(rhsParts.map((p) => evalNonEmpty(p)));
+            } else {
+              rhsVal = evalNonEmpty(rawRhs);
+              rhsIsFloat = isExprFloat(rawRhs, rhsVal);
+            }
+            if (blk.attachedMethodId) {
+              let currMId = blk.attachedMethodId;
+              const visitedM = new Set<string>();
+              while (currMId && !visitedM.has(currMId)) {
+                visitedM.add(currMId);
+                const m = blocks.find((item: any) => item.id === currMId);
+                if (!m || m.type !== 'method') break;
+                const mName = m.methodName || 'method';
+                if (mName === 'method') throw new Error('SyntaxError: select a method from the dropdown');
+                rhsVal = applyMethodCall(rhsVal, mName, m.content || '');
+                currMId = m.attachedMethodId;
+              }
+            }
+          }
+
+          // Indexed / Keyed LHS assignment: nums[0] = 99, grid[0][1] = 5, d["a"] += 1
+          const lhsBracket = findBalancedPostfixBracket(rawVarName);
+          if (lhsBracket) {
+            const container = evalNonEmpty(lhsBracket.receiver);
+            if (isTuple(container) || typeof container === 'string') {
+              throw new Error('TypeError: object does not support item assignment');
+            }
+            const keyVal = evalNonEmpty(lhsBracket.bracketContent);
+            if (Array.isArray(container)) {
+              if (typeof keyVal !== 'number' || !Number.isInteger(keyVal)) {
+                throw new Error('TypeError: list indices must be integers');
+              }
+              const idx = keyVal < 0 ? container.length + keyVal : keyVal;
+              if (idx < 0 || idx >= container.length) {
+                throw new Error('IndexError: list assignment index out of range');
+              }
+              container[idx] = op === '=' ? rhsVal : applyCompoundValue(container[idx], op, rhsVal);
+            } else if (container && typeof container === 'object' && !(container instanceof Set)) {
+              const k = String(keyVal);
+              if (op === '=') {
+                container[k] = rhsVal;
+              } else {
+                if (!Object.prototype.hasOwnProperty.call(container, k)) {
+                  throw new Error(`KeyError: '${k}'`);
+                }
+                container[k] = applyCompoundValue(container[k], op, rhsVal);
+              }
+            } else {
+              throw new Error('TypeError: object does not support item assignment');
+            }
+            recordStep(blk);
+            continue;
+          }
+
+          // Single identifier assignment or compound assignment
+          if (!isValidPythonIdentifier(rawVarName)) {
+            throw new Error('SyntaxError: invalid syntax');
           }
 
           if (op === '=') {
-            if (blk.attachedMethodId && !blk.argBlock && !rawRhs) {
-              // e.g. my_list.append(10) via horizontal method block on variable
-              evalBlockAsExpr(blk);
-            } else {
-              scope[rawVarName] = rhsVal;
+            currentScope[rawVarName] = rhsVal;
+            if (currentScope === scope) {
               if (typeof rhsVal === 'number' && rhsIsFloat) floatVars.add(rawVarName);
               else floatVars.delete(rawVarName);
             }
           } else {
-            if (!(rawVarName in scope)) {
+            if (!hasVar(rawVarName)) {
               throw new Error(`NameError: name '${rawVarName}' is not defined`);
             }
-            const lhsVal = scope[rawVarName];
+            const lhsVal = getVar(rawVarName);
             const lhsIsFloat =
-              floatVars.has(rawVarName) || (typeof lhsVal === 'number' && !Number.isInteger(lhsVal));
-
-            if (op === '+=') {
-              if (typeof lhsVal === 'string' && typeof rhsVal === 'string') {
-                scope[rawVarName] = lhsVal + rhsVal;
-                floatVars.delete(rawVarName);
-              } else if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                scope[rawVarName] = lhsVal + rhsVal;
-                if (lhsIsFloat || rhsIsFloat) floatVars.add(rawVarName);
-                else floatVars.delete(rawVarName);
-              } else if (Array.isArray(lhsVal) && Array.isArray(rhsVal)) {
-                scope[rawVarName] = [...lhsVal, ...rhsVal];
-                floatVars.delete(rawVarName);
-              } else {
-                throw new Error(`TypeError: unsupported operand type(s) for +=`);
-              }
-            } else if (op === '-=') {
-              if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                scope[rawVarName] = lhsVal - rhsVal;
-                if (lhsIsFloat || rhsIsFloat) floatVars.add(rawVarName);
-                else floatVars.delete(rawVarName);
-              } else {
-                throw new Error(`TypeError: unsupported operand type(s) for -=`);
-              }
-            } else if (op === '*=') {
-              if (typeof lhsVal === 'string' && typeof rhsVal === 'number' && Number.isInteger(rhsVal)) {
-                scope[rawVarName] = lhsVal.repeat(Math.max(0, rhsVal));
-                floatVars.delete(rawVarName);
-              } else if (typeof lhsVal === 'number' && Number.isInteger(lhsVal) && typeof rhsVal === 'string') {
-                scope[rawVarName] = rhsVal.repeat(Math.max(0, lhsVal));
-                floatVars.delete(rawVarName);
-              } else if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                scope[rawVarName] = lhsVal * rhsVal;
-                if (lhsIsFloat || rhsIsFloat) floatVars.add(rawVarName);
-                else floatVars.delete(rawVarName);
-              } else {
-                throw new Error(`TypeError: unsupported operand type(s) for *=`);
-              }
-            } else if (op === '/=') {
-              if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                if (rhsVal === 0) throw new Error('ZeroDivisionError: float division by zero');
-                scope[rawVarName] = lhsVal / rhsVal;
+              (currentScope === scope && floatVars.has(rawVarName)) ||
+              (typeof lhsVal === 'number' && !Number.isInteger(lhsVal));
+            const nextVal = applyCompoundValue(lhsVal, op, rhsVal);
+            currentScope[rawVarName] = nextVal;
+            if (currentScope === scope) {
+              if (op === '/=' || (typeof nextVal === 'number' && (lhsIsFloat || rhsIsFloat))) {
                 floatVars.add(rawVarName);
               } else {
-                throw new Error(`TypeError: unsupported operand type(s) for /=`);
-              }
-            } else if (op === '//=') {
-              if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                if (rhsVal === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
-                scope[rawVarName] = Math.floor(lhsVal / rhsVal);
-                if (lhsIsFloat || rhsIsFloat) floatVars.add(rawVarName);
-                else floatVars.delete(rawVarName);
-              } else {
-                throw new Error(`TypeError: unsupported operand type(s) for //=`);
-              }
-            } else if (op === '%=') {
-              if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                if (rhsVal === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
-                scope[rawVarName] = ((lhsVal % rhsVal) + rhsVal) % rhsVal;
-                if (lhsIsFloat || rhsIsFloat) floatVars.add(rawVarName);
-                else floatVars.delete(rawVarName);
-              } else {
-                throw new Error(`TypeError: unsupported operand type(s) for %=`);
-              }
-            } else if (op === '**=') {
-              if (typeof lhsVal === 'number' && typeof rhsVal === 'number') {
-                scope[rawVarName] = Math.pow(lhsVal, rhsVal);
-                if (lhsIsFloat || rhsIsFloat) floatVars.add(rawVarName);
-                else floatVars.delete(rawVarName);
-              } else {
-                throw new Error(`TypeError: unsupported operand type(s) for **=`);
+                floatVars.delete(rawVarName);
               }
             }
+          }
+          recordStep(blk);
+        } else if (blk.type === 'call') {
+          evalBlockAsExpr(blk);
+          recordStep(blk);
+        } else if (blk.type === 'return') {
+          const rawRet = (blk.content ?? '').trim();
+          let retVal: any = null;
+          if (rawRet) {
+            const parts = splitTopLevelArgs(rawRet);
+            retVal = parts.length > 1 ? makeTuple(parts.map((p) => evalNonEmpty(p))) : evalNonEmpty(rawRet);
+          }
+          recordStep(blk);
+          return { __isReturn: true, value: retVal };
+        } else if (blk.type === 'del') {
+          const targetExpr = (blk.content ?? '').trim();
+          if (!targetExpr) throw new Error('SyntaxError: invalid syntax');
+          const delBracket = findBalancedPostfixBracket(targetExpr);
+          if (delBracket) {
+            const container = evalNonEmpty(delBracket.receiver);
+            if (isTuple(container) || typeof container === 'string') {
+              throw new Error("TypeError: object doesn't support item deletion");
+            }
+            const keyVal = evalNonEmpty(delBracket.bracketContent);
+            if (Array.isArray(container)) {
+              const idx = pyInt(keyVal) < 0 ? container.length + pyInt(keyVal) : pyInt(keyVal);
+              if (idx < 0 || idx >= container.length) throw new Error('IndexError: list assignment index out of range');
+              container.splice(idx, 1);
+            } else if (container && typeof container === 'object' && !(container instanceof Set)) {
+              const k = String(keyVal);
+              if (!Object.prototype.hasOwnProperty.call(container, k)) throw new Error(`KeyError: '${k}'`);
+              delete container[k];
+            } else {
+              throw new Error("TypeError: object doesn't support item deletion");
+            }
+          } else if (isValidPythonIdentifier(targetExpr)) {
+            if (Object.prototype.hasOwnProperty.call(currentScope, targetExpr)) {
+              delete currentScope[targetExpr];
+            } else {
+              throw new Error(`NameError: name '${targetExpr}' is not defined`);
+            }
+          } else {
+            throw new Error('SyntaxError: invalid syntax');
           }
           recordStep(blk);
         } else if ([
@@ -1626,32 +2323,48 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           evalBlockAsExpr(blk);
           recordStep(blk);
         } else if (blk.type === 'math') {
-          // math pseudo-block placed directly in statement list: safe no-op
+          throw new Error('SyntaxError: select a math function from the dropdown');
         } else if (blk.type === 'list') {
-          const vName = blk.varName || 'my_list';
-          scope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i));
+          const vName = (blk.varName ?? '').trim();
+          if (!isValidPythonIdentifier(vName)) throw new Error('SyntaxError: invalid syntax');
+          currentScope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalNonEmpty(i));
           recordStep(blk);
         } else if (blk.type === 'tuple') {
-          const vName = blk.varName || 'my_tuple';
-          scope[vName] = (blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i));
+          const vName = (blk.varName ?? '').trim();
+          if (!isValidPythonIdentifier(vName)) throw new Error('SyntaxError: invalid syntax');
+          currentScope[vName] = makeTuple((blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalNonEmpty(i)));
           recordStep(blk);
         } else if (blk.type === 'set') {
-          const vName = blk.varName || 'my_set';
-          scope[vName] = new Set((blk.items || []).filter((i: string) => i.trim().length > 0).map((i: string) => evalExpr(i)));
+          const vName = (blk.varName ?? '').trim();
+          if (!isValidPythonIdentifier(vName)) throw new Error('SyntaxError: invalid syntax');
+          const outSet = new Set<any>();
+          for (const rawItem of (blk.items || []).filter((i: string) => i.trim().length > 0)) {
+            const iv = evalNonEmpty(rawItem);
+            if (!Array.from(outSet).some((x) => pyEquals(x, iv))) outSet.add(iv);
+          }
+          currentScope[vName] = outSet;
           recordStep(blk);
         } else if (blk.type === 'dict') {
-          const vName = blk.varName || 'my_dict';
+          const vName = (blk.varName ?? '').trim();
+          if (!isValidPythonIdentifier(vName)) throw new Error('SyntaxError: invalid syntax');
           const dictObj: Record<string, any> = {};
-          (blk.dictPairs || []).forEach((p: any) => {
-            if (p.key.trim()) dictObj[p.key.trim()] = evalExpr(p.value.trim() || 'None');
-          });
-          scope[vName] = dictObj;
+          for (const p of blk.dictPairs || []) {
+            const rk = (p.key || '').trim();
+            const rv = (p.value || '').trim();
+            if (!rk && !rv) continue;
+            if (!rk || !rv) throw new Error('SyntaxError: invalid syntax');
+            const kVal = (/^['"].*['"]$/.test(rk) || /^[+-]?\d+(\.\d+)?$/.test(rk) || hasVar(rk))
+              ? evalNonEmpty(rk)
+              : rk;
+            dictObj[String(kVal)] = evalNonEmpty(rv);
+          }
+          currentScope[vName] = dictObj;
           recordStep(blk);
         } else if (blk.type === 'comment') {
-          // Pure comment block: does not affect scope or stdout
           recordStep(blk);
         } else if (blk.type === 'def') {
-          const fName = blk.varName || 'my_func';
+          const fName = (blk.varName ?? '').trim();
+          if (!isValidPythonIdentifier(fName)) throw new Error('SyntaxError: invalid syntax');
           functions[fName] = {
             args: blk.content || '',
             innerBlocks: blk.innerBlocks || [],
@@ -1664,7 +2377,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           let end = '\n';
 
           const applySepExpr = (exprStr: string) => {
-            const val = evalExpr(exprStr);
+            const val = evalNonEmpty(exprStr);
             if (val === null || val === undefined) {
               sep = ' ';
             } else if (typeof val !== 'string') {
@@ -1675,7 +2388,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           };
 
           const applyEndExpr = (exprStr: string) => {
-            const val = evalExpr(exprStr);
+            const val = evalNonEmpty(exprStr);
             if (val === null || val === undefined) {
               end = '\n';
             } else if (typeof val !== 'string') {
@@ -1687,16 +2400,12 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
 
           if (blk.hasSep) {
             const rawSep = (blk.sepVal ?? '').trim().replace(/^sep\s*=\s*/, '');
-            if (rawSep.length === 0) {
-              throw new Error('SyntaxError: invalid syntax');
-            }
+            if (rawSep.length === 0) throw new Error('SyntaxError: invalid syntax');
             applySepExpr(rawSep);
           }
           if (blk.hasEnd) {
             const rawEnd = (blk.endVal ?? '').trim().replace(/^end\s*=\s*/, '');
-            if (rawEnd.length === 0) {
-              throw new Error('SyntaxError: invalid syntax');
-            }
+            if (rawEnd.length === 0) throw new Error('SyntaxError: invalid syntax');
             applyEndExpr(rawEnd);
           }
 
@@ -1734,7 +2443,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
               }
 
               const printed = posArgs.map((arg) => {
-                const val = evalExpr(arg);
+                const val = evalNonEmpty(arg);
                 return formatPythonValue(val, arg);
               });
               stdoutBuffer += printed.join(sep) + end;
@@ -1748,76 +2457,68 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           recordStep(blk);
           return 'continue';
         } else if (blk.type === 'for_range' || blk.type === 'for_in') {
-          const vName = blk.varName || (blk.type === 'for_range' ? 'i' : 'item');
-          let seqVal: any = null;
-          let seqLabel = 'range(5)';
+          const rawLoopVar = (blk.varName ?? '').trim();
+          if (!rawLoopVar) throw new Error('SyntaxError: invalid syntax');
+          const loopVarNames = rawLoopVar.split(',').map((s: string) => s.trim());
+          for (const lv of loopVarNames) {
+            if (!isValidPythonIdentifier(lv)) throw new Error('SyntaxError: invalid syntax');
+          }
 
+          let seqVal: any = null;
           if (blk.argBlock) {
             seqVal = evalBlockAsExpr(blk.argBlock);
-            seqLabel = blk.argBlock.type || 'seq';
-          } else if (blk.content) {
-            seqVal = evalExpr(blk.content);
-            const contentTrimmed = (blk.content || '').trim();
-            if (
-              contentTrimmed.startsWith('range(') ||
-              contentTrimmed.startsWith('enumerate(') ||
-              contentTrimmed.startsWith('zip(') ||
-              contentTrimmed.startsWith('reversed(') ||
-              contentTrimmed.startsWith('sorted(')
-            ) {
-              seqLabel = contentTrimmed;
-            } else if (blk.type === 'for_range') {
-              seqLabel = `range(${contentTrimmed})`;
-            } else {
-              seqLabel = contentTrimmed;
-            }
           } else {
-            seqVal = blk.type === 'for_range' ? [0, 1, 2, 3, 4] : [];
-            seqLabel = 'range(5)';
+            const contentTrimmed = (blk.content ?? '').trim();
+            if (!contentTrimmed) throw new Error('SyntaxError: invalid syntax');
+            if (blk.type === 'for_range' && !contentTrimmed.startsWith('range(')) {
+              seqVal = evalNonEmpty(`range(${contentTrimmed})`);
+            } else {
+              seqVal = evalNonEmpty(contentTrimmed);
+            }
           }
 
-          const arr = Array.isArray(seqVal)
-            ? seqVal
-            : typeof seqVal === 'number'
-            ? Array.from({ length: Math.max(0, Math.min(seqVal, 100)) }, (_, i) => i)
-            : typeof seqVal === 'string'
-            ? seqVal.split('')
-            : [seqVal];
-
-          // 1. Expose generated sequence in memory scope
-          if (!(seqLabel in scope)) {
-            scope[seqLabel] = arr;
-          }
+          const arr = toIterableArray(seqVal);
 
           for (const item of arr) {
             if (maxSteps <= 0) break;
-            scope[vName] = item;
-            // Record step for loop header cycling on every iteration!
+            if (loopVarNames.length === 1) {
+              currentScope[loopVarNames[0]] = item;
+            } else {
+              const unpacked = toIterableArray(item);
+              if (unpacked.length !== loopVarNames.length) {
+                throw new Error(`ValueError: cannot unpack ${unpacked.length} values into ${loopVarNames.length}`);
+              }
+              loopVarNames.forEach((lv: string, idx: number) => {
+                currentScope[lv] = unpacked[idx];
+              });
+            }
             recordStep(blk);
             if (blk.innerBlocks && blk.innerBlocks.length > 0) {
               const sig = runBlockList(blk.innerBlocks);
               if (sig === 'break') break;
+              if (sig && typeof sig === 'object' && sig.__isReturn) return sig;
             }
           }
         } else if (blk.type === 'while') {
-          const condRaw = (blk.content || '').trim() || 'False';
-          let loopGuard = 100;
-          while (isPythonTruthy(evalExpr(condRaw)) && loopGuard-- > 0) {
+          const condRaw = (blk.content ?? '').trim();
+          if (!condRaw) throw new Error('SyntaxError: invalid syntax');
+          let loopGuard = 200;
+          while (isPythonTruthy(evalNonEmpty(condRaw)) && loopGuard-- > 0) {
             if (--maxSteps <= 0) {
               stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
               break;
             }
-            // Record step for while header cycling on every iteration!
             recordStep(blk);
             if (blk.innerBlocks && blk.innerBlocks.length > 0) {
               const sig = runBlockList(blk.innerBlocks);
               if (sig === 'break') break;
+              if (sig && typeof sig === 'object' && sig.__isReturn) return sig;
             }
           }
         } else if (blk.type === 'if') {
           const branches = (blk.branches && blk.branches.length > 0)
             ? blk.branches
-            : [{ id: 'br-if-0', kind: 'if', condition: blk.content || 'False', innerBlocks: blk.innerBlocks || [] }];
+            : [{ id: 'br-if-0', kind: 'if', condition: blk.content ?? '', innerBlocks: blk.innerBlocks || [] }];
 
           for (const br of branches) {
             const branchStepRef = { id: blk.id, lineIndex: (br as any).lineIndex ?? blk.lineIndex };
@@ -1826,13 +2527,14 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
               if (!rawCond) {
                 throw new Error('SyntaxError: invalid syntax');
               }
-              const cond = isPythonTruthy(evalExpr(rawCond));
+              const cond = isPythonTruthy(evalNonEmpty(rawCond));
               if (cond) {
                 recordStep(branchStepRef);
                 if (br.innerBlocks) {
                   const sig = runBlockList(br.innerBlocks);
                   if (sig === 'break') return 'break';
                   if (sig === 'continue') return 'continue';
+                  if (sig && typeof sig === 'object' && sig.__isReturn) return sig;
                 }
                 break;
               }
@@ -1842,6 +2544,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
                 const sig = runBlockList(br.innerBlocks);
                 if (sig === 'break') return 'break';
                 if (sig === 'continue') return 'continue';
+                if (sig && typeof sig === 'object' && sig.__isReturn) return sig;
               }
               break;
             }
@@ -1881,7 +2584,7 @@ export function evaluateBlocksLocally(blocks: any[], stdin: string = ''): Evalua
   };
 }
 
-// Lightweight AST parser for Python code in Typing Mode (preserves lineIndex, branches, and loops)
+// Lightweight AST parser for Python code in Typing Mode (preserves lineIndex, branches, loops, and functions)
 export function parsePythonCodeToBlocks(code: string): any[] {
   const rawLines = code.replace(/\r\n/g, '\n').split('\n');
   let i = 0;
@@ -1910,7 +2613,6 @@ export function parsePythonCodeToBlocks(code: string): any[] {
       const codeOnly = stripPythonComment(line);
       const trimmed = codeOnly.trim();
 
-      // Skip blank lines and pure comments
       if (!trimmed) {
         i++;
         continue;
@@ -1918,7 +2620,7 @@ export function parsePythonCodeToBlocks(code: string): any[] {
 
       const indent = getIndent(line);
       if (indent < minIndent) {
-        break; // Return back to parent indentation level
+        break;
       }
       if (blockIndent === undefined) {
         blockIndent = indent;
@@ -1929,12 +2631,11 @@ export function parsePythonCodeToBlocks(code: string): any[] {
       const lineIndex = i;
       i++;
 
-      // Catch orphan elif / else or malformed headers
       if (/^(?:elif|else)\b/.test(trimmed)) {
         throw new Error('SyntaxError: invalid syntax');
       }
-      if (/^(?:if|for|while)\b/.test(trimmed) && !trimmed.endsWith(':')) {
-        throw new Error('SyntaxError: expected \':\'');
+      if (/^(?:if|for|while|def)\b/.test(trimmed) && !trimmed.endsWith(':')) {
+        throw new Error("SyntaxError: expected ':'");
       }
 
       if (trimmed === 'pass') {
@@ -1950,8 +2651,50 @@ export function parsePythonCodeToBlocks(code: string): any[] {
         continue;
       }
 
-      // 1. for loop: for <var> in <range/seq>:
-      const forMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*)\s+in\s+([\s\S]+?)\s*:$/);
+      // 0. def function: def <name>(<params>):
+      const defMatch = trimmed.match(/^def\s+([a-zA-Z_]\w*)\s*\(([\s\S]*)\)\s*:$/);
+      if (defMatch) {
+        const inner = parseBlock(indent + 1);
+        if (inner.length === 0) {
+          throw new Error('IndentationError: expected an indented block');
+        }
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'def',
+          varName: defMatch[1],
+          content: defMatch[2].trim(),
+          lineIndex,
+          innerBlocks: inner,
+        });
+        continue;
+      }
+
+      // 0b. return statement
+      const retMatch = trimmed.match(/^return(?:\s+([\s\S]+))?$/);
+      if (retMatch) {
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'return',
+          content: (retMatch[1] || '').trim(),
+          lineIndex,
+        });
+        continue;
+      }
+
+      // 0c. del statement
+      const delMatch = trimmed.match(/^del\s+([\s\S]+)$/);
+      if (delMatch) {
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'del',
+          content: delMatch[1].trim(),
+          lineIndex,
+        });
+        continue;
+      }
+
+      // 1. for loop: for <var(s)> in <range/seq>:
+      const forMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s+in\s+([\s\S]+?)\s*:$/);
       if (forMatch) {
         const inner = parseBlock(indent + 1);
         if (inner.length === 0) {
@@ -2083,21 +2826,55 @@ export function parsePythonCodeToBlocks(code: string): any[] {
         continue;
       }
 
-      // 5. Compound assignment: x += 10, hp -= 5, a *= 2, n /= 4, n //= 2, n %= 3, n **= 2
-      const compoundMatch = trimmed.match(/^([^=+\-*/%]+?)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*([\s\S]*)$/);
-      if (compoundMatch) {
+      // 5. Compound assignment (including indexed LHS like d["k"] += 1 or nums[0] += 5)
+      let compOpPos = -1;
+      let compOpStr = '';
+      {
+        let q: string | null = null;
+        let p = 0, b = 0, c = 0;
+        for (let k = 0; k < trimmed.length; k++) {
+          const ch = trimmed[k];
+          if (q) {
+            if (ch === '\\' && k + 1 < trimmed.length) { k++; continue; }
+            if (ch === q) q = null;
+            continue;
+          }
+          if (ch === '"' || ch === "'") { q = ch; continue; }
+          if (ch === '(') p++;
+          else if (ch === ')') p = Math.max(0, p - 1);
+          else if (ch === '[') b++;
+          else if (ch === ']') b = Math.max(0, b - 1);
+          else if (ch === '{') c++;
+          else if (ch === '}') c = Math.max(0, c - 1);
+          else if (p === 0 && b === 0 && c === 0) {
+            const three = trimmed.slice(k, k + 3);
+            const two = trimmed.slice(k, k + 2);
+            if (three === '//=' || three === '**=') {
+              compOpPos = k;
+              compOpStr = three;
+              break;
+            }
+            if (['+=', '-=', '*=', '/=', '%='].includes(two)) {
+              compOpPos = k;
+              compOpStr = two;
+              break;
+            }
+          }
+        }
+      }
+      if (compOpPos > 0) {
         list.push({
           id: `py-line-${lineIndex}`,
           type: 'variable',
-          varName: compoundMatch[1].trim(),
-          assignOp: compoundMatch[2],
-          content: compoundMatch[3].trim(),
+          varName: trimmed.slice(0, compOpPos).trim(),
+          assignOp: compOpStr,
+          content: trimmed.slice(compOpPos + compOpStr.length).trim(),
           lineIndex,
         });
         continue;
       }
 
-      // 6. Standard or multiple assignment: x = 10 or a, b = 10, 20
+      // 6. Standard, multiple, or indexed assignment: x = 10, a, b = 10, 20, nums[0] = 99
       const eqIdx = findStandaloneAssignIndex(trimmed);
       if (eqIdx > 0) {
         list.push({
@@ -2111,7 +2888,7 @@ export function parsePythonCodeToBlocks(code: string): any[] {
         continue;
       }
 
-      // 7. Generic expression statement / method call (e.g. my_list.append(10))
+      // 7. Generic expression statement / method call / user function call
       list.push({
         id: `py-line-${lineIndex}`,
         type: 'variable',
@@ -2128,7 +2905,7 @@ export function parsePythonCodeToBlocks(code: string): any[] {
   return parseBlock(0, 0);
 }
 
-// Local python evaluator for simple, conditional & loop typing mode lines
+// Local python evaluator for simple, conditional, loop & function typing mode lines
 export function evaluatePythonLocally(code: string, stdin: string = ''): EvaluationResult {
   try {
     const blocks = parsePythonCodeToBlocks(code);
@@ -2187,4 +2964,3 @@ export function getOrderedCanvasBlocks<T extends { id: string; type: string; nex
 
   return ordered;
 }
-

@@ -188,6 +188,7 @@ export const SvgBottomClosingArm: React.FC<{
         display: 'flex',
         alignItems: 'center',
         paddingLeft: (extraButtons || (isDef && hasReturn)) ? `${notchLeft + 24}px` : '0px',
+        paddingRight: (isDef && hasReturn) ? '10px' : '0px',
         gap: '4px',
         whiteSpace: 'nowrap',
         zIndex: 2,
@@ -226,7 +227,7 @@ export const SvgBottomClosingArm: React.FC<{
             onPointerDown={(e) => e.stopPropagation()}
             onChange={(e) => onDefReturnValChange?.(e.target.value)}
             style={{
-              width: '60px',
+              width: `${Math.max(46, Math.round((returnVal?.length || 1) * 7.5 + 14))}px`,
               height: '18px',
               padding: '1px 5px',
               borderRadius: '4px',

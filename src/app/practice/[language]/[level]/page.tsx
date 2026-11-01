@@ -101,6 +101,7 @@ type BlockType =
   | 'reversed'
   | 'def'
   | 'return'
+  | 'call'
   // 메서드
   | 'method'
   // 반복 (루프)
@@ -204,6 +205,7 @@ const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: stri
   reversed: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
+  call: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
 
   // 메서드 (보라/바이올렛 계열)
   method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
@@ -494,7 +496,7 @@ function splitTopLevelArgs(str: string): string[] {
  * Builds the initial canvas block stack (Start block + pre-placed skeleton blocks) for Block Mode questions.
  * Uses explicit question.initialBlocks if specified, otherwise derives clean empty-slot blocks from question.targetCode.
  */
-function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
+function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: string[]): CanvasBlock[] {
   const startBlock: CanvasBlock = {
     ...createDefaultStartBlock(),
     zIndex: 30,
@@ -508,6 +510,16 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
   ) {
     return [startBlock];
   }
+
+  const isPaletteAllowed = (paletteKey: string): boolean =>
+    !unlockedList || unlockedList.length === 0 || unlockedList.includes(paletteKey);
+
+  const paletteKeyForFn = (fn: string): string => {
+    if (['type', 'int', 'float', 'str', 'bool'].includes(fn)) return 'type';
+    if (['len', 'round', 'abs', 'sum', 'min', 'max'].includes(fn)) return 'math';
+    if (['enumerate', 'zip', 'all', 'any', 'reversed'].includes(fn)) return 'iter';
+    return fn;
+  };
 
   const derived: CanvasBlock[] = [];
   const extraMethodBlocks: CanvasBlock[] = [];
@@ -565,10 +577,143 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
       return rawLine;
     };
 
+    const isWrappedBy = (s: string, openCh: string, closeCh: string): { wraps: boolean; hasTopComma: boolean; hasTopColon: boolean } => {
+      if (!s.startsWith(openCh) || !s.endsWith(closeCh)) {
+        return { wraps: false, hasTopComma: false, hasTopColon: false };
+      }
+      let depth = 0;
+      let p = 0, b = 0, c = 0;
+      let q: string | null = null;
+      let hasTopComma = false;
+      let hasTopColon = false;
+      for (let k = 0; k < s.length; k++) {
+        const ch = s[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < s.length) { k++; continue; }
+          if (ch === q) q = null;
+          continue;
+        }
+        if (ch === '"' || ch === "'") { q = ch; continue; }
+        if (ch === openCh) depth++;
+        else if (ch === closeCh) {
+          depth--;
+          if (depth === 0 && k < s.length - 1) {
+            return { wraps: false, hasTopComma: false, hasTopColon: false };
+          }
+        }
+        if (ch === '(') p++;
+        else if (ch === ')') p = Math.max(0, p - 1);
+        else if (ch === '[') b++;
+        else if (ch === ']') b = Math.max(0, b - 1);
+        else if (ch === '{') c++;
+        else if (ch === '}') c = Math.max(0, c - 1);
+        else if (
+          depth === 1 &&
+          ((openCh === '(' && p === 1 && b === 0 && c === 0) ||
+            (openCh === '[' && b === 1 && p === 0 && c === 0) ||
+            (openCh === '{' && c === 1 && p === 0 && b === 0))
+        ) {
+          if (ch === ',') hasTopComma = true;
+          if (ch === ':') hasTopColon = true;
+        }
+      }
+      return { wraps: depth === 0 && !q, hasTopComma, hasTopColon };
+    };
+
+    const findStandaloneEq = (line: string): number => {
+      let q: string | null = null;
+      let p = 0, b = 0, c = 0;
+      for (let k = 0; k < line.length; k++) {
+        const ch = line[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < line.length) { k++; continue; }
+          if (ch === q) q = null;
+          continue;
+        }
+        if (ch === '"' || ch === "'") { q = ch; continue; }
+        if (ch === '(') p++;
+        else if (ch === ')') p = Math.max(0, p - 1);
+        else if (ch === '[') b++;
+        else if (ch === ']') b = Math.max(0, b - 1);
+        else if (ch === '{') c++;
+        else if (ch === '}') c = Math.max(0, c - 1);
+        else if (p === 0 && b === 0 && c === 0 && ch === '=') {
+          const prev = k > 0 ? line[k - 1] : '';
+          const next = k + 1 < line.length ? line[k + 1] : '';
+          if (next !== '=' && !/[!<>=+\-*/%]/.test(prev)) return k;
+        }
+      }
+      return -1;
+    };
+
+    const findCompoundOp = (line: string): { pos: number; op: AssignOperator } | null => {
+      let q: string | null = null;
+      let p = 0, b = 0, c = 0;
+      for (let k = 0; k < line.length; k++) {
+        const ch = line[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < line.length) { k++; continue; }
+          if (ch === q) q = null;
+          continue;
+        }
+        if (ch === '"' || ch === "'") { q = ch; continue; }
+        if (ch === '(') p++;
+        else if (ch === ')') p = Math.max(0, p - 1);
+        else if (ch === '[') b++;
+        else if (ch === ']') b = Math.max(0, b - 1);
+        else if (ch === '{') c++;
+        else if (ch === '}') c = Math.max(0, c - 1);
+        else if (p === 0 && b === 0 && c === 0) {
+          const three = line.slice(k, k + 3);
+          const two = line.slice(k, k + 2);
+          if (three === '//=') return { pos: k, op: '//=' };
+          if (['+=', '-=', '*=', '/=', '%='].includes(two)) return { pos: k, op: two as AssignOperator };
+        }
+      }
+      return null;
+    };
+
+    const matchPostfixMethod = (s: string): { receiver: string; methodName: string } | null => {
+      if (!s.endsWith(')')) return null;
+      let q: string | null = null;
+      let p = 0, b = 0, c = 0;
+      let lastOpenParen = -1;
+      for (let k = 0; k < s.length; k++) {
+        const ch = s[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < s.length) { k++; continue; }
+          if (ch === q) q = null;
+          continue;
+        }
+        if (ch === '"' || ch === "'") { q = ch; continue; }
+        if (ch === '[') b++;
+        else if (ch === ']') b = Math.max(0, b - 1);
+        else if (ch === '{') c++;
+        else if (ch === '}') c = Math.max(0, c - 1);
+        else if (ch === '(') {
+          if (p === 0 && b === 0 && c === 0) lastOpenParen = k;
+          p++;
+        } else if (ch === ')') {
+          p--;
+          if (p < 0) return null;
+        }
+      }
+      if (p !== 0 || q || lastOpenParen <= 0) return null;
+      const prefix = s.slice(0, lastOpenParen).trimEnd();
+      const dm = prefix.match(/^([\s\S]+)\.\s*([a-zA-Z_]\w*)$/);
+      if (!dm) return null;
+      const rec = dm[1].trim();
+      if (!rec || /^[+-]?\d+$/.test(rec)) return null;
+      return { receiver: rec, methodName: dm[2] };
+    };
+
     const matchSingleCall = (expr: string): { fn: BlockType; inner: string } | null => {
       const s = expr.trim();
-      const m = s.match(/^(type|int|float|str|bool|input|len)\s*\(/);
+      const m = s.match(
+        /^(type|int|float|str|bool|input|len|round|abs|sum|min|max|range|sorted|reversed|all|any|enumerate|zip|map)\s*\(/
+      );
       if (!m) return null;
+      if (!isPaletteAllowed(paletteKeyForFn(m[1]))) return null;
       const openIdx = s.indexOf('(');
       let depth = 0;
       let q: string | null = null;
@@ -601,31 +746,41 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
       const s = exprRaw.trim();
       if (!s) return undefined;
 
-      // Support <call>.split(...) -> argBlock with horizontally attached .split() method block
-      const splitMatch = s.match(/^([\s\S]+)\.split\s*\(([^()]*)\)$/);
-      if (splitMatch) {
-        const baseBlk = tryBuildArgBlock(splitMatch[1].trim());
-        if (baseBlk) {
-          const mId = nextId('method');
-          baseBlk.attachedMethodId = mId;
-          extraMethodBlocks.push({
-            id: mId,
-            type: 'method',
-            methodName: 'split',
-            content: '',
-            attachedToBlockId: baseBlk.id,
-            x: 180,
-            y: 66,
-            zIndex: 25,
-          });
-          return baseBlk;
+      if (isPaletteAllowed('method')) {
+        const mCall = matchPostfixMethod(s);
+        if (mCall) {
+          let baseBlk = tryBuildArgBlock(mCall.receiver);
+          if (!baseBlk && /^[a-zA-Z_]\w*$/.test(mCall.receiver) && isPaletteAllowed('variable')) {
+            baseBlk = {
+              id: nextId('var'),
+              type: 'variable',
+              varName: '',
+              content: '',
+              x: 0,
+              y: 0,
+            };
+          }
+          if (baseBlk) {
+            const mId = nextId('method');
+            baseBlk.attachedMethodId = mId;
+            extraMethodBlocks.push({
+              id: mId,
+              type: 'method',
+              methodName: mCall.methodName,
+              content: '',
+              attachedToBlockId: baseBlk.id,
+              x: 180,
+              y: 66,
+              zIndex: 25,
+            });
+            return baseBlk;
+          }
         }
       }
 
       const call = matchSingleCall(s);
       if (!call) return undefined;
       const callArgs = splitTopLevelArgs(call.inner);
-      if (callArgs.length > 1) return undefined;
       const nestedArg = callArgs.length === 1 ? tryBuildArgBlock(callArgs[0]) : undefined;
       return {
         id: nextId(call.fn),
@@ -665,6 +820,118 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
             y: 66,
           });
           i++;
+          continue;
+        }
+
+        if (trimmed === 'break' && isPaletteAllowed('break')) {
+          suiteBlocks.push({ id: nextId('break'), type: 'break', x: 40, y: 66 });
+          i++;
+          continue;
+        }
+
+        if (trimmed === 'continue' && isPaletteAllowed('continue')) {
+          suiteBlocks.push({ id: nextId('continue'), type: 'continue', x: 40, y: 66 });
+          i++;
+          continue;
+        }
+
+        const retMatch = trimmed.match(/^return(?:\s+([\s\S]+))?$/);
+        if (retMatch && isPaletteAllowed('def')) {
+          suiteBlocks.push({
+            id: nextId('return'),
+            type: 'return',
+            content: '',
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        const defMatch = trimmed.match(/^def\s+([a-zA-Z_]\w*)\s*\(([\s\S]*)\)\s*:$/);
+        if (defMatch && isPaletteAllowed('def')) {
+          const bodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const defBody = parseSuite(i + 1, bodyIndent);
+          const innerBlocks = [...defBody.blocks];
+          let hasReturn = false;
+          if (innerBlocks.length > 0 && innerBlocks[innerBlocks.length - 1].type === 'return') {
+            innerBlocks.pop();
+            hasReturn = true;
+          }
+          suiteBlocks.push({
+            id: nextId('def'),
+            type: 'def',
+            varName: '',
+            content: '',
+            innerBlocks,
+            hasReturn: hasReturn ? true : undefined,
+            returnVal: hasReturn ? '' : undefined,
+            x: 40,
+            y: 66,
+          });
+          i = defBody.nextIdx;
+          continue;
+        }
+
+        const forRangeMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s+in\s+range\s*\(([\s\S]*)\)\s*:$/);
+        if (forRangeMatch && isPaletteAllowed('for_range')) {
+          const bodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const loopBody = parseSuite(i + 1, bodyIndent);
+          suiteBlocks.push({
+            id: nextId('for-range'),
+            type: 'for_range',
+            varName: '',
+            content: '',
+            argBlock: isPaletteAllowed('range')
+              ? { id: nextId('range'), type: 'range', content: '', x: 0, y: 0 }
+              : undefined,
+            innerBlocks: loopBody.blocks,
+            x: 40,
+            y: 66,
+          });
+          i = loopBody.nextIdx;
+          continue;
+        }
+
+        const forInMatch = trimmed.match(/^for\s+([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s+in\s+([\s\S]+?)\s*:$/);
+        if (forInMatch && isPaletteAllowed('for_in')) {
+          const bodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const loopBody = parseSuite(i + 1, bodyIndent);
+          suiteBlocks.push({
+            id: nextId('for-in'),
+            type: 'for_in',
+            varName: '',
+            content: '',
+            argBlock: tryBuildArgBlock(forInMatch[2].trim()),
+            innerBlocks: loopBody.blocks,
+            x: 40,
+            y: 66,
+          });
+          i = loopBody.nextIdx;
+          continue;
+        }
+
+        const whileMatch = trimmed.match(/^while\s+([\s\S]+?)\s*:$/);
+        if (whileMatch && isPaletteAllowed('while')) {
+          const bodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
+            ? parsedLines[i + 1].indent
+            : indent + 4;
+          const loopBody = parseSuite(i + 1, bodyIndent);
+          suiteBlocks.push({
+            id: nextId('while'),
+            type: 'while',
+            content: '',
+            innerBlocks: loopBody.blocks,
+            x: 40,
+            y: 66,
+          });
+          i = loopBody.nextIdx;
           continue;
         }
 
@@ -748,16 +1015,15 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
           continue;
         }
 
-        // Compound assignment: defaults pre-placed variable block operator to the target compound operator
-        const compoundMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=)\s*([\s\S]+)$/);
-        if (compoundMatch) {
-          const rhsExpr = compoundMatch[3].trim();
+        const compOp = findCompoundOp(trimmed);
+        if (compOp && compOp.pos > 0) {
+          const rhsExpr = trimmed.slice(compOp.pos + compOp.op.length).trim();
           const rhsArgBlk = tryBuildArgBlock(rhsExpr);
           suiteBlocks.push({
             id: nextId('var'),
             type: 'variable',
             varName: '',
-            assignOp: compoundMatch[2] as AssignOperator,
+            assignOp: compOp.op,
             content: '',
             argBlock: rhsArgBlk,
             x: 40,
@@ -767,10 +1033,76 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
           continue;
         }
 
-        // Single or multiple assignment: x = 10, a, b = 10, 20, a, b = input().split()
-        const assignMatch = trimmed.match(/^([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s*=(?!=)\s*([\s\S]+)$/);
-        if (assignMatch) {
-          const rhsExpr = assignMatch[2].trim();
+        const eqIdx = findStandaloneEq(trimmed);
+        if (eqIdx > 0) {
+          const lhsExpr = trimmed.slice(0, eqIdx).trim();
+          const rhsExpr = trimmed.slice(eqIdx + 1).trim();
+          const isSimpleVar = /^[a-zA-Z_]\w*$/.test(lhsExpr);
+
+          if (isSimpleVar && isPaletteAllowed('variable')) {
+            const listWrap = isWrappedBy(rhsExpr, '[', ']');
+            if (listWrap.wraps) {
+              const inner = rhsExpr.slice(1, -1).trim();
+              const itemSlots = inner ? splitTopLevelArgs(inner).map(() => '') : [''];
+              suiteBlocks.push({
+                id: nextId('list'),
+                type: 'list',
+                varName: '',
+                items: itemSlots,
+                x: 40,
+                y: 66,
+              });
+              i++;
+              continue;
+            }
+
+            const tupleWrap = isWrappedBy(rhsExpr, '(', ')');
+            if (rhsExpr === '()' || (tupleWrap.wraps && tupleWrap.hasTopComma)) {
+              const inner = rhsExpr.slice(1, -1).trim();
+              const itemSlots = inner ? splitTopLevelArgs(inner).map(() => '') : [''];
+              suiteBlocks.push({
+                id: nextId('tuple'),
+                type: 'tuple',
+                varName: '',
+                items: itemSlots,
+                x: 40,
+                y: 66,
+              });
+              i++;
+              continue;
+            }
+
+            const braceWrap = isWrappedBy(rhsExpr, '{', '}');
+            if (braceWrap.wraps) {
+              const inner = rhsExpr.slice(1, -1).trim();
+              if (!inner || braceWrap.hasTopColon) {
+                const pairSlots = inner
+                  ? splitTopLevelArgs(inner).map(() => ({ key: '', value: '' }))
+                  : [{ key: '', value: '' }];
+                suiteBlocks.push({
+                  id: nextId('dict'),
+                  type: 'dict',
+                  varName: '',
+                  dictPairs: pairSlots,
+                  x: 40,
+                  y: 66,
+                });
+              } else {
+                const itemSlots = splitTopLevelArgs(inner).map(() => '');
+                suiteBlocks.push({
+                  id: nextId('set'),
+                  type: 'set',
+                  varName: '',
+                  items: itemSlots,
+                  x: 40,
+                  y: 66,
+                });
+              }
+              i++;
+              continue;
+            }
+          }
+
           const rhsArgBlk = tryBuildArgBlock(rhsExpr);
           suiteBlocks.push({
             id: nextId('var'),
@@ -778,6 +1110,60 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
             varName: '',
             content: '',
             argBlock: rhsArgBlk,
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        const stmtMethod = matchPostfixMethod(trimmed);
+        if (stmtMethod && /^[a-zA-Z_]\w*$/.test(stmtMethod.receiver) && isPaletteAllowed('method') && isPaletteAllowed('variable')) {
+          const hostId = nextId('var');
+          const mId = nextId('method');
+          suiteBlocks.push({
+            id: hostId,
+            type: 'variable',
+            varName: '',
+            content: '',
+            attachedMethodId: mId,
+            x: 40,
+            y: 66,
+          });
+          extraMethodBlocks.push({
+            id: mId,
+            type: 'method',
+            methodName: stmtMethod.methodName,
+            content: '',
+            attachedToBlockId: hostId,
+            x: 180,
+            y: 66,
+            zIndex: 25,
+          });
+          i++;
+          continue;
+        }
+
+        const singleBuiltin = matchSingleCall(trimmed);
+        if (singleBuiltin) {
+          suiteBlocks.push({
+            id: nextId(singleBuiltin.fn),
+            type: singleBuiltin.fn,
+            content: '',
+            x: 40,
+            y: 66,
+          });
+          i++;
+          continue;
+        }
+
+        const userCallMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*\(([\s\S]*)\)$/);
+        if (userCallMatch && isPaletteAllowed('def')) {
+          suiteBlocks.push({
+            id: nextId('call'),
+            type: 'call',
+            varName: '',
+            content: '',
             x: 40,
             y: 66,
           });
@@ -800,7 +1186,6 @@ function createInitialCanvasBlocks(question?: PracticeQuestion): CanvasBlock[] {
     });
     extraMethodBlocks.forEach((mb) => derived.push(mb));
   }
-
   const stackBlocks = derived.filter((b) => !b.attachedToBlockId);
   if (stackBlocks.length === 0) {
     return [startBlock, ...derived];
@@ -1179,7 +1564,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
 
   // Drag and Drop Canvas Blocks: Starts with Start Block + pre-placed skeleton blocks for Block Mode
   const [canvasBlocks, setCanvasBlocks] = useState<CanvasBlock[]>(() =>
-    createInitialCanvasBlocks(round.questions[initialStep] || round.questions[0])
+    createInitialCanvasBlocks(round.questions[initialStep] || round.questions[0], unlockedBlocks)
   );
   const [draggedBlockType, setDraggedBlockType] = useState<BlockType | null>(null);
   const [isDraggingBlock, setIsDraggingBlock] = useState<boolean>(false);
@@ -1286,7 +1671,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     setIsExecuting(false);
     lastExecutedCodeRef.current = '';
     setActiveInputHelp(null);
-    setCanvasBlocks(createInitialCanvasBlocks(currentQuestion));
+    setCanvasBlocks(createInitialCanvasBlocks(currentQuestion, unlockedBlocks));
     setUserCode('');
     setSelectedChoiceIndex(null);
     setTerminalOutput('');
@@ -1516,6 +1901,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           const vName = (b.varName || 'x').trim();
           return `${vName}${chain}`;
         }
+        if (b.type === 'call') {
+          const fnName = (b.varName || '').trim();
+          const inner = b.argBlock ? generateExpression(b.argBlock) : (b.content || '').trim();
+          return `${fnName}(${inner})${chain}`;
+        }
         return `${(b.content || '').trim()}${chain}`;
       };
 
@@ -1612,6 +2002,10 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       } else if (blk.type === 'return') {
         const content = (blk.content || '').trim();
         out.push(`${indentStr}return ${content}`);
+      } else if (blk.type === 'call') {
+        const fnName = (blk.varName || '').trim();
+        const inner = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
+        out.push(`${indentStr}${fnName}(${inner})${mSuffix}`);
       } else if (blk.type === 'for_range' || blk.type === 'for_in') {
         const v = (blk.varName || (blk.type === 'for_range' ? 'i' : 'item')).trim();
         const defaultSeq = blk.type === 'for_range' ? 'range(5)' : 'items';
@@ -1741,6 +2135,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
               fullValue: fullSeq,
               type: valType,
             });
+          } else if ((val as any).__isTuple) {
+            const tupleStr = val.length === 1
+              ? `(${typeof val[0] === 'string' ? `'${val[0]}'` : String(val[0])},)`
+              : `(${val.map((v: any) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')})`;
+            varMap.set(varName, { value: tupleStr, fullValue: tupleStr, type: 'tuple' });
           } else {
             // User-created list: separate into individual memory cells: lst[0], lst[1], ...
             if (val.length === 0) {
@@ -1783,6 +2182,9 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         } else if (typeof val === 'boolean') {
           valType = 'bool';
           cleanVal = val ? 'True' : 'False';
+        } else if (val instanceof Set) {
+          valType = 'set';
+          cleanVal = val.size === 0 ? 'set()' : `{${Array.from(val).map((v: any) => (typeof v === 'string' ? `'${v}'` : String(v))).join(', ')}}`;
         } else if (typeof val === 'object' && val !== null) {
           valType = 'dict';
           cleanVal = JSON.stringify(val);
@@ -1829,7 +2231,8 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             });
           }
         } else if (b.type === 'list') {
-          const vName = (b.varName || 'my_list').trim();
+          const vName = (b.varName ?? 'my_list').trim();
+          if (!vName) continue;
           const items = (b.items || []).filter((i) => i.trim().length > 0);
           if (items.length === 0) {
             varMap.set(vName, { value: '[]', fullValue: '[]', type: 'list' });
@@ -1854,19 +2257,20 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             });
           }
         } else if (b.type === 'tuple') {
-          const vName = (b.varName || 'my_tuple').trim();
+          const vName = (b.varName ?? 'my_tuple').trim();
           if (vName && !varMap.has(vName)) {
             const items = (b.items || []).filter((i) => i.trim().length > 0).join(', ');
             varMap.set(vName, { value: `(${items})`, fullValue: `(${items})`, type: 'tuple' });
           }
         } else if (b.type === 'dict') {
-          const vName = (b.varName || 'my_dict').trim();
+          const vName = (b.varName ?? 'my_dict').trim();
           if (vName && !varMap.has(vName)) {
             varMap.set(vName, { value: '{...}', fullValue: '{...}', type: 'dict' });
           }
         } else if (b.type === 'for_range') {
-          const vName = (b.varName || 'i').trim();
-          const rangeArg = (b.content || '5').trim();
+          const vName = (b.varName ?? 'i').trim();
+          const rangeArg = (b.argBlock ? (b.argBlock.content ?? '') : (b.content ?? '')).trim();
+          if (!vName && !rangeArg) continue;
           const rangeLabel = `range(${rangeArg})`;
           const numbers = evaluateRangeString(rangeArg, runtimeMemory);
           const fullSeqStr = `[${numbers.join(', ')}]`;
@@ -1890,7 +2294,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             });
           }
         } else if (b.type === 'for_in') {
-          const vName = (b.varName || 'item').trim();
+          const vName = (b.varName ?? 'item').trim();
           if (vName && !varMap.has(vName)) {
             varMap.set(vName, { value: '-', fullValue: '-', type: 'item' });
           }
@@ -2143,13 +2547,47 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         let hasLogicOp = false;
         let hasNewlineEscape = false;
         let hasTabEscape = false;
+        let hasFString = false;
 
         for (const rawLine of src.split('\n')) {
           let line = '';
+          let fInterpolations = '';
           let q: string | null = null;
+          let inFStr = false;
           for (let i = 0; i < rawLine.length; i++) {
             const ch = rawLine[i];
             if (q) {
+              if (inFStr && ch === '{') {
+                if (rawLine[i + 1] === '{') {
+                  i++;
+                  continue;
+                }
+                let braceDepth = 1;
+                let k = i + 1;
+                let iq: string | null = null;
+                while (k < rawLine.length && braceDepth > 0) {
+                  const kc = rawLine[k];
+                  if (iq) {
+                    if (kc === '\\' && k + 1 < rawLine.length) { k += 2; continue; }
+                    if (kc === iq) iq = null;
+                  } else if (kc === '"' || kc === "'") {
+                    iq = kc;
+                  } else if (kc === '{') braceDepth++;
+                  else if (kc === '}') {
+                    braceDepth--;
+                    if (braceDepth === 0) break;
+                  }
+                  k++;
+                }
+                if (braceDepth === 0) {
+                  const rawField = rawLine.slice(i + 1, k);
+                  const colonIdx = rawField.indexOf(':');
+                  const exprPart = (colonIdx >= 0 ? rawField.slice(0, colonIdx) : rawField).trim();
+                  if (exprPart) fInterpolations += ` (${exprPart}) `;
+                  i = k;
+                  continue;
+                }
+              }
               if (ch === '\\' && i + 1 < rawLine.length) {
                 const next = rawLine[i + 1];
                 if (next === 'n') hasNewlineEscape = true;
@@ -2157,16 +2595,38 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                 i++;
                 continue;
               }
-              if (ch === q) q = null;
+              if (ch === q) {
+                q = null;
+                inFStr = false;
+              }
               continue;
+            }
+            if ((ch === 'f' || ch === 'F') && (rawLine[i + 1] === '"' || rawLine[i + 1] === "'")) {
+              const prevCh = i > 0 ? rawLine[i - 1] : ' ';
+              if (!/[a-zA-Z0-9_]/.test(prevCh)) {
+                hasFString = true;
+                inFStr = true;
+                q = rawLine[i + 1];
+                line += '""';
+                i++;
+                continue;
+              }
             }
             if (ch === '"' || ch === "'") {
               q = ch;
+              inFStr = false;
               line += '""';
               continue;
             }
             if (ch === '#') break;
             line += ch;
+          }
+          if (fInterpolations) {
+            for (const w of fInterpolations.match(/\b[a-zA-Z_]\w*\b/g) || []) {
+              readVars.add(w);
+              tokens.add(w);
+            }
+            if (/[+\-*/%]/.test(fInterpolations)) hasArithOp = true;
           }
 
           const trimmed = line.trim();
@@ -2224,6 +2684,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
           hasLogicOp,
           hasNewlineEscape,
           hasTabEscape,
+          hasFString,
         };
       };
 
@@ -2243,6 +2704,11 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
       if (usesInput && !user.tokens.has('input')) return false;
       if (target.tokens.has('type') && !user.tokens.has('type')) return false;
       if (target.tokens.has('if') && !user.tokens.has('if')) return false;
+      if (target.tokens.has('for') && !user.tokens.has('for')) return false;
+      if (target.tokens.has('while') && !user.tokens.has('while')) return false;
+      if (target.tokens.has('def') && !user.tokens.has('def')) return false;
+      if (target.tokens.has('return') && !user.tokens.has('return')) return false;
+      if (target.hasFString && !user.hasFString) return false;
       if (target.hasCompoundOp && !user.hasCompoundOp) return false;
       if (target.hasNewlineEscape && !user.hasNewlineEscape) return false;
       if (target.hasTabEscape && !user.hasTabEscape) return false;
@@ -2265,7 +2731,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
     if (!trimmedUser) return false;
 
     // 3. Unfilled blank placeholder check: § or legacy brackets
-    if (trimmedUser.includes('§') || /\[\s*(?:|\?|___|빈칸)\s*\]/.test(trimmedUser)) {
+    if (trimmedUser.includes('§') || /\[\s*(?:\?|___|빈칸)\s*\]/.test(trimmedUser)) {
       return false;
     }
 
@@ -3072,6 +3538,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
             b.type === 'tuple' ||
             b.type === 'sorted' ||
             b.type === 'variable' ||
+            b.type === 'call' ||
             b.type === 'method';
           if (canAcceptMethod) {
             candidates.push(b);
@@ -3531,7 +3998,7 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
         bType === 'variable' ? 'x' :
           bType === 'for_range' ? 'i' :
             bType === 'for_in' ? 'item' :
-              bType === 'def' ? 'my_func' : undefined
+              (bType === 'def' || bType === 'call') ? 'my_func' : undefined
       );
       const isLoopOrDef = bType === 'for_range' || bType === 'for_in' || bType === 'while' || bType === 'def';
       const isIf = bType === 'if';
@@ -6752,6 +7219,72 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                     <SvgBottomClosingArm theme={BLOCK_THEMES.def} />
                   </div>
                 )}
+
+                {/* 함수 호출 call 블록 */}
+                {isBlockUnlocked('def') && (
+                  <div
+                    draggable
+                    onDragStart={(e) => handleDragStartFromToolbox(e, 'call')}
+                    style={{
+                      display: 'inline-flex',
+                      width: 'fit-content',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px',
+                      background: BLOCK_THEMES.call.bg,
+                      boxShadow: `0 2px 0 ${BLOCK_THEMES.call.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                      border: `1px solid ${BLOCK_THEMES.call.border}`,
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      fontFamily: 'var(--font-mono)',
+                      cursor: 'grab',
+                      userSelect: 'none',
+                      position: 'relative',
+                    }}
+                    title="정의한 함수를 이름으로 호출하는 블록 (예: my_func(10))"
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.call.border} />
+                    <PuzzleTab borderColor={BLOCK_THEMES.call.border} bg={BLOCK_THEMES.call.bg} />
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>my_func</span>
+                    <span>(</span>
+                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                    <span>)</span>
+                  </div>
+                )}
+
+                {/* return 반환 블록 */}
+                {isBlockUnlocked('def') && (
+                  <div
+                    draggable
+                    onDragStart={(e) => handleDragStartFromToolbox(e, 'return')}
+                    style={{
+                      display: 'inline-flex',
+                      width: 'fit-content',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '5px 10px',
+                      borderRadius: '6px',
+                      background: BLOCK_THEMES.return.bg,
+                      boxShadow: `0 2px 0 ${BLOCK_THEMES.return.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
+                      border: `1px solid ${BLOCK_THEMES.return.border}`,
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.80rem',
+                      fontFamily: 'var(--font-mono)',
+                      cursor: 'grab',
+                      userSelect: 'none',
+                      position: 'relative',
+                    }}
+                    title="return 결과값 반환 블록 (함수 내부에서 사용)"
+                  >
+                    <PuzzleNotch borderColor={BLOCK_THEMES.return.border} />
+                    <PuzzleTab borderColor={BLOCK_THEMES.return.border} bg={BLOCK_THEMES.return.bg} />
+                    <span>return</span>
+                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
+                  </div>
+                )}
               </div>
             )}
 
@@ -7637,8 +8170,19 @@ export default function PracticePage({ params, searchParams }: PracticePageProps
                   .filter((block) => {
                     // Do not render blocks that are attached horizontally to an argBlock (they render inside the arg slot)
                     if (block.attachedToBlockId) {
-                      const isRootCanvasBlock = canvasBlocks.some((b) => b.id === block.attachedToBlockId);
-                      if (!isRootCanvasBlock) return false;
+                      let rootHostId: string | undefined = block.attachedToBlockId;
+                      const seenH = new Set<string>();
+                      while (rootHostId && !seenH.has(rootHostId)) {
+                        seenH.add(rootHostId);
+                        const h = canvasBlocks.find((b) => b.id === rootHostId);
+                        if (!h) {
+                          rootHostId = undefined;
+                          break;
+                        }
+                        if (!h.attachedToBlockId) break;
+                        rootHostId = h.attachedToBlockId;
+                      }
+                      if (!rootHostId) return false;
                     }
                     return true;
                   })

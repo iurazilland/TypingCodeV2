@@ -28,6 +28,7 @@ export type BlockType =
   | 'reversed'
   | 'def'
   | 'return'
+  | 'call'
   // 메서드
   | 'method'
   // 반복 (루프)
@@ -138,6 +139,7 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
   open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
   return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
+  call: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
   method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
   for_range: { bg: '#059669', shadow: '#047857', border: '#10b981' },
   for_in: { bg: '#059669', shadow: '#047857', border: '#10b981' },

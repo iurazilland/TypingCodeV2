@@ -114,7 +114,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
       }
 
       // Scan per-level steps dynamically against each level's actual question count
-      for (let lvl = 1; lvl <= 50; lvl++) {
+      const scanMaxLevel = Math.max(50, totalLevelsCount);
+      for (let lvl = 1; lvl <= scanMaxLevel; lvl++) {
         const stepVal = parseInt(localStorage.getItem(`unlocked_step_${rawLang}_${lvl}`) || '0', 10);
         const lvlRound = getPracticeRound(rawLang, lvl);
         const requiredSteps = lvlRound && lvlRound.roundNumber === lvl ? lvlRound.questions.length : 10;
@@ -136,7 +137,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     } finally {
       setIsProgressLoaded(true);
     }
-  }, [rawLang]);
+  }, [rawLang, totalLevelsCount]);
 
   // Soft ice-cyan body background matching /languages page
   useEffect(() => {

@@ -1152,18 +1152,19 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           }));
       } else if (targetBlock.type === 'variable') {
         const vContent = (targetBlock.content || '').trim();
-        const vName = (targetBlock.varName || '').toLowerCase();
-        if (/^['"]/.test(vContent) || vName.includes('str') || vName.includes('text') || vName.includes('line') || vName.includes('msg') || vName.includes('word') || vName.includes('name')) {
+        if (/^f?['"]/.test(vContent)) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('문자열') || c.category.includes('String'));
-        } else if (/^\[/.test(vContent) || vName.includes('list') || vName.includes('items') || vName.includes('nums') || vName.includes('arr') || vName.includes('scores')) {
+        } else if (/^\[/.test(vContent)) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('리스트') || c.category.includes('List'));
-        } else if (/^\{.*:/.test(vContent) || vName.includes('dict') || vName.includes('map') || vName.includes('info')) {
+        } else if (/^\{.*:/.test(vContent)) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('딕셔너리') || c.category.includes('Dictionary'));
-        } else if (/^\{/.test(vContent) || vName.includes('set')) {
+        } else if (/^\{/.test(vContent)) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('세트') || c.category.includes('Set'));
-        } else if (vContent.includes('open(') || vName.includes('file') || vName === 'f') {
+        } else if (vContent.includes('open(')) {
           filteredCategories = (methodCategories || []).filter((c) => c.category.includes('파일') || c.category.includes('File'));
         }
+      } else if (targetBlock.type === 'call') {
+        filteredCategories = methodCategories || [];
       } else if (targetBlock.type === 'method') {
         const prevM = targetBlock.methodName;
         if (['split', 'splitlines', 'keys', 'values', 'items', 'readlines'].includes(prevM || '')) {
@@ -1370,7 +1371,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       )}
 
       {/* Horizontal notch for method chaining on functions, variables, collections */}
-      {(['input', 'str', 'open', 'list', 'dict', 'set', 'tuple', 'sorted'].includes(block.type) ||
+      {(['input', 'str', 'open', 'list', 'dict', 'set', 'tuple', 'sorted', 'call'].includes(block.type) ||
         block.type === 'variable') && (
         <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
       )}
@@ -1616,6 +1617,39 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {renderArgSlot(block.type)}
           <span>)</span>
         </>
+      ) : block.type === 'call' ? (
+        <>
+          <input
+            type="text"
+            value={block.varName ?? 'my_func'}
+            placeholder=""
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            onFocus={handleInputFocusSelect}
+            onClick={handleInputClickSelect}
+            onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
+            style={{
+              width: `${getBlockInputWidth(block.varName ?? 'my_func')}px`,
+              height: '20px',
+              padding: '1px 5px',
+              borderRadius: '6px',
+              background: '#ffffff',
+              color: '#0f172a',
+              border: '1px solid rgba(0,0,0,0.2)',
+              fontWeight: 800,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.76rem',
+              textAlign: 'left',
+              outline: 'none',
+              cursor: 'text',
+              boxSizing: 'border-box',
+            }}
+          />
+          <span>(</span>
+          {renderArgSlot('call')}
+          <span>)</span>
+        </>
       ) : block.type === 'variable' ? (
         <>
           <input
@@ -1645,58 +1679,68 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               boxSizing: 'border-box',
             }}
           />
-          <div
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            title="클릭하여 대입 연산자 선택 (=, +=, -=, *=, /=, //=, %=)"
-            style={{
-              position: 'relative',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '20px',
-              padding: '0 6px',
-              borderRadius: '5px',
-              background: 'rgba(0, 0, 0, 0.26)',
-              border: '1px solid rgba(255, 255, 255, 0.34)',
-              color: '#ffffff',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.76rem',
-              cursor: 'pointer',
-              boxSizing: 'border-box',
-              userSelect: 'none',
-              lineHeight: 1,
-            }}
-          >
-            <span>{block.assignOp || '='}</span>
-            <select
-              value={block.assignOp || '='}
-              onMouseDown={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-              onChange={(e) => onAssignOpChange?.(block.id, e.target.value as AssignOperator)}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                opacity: 0,
-                cursor: 'pointer',
-                fontSize: '0.82rem',
-                color: '#0f172a',
-                background: '#ffffff',
-              }}
-            >
-              <option value="=">=</option>
-              <option value="+=">+=</option>
-              <option value="-=">-=</option>
-              <option value="*=">*=</option>
-              <option value="/=">/=</option>
-              <option value="//=">//=</option>
-              <option value="%=">%=</option>
-            </select>
-          </div>
-          {renderArgSlot('variable', true)}
+          {!(
+            isSlotArg ||
+            (Boolean(block.attachedMethodId) &&
+              !(block.content || '').trim() &&
+              !block.argBlock &&
+              (!block.assignOp || block.assignOp === '='))
+          ) && (
+            <>
+              <div
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                title="클릭하여 대입 연산자 선택 (=, +=, -=, *=, /=, //=, %=)"
+                style={{
+                  position: 'relative',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '20px',
+                  padding: '0 6px',
+                  borderRadius: '5px',
+                  background: 'rgba(0, 0, 0, 0.26)',
+                  border: '1px solid rgba(255, 255, 255, 0.34)',
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.76rem',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box',
+                  userSelect: 'none',
+                  lineHeight: 1,
+                }}
+              >
+                <span>{block.assignOp || '='}</span>
+                <select
+                  value={block.assignOp || '='}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onChange={(e) => onAssignOpChange?.(block.id, e.target.value as AssignOperator)}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    color: '#0f172a',
+                    background: '#ffffff',
+                  }}
+                >
+                  <option value="=">=</option>
+                  <option value="+=">+=</option>
+                  <option value="-=">-=</option>
+                  <option value="*=">*=</option>
+                  <option value="/=">/=</option>
+                  <option value="//=">//=</option>
+                  <option value="%=">%=</option>
+                </select>
+              </div>
+              {renderArgSlot('variable', true)}
+            </>
+          )}
         </>
       ) : block.type === 'return' ? (
         <>
@@ -1765,7 +1809,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         <span style={{ color: '#ffffff' }}>{block.type}</span>
       ) : (
         <>
-          {block.varName && (
+          {block.varName !== undefined && (
             <>
               <input
                 type="text"

@@ -110,7 +110,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: '한 줄에 공백으로 구분된 두 단어를 input().split()으로 first, second에 저장하고 순서를 바꿔 second, first를 출력해보세요. (예: Python Code -> Code Python)',
+      prompt_ko: '두 단어를 input().split()으로 first, second에 저장하고 순서를 바꿔 second, first를 출력해보세요. (예: Python Code -> Code Python)',
       prompt_en: 'Read two space-separated words via input().split() into first, second and print second, first (e.g., Python Code -> Code Python).',
       hint_ko: '첫째 블록 왼쪽 칸에 first, second를 입력하고(.split() 안은 비워두면 공백 기준 분리), print에 second, first를 넣으세요.',
       hint_en: 'Enter first, second on the left of input().split() (empty .split() splits on whitespace), then print second, first.',
@@ -334,3 +334,4 @@ export const PYTHON_LEVEL_14: PracticeRound = {
     },
   ],
 };
+
