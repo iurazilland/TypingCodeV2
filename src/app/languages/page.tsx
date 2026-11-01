@@ -853,49 +853,15 @@ export default function LanguagesPage() {
           })}
         </div>
 
-        {/* 2. Large 2-Row Learning Direction Buttons (3 columns x 2 rows = 6 buttons) */}
+        {/* 2. Single-Row Learning Direction Buttons (6 equal columns in 1 row) */}
         <div
           style={{
-            paddingBottom: '18px',
-            marginBottom: '18px',
+            paddingBottom: '16px',
+            marginBottom: '16px',
             borderBottom: '1.5px solid #e2e8f0',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '10px',
-              padding: '0 2px',
-            }}
-          >
-            <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#475569' }}>
-              {isEn ? 'Sort by Learning Direction' : '학습 방향별 추천 구성'}
-            </span>
-            {selectedRoadmapId && (
-              <button
-                onClick={() => setSelectedRoadmapId(null)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  padding: 0,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  fontSize: '0.8rem',
-                  fontWeight: 700,
-                  color: '#0891b2',
-                }}
-              >
-                <RotateCcw size={13} />
-                <span>{isEn ? 'Back to Language Grouping' : '기본 언어별 분류로 보기'}</span>
-              </button>
-            )}
-          </div>
-
-          <div className="roadmap-2row-grid">
+          <div className="roadmap-1row-grid" style={{ padding: '2px' }}>
             {LEARNING_ROADMAPS.map((rm) => {
               const isSelected = selectedRoadmapId === rm.id;
               const isHovered = hoveredRoadmapId === rm.id;
@@ -912,10 +878,10 @@ export default function LanguagesPage() {
                   style={{
                     width: '100%',
                     textAlign: 'left',
-                    padding: '13px 16px',
+                    padding: '11px 13px',
                     borderRadius: '16px',
                     background: isSelected
-                      ? `${rm.color}12`
+                      ? `${rm.color}14`
                       : isHovered
                       ? '#ffffff'
                       : '#f8fafc',
@@ -929,74 +895,77 @@ export default function LanguagesPage() {
                       : isHovered
                       ? '0 3px 10px rgba(15, 23, 42, 0.05)'
                       : 'none',
+                    transform: isHovered ? 'translateY(-1px)' : 'none',
                     cursor: 'pointer',
                     transition: 'all 0.18s ease',
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '12px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    gap: '4px',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '6px',
+                      width: '100%',
+                    }}
+                  >
                     <div
                       style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '12px',
-                        background: isSelected ? '#ffffff' : `${rm.color}14`,
-                        border: `1px solid ${rm.color}38`,
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.22rem',
-                        flexShrink: 0,
+                        gap: '6px',
+                        minWidth: 0,
                       }}
                     >
-                      {rm.icon}
-                    </div>
-                    <div style={{ minWidth: 0 }}>
-                      <div
+                      <span style={{ fontSize: '1.1rem', lineHeight: 1, flexShrink: 0 }}>
+                        {rm.icon}
+                      </span>
+                      <span
                         style={{
-                          fontSize: '0.96rem',
+                          fontSize: '0.88rem',
                           fontWeight: 800,
                           color: isSelected ? rm.color : '#0f172a',
-                          lineHeight: 1.25,
-                          marginBottom: '3px',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                         }}
                       >
                         {isEn ? rm.title_en : rm.title_ko}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '0.76rem',
-                          color: '#64748b',
-                          fontWeight: 600,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {isEn ? rm.target_en : rm.target_ko}
-                      </div>
+                      </span>
                     </div>
+
+                    <span
+                      style={{
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        padding: '2px 6px',
+                        borderRadius: '6px',
+                        background: isSelected ? rm.color : '#e2e8f0',
+                        color: isSelected ? '#ffffff' : '#475569',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {courseCount}
+                    </span>
                   </div>
 
-                  <span
+                  <div
                     style={{
-                      fontSize: '0.74rem',
-                      fontWeight: 800,
-                      padding: '4px 9px',
-                      borderRadius: '8px',
-                      background: isSelected ? rm.color : '#e2e8f0',
-                      color: isSelected ? '#ffffff' : '#475569',
-                      flexShrink: 0,
+                      fontSize: '0.73rem',
+                      color: '#64748b',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      paddingLeft: '2px',
                     }}
                   >
-                    {isEn ? `${courseCount}` : `${courseCount}과정`}
-                  </span>
+                    {isEn ? rm.target_en : rm.target_ko}
+                  </div>
                 </button>
               );
             })}

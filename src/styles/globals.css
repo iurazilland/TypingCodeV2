@@ -256,25 +256,17 @@ button {
   box-shadow: 0 14px 30px -4px rgba(168, 85, 247, 0.28), 0 4px 12px rgba(15, 23, 42, 0.06) !important;
 }
 
-/* 2-Row (3x2) Learning Direction Button Grid */
-.roadmap-2row-grid {
+/* 1-Row (6-Column) Learning Direction Button Bar */
+.roadmap-1row-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(6, minmax(176px, 1fr));
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-@media (max-width: 900px) {
-  .roadmap-2row-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-}
-
-@media (max-width: 580px) {
-  .roadmap-2row-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
+.roadmap-1row-grid::-webkit-scrollbar {
+  display: none;
 }
 
 /* 4-Column Curriculum Grid System */
