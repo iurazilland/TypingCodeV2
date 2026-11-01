@@ -1214,6 +1214,8 @@ export default function CodeTypingPage() {
             overflowY: 'auto',
             padding: '20px 0 28px',
             fontFamily: 'var(--font-mono), monospace',
+            fontVariantLigatures: 'none',
+            fontFeatureSettings: '"liga" 0, "calt" 0',
             fontSize: '1.22rem',
             lineHeight: 1.85,
             color: '#f8fafc',

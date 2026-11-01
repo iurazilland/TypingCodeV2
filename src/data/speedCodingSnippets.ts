@@ -39,7 +39,7 @@ export const SPEED_CODING_SNIPPETS: SpeedCodingSnippet[] = [
     descKo: 'for 반복문과 f-문자열로 깔끔하게 구구단을 출력하는 기본 코드',
     descEn: 'Print a multiplication table using a for loop and f-strings',
     code: `dan = 3
-print(f"=== Table {dan} ===")
+print(f"Table {dan}")
 
 for i in range(1, 10):
     result = dan * i
@@ -169,7 +169,7 @@ for (const s of scores) {
     }
 }
 
-console.log(\`Total: \${total}, Max: \${maxScore}\`);`,
+console.log("Total:", total, "Max:", maxScore);`,
   },
   {
     id: 'js-currency-calc',
@@ -187,7 +187,7 @@ console.log(\`Total: \${total}, Max: \${maxScore}\`);`,
 const amounts = [13500, 27000, 50000];
 for (const won of amounts) {
     const usd = toUsd(won);
-    console.log(\`\${won} KRW => $\${usd}\`);
+    console.log(won, "KRW =", usd, "USD");
 }`,
   },
   {
@@ -201,7 +201,7 @@ for (const won of amounts) {
     descEn: 'Format user profile strings cleanly with object destructuring',
     code: `function formatUser({ name, role, level }) {
     const tag = role.toUpperCase();
-    return \`[\${tag}] \${name} (Lv.\${level})\`;
+    return "[" + tag + "] " + name + " (Lv." + level + ")";
 }
 
 const member = { name: "Mina", role: "dev", level: 7 };
@@ -250,7 +250,7 @@ int main(void) {
     for (int i = 1; i <= 10; i++) {
         sum += i;
     }
-    printf("Sum 1..10 = %d\\n", sum);
+    printf("Sum: %d\\n", sum);
     return 0;
 }`,
   },

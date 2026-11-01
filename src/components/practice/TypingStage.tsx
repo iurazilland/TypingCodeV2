@@ -712,6 +712,8 @@ export default function TypingStage({
             overflowY: 'auto',
             padding: '20px 0',
             fontFamily: 'var(--font-mono), monospace',
+            fontVariantLigatures: 'none',
+            fontFeatureSettings: '"liga" 0, "calt" 0',
             fontSize: '1.25rem',
             lineHeight: 1.85,
             color: '#f8fafc',
