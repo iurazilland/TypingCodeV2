@@ -5,6 +5,7 @@ import type {
   SectionDifficultyRating,
   UserClearedLevelRow,
   UserProfile,
+  UserSavedSnippetRow,
   UserSpeedRecordRow,
 } from '@/lib/supabase/types';
 
@@ -88,6 +89,10 @@ export function normalizeProfileRow(
     activity_score: computedScore,
     best_typing_cpm: Number(raw.best_typing_cpm ?? raw.best_cpm ?? 0) || 0,
     best_typing_accuracy: Number(raw.best_typing_accuracy ?? raw.avg_accuracy ?? 0) || 0,
+    best_typing_language:
+      typeof raw.best_typing_language === 'string' && raw.best_typing_language.trim()
+        ? raw.best_typing_language
+        : undefined,
     created_at:
       typeof raw.created_at === 'string'
         ? raw.created_at
@@ -492,30 +497,108 @@ export async function saveSpeedCodingRecord(input: {
   }
 }
 
-export async function fetchSolvedProblemIds(): Promise<number[]> {
-  if (!isSupabaseConfigured()) return [];
+function readLocalProblemSolutions(
+  userId: string
+): Record<number, Record<string, string>> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(`problem_solutions_v2_${userId}`);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeLocalProblemSolutions(
+  userId: string,
+  map: Record<number, Record<string, string>>
+): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(`problem_solutions_v2_${userId}`, JSON.stringify(map));
+  } catch {
+    // Non-fatal storage quota error
+  }
+}
+
+export interface SolvedProblemsData {
+  solvedIds: number[];
+  solutionsByProblem: Record<number, Record<string, string>>;
+}
+
+export async function fetchSolvedProblemsData(): Promise<SolvedProblemsData> {
+  if (!isSupabaseConfigured()) {
+    return { solvedIds: [], solutionsByProblem: {} };
+  }
   try {
     const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return [];
+    if (!user) return { solvedIds: [], solutionsByProblem: {} };
 
+    const localMap = readLocalProblemSolutions(user.id);
     const { data, error } = await supabase
       .from('user_problem_solves')
-      .select('problem_id')
+      .select('*')
       .eq('user_id', user.id);
 
-    if (error || !data) return [];
-    return data.map((r: { problem_id: number }) => r.problem_id);
+    if (error || !data) {
+      return {
+        solvedIds: Object.keys(localMap).map((k) => Number(k)),
+        solutionsByProblem: localMap,
+      };
+    }
+
+    const mergedMap: Record<number, Record<string, string>> = { ...localMap };
+    const solvedIds: number[] = [];
+
+    for (const row of data as Array<Record<string, unknown>>) {
+      const pid = Number(row.problem_id);
+      if (!Number.isInteger(pid) || pid < 1) continue;
+      solvedIds.push(pid);
+
+      const perLang: Record<string, string> = { ...(mergedMap[pid] || {}) };
+      if (row.solutions_by_lang && typeof row.solutions_by_lang === 'object') {
+        for (const [k, v] of Object.entries(
+          row.solutions_by_lang as Record<string, unknown>
+        )) {
+          if (typeof v === 'string' && v.trim()) {
+            perLang[k] = v;
+          }
+        }
+      }
+      if (
+        typeof row.language === 'string' &&
+        typeof row.submitted_code === 'string' &&
+        row.submitted_code.trim()
+      ) {
+        perLang[row.language] = row.submitted_code;
+      }
+      if (Object.keys(perLang).length > 0) {
+        mergedMap[pid] = perLang;
+      }
+    }
+
+    writeLocalProblemSolutions(user.id, mergedMap);
+    return { solvedIds, solutionsByProblem: mergedMap };
   } catch {
-    return [];
+    return { solvedIds: [], solutionsByProblem: {} };
   }
+}
+
+export async function fetchSolvedProblemIds(): Promise<number[]> {
+  const res = await fetchSolvedProblemsData();
+  return res.solvedIds;
 }
 
 export async function recordProblemSolve(
   problemId: number,
-  language = 'python'
+  language = 'python',
+  submittedCode?: string,
+  executionMs?: number
 ): Promise<void> {
   if (!isSupabaseConfigured()) return;
   try {
@@ -526,18 +609,200 @@ export async function recordProblemSolve(
     if (!user) return;
 
     await recordDailyAttendance(user.id);
-    const { error } = await supabase.from('user_problem_solves').upsert(
-      {
-        user_id: user.id,
-        problem_id: problemId,
-        language,
-      },
-      { onConflict: 'user_id,problem_id' }
-    );
-    if (!error) {
-      dispatchProgressSynced();
+
+    const localMap = readLocalProblemSolutions(user.id);
+    const prevPerLang = localMap[problemId] || {};
+    const nextPerLang = submittedCode
+      ? { ...prevPerLang, [language]: submittedCode.slice(0, 30000) }
+      : prevPerLang;
+    if (Object.keys(nextPerLang).length > 0) {
+      localMap[problemId] = nextPerLang;
+      writeLocalProblemSolutions(user.id, localMap);
     }
+
+    const richPayload = {
+      user_id: user.id,
+      problem_id: problemId,
+      language,
+      submitted_code: submittedCode ? submittedCode.slice(0, 30000) : null,
+      execution_ms:
+        typeof executionMs === 'number' && executionMs >= 0
+          ? Math.round(executionMs)
+          : null,
+      solutions_by_lang: nextPerLang,
+    };
+
+    const { error } = await supabase
+      .from('user_problem_solves')
+      .upsert(richPayload, { onConflict: 'user_id,problem_id' });
+
+    if (error) {
+      // Pre-migration fallback (when submitted_code / solutions_by_lang / UPDATE policy not yet applied)
+      const { error: fallbackError } = await supabase
+        .from('user_problem_solves')
+        .upsert(
+          {
+            user_id: user.id,
+            problem_id: problemId,
+            language,
+          },
+          { onConflict: 'user_id,problem_id', ignoreDuplicates: true }
+        );
+      if (!fallbackError) {
+        dispatchProgressSynced();
+      }
+      return;
+    }
+
+    dispatchProgressSynced();
   } catch {
     // Non-fatal
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Cloud Saved Snippets (Compiler / Free Coding Storage)
+// -----------------------------------------------------------------------------
+
+function readLocalSnippets(userId: string): UserSavedSnippetRow[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(`saved_snippets_v2_${userId}`);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalSnippets(userId: string, rows: UserSavedSnippetRow[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(`saved_snippets_v2_${userId}`, JSON.stringify(rows));
+  } catch {
+    // Non-fatal
+  }
+}
+
+export async function fetchSavedSnippets(): Promise<UserSavedSnippetRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return [];
+
+    const localRows = readLocalSnippets(user.id);
+    const { data, error } = await supabase
+      .from('user_saved_snippets')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('updated_at', { ascending: false })
+      .limit(50);
+
+    if (error || !data) {
+      return localRows;
+    }
+
+    const cloudRows = data as UserSavedSnippetRow[];
+    writeLocalSnippets(user.id, cloudRows);
+    return cloudRows;
+  } catch {
+    return [];
+  }
+}
+
+export async function saveUserSnippet(input: {
+  id?: string | null;
+  title: string;
+  language: string;
+  code: string;
+  stdin?: string;
+}): Promise<UserSavedSnippetRow | null> {
+  if (!isSupabaseConfigured()) return null;
+  const cleanTitle = input.title.trim().slice(0, 80) || 'Untitled';
+  const cleanCode = input.code.slice(0, 50000);
+  const cleanStdin = (input.stdin || '').slice(0, 10000);
+
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const nowIso = new Date().toISOString();
+    const payload: Record<string, unknown> = {
+      user_id: user.id,
+      title: cleanTitle,
+      language: input.language,
+      code: cleanCode,
+      stdin: cleanStdin,
+    };
+    if (input.id) {
+      payload.id = input.id;
+    }
+
+    const { data, error } = await supabase
+      .from('user_saved_snippets')
+      .upsert(payload, { onConflict: 'id' })
+      .select('*')
+      .maybeSingle();
+
+    if (!error && data) {
+      const saved = data as UserSavedSnippetRow;
+      const existing = readLocalSnippets(user.id).filter((s) => s.id !== saved.id);
+      writeLocalSnippets(user.id, [saved, ...existing]);
+      return saved;
+    }
+
+    // Fallback to localStorage mirror if migration SQL hasn't been applied yet
+    const fallbackRow: UserSavedSnippetRow = {
+      id:
+        input.id ||
+        (typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : `local-${Date.now()}`),
+      user_id: user.id,
+      title: cleanTitle,
+      language: input.language,
+      code: cleanCode,
+      stdin: cleanStdin,
+      created_at: nowIso,
+      updated_at: nowIso,
+    };
+    const existing = readLocalSnippets(user.id).filter(
+      (s) => s.id !== fallbackRow.id
+    );
+    writeLocalSnippets(user.id, [fallbackRow, ...existing]);
+    return fallbackRow;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteUserSnippet(snippetId: string): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return false;
+
+    const remaining = readLocalSnippets(user.id).filter((s) => s.id !== snippetId);
+    writeLocalSnippets(user.id, remaining);
+
+    await supabase
+      .from('user_saved_snippets')
+      .delete()
+      .eq('id', snippetId)
+      .eq('user_id', user.id);
+
+    return true;
+  } catch {
+    return false;
   }
 }

@@ -16,6 +16,7 @@ export interface UserProfile {
   activity_score: number;
   best_typing_cpm: number;
   best_typing_accuracy: number;
+  best_typing_language?: string;
   created_at: string;
   updated_at: string;
 }
@@ -31,6 +32,9 @@ export interface UserProblemSolveRow {
   user_id: string;
   problem_id: number;
   language: string;
+  submitted_code?: string | null;
+  execution_ms?: number | null;
+  solutions_by_lang?: Record<string, string>;
   solved_at: string;
 }
 
@@ -46,6 +50,23 @@ export interface UserSpeedRecordRow {
   language: string;
   best_cpm: number;
   best_accuracy: number;
+  updated_at: string;
+}
+
+export interface SpeedLanguageLeaderboardRow extends UserProfile {
+  language: string;
+  best_cpm: number;
+  best_accuracy: number;
+}
+
+export interface UserSavedSnippetRow {
+  id: string;
+  user_id: string;
+  title: string;
+  language: string;
+  code: string;
+  stdin: string;
+  created_at: string;
   updated_at: string;
 }
 

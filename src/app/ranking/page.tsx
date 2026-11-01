@@ -15,17 +15,47 @@ import {
 } from '@/lib/progressSync';
 import { getRepresentativeBadge } from '@/lib/badges';
 import UserAvatar from '@/components/UserAvatar';
+import type { SpeedCodingLanguage } from '@/data/speedCodingSnippets';
+
+type SpeedLangFilter = 'all' | SpeedCodingLanguage;
+
+const SPEED_FILTER_TABS: ReadonlyArray<{
+  id: SpeedLangFilter;
+  labelKo: string;
+  labelEn: string;
+}> = [
+  { id: 'all', labelKo: '전체', labelEn: 'All' },
+  { id: 'python', labelKo: 'Python', labelEn: 'Python' },
+  { id: 'javascript', labelKo: 'JavaScript', labelEn: 'JavaScript' },
+  { id: 'c', labelKo: 'C언어', labelEn: 'C' },
+  { id: 'java', labelKo: 'Java', labelEn: 'Java' },
+  { id: 'sql', labelKo: 'SQL', labelEn: 'SQL' },
+];
+
+function formatSpeedLangLabel(raw: string): string {
+  const lower = raw.trim().toLowerCase();
+  if (lower === 'python') return 'Python';
+  if (lower === 'javascript' || lower === 'js' || lower.includes('web')) return 'JavaScript';
+  if (lower === 'c' || lower === 'c언어') return 'C언어';
+  if (lower === 'java') return 'Java';
+  if (lower === 'sql') return 'SQL';
+  return raw || 'Python';
+}
 
 function getLangColor(lang: string): string {
   const lower = lang.toLowerCase();
   if (lower.includes('python')) return '#2563eb';
-  if (lower.includes('web') || lower.includes('js') || lower.includes('html')) return '#ea580c';
+  if (lower.includes('web') || lower.includes('js') || lower.includes('javascript')) return '#d97706';
   if (lower.includes('c')) return '#0891b2';
   if (lower.includes('java')) return '#dc2626';
-  if (lower.includes('rust')) return '#d97706';
-  if (lower.includes('go')) return '#059669';
   if (lower.includes('sql')) return '#059669';
   return '#0284c7';
+}
+
+interface SpeedLeaderEntry extends UserProfile {
+  display_cpm: number;
+  display_accuracy: number;
+  display_language: string;
 }
 
 function RankingPageContent() {
@@ -36,30 +66,32 @@ function RankingPageContent() {
 
   const initialTab = searchParams.get('tab') === 'speed' ? 'speed' : 'learning';
   const [activeTab, setActiveTab] = useState<'learning' | 'speed'>(initialTab);
+  const [speedLangFilter, setSpeedLangFilter] = useState<SpeedLangFilter>('all');
+
   const [learningLeaders, setLearningLeaders] = useState<UserProfile[]>([]);
-  const [speedLeaders, setSpeedLeaders] = useState<UserProfile[]>([]);
+  const [speedLeaders, setSpeedLeaders] = useState<SpeedLeaderEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [dbError, setDbError] = useState<string | null>(null);
 
-  const fetchLeaderboards = useCallback(async (silent = false) => {
-    if (!isSupabaseConfigured()) {
-      setIsLoading(false);
-      return;
-    }
+  const fetchLeaderboards = useCallback(
+    async (langFilter: SpeedLangFilter, silent = false) => {
+      if (!isSupabaseConfigured()) {
+        setIsLoading(false);
+        return;
+      }
 
-    if (silent) {
-      setIsRefreshing(true);
-    } else {
-      setIsLoading(true);
-    }
-    setDbError(null);
+      if (silent) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+      setDbError(null);
 
-    try {
-      const supabase = createClient();
+      try {
+        const supabase = createClient();
 
-      const [learningRes, speedRes] = await Promise.all([
-        supabase
+        const learningPromise = supabase
           .from('profiles')
           .select('*')
           .gt('activity_score', 0)
@@ -67,54 +99,128 @@ function RankingPageContent() {
           .order('cleared_levels_count', { ascending: false })
           .order('longest_streak', { ascending: false })
           .order('solved_problems_count', { ascending: false })
-          .limit(100),
-        supabase
+          .limit(100);
+
+        const overallSpeedPromise = supabase
           .from('profiles')
           .select('*')
           .gt('best_typing_cpm', 0)
           .order('best_typing_cpm', { ascending: false })
           .order('best_typing_accuracy', { ascending: false })
-          .limit(100),
-      ]);
+          .limit(100);
 
-      if (learningRes.error) {
-        throw learningRes.error;
-      }
-      if (speedRes.error) {
-        throw speedRes.error;
-      }
+        if (langFilter === 'all') {
+          const [learningRes, speedRes] = await Promise.all([
+            learningPromise,
+            overallSpeedPromise,
+          ]);
+          if (learningRes.error) throw learningRes.error;
+          if (speedRes.error) throw speedRes.error;
 
-      setLearningLeaders(
-        ((learningRes.data as Array<Record<string, unknown>>) || []).map((r) =>
-          normalizeProfileRow(r)
-        )
-      );
-      setSpeedLeaders(
-        ((speedRes.data as Array<Record<string, unknown>>) || []).map((r) =>
-          normalizeProfileRow(r)
-        )
-      );
-    } catch (err: unknown) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : '리더보드 데이터를 불러오지 못했습니다.';
-      setDbError(msg);
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, []);
+          setLearningLeaders(
+            ((learningRes.data as Array<Record<string, unknown>>) || []).map(
+              (r) => normalizeProfileRow(r)
+            )
+          );
+
+          setSpeedLeaders(
+            ((speedRes.data as Array<Record<string, unknown>>) || []).map((r) => {
+              const p = normalizeProfileRow(r);
+              return {
+                ...p,
+                display_cpm: p.best_typing_cpm,
+                display_accuracy: p.best_typing_accuracy,
+                display_language: formatSpeedLangLabel(
+                  p.best_typing_language || p.primary_language
+                ),
+              };
+            })
+          );
+        } else {
+          // Per-language query via security_invoker view `speed_language_leaderboard` (with fallback if view not yet migrated)
+          const [learningRes, langSpeedRes] = await Promise.all([
+            learningPromise,
+            supabase
+              .from('speed_language_leaderboard')
+              .select('*')
+              .eq('language', langFilter)
+              .order('best_cpm', { ascending: false })
+              .order('best_accuracy', { ascending: false })
+              .limit(100),
+          ]);
+
+          if (learningRes.error) throw learningRes.error;
+
+          setLearningLeaders(
+            ((learningRes.data as Array<Record<string, unknown>>) || []).map(
+              (r) => normalizeProfileRow(r)
+            )
+          );
+
+          if (!langSpeedRes.error && langSpeedRes.data) {
+            setSpeedLeaders(
+              (langSpeedRes.data as Array<Record<string, unknown>>).map((r) => {
+                const p = normalizeProfileRow(r);
+                return {
+                  ...p,
+                  display_cpm: Number(r.best_cpm ?? p.best_typing_cpm ?? 0) || 0,
+                  display_accuracy:
+                    Number(r.best_accuracy ?? p.best_typing_accuracy ?? 0) || 0,
+                  display_language: formatSpeedLangLabel(
+                    typeof r.language === 'string' ? r.language : langFilter
+                  ),
+                };
+              })
+            );
+          } else {
+            // Graceful fallback before V2.2 SQL migration is applied
+            const fallbackRes = await overallSpeedPromise;
+            if (fallbackRes.error) throw fallbackRes.error;
+            const targetLabel = formatSpeedLangLabel(langFilter).toLowerCase();
+            const filtered = (
+              (fallbackRes.data as Array<Record<string, unknown>>) || []
+            )
+              .map((r) => {
+                const p = normalizeProfileRow(r);
+                const langLabel = formatSpeedLangLabel(
+                  p.best_typing_language || p.primary_language
+                );
+                return {
+                  ...p,
+                  display_cpm: p.best_typing_cpm,
+                  display_accuracy: p.best_typing_accuracy,
+                  display_language: langLabel,
+                };
+              })
+              .filter(
+                (entry) => entry.display_language.toLowerCase() === targetLabel
+              );
+            setSpeedLeaders(filtered);
+          }
+        }
+      } catch (err: unknown) {
+        const msg =
+          err instanceof Error
+            ? err.message
+            : '리더보드 데이터를 불러오지 못했습니다.';
+        setDbError(msg);
+      } finally {
+        setIsLoading(false);
+        setIsRefreshing(false);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    void fetchLeaderboards(false);
-  }, [fetchLeaderboards]);
+    void fetchLeaderboards(speedLangFilter, false);
+  }, [fetchLeaderboards, speedLangFilter]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !isSupabaseConfigured()) return;
 
     const handleProgressSync = () => {
-      void fetchLeaderboards(true);
+      void fetchLeaderboards(speedLangFilter, true);
     };
     window.addEventListener(PROGRESS_SYNCED_EVENT, handleProgressSync);
 
@@ -125,7 +231,7 @@ function RankingPageContent() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'profiles' },
         () => {
-          void fetchLeaderboards(true);
+          void fetchLeaderboards(speedLangFilter, true);
         }
       )
       .subscribe();
@@ -134,9 +240,11 @@ function RankingPageContent() {
       window.removeEventListener(PROGRESS_SYNCED_EVENT, handleProgressSync);
       void supabase.removeChannel(channel);
     };
-  }, [fetchLeaderboards]);
+  }, [fetchLeaderboards, speedLangFilter]);
 
-  const displayList = activeTab === 'learning' ? learningLeaders : speedLeaders;
+  const displayList: Array<UserProfile | SpeedLeaderEntry> =
+    activeTab === 'learning' ? learningLeaders : speedLeaders;
+
   const myRankIndex = user
     ? displayList.findIndex((entry) => entry.id === user.id)
     : -1;
@@ -155,7 +263,7 @@ function RankingPageContent() {
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '14px',
-          marginBottom: '22px',
+          marginBottom: '20px',
         }}
       >
         <h1 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
@@ -221,7 +329,7 @@ function RankingPageContent() {
 
           <button
             type="button"
-            onClick={() => void fetchLeaderboards(true)}
+            onClick={() => void fetchLeaderboards(speedLangFilter, true)}
             disabled={isLoading || isRefreshing}
             title={isKo ? '새로고침' : 'Refresh'}
             style={{
@@ -259,6 +367,42 @@ function RankingPageContent() {
           </Link>
         </div>
       </div>
+
+      {/* Per-Language Filter Strip (Speed Coding Tab Only) */}
+      {activeTab === 'speed' && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            flexWrap: 'wrap',
+            marginBottom: '18px',
+          }}
+        >
+          {SPEED_FILTER_TABS.map((item) => {
+            const active = speedLangFilter === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setSpeedLangFilter(item.id)}
+                style={{
+                  padding: '6px 13px',
+                  borderRadius: '10px',
+                  border: active ? '1.5px solid #7c3aed' : '1.5px solid #cbd5e1',
+                  background: active ? 'rgba(124, 58, 237, 0.12)' : '#ffffff',
+                  color: active ? '#7c3aed' : '#475569',
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                }}
+              >
+                {isKo ? item.labelKo : item.labelEn}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Signed-in User Summary Bar */}
       {user && profile && (
@@ -310,11 +454,15 @@ function RankingPageContent() {
               ? isKo
                 ? `${profile.cleared_levels_count}레벨 · ${profile.current_streak}일 연속 · ${profile.solved_problems_count}문제 · ${profile.activity_score.toLocaleString()} PT`
                 : `${profile.cleared_levels_count} lvls · ${profile.current_streak}d · ${profile.solved_problems_count} probs · ${profile.activity_score.toLocaleString()} PT`
-              : profile.best_typing_cpm > 0
+              : myRankIndex >= 0 && 'display_cpm' in displayList[myRankIndex]
+              ? `${(displayList[myRankIndex] as SpeedLeaderEntry).display_cpm} CPM · ${Number(
+                  (displayList[myRankIndex] as SpeedLeaderEntry).display_accuracy || 0
+                ).toFixed(1)}%`
+              : profile.best_typing_cpm > 0 && speedLangFilter === 'all'
               ? `${profile.best_typing_cpm} CPM · ${Number(profile.best_typing_accuracy || 0).toFixed(1)}%`
               : isKo
-              ? '코드타자 기록 없음'
-              : 'No record yet'}
+              ? '해당 부문 기록 없음'
+              : 'No record'}
           </div>
         </div>
       )}
@@ -338,9 +486,10 @@ function RankingPageContent() {
             .map((podium) => {
               const u = podium.entry!;
               const repBadge = getRepresentativeBadge(u, isKo);
+              const speedEntry = u as SpeedLeaderEntry;
               return (
                 <div
-                  key={u.id}
+                  key={`${u.id}-${speedLangFilter}`}
                   style={{
                     background: podium.bg,
                     border: `2px solid ${podium.border}`,
@@ -384,11 +533,11 @@ function RankingPageContent() {
                   ) : (
                     <>
                       <div style={{ fontSize: '1.75rem', fontWeight: 900, color: podium.accent }}>
-                        {u.best_typing_cpm}{' '}
+                        {speedEntry.display_cpm}{' '}
                         <span style={{ fontSize: '0.82rem', color: '#64748b' }}>CPM</span>
                       </div>
                       <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '4px', fontWeight: 600 }}>
-                        {`${Number(u.best_typing_accuracy || 0).toFixed(1)}% · ${u.primary_language}`}
+                        {`${Number(speedEntry.display_accuracy || 0).toFixed(1)}% · ${speedEntry.display_language}`}
                       </div>
                     </>
                   )}
@@ -438,12 +587,12 @@ function RankingPageContent() {
               <div style={{ padding: '40px 24px', textAlign: 'center', color: '#dc2626', fontWeight: 600 }}>
                 {dbError}
               </div>
-            ) : displayList.length === 0 ? (
+            ) : learningLeaders.length === 0 ? (
               <div style={{ padding: '44px 24px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
                 {isKo ? '등록된 학습 기록이 없습니다.' : 'No learning records yet.'}
               </div>
             ) : (
-              displayList.map((entry, idx) => {
+              learningLeaders.map((entry, idx) => {
                 const rank = idx + 1;
                 const isMe = Boolean(user && entry.id === user.id);
                 const badge = getRepresentativeBadge(entry, isKo);
@@ -561,20 +710,20 @@ function RankingPageContent() {
               <div style={{ padding: '40px 24px', textAlign: 'center', color: '#dc2626', fontWeight: 600 }}>
                 {dbError}
               </div>
-            ) : displayList.length === 0 ? (
+            ) : speedLeaders.length === 0 ? (
               <div style={{ padding: '44px 24px', textAlign: 'center', color: '#64748b', fontWeight: 600 }}>
                 {isKo ? '등록된 코드타자 기록이 없습니다.' : 'No code typing records yet.'}
               </div>
             ) : (
-              displayList.map((entry, idx) => {
+              speedLeaders.map((entry, idx) => {
                 const rank = idx + 1;
                 const isMe = Boolean(user && entry.id === user.id);
                 const badge = getRepresentativeBadge(entry, isKo);
-                const langColor = getLangColor(entry.primary_language || 'Python');
+                const langColor = getLangColor(entry.display_language);
 
                 return (
                   <div
-                    key={entry.id}
+                    key={`${entry.id}-${entry.display_language}`}
                     style={{
                       display: 'grid',
                       gridTemplateColumns: '70px 2.2fr 1.1fr 1.1fr 1.1fr',
@@ -632,16 +781,16 @@ function RankingPageContent() {
                           fontWeight: 800,
                         }}
                       >
-                        {entry.primary_language || 'Python'}
+                        {entry.display_language}
                       </span>
                     </div>
 
                     <div style={{ textAlign: 'right', fontWeight: 900, color: '#7c3aed', fontFamily: 'var(--font-mono)' }}>
-                      {entry.best_typing_cpm} CPM
+                      {entry.display_cpm} CPM
                     </div>
 
                     <div style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
-                      {Number(entry.best_typing_accuracy || 0).toFixed(1)}%
+                      {Number(entry.display_accuracy || 0).toFixed(1)}%
                     </div>
                   </div>
                 );
