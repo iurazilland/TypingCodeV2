@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
+import { getRepresentativeBadge } from '@/lib/badges';
 import UserAvatar from '@/components/UserAvatar';
 
 export default function Navbar() {
@@ -65,6 +66,8 @@ export default function Navbar() {
     (user?.email ? user.email.split('@')[0] : 'Coder');
 
   const currentStreak = profile?.current_streak || 0;
+  const totalAttendance = profile?.total_attendance_days || 0;
+  const repBadge = getRepresentativeBadge(profile, language === 'ko');
   const codeTypingLabel =
     (t.nav as Record<string, string>).codeTyping ||
     (language === 'ko' ? '코드타자' : 'Code Typing');
@@ -284,24 +287,25 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                aria-label={language === 'ko' ? '내 정보 메뉴 열기' : 'Open profile menu'}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  padding: '5px 11px 5px 6px',
+                  gap: '7px',
+                  padding: '5px 10px 5px 6px',
                   borderRadius: '13px',
                   background: isLightPage ? '#ffffff' : 'rgba(15, 23, 42, 0.78)',
                   border: isLightPage
                     ? '1.5px solid #cbd5e1'
                     : '1.5px solid rgba(56, 189, 248, 0.32)',
                   color: isLightPage ? '#0f172a' : '#f8fafc',
-                  fontSize: '0.84rem',
+                  fontSize: '0.82rem',
                   fontWeight: 700,
                   cursor: 'pointer',
                   boxShadow: isLightPage
                     ? '0 2px 6px rgba(15, 23, 42, 0.05)'
                     : '0 4px 12px rgba(0, 0, 0, 0.25)',
-                  transition: 'all 0.15s ease',
+                  transition: 'background-color 0.15s ease, border-color 0.15s ease',
                 }}
               >
                 <UserAvatar
@@ -311,39 +315,48 @@ export default function Navbar() {
                   alt={displayName}
                 />
                 <span
-                  className="login-btn-text"
+                  title={repBadge.label}
                   style={{
-                    maxWidth: '115px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '3px 8px',
+                    borderRadius: '8px',
+                    background: isLightPage ? `${repBadge.color}16` : `${repBadge.color}22`,
+                    color: isLightPage ? '#0f172a' : '#f8fafc',
+                    fontSize: '0.78rem',
+                    fontWeight: 800,
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {displayName}
+                  <span style={{ lineHeight: 1 }}>{repBadge.icon}</span>
+                  <span className="login-btn-text">{repBadge.title}</span>
                 </span>
-                {currentStreak > 0 && (
-                  <span
-                    title={
-                      language === 'ko'
-                        ? `${currentStreak}일 연속 출석 중`
-                        : `${currentStreak}-day streak`
-                    }
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '2px',
-                      padding: '2px 6px',
-                      borderRadius: '8px',
-                      background: 'rgba(249, 115, 22, 0.15)',
-                      color: '#f97316',
-                      fontSize: '0.73rem',
-                      fontWeight: 800,
-                    }}
-                  >
-                    <Flame size={12} />
+                <span
+                  title={
+                    language === 'ko'
+                      ? `연속 출석 ${currentStreak}일 (누적 ${totalAttendance}일)`
+                      : `${currentStreak}-day streak (${totalAttendance} total days)`
+                  }
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '3px',
+                    padding: '3px 8px',
+                    borderRadius: '8px',
+                    background: 'rgba(249, 115, 22, 0.15)',
+                    color: isLightPage ? '#ea580c' : '#fb923c',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <Flame size={12} />
+                  <span>
                     {currentStreak}
+                    {language === 'ko' ? '일' : 'd'}
                   </span>
-                )}
+                </span>
                 <ChevronDown
                   size={14}
                   style={{
@@ -478,7 +491,7 @@ export default function Navbar() {
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
                     <Settings size={15} style={{ color: '#38bdf8' }} />
-                    <span>{language === 'ko' ? '내 정보 수정 & 뱃지' : 'My Profile & Badges'}</span>
+                    <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
                   </Link>
 
                   <button
@@ -635,7 +648,7 @@ export default function Navbar() {
                 }}
               >
                 <Settings size={18} style={{ color: '#38bdf8' }} />
-                <span>{language === 'ko' ? '내 정보 수정 & 뱃지' : 'My Profile & Badges'}</span>
+                <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
               </Link>
               <button
                 type="button"
@@ -658,9 +671,7 @@ export default function Navbar() {
                 }}
               >
                 <LogOut size={18} />
-                <span>
-                  {displayName} · {language === 'ko' ? '로그아웃' : 'Sign Out'}
-                </span>
+                <span>{language === 'ko' ? '로그아웃' : 'Sign Out'}</span>
               </button>
             </>
           ) : (

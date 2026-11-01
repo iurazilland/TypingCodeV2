@@ -141,7 +141,7 @@ export function evaluateUserBadges(
 export function getRepresentativeBadge(
   profile: Partial<UserProfile> | null | undefined,
   isKo: boolean
-): { label: string; color: string } {
+): { icon: string; title: string; label: string; color: string } {
   const badges = evaluateUserBadges(profile);
   const priorityOrder = [
     'level_87',
@@ -159,15 +159,21 @@ export function getRepresentativeBadge(
   for (const id of priorityOrder) {
     const found = badges.find((b) => b.id === id && b.unlocked);
     if (found) {
+      const title = isKo ? found.titleKo : found.titleEn;
       return {
-        label: `${found.icon} ${isKo ? found.titleKo : found.titleEn}`,
+        icon: found.icon,
+        title,
+        label: `${found.icon} ${title}`,
         color: found.color,
       };
     }
   }
 
+  const fallbackTitle = isKo ? '루키 코더' : 'Rookie Coder';
   return {
-    label: isKo ? '🌱 루키 코더' : '🌱 Rookie Coder',
+    icon: '🌱',
+    title: fallbackTitle,
+    label: `🌱 ${fallbackTitle}`,
     color: '#10b981',
   };
 }

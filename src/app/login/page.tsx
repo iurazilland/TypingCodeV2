@@ -847,7 +847,8 @@ function LoginPageContent() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        transition: 'all 0.15s ease',
+                        outline: 'none',
+                        transition: 'background-color 0.15s ease, border-color 0.15s ease',
                       }}
                     >
                       <UserAvatar avatarPreset={preset.id} size={38} />

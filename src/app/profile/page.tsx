@@ -306,7 +306,7 @@ export default function ProfilePage() {
           <span>MY PROFILE & ACHIEVEMENTS</span>
         </div>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, margin: '0 0 8px' }}>
-          {isKo ? '내 정보 수정 & 학습 프로필' : 'Edit Profile & Learning Stats'}
+          {isKo ? '내 정보' : 'My Profile'}
         </h1>
         <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: 0 }}>
           {isKo
@@ -554,28 +554,28 @@ export default function ProfilePage() {
                   </span>
                 </button>
 
-                {avatarUrl && (
-                  <button
-                    type="button"
-                    onClick={() => void handleResetToPresetAvatar()}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      padding: '8px 12px',
-                      borderRadius: '10px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#cbd5e1',
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <RotateCcw size={13} />
-                    <span>{isKo ? '기본 아이콘 사용' : 'Use Built-in Icon'}</span>
-                  </button>
-                )}
+                <button
+                  type="button"
+                  disabled={!avatarUrl}
+                  onClick={() => void handleResetToPresetAvatar()}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    color: '#cbd5e1',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    opacity: avatarUrl ? 1 : 0.4,
+                    cursor: avatarUrl ? 'pointer' : 'default',
+                  }}
+                >
+                  <RotateCcw size={13} />
+                  <span>{isKo ? '기본 아이콘 사용' : 'Use Built-in Icon'}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -601,18 +601,21 @@ export default function ProfilePage() {
                   style={{
                     padding: '10px 6px',
                     borderRadius: '14px',
+                    boxSizing: 'border-box',
+                    outline: 'none',
+                    transform: 'none',
                     background: isSelected
                       ? 'rgba(56, 189, 248, 0.16)'
                       : 'rgba(11, 19, 41, 0.55)',
                     border: isSelected
                       ? '2px solid #38bdf8'
-                      : '1.5px solid rgba(148, 163, 184, 0.14)',
+                      : '2px solid rgba(148, 163, 184, 0.16)',
                     cursor: 'pointer',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: '6px',
-                    transition: 'all 0.15s ease',
+                    transition: 'background-color 0.15s ease, border-color 0.15s ease',
                   }}
                 >
                   <UserAvatar avatarPreset={preset.id} size={44} />
@@ -758,7 +761,7 @@ export default function ProfilePage() {
             {/* Editable Nickname */}
             <div>
               <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>
-                {isKo ? '닉네임 (헤더 & 리더보드 표시)' : 'Nickname'}
+                {isKo ? '닉네임 (내 정보 & 리더보드 표시)' : 'Nickname'}
               </label>
               <div style={{ position: 'relative' }}>
                 <User
@@ -945,12 +948,14 @@ export default function ProfilePage() {
               style={{
                 padding: '16px',
                 borderRadius: '16px',
+                boxSizing: 'border-box',
+                userSelect: 'none',
                 background: badge.unlocked
                   ? 'rgba(11, 19, 41, 0.85)'
                   : 'rgba(11, 19, 41, 0.38)',
                 border: badge.unlocked
-                  ? `1.5px solid ${badge.color}66`
-                  : '1px solid rgba(148, 163, 184, 0.12)',
+                  ? `2px solid ${badge.color}66`
+                  : '2px solid rgba(148, 163, 184, 0.12)',
                 opacity: badge.unlocked ? 1 : 0.55,
                 display: 'flex',
                 flexDirection: 'column',
