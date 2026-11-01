@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
-import { getRepresentativeBadge } from '@/lib/badges';
 import UserAvatar from '@/components/UserAvatar';
 
 export default function Navbar() {
@@ -67,7 +66,6 @@ export default function Navbar() {
 
   const currentStreak = profile?.current_streak || 0;
   const totalAttendance = profile?.total_attendance_days || 0;
-  const repBadge = getRepresentativeBadge(profile, language === 'ko');
   const codeTypingLabel =
     (t.nav as Record<string, string>).codeTyping ||
     (language === 'ko' ? '코드타자' : 'Code Typing');
@@ -314,24 +312,6 @@ export default function Navbar() {
                   size={28}
                   alt={displayName}
                 />
-                <span
-                  title={repBadge.label}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '3px 8px',
-                    borderRadius: '8px',
-                    background: isLightPage ? `${repBadge.color}16` : `${repBadge.color}22`,
-                    color: isLightPage ? '#0f172a' : '#f8fafc',
-                    fontSize: '0.78rem',
-                    fontWeight: 800,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <span style={{ lineHeight: 1 }}>{repBadge.icon}</span>
-                  <span className="login-btn-text">{repBadge.title}</span>
-                </span>
                 <span
                   title={
                     language === 'ko'
