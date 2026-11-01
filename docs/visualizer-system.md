@@ -1,104 +1,76 @@
 # 🎨 Visual & Interactive System Specification (V2)
 
-이 문서는 **TypingCode V2**의 시각화 및 인터랙티브 인터페이스 사양을 정의합니다. V2에서는 단순 텍스트 타자나 팝업형 비주얼 모달을 넘어, **Scratch 스타일 인터랙티브 블록 시스템**, **인사이트 카드**, **실시간 WebPreview**, **가상 키보드**가 유기적으로 결합된 하이브리드 비주얼 학습 시스템을 제공합니다.
+이 문서는 **TypingCode V2**의 시각화 및 인터랙티브 학습 인터페이스 사양을 정의합니다. V2는 **Scratch 스타일 SVG 시각적 블록 스튜디오**, **실시간 변수 메모리 박스 & 스텝 디버거**, **제로 변위(`§`) 타이핑 에디터 & 가상 키보드**, **인사이트 카드**, **실시간 WebPreview**가 유기적으로 결합된 하이브리드 비주얼 학습 환경을 제공합니다.
 
 ---
 
-## 1. Scratch 스타일 인터랙티브 블록 시스템 (Visual Block System)
+## 1. Scratch 스타일 인터랙티브 블록 스튜디오 ([`blockGeometry.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockGeometry.ts) & [`CanvasBlockItem.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/CanvasBlockItem.tsx))
 
-`src/app/practice/[language]/[level]/page.tsx`에서 구동되는 시각적 블록 코딩 인터페이스입니다.
+### 1.1 블록 해부학 및 지원 블록 계층 (Block Anatomy & Taxonomy)
+- **Statement Blocks (단일 명령 블록)**:
+  - 상단 홈(Top Notch, `x: 16px ~ 36px`, 깊이 `4px`) + 하단 돌출 탭(Bottom Tab, 너비 `20px`, 높이 `4px`).
+  - 지원 타입: `print`, `variable` / `assign` / `aug_assign`(`+=` 등), `return`, `raise`, `break`, `continue`, `call`, 컬렉션(`list`, `tuple`, `dict`, `set`) 및 내장 함수/형변환 드롭다운(`type`, `int`, `float`, `str`, `bool`, `isinstance`, `ord`, `chr`).
+- **C-Shape Blocks (ㄷ자 컨테이너 블록)**:
+  - 상단 헤더 암(Top Bar), 수직 기둥(Spine, 두께 `16px`), 자동 확장 입구(Auto-grow Mouth), 하단 마감 암(Bottom Bar)으로 구성.
+  - 지원 타입:
+    - 반복문: `for_range`, `for_in`, `while`
+    - 함수 정의: `def [함수명]([매개변수]):`
+    - **클래스 정의 (`class`)**: 기본형 `class [클래스명]:` 및 단일 상속형 `class [자식클래스]([부모클래스]):` 슬롯 지원. `class` 입구(Mouth) 내부에 `def` 블록을 스냅하여 `__init__`, `__str__` 및 인스턴스 메서드를 시각적으로 조립 가능.
+- **E-Shape Multi-Branch Blocks (다단 분기 블록)**:
+  - 여러 개의 분기 헤더와 독립 입구(Mouth)를 하나의 수직 기둥으로 연결하며, 우클릭 컨텍스트 메뉴로 분기를 동적 추가·제거 가능.
+  - 지원 타입:
+    - 조건 분기: `if` — `elif` — `else`
+    - **예외 처리 분기 (`try`)**: `try:` — `except [에러타입]:` (다중 `except` 가능) — `else:` — `finally:`
+- **Right-Chained Method Blocks (가로 체이닝 블록)**:
+  - 대상 블록 우측 요철에 직결합되는 메서드 블록 (`.strip()`, `.replace()`, `.split()`, `.append()`, `.pop()`, `.sort()`, `.items()`, `.get()` 등).
 
-### 1.1 블록 해부학 (Block Anatomy)
-- **Top Notch (상단 홈)**: 직전 블록의 하단 돌출 탭과 맞물리는 오목한 홈.
-  - 위치: 좌측 기준 `x: 16px ~ 36px`, 깊이 `4px`.
-- **Bottom Tab (하단 돌출 탭)**: 다음 블록의 상단 홈에 꽂히는 돌출부.
-  - 너비 `20px`, 높이 `4px`, 살짝 경사진 사다리꼴 형태.
-- **Mouth (ㄷ자/E자 입구)**:
-  - C-Shape (루프/함수): 상단 암(Top Bar), 수직 기둥(Spine), 하단 마감 암(Bottom Bar)으로 구성.
-  - 기둥 두께: `16px`.
-  - 내부 입구에 블록이 추가될 때마다 컨테이너 높이가 유동적으로 확장(Auto-grow).
-- **Right Notch / Tab (가로 결합부)**:
-  - 문자열이나 변수 블록의 우측에 메서드(`.split()`, `.strip()`) 블록을 결합할 수 있는 가로형 퍼즐 요철.
+### 1.2 SVG 단일 벡터 패스 표준 (Single SVG `<path>` Standard)
+사각형 `div` 조각을 음수 마진(`-1px`)으로 이어 붙이던 구 방식 대신 단일 닫힌 `<path d="..." />` 벡터 외곽선으로 블록을 렌더링합니다.
+1. `z-index` 간섭이나 테두리 덮어쓰기로 인한 하단 돌출 탭 소실 원천 차단.
+2. 선 굵기(`stroke-width`), 그림자(`drop-shadow`), 테마 색상(`BLOCK_THEMES`) 일괄 제어.
+3. 중첩 C-블록(`class` 안의 `def` 안의 `try` / `for` / `if`) 확장 시에도 1px 오차 없는 기하학적 정밀도 유지.
 
-### 1.2 SVG 단일 벡터 패스 표준 (The SVG Path Standard)
-기존 사각형 `div` 조각들을 음수 마진(`-1px`)으로 덧대던 방식에서 탈피하여, 단일 `<path d="..." />`로 블록 외곽선을 드로잉합니다.
-- **장점**:
-  1. z-index 간섭이나 `border` 덮어쓰기로 인한 하단 돌출 탭 소실 원천 차단.
-  2. 선 굵기(`stroke-width`), 그림자(`filter: drop-shadow`), 배경색(`fill`)을 한 번에 제어.
-  3. 창 크기 및 내부 블록 개수 변화에 따른 기하학적 정밀도 유지.
-
-### 1.3 자석 스냅 인터랙션 (Magnetic Snapping Feedback)
-- **스냅 가이드 인디케이터**:
-  - 드래그 중인 블록이 기존 블록의 결합 가능 영역(요철 부근, ㄷ블록 입구 내부)에 진입하면, **두께 3px의 네온 옐로우(`rgba(234, 179, 8, 1)`) 발광선**이 결합 예정 위치에 즉시 렌더링됩니다.
-  - ㄷ블록 입구 내에서는 드래그 위치에 따라 기존 자식 블록들 사이의 정확한 삽입 위치(Index)를 가리킵니다.
-- **스냅 릴리즈(Drop)**:
-  - 마우스를 놓으면 인디케이터 위치로 블록이 부드럽게 흡착(Snap-in)되며 논리 트리에 결합됩니다.
-
----
-
-## 2. 인사이트 카드 시스템 (`InsightCard.tsx`)
-
-연습 시작 전 또는 스텝 전환 시 학습자에게 핵심 개념을 시각적으로 주입하는 카드 컴포넌트입니다.
-
-### 2.1 UI/UX 사양
-- **배경**: `rgba(15, 23, 42, 0.95)` 기반 글래스모피즘(Glassmorphism) 및 `backdrop-filter: blur(16px)`.
-- **테두리**: `1px solid rgba(59, 130, 246, 0.3)`의 은은한 블루 네온 테두리.
-- **상단 뱃지**: 문법 카테고리(`함수`, `조건문`, `반복문`, `연산자`) 뱃지 표시.
-- **인터랙션**:
-  - 스텝 진입 시 가이드 카드가 활성화되어 코드의 핵심 의도와 주의사항을 먼저 정독하도록 유도.
-  - '학습 시작' 또는 키 입력 시 부드럽게 축소 및 상단 안착(Focus -> Settle 전환).
+### 1.3 자석 스냅 피드백 (Magnetic Snapping Feedback)
+- 드래그 중인 블록이 결합 가능 영역(상하 탭, ㄷ/E블록 Mouth 내부, 우측 메서드 홈)에 진입하면 **두께 3px 네온 옐로우(`rgba(234, 179, 8, 1)`) 발광 가이드라인**이 결합 예정 인덱스 위치에 즉시 표시되며, 드롭 시 논리 트리에 자동 흡착됩니다.
 
 ---
 
-## 3. 실시간 웹 뷰포트 시스템 (`WebPreview.tsx`)
+## 2. 실시간 변수 메모리 박스 & 스텝 디버거 (Memory Visualizer & Step Debugger)
 
-HTML/CSS/JavaScript 웹 트랙을 위한 실시간 렌더링 엔진입니다.
+[`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts)의 로컬 실행 트레이스(`steps`, `scope`)와 [`page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/practice/%5Blanguage%5D/%5Blevel%5D/page.tsx)의 `getMemoryBoxes`가 연동되어 코드 실행 중 메모리 상태 변화를 시각적으로 보여줍니다.
 
-### 3.1 아키텍처
-- **샌드박스 격리**: `iframe`의 `sandbox="allow-scripts"` 속성을 통해 안전한 실행 환경 유지.
-- **동적 문서 주입**:
-  ```html
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="utf-8" />
-      <style>${cssContent}</style>
-    </head>
-    <body>
-      ${htmlContent}
-      <script>
-        ${consoleCaptureScript}
-        ${jsContent}
-      </script>
-    </body>
-  </html>
-  ```
-- **실시간 콘솔 캡처**:
-  - `console.log`, `console.error`, `window.onerror`를 후킹하여 `postMessage`로 부모 창에 전달.
-  - 브라우저를 벗어나지 않고도 하단 `Terminal` 컴포넌트에서 실시간 JS 실행 결과를 즉시 확인.
+- **실시간 변수 카드 렌더링**:
+  - 기본형(`int`, `float`, `str`, `bool`, `None`), 컬렉션(`list`, `tuple`, `dict`, `set`), 그리고 사용자 정의 클래스 인스턴스(`<ClassName object>` 및 속성 요약)를 자료형 배지와 함께 실시간 카드로 시각화합니다.
+- **한 줄씩 스텝 실행 (Progressive Step Debugging)**:
+  - 블록 모드와 타이핑 모드 모두에서 각 실행 스텝(`lineIndex` / `blockId`)마다 변수가 생성·갱신되고 터미널 `stdout`이 한 줄씩 쌓이는 과정을 단계별로 추적할 수 있습니다.
 
 ---
 
-## 4. 가상 키보드 가이드 (`VirtualKeyboard.tsx`)
+## 3. 제로 변위(`§`) 타이핑 에디터, 인사이트 카드 & 가상 키보드
 
-타이핑 연습 모드에서 올바른 타건 자세와 다음 입력 키를 시각적으로 유도합니다.
+### 3.1 `§` 캡슐 빈칸 에디터 & 4지선다 출력 예측 UI
+- `templateCode` 내 `§` 문자의 개수가 정답 글자 수와 정확히 1:1 매칭되어, 타이핑 중 주변 코드가 밀리지 않는(Zero-displacement) 캡슐 빈칸 박스를 렌더링합니다.
+- `predict_output` (`type: 'quiz'`) 스텝에서는 코드 리더 뷰와 4지선다 선택 카드 UI로 자동 전환되어 실행 전 논리 추론 능력을 훈련합니다.
 
-- **실시간 하이라이트**: 사용자가 현재 입력해야 하는 문자의 키캡에 활성 네온 글로우(`accentColor`) 표시.
-- **시프트 키 상태 연동**: 대문자나 특수문자 입력 시 Shift 키와 해당 키가 동시에 하이라이트.
-- **반응형 렌더링**: 모바일/태블릿 화면 크기에 맞춰 크기가 자동 조절되며 필요 시 토글 접기 지원.
+### 3.2 인사이트 카드 (`InsightCard`) & 가상 키보드 ([`VirtualKeyboard.tsx`](file:///d:/Projects/TypingCode_V2/src/components/VirtualKeyboard.tsx))
+- 글래스모피즘(`rgba(15, 23, 42, 0.95)`, `backdrop-filter: blur(16px)`) 기반 가이드 카드 및 다음 타건 키(`Shift` 조합 포함) 실시간 네온 하이라이트를 제공합니다.
 
 ---
 
-## 5. 디자인 원칙 및 토큰 (Design Principles)
+## 4. 실시간 웹 뷰포트 시스템 ([`WebPreview.tsx`](file:///d:/Projects/TypingCode_V2/src/components/WebPreview.tsx))
 
-1. **Bezel-less & Clean**: 불필요한 이중 박스를 배제하고 다크 공간 속에 블록과 코드가 자연스럽게 떠 있는 느낌(Floating Space)을 구현.
-2. **Color Semantics (의미론적 색상 체계)**:
-   - **키워드/출력**: `#3b82f6` (Blue)
-   - **반복문**: `#8b5cf6` (Purple)
-   - **조건문**: `#f59e0b` (Amber)
-   - **함수/정의**: `#10b981` (Emerald)
-   - **문자열/값**: `#ec4899` (Pink)
-3. **Micro-Animations**:
-   - 스냅 인디케이터 점멸: `pulse 1.5s infinite`
-   - 블록 흡착 애니메이션: 150ms 퀵 트랜지션
-   - 오타 발생 시: 즉각적인 레드 하이라이트 및 흔들림(Shake) 효과
+- `iframe` (`sandbox="allow-scripts"`)의 `srcdoc`에 HTML/CSS/JS를 병합 주입하고, `console.log`·`console.error`·`window.onerror`를 `postMessage`로 후킹하여 하단 터미널에 실시간 출력합니다.
+
+---
+
+## 5. 디자인 원칙 및 의미론적 색상 토큰 (Design Tokens)
+
+1. **Bezel-less Floating Workspace**: 불필요한 이중 테두리를 덜어내고 다크 캔버스 위에 블록과 코드가 또렷이 부각되도록 구성.
+2. **Color Semantics (`BLOCK_THEMES`)**:
+   - **입출력 / 기본 함수**: `#3b82f6` (Blue)
+   - **반복문 (`for`, `while`)**: `#8b5cf6` (Purple)
+   - **조건 분기 (`if/elif/else`)**: `#f59e0b` (Amber)
+   - **함수 정의 (`def`, `return`)**: `#10b981` (Emerald)
+   - **클래스 정의 (`class`)**: `#6366f1` (Indigo)
+   - **예외 처리 (`try/except/finally`, `raise`)**: `#f43f5e` (Rose)
+   - **문자열 / 컬렉션 / 값**: `#ec4899` (Pink) / `#06b6d4` (Cyan)

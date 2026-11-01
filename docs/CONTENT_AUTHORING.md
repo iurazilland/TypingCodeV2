@@ -1,245 +1,118 @@
 # ✍️ 콘텐츠 제작 및 커리큘럼 가이드 (Content Authoring)
 
-이 문서는 **TypingCode V2**의 학습 커리큘럼 및 연습 콘텐츠를 제작, 확장, 등록하는 표준 절차를 설명합니다.
+이 문서는 **TypingCode V2**의 학습 커리큘럼 및 연습 콘텐츠를 제작, 확장, 검증하는 공식 표준 규격(SSOT)을 설명합니다.
 
-> ⚠️ **중요 알림 (Content Folder Preservation)**:  
-> `docs/content/` 폴더는 이전 버전에서 작성된 레벨 기획 및 예제 참고용 아카이브(SSOT Reference)입니다.  
-> **현재 단계에서는 이 폴더를 직접 수정하거나 삭제하지 않으며**, 향후 신규 레벨 기획 및 레퍼런스로 활용합니다.
+> 📌 **참고 문서 안내**:
+> - 파이썬 베이직(2-Part · 14섹션 · 87레벨 · 1,089문항) 마스터 로드맵: [`docs/content/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/content/python_curriculum.md)
+> - 파이썬 어드밴스(20레벨 심화 과정) 로드맵: [`docs/content/python_advanced_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/content/python_advanced_curriculum.md)
+> - `docs/content/Python Basic Levels/`, `Web Basic Levels/` 등의 구버전 마크다운 폴더는 과거 기획 레퍼런스 보존용 아카이브입니다.
 
 ---
 
 ## 1. V2 콘텐츠 관리 아키텍처 (Content Architecture)
 
-TypingCode V2는 각 언어별로 독립된 모듈 파일(`src/data/curriculum/[language]/level[N].ts`)을 통해 커리큘럼을 작성하고 관리합니다.
+TypingCode V2는 각 언어별로 독립된 TypeScript 모듈 파일(`src/data/curriculum/[language]/level[N].ts`)을 통해 커리큘럼을 관리합니다.
 
 | 대상 | 파일 경로 | 설명 |
 | :--- | :--- | :--- |
-| **언어별 레벨 파일** | `src/data/curriculum/[language]/level[N].ts` | 각 레벨별 10단계 문항, `unlockedBlocks`, 테스트 케이스 정의 (SSOT) |
-| **언어 트랙 & 모듈** | `src/lib/curriculum.ts` | 13개 지원 언어의 트랙 정보, 코스 모듈, 스킬셋 메타데이터 |
-| **챕터 & 문법 태그** | `src/lib/curriculumSections.ts` | 챕터(섹션) 그룹화 및 레벨 카드 문법 태그(`syntaxTags`) 정의 |
-| **연습 라운드 등록소** | `src/lib/practiceData.ts` | 각 언어 및 레벨 라운드 연결 및 `getPracticeRound` 제공 |
+| **언어별 레벨 파일** | `src/data/curriculum/[language]/level[N].ts` | 각 레벨 문항(일반 13문항 / 종합 10문항), `unlockedBlocks`, 테스트 케이스 정의 |
+| **언어 트랙 & 모듈** | [`src/lib/curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts) | 13개 지원 언어의 트랙 정보, `totalLevels`, 스킬셋 메타데이터 |
+| **챕터(섹션) & 태그** | [`src/lib/curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) | 섹션 그룹화(`CourseSection`) 및 레벨 카드 문법 태그(`syntaxTags`) 정의 |
+| **연습 라운드 등록소** | [`src/lib/practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) | 레벨별 라운드 매핑(`PRACTICE_ROUNDS`) 및 `getPracticeRound` 제공 |
+| **타입 스키마 정의** | [`src/lib/practiceTypes.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceTypes.ts) | `PracticeRound`, `PracticeQuestion`, `ChallengeKind`, `TestCase` 인터페이스 |
 
 ---
 
-## 2. V2 커리큘럼 작성 규격 (Curriculum Level Specification)
+## 2. 2-Part 나선형 커리큘럼 설계 원칙 (2-Part Spiral Curriculum)
 
-각 레벨은 **10개 단계(Step 1 ~ Step 10)**로 구성되며, **5단계 블록 모드 + 5단계 타이핑 모드**의 듀얼 모드 표준을 준수합니다.
+입문자가 부가 메서드·보조 내장 함수의 홍수에 빠지지 않도록 커리큘럼을 **Part 1(핵심 개념 기초)**과 **Part 2(반복 복습 & 부가 기능 확장)**로 엄격히 분리합니다 (대표 구현: Python Basic `Lv 1 ~ Lv 87`).
 
-### 2.1 라운드 기본 구조 (`PracticeRound`)
-```typescript
-import { PracticeRound } from '@/lib/practiceTypes';
-
-export const PYTHON_LEVEL_1: PracticeRound = {
-  id: 'py-basic-r1',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 1,
-  title_ko: '1레벨: print() 함수와 숫자 출력',
-  title_en: 'Level 1: print() & Numbers',
-  totalQuestions: 10,
-  unlockedBlocks: ['print'], // 도구함에 노출할 블록 키 목록
-  questions: [
-    // 1~5단계: 블록 모드
-    // 6~10단계: 타이핑 모드 (빈칸 채우기 / 오타 수정)
-  ],
-};
-```
-
-### 2.2 도구함 해금 블록 키 (`unlockedBlocks`)
-커리큘럼 진행도에 맞춰 해당 레벨에서 다룰 블록만 배열에 선언합니다. 미선언된 블록은 도구함에서 완전히 숨겨져 여백 없이 밀착 배치됩니다.
-
-| 분류 | 블록 키 (`unlockedBlocks`에 지정할 문자열) |
-| :--- | :--- |
-| **함수 계열** | `'print'`, `'input'`, `'range'`, `'map'`, `'sorted'`, `'type'`, `'math'`, `'iter'`, `'method'`, `'open'`, `'def'` |
-| **제어 계열** | `'if'`, `'for_range'`, `'for_in'`, `'while'`, `'break'`, `'continue'` |
-| **변수 계열** | `'variable'` (사용자 정의 변수 생성기 및 변수 블록) |
-
-### 2.3 단계별 문항 스펙
-
-#### [1~5단계] 블록 모드 (Block Mode)
-```typescript
-{
-  id: 1,
-  step: 1,
-  type: 'block',
-  kind: 'standard',
-  prompt_ko: '숫자 10을 화면에 출력해보세요.',
-  prompt_en: 'Output the number 10 on the screen.',
-  hint_ko: '도구 상자의 함수 카테고리에서 출력 블록을 찾아 시작 블록 밑에 홈을 맞춰 끼워보세요.',
-  hint_en: 'Find the output block in the toolbox and snap it beneath the start block.',
-  targetCode: 'print(10)',
-  testCases: [
-    {
-      id: 1,
-      input: '',
-      expectedOutput: '10',
-    },
-  ],
-}
-```
-
-#### [6~10단계] 타이핑 모드 (Typing Mode - 빈칸 채우기 & 오타 수정)
-- 빈칸은 `templateCode` 내에 `§` 기호로 표기합니다.
-- `§`의 개수가 사용자가 입력해야 하는 글자 수(Width)와 1:1 일치하여 흔들림 없는 캡슐 박스를 렌더링합니다.
-```typescript
-{
-  id: 6,
-  step: 6,
-  type: 'typing',
-  kind: 'fill_blank', // 또는 'fix_bug'
-  prompt_ko: '빈칸을 채워 숫자 10을 출력해보세요.',
-  prompt_en: 'Fill in the blank to output the number 10.',
-  hint_ko: '함수 괄호 () 안에는 화면에 보여주고 싶은 전달값(인자)이 들어갑니다.',
-  hint_en: 'The argument you want to display goes inside the function parentheses ().',
-  templateCode: 'print(§§)', // 2글자 빈칸 박스
-  targetCode: 'print(10)',
-  testCases: [
-    {
-      id: 1,
-      input: '',
-      expectedOutput: '10',
-    },
-  ],
-}
-```
+1. **Part 1 — 핵심 개념 기초편 (예: Python `섹션 1 ~ 섹션 10`, `Lv 1 ~ Lv 63`, 789문항)**
+   - **최소 필수 함수만 허용**: 부가 메서드나 편의 내장 함수를 **완전히 배제(0건)**하고 가장 본질적인 문법만으로 `입출력` → `변수·입력` → `불리언·조건문` → `반복문(for/while)` → `문자열 기초` → `리스트 기초` → `None·튜플·딕셔너리·집합 기초` → `함수(def) 기초` → `예외 처리(try-except) 기초` → `클래스(class) 기초`까지 언어의 전체 뼈대를 완주합니다.
+2. **Part 2 — 반복 심화 & 부가 함수·기능 확장편 (예: Python `섹션 11 ~ 섹션 14`, `Lv 64 ~ Lv 87`, 300문항)**
+   - Part 1에서 익힌 전 영역을 **처음부터 다시 2회독 나선형으로 복습**하면서, 부가 문자열·컬렉션 메서드, 2차원 리스트, 삼항 조건식·리스트 컴프리헨션, 실용 내장 함수(`abs`, `round`, `map`, `enumerate`, `zip`, `reversed`, `all`, `any`, `sorted`, `isinstance`, `ord`, `chr`), `*args`·`lambda`, `try-except-else-finally`·`raise`, `__str__`·단일 상속을 단계적으로 확장합니다.
 
 ---
 
-## 3. 학습 프롬프트(Prompt) 작성 표준 원칙 (Prompt Authoring Rules) — ★필수 준수★
+## 3. V2 레벨 및 문항 구성 규격 (13-Step Regular / 10-Step Finale)
 
-TypingCode의 모든 연습 문항은 단순 따라치기 튜토리얼이 아닌 **학습자의 자기주도 문제 풀이 방식(Problem-Solving Format)**으로 진행됩니다.  
-따라서 학습 프롬프트(`prompt_ko`, `prompt_en`)를 작성하거나 번역할 때는 레벨 1의 모범 사례를 기반으로 아래 표준 규칙을 반드시 엄수해야 합니다.
+### 3.1 일반 학습 레벨 (`totalQuestions: 13`)
+블록 조작으로 구조를 먼저 직관화한 직후 텍스트 타이핑으로 즉시 체화하도록 **홀수 블록 ⇄ 짝수 타이핑 1:1 교차 구조**와 **마무리 응용 3문항**으로 구성합니다.
 
-### 3.1 🔬 레벨 1 프롬프트 작성 방식 심층 분석 (Level 1 Golden Standard)
+| 단계 (`step`) | `type` | `kind` | 구성 및 역할 |
+| :---: | :---: | :---: | :--- |
+| **Step 1, 3, 5, 7, 9** | `'block'` | `'standard'` (생략 가능) | **사전 배치 블록 모드**: `targetCode` 기반으로 빈 슬롯이 뚫린 블록 골격이 캔버스에 제공되며 조작·조립으로 문법 구조를 습득 |
+| **Step 2, 4, 6, 8, 10** | `'typing'` | `'fill_blank'` | **빈칸 채우기 타이핑**: 직전 홀수 블록 문제와 짝을 이루며 `templateCode`의 `§` 캡슐 빈칸을 직접 타이핑하여 완성 |
+| **Step 11** | `'typing'` | `'fix_bug'` | **버그 1곳 정밀 수정**: 잘못된 연산자·키워드·인덱스 등 버그가 포함된 `templateCode`(그대로 실행 시 반드시 실패/오답)를 수정 |
+| **Step 12** | `'typing'` | `'one_line'` | **한 줄 코드 추가**: 주어진 코드의 `§` 빈 줄 한 줄을 스스로 작성하여 완성 (프롬프트에 `'한 줄을 추가하여'` / `'한 줄의 코드를'` 포함) |
+| **Step 13** | `'quiz'` | `'predict_output'` | **실행 결과 예측 4지선다**: `targetCode`를 읽고 실행 결과를 머릿속으로 추적해 `choices`(4개) 중 `correctChoiceIndex` 선택 |
 
-레벨 1(`src/data/curriculum/python/level1.ts`)의 10개 문항은 블록 모드(1~5단계)와 타이핑 모드(6~10단계)의 학습 목적에 맞춰 정교하게 분리 설계되었습니다:
+#### 레벨 내 미시 나선형 복습 배치 (Intra-Level Micro-Spiral)
+- **Steps 1 ~ 4**: 해당 레벨의 **신규 핵심 개념**만 순수하게 도입 (인지 부하 최소화).
+- **Steps 5 ~ 8**: 신규 개념 + **직전 레벨·직전 섹션 개념** 결합.
+- **Steps 9 ~ 13**: 신규 개념 + **이전 누적 핵심 개념**(`while`, `+=/-=/*=`, `float()/str()/bool()`, `f-string`, `list`, `tuple/None/dict/set`, `def/return`, `try-except`, `class`)을 골고루 순환 결합하여 망각을 방지.
 
-| 단계 | 모드 | 문항 유형 | 레벨 1 공식 프롬프트 (prompt_ko) | 분석 및 설계 의도 |
-| :---: | :---: | :---: | :--- | :--- |
-| **Step 1** | 블록 | 기본 출력 | `숫자 10을 넣어 화면에 출력해보세요.` | **최소주의 기본형**: 불필요한 지시어("print 함수를 써서", "블록을 조립해서")를 모두 빼고, **입력 대상(`숫자 10`)**과 **최종 목적(`화면에 출력`)**만 간결하게 명시. |
-| **Step 2** | 블록 | 덧셈 연산 | `덧셈 기호(+)를 사용해 10 + 5를 넣어 화면에 출력해보세요.` | **개념 소개형**: 블록 모드는 새 문법을 처음 만나는 단계이므로 기호 이름과 수식을 직접 안내하여 조작법을 익히게 함. |
-| **Step 3** | 블록 | 곱셈 연산 | `곱셈 기호(*)를 사용해 4 * 5를 넣어 화면에 출력해보세요.` | 프로그래밍의 곱셈 기호(`*`)를 직관적으로 소개. |
-| **Step 4** | 블록 | 나눗셈 연산 | `나눗셈 기호(/)를 사용해 20 / 4를 넣어 화면에 출력해보세요.` | 프로그래밍의 나눗셈 기호(`/`)를 직관적으로 소개. |
-| **Step 5** | 블록 | 연산 우선순위 | `우선 계산되는 괄호를 활용해 (10 + 20) * 3을 넣어 화면에 출력해보세요.` | 괄호의 우선순위 계산 개념을 블록 조립으로 체득. |
-| **Step 6** | 타이핑 | 빈칸 채우기 | `빈칸을 채워 숫자 77을 화면에 출력해보세요.` | **타이핑 모드 전환 (스포일러 차단)**: "77을 입력하여"가 아니라 `빈칸을 채워 ...` 표준 서두 사용. |
-| **Step 7** | 타이핑 | 빈칸 채우기 | `빈칸을 채워 20 + 30의 결과를 화면에 출력해보세요.` | **연산자 스포일러 차단**: "더하기(+) 기호를 입력하여"라고 하지 않고, 목표 수식과 기대 결과만 제시. |
-| **Step 8** | 타이핑 | 오류 수정 | `틀린 곳을 수정하여 올바른 곱셈 결과를 출력해보세요.` | **수정할 정답 기호 노출 금지**: `*` 기호를 직접 알려주지 않고, "틀린 곳을 수정하여"와 "올바른 곱셈 결과"라는 문제 상황만 제시. 정답 키보드 안내는 `hint_ko`로 격리. |
-| **Step 9** | 타이핑 | 빈칸 채우기 | `빈칸을 채워 화면에 결과(50.0)을 출력해보세요.` | **기대값 제시형**: 나눗셈 기호(`/`)를 쓰라는 말을 일체 하지 않고, 출력되어야 할 결과값 `결과(50.0)`만 제시하여 스스로 나눗셈 연산자를 떠올리게 유도. |
-| **Step 10** | 타이핑 | 빈칸 채우기 | `빈칸을 채워 화면에 2 + 3을 먼저 계산한 결과(20)를 출력해보세요.` | **문제 목표 제시형**: "괄호 ()를 채워"라고 답을 주지 않고, "2 + 3을 먼저 계산한 결과(20)"라는 연산 논리 목표만 제시. |
+### 3.2 섹션 종합 문제풀이 레벨 (`totalQuestions: 10`)
+각 섹션의 마지막 레벨(예: Python `Lv 8, 15, 23, 31, 37, 43, 49, 54, 58, 63, 68, 76, 82, 87`)은 블록 보조 바퀴를 떼고 순수 타이핑·코드 독해로 섹션 전체와 누적 개념을 검증합니다 (`unlockedBlocks: []`).
+- **Steps 1 ~ 3 (3문항)**: `type: 'typing'`, `kind: 'fill_blank'`
+- **Steps 4 ~ 6 (3문항)**: `type: 'typing'`, `kind: 'fix_bug'`
+- **Steps 7 ~ 8 (2문항)**: `type: 'typing'`, `kind: 'one_line'`
+- **Steps 9 ~ 10 (2문항)**: `type: 'quiz'`, `kind: 'predict_output'`
 
----
+### 3.3 도구함 해금 블록 키 (`unlockedBlocks`)
+해당 레벨까지의 진도에 맞춰 필요한 블록 키만 선언합니다.
 
-### 3.2 🚫 타이핑 모드(6~10단계) 정답 코드/연산자 스포일러 원천 차단
-
-블록 모드(1~5단계)와 타이핑 모드(6~10단계)는 작성 원칙이 완전히 다릅니다:
-1. **블록 모드(1~5단계)**: 새로운 문법과 개념을 처음 마주하는 단계 → 연산자 기호 명칭(`//`, `%`, `**`, `,`) 안내 허용.
-2. **타이핑 모드(6~10단계)**: 앞서 배운 개념을 스스로 상기하여 입력하는 문제 풀이 단계 → **정답 연산자, 기호, 괄호, 글쇠를 프롬프트에 직접 노출하는 행위 절대 금지!**
-
-#### ❌ 레벨 2 등에서 흔히 범하는 안티 패턴 vs ⭕ 올바른 표준
-- **몫 연산자 (Step 6)**:
-  - ❌ *안티 패턴*: `"빈칸에 몫 연산자(//)를 입력하여 20을 3으로 나눈 몫(6)을 출력해보세요."` (`//` 직접 스포일러)
-  - ⭕ *올바른 표준*: `"빈칸을 채워 20을 3으로 나눈 몫(6)을 화면에 출력해보세요."`
-- **나머지 연산자 (Step 7)**:
-  - ❌ *안티 패턴*: `"빈칸에 나머지 연산자(%)를 입력하여 20을 3으로 나눈 나머지(2)를 출력해보세요."` (`%` 직접 스포일러)
-  - ⭕ *올바른 표준*: `"빈칸을 채워 20을 3으로 나눈 나머지(2)를 화면에 출력해보세요."`
-- **오타 수정 (Step 8)**:
-  - ❌ *안티 패턴*: `"^ 기호를 **로 고쳐서 27을 출력해보세요."` (정답 기호 `**` 직접 노출)
-  - ⭕ *올바른 표준*: `"틀린 곳을 수정하여 3의 3제곱 결과인 27을 화면에 출력해보세요."`
-- **쉼표 다중 출력 (Step 9)**:
-  - ❌ *안티 패턴*: `"빈칸에 쉼표(,)를 입력하여 숫자 50과 100을 나란히 출력해보세요."` (쉼표 `,` 직접 스포일러)
-  - ⭕ *올바른 표준*: `"빈칸을 채워 숫자 50과 100을 나란히 출력해보세요."`
-- **종합 응용 (Step 10)**:
-  - ❌ *안티 패턴*: `"빈칸을 채워 15를 4로 나눈 몫(3)과 나머지(3)를 쉼표로 연결해 출력해보세요."`
-  - ⭕ *올바른 표준*: `"빈칸을 채워 15를 4로 나눈 몫(3)과 나머지(3)를 함께 출력해보세요."`
-
----
-
-### 3.3 🎯 프롬프트(Prompt)와 힌트(Hint)의 명확한 역할 분담
-
-학습자가 스스로 해결할 수 있는 기회를 보장하기 위해 프롬프트와 힌트의 역할을 엄격히 분리합니다:
-
-| 구분 | 프롬프트 (`prompt_ko`, `prompt_en`) | 힌트 (`hint_ko`, `hint_en`) |
+| 분류 | 블록 키 (`unlockedBlocks`에 지정할 문자열) | 비고 |
 | :--- | :--- | :--- |
-| **주 역할** | **"무엇을 달성해야 하는가?" (Problem & Goal)** | **"어떻게 입력하고 해결하는가?" (How-to & Syntax)** |
-| **포함 내용** | • 문제 해결 서두 (`빈칸을 채워`, `틀린 곳을 수정하여`)<br>• 문제 목표 및 계산 의도 (예: `몫과 나머지를 함께`)<br>• 최종 기대 출력값 (예: `결과(50.0)`, `결과인 27`) | • 구체적인 연산자 기호 명칭 및 형태 (`//`, `%`, `**`)<br>• 키보드 입력법 (예: `Shift + 5를 누르면 % 기호 입력`)<br>• 문법적 배경 원리 및 상세 설명 |
-| **노출 시점** | 연습 화면 상단에 **항상 노출** | 학습자가 모를 때 버튼을 눌러 여는 **팝오버 영역에만 노출** |
+| **입출력·함수·연산** | `'print'`, `'input'`, `'type'`, `'math'`, `'method'`, `'range'`, `'map'`, `'sorted'`, `'iter'`, `'open'`, `'def'`, `'return'` | `'type'` 해금 시 `type`, `int`, `float`, `str`, `bool`, `isinstance`, `ord`, `chr` 드롭다운 활성화 |
+| **제어·예외·클래스** | `'if'`, `'for_range'`, `'for_in'`, `'while'`, `'break'`, `'continue'`, `'try'`, `'raise'`, `'class'` | `'try'` 해금 시 `try-except-else-finally` 다단 블록 활성화; `'class'` 해금 시 내부에 `def` 메서드 스냅 가능 |
+| **변수·컬렉션** | `'variable'`, `'list'`, `'tuple'`, `'dict'`, `'set'` | 사용자 변수 생성·재할당·복합 대입 및 컬렉션 블록 |
 
 ---
 
-### 3.4 🏷️ 문제 유형별 표준 서두 규격 (Standard Prefixes by Question Type)
+## 4. 학습 프롬프트(Prompt) 및 템플릿 작성 절대 원칙 — ★필수 준수★
 
-학습자가 문항을 마주했을 때 문제의 해결 방식을 즉각 직관적으로 인지할 수 있도록, 문제 유형별 고정 서두를 표준화합니다:
+모든 연습 문항은 단순 받아쓰기가 아닌 **자기주도 문제 풀이(Problem-Solving Format)**입니다.
 
-| 문제 유형 | 표준 서두 (한국어) | 표준 서두 (영문) | 작성 예시 |
-| :--- | :--- | :--- | :--- |
-| **빈칸 채우기** (`fill_blank`) | **`빈칸을 채워 ...`** | `Fill in the blank(s) to ...` | `빈칸을 채워 화면에 결과(20)를 출력해보세요.`<br>`Fill in the blanks to print the result (20) on the screen.` |
-| **틀린 곳 수정** (`fix_bug`) | **`틀린 곳을 수정하여 ...`** | `Fix the error to ...` | `틀린 곳을 수정하여 올바른 결과를 화면에 출력해보세요.`<br>`Fix the error to print the correct result on the screen.` |
-| **한 줄 코드 작성** (`single_line`) | **`한 줄의 코드를 작성하여 ...`** | `Write a single line of code to ...` | `한 줄의 코드를 작성하여 화면에 숫자 100을 출력해보세요.`<br>`Write a single line of code to print the number 100 on the screen.` |
-| **블록 조립** (`block`) | **`... 넣어 화면에 출력해보세요.`** | `... and print it on the screen.` | `숫자 10을 넣어 화면에 출력해보세요.`<br>`Insert the number 10 and print it on the screen.` |
+### 4.1 🚫 정답 스포일러 원천 차단 (`fill_blank` & `fix_bug`)
+1. **`fill_blank` / `fix_bug` 프롬프트 내 정답 노출 금지**:
+   - 빈칸에 들어갈 키워드·연산자·메서드명이나 `fix_bug`에서 고쳐야 할 정답 코드를 `prompt_ko` / `prompt_en`에 그대로 적지 않습니다.
+   - 구체적인 문법 키워드나 타건 안내는 반드시 팝오버 힌트(`hint_ko`, `hint_en`)로 분리합니다.
+   - ❌ *나쁜 예*: `"틀린 곳의 skip을 pass로 수정하여 음수일 때 건너뛰게 해보세요."` (`pass` 정답 직접 노출)
+   - ⭕ *좋은 예*: `"음수일 때 아무 동작 없이 넘어가려다 잘못된 단어를 적어 발생한 오류를 올바른 파이썬 키워드로 수정해보세요."`
+2. **식별자·키워드 부분 쪼개기 빈칸 금지 (No Broken Partial Identifiers)**:
+   - `pr§§§(10)`, `whi§§`, `ap§§§§`처럼 하나의 식별자나 키워드 중간만 `§`로 뚫지 않습니다. 키워드·변수명·연산자·리터럴 단위로 온전히 마스킹하며, `templateCode.length === targetCode.length` 및 줄바꿈 위치가 정확히 1:1 일치해야 합니다.
+3. **모호하지 않고 간결한 프롬프트 (`<= 125자`)**:
+   - 한국어 프롬프트(`prompt_ko`)는 **125자 이내**로 핵심 조건과 기대 출력을 명료하게 제시합니다.
+   - 문자열 앞뒤에 눈에 보이지 않는 공백(`"Hello "` 등)을 강제해 학습자가 헷갈리는 출력을 피하고, 공백 유무가 직관적인 출력값을 설계합니다.
 
----
+### 4.2 🏷️ 문제 유형별 표준 서두 규격
+| 문제 유형 (`kind`) | 표준 표현 (한국어) | 표준 표현 (영문) |
+| :--- | :--- | :--- |
+| **블록 조립** (`block`) | `... 출력해보세요.` / `... 작성해보세요.` | `... and print ...` |
+| **빈칸 채우기** (`fill_blank`) | **`빈칸을 채워 ...`** | `Fill in the blank(s) to ...` |
+| **버그 수정** (`fix_bug`) | **`... 오류를 수정해보세요.`** / **`틀린 곳을 수정하여 ...`** | `Fix the bug/error so that ...` |
+| **한 줄 추가** (`one_line`) | **`... 한 줄을 추가하여 ...`** / **`한 줄의 코드를 작성하여 ...`** | `Add/Write a single line ...` |
+| **결과 예측** (`predict_output`) | **`다음 코드의 실행 결과로 알맞은 것을 골라보세요.`** | `Choose the exact output of the following code.` |
 
-## 4. 예시 코드 설계 4대 원칙 (Authoring Principles)
-
-### 4.1 누적 복습 (Cumulative Review) — **가장 중요**
-- 새로운 개념을 소개하더라도 이전 레벨에서 학습한 변수, 사칙연산, 조건문을 자연스럽게 결합하여 반복 노출시킵니다.
-- *나쁜 예*: 반복문 레벨에서 단순 숫자 출력 `for i in range(5): print(i)`만 10문제 반복.
-- *좋은 예*: 이전 단계의 변수와 덧셈을 결합하여 `total += i` 형태의 누적합 로직으로 확장.
-
-### 4.2 한 줄 길이 제한 (40자 규칙)
-- 타이핑 인터페이스 및 블록 캔버스 가독성을 위해 단일 라인의 코드는 **공백 포함 40자 이내**로 제한합니다.
-- 긴 표현식은 중간 변수로 쪼개어 가독성을 확보합니다.
-
-### 4.3 즉각적이고 가시적인 실행 결과 (Visual Feedback)
-- 코드가 성공적으로 실행되었을 때 터미널 출력창 또는 WebPreview에 직관적인 결과가 나타나야 합니다.
-- 빈 화면이나 아무런 출력이 없는 무응답 코드는 피합니다.
-
-### 4.4 10단계 스케일링 (10-Step Scaffolding)
-- Step 1~3: 극단적으로 단순한 기본형 (개념 도입).
-- Step 4~7: 파라미터 변경 및 기본 응용.
-- Step 8~10: 종합 복습 및 작은 미니 문제 해결.
+### 4.3 코드 가독성 및 실행 검증 규칙
+- **한 줄 코드 길이**: 블록 캔버스와 타이핑 에디터 가독성을 위해 코드 단일 라인은 가급적 **40~52자 이내**로 간결하게 유지합니다.
+- **실행 결정성**: `set` 다중 원소 등 출력 순서가 비결정적일 수 있는 자료구조는 `len()`, `sum()`, `in` 검사 또는 `sorted()` / `.sort()`를 거쳐 항상 결정적인 `expectedOutput`을 갖도록 작성합니다.
+- **부동소수점 정합성**: 로컬 JS AST 실행기(`blockEvaluator.ts`)와 CPython 간 출력 표기가 1:1 일치하도록 테스트 케이스 입력값을 설계합니다.
 
 ---
 
-## 5. 커리큘럼 트랙 등록 절차 (`src/lib/curriculum.ts`)
+## 5. 검증 게이트 (Verification Protocol)
 
-새로운 언어나 코스 모듈을 등록할 때는 `CURRICULUM_TRACKS` 배열에 객체를 추가합니다:
-```typescript
-{
-  id: 'my-language',
-  name: '언어 이름',
-  icon: '아이콘',
-  badge: '버전 정보',
-  color: '#색상코드',
-  gradient: '그라데이션',
-  tagline_ko: '국문 슬로건',
-  tagline_en: '영문 슬로건',
-  modules: [
-    {
-      id: 'module-id',
-      category: '베이직',
-      categoryBadgeColor: '#10b981',
-      title_ko: '모듈 제목',
-      title_en: 'Module Title',
-      difficulty: '입문',
-      difficultyColor: '#10b981',
-      totalLevels: 20,
-      description_ko: '설명',
-      description_en: 'Description',
-      skills: ['습득 기술 1', '습득 기술 2'],
-      practiceUrl: '/practice/my-language/1',
-      isPopular: true,
-    }
-  ]
-}
-```
+신규 레벨을 작성하거나 수정한 뒤에는 반드시 아래 정적·실행 검증을 통과해야 합니다:
 
----
-
-## 6. 검증 및 빌드 확인
-새로운 콘텐츠를 추가하거나 수정한 후에는 다음 명령으로 타입스크립트 무오류 상태를 확인합니다:
-```bash
-npx tsc --noEmit
-```
-오류가 0건이면 앱을 재시작할 필요 없이 브라우저에서 즉시 반영된 콘텐츠를 확인할 수 있습니다.
+1. **TypeScript 정적 타입 검사 (필수)**:
+   ```bash
+   npx tsc --noEmit
+   ```
+2. **필수 자동 점검 체크리스트**:
+   - [ ] [`curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts)의 `levelNumber` 및 `title_ko`와 레벨 파일의 `roundNumber`·`title_ko`가 정확히 일치하는가?
+   - [ ] [`practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) 및 [`curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts)의 `totalLevels`에 누락 없이 등록되었는가?
+   - [ ] 모든 문항의 `targetCode`가 [`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts) 실행 시 모든 `testCases`의 `expectedOutput`과 100% 일치하는가?
+   - [ ] `fix_bug` 문항의 초기 `templateCode`를 그대로 실행했을 때 반드시 에러가 나거나 오답이 출력되는가?
+   - [ ] 홀수 블록 문항의 `createInitialCanvasBlocks` 블록들이 해당 레벨의 `unlockedBlocks` 범위 내에 있으며, Part 1 레벨에 Part 2 전용 문법이 섞이지 않았는가?

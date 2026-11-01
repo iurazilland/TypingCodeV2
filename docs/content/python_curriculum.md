@@ -1,7 +1,12 @@
 # 파이썬 타자 연습 커리큘럼 — Basic (2-Part · 14섹션 · 87레벨 완결 SSOT)
 
+> ✅ **구현 및 전수 검증 완료 (Implementation & Verification Status: 100% Complete)**
+> - **구현 파일**: `src/data/curriculum/python/level1.ts` ~ `level87.ts` (총 **14섹션 · 87레벨 · 1,089문항** — Part 1 `789문항` + Part 2 `300문항`)
+> - **메타데이터 & 런타임 연동**: [`curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) · [`practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) · [`curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts) · [`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts) · [`CanvasBlockItem.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/CanvasBlockItem.tsx)
+> - **검증 결과**: `npx tsc --noEmit` `0 errors`, 1,089문항 AST 실행 정합성 100%, Part 1(`Lv 1~63`) 내 Part 2 문법 혼입 `0건`, 프롬프트·교육학 결함 `0건`, 섹션 간 누적 나선형 복습 `1,534회` 검증 완료 (상세: [`LEVEL_VERIFICATION_REPORT.md`](file:///d:/Projects/TypingCode_V2/docs/LEVEL_VERIFICATION_REPORT.md))
+
 이 문서는 **TypingCode V2 파이썬 베이직(`py-basic` / `python_basic`)** 과정의 **단일 마스터 로드맵(SSOT)**입니다.  
-입문자가 부가 메서드·보조 함수의 홍수에 빠지지 않고 먼저 파이썬 전체의 핵심 뼈대를 완주한 뒤, 2회독 나선형 복습으로 부가 기능과 파이썬다운 표현식을 자연스럽게 확장하도록 **2-Part 아키텍처**로 설계되어 있습니다.
+입문자가 부가 메서드·보조 함수의 홍수에 빠지지 않고 먼저 파이썬 전체의 핵심 뼈대를 완주한 뒤, 2회독 나선형 복습으로 부가 기능과 파이썬다운 표현식을 자연스럽게 확장하도록 **2-Part 아키텍처**로 설계·구현되어 있습니다.
 
 ---
 
