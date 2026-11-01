@@ -10,10 +10,10 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { CURRICULUM_TRACKS, CourseModule, LanguageTrack } from '@/lib/curriculum';
+import { findCurriculumModuleBySlug } from '@/lib/curriculum';
 import LanguageIcon from '@/components/LanguageIcon';
 import { getCategoryName } from '@/lib/curriculumTranslations';
-import { getCourseSections, LevelSection, LevelItem } from '@/lib/curriculumSections';
+import { getCourseSections, LevelSection } from '@/lib/curriculumSections';
 import { getClearedLevelsLocal, PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
 
 interface StageSelectPageProps {
@@ -32,42 +32,8 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
   // Find matching track and module from CURRICULUM_TRACKS
   const { matchedTrack, matchedModule } = useMemo(() => {
-    let tFound: LanguageTrack | undefined;
-    let mFound: CourseModule | undefined;
-
-    for (const track of CURRICULUM_TRACKS) {
-      for (const mod of track.modules) {
-        if (
-          mod.practiceUrl === `/practice/${rawLang}` ||
-          mod.id.toLowerCase() === rawLang ||
-          (rawLang === 'python_basic' && mod.id === 'py-basic') ||
-          (rawLang === 'python' && mod.id === 'py-basic') ||
-          (rawLang === 'c' && mod.id === 'c-basic') ||
-          (rawLang === 'web' && mod.id === 'web-html')
-        ) {
-          tFound = track;
-          mFound = mod;
-          break;
-        }
-      }
-      if (mFound) break;
-    }
-
-    if (!tFound) {
-      const cleanLang = rawLang.replace(/_basic$/, '').replace(/_adv$/, '').replace(/_advanced$/, '');
-      tFound = CURRICULUM_TRACKS.find((t) => 
-        t.id === rawLang ||
-        t.id === cleanLang ||
-        (cleanLang === 'py' && t.id === 'python') ||
-        (cleanLang === 'js' && t.id === 'javascript') ||
-        (cleanLang === 'html' && t.id === 'web')
-      ) || CURRICULUM_TRACKS[0];
-      mFound = tFound.modules[0];
-    } else if (!mFound) {
-      mFound = tFound.modules[0];
-    }
-
-    return { matchedTrack: tFound, matchedModule: mFound };
+    const { track, module } = findCurriculumModuleBySlug(rawLang);
+    return { matchedTrack: track, matchedModule: module };
   }, [rawLang]);
 
   // Section & Level definitions for this course
@@ -151,6 +117,79 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
   const clearedCount = userProgress.clearedLevels.size;
   const progressPercent = totalLevelsCount > 0 ? Math.min(100, Math.round((clearedCount / totalLevelsCount) * 100)) : 0;
+
+  if (matchedModule.isLocked) {
+    return (
+      <div style={{ maxWidth: '640px', margin: '0 auto', padding: '72px 24px 100px' }}>
+        <div
+          style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            border: '1.5px solid #cbd5e1',
+            padding: '36px 28px',
+            textAlign: 'center',
+            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
+          }}
+        >
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              background: '#f1f5f9',
+              border: '1.5px solid #cbd5e1',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px',
+            }}
+          >
+            <Lock size={24} color="#64748b" />
+          </div>
+          <h1 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', margin: '0 0 8px 0' }}>
+            {isEn ? matchedModule.title_en : matchedModule.title_ko}
+          </h1>
+          <p style={{ fontSize: '0.94rem', color: '#475569', margin: '0 0 24px 0', lineHeight: 1.55 }}>
+            {isEn
+              ? 'This curriculum is currently in preparation and will open sequentially.'
+              : '현재 준비 중인 커리큘럼이며 순차적으로 오픈될 예정입니다.'}
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <Link
+              href="/languages"
+              style={{
+                padding: '10px 18px',
+                borderRadius: '12px',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                color: '#0f172a',
+                fontSize: '0.88rem',
+                fontWeight: 800,
+                textDecoration: 'none',
+              }}
+            >
+              {isEn ? 'Back to Roadmaps' : '학습 로드맵으로'}
+            </Link>
+            <Link
+              href="/practice/python_basic"
+              style={{
+                padding: '10px 18px',
+                borderRadius: '12px',
+                background: '#0891b2',
+                border: '1.5px solid #0891b2',
+                color: '#ffffff',
+                fontSize: '0.88rem',
+                fontWeight: 800,
+                textDecoration: 'none',
+              }}
+            >
+              {isEn ? 'Start Python Basics' : '파이썬 베이직 시작'}
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>

@@ -87,7 +87,7 @@ export default function ProfilePage() {
 
     for (const track of CURRICULUM_TRACKS) {
       for (const mod of track.modules) {
-        if (!mod.practiceUrl.startsWith('/practice/')) continue;
+        if (mod.isLocked || !mod.practiceUrl.startsWith('/practice/')) continue;
         const rawLang = mod.practiceUrl.replace(/^\/practice\//, '');
         const clearedList = getClearedLevelsLocal(rawLang);
         if (clearedList.length > 0) {

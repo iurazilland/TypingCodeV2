@@ -12,6 +12,26 @@ export interface CourseModule {
   skills: string[];
   practiceUrl: string;
   isPopular?: boolean;
+  isLocked?: boolean;
+}
+
+export interface LearningRoadmap {
+  id: string;
+  icon: string;
+  color: string;
+  title_ko: string;
+  title_en: string;
+  target_ko: string;
+  target_en: string;
+  summary_ko: string;
+  summary_en: string;
+  moduleIds: string[];
+}
+
+export interface FinderAnswers {
+  experience: 'none' | 'basic' | 'experienced';
+  goal: 'starter' | 'ai-data' | 'frontend' | 'backend' | 'cs-algo' | 'game-mobile';
+  style: 'practical' | 'fundamental';
 }
 
 export const DIFFICULTY_COLORS: Record<'입문' | '중급' | '심화', string> = {
@@ -64,6 +84,7 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         skills: ['입출력·조건·반복 & 필수 자료구조', 'def 함수·try-except·class 기초', '컴프리헨션·삼항식·실용 내장 함수', '2-Part 나선형 누적 복습 (87레벨)'],
         practiceUrl: '/practice/python_basic',
         isPopular: true,
+        isLocked: false,
       },
       {
         id: 'py-advanced',
@@ -77,7 +98,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'super()·다중 상속·@property·심화 매직 메서드, **kwargs·클로저·데코레이터(@)·제너레이터(yield), with 컨텍스트 매니저와 정규표현식·모듈 아키텍처를 체득합니다.',
         description_en: 'Master super(), @property, magic methods, **kwargs, decorators (@), generators (yield), context managers (with), regex, and modular architecture.',
         skills: ['super()·@property·심화 OOP', '**kwargs·데코레이터(@)·클로저', '제너레이터(yield) & with 컨텍스트', '딕셔너리 컴프리헨션·모듈·정규식'],
-        practiceUrl: '/practice/python',
+        practiceUrl: '/practice/py-advanced',
+        isLocked: true,
       },
       {
         id: 'py-bigdata',
@@ -91,7 +113,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '데이터 사이언스의 필수 라이브러리인 NumPy 행렬 연산과 Pandas DataFrame 필터링, 결측치 정제, 통계 집계를 실전 데이터로 학습합니다.',
         description_en: 'Learn NumPy matrix math, Pandas DataFrame filtering, data cleaning, and statistical summaries.',
         skills: ['NumPy 다차원 배열 연산', 'Pandas DataFrame 조작', '데이터 결측치 정제', '그룹화 통계 집계'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/py-bigdata',
+        isLocked: true,
       },
       {
         id: 'py-ai',
@@ -105,8 +128,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '머신러닝과 딥러닝의 핵심! 텐서 연산, 선형 회귀, 경사 하강법 알고리즘, 신경망 기초 모델을 타이핑하며 수식과 코드를 직관적으로 이해합니다.',
         description_en: 'Understand tensors, linear regression, gradient descent, and neural networks through code.',
         skills: ['텐서(Tensor) 기본 연산', '선형 회귀 모델 구현', '손실 함수 & 경사하강법', '인공 신경망 Perceptron'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/py-ai',
         isPopular: true,
+        isLocked: true,
       },
     ],
   },
@@ -134,8 +158,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'main 진입점 함수, 정수형/실수형 데이터 타입, 서식 지정자 printf/scanf, 분기문과 반복문으로 C언어의 탄탄한 기본기를 세웁니다.',
         description_en: 'Build strong fundamentals with main function, data types, format specifiers, and control logic.',
         skills: ['main 함수 & 표준 라이브러리', '정밀 입출력 printf/scanf', '기본 연산 & 형변환', '반복 제어 for/while'],
-        practiceUrl: '/practice/c',
+        practiceUrl: '/practice/c-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'c-arduino',
@@ -149,7 +174,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '소프트웨어가 물리적 세상과 만나는 마법! 디지털 핀 입출력, 아날로그 센서 데이터 읽기, PWM 모터 제어, 시리얼 통신을 코딩합니다.',
         description_en: 'Control hardware sensors, digital I/O pins, PWM signals, and serial communications.',
         skills: ['digitalRead / digitalWrite 핀 제어', '아날로그 센서 ADC 읽기', 'PWM 모터 & LED 제어', '시리얼 통신 데이터 송수신'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/c-arduino',
+        isLocked: true,
       },
       {
         id: 'c-advanced',
@@ -163,7 +189,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'C언어의 꽃이자 핵심! 메모리 주소 체계, 단일/이중 포인터, 구조체(struct), 힙 메모리 malloc/free를 완벽히 정복합니다.',
         description_en: 'Conquer the crown jewel of C: memory address systems, pointers, structs, and dynamic memory allocation.',
         skills: ['메모리 주소 & 포인터 연산', '동적 메모리 malloc/free', '구조체(struct) 설계', '함수 포인터 & 콜백'],
-        practiceUrl: '/practice/c',
+        practiceUrl: '/practice/c-advanced',
+        isLocked: true,
       },
       {
         id: 'c-datastruct',
@@ -177,7 +204,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '라이브러리 도움 없이 포인터로 직접 연결 리스트(Linked List), 스택, 큐, 이진 트리(Binary Tree)를 바닥부터 구현합니다.',
         description_en: 'Build Linked Lists, Stacks, Queues, and Binary Search Trees directly from scratch using pointers.',
         skills: ['단방향/양방향 연결 리스트', '스택(Stack) & 큐(Queue)', '이진 탐색 트리(BST)', '재귀 알고리즘 최적화'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/c-datastruct',
+        isLocked: true,
       },
     ],
   },
@@ -205,8 +233,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '웹 페이지의 표준 규격! 시맨틱 태그(header, nav, main, article), 사용자 폼(form/input), 표(table), 멀티미디어 태그를 다룹니다.',
         description_en: 'Learn web standards: semantic tags, accessible forms, inputs, tables, and multimedia embeds.',
         skills: ['시맨틱 구조 태그(header, section)', '사용자 입력 Form & Input', '표(Table) & 리스트 마크업', '웹 표준 & 접근성 원칙'],
-        practiceUrl: '/practice/web',
+        practiceUrl: '/practice/web-html',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'web-css',
@@ -220,8 +249,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '웹에 생명을 불어넣는 디자인! Flexbox 1차원 정렬, CSS Grid 2차원 바둑판 레이아웃, 트랜지션 및 반응형 미디어쿼리를 마스터합니다.',
         description_en: 'Master Flexbox alignment, CSS Grid layouts, interactive keyframe animations, and responsive media queries.',
         skills: ['Flexbox 주축/교차축 정렬', 'CSS Grid 2차원 레이아웃', '트랜지션 & 키프레임 애니메이션', '모바일 반응형 미디어쿼리'],
-        practiceUrl: '/practice/web',
+        practiceUrl: '/practice/web-css',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'web-responsive',
@@ -235,7 +265,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '스마트폰, 태블릿, 데스크톱 어디서나 완벽한 반응형 뷰포트 구성과 부드러운 인터랙티브 애니메이션 효과를 구현합니다.',
         description_en: 'Design flexible layouts for mobile, tablet, and desktop with smooth UI motion.',
         skills: ['모바일 우선(Mobile-First) 디자인', 'CSS 변수(Custom Properties)', '다크모드 지원 테마 시스템', 'SVG 그래픽 & 키프레임 이펙트'],
-        practiceUrl: '/practice/web',
+        practiceUrl: '/practice/web-responsive',
+        isLocked: true,
       },
     ],
   },
@@ -263,8 +294,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '살아있는 웹의 두뇌! 변수(let/const), 함수, 배열 메서드, document DOM 노드 제어, 클릭 이벤트 리스너를 실습합니다.',
         description_en: 'Control DOM nodes, handle click events, and learn fundamental JS syntax.',
         skills: ['let/const 변수 & 화살표 함수', 'document DOM 요소 선택/수정', 'addEventListener 이벤트 제어', '배열 고차함수(map, filter)'],
-        practiceUrl: '/practice/web/1',
+        practiceUrl: '/practice/js-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'js-advanced',
@@ -278,7 +310,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '실무급 프론트엔드 역량의 분수령! 비동기 Promise와 async/await, 클로저, 프로토타입, 이벤트 루프 메커니즘을 마스터합니다.',
         description_en: 'Master Promise chains, async/await HTTP fetching, closures, and the JS event loop.',
         skills: ['Promise 체이닝 & 에러 처리', 'async / await 비동기 제어', '클로저(Closure)와 스코프', 'Fetch API 데이터 로드'],
-        practiceUrl: '/practice/web/1',
+        practiceUrl: '/practice/js-advanced',
+        isLocked: true,
       },
       {
         id: 'js-ts',
@@ -292,7 +325,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '에러 없는 견고한 코드 작성! interface, type alias, 제네릭(Generics), 유니온 타입을 통해 현대 웹 개발 표준을 정복합니다.',
         description_en: 'Level up your JavaScript with static type checking, interfaces, type aliases, and generics.',
         skills: ['기본 타입 선언 & 타입 추론', '인터페이스(interface) 모델링', '제네릭(Generics) 재사용성', '유니온 & 제어 흐름 분석'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/js-ts',
+        isLocked: true,
       },
       {
         id: 'js-react',
@@ -306,7 +340,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '세계에서 가장 널리 쓰이는 UI 라이브러리! JSX 문법, 함수형 컴포넌트, useState & useEffect 상태 관리를 타이핑하며 익힙니다.',
         description_en: 'Build modern declarative UI using React functional components, hooks, and props.',
         skills: ['JSX 컴포넌트 구조화', 'useState 반응형 상태 관리', 'useEffect 부수효과 처리', 'Props 컴포넌트 통신'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/js-react',
+        isLocked: true,
       },
       {
         id: 'js-node',
@@ -320,7 +355,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '자바스크립트로 서버 구축하기! Node.js 모듈 시스템, 파일 시스템(fs), Express REST API 라우팅을 실습합니다.',
         description_en: 'Build backend REST APIs with Node.js modules and Express framework routing.',
         skills: ['Node.js 런타임 & 모듈(ESM)', 'Express 서버 라우팅', 'JSON 요청/응답 처리', '미들웨어(Middleware) 파이프라인'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/js-node',
+        isLocked: true,
       },
     ],
   },
@@ -348,8 +384,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '강력한 정적 타입 언어의 기초! public static void main, 캡슐화, 상속, 다형성, 인터페이스의 원리를 단단하게 다집니다.',
         description_en: 'Solidify your Java foundation with static typing, main entry points, encapsulation, and interfaces.',
         skills: ['클래스와 객체 인스턴스', '캡슐화 getter/setter', '상속(extends)과 다형성', '인터페이스(implements)'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/java-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'java-advanced',
@@ -363,7 +400,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '실무 자바 개발의 핵심 도구! List, Map, Set 컬렉션 프레임워크와 모던 자바의 람다식, 함수형 Stream API 연산을 체득합니다.',
         description_en: 'Master ArrayList, HashMap, Set collections, alongside modern Lambda expressions and Stream API.',
         skills: ['ArrayList & HashMap 컬렉션', '제네릭(Generics) 타입 안정성', '람다식 & 함수형 인터페이스', 'Stream API map/filter/collect'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/java-advanced',
+        isLocked: true,
       },
       {
         id: 'java-spring',
@@ -377,7 +415,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '대한민국 실무 백엔드 1위 기술! 어노테이션(@RestController, @GetMapping), 의존성 주입(DI), JSON 응답 API를 코딩합니다.',
         description_en: 'Build REST APIs with Spring Boot annotations, Dependency Injection (DI), and JSON serialization.',
         skills: ['@RestController & 엔드포인트', '제어의 역전(IoC) & DI 주입', 'DTO 객체 매핑 & JSON 반환', 'HTTP 상태 코드 응답'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/java-spring',
+        isLocked: true,
       },
     ],
   },
@@ -405,8 +444,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '데이터를 자유자재로 추출하는 첫걸음! SELECT 컬럼 조회, WHERE 필터링 조건, LIKE 패턴 매칭, ORDER BY 정렬을 학습합니다.',
         description_en: 'Extract data effortlessly with SELECT queries, WHERE conditional clauses, and ORDER BY sorting.',
         skills: ['SELECT 컬럼 지정 조회', 'WHERE 조건식 & 비교 연산자', 'IN / BETWEEN / LIKE 패턴', 'ORDER BY 오름/내림차순 정렬'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/sql-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'sql-advanced',
@@ -420,7 +460,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '실무 데이터 분석의 정점! 다중 테이블 결합(INNER/LEFT JOIN), GROUP BY 그룹별 집계, 서브쿼리(Subquery)를 마스터합니다.',
         description_en: 'Analyze multi-table relations using INNER/LEFT JOINs, aggregate functions (COUNT, SUM), and nested subqueries.',
         skills: ['INNER / LEFT OUTER JOIN 결합', 'GROUP BY & HAVING 집계 필터', '서브쿼리(Subquery) 중첩 조회', '집계 함수 COUNT/SUM/AVG'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/sql-advanced',
+        isLocked: true,
       },
     ],
   },
@@ -448,8 +489,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '군더더기 없는 구글의 명작 언어! 패키지 main, 간결한 변수 선언(:=), 슬라이스(Slice), 구조체(struct)를 학습합니다.',
         description_en: 'Learn minimal clean syntax: packages, short variable declarations, slices, and structs.',
         skills: ['package main & fmt 패키지', ':= 단축 변수 선언 & 타입', '동적 배열 슬라이스(Slice)', '구조체(struct) 데이터 모델'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/go-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'go-backend',
@@ -463,7 +505,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '넷플릭스, 쿠버네티스, 도커의 심장! net/http 표준 패키지로 외부 프레임워크 없이 초경량 고성능 웹 서버를 구축합니다.',
         description_en: 'Build super-fast cloud APIs using standard net/http, JSON handlers, and middleware.',
         skills: ['net/http 웹 서버 라우팅', 'JSON 인코딩/디코딩 직렬화', 'HTTP 미들웨어 인터셉터', 'RESTful 엔드포인트 설계'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/go-backend',
+        isLocked: true,
       },
       {
         id: 'go-concurrency',
@@ -477,7 +520,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '수백만 개의 동시 작업을 단 몇 MB 메모리로 처리하는 마법! go 키워드, 채널(Channel), select 다중 대기를 실습합니다.',
         description_en: 'Master lightweight concurrency with go routines, channels, buffered channels, and select multiplexing.',
         skills: ['go 비동기 고루틴 생성', '채널(Channel) 데이터 송수신', 'select 다중 채널 폴링', 'sync.WaitGroup 동기화'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/go-concurrency',
+        isLocked: true,
       },
     ],
   },
@@ -505,8 +549,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '러스트의 혁명적 철학! 불변성(let vs mut), 스택/힙 메모리, 소유권 이동(Move)과 참조 대여(&) 원리를 타이핑하며 깨우칩니다.',
         description_en: 'Understand Rust unique superpowers: ownership move semantics, immutable/mutable borrowing.',
         skills: ['let / let mut 변수 가변성', '소유권 이동(Move) 규칙', '참조와 대여(&, &mut)', 'match 패턴 매칭 제어'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/rust-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'rust-advanced',
@@ -520,7 +565,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'null 버그 제로! Option<T>와 Result<T, E>, 트레이트(Trait) 인터페이스, 제네릭 추상화로 타협 없는 견고한 코드를 작성합니다.',
         description_en: 'Eliminate null pointer bugs with Option and Result types, custom Traits, and generics.',
         skills: ['Result와 Option 에러 처리', '? 연산자 에러 전파', '트레이트(Trait) 다형성', '제네릭(Generics) 추상화'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/rust-advanced',
+        isLocked: true,
       },
       {
         id: 'rust-systems',
@@ -534,7 +580,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'C/C++ 속도에 안정성을 더하다! 스마트 포인터(Box, Rc), 멀티스레딩 Arc/Mutex, 데이터 경쟁 없는 고성능 병렬 처리를 정복합니다.',
         description_en: 'Master multi-threading with Arc/Mutex, smart pointers (Box, Rc), and zero-cost abstractions.',
         skills: ['스마트 포인터 Box<T>', '스레드 안전 Arc / Mutex', '채널 기반 메시지 패싱', '무비용 이터레이터 최적화'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/rust-systems',
+        isLocked: true,
       },
     ],
   },
@@ -562,8 +609,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'C언어의 성능 위에 강력한 객체지향을 결합! cin/cout 스트림 입출력, 생성자와 소멸자, 클래스 캡슐화를 탄탄하게 다집니다.',
         description_en: 'Bridge C and OOP with cin/cout streams, constructors, destructors, and class encapsulation.',
         skills: ['std::cout / cin 스트림 제어', '생성자 & 소멸자 생명주기', '클래스 캡슐화 & 네임스페이스', '참조자(Reference &) 문법'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/cpp-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'cpp-stl',
@@ -577,7 +625,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '코딩 테스트와 실무의 필수 무기! std::vector, std::map, 정렬(std::sort), 이진 탐색 등 검증된 최적화 컨테이너를 마스터합니다.',
         description_en: 'Master std::vector, map, set, iterators, and high-performance standard algorithms.',
         skills: ['std::vector 동적 배열', 'std::map 딕셔너리 구조', '반복자(Iterator) 순회', 'std::sort & 알고리즘 함수'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/cpp-stl',
+        isLocked: true,
       },
       {
         id: 'cpp-modern',
@@ -591,7 +640,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '메모리 누수 없는 안전한 C++! unique_ptr, shared_ptr, auto 타입 추론, 람다 표현식, 구조화된 바인딩을 실습합니다.',
         description_en: 'Write modern memory-safe C++ using unique_ptr, shared_ptr, auto deduction, and lambda expressions.',
         skills: ['std::unique_ptr & shared_ptr', 'auto 자동 타입 추론', '인라인 람다 표현식', '범위 기반 for (Range-for)'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/cpp-modern',
+        isLocked: true,
       },
     ],
   },
@@ -619,8 +669,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '마이크로소프트의 대표 명작 언어! 클래스, 자동 구현 프로퍼티, 제네릭 컬렉션(List<T>), LINQ 쿼리 기초를 다집니다.',
         description_en: 'Build strong C# foundations: OOP classes, automatic properties, List<T>, and LINQ basics.',
         skills: ['Console.WriteLine 표준 입출력', '프로퍼티(get; set;) 문법', '제네릭 List<T> & Dictionary', 'LINQ 컬렉션 쿼리 필터'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/cs-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'cs-unity',
@@ -634,8 +685,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '내 손으로 게임 만들기! MonoBehaviour 생명주기(Start/Update), Transform 좌표 이동, Rigidbody 물리 충돌을 실습합니다.',
         description_en: 'Script game mechanics with Unity MonoBehaviour lifecycle, Vector3 transforms, and Rigidbody physics.',
         skills: ['Start() / Update() 게임 루프', 'Transform & Vector3 위치 제어', 'Rigidbody 물리 및 충돌 처리', 'Instantiate 프리팹 동적 생성'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/cs-unity',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'cs-dotnet',
@@ -649,7 +701,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '글로벌 대기업 백엔드의 정석! 의존성 주입(DI), Minimal API 엔드포인트 라우팅, 비동기 async/await 태스크를 마스터합니다.',
         description_en: 'Build scalable cloud APIs with ASP.NET Core, Minimal APIs, Dependency Injection, and Tasks.',
         skills: ['Minimal API 엔드포인트 매핑', '의존성 주입(DI) 서비스 컨테이너', 'async Task<T> 비동기 I/O', 'Entity Framework Core 연동'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/cs-dotnet',
+        isLocked: true,
       },
     ],
   },
@@ -677,8 +730,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '애플이 설계한 가장 안전한 언어! 옵셔널(?/!), if let과 guard let 언래핑, 간결한 후행 클로저 문법을 학습합니다.',
         description_en: 'Master Apple safety standards: Optionals, safe unwrapping with guard/if let, and trailing closures.',
         skills: ['let/var 변수 & 타입 추론', '옵셔널(Optional) 안전성', 'guard let 조기 탈출 패턴', '후행 클로저(Trailing Closure)'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/swift-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'swift-swiftui',
@@ -692,8 +746,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '코드로 화면을 그리는 최신 기술! VStack, HStack 스택 레이아웃, @State 반응형 상태 바인딩, 모디파이어 체이닝을 실습합니다.',
         description_en: 'Build modern native iOS user interfaces using SwiftUI view stacks, @State, and view modifiers.',
         skills: ['VStack / HStack / ZStack 뷰 레이아웃', '@State & @Binding 상태 관리', 'ViewModifier 스타일 체이닝', '네비게이션 뷰(NavigationStack)'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/swift-swiftui',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'swift-ios',
@@ -707,7 +762,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '실제 앱스토어 출시급 실력! MVVM 디자인 패턴, URLSession 네트워크 데이터 통신, 모던 async/await 동시성을 마스터합니다.',
         description_en: 'Create production-ready iOS apps with MVVM architecture, URLSession REST communication, and async/await.',
         skills: ['MVVM ViewModel 설계', 'URLSession 비동기 JSON 로드', 'Codable 데이터 디코딩', 'MainActor UI 스레드 동기화'],
-        practiceUrl: '/compiler',
+        practiceUrl: '/practice/swift-ios',
+        isLocked: true,
       },
     ],
   },
@@ -735,8 +791,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'pwd, ls, cd 디렉토리 탐색부터 touch, mkdir, cp, mv, rm 파일 관리까지 터미널 필수 조작 명령어를 손끝으로 체득합니다.',
         description_en: 'Master foundational CLI commands: directory navigation (pwd, ls, cd) and file manipulations (touch, mkdir, cp, mv, rm).',
         skills: ['디렉토리 탐색 pwd/ls/cd', '파일 생성/복사 touch/cp/mv', '파일 삭제 & 안전 옵션 rm', '터미널 단축키 & 자동완성'],
-        practiceUrl: '/practice/linux',
+        practiceUrl: '/practice/linux-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'linux-shell',
@@ -750,7 +807,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'cat, grep, head, tail, sort, uniq 텍스트 필터링과 파이프(|), 리다이렉션(>, >>)으로 복잡한 데이터를 한 줄로 가공합니다.',
         description_en: 'Harness the power of pipes (|), I/O redirection, and stream filters (cat, grep, head, tail, sort, uniq).',
         skills: ['텍스트 검색 & 필터링 grep', '입출력 리다이렉션 (> / >>)', '명령어 연결 파이프라인 (|)', '정렬 및 중복 제거 sort/uniq'],
-        practiceUrl: '/practice/linux',
+        practiceUrl: '/practice/linux-shell',
+        isLocked: true,
       },
       {
         id: 'linux-admin',
@@ -764,7 +822,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'chmod 권한 설정, ps/kill 프로세스 모니터링, systemctl 서비스 제어, curl/ssh 네트워크 유틸리티를 다룹니다.',
         description_en: 'Manage file permissions (chmod/chown), process controls (ps/top/kill), system services, and network tools.',
         skills: ['파일 권한 & 소유권 chmod/chown', '프로세스 감시 & 종료 ps/kill', '환경 변수 export & PATH', '네트워크 통신 curl/ping'],
-        practiceUrl: '/practice/linux',
+        practiceUrl: '/practice/linux-admin',
+        isLocked: true,
       },
     ],
   },
@@ -792,8 +851,9 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'Dim 변수 선언, Integer/String/Double/Boolean 기본 자료형, Console.WriteLine 출력과 산술 연산 기초를 다집니다.',
         description_en: 'Learn variable declaration (Dim), core data types (Integer, String, Boolean), and basic I/O operations.',
         skills: ['변수 선언 Dim & 자료형', '표준 출력 Console.WriteLine', '문자열 결합 & 산술 연산', '상수 Const 정의'],
-        practiceUrl: '/practice/vb',
+        practiceUrl: '/practice/vb-basic',
         isPopular: true,
+        isLocked: true,
       },
       {
         id: 'vb-control',
@@ -807,7 +867,8 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: 'If...Then...Else 조건 분기와 Select Case 다중 선택, For...Next 및 Do While 루프로 프로그램 흐름을 제어합니다.',
         description_en: 'Master conditional branching (If...Then...Else, Select Case) and iterations (For...Next, Do While).',
         skills: ['조건 분기 If...Then...Else', '다중 조건 Select Case', '카운트 반복 For...Next', '조건 반복 Do While / Loop'],
-        practiceUrl: '/practice/vb',
+        practiceUrl: '/practice/vb-control',
+        isLocked: true,
       },
       {
         id: 'vb-sub',
@@ -821,8 +882,182 @@ export const CURRICULUM_TRACKS: LanguageTrack[] = [
         description_ko: '실행 프로시저 Sub, 값 반환 함수 Function, ByVal/ByRef 매개변수 전달과 배열(Array) 활용을 익힙니다.',
         description_en: 'Build modular code using Sub procedures, return-value Functions, ByVal/ByRef parameter passing, and Arrays.',
         skills: ['실행 프로시저 Sub', '값 반환 함수 Function', '매개변수 전달 ByVal / ByRef', '1차원 배열 Array 선언'],
-        practiceUrl: '/practice/vb',
+        practiceUrl: '/practice/vb-sub',
+        isLocked: true,
       },
     ],
   },
 ];
+
+// Curated Goal-Based Learning Roadmaps (Ordered STEP 1 -> STEP N)
+export const LEARNING_ROADMAPS: LearningRoadmap[] = [
+  {
+    id: 'starter',
+    icon: '🌱',
+    color: '#10b981',
+    title_ko: '코딩 첫걸음',
+    title_en: 'First Steps in Coding',
+    target_ko: '완전 초보 · 비전공자',
+    target_en: 'Total Beginners',
+    summary_ko: '가장 직관적인 파이썬 기초로 시작해 웹과 데이터 핵심 문법까지 자연스럽게 넓혀갑니다.',
+    summary_en: 'Start with intuitive Python basics, then expand smoothly into web and SQL fundamentals.',
+    moduleIds: ['py-basic', 'web-html', 'js-basic', 'sql-basic'],
+  },
+  {
+    id: 'ai-data',
+    icon: '🤖',
+    color: '#3b82f6',
+    title_ko: 'AI · 데이터 분석',
+    title_en: 'AI & Data Analytics',
+    target_ko: '데이터 · 업무 자동화 · 머신러닝',
+    target_en: 'Data, Automation & ML',
+    summary_ko: '파이썬 문법부터 심화 설계, SQL 데이터 추출, 빅데이터·머신러닝 순서로 학습합니다.',
+    summary_en: 'Progress from Python core syntax to advanced OOP, SQL queries, big data, and ML.',
+    moduleIds: ['py-basic', 'py-advanced', 'sql-basic', 'py-bigdata', 'py-ai'],
+  },
+  {
+    id: 'frontend',
+    icon: '🌐',
+    color: '#f97316',
+    title_ko: '웹 프론트엔드',
+    title_en: 'Web Frontend',
+    target_ko: '웹사이트 · 서비스 UI 제작',
+    target_en: 'Websites & Interactive UI',
+    summary_ko: '웹 구조(HTML)와 디자인(CSS)을 익힌 뒤 자바스크립트, 타입스크립트, React로 확장합니다.',
+    summary_en: 'Learn HTML structure and CSS layout first, then advance through JS, TypeScript, and React.',
+    moduleIds: ['web-html', 'web-css', 'js-basic', 'js-advanced', 'js-ts', 'js-react'],
+  },
+  {
+    id: 'backend',
+    icon: '🖥️',
+    color: '#0891b2',
+    title_ko: '백엔드 · 서버',
+    title_en: 'Backend & Server',
+    target_ko: 'API 서버 · 데이터베이스 · 인프라',
+    target_en: 'APIs, Databases & Linux',
+    summary_ko: '프로그래밍 기초와 SQL 데이터베이스, 리눅스 터미널, 백엔드 API 순서로 다집니다.',
+    summary_en: 'Build core logic first, followed by SQL databases, Linux CLI, and REST API servers.',
+    moduleIds: ['py-basic', 'sql-basic', 'sql-advanced', 'linux-basic', 'java-spring'],
+  },
+  {
+    id: 'cs-algo',
+    icon: '🎓',
+    color: '#6366f1',
+    title_ko: '전공 · 코딩테스트',
+    title_en: 'CS & Coding Tests',
+    target_ko: '컴퓨터공학 · 알고리즘 대비',
+    target_en: 'CS Fundamentals & Algorithms',
+    summary_ko: '파이썬 문제 해결력부터 C 메모리·포인터 원리, 자료구조, C++ STL 순서로 완성합니다.',
+    summary_en: 'Start with Python problem solving, then master C pointers, data structures, and C++ STL.',
+    moduleIds: ['py-basic', 'c-basic', 'c-advanced', 'c-datastruct', 'cpp-stl'],
+  },
+  {
+    id: 'game-mobile',
+    icon: '🎮',
+    color: '#9333ea',
+    title_ko: '게임 · 모바일 앱',
+    title_en: 'Games & Mobile Apps',
+    target_ko: 'Unity 게임 · iOS 앱 개발',
+    target_en: 'Unity Games & iOS Apps',
+    summary_ko: 'C# 객체지향과 유니티 스크립팅, Swift 및 SwiftUI 모바일 UI 제작 순서로 익힙니다.',
+    summary_en: 'Learn C# OOP and Unity scripting alongside Swift and declarative SwiftUI app design.',
+    moduleIds: ['cs-basic', 'cs-unity', 'swift-basic', 'swift-swiftui'],
+  },
+];
+
+export function findCurriculumModuleById(
+  moduleId: string
+): { track: LanguageTrack; module: CourseModule } | null {
+  for (const track of CURRICULUM_TRACKS) {
+    for (const mod of track.modules) {
+      if (mod.id === moduleId) {
+        return { track, module: mod };
+      }
+    }
+  }
+  return null;
+}
+
+export function findCurriculumModuleBySlug(
+  rawLang: string
+): { track: LanguageTrack; module: CourseModule } {
+  const clean = rawLang.trim().toLowerCase();
+
+  for (const track of CURRICULUM_TRACKS) {
+    for (const mod of track.modules) {
+      if (
+        mod.practiceUrl.toLowerCase() === `/practice/${clean}` ||
+        mod.id.toLowerCase() === clean ||
+        ((clean === 'python_basic' || clean === 'python') && mod.id === 'py-basic') ||
+        (clean === 'c' && mod.id === 'c-basic') ||
+        (clean === 'web' && mod.id === 'web-html') ||
+        (clean === 'linux' && mod.id === 'linux-basic') ||
+        (clean === 'vb' && mod.id === 'vb-basic')
+      ) {
+        return { track, module: mod };
+      }
+    }
+  }
+
+  const baseLang = clean.replace(/_basic$/, '').replace(/_adv$/, '').replace(/_advanced$/, '');
+  const fallbackTrack =
+    CURRICULUM_TRACKS.find(
+      (t) =>
+        t.id === clean ||
+        t.id === baseLang ||
+        (baseLang === 'py' && t.id === 'python') ||
+        (baseLang === 'js' && t.id === 'javascript') ||
+        (baseLang === 'html' && t.id === 'web')
+    ) || CURRICULUM_TRACKS[0];
+
+  return { track: fallbackTrack, module: fallbackTrack.modules[0] };
+}
+
+export function isPracticeLanguageUnlocked(rawLang: string): boolean {
+  const { module } = findCurriculumModuleBySlug(rawLang);
+  return !module.isLocked;
+}
+
+export function recommendRoadmap(answers: FinderAnswers): {
+  roadmap: LearningRoadmap;
+  reason_ko: string;
+  reason_en: string;
+} {
+  let targetId: LearningRoadmap['id'] = answers.goal;
+
+  // Complete beginners aiming for practical quick wins with starter/general interest start best on 'starter'
+  if (answers.experience === 'none' && answers.goal === 'cs-algo' && answers.style === 'practical') {
+    targetId = 'starter';
+  }
+
+  const roadmap =
+    LEARNING_ROADMAPS.find((r) => r.id === targetId) || LEARNING_ROADMAPS[0];
+
+  const expTextKo =
+    answers.experience === 'none'
+      ? '입문자 눈높이에 맞춰'
+      : answers.experience === 'basic'
+      ? '기초 경험을 바탕으로'
+      : '기존 코딩 경험을 살려';
+  const styleTextKo =
+    answers.style === 'practical'
+      ? '직접 타이핑하고 결과를 바로 확인하는 순서로 구성했습니다.'
+      : '기초 원리부터 단계별로 빈틈없이 쌓아가는 순서로 구성했습니다.';
+
+  const expTextEn =
+    answers.experience === 'none'
+      ? 'Tailored for first-time learners,'
+      : answers.experience === 'basic'
+      ? 'Building on your basic syntax knowledge,'
+      : 'Leveraging your prior coding experience,';
+  const styleTextEn =
+    answers.style === 'practical'
+      ? 'ordered for fast hands-on execution and immediate feedback.'
+      : 'ordered step-by-step from core fundamentals upward.';
+
+  return {
+    roadmap,
+    reason_ko: `${expTextKo} ${styleTextKo}`,
+    reason_en: `${expTextEn} ${styleTextEn}`,
+  };
+}

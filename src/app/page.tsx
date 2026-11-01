@@ -57,7 +57,7 @@ export default function HomePage() {
             difficulty: mod.difficulty,
             difficultyLabel: isEn ? 'Beginner' : '초급',
             totalLevels: mod.totalLevels,
-            practiceUrl: mod.practiceUrl || `/practice/${track.id}/1`,
+            practiceUrl: mod.isLocked ? '/languages' : (mod.practiceUrl || `/practice/${track.id}/1`),
           });
         }
       });
@@ -80,7 +80,7 @@ export default function HomePage() {
             difficulty: mod.difficulty,
             difficultyLabel: mod.difficulty === '심화' ? (isEn ? 'Adv' : '상급') : (isEn ? 'Int' : '중급'),
             totalLevels: mod.totalLevels,
-            practiceUrl: mod.practiceUrl || `/practice/${track.id}/1`,
+            practiceUrl: mod.isLocked ? '/languages' : (mod.practiceUrl || `/practice/${track.id}/1`),
           });
         }
       });

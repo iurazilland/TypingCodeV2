@@ -32,6 +32,7 @@ import {
   Compass
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import { findCurriculumModuleBySlug } from '@/lib/curriculum';
 import SpotlightTour from '@/components/practice/SpotlightTour';
 import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
@@ -1552,7 +1553,91 @@ function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] 
 
 // evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
-export default function PracticePage({ params, searchParams }: PracticePageProps) {
+export default function PracticePage(props: PracticePageProps) {
+  const { language } = useLanguage();
+  const isEn = language === 'en';
+  const rawSlug = props.params.language || 'python_basic';
+  const { module: matchedModule } = findCurriculumModuleBySlug(rawSlug);
+
+  if (matchedModule.isLocked) {
+    return (
+      <div style={{ minHeight: 'calc(100vh - 70px)', background: '#e2eff6', padding: '72px 24px 100px' }}>
+        <div
+          style={{
+            maxWidth: '580px',
+            margin: '0 auto',
+            background: '#ffffff',
+            borderRadius: '24px',
+            border: '1.5px solid #cbd5e1',
+            padding: '36px 28px',
+            textAlign: 'center',
+            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
+          }}
+        >
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              background: '#f1f5f9',
+              border: '1.5px solid #cbd5e1',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px',
+            }}
+          >
+            <Lock size={24} color="#64748b" />
+          </div>
+          <h1 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a', margin: '0 0 8px 0' }}>
+            {isEn ? matchedModule.title_en : matchedModule.title_ko}
+          </h1>
+          <p style={{ fontSize: '0.92rem', color: '#475569', margin: '0 0 24px 0', lineHeight: 1.55 }}>
+            {isEn
+              ? 'This curriculum is currently in preparation and will open sequentially.'
+              : '현재 준비 중인 커리큘럼이며 순차적으로 오픈될 예정입니다.'}
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <Link
+              href="/languages"
+              style={{
+                padding: '10px 18px',
+                borderRadius: '12px',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                color: '#0f172a',
+                fontSize: '0.88rem',
+                fontWeight: 800,
+                textDecoration: 'none',
+              }}
+            >
+              {isEn ? 'Back to Roadmaps' : '학습 로드맵으로'}
+            </Link>
+            <Link
+              href="/practice/python_basic"
+              style={{
+                padding: '10px 18px',
+                borderRadius: '12px',
+                background: '#0891b2',
+                border: '1.5px solid #0891b2',
+                color: '#ffffff',
+                fontSize: '0.88rem',
+                fontWeight: 800,
+                textDecoration: 'none',
+              }}
+            >
+              {isEn ? 'Start Python Basics' : '파이썬 베이직 시작'}
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <PracticePageInner {...props} />;
+}
+
+function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const { language } = useLanguage();
   const isEn = language === 'en';
   const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
