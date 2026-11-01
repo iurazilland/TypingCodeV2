@@ -49,6 +49,7 @@ TypingCode_V2/
 ├── docs/                   # 프로젝트 공식 기술 및 커리큘럼 SSOT 문서
 │   ├── PROJECT_CONTEXT.md          # 본 문서 (V2 컨텍스트 및 전체 아키텍처)
 │   ├── SYSTEM_DESIGN.md            # 시스템 상세 설계, AST 실행기 및 블록/스냅 엔진 규격
+│   ├── DATABASE_GUIDE.md           # Supabase V2 데이터베이스(3개 테이블) 및 인증 쉬운 가이드
 │   ├── visualizer-system.md        # 블록 코딩, 메모리 비주얼라이저 및 UI 인터랙션 사양서
 │   ├── CONTENT_AUTHORING.md        # 2-Part · 13단계/10단계 커리큘럼 및 프롬프트 작성 표준
 │   ├── python_curriculum.md        # Python Basic (2-Part · 14섹션 · 87레벨 · 1,089문항) 공식 SSOT
