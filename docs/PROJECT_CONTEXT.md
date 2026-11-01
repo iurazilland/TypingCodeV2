@@ -74,7 +74,7 @@ TypingCode_V2/
     │   ├── Terminal.tsx / WebPreview.tsx / VirtualKeyboard.tsx
     │   └── LanguageIcon.tsx / UserAvatar.tsx
     ├── data/
-    │   ├── curriculum/python/      # Python Basic 레벨 모듈 (level1.ts ~ level87.ts, 1,089문항)
+    │   ├── curriculum/python_basic/# Python Basic 레벨 모듈 (level1.ts ~ level87.ts, 1,089문항)
     │   ├── problemsBank.ts         # 실전 문제풀이 26문항 및 테스트케이스·스타터 코드
     │   └── speedCodingSnippets.ts  # 코드타자 언어별 실전 코드 예제 25종
     └── lib/

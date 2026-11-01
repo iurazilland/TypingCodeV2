@@ -19,7 +19,7 @@
 
 ## 2. `§` 제로 변위 빈칸 마스킹 규칙 (`templateCode` ⇄ `targetCode`)
 
-V2 TypeScript 레벨 파일(`src/data/curriculum/[language]/level[N].ts`)에서는 구버전 마크다운의 `^` 대신 **`§` 문자**를 사용합니다.
+V2 TypeScript 레벨 파일(`src/data/curriculum/[course]/level[N].ts`, 예: `python_basic`)에서는 구버전 마크다운의 `^` 대신 **`§` 문자**를 사용합니다.
 
 1. **정확한 글자 수·줄바꿈 1:1 일치**:
    - `templateCode.length === targetCode.length`여야 하며, 모든 개행(`\n`) 인덱스가 `targetCode`와 정확히 일치해야 합니다.

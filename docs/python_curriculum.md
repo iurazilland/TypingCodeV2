@@ -1,7 +1,7 @@
 # 파이썬 타자 연습 커리큘럼 — Basic (2-Part · 14섹션 · 87레벨 완결 SSOT)
 
 > ✅ **구현 및 전수 검증 완료 (Implementation & Verification Status: 100% Complete)**
-> - **구현 파일**: `src/data/curriculum/python/level1.ts` ~ `level87.ts` (총 **14섹션 · 87레벨 · 1,089문항** — Part 1 `789문항` + Part 2 `300문항`)
+> - **구현 파일**: `src/data/curriculum/python_basic/level1.ts` ~ `level87.ts` (총 **14섹션 · 87레벨 · 1,089문항** — Part 1 `789문항` + Part 2 `300문항`)
 > - **메타데이터 & 런타임 연동**: [`curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) · [`practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) · [`curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts) · [`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts) · [`CanvasBlockItem.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/CanvasBlockItem.tsx)
 > - **검증 결과**: `npx tsc --noEmit` `0 errors`, 1,089문항 AST 실행 정합성 100%, Part 1(`Lv 1~63`) 내 Part 2 문법 혼입 `0건`, 프롬프트·교육학 결함 `0건`, 섹션 간 누적 나선형 복습 `1,534회` 검증 완료 (상세: [`LEVEL_VERIFICATION_REPORT.md`](file:///d:/Projects/TypingCode_V2/docs/LEVEL_VERIFICATION_REPORT.md))
 

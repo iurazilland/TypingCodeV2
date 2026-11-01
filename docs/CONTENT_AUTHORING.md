@@ -10,11 +10,11 @@
 
 ## 1. V2 콘텐츠 관리 아키텍처 (Content Architecture)
 
-TypingCode V2는 각 언어별로 독립된 TypeScript 모듈 파일(`src/data/curriculum/[language]/level[N].ts`)을 통해 커리큘럼을 관리합니다.
+TypingCode V2는 각 코스 모듈별로 독립된 TypeScript 모듈 파일(`src/data/curriculum/[course]/level[N].ts`, 예: `python_basic`)을 통해 커리큘럼을 관리합니다.
 
 | 대상 | 파일 경로 | 설명 |
 | :--- | :--- | :--- |
-| **언어별 레벨 파일** | `src/data/curriculum/[language]/level[N].ts` | 각 레벨 문항(일반 13문항 / 종합 10문항), `unlockedBlocks`, 테스트 케이스 정의 |
+| **코스별 레벨 파일** | `src/data/curriculum/[course]/level[N].ts` | 각 레벨 문항(일반 13문항 / 종합 10문항), `unlockedBlocks`, 테스트 케이스 정의 |
 | **언어 트랙 & 모듈** | [`src/lib/curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts) | 13개 지원 언어의 트랙 정보, `totalLevels`, 스킬셋 메타데이터 |
 | **챕터(섹션) & 태그** | [`src/lib/curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) | 섹션 그룹화(`CourseSection`) 및 레벨 카드 문법 태그(`syntaxTags`) 정의 |
 | **연습 라운드 등록소** | [`src/lib/practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) | 레벨별 라운드 매핑(`PRACTICE_ROUNDS`) 및 `getPracticeRound` 제공 |
