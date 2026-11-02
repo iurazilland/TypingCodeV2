@@ -132,7 +132,7 @@ export default function HomePage() {
           textAlign: 'center',
           maxWidth: '960px',
           margin: '0 auto',
-          padding: '140px 24px 170px',
+          padding: '210px 24px 140px',
           minHeight: 'calc(90vh - 70px)',
           display: 'flex',
           flexDirection: 'column',
@@ -143,7 +143,7 @@ export default function HomePage() {
           {/* Subtle Ambient Radial Light Aura */}
           <div style={{
             position: 'absolute',
-            top: '50%',
+            top: '54%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'min(920px, 90vw)',
@@ -158,7 +158,7 @@ export default function HomePage() {
             display: 'inline-flex',
             flexDirection: 'column',
             alignItems: 'center',
-            marginBottom: '36px',
+            marginBottom: 0,
             position: 'relative',
             zIndex: 1,
           }}>
