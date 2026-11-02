@@ -215,21 +215,6 @@ export default function HomePage() {
               </div>
             </h1>
           </div>
-
-          {/* Simple Subtitle with enhanced contrast */}
-          <p style={{
-            fontSize: 'clamp(1.15rem, 2.5vw, 1.38rem)',
-            color: '#475569',
-            fontWeight: 500,
-            lineHeight: 1.6,
-            maxWidth: '560px',
-            margin: '0 auto',
-            wordBreak: 'keep-all',
-          }}>
-            {isEn 
-              ? 'Simply type. The code will follow.'
-              : '그냥 입력하세요. 코드가 완성됩니다.'}
-          </p>
         </section>
 
         {/* =================================================================
