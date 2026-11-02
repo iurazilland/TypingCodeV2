@@ -108,8 +108,8 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '나머지 연산자(%)를 사용해 10%2를 넣어 짝수(0)인지 확인해보세요.',
-      prompt_en: 'Use the modulo operator (%) to insert 10%2 and check if it is even (0).',
+      prompt_ko: '어떤 수를 2로 나눈 나머지가 0이면 짝수임을 확인할 수 있습니다. print()에 10%2를 넣어 결과를 출력해보세요.',
+      prompt_en: 'If the remainder when divided by 2 is 0, the number is even. Insert 10%2 into print() to check the result.',
       hint_ko: 'print() 괄호 안에 10%2를 입력하세요. 2로 나눈 나머지가 0이면 그 수는 짝수입니다.',
       hint_en: '10%2 produces 0. A remainder of 0 when divided by 2 confirms the number is even.',
       targetCode: 'print(10%2)',
@@ -142,23 +142,23 @@ export const PYTHON_LEVEL_4: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 페어 4: 구구단 라벨과 곱셈 연산자(*)
+    // 페어 4: 나머지(%)의 실전 활용 (10으로 나눈 나머지로 일의 자리 숫자 추출)
     // ------------------------------------------------------------------------
     {
       id: 7,
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 "2 x 3 =", 2*3을 넣어 구구단 결과를 출력해보세요.',
-      prompt_en: 'Use a comma (,) to insert "2 x 3 =", 2*3 and print the multiplication result.',
-      hint_ko: 'print() 괄호 안에 "2 x 3 =", 2*3을 입력하세요. "2 x 3 = 6"이 출력됩니다.',
-      hint_en: 'Use "2 x 3 =", 2*3 inside print() to evaluate and print "2 x 3 = 6".',
-      targetCode: 'print("2 x 3 =", 2*3)',
+      prompt_ko: '어떤 수를 10으로 나눈 나머지는 일의 자리 숫자가 됩니다. 쉼표(,)를 사용해 "Last digit:", 47%10을 출력해보세요.',
+      prompt_en: 'The remainder when divided by 10 gives the last digit. Use a comma (,) to print "Last digit:", 47%10.',
+      hint_ko: 'print() 괄호 안에 "Last digit:", 47%10을 입력하면 47의 일의 자리 숫자인 "Last digit: 7"이 출력됩니다.',
+      hint_en: 'Enter "Last digit:", 47%10 inside print() to output "Last digit: 7".',
+      targetCode: 'print("Last digit:", 47%10)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '2 x 3 = 6',
+          expectedOutput: 'Last digit: 7',
         },
       ],
     },
@@ -167,17 +167,17 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 곱셈 연산자를 사용해 구구단 결과(4 x 5 = 20)를 완성해보세요.',
-      prompt_en: 'Use the multiplication operator in the blank to complete 4 x 5 = 20.',
-      hint_ko: '4와 5 사이의 빈칸에 파이썬 곱셈 기호인 별표(*)를 입력하세요.',
-      hint_en: 'Enter the asterisk (*) multiplication operator into the blank between 4 and 5.',
-      templateCode: 'print("4 x 5 =", 4§5)',
-      targetCode: 'print("4 x 5 =", 4*5)',
+      prompt_ko: '빈칸에 나머지 연산식을 채워 128의 일의 자리 숫자인 Last digit: 8이 출력되도록 해보세요.',
+      prompt_en: 'Fill in the blank with a modulo expression so the last digit of 128 prints as Last digit: 8.',
+      hint_ko: '일의 자리 숫자를 구하려면 10으로 나눈 나머지를 계산해야 합니다. 빈칸에 128%10을 입력하세요.',
+      hint_en: 'To extract the last digit, find the remainder when divided by 10: type 128%10 in the blank.',
+      templateCode: 'print("Last digit:", §§§§§§)',
+      targetCode: 'print("Last digit:", 128%10)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '4 x 5 = 20',
+          expectedOutput: 'Last digit: 8',
         },
       ],
     },
