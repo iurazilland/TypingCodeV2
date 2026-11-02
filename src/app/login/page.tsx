@@ -562,40 +562,17 @@ function LoginPageContent() {
             </div>
 
             <div>
-              <div
+              <label
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  display: 'block',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  color: '#334155',
                   marginBottom: '6px',
                 }}
               >
-                <label
-                  style={{
-                    fontSize: '0.82rem',
-                    fontWeight: 700,
-                    color: '#334155',
-                  }}
-                >
-                  {isKo ? '비밀번호' : 'Password'}
-                </label>
-                <button
-                  type="button"
-                  disabled={isSubmitting}
-                  onClick={handleForgotPassword}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#0284c7',
-                    fontSize: '0.78rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    padding: 0,
-                  }}
-                >
-                  {isKo ? '비밀번호 재설정' : 'Forgot?'}
-                </button>
-              </div>
+                {isKo ? '비밀번호' : 'Password'}
+              </label>
               <div style={{ position: 'relative' }}>
                 <Lock
                   size={16}
@@ -612,6 +589,30 @@ function LoginPageContent() {
                   onFocus={(e) => (e.target.style.borderColor = '#0891b2')}
                   onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                 />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginTop: '7px',
+                }}
+              >
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={handleForgotPassword}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#0284c7',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    padding: 0,
+                  }}
+                >
+                  {isKo ? '비밀번호 재설정' : 'Forgot?'}
+                </button>
               </div>
             </div>
 
@@ -998,7 +999,13 @@ function LoginPageContent() {
                 gap: '7px',
               }}
             >
-              <span>🐙</span>
+              <img
+                src="/icons/github.svg"
+                alt=""
+                width={18}
+                height={18}
+                style={{ display: 'block', flexShrink: 0 }}
+              />
               <span>GitHub</span>
             </button>
 
@@ -1021,7 +1028,13 @@ function LoginPageContent() {
                 gap: '7px',
               }}
             >
-              <span>🔍</span>
+              <img
+                src="/icons/google.svg"
+                alt=""
+                width={18}
+                height={18}
+                style={{ display: 'block', flexShrink: 0 }}
+              />
               <span>Google</span>
             </button>
           </div>
