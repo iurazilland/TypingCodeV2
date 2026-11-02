@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Sparkles, ChevronRight, ChevronLeft, Code2, Play } from 'lucide-react';
+import { Sparkles, ChevronRight, ChevronLeft, Code2, Play, Bug, Zap } from 'lucide-react';
 
 export interface TourStep {
   targetId: string;
@@ -111,16 +111,20 @@ export default function SpotlightTour({
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [dontShowAgain, setDontShowAgain] = useState<boolean>(true);
-  const [canvasPreviewTab, setCanvasPreviewTab] = useState<'block' | 'typing'>('block');
+  const [isDebugSimulated, setIsDebugSimulated] = useState<boolean>(false);
+  const [debugBtnRect, setDebugBtnRect] = useState<DOMRect | null>(null);
 
   const isEn = language === 'en';
   const currentStep = TOUR_STEPS[stepIndex] || TOUR_STEPS[0];
+  const isCanvasStep = currentStep.targetId === 'tour-col-canvas';
+  const isDebugStep = currentStep.targetId === 'tour-debug-mode';
 
   // Reset tour state when opened
   useEffect(() => {
     if (isOpen) {
       setStepIndex(0);
       setDontShowAgain(true);
+      setIsDebugSimulated(false);
     }
   }, [isOpen]);
 
@@ -130,10 +134,67 @@ export default function SpotlightTour({
     const el = document.getElementById(currentStep.targetId);
     if (el) {
       setTargetRect(el.getBoundingClientRect());
+      if (currentStep.targetId === 'tour-debug-mode') {
+        const btns = el.querySelectorAll('button');
+        const dbgBtn = btns.length >= 2 ? btns[btns.length - 2] : null;
+        setDebugBtnRect(dbgBtn ? dbgBtn.getBoundingClientRect() : null);
+      } else {
+        setDebugBtnRect(null);
+      }
     } else {
       setTargetRect(null);
+      setDebugBtnRect(null);
     }
   }, [isOpen, currentStep.targetId]);
+
+  // Step 7 ('tour-debug-mode'): Automatically click the Debug Mode toggle button in the real UI
+  // so users visually see the mode switch & speed controls (0.2x~3x) appear in real time.
+  useEffect(() => {
+    if (!isOpen || !isDebugStep) {
+      setIsDebugSimulated(false);
+      setDebugBtnRect(null);
+      return;
+    }
+
+    const triggerRealModeButton = (toDebug: boolean) => {
+      setIsDebugSimulated(toDebug);
+      const container = document.getElementById('tour-debug-mode');
+      if (container) {
+        const btns = container.querySelectorAll('button');
+        const targetBtn =
+          btns.length >= 2 ? btns[toDebug ? btns.length - 2 : btns.length - 1] : null;
+        if (targetBtn) {
+          targetBtn.click();
+        }
+      }
+      requestAnimationFrame(() => updateRect());
+      window.setTimeout(() => updateRect(), 60);
+    };
+
+    // Start in Normal briefly, then auto-click Debug Mode and repeat cycle
+    triggerRealModeButton(false);
+    const initialClickTimer = window.setTimeout(() => {
+      triggerRealModeButton(true);
+    }, 550);
+
+    let nextState = false;
+    const cycleInterval = window.setInterval(() => {
+      triggerRealModeButton(nextState);
+      nextState = !nextState;
+    }, 1800);
+
+    return () => {
+      window.clearTimeout(initialClickTimer);
+      window.clearInterval(cycleInterval);
+      // Restore normal execution mode when leaving Step 7 or closing the tour
+      const container = document.getElementById('tour-debug-mode');
+      if (container) {
+        const btns = container.querySelectorAll('button');
+        const normalBtn = btns.length >= 2 ? btns[btns.length - 1] : null;
+        normalBtn?.click();
+      }
+    };
+  }, [isOpen, isDebugStep, updateRect]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -180,9 +241,8 @@ export default function SpotlightTour({
 
   if (!isOpen) return null;
 
-  const isCanvasStep = currentStep.targetId === 'tour-col-canvas';
-  const cardWidth = isCanvasStep ? 440 : 380;
-  const cardHeight = isCanvasStep ? 340 : 210;
+  const cardWidth = isCanvasStep ? 440 : 390;
+  const cardHeight = isCanvasStep ? 430 : isDebugStep ? 295 : 210;
 
   // Calculate Popover Position relative to targetRect
   let popoverStyle: React.CSSProperties = {
@@ -266,6 +326,42 @@ export default function SpotlightTour({
         />
       )}
 
+      {/* 1-B. Step 7 Auto-Click Indicator on the Real Debug Button */}
+      {isDebugStep && debugBtnRect && (
+        <div
+          style={{
+            position: 'fixed',
+            top: debugBtnRect.top - 4,
+            left: debugBtnRect.left - 4,
+            width: debugBtnRect.width + 8,
+            height: debugBtnRect.height + 8,
+            borderRadius: '8px',
+            border: isDebugSimulated ? '2px solid #fb923c' : '2px dashed rgba(251, 146, 60, 0.7)',
+            boxShadow: isDebugSimulated
+              ? '0 0 16px rgba(251, 146, 60, 0.8), inset 0 0 8px rgba(251, 146, 60, 0.35)'
+              : 'none',
+            pointerEvents: 'none',
+            zIndex: 10003,
+            transition: 'all 0.22s ease',
+          }}
+        >
+          <span
+            style={{
+              position: 'absolute',
+              bottom: '-18px',
+              left: '50%',
+              transform: `translateX(-50%) scale(${isDebugSimulated ? 0.92 : 1.08})`,
+              fontSize: '0.88rem',
+              lineHeight: 1,
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
+              transition: 'transform 0.2s ease',
+            }}
+          >
+            👆
+          </span>
+        </div>
+      )}
+
       {/* 2. Floating Interactive Tour Card */}
       <div
         style={{
@@ -320,7 +416,7 @@ export default function SpotlightTour({
           {isEn ? currentStep.description_en : currentStep.description_ko}
         </p>
 
-        {/* Special Interactive Mode Preview for Assembly Canvas */}
+        {/* Step 6: Show BOTH Block Mode & Typing Mode together without tabs */}
         {isCanvasStep && (
           <div
             style={{
@@ -333,78 +429,43 @@ export default function SpotlightTour({
               gap: '10px',
             }}
           >
-            {/* Mode Switch Tabs */}
+            {/* 1) Block Mode Box */}
             <div
               style={{
                 display: 'flex',
-                alignItems: 'center',
-                background: 'rgba(255, 255, 255, 0.06)',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '5px',
+                padding: '10px 12px',
+                background: '#090e1a',
                 borderRadius: '8px',
-                padding: '3px',
-                gap: '4px',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: '0.78rem',
               }}
             >
-              <button
-                type="button"
-                onClick={() => setCanvasPreviewTab('block')}
-                style={{
-                  flex: 1,
-                  padding: '5px 8px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: canvasPreviewTab === 'block' ? 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)' : 'transparent',
-                  color: canvasPreviewTab === 'block' ? '#ffffff' : '#94a3b8',
-                  fontSize: '0.74rem',
-                  fontWeight: 800,
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                {isEn ? '🧩 Block Mode' : '🧩 블록 조립 모드'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setCanvasPreviewTab('typing')}
-                style={{
-                  flex: 1,
-                  padding: '5px 8px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: canvasPreviewTab === 'typing' ? 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' : 'transparent',
-                  color: canvasPreviewTab === 'typing' ? '#ffffff' : '#94a3b8',
-                  fontSize: '0.74rem',
-                  fontWeight: 800,
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                {isEn ? '⌨️ Typing Mode' : '⌨️ 실전 타이핑 모드'}
-              </button>
-            </div>
-
-            {/* Mode Visual Demonstration */}
-            {canvasPreviewTab === 'block' ? (
               <div
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: '4px',
-                  padding: '10px 14px',
-                  background: '#090e1a',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  fontFamily: 'var(--font-mono), monospace',
-                  fontSize: '0.8rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  color: '#38bdf8',
+                  fontFamily: 'sans-serif',
+                  marginBottom: '2px',
                 }}
               >
+                <span>{isEn ? '🧩 Block Assembly Mode' : '🧩 블록 조립 모드'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                 {/* Mock Start Block */}
                 <div
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '6px',
-                    padding: '4px 10px',
+                    gap: '5px',
+                    padding: '3px 9px',
                     borderRadius: '6px',
                     background: '#059669',
                     color: '#ffffff',
@@ -412,17 +473,17 @@ export default function SpotlightTour({
                     boxShadow: '0 2px 0 #047857',
                   }}
                 >
-                  <Play size={11} fill="#ffffff" />
+                  <Play size={10} fill="#ffffff" />
                   <span>시작 (Start)</span>
                 </div>
+                <span style={{ color: '#64748b', fontSize: '0.72rem' }}>→</span>
                 {/* Mock Snapped print Block */}
                 <div
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '4px',
-                    padding: '4px 10px',
-                    marginLeft: '8px',
+                    padding: '3px 9px',
                     borderRadius: '6px',
                     background: '#0284c7',
                     color: '#ffffff',
@@ -435,7 +496,7 @@ export default function SpotlightTour({
                     style={{
                       background: '#ffffff',
                       color: '#0f172a',
-                      padding: '1px 6px',
+                      padding: '0px 5px',
                       borderRadius: '4px',
                       fontWeight: 900,
                     }}
@@ -444,52 +505,183 @@ export default function SpotlightTour({
                   </span>
                   <span>)</span>
                 </div>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', fontFamily: 'sans-serif' }}>
-                  {isEn ? '• Assemble blocks like puzzle pieces to build the algorithm.' : '• 블록을 퍼즐처럼 결합하여 알고리즘의 기초를 다집니다.'}
-                </span>
               </div>
-            ) : (
+              <span style={{ fontSize: '0.71rem', color: '#94a3b8', marginTop: '2px', fontFamily: 'sans-serif' }}>
+                {isEn
+                  ? '• Assemble blocks like puzzle pieces to build the algorithm.'
+                  : '• 블록을 퍼즐처럼 결합하여 알고리즘의 기초를 다집니다.'}
+              </span>
+            </div>
+
+            {/* 2) Typing Mode Box */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px',
+                padding: '10px 12px',
+                background: '#0b1120',
+                borderRadius: '8px',
+                border: '1px solid rgba(16, 185, 129, 0.35)',
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: '0.8rem',
+              }}
+            >
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '6px',
-                  padding: '10px 14px',
-                  background: '#0b1120',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(16, 185, 129, 0.35)',
-                  fontFamily: 'var(--font-mono), monospace',
-                  fontSize: '0.82rem',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '0.72rem',
+                  fontFamily: 'sans-serif',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.70rem' }}>
-                  <Code2 size={12} color="#10b981" />
+                <span style={{ fontWeight: 800, color: '#34d399' }}>
+                  {isEn ? '⌨️ Hands-on Typing Mode' : '⌨️ 실전 타이핑 모드'}
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
+                  <Code2 size={11} color="#10b981" />
                   <span>main.py</span>
-                  <span style={{ color: '#10b981' }}>✓ typing mode</span>
-                </div>
-                <div style={{ color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '2px' }}>
-                  <span style={{ color: '#475569', marginRight: '6px' }}>1</span>
-                  <span style={{ color: '#dcdcaa' }}>print</span>
-                  <span>(</span>
-                  <span
-                    style={{
-                      background: 'rgba(56, 189, 248, 0.25)',
-                      border: '1px solid #38bdf8',
-                      color: '#38bdf8',
-                      padding: '0 6px',
-                      borderRadius: '4px',
-                      fontWeight: 900,
-                    }}
-                  >
-                    10
-                  </span>
-                  <span>)</span>
-                </div>
-                <span style={{ fontSize: '0.72rem', color: '#34d399', marginTop: '2px', fontFamily: 'sans-serif' }}>
-                  {isEn ? '• Fill in the blanks or fix typos with keyboard typing.' : '• 가이드 코드의 빈칸을 채우거나 오타를 수정하며 실전 코딩을 완성합니다.'}
                 </span>
               </div>
-            )}
+              <div style={{ color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '2px' }}>
+                <span style={{ color: '#475569', marginRight: '6px' }}>1</span>
+                <span style={{ color: '#dcdcaa' }}>print</span>
+                <span>(</span>
+                <span
+                  style={{
+                    background: 'rgba(56, 189, 248, 0.25)',
+                    border: '1px solid #38bdf8',
+                    color: '#38bdf8',
+                    padding: '0 6px',
+                    borderRadius: '4px',
+                    fontWeight: 900,
+                  }}
+                >
+                  10
+                </span>
+                <span>)</span>
+              </div>
+              <span style={{ fontSize: '0.71rem', color: '#34d399', marginTop: '2px', fontFamily: 'sans-serif' }}>
+                {isEn
+                  ? '• Fill in the blanks or fix typos with keyboard typing.'
+                  : '• 가이드 코드의 빈칸을 채우거나 오타를 수정하며 실전 코딩을 완성합니다.'}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Step 7: Visual Auto-Click Preview for Debug Mode & Speed */}
+        {isDebugStep && (
+          <div
+            style={{
+              background: 'rgba(2, 6, 23, 0.8)',
+              border: '1px solid rgba(251, 146, 60, 0.35)',
+              borderRadius: '12px',
+              padding: '10px 12px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '6px',
+                flexWrap: 'wrap',
+              }}
+            >
+              {/* Simulated Speed Selector */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  padding: '2px',
+                  borderRadius: '7px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  opacity: isDebugSimulated ? 1 : 0.3,
+                  transition: 'opacity 0.25s ease',
+                }}
+              >
+                {[0.2, 0.5, 1, 2, 3].map((spd) => (
+                  <span
+                    key={spd}
+                    style={{
+                      padding: '2px 5px',
+                      borderRadius: '4px',
+                      background: spd === 1 && isDebugSimulated ? 'rgba(251, 146, 60, 0.35)' : 'transparent',
+                      color: spd === 1 && isDebugSimulated ? '#fed7aa' : '#64748b',
+                      fontWeight: 800,
+                      fontSize: '0.65rem',
+                      fontFamily: 'var(--font-mono)',
+                    }}
+                  >
+                    {spd}x
+                  </span>
+                ))}
+              </div>
+
+              {/* Simulated [🐞 디버깅 | ⚡ 일반] Switch */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  padding: '2px',
+                  borderRadius: '7px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '3px 8px',
+                    borderRadius: '5px',
+                    background: isDebugSimulated ? 'rgba(234, 88, 12, 0.32)' : 'transparent',
+                    boxShadow: isDebugSimulated ? '0 0 0 1.5px #fb923c' : 'none',
+                    color: isDebugSimulated ? '#fb923c' : '#94a3b8',
+                    fontWeight: isDebugSimulated ? 800 : 600,
+                    fontSize: '0.72rem',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <Bug size={11} />
+                  <span>{isEn ? 'Debug' : '디버깅'}</span>
+                </span>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '3px 8px',
+                    borderRadius: '5px',
+                    background: !isDebugSimulated ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
+                    color: !isDebugSimulated ? '#38bdf8' : '#94a3b8',
+                    fontWeight: !isDebugSimulated ? 800 : 600,
+                    fontSize: '0.72rem',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <Zap size={11} />
+                  <span>{isEn ? 'Normal' : '일반'}</span>
+                </span>
+              </div>
+            </div>
+
+            <div style={{ fontSize: '0.72rem', color: isDebugSimulated ? '#fdba74' : '#94a3b8', fontWeight: 700, transition: 'color 0.2s ease' }}>
+              {isDebugSimulated
+                ? isEn
+                  ? '✓ Debug Mode active: 0.2x~3x speed bar unlocked for line-by-line trace'
+                  : '✓ [디버깅] 클릭 시: 배속(0.2x~3x) 바가 열리며 한 줄씩 순차 실행됩니다'
+                : isEn
+                ? '• Click [Debug] on the left to switch from Normal Mode'
+                : '• 좌측의 [🐞 디버깅] 버튼을 클릭해 모드를 전환할 수 있습니다'}
+            </div>
           </div>
         )}
 
