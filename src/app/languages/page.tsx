@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   Flame,
   Lock,
-  RotateCcw,
   Target,
   X,
 } from 'lucide-react';
@@ -174,16 +173,6 @@ export default function LanguagesPage() {
       })
       .filter((s): s is NonNullable<typeof s> => s !== null);
   }, [activeRoadmap, searchQuery, selectedDifficulty, showUnlockedOnly]);
-
-  const hasUnlockedInActiveRoadmap = useMemo(() => {
-    if (!activeRoadmap) return true;
-    return activeRoadmap.stages.some((st) =>
-      st.moduleIds.some((id) => {
-        const found = findCurriculumModuleById(id);
-        return found ? !found.module.isLocked : false;
-      })
-    );
-  }, [activeRoadmap]);
 
   const difficultyOptions = ['all', '입문', '중급', '심화'];
   const getDifficultyLabel = (diff: string) => {
@@ -689,7 +678,6 @@ export default function LanguagesPage() {
           {(() => {
             const isSelected = selectedRoadmapId === null && selectedTrackId === 'all';
             const isHovered = hoveredTrackId === 'all';
-            const isExpanded = isSelected || isHovered;
             return (
               <button
                 onClick={() => {
@@ -700,25 +688,26 @@ export default function LanguagesPage() {
                 onMouseLeave={() => setHoveredTrackId(null)}
                 style={{
                   height: '52px',
-                  padding: isExpanded ? '0 16px 0 10px' : '0 10px',
+                  padding: '0 16px 0 10px',
                   borderRadius: '16px',
                   flexShrink: 0,
+                  boxSizing: 'border-box',
                   background: isSelected
                     ? 'rgba(8, 145, 178, 0.12)'
                     : isHovered
                     ? '#f1f5f9'
                     : '#f8fafc',
-                  border: isSelected
-                    ? '2px solid #0891b2'
-                    : isHovered
-                    ? '1.5px solid #0891b2'
-                    : '1.5px solid #cbd5e1',
-                  boxShadow: isSelected ? '0 4px 14px rgba(8, 145, 178, 0.25)' : 'none',
-                  transform: isHovered ? 'scale(1.04)' : 'scale(1)',
-                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  border:
+                    isSelected || isHovered
+                      ? '1.5px solid #0891b2'
+                      : '1.5px solid #cbd5e1',
+                  boxShadow: isSelected
+                    ? '0 0 0 1px #0891b2, 0 4px 14px rgba(8, 145, 178, 0.22)'
+                    : 'none',
+                  transition: 'background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: isExpanded ? '8px' : '0px',
+                  gap: '8px',
                   cursor: 'pointer',
                   overflow: 'hidden',
                 }}
@@ -726,11 +715,7 @@ export default function LanguagesPage() {
                 <LanguageIcon language="all" size={32} />
                 <div
                   style={{
-                    maxWidth: isExpanded ? '110px' : '0px',
-                    opacity: isExpanded ? 1 : 0,
-                    overflow: 'hidden',
                     whiteSpace: 'nowrap',
-                    transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
@@ -787,19 +772,20 @@ export default function LanguagesPage() {
                   padding: isExpanded ? '0 16px 0 11px' : '0 11px',
                   borderRadius: '16px',
                   flexShrink: 0,
+                  boxSizing: 'border-box',
                   background: isSelected
                     ? `${track.color}18`
                     : isHovered
                     ? `${track.color}0d`
                     : '#f8fafc',
-                  border: isSelected
-                    ? `2px solid ${track.color}`
-                    : isHovered
-                    ? `1.5px solid ${track.color}`
-                    : '1.5px solid #cbd5e1',
-                  boxShadow: isSelected ? `0 4px 14px ${track.color}35` : 'none',
-                  transform: isHovered ? 'scale(1.04)' : 'scale(1)',
-                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  border:
+                    isSelected || isHovered
+                      ? `1.5px solid ${track.color}`
+                      : '1.5px solid #cbd5e1',
+                  boxShadow: isSelected
+                    ? `0 0 0 1px ${track.color}, 0 4px 14px ${track.color}30`
+                    : 'none',
+                  transition: 'padding 0.22s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: isExpanded ? '8px' : '0px',
@@ -870,9 +856,10 @@ export default function LanguagesPage() {
               return (
                 <button
                   key={rm.id}
-                  onClick={() =>
-                    setSelectedRoadmapId((prev) => (prev === rm.id ? null : rm.id))
-                  }
+                  onClick={() => {
+                    setSelectedTrackId('all');
+                    setSelectedRoadmapId((prev) => (prev === rm.id ? null : rm.id));
+                  }}
                   onMouseEnter={() => setHoveredRoadmapId(rm.id)}
                   onMouseLeave={() => setHoveredRoadmapId(null)}
                   style={{
@@ -880,24 +867,23 @@ export default function LanguagesPage() {
                     textAlign: 'left',
                     padding: '11px 13px',
                     borderRadius: '16px',
+                    boxSizing: 'border-box',
                     background: isSelected
                       ? `${rm.color}14`
                       : isHovered
                       ? '#ffffff'
                       : '#f8fafc',
-                    border: isSelected
-                      ? `2px solid ${rm.color}`
-                      : isHovered
-                      ? `1.5px solid ${rm.color}`
-                      : '1.5px solid #cbd5e1',
+                    border:
+                      isSelected || isHovered
+                        ? `1.5px solid ${rm.color}`
+                        : '1.5px solid #cbd5e1',
                     boxShadow: isSelected
-                      ? `0 4px 14px ${rm.color}28`
+                      ? `0 0 0 1px ${rm.color}, 0 4px 12px ${rm.color}24`
                       : isHovered
                       ? '0 3px 10px rgba(15, 23, 42, 0.05)'
                       : 'none',
-                    transform: isHovered ? 'translateY(-1px)' : 'none',
                     cursor: 'pointer',
-                    transition: 'all 0.18s ease',
+                    transition: 'background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -1116,82 +1102,8 @@ export default function LanguagesPage() {
             </button>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '34px' }}>
-            {/* Active Learning Direction Banner */}
-            <div
-              style={{
-                background: '#ffffff',
-                borderRadius: '20px',
-                border: `1.5px solid ${activeRoadmap.color}65`,
-                padding: '18px 22px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '12px',
-                boxShadow: '0 3px 14px rgba(15, 23, 42, 0.04)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '1.5rem' }}>{activeRoadmap.icon}</span>
-                <div>
-                  <h2 style={{ fontSize: '1.18rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                    {isEn
-                      ? `${activeRoadmap.title_en} Curriculum`
-                      : `${activeRoadmap.title_ko} 단계별 추천 분류`}
-                  </h2>
-                  <p style={{ fontSize: '0.85rem', color: '#475569', margin: '3px 0 0 0', fontWeight: 500 }}>
-                    {isEn ? activeRoadmap.summary_en : activeRoadmap.summary_ko}
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                {!hasUnlockedInActiveRoadmap && (
-                  <Link
-                    href="/practice/python_basic"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      padding: '8px 14px',
-                      borderRadius: '10px',
-                      background: '#f0f9ff',
-                      border: '1px solid #bae6fd',
-                      color: '#0284c7',
-                      fontSize: '0.8rem',
-                      fontWeight: 800,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <span>{isEn ? 'Start Python Basics First' : '오픈된 파이썬 베이직 먼저 시작'}</span>
-                    <ArrowRight size={13} />
-                  </Link>
-                )}
-
-                <button
-                  onClick={() => setSelectedRoadmapId(null)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    background: '#f8fafc',
-                    border: '1.5px solid #cbd5e1',
-                    color: '#334155',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <RotateCcw size={13} />
-                  <span>{isEn ? 'Language View' : '언어별 분류로'}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Stage Sections (STEP 01 -> STEP 02 -> STEP 03) */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
+            {/* Stage Sections (STEP 01 -> STEP 02 -> STEP 03) directly below filter card */}
             {filteredRoadmapStages.map((stage) => (
               <section key={stage.id}>
                 <div
@@ -1228,7 +1140,7 @@ export default function LanguagesPage() {
                     <div>
                       <h3
                         style={{
-                          fontSize: '1.25rem',
+                          fontSize: '1.3rem',
                           fontWeight: 800,
                           color: '#0f172a',
                           margin: 0,
