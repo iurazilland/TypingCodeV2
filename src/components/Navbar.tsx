@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  BarChart3,
   BookOpen,
   CheckSquare,
   ChevronDown,
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
+import { isAdminUser } from '@/lib/admin';
 import UserAvatar from '@/components/UserAvatar';
 
 export default function Navbar() {
@@ -63,6 +65,7 @@ export default function Navbar() {
 
   const currentStreak = profile?.current_streak || 0;
   const totalAttendance = profile?.total_attendance_days || 0;
+  const isAdmin = isAdminUser(profile, user);
   const codeTypingLabel =
     (t.nav as Record<string, string>).codeTyping ||
     (language === 'ko' ? '코드타자' : 'Code Typing');
@@ -473,6 +476,33 @@ export default function Navbar() {
                     <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
                   </Link>
 
+                  {isAdmin && (
+                    <Link
+                      href="/admin/feedbacks"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '9px',
+                        padding: '10px 12px',
+                        borderRadius: '10px',
+                        color: '#0f172a',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        transition: 'background 0.15s ease',
+                        marginTop: '2px',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)')
+                      }
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <BarChart3 size={15} style={{ color: '#6366f1' }} />
+                      <span>{language === 'ko' ? '설문 대시보드' : 'Survey Dashboard'}</span>
+                    </Link>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => {
@@ -629,6 +659,28 @@ export default function Navbar() {
                 <Settings size={18} style={{ color: '#0891b2' }} />
                 <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
               </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin/feedbacks"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    fontSize: '0.96rem',
+                    fontWeight: 700,
+                    color: '#0f172a',
+                    background: '#f5f3ff',
+                    border: '1px solid #c4b5fd',
+                    textDecoration: 'none',
+                  }}
+                >
+                  <BarChart3 size={18} style={{ color: '#6366f1' }} />
+                  <span>{language === 'ko' ? '설문 대시보드' : 'Survey Dashboard'}</span>
+                </Link>
+              )}
               <button
                 type="button"
                 onClick={() => {

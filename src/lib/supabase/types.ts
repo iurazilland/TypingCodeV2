@@ -81,3 +81,10 @@ export interface SectionFeedbackRow {
   created_at: string;
   updated_at: string;
 }
+
+export interface AdminSectionFeedbackRow extends SectionFeedbackRow {
+  username: string | null;
+  display_name: string | null;
+  avatar_preset: string | null;
+  avatar_url: string | null;
+}

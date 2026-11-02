@@ -65,7 +65,7 @@ export function findCompletedSectionForLevel(
   return null;
 }
 
-const FEEDBACK_TAGS = [
+export const FEEDBACK_TAGS = [
   {
     id: 'clear_explanation',
     labelKo: '💡 설명과 힌트가 이해하기 쉬웠어요',

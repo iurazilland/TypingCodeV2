@@ -70,7 +70,7 @@
 코드타자(`/code-typing`)의 25개 언어별 코드 예제(`snippet_id`, `language`)마다 본인의 최고 타수(`best_cpm`)와 정확도(`best_accuracy`)를 갱신하며, 리더보드(`/ranking`)의 언어별 타자 순위 집계에 사용됩니다.
 
 ### ⑥ `section_feedbacks` — 섹션 완료 마이크로 설문
-각 섹션의 마지막 레벨을 처음 완주했을 때 받는 **별점(`1~5`), 체감 난이도(`easy / just_right / hard`), 빠른 선택 태그(`tags`), 추가 요청사항(`comment`)** 이 저장됩니다. Supabase 대시보드 **Table Editor → `section_feedbacks`** 에서 사용자 피드백을 바로 모아볼 수 있습니다.
+각 섹션의 마지막 레벨을 처음 완주했을 때 받는 **별점(`1~5`), 체감 난이도(`easy / just_right / hard`), 빠른 선택 태그(`tags`), 추가 요청사항(`comment`)** 이 저장됩니다. 지정된 관리자 ID로 로그인하면 우측 상단 프로필 드롭다운의 **`📊 설문 대시보드` (`/admin/feedbacks`)** 에서 섹션별 그래프와 학습자 개별 의견을 하나씩 바로 확인할 수 있습니다.
 
 ### ⑦ `user_saved_snippets` — 자유코딩 클라우드 스니펫 보관함
 자유코딩(`/compiler`)에서 작성한 코드를 제목·언어와 함께 계정당 최대 20개까지 클라우드에 저장·덮어쓰기·삭제할 수 있습니다.
@@ -93,6 +93,8 @@
 - **초기 V2 마이그레이션 SQL**: [20261101000000_v2_initial_schema.sql](file:///d:/Projects/TypingCode_V2/supabase/migrations/20261101000000_v2_initial_schema.sql)
 - **V2.1 고도화 마이그레이션 SQL**: [20261101010000_v2_schema_refinement.sql](file:///d:/Projects/TypingCode_V2/supabase/migrations/20261101010000_v2_schema_refinement.sql)
 - **V2.2 문제풀이·자유코딩 스니펫·언어별 타자 리더보드 마이그레이션 SQL**: [20261101020000_v2_judge_snippets_speed_leaderboard.sql](file:///d:/Projects/TypingCode_V2/supabase/migrations/20261101020000_v2_judge_snippets_speed_leaderboard.sql)
+- **V2.3 관리자 섹션 설문 대시보드 조회 RPC 마이그레이션 SQL**: [20261102010000_admin_section_feedbacks.sql](file:///d:/Projects/TypingCode_V2/supabase/migrations/20261102010000_admin_section_feedbacks.sql)
+- **관리자 권한 판별 및 섹션 설문 대시보드**: [src/lib/admin.ts](file:///d:/Projects/TypingCode_V2/src/lib/admin.ts), [src/app/admin/feedbacks/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/admin/feedbacks/page.tsx)
 - **전용 로그인/회원가입 페이지 & ID 로그인 API**: [src/app/login/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/login/page.tsx), [src/app/api/auth/login/route.ts](file:///d:/Projects/TypingCode_V2/src/app/api/auth/login/route.ts)
 - **내 정보 수정 & 아바타 자동 압축 업로드**: [src/app/profile/page.tsx](file:///d:/Projects/TypingCode_V2/src/app/profile/page.tsx), [src/lib/avatarCompression.ts](file:///d:/Projects/TypingCode_V2/src/lib/avatarCompression.ts), [src/components/UserAvatar.tsx](file:///d:/Projects/TypingCode_V2/src/components/UserAvatar.tsx)
 - **섹션 완료 설문 모달**: [src/components/SectionFeedbackModal.tsx](file:///d:/Projects/TypingCode_V2/src/components/SectionFeedbackModal.tsx)

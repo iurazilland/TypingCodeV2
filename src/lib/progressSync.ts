@@ -2,7 +2,9 @@ import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
 import type {
+  AdminSectionFeedbackRow,
   SectionDifficultyRating,
+  SectionFeedbackRow,
   UserClearedLevelRow,
   UserProfile,
   UserSavedSnippetRow,
@@ -411,6 +413,87 @@ export async function submitSectionFeedback(
     return !error;
   } catch {
     return false;
+  }
+}
+
+export async function fetchAdminSectionFeedbacks(): Promise<{
+  items: AdminSectionFeedbackRow[];
+  usedFallback: boolean;
+}> {
+  if (!isSupabaseConfigured()) {
+    return { items: [], usedFallback: false };
+  }
+
+  try {
+    const supabase = createClient();
+    const { data: rpcData, error: rpcError } = await supabase.rpc(
+      'get_admin_section_feedbacks'
+    );
+
+    if (!rpcError && Array.isArray(rpcData)) {
+      return {
+        items: (rpcData as AdminSectionFeedbackRow[]).map((row) => ({
+          ...row,
+          rating: Number(row.rating) || 5,
+          section_number: Number(row.section_number) || 1,
+          tags: Array.isArray(row.tags) ? row.tags : [],
+        })),
+        usedFallback: false,
+      };
+    }
+
+    // Fallback: query section_feedbacks directly and merge public profiles
+    const { data: fbRows, error: fbError } = await supabase
+      .from('section_feedbacks')
+      .select('*')
+      .order('updated_at', { ascending: false });
+
+    if (fbError || !fbRows) {
+      return { items: [], usedFallback: true };
+    }
+
+    const typedRows = fbRows as SectionFeedbackRow[];
+    const userIds = Array.from(new Set(typedRows.map((r) => r.user_id)));
+    const profileMap = new Map<
+      string,
+      Pick<UserProfile, 'username' | 'display_name' | 'avatar_preset' | 'avatar_url'>
+    >();
+
+    if (userIds.length > 0) {
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, username, display_name, avatar_preset, avatar_url')
+        .in('id', userIds);
+
+      if (Array.isArray(profilesData)) {
+        for (const p of profilesData as Array<
+          Pick<
+            UserProfile,
+            'id' | 'username' | 'display_name' | 'avatar_preset' | 'avatar_url'
+          >
+        >) {
+          profileMap.set(p.id, p);
+        }
+      }
+    }
+
+    const merged: AdminSectionFeedbackRow[] = typedRows.map((row) => {
+      const prof = profileMap.get(row.user_id);
+      return {
+        ...row,
+        rating: Number(row.rating) || 5,
+        section_number: Number(row.section_number) || 1,
+        tags: Array.isArray(row.tags) ? row.tags : [],
+        username: prof?.username ?? null,
+        display_name: prof?.display_name ?? null,
+        avatar_preset: prof?.avatar_preset ?? null,
+        avatar_url: prof?.avatar_url ?? null,
+      };
+    });
+
+    return { items: merged, usedFallback: true };
+  } catch {
+    return { items: [], usedFallback: true };
   }
 }
 

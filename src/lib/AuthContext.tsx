@@ -26,6 +26,7 @@ const PROTECTED_PREFIXES = [
   '/challenges',
   '/compiler',
   '/profile',
+  '/admin',
 ];
 
 function isProtectedPath(pathname: string): boolean {
