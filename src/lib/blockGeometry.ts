@@ -175,9 +175,10 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
 };
 
 export const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {
+  const BASE_WIDTH = 26;
   const str = val ?? '';
   if (str.length === 0) {
-    return 26;
+    return BASE_WIDTH;
   }
   let units = 0;
   for (let i = 0; i < str.length; i++) {
@@ -189,7 +190,7 @@ export const getBlockInputWidth = (val: string | undefined | null, minChars: num
     }
   }
   const effectiveLen = Math.max(minChars, units);
-  return Math.round(effectiveLen * 7.5 + 13);
+  return Math.max(BASE_WIDTH, Math.round(effectiveLen * 7.5 + 13));
 };
 
 export interface SnapTarget {
