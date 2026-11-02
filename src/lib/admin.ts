@@ -6,6 +6,8 @@ import type { UserProfile } from '@/lib/supabase/types';
  * 추가 관리자 ID는 아래 배열에 추가하거나 .env.local 의 NEXT_PUBLIC_ADMIN_IDS 에 콤마(,)로 구분해 지정할 수 있습니다.
  */
 export const DEFAULT_ADMIN_IDS: readonly string[] = [
+  'iurazilland@gmail.com',
+  'iurazilland',
   'admin',
   'easyp',
   'typingcode',
@@ -59,3 +61,4 @@ export function isAdminUser(
 
   return candidates.some((id) => adminSet.has(id));
 }
+
