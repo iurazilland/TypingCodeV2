@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Sparkles, ChevronRight, ChevronLeft, Code2, Play, Bug, Zap } from 'lucide-react';
 
 export interface TourStep {
+  id: string;
   targetId: string;
   title_ko: string;
   title_en: string;
@@ -14,6 +15,7 @@ export interface TourStep {
 
 export const TOUR_STEPS: TourStep[] = [
   {
+    id: 'mission',
     targetId: 'tour-mission-prompt',
     title_ko: '1. 학습 미션 안내',
     title_en: '1. Mission Objective',
@@ -22,6 +24,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
   },
   {
+    id: 'step-nav',
     targetId: 'tour-step-nav',
     title_ko: '2. 단계별 순차 이동',
     title_en: '2. Step Navigation',
@@ -30,6 +33,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
   },
   {
+    id: 'progress',
     targetId: 'tour-progress-bar',
     title_ko: '3. 레벨 학습 진행도',
     title_en: '3. Level Progress Bar',
@@ -38,6 +42,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
   },
   {
+    id: 'hearts',
     targetId: 'tour-hearts-system',
     title_ko: '4. 하트 생명 시스템',
     title_en: '4. Heart Life System',
@@ -46,6 +51,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
   },
   {
+    id: 'toolbox',
     targetId: 'tour-col-toolbox',
     title_ko: '5. 코드 블록 도구함',
     title_en: '5. Block Toolbox',
@@ -54,6 +60,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'right',
   },
   {
+    id: 'canvas',
     targetId: 'tour-col-canvas',
     title_ko: '6. 블록 조립 캔버스 및 타이핑 모드',
     title_en: '6. Assembly Canvas & Typing Mode',
@@ -62,33 +69,46 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'inside-top-right',
   },
   {
+    id: 'normal-mode',
     targetId: 'tour-debug-mode',
-    title_ko: '7. 디버깅 모드 및 속도 제어',
-    title_en: '7. Debug Mode & Speed',
-    description_ko: '디버깅 모드를 켜면 코드가 한 줄씩 순차 실행되며, 속도(0.2x~3x)를 조절하여 코드 동작 과정을 면밀히 관찰합니다.',
-    description_en: 'In Debug Mode, code runs line-by-line. Adjust speed (0.2x~3x) to trace logic step-by-step.',
+    title_ko: '7. 일반 실행 모드',
+    title_en: '7. Normal Execution Mode',
+    description_ko: '일반 모드를 선택하면 작성한 코드가 지연 없이 한 번에 실행되어 최종 출력 결과를 즉시 확인합니다.',
+    description_en: 'In Normal Mode, your code runs all at once without delay so you can check the output immediately.',
     placement: 'bottom',
   },
   {
+    id: 'debug-mode',
+    targetId: 'tour-debug-mode',
+    title_ko: '8. 디버깅 모드 및 속도 제어 (기본 1x)',
+    title_en: '8. Debug Mode & Speed (Default 1x)',
+    description_ko: '디버깅 모드(기본 1x)에서는 코드가 한 줄씩 순차 실행되며, 배속(0.2x~3x)을 조절해 동작 과정을 면밀히 관찰합니다.',
+    description_en: 'In Debug Mode (default 1x), code runs line-by-line. Adjust speed (0.2x~3x) to trace logic step-by-step.',
+    placement: 'bottom',
+  },
+  {
+    id: 'run-btn',
     targetId: 'tour-run-btn',
-    title_ko: '8. 코드 실행 및 정지',
-    title_en: '8. Run & Stop Controls',
+    title_ko: '9. 코드 실행 및 정지',
+    title_en: '9. Run & Stop Controls',
     description_ko: '작성한 코드를 파이썬 엔진에서 즉시 실행합니다. 키보드 단축키 Ctrl+Enter를 누르면 즉시 실행할 수 있습니다.',
     description_en: 'Executes your code in the Python engine immediately. Press shortcut Ctrl+Enter for instant execution.',
     placement: 'bottom',
   },
   {
+    id: 'terminal',
     targetId: 'tour-terminal-console',
-    title_ko: '9. 터미널 콘솔 출력',
-    title_en: '9. Terminal Console',
+    title_ko: '10. 터미널 콘솔 출력',
+    title_en: '10. Terminal Console',
     description_ko: '파이썬 코드의 print() 출력 결과와 오류 메시지를 실제 터미널 환경과 동일하게 출력하여 확인합니다.',
     description_en: 'Displays real standard output from print() statements and error diagnostics in real-time.',
     placement: 'right',
   },
   {
+    id: 'memory',
     targetId: 'tour-memory-visualizer',
-    title_ko: '10. 메모리 시각화 (RAM Box)',
-    title_en: '10. Memory Visualizer (RAM)',
+    title_ko: '11. 메모리 시각화 (RAM Box)',
+    title_en: '11. Memory Visualizer (RAM)',
     description_ko: '프로그램 실행 중 생성되거나 변경되는 변수의 이름, 데이터 타입, 저장 값을 실시간 메모리 상자로 관찰합니다.',
     description_en: 'Visualizes variable identifiers, data types, and stored values inside animated RAM storage boxes.',
     placement: 'right',
@@ -111,20 +131,20 @@ export default function SpotlightTour({
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [dontShowAgain, setDontShowAgain] = useState<boolean>(true);
-  const [isDebugSimulated, setIsDebugSimulated] = useState<boolean>(false);
-  const [debugBtnRect, setDebugBtnRect] = useState<DOMRect | null>(null);
+  const [modeBtnRect, setModeBtnRect] = useState<DOMRect | null>(null);
 
   const isEn = language === 'en';
   const currentStep = TOUR_STEPS[stepIndex] || TOUR_STEPS[0];
-  const isCanvasStep = currentStep.targetId === 'tour-col-canvas';
-  const isDebugStep = currentStep.targetId === 'tour-debug-mode';
+  const isCanvasStep = currentStep.id === 'canvas';
+  const isNormalModeStep = currentStep.id === 'normal-mode';
+  const isDebugModeStep = currentStep.id === 'debug-mode';
+  const isExecModeStep = isNormalModeStep || isDebugModeStep;
 
   // Reset tour state when opened
   useEffect(() => {
     if (isOpen) {
       setStepIndex(0);
       setDontShowAgain(true);
-      setIsDebugSimulated(false);
     }
   }, [isOpen]);
 
@@ -134,67 +154,58 @@ export default function SpotlightTour({
     const el = document.getElementById(currentStep.targetId);
     if (el) {
       setTargetRect(el.getBoundingClientRect());
-      if (currentStep.targetId === 'tour-debug-mode') {
+      if (currentStep.id === 'normal-mode' || currentStep.id === 'debug-mode') {
         const btns = el.querySelectorAll('button');
-        const dbgBtn = btns.length >= 2 ? btns[btns.length - 2] : null;
-        setDebugBtnRect(dbgBtn ? dbgBtn.getBoundingClientRect() : null);
+        const activeBtn =
+          btns.length >= 2
+            ? btns[currentStep.id === 'debug-mode' ? btns.length - 2 : btns.length - 1]
+            : null;
+        setModeBtnRect(activeBtn ? activeBtn.getBoundingClientRect() : null);
       } else {
-        setDebugBtnRect(null);
+        setModeBtnRect(null);
       }
     } else {
       setTargetRect(null);
-      setDebugBtnRect(null);
+      setModeBtnRect(null);
     }
-  }, [isOpen, currentStep.targetId]);
+  }, [isOpen, currentStep.id, currentStep.targetId]);
 
-  // Step 7 ('tour-debug-mode'): Automatically click the Debug Mode toggle button in the real UI
-  // so users visually see the mode switch & speed controls (0.2x~3x) appear in real time.
+  // Step 7 ('normal-mode') -> switch to Normal Mode once
+  // Step 8 ('debug-mode') & default -> switch to Debug Mode (1x) and keep it as default
   useEffect(() => {
-    if (!isOpen || !isDebugStep) {
-      setIsDebugSimulated(false);
-      setDebugBtnRect(null);
+    if (!isOpen) {
+      setModeBtnRect(null);
       return;
     }
 
-    const triggerRealModeButton = (toDebug: boolean) => {
-      setIsDebugSimulated(toDebug);
+    const selectRealMode = (toDebug: boolean) => {
       const container = document.getElementById('tour-debug-mode');
       if (container) {
         const btns = container.querySelectorAll('button');
         const targetBtn =
           btns.length >= 2 ? btns[toDebug ? btns.length - 2 : btns.length - 1] : null;
-        if (targetBtn) {
-          targetBtn.click();
-        }
+        targetBtn?.click();
       }
       requestAnimationFrame(() => updateRect());
       window.setTimeout(() => updateRect(), 60);
     };
 
-    // Start in Normal briefly, then auto-click Debug Mode and repeat cycle
-    triggerRealModeButton(false);
-    const initialClickTimer = window.setTimeout(() => {
-      triggerRealModeButton(true);
-    }, 550);
-
-    let nextState = false;
-    const cycleInterval = window.setInterval(() => {
-      triggerRealModeButton(nextState);
-      nextState = !nextState;
-    }, 1800);
+    if (isNormalModeStep) {
+      selectRealMode(false);
+    } else if (isDebugModeStep) {
+      selectRealMode(true);
+    }
 
     return () => {
-      window.clearTimeout(initialClickTimer);
-      window.clearInterval(cycleInterval);
-      // Restore normal execution mode when leaving Step 7 or closing the tour
+      // Ensure Debug Mode (1x) remains the active default whenever leaving Step 7 or closing the tour
       const container = document.getElementById('tour-debug-mode');
       if (container) {
         const btns = container.querySelectorAll('button');
-        const normalBtn = btns.length >= 2 ? btns[btns.length - 1] : null;
-        normalBtn?.click();
+        const debugBtn = btns.length >= 2 ? btns[btns.length - 2] : null;
+        debugBtn?.click();
       }
     };
-  }, [isOpen, isDebugStep, updateRect]);
+  }, [isOpen, isNormalModeStep, isDebugModeStep, updateRect]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -242,7 +253,7 @@ export default function SpotlightTour({
   if (!isOpen) return null;
 
   const cardWidth = isCanvasStep ? 440 : 390;
-  const cardHeight = isCanvasStep ? 430 : isDebugStep ? 295 : 210;
+  const cardHeight = isCanvasStep ? 430 : isExecModeStep ? 295 : 210;
 
   // Calculate Popover Position relative to targetRect
   let popoverStyle: React.CSSProperties = {
@@ -326,20 +337,20 @@ export default function SpotlightTour({
         />
       )}
 
-      {/* 1-B. Step 7 Auto-Click Indicator on the Real Debug Button */}
-      {isDebugStep && debugBtnRect && (
+      {/* 1-B. Step 7 (Normal) / Step 8 (Debug) Button Indicator on the Real Control */}
+      {isExecModeStep && modeBtnRect && (
         <div
           style={{
             position: 'fixed',
-            top: debugBtnRect.top - 4,
-            left: debugBtnRect.left - 4,
-            width: debugBtnRect.width + 8,
-            height: debugBtnRect.height + 8,
+            top: modeBtnRect.top - 4,
+            left: modeBtnRect.left - 4,
+            width: modeBtnRect.width + 8,
+            height: modeBtnRect.height + 8,
             borderRadius: '8px',
-            border: isDebugSimulated ? '2px solid #fb923c' : '2px dashed rgba(251, 146, 60, 0.7)',
-            boxShadow: isDebugSimulated
+            border: isDebugModeStep ? '2px solid #fb923c' : '2px solid #38bdf8',
+            boxShadow: isDebugModeStep
               ? '0 0 16px rgba(251, 146, 60, 0.8), inset 0 0 8px rgba(251, 146, 60, 0.35)'
-              : 'none',
+              : '0 0 16px rgba(56, 189, 248, 0.8), inset 0 0 8px rgba(56, 189, 248, 0.35)',
             pointerEvents: 'none',
             zIndex: 10003,
             transition: 'all 0.22s ease',
@@ -350,11 +361,10 @@ export default function SpotlightTour({
               position: 'absolute',
               bottom: '-18px',
               left: '50%',
-              transform: `translateX(-50%) scale(${isDebugSimulated ? 0.92 : 1.08})`,
+              transform: 'translateX(-50%)',
               fontSize: '0.88rem',
               lineHeight: 1,
               filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
-              transition: 'transform 0.2s ease',
             }}
           >
             👆
@@ -571,12 +581,14 @@ export default function SpotlightTour({
           </div>
         )}
 
-        {/* Step 7: Visual Auto-Click Preview for Debug Mode & Speed */}
-        {isDebugStep && (
+        {/* Step 7 (Normal Mode) & Step 8 (Debug Mode 1x) Visual Preview */}
+        {isExecModeStep && (
           <div
             style={{
               background: 'rgba(2, 6, 23, 0.8)',
-              border: '1px solid rgba(251, 146, 60, 0.35)',
+              border: isDebugModeStep
+                ? '1px solid rgba(251, 146, 60, 0.38)'
+                : '1px solid rgba(56, 189, 248, 0.35)',
               borderRadius: '12px',
               padding: '10px 12px',
               display: 'flex',
@@ -593,7 +605,7 @@ export default function SpotlightTour({
                 flexWrap: 'wrap',
               }}
             >
-              {/* Simulated Speed Selector */}
+              {/* Speed Selector (Visible and highlighted in Step 8 Debug Mode) */}
               <div
                 style={{
                   display: 'inline-flex',
@@ -602,8 +614,7 @@ export default function SpotlightTour({
                   padding: '2px',
                   borderRadius: '7px',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
-                  opacity: isDebugSimulated ? 1 : 0.3,
-                  transition: 'opacity 0.25s ease',
+                  opacity: isDebugModeStep ? 1 : 0.28,
                 }}
               >
                 {[0.2, 0.5, 1, 2, 3].map((spd) => (
@@ -612,8 +623,8 @@ export default function SpotlightTour({
                     style={{
                       padding: '2px 5px',
                       borderRadius: '4px',
-                      background: spd === 1 && isDebugSimulated ? 'rgba(251, 146, 60, 0.35)' : 'transparent',
-                      color: spd === 1 && isDebugSimulated ? '#fed7aa' : '#64748b',
+                      background: spd === 1 && isDebugModeStep ? 'rgba(251, 146, 60, 0.35)' : 'transparent',
+                      color: spd === 1 && isDebugModeStep ? '#fed7aa' : '#64748b',
                       fontWeight: 800,
                       fontSize: '0.65rem',
                       fontFamily: 'var(--font-mono)',
@@ -624,7 +635,7 @@ export default function SpotlightTour({
                 ))}
               </div>
 
-              {/* Simulated [🐞 디버깅 | ⚡ 일반] Switch */}
+              {/* [🐞 디버깅 | ⚡ 일반] Switch */}
               <div
                 style={{
                   display: 'inline-flex',
@@ -642,12 +653,11 @@ export default function SpotlightTour({
                     gap: '4px',
                     padding: '3px 8px',
                     borderRadius: '5px',
-                    background: isDebugSimulated ? 'rgba(234, 88, 12, 0.32)' : 'transparent',
-                    boxShadow: isDebugSimulated ? '0 0 0 1.5px #fb923c' : 'none',
-                    color: isDebugSimulated ? '#fb923c' : '#94a3b8',
-                    fontWeight: isDebugSimulated ? 800 : 600,
+                    background: isDebugModeStep ? 'rgba(234, 88, 12, 0.32)' : 'transparent',
+                    boxShadow: isDebugModeStep ? '0 0 0 1.5px #fb923c' : 'none',
+                    color: isDebugModeStep ? '#fb923c' : '#94a3b8',
+                    fontWeight: isDebugModeStep ? 800 : 600,
                     fontSize: '0.72rem',
-                    transition: 'all 0.2s ease',
                   }}
                 >
                   <Bug size={11} />
@@ -660,11 +670,11 @@ export default function SpotlightTour({
                     gap: '4px',
                     padding: '3px 8px',
                     borderRadius: '5px',
-                    background: !isDebugSimulated ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
-                    color: !isDebugSimulated ? '#38bdf8' : '#94a3b8',
-                    fontWeight: !isDebugSimulated ? 800 : 600,
+                    background: isNormalModeStep ? 'rgba(56, 189, 248, 0.28)' : 'transparent',
+                    boxShadow: isNormalModeStep ? '0 0 0 1.5px #38bdf8' : 'none',
+                    color: isNormalModeStep ? '#38bdf8' : '#94a3b8',
+                    fontWeight: isNormalModeStep ? 800 : 600,
                     fontSize: '0.72rem',
-                    transition: 'all 0.2s ease',
                   }}
                 >
                   <Zap size={11} />
@@ -673,14 +683,20 @@ export default function SpotlightTour({
               </div>
             </div>
 
-            <div style={{ fontSize: '0.72rem', color: isDebugSimulated ? '#fdba74' : '#94a3b8', fontWeight: 700, transition: 'color 0.2s ease' }}>
-              {isDebugSimulated
+            <div
+              style={{
+                fontSize: '0.72rem',
+                color: isDebugModeStep ? '#fdba74' : '#7dd3fc',
+                fontWeight: 700,
+              }}
+            >
+              {isDebugModeStep
                 ? isEn
-                  ? '✓ Debug Mode active: 0.2x~3x speed bar unlocked for line-by-line trace'
-                  : '✓ [디버깅] 클릭 시: 배속(0.2x~3x) 바가 열리며 한 줄씩 순차 실행됩니다'
+                  ? '✓ Default 1x Debug Mode: traces each line & RAM variable step by step'
+                  : '✓ 기본값(디버깅 1x): 한 줄씩 실행 흐름과 메모리 변화를 눈으로 따라갑니다'
                 : isEn
-                ? '• Click [Debug] on the left to switch from Normal Mode'
-                : '• 좌측의 [🐞 디버깅] 버튼을 클릭해 모드를 전환할 수 있습니다'}
+                ? '✓ Normal Mode: runs the entire code at once without step delay'
+                : '✓ [⚡ 일반] 선택 시: 단계별 대기 없이 전체 코드를 즉시 실행합니다'}
             </div>
           </div>
         )}

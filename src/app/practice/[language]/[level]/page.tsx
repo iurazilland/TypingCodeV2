@@ -1726,7 +1726,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   }, []);
 
   // Execution Mode & Step Debugging States
-  const [execMode, setExecMode] = useState<'normal' | 'debug'>('normal');
+  const [execMode, setExecMode] = useState<'normal' | 'debug'>('debug');
   const [debugSpeed, setDebugSpeed] = useState<number>(1); // 0.5 | 1 | 2 | 3
   const debugSpeedRef = useRef<number>(debugSpeed);
   debugSpeedRef.current = debugSpeed;
