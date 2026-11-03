@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle2, MessageSquareHeart, Send, Sparkles, Star, X } from 'lucide-react';
+import { CheckCircle2, MessageSquareHeart, Send, Sparkles, Star } from 'lucide-react';
 import { CURRICULUM_TRACKS } from '@/lib/curriculum';
 import { getCourseSections } from '@/lib/curriculumSections';
 import type { SectionDifficultyRating } from '@/lib/supabase/types';
@@ -108,15 +108,21 @@ export default function SectionFeedbackModal({
   sectionInfo,
   onClose,
 }: SectionFeedbackModalProps) {
-  const [rating, setRating] = useState<number>(5);
+  const [rating, setRating] = useState<number>(3);
   const [hoveredStar, setHoveredStar] = useState<number>(0);
-  const [difficulty, setDifficulty] = useState<SectionDifficultyRating>('just_right');
+  const [difficulty, setDifficulty] = useState<SectionDifficultyRating | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
   if (!isOpen) return null;
+
+  const canSubmit =
+    rating >= 1 &&
+    difficulty !== null &&
+    selectedTags.length > 0 &&
+    !isSubmitting;
 
   const toggleTag = (tagId: string) => {
     setSelectedTags((prev) =>
@@ -126,7 +132,7 @@ export default function SectionFeedbackModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating < 1) return;
+    if (!difficulty || selectedTags.length === 0 || rating < 1) return;
 
     setIsSubmitting(true);
     await submitSectionFeedback({
@@ -174,29 +180,6 @@ export default function SectionFeedbackModal({
           position: 'relative',
         }}
       >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="닫기"
-          style={{
-            position: 'absolute',
-            top: '18px',
-            right: '18px',
-            width: '32px',
-            height: '32px',
-            borderRadius: '10px',
-            background: 'rgba(255, 255, 255, 0.06)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            color: '#94a3b8',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-          }}
-        >
-          <X size={16} />
-        </button>
-
         {isDone ? (
           <div style={{ textAlign: 'center', padding: '32px 12px' }}>
             <div
@@ -303,10 +286,10 @@ export default function SectionFeedbackModal({
               </div>
             </div>
 
-            {/* 2. Perceived Difficulty */}
+            {/* 2. Perceived Difficulty (Required) */}
             <div style={{ marginBottom: '14px' }}>
               <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>
-                {isEn ? '2. How was the difficulty?' : '2. 체감 난이도는 어땠나요?'}
+                {isEn ? '2. How was the difficulty? (Required)' : '2. 체감 난이도는 어땠나요? (필수)'}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
                 {(
@@ -357,12 +340,12 @@ export default function SectionFeedbackModal({
               </div>
             </div>
 
-            {/* 3. Optional Quick Tags */}
+            {/* 3. Quick Tags (Required: 1 or more) */}
             <div style={{ marginBottom: '14px' }}>
               <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>
                 {isEn
-                  ? '3. Quick tags (optional, multiple allowed)'
-                  : '3. 좋았던 점이나 아쉬운 점을 골라주세요 (선택 · 복수 가능)'}
+                  ? '3. Quick tags (required, select 1 or more)'
+                  : '3. 좋았던 점이나 아쉬운 점을 골라주세요 (필수 · 복수 선택 가능)'}
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {FEEDBACK_TAGS.map((tag) => {
@@ -439,33 +422,15 @@ export default function SectionFeedbackModal({
               />
             </div>
 
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button
-                type="button"
-                onClick={onClose}
-                style={{
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  color: '#94a3b8',
-                  fontSize: '0.86rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {isEn ? 'Skip' : '건너뛰기'}
-              </button>
-
+            {/* Action Button (Mandatory Submission: 2 & 3 must be selected) */}
+            <div style={{ display: 'flex' }}>
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="tactile-btn tactile-btn-primary"
+                disabled={!canSubmit}
+                className={canSubmit ? 'tactile-btn tactile-btn-primary' : undefined}
                 style={{
                   flex: 1,
-                  padding: '12px 18px',
+                  padding: '13px 18px',
                   borderRadius: '12px',
                   fontSize: '0.9rem',
                   fontWeight: 800,
@@ -473,7 +438,12 @@ export default function SectionFeedbackModal({
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '7px',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  border: canSubmit ? undefined : '1px solid rgba(148, 163, 184, 0.2)',
+                  background: canSubmit ? undefined : 'rgba(255, 255, 255, 0.07)',
+                  color: canSubmit ? undefined : '#64748b',
+                  opacity: canSubmit ? 1 : 0.7,
+                  cursor: canSubmit ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.15s ease',
                 }}
               >
                 <Send size={15} />
@@ -483,7 +453,7 @@ export default function SectionFeedbackModal({
                       ? 'Submitting...'
                       : '제출 중...'
                     : isEn
-                    ? 'Submit Feedback'
+                    ? 'Submit Feedback & Continue'
                     : '설문 제출하고 계속하기'}
                 </span>
               </button>
