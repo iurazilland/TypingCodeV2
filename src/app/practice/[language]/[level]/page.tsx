@@ -3296,7 +3296,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (0.6s base step delay, live speed adjustable)
       setIsDebugging(true);
       setExecutingBlockId(null);
-      setExecutingLineIndex(null);
+      setExecutingLineIndex(-1);
       setHighlightedMemoryKeys(new Set());
 
       try {

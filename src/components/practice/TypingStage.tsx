@@ -794,11 +794,11 @@ export default function TypingStage({
             const targetLineText = targetLines[lineIdx] || '';
             const userLineText = userLines[lineIdx] !== undefined ? userLines[lineIdx] : null;
 
-            const isThisLineExecuting = Boolean(
-              isDebugging && executingLineIndex !== null && executingLineIndex !== undefined && executingLineIndex === lineIdx
-            );
             const isAnyLineExecuting = Boolean(
               isDebugging && executingLineIndex !== null && executingLineIndex !== undefined
+            );
+            const isThisLineExecuting = Boolean(
+              isAnyLineExecuting && executingLineIndex === lineIdx
             );
             const isThisLineDimmed = Boolean(isAnyLineExecuting && !isThisLineExecuting);
 
@@ -818,18 +818,22 @@ export default function TypingStage({
                   display: 'flex',
                   alignItems: 'center',
                   background: isThisLineExecuting
-                    ? 'linear-gradient(90deg, rgba(56, 189, 248, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%)'
+                    ? 'linear-gradient(90deg, rgba(56, 189, 248, 0.32) 0%, rgba(14, 165, 233, 0.18) 55%, rgba(56, 189, 248, 0.04) 100%)'
                     : isThisLineDimmed
-                    ? 'rgba(15, 23, 42, 0.35)'
+                    ? 'transparent'
                     : isCursorOnThisLine
                     ? 'rgba(255, 255, 255, 0.025)'
                     : 'transparent',
                   borderLeft: isThisLineExecuting
-                    ? '3px solid #38bdf8'
+                    ? '4px solid #38bdf8'
                     : isCursorOnThisLine
                     ? '3px solid rgba(56, 189, 248, 0.4)'
                     : '3px solid transparent',
-                  opacity: isThisLineDimmed ? 0.35 : 1,
+                  boxShadow: isThisLineExecuting
+                    ? 'inset 0 1px 0 rgba(56, 189, 248, 0.38), inset 0 -1px 0 rgba(56, 189, 248, 0.38), 0 0 18px rgba(56, 189, 248, 0.18)'
+                    : 'none',
+                  opacity: isThisLineDimmed ? 0.28 : 1,
+                  filter: isThisLineDimmed ? 'brightness(0.55) saturate(0.4)' : 'none',
                   transition: 'all 0.15s ease',
                   minHeight: '38px',
                   cursor: 'text',
@@ -852,7 +856,8 @@ export default function TypingStage({
                     paddingRight: '14px',
                     userSelect: 'none',
                     borderRight: '1px solid rgba(255, 255, 255, 0.06)',
-                    color: isThisLineExecuting ? '#38bdf8' : isCursorOnThisLine ? '#cbd5e1' : '#475569',
+                    color: isThisLineExecuting ? '#7dd3fc' : isCursorOnThisLine ? '#cbd5e1' : '#475569',
+                    textShadow: isThisLineExecuting ? '0 0 8px rgba(56, 189, 248, 0.85)' : 'none',
                     fontSize: '0.88rem',
                     fontWeight: isThisLineExecuting ? 900 : isCursorOnThisLine ? 800 : 600,
                     gap: '4px',
@@ -893,6 +898,7 @@ export default function TypingStage({
                     }}
                     style={{
                       color: 'rgba(255, 255, 255, 0.32)',
+                      opacity: isAnyLineExecuting && userLineText !== null && userLineText.length > 0 ? 0 : 1,
                       userSelect: 'none',
                       whiteSpace: 'pre',
                       fontFamily: 'inherit',
@@ -1021,8 +1027,16 @@ export default function TypingStage({
                                 style={{
                                   display: 'inline-block',
                                   color: isCharError ? VSCODE_DARK_PLUS.error : syntaxColor,
-                                  background: '#090e1a',
-                                  fontWeight: token && (token.type === 'keyword' || token.type === 'builtin') ? 700 : 500,
+                                  background: isAnyLineExecuting ? 'transparent' : '#090e1a',
+                                  filter: isThisLineExecuting ? 'brightness(1.35) saturate(1.25)' : 'none',
+                                  textShadow: isThisLineExecuting
+                                    ? '0 0 10px rgba(56, 189, 248, 0.7), 0 0 2px rgba(255, 255, 255, 0.4)'
+                                    : 'none',
+                                  fontWeight: isThisLineExecuting
+                                    ? 700
+                                    : token && (token.type === 'keyword' || token.type === 'builtin')
+                                    ? 700
+                                    : 500,
                                   borderRadius: '2px',
                                   boxShadow: 'none',
                                   cursor: 'text',
