@@ -509,6 +509,14 @@ export default function TypingStage({
       return;
     }
 
+    // Ctrl+Enter / Cmd+Enter: trigger code execution without inserting a newline
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      e.stopPropagation();
+      onSubmit();
+      return;
+    }
+
     // Enter: newline insertion at cursor with Python-accurate auto-indent
     if (e.key === 'Enter') {
       e.preventDefault();

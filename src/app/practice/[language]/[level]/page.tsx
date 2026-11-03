@@ -3442,12 +3442,14 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     }
   };
 
-  // Keyboard shortcut: Ctrl + Enter to run code
+  // Keyboard shortcut: Ctrl + Enter to run code (disabled in Quiz mode where click-only is enforced)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        handleExecuteManual();
+        if (!isQuiz) {
+          handleExecuteManual();
+        }
       }
     };
     window.addEventListener('keydown', handleGlobalKeyDown);
@@ -3503,28 +3505,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       window.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [isSuccess, currentStepIndex, totalQuestions]);
-
-  // Quiz mode keyboard shortcuts: 1~4 to select choice, Enter to check answer
-  useEffect(() => {
-    if (!isQuiz || isSuccess || isGameOver) return;
-
-    const handleQuizKey = (e: KeyboardEvent) => {
-      const choices = currentQuestion.choices || [];
-      if (['1', '2', '3', '4'].includes(e.key)) {
-        const idx = parseInt(e.key, 10) - 1;
-        if (idx >= 0 && idx < choices.length) {
-          e.preventDefault();
-          setSelectedChoiceIndex(idx);
-        }
-      } else if (e.key === 'Enter' && selectedChoiceIndex !== null) {
-        e.preventDefault();
-        handleExecuteManual();
-      }
-    };
-
-    window.addEventListener('keydown', handleQuizKey);
-    return () => window.removeEventListener('keydown', handleQuizKey);
-  }, [isQuiz, isSuccess, isGameOver, currentQuestion, selectedChoiceIndex]);
 
   const handleResetRound = (forceReviewLock = false) => {
     lastExecutedCodeRef.current = '';
@@ -8706,7 +8686,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                       borderRadius: '999px',
                     }}
                   >
-                    {isEn ? 'Output Prediction (Press 1-4)' : '출력 결과 선택 (단축키 1~4)'}
+                    {isEn ? 'Output Prediction' : '출력 결과 선택'}
                   </span>
                 </div>
 
@@ -8936,8 +8916,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                             ? 'Correct!'
                             : '정답입니다!'
                           : isEn
-                            ? 'Check Answer (Enter)'
-                            : '정답 확인 (Enter)'}
+                            ? 'Check Answer'
+                            : '정답 확인'}
                       </span>
                     </button>
                   </div>
