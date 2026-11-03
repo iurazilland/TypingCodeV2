@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle2, MessageSquareHeart, Send, Sparkles, Star } from 'lucide-react';
+import { CheckCircle2, ClipboardCheck, Star } from 'lucide-react';
 import { CURRICULUM_TRACKS } from '@/lib/curriculum';
 import { getCourseSections } from '@/lib/curriculumSections';
 import type { SectionDifficultyRating } from '@/lib/supabase/types';
@@ -68,28 +68,28 @@ export function findCompletedSectionForLevel(
 export const FEEDBACK_TAGS = [
   {
     id: 'clear_explanation',
-    labelKo: '💡 설명과 힌트가 이해하기 쉬웠어요',
-    labelEn: '💡 Clear explanations & hints',
+    labelKo: '설명·힌트 명확',
+    labelEn: 'Clear hints',
   },
   {
     id: 'good_flow',
-    labelKo: '🧩 빈칸 → 블록 → 타이핑 흐름이 좋았어요',
-    labelEn: '🧩 Great blank → block → typing flow',
+    labelKo: '단계 흐름 적절',
+    labelEn: 'Good step flow',
   },
   {
     id: 'need_more_examples',
-    labelKo: '📚 개념 설명이나 예제가 조금 더 필요해요',
-    labelEn: '📚 Need a few more examples',
+    labelKo: '예제 보충 필요',
+    labelEn: 'Need examples',
   },
   {
     id: 'too_many_questions',
-    labelKo: '⏳ 한 섹션의 문제 분량이 많게 느껴졌어요',
-    labelEn: '⏳ Section felt a bit long',
+    labelKo: '문제 분량 많음',
+    labelEn: 'Too many steps',
   },
   {
     id: 'confusing_prompt',
-    labelKo: '🛠️ 문제 지문이나 오답 안내가 헷갈렸어요',
-    labelEn: '🛠️ Some prompts/errors felt confusing',
+    labelKo: '지문·안내 혼동',
+    labelEn: 'Confusing prompt',
   },
 ];
 
@@ -147,10 +147,10 @@ export default function SectionFeedbackModal({
     setIsDone(true);
     setTimeout(() => {
       onClose();
-    }, 850);
+    }, 650);
   };
 
-  const secBadge = `SECTION ${String(sectionInfo.sectionNumber).padStart(2, '0')}`;
+  const secNum = String(sectionInfo.sectionNumber).padStart(2, '0');
 
   return (
     <div
@@ -158,8 +158,8 @@ export default function SectionFeedbackModal({
         position: 'fixed',
         inset: 0,
         zIndex: 10020,
-        background: 'rgba(2, 6, 23, 0.86)',
-        backdropFilter: 'blur(10px)',
+        background: 'rgba(2, 6, 23, 0.82)',
+        backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -170,292 +170,268 @@ export default function SectionFeedbackModal({
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: '500px',
-          background: 'linear-gradient(180deg, #13203b 0%, #0d1527 100%)',
-          border: '1.5px solid rgba(56, 189, 248, 0.38)',
-          borderRadius: '26px',
-          padding: '30px 28px',
-          boxShadow: '0 28px 64px rgba(0, 0, 0, 0.85), 0 0 36px rgba(56, 189, 248, 0.16)',
-          color: '#f8fafc',
-          position: 'relative',
+          maxWidth: '440px',
+          background: '#ffffff',
+          border: '1.5px solid #cbd5e1',
+          borderRadius: '20px',
+          overflow: 'hidden',
+          boxShadow: '0 28px 60px rgba(0, 0, 0, 0.55)',
+          color: '#0f172a',
         }}
       >
         {isDone ? (
-          <div style={{ textAlign: 'center', padding: '32px 12px' }}>
-            <div
-              style={{
-                width: '60px',
-                height: '60px',
-                borderRadius: '20px',
-                background: 'rgba(16, 185, 129, 0.16)',
-                border: '1.5px solid #10b981',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-              }}
-            >
-              <CheckCircle2 size={32} color="#10b981" />
+          <div style={{ textAlign: 'center', padding: '40px 24px' }}>
+            <CheckCircle2
+              size={36}
+              color="#10b981"
+              style={{ margin: '0 auto 10px', display: 'block' }}
+            />
+            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>
+              {isEn ? 'Survey Submitted' : '설문 제출 완료'}
             </div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '6px' }}>
-              {isEn ? 'Thank you for your feedback!' : '소중한 피드백 감사합니다!'}
-            </h3>
-            <p style={{ fontSize: '0.88rem', color: '#94a3b8', margin: 0 }}>
-              {isEn
-                ? 'Your review helps us make the next section even better.'
-                : '보내주신 의견을 반영해 더 알찬 커리큘럼으로 발전시키겠습니다.'}
-            </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '22px' }}>
-              <div
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '4px 12px',
-                  borderRadius: '14px',
-                  background: 'rgba(56, 189, 248, 0.16)',
-                  border: '1px solid rgba(56, 189, 248, 0.35)',
-                  color: '#38bdf8',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  marginBottom: '10px',
-                }}
-              >
-                <Sparkles size={13} />
-                <span>{secBadge} CLEAR!</span>
-              </div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: '0 0 6px' }}>
-                {isEn
-                  ? `"${sectionInfo.titleEn}" Complete!`
-                  : `「${sectionInfo.titleKo}」 섹션 완주!`}
-              </h3>
-              <p style={{ fontSize: '0.84rem', color: '#94a3b8', margin: 0 }}>
-                {isEn
-                  ? 'How was your learning experience in this section?'
-                  : '이번 섹션 학습은 어떠셨나요? 5초 만에 간단한 평가를 남겨주세요.'}
-              </p>
-            </div>
-
-            {/* 1. Star Rating */}
+            {/* Survey Sheet Header */}
             <div
               style={{
-                background: 'rgba(11, 19, 41, 0.65)',
-                border: '1px solid rgba(148, 163, 184, 0.16)',
-                borderRadius: '16px',
-                padding: '14px 16px',
-                marginBottom: '14px',
-                textAlign: 'center',
+                padding: '18px 22px 16px',
+                background: '#f8fafc',
+                borderBottom: '1.5px solid #e2e8f0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
               }}
             >
-              <div style={{ fontSize: '0.83rem', fontWeight: 700, color: '#e2e8f0', marginBottom: '10px' }}>
-                {isEn
-                  ? '1. Did this section help you understand the concepts well?'
-                  : '1. 이번 섹션 내용이 잘 이해되고 학습에 도움이 되었나요?'}
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                {[1, 2, 3, 4, 5].map((star) => {
-                  const active = (hoveredStar || rating) >= star;
-                  return (
-                    <button
-                      key={star}
-                      type="button"
-                      onMouseEnter={() => setHoveredStar(star)}
-                      onMouseLeave={() => setHoveredStar(0)}
-                      onClick={() => setRating(star)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        padding: '4px',
-                        cursor: 'pointer',
-                        transform: active ? 'scale(1.08)' : 'scale(1)',
-                        transition: 'transform 0.12s ease',
-                      }}
-                    >
-                      <Star
-                        size={30}
-                        color={active ? '#fbbf24' : '#475569'}
-                        fill={active ? '#fbbf24' : 'transparent'}
-                      />
-                    </button>
-                  );
-                })}
+              <div>
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    fontSize: '0.72rem',
+                    fontWeight: 800,
+                    color: '#0284c7',
+                    marginBottom: '3px',
+                  }}
+                >
+                  <ClipboardCheck size={14} />
+                  <span>{isEn ? `SECTION ${secNum} SURVEY` : `섹션 ${secNum} 설문조사`}</span>
+                </div>
+                <div
+                  style={{
+                    fontSize: '1.05rem',
+                    fontWeight: 900,
+                    color: '#0f172a',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  {isEn ? sectionInfo.titleEn : sectionInfo.titleKo}
+                </div>
               </div>
             </div>
 
-            {/* 2. Perceived Difficulty (Required) */}
-            <div style={{ marginBottom: '14px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>
-                {isEn ? '2. How was the difficulty? (Required)' : '2. 체감 난이도는 어땠나요? (필수)'}
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                {(
-                  [
-                    {
-                      key: 'easy' as const,
-                      labelKo: '🌱 쉬웠어요',
-                      labelEn: '🌱 Easy',
-                      color: '#34d399',
-                    },
-                    {
-                      key: 'just_right' as const,
-                      labelKo: '👌 딱 적당해요',
-                      labelEn: '👌 Just Right',
-                      color: '#38bdf8',
-                    },
-                    {
-                      key: 'hard' as const,
-                      labelKo: '🔥 어려웠어요',
-                      labelEn: '🔥 Challenging',
-                      color: '#fb923c',
-                    },
-                  ]
-                ).map((opt) => {
-                  const selected = difficulty === opt.key;
-                  return (
-                    <button
-                      key={opt.key}
-                      type="button"
-                      onClick={() => setDifficulty(opt.key)}
-                      style={{
-                        padding: '10px 8px',
-                        borderRadius: '12px',
-                        background: selected ? `${opt.color}22` : 'rgba(11, 19, 41, 0.6)',
-                        border: selected
-                          ? `1.5px solid ${opt.color}`
-                          : '1.5px solid rgba(148, 163, 184, 0.16)',
-                        color: selected ? '#ffffff' : '#94a3b8',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {isEn ? opt.labelEn : opt.labelKo}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 3. Quick Tags (Required: 1 or more) */}
-            <div style={{ marginBottom: '14px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>
-                {isEn
-                  ? '3. Quick tags (required, select 1 or more)'
-                  : '3. 좋았던 점이나 아쉬운 점을 골라주세요 (필수 · 복수 선택 가능)'}
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {FEEDBACK_TAGS.map((tag) => {
-                  const active = selectedTags.includes(tag.id);
-                  return (
-                    <button
-                      key={tag.id}
-                      type="button"
-                      onClick={() => toggleTag(tag.id)}
-                      style={{
-                        padding: '6px 11px',
-                        borderRadius: '10px',
-                        background: active
-                          ? 'rgba(56, 189, 248, 0.18)'
-                          : 'rgba(255, 255, 255, 0.04)',
-                        border: active
-                          ? '1px solid #38bdf8'
-                          : '1px solid rgba(148, 163, 184, 0.18)',
-                        color: active ? '#bae6fd' : '#94a3b8',
-                        fontSize: '0.76rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {isEn ? tag.labelEn : tag.labelKo}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 4. Optional Free-Text Request */}
-            <div style={{ marginBottom: '20px' }}>
+            {/* Survey Body */}
+            <div style={{ padding: '18px 22px 22px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* 1. 만족도 */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  color: '#cbd5e1',
-                  marginBottom: '6px',
+                  justifyContent: 'space-between',
+                  paddingBottom: '14px',
+                  borderBottom: '1px solid #f1f5f9',
                 }}
               >
-                <MessageSquareHeart size={14} style={{ color: '#38bdf8' }} />
-                <span>
-                  {isEn
-                    ? '4. Additional requests or suggestions (optional)'
-                    : '4. 추가 요청사항이나 건의 의견 (선택)'}
+                <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#1e293b' }}>
+                  {isEn ? '1. Rating' : '1. 만족도'}
                 </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const active = (hoveredStar || rating) >= star;
+                    return (
+                      <button
+                        key={star}
+                        type="button"
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        onClick={() => setRating(star)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          padding: '2px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                        }}
+                      >
+                        <Star
+                          size={24}
+                          color={active ? '#f59e0b' : '#cbd5e1'}
+                          fill={active ? '#fbbf24' : 'transparent'}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <textarea
-                rows={2}
-                maxLength={500}
-                placeholder={
-                  isEn
-                    ? 'e.g. More examples on f-strings, or question #4 felt tricky...'
-                    : '예: 이런 예제가 더 있었으면 좋겠어요 / 특정 문제 설명이 조금 헷갈렸어요'
-                }
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: '12px',
-                  background: 'rgba(11, 19, 41, 0.8)',
-                  border: '1.5px solid rgba(148, 163, 184, 0.2)',
-                  color: '#f8fafc',
-                  fontSize: '0.84rem',
-                  resize: 'none',
-                  outline: 'none',
-                  fontFamily: 'inherit',
-                }}
-              />
-            </div>
 
-            {/* Action Button (Mandatory Submission: 2 & 3 must be selected) */}
-            <div style={{ display: 'flex' }}>
+              {/* 2. 난이도 */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '8px',
+                  }}
+                >
+                  <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#1e293b' }}>
+                    {isEn ? '2. Difficulty' : '2. 체감 난이도'}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0284c7' }}>
+                    {isEn ? 'Required' : '필수'}
+                  </span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                  {(
+                    [
+                      { key: 'easy' as const, labelKo: '쉬움', labelEn: 'Easy' },
+                      { key: 'just_right' as const, labelKo: '적당함', labelEn: 'Good' },
+                      { key: 'hard' as const, labelKo: '어려움', labelEn: 'Hard' },
+                    ]
+                  ).map((opt) => {
+                    const selected = difficulty === opt.key;
+                    return (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => setDifficulty(opt.key)}
+                        style={{
+                          padding: '9px 8px',
+                          borderRadius: '10px',
+                          background: selected ? '#0f172a' : '#f8fafc',
+                          border: selected ? '1.5px solid #0f172a' : '1px solid #cbd5e1',
+                          color: selected ? '#ffffff' : '#475569',
+                          fontSize: '0.82rem',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {isEn ? opt.labelEn : opt.labelKo}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. 평가 태그 */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '8px',
+                  }}
+                >
+                  <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#1e293b' }}>
+                    {isEn ? '3. Evaluation' : '3. 평가 항목'}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0284c7' }}>
+                    {isEn ? 'Select 1+' : '복수 선택'}
+                  </span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '7px' }}>
+                  {FEEDBACK_TAGS.map((tag) => {
+                    const active = selectedTags.includes(tag.id);
+                    return (
+                      <button
+                        key={tag.id}
+                        type="button"
+                        onClick={() => toggleTag(tag.id)}
+                        style={{
+                          padding: '8px 10px',
+                          borderRadius: '10px',
+                          background: active ? '#e0f2fe' : '#f8fafc',
+                          border: active ? '1.5px solid #0284c7' : '1px solid #cbd5e1',
+                          color: active ? '#0369a1' : '#475569',
+                          fontSize: '0.79rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {isEn ? tag.labelEn : tag.labelKo}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 4. 추가 의견 */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '6px',
+                  }}
+                >
+                  <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#1e293b' }}>
+                    {isEn ? '4. Comment' : '4. 기타 의견'}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#94a3b8' }}>
+                    {isEn ? 'Optional' : '선택'}
+                  </span>
+                </div>
+                <textarea
+                  rows={2}
+                  maxLength={500}
+                  placeholder={isEn ? 'Optional feedback' : '개선 의견 입력'}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '9px 11px',
+                    borderRadius: '10px',
+                    background: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    color: '#0f172a',
+                    fontSize: '0.83rem',
+                    resize: 'none',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                    boxSizing: 'border-box',
+                  }}
+                />
+              </div>
+
+              {/* Submit */}
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className={canSubmit ? 'tactile-btn tactile-btn-primary' : undefined}
                 style={{
-                  flex: 1,
-                  padding: '13px 18px',
-                  borderRadius: '12px',
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '11px',
+                  border: 'none',
+                  background: canSubmit ? '#0284c7' : '#e2e8f0',
+                  color: canSubmit ? '#ffffff' : '#94a3b8',
                   fontSize: '0.9rem',
                   fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '7px',
-                  border: canSubmit ? undefined : '1px solid rgba(148, 163, 184, 0.2)',
-                  background: canSubmit ? undefined : 'rgba(255, 255, 255, 0.07)',
-                  color: canSubmit ? undefined : '#64748b',
-                  opacity: canSubmit ? 1 : 0.7,
                   cursor: canSubmit ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.15s ease',
+                  transition: 'background 0.15s ease',
                 }}
               >
-                <Send size={15} />
-                <span>
-                  {isSubmitting
-                    ? isEn
-                      ? 'Submitting...'
-                      : '제출 중...'
-                    : isEn
-                    ? 'Submit Feedback & Continue'
-                    : '설문 제출하고 계속하기'}
-                </span>
+                {isSubmitting
+                  ? isEn
+                    ? 'Submitting...'
+                    : '제출 중...'
+                  : isEn
+                  ? 'Submit Survey'
+                  : '설문 제출'}
               </button>
             </div>
           </form>
@@ -464,4 +440,3 @@ export default function SectionFeedbackModal({
     </div>
   );
 }
-
