@@ -28,8 +28,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "type": "block",
       "prompt_ko": "1부터 9까지 반복하며 3의 배수(i % 3 == 0)만 골라 출력해보세요.",
       "prompt_en": "Loop from 1 to 9 and print only multiples of 3 (i % 3 == 0).",
-      "hint_ko": "for i in range(1, 10): 안에 if i % 3 == 0: 블록을 넣고 print(i)를 실행하세요.",
-      "hint_en": "Inside for i in range(1, 10):, check if i % 3 == 0: and run print(i).",
+      "hint_ko": "반복문 안에 조건 블록을 중첩하고, 3으로 나눈 나머지가 0일 때만 한 단계 더 들여써서 출력 블록을 실행하세요.",
+      "hint_en": "Nest the remainder check inside the loop and indent the print block inside that condition.",
       "targetCode": "for i in range(1, 10):\n    if i % 3 == 0:\n        print(i)",
       "testCases": [
         {
@@ -46,8 +46,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "나머지 연산자와 비교 연산자를 채워 1부터 n까지 중 n의 약수를 모두 출력해보세요.",
       "prompt_en": "Fill in the modulo and equality operators to print every divisor of n from 1 through n.",
-      "hint_ko": "n을 i로 나눈 나머지가 0과 같은지 확인하려면 % 연산자와 == 연산자를 사용합니다.",
-      "hint_en": "Use % to compute the remainder of n divided by i and == to compare it with 0.",
+      "hint_ko": "나눗셈 나머지를 구하는 퍼센트 기호와, 양쪽 값이 같은지 판별하는 등호 두 개짜리 비교 연산자를 순서대로 채워보세요.",
+      "hint_en": "Enter the percent remainder symbol first, then the double-equals comparison operator to check for zero remainder.",
       "templateCode": "n = int(input())\nfor i in range(1, n + 1):\n    if n § i §§ 0:\n        print(i)",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if n % i == 0:\n        print(i)",
       "testCases": [
@@ -74,8 +74,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "type": "block",
       "prompt_ko": "정수 n을 입력받아 1부터 n까지 n의 약수가 총 몇 개인지 cnt에 세어 출력해보세요.",
       "prompt_en": "Read integer n, count how many divisors n has in 1..n, and print cnt.",
-      "hint_ko": "if n % i == 0: 조건이 참일 때만 cnt += 1을 실행하고 반복이 끝난 뒤 cnt를 출력하세요.",
-      "hint_en": "Increment cnt += 1 whenever n % i == 0, then print cnt outside the loop.",
+      "hint_ko": "나머지가 0인 약수 조건 안쪽에서만 개수 변수를 1씩 늘리고, 반복문을 빠져나온 뒤 최종 개수를 출력하세요.",
+      "hint_en": "Increment the counter only inside the zero-remainder branch, then print the total count after the loop.",
       "targetCode": "n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        cnt += 1\nprint(cnt)",
       "testCases": [
         {
@@ -102,8 +102,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 논리 연산자를 채워 1부터 n까지 중 3의 배수이거나 5의 배수인 수들의 합을 출력해보세요.",
       "prompt_en": "Fill in the logical operator to sum numbers in 1..n divisible by 3 or by 5.",
-      "hint_ko": "두 조건 중 하나라도 참이면 선택해야 하므로 논리합 연산자 or를 입력하세요.",
-      "hint_en": "Use the logical operator or so numbers matching either condition are added.",
+      "hint_ko": "두 배수 조건 중 어느 한쪽만 참이어도 더해야 하므로 영어로 '또는'을 뜻하는 두 글자 논리 연산자를 채워보세요.",
+      "hint_en": "Since matching either divisibility test qualifies, join the two checks with the 2-letter logical disjunction keyword.",
       "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 §§ i % 5 == 0:\n        total += i\nprint(total)",
       "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 or i % 5 == 0:\n        total += i\nprint(total)",
       "testCases": [
@@ -130,8 +130,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "type": "block",
       "prompt_ko": "1부터 입력받은 n까지 중 2의 배수이면서 동시에 3의 배수인 공배수만 출력해보세요.",
       "prompt_en": "Print numbers from 1 through n that are divisible by both 2 and 3.",
-      "hint_ko": "if i % 2 == 0 and i % 3 == 0: 조건이 참일 때만 print(i)를 실행하세요.",
-      "hint_en": "Check if i % 2 == 0 and i % 3 == 0: inside the loop and print(i).",
+      "hint_ko": "2로 나누어떨어지는 조건과 3으로 나누어떨어지는 조건을 동시 만족 논리 연산자로 묶어 공배수만 출력하세요.",
+      "hint_en": "Connect both remainder-zero checks with a simultaneous-truth logical operator inside the loop.",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 3 == 0:\n        print(i)",
       "testCases": [
         {
@@ -158,8 +158,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 논리 연산자를 채워 이어지는 4개의 정수 중 low 이상이고 high 이하인 값의 개수를 출력해보세요.",
       "prompt_en": "Fill in the logical operator to count how many of 4 integers fall between low and high inclusive.",
-      "hint_ko": "최솟값 이상과 최댓값 이하 두 조건을 모두 만족해야 하므로 and를 입력하세요.",
-      "hint_en": "Both bounds must hold simultaneously, so enter and.",
+      "hint_ko": "하한 이상과 상한 이하 두 조건을 동시에 만족해야 하므로 영어로 '그리고'를 뜻하는 세 글자 논리 연산자를 사용합니다.",
+      "hint_en": "Both boundary comparisons must hold together, so connect them with the 3-letter simultaneous-truth keyword.",
       "templateCode": "low, high = input().split()\ncnt = 0\nfor i in range(4):\n    x = int(input())\n    if x >= int(low) §§§ x <= int(high):\n        cnt += 1\nprint(cnt)",
       "targetCode": "low, high = input().split()\ncnt = 0\nfor i in range(4):\n    x = int(input())\n    if x >= int(low) and x <= int(high):\n        cnt += 1\nprint(cnt)",
       "testCases": [
@@ -186,8 +186,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "type": "block",
       "prompt_ko": "1부터 n까지 6의 배수면 \"AB\", 아니고 2의 배수면 \"A\", 그 외에는 숫자 i를 그대로 출력해보세요.",
       "prompt_en": "From 1 to n, print \"AB\" for multiples of 6, else \"A\" for multiples of 2, else i.",
-      "hint_ko": "더 좁은 조건인 i % 6 == 0을 먼저 if로 검사하고 elif i % 2 == 0:, else: 순서로 작성하세요.",
-      "hint_en": "Check i % 6 == 0 first with if, followed by elif i % 2 == 0: and else:.",
+      "hint_ko": "6의 배수는 2의 배수에도 포함되므로 더 좁은 조건인 6의 배수를 가장 먼저 검사한 뒤 차례로 분기하세요.",
+      "hint_en": "Because multiples of 6 are also multiples of 2, test the narrower multiple-of-6 condition first before the others.",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 6 == 0:\n        print(\"AB\")\n    elif i % 2 == 0:\n        print(\"A\")\n    else:\n        print(i)",
       "testCases": [
         {
@@ -214,8 +214,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 조건 분기 키워드를 채워 n개의 실수 중 양수 개수(pos), 음수 개수(neg)를 세고 0이면 \"Zero\"를 출력해보세요.",
       "prompt_en": "Fill in the two branching keywords to count positive and negative floats and print \"Zero\" for 0.",
-      "hint_ko": "추가 조건 검사에는 elif를, 앞선 모든 조건이 거짓일 때는 else를 사용합니다.",
-      "hint_en": "Use elif for the second condition (x < 0) and else for the remaining zero case.",
+      "hint_ko": "두 번째 조건식이 붙는 자리에는 '그밖에 만약' 두 영단어의 앞 두 글자씩 합친 네 글자 키워드를, 마지막 기본 분기에는 '그밖에'를 뜻하는 네 글자 키워드를 채워보세요.",
+      "hint_en": "Use the 4-letter chained condition keyword for the second test, followed by the 4-letter fallback keyword before the final colon.",
       "templateCode": "n = int(input())\npos = 0\nneg = 0\nfor i in range(n):\n    x = float(input())\n    if x > 0:\n        pos += 1\n    §§§§ x < 0:\n        neg += 1\n    §§§§:\n        print(\"Zero\")\nprint(pos, neg)",
       "targetCode": "n = int(input())\npos = 0\nneg = 0\nfor i in range(n):\n    x = float(input())\n    if x > 0:\n        pos += 1\n    elif x < 0:\n        neg += 1\n    else:\n        print(\"Zero\")\nprint(pos, neg)",
       "testCases": [
@@ -242,8 +242,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "type": "block",
       "prompt_ko": "초기 체력 hp = 50에서 n번 정수를 입력받아 양수면 hp += d, 0 이하면 hp -= 10을 적용한 뒤 \"HP:\" + str(hp)를 출력해보세요.",
       "prompt_en": "Starting at hp = 50, read n integers: if d > 0 add d to hp, else subtract 10, then print \"HP:\" + str(hp).",
-      "hint_ko": "for i in range(n): 안에서 if d > 0:과 else:로 hp를 증감시키고 마지막에 \"HP:\" + str(hp)를 출력하세요.",
-      "hint_en": "Update hp with += d or -= 10 inside the loop, then print \"HP:\" + str(hp).",
+      "hint_ko": "반복문 안에서 입력값의 부호에 따라 체력을 더하거나 빼고, 모든 반복이 끝난 뒤 문자열로 변환해 접두사와 이어 출력하세요.",
+      "hint_en": "Branch on each input's sign inside the loop to adjust hp, then convert hp to text for the final output outside.",
       "targetCode": "hp = 50\nn = int(input())\nfor i in range(n):\n    d = int(input())\n    if d > 0:\n        hp += d\n    else:\n        hp -= 10\nprint(\"HP:\" + str(hp))",
       "testCases": [
         {
@@ -270,8 +270,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 비교 연산자를 채워 약수의 개수가 정확히 2개인 소수이면 True, 아니면 False를 출력해보세요.",
       "prompt_en": "Fill in the comparison operator to print True when n has exactly 2 divisors and False otherwise.",
-      "hint_ko": "약수 개수 cnt가 2와 같은지 비교하는 연산자 ==를 입력하세요.",
-      "hint_en": "Use == to test whether cnt equals 2.",
+      "hint_ko": "누적된 약수 개수가 2와 일치하는지 참·거짓으로 판별하려면 등호 두 개를 나란히 붙인 비교 연산자를 사용합니다.",
+      "hint_en": "Write two equals signs side by side to test whether the divisor count matches 2.",
       "templateCode": "n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        cnt += 1\nprint(cnt §§ 2)",
       "targetCode": "n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        cnt += 1\nprint(cnt == 2)",
       "testCases": [
@@ -299,8 +299,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "논리 연산자 버그를 고쳐 1부터 n까지 중 2와 5로 모두 나누어떨어지는 공배수만 출력되게 해보세요.",
       "prompt_en": "Fix the logical operator bug so only numbers divisible by both 2 and 5 are printed.",
-      "hint_ko": "두 조건을 동시에 만족하는 공배수만 고르려면 둘 중 하나만 참이어도 통과하는 연산자를 바꿔야 합니다.",
-      "hint_en": "Both divisibility checks must be True at the same time, so replace or with and.",
+      "hint_ko": "현재 조건은 둘 중 하나만 나누어떨어져도 참이 되는 논리합 연산자여서 공배수가 아닌 수까지 섞여 나오고 있습니다.",
+      "hint_en": "The condition currently passes numbers divisible by either factor alone instead of requiring both checks to hold together.",
       "templateCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 or i % 5 == 0:\n        print(i)",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 5 == 0:\n        print(i)",
       "testCases": [
@@ -328,8 +328,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "조건문 아래에 한 줄을 추가하여 1부터 n까지 중 홀수이면서 3의 배수인 수를 순서대로 출력해보세요.",
       "prompt_en": "Add one line under the if condition to print numbers in 1..n that are odd multiples of 3.",
-      "hint_ko": "if 블록 내부이므로 공백 8칸 들여쓰기 후 print(i)를 작성하세요.",
-      "hint_en": "Indent by 8 spaces inside the if block and write print(i).",
+      "hint_ko": "반복문 안의 조건문 내부 블록이므로 두 단계(공백 8칸) 들여쓰기하여 조건을 통과한 숫자를 출력해보세요.",
+      "hint_en": "Indent two levels deep (8 spaces) inside the conditional block to output the matching loop variable.",
       "templateCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 1 and i % 3 == 0:\n        §§§§§§§§",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 1 and i % 3 == 0:\n        print(i)",
       "testCases": [
@@ -357,8 +357,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
       "prompt_en": "Select the exact output produced when the following Python code runs.",
-      "hint_ko": "i=1,3,5(홀수)는 -2씩 총 -6, i=2는 else로 가서 +1, i=4는 첫 조건이 참이라 +5가 더해집니다.",
-      "hint_en": "Odds (1, 3, 5) subtract 2 each (-6), i=2 hits else (+1), and i=4 hits if (+5): 10 - 6 + 1 + 5 = 10.",
+      "hint_ko": "1부터 5까지 각 숫자가 세 갈래 분기 중 어느 조건에 먼저 해당되는지 하나씩 대입하며 점수 변화를 누적해보세요.",
+      "hint_en": "Step through i from 1 to 5, match each value against the three branches in order, and track the running score.",
       "targetCode": "score = 10\nfor i in range(1, 6):\n    if i % 2 == 0 and i > 2:\n        score += 5\n    elif i % 2 == 1:\n        score -= 2\n    else:\n        score += 1\nprint(score)",
       "choices": [
         "10",

@@ -26,8 +26,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "type": "block",
       "prompt_ko": "정수 n을 입력받아 0보다 크면 \"Positive\", 0과 같으면 \"Zero\", 그 외에는 \"Negative\"를 출력해보세요.",
       "prompt_en": "Read integer n; print \"Positive\" (>0), \"Zero\" (==0), or \"Negative\" (otherwise).",
-      "hint_ko": "첫째 if 조건이 거짓일 때 추가 조건을 검사하는 두 번째 가지가 elif입니다.",
-      "hint_en": "Use elif n == 0: for the second check and else: for negative numbers.",
+      "hint_ko": "다중 분기는 위에서부터 차례로 조건을 검사하며, 첫 조건이 거짓일 때 그밖에 만약(else if)을 줄인 두 번째 분기로 넘어갑니다.",
+      "hint_en": "Multi-way branching checks conditions top to bottom; when the first check fails, it moves to the second check shortened from \"else if\".",
       "targetCode": "n = int(input())\nif n > 0:\n    print(\"Positive\")\nelif n == 0:\n    print(\"Zero\")\nelse:\n    print(\"Negative\")",
       "testCases": [
         {
@@ -54,8 +54,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "넷째 줄 빈칸에 추가 조건 분기 키워드와 콜론을 채워 Plus, Zero, Minus 중 하나를 출력해보세요.",
       "prompt_en": "Fill in the additional-condition keyword and colon on line 4.",
-      "hint_ko": "파이썬에서 \"그렇지 않고 만약 ~라면\"은 네 글자 키워드 elif로 적고 조건 끝에 콜론(:)을 붙입니다.",
-      "hint_en": "Write elif at the start of line 4 and : at the end.",
+      "hint_ko": "그밖에 만약(else if)의 앞 두 글자와 뒤 두 글자를 합쳐 네 글자로 줄인 분기 키워드를 적고, 조건식 끝에 콜론을 붙입니다.",
+      "hint_en": "Combine the first two letters of \"else\" with \"if\" into a four-letter keyword, and finish the header line with a colon.",
       "templateCode": "n = int(input())\nif n > 0:\n    print(\"Plus\")\n§§§§ n == 0§\n    print(\"Zero\")\nelse:\n    print(\"Minus\")",
       "targetCode": "n = int(input())\nif n > 0:\n    print(\"Plus\")\nelif n == 0:\n    print(\"Zero\")\nelse:\n    print(\"Minus\")",
       "testCases": [
@@ -82,8 +82,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "type": "block",
       "prompt_ko": "점수 score를 입력받아 90 이상은 \"A\", 80 이상은 \"B\", 70 이상은 \"C\", 미만은 \"F\"를 출력해보세요.",
       "prompt_en": "Read integer score and print \"A\" (>=90), \"B\" (>=80), \"C\" (>=70), or \"F\" (<70).",
-      "hint_ko": "높은 기준부터 순서대로 검사하면 맨 처음 참이 된 학점 하나만 출력되고 분기가 종료됩니다.",
-      "hint_en": "Test thresholds from highest (90) down to lowest (70).",
+      "hint_ko": "가장 높은 점수 기준부터 차례로 내려오며 검사하면, 처음으로 참이 된 구간의 실행문 하나만 동작하고 전체 분기를 빠져나갑니다.",
+      "hint_en": "Checking thresholds from highest to lowest ensures that only the first matching grade prints before exiting the entire chain.",
       "targetCode": "score = int(input())\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelif score >= 70:\n    print(\"C\")\nelse:\n    print(\"F\")",
       "testCases": [
         {
@@ -115,8 +115,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸에 분기 키워드를 채워 명령어가 \"start\"면 Run, \"stop\"이면 Halt, 나머지는 Wait을 출력해보세요.",
       "prompt_en": "Fill in the two branching keywords to dispatch \"start\", \"stop\", and fallback commands.",
-      "hint_ko": "조건식이 뒤따르는 넷째 줄에는 elif를, 조건식 없는 여섯째 줄에는 else를 입력하세요.",
-      "hint_en": "Enter elif on line 4 and else on line 6.",
+      "hint_ko": "추가 조건식이 뒤따르는 넷째 줄에는 '그밖에 만약' 두 영단어의 앞 두 글자씩 합친 네 글자 키워드를, 여섯째 줄에는 '그밖에'를 뜻하는 네 글자 키워드를 적으세요.",
+      "hint_en": "Combine the first two letters of each word in 'otherwise when' on line 4 where a condition follows, and use the 4-letter fallback keyword before the bare colon on line 6.",
       "templateCode": "cmd = input()\nif cmd == \"start\":\n    print(\"Run\")\n§§§§ cmd == \"stop\":\n    print(\"Halt\")\n§§§§:\n    print(\"Wait\")",
       "targetCode": "cmd = input()\nif cmd == \"start\":\n    print(\"Run\")\nelif cmd == \"stop\":\n    print(\"Halt\")\nelse:\n    print(\"Wait\")",
       "testCases": [
@@ -143,8 +143,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "type": "block",
       "prompt_ko": "레벨 lv를 입력받아 50 이상이면 \"Master\", 20 이상이면 \"Pro\", 미만이면 \"Rookie\"를 rank에 담아 출력해보세요.",
       "prompt_en": "Read integer lv, set rank to \"Master\" (>=50), \"Pro\" (>=20), or \"Rookie\", and print rank.",
-      "hint_ko": "각 분기에서는 rank 변수에 등급 문자열만 저장하고, 맨 마지막 줄에서 print(rank)로 출력합니다.",
-      "hint_en": "Assign rank inside each branch and print(rank) once after the block.",
+      "hint_ko": "각 구간 분기 안에서는 등급 변수에 알맞은 문자열만 대입하고, 분기가 모두 끝난 바깥 마지막 줄에서 변수를 한 번만 출력해보세요.",
+      "hint_en": "Assign the appropriate title string to the variable inside each branch, then print that variable once outside at the end.",
       "targetCode": "lv = int(input())\nif lv >= 50:\n    rank = \"Master\"\nelif lv >= 20:\n    rank = \"Pro\"\nelse:\n    rank = \"Rookie\"\nprint(rank)",
       "testCases": [
         {
@@ -171,8 +171,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 미만 비교 기호와 추가 조건 키워드를 채워 8세 미만은 0, 20세 미만은 1000, 이상은 2000을 출력해보세요.",
       "prompt_en": "Fill in the less-than symbol and branching keyword to compute the age-based fee.",
-      "hint_ko": "미만 비교에는 <를 쓰고, 두 번째 나이 구간 검사에는 elif를 사용합니다.",
-      "hint_en": "Enter < on line 2 and elif on line 4.",
+      "hint_ko": "둘째 줄에는 왼쪽이 더 작음(미만)을 뜻하는 부등호를 넣고, 넷째 줄에는 else if를 네 글자로 줄인 다중 분기 키워드를 채워보세요.",
+      "hint_en": "Place the less-than angle bracket on line 2, and start the second age check on line 4 with the four-letter contraction of \"else if\".",
       "templateCode": "age = int(input())\nif age § 8:\n    fee = 0\n§§§§ age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)",
       "targetCode": "age = int(input())\nif age < 8:\n    fee = 0\nelif age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)",
       "testCases": [
@@ -199,8 +199,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "type": "block",
       "prompt_ko": "정수 n을 입력받아 6의 배수면 \"6x\", 2의 배수면 \"2x\", 3의 배수면 \"3x\", 모두 아니면 \"None\"을 출력해보세요.",
       "prompt_en": "Read integer n; print \"6x\" (%6==0), \"2x\" (%2==0), \"3x\" (%3==0), or \"None\".",
-      "hint_ko": "12처럼 2와 3의 공배수일 때 \"6x\"가 나오려면 가장 좁은 조건인 n % 6 == 0을 맨 먼저 검사해야 합니다.",
-      "hint_en": "Check n % 6 == 0 first before checking n % 2 == 0 or n % 3 == 0.",
+      "hint_ko": "6의 배수는 2의 배수 조건도 함께 만족하므로, 범위가 가장 좁고 까다로운 6의 배수 조건을 맨 위에서 먼저 검사해야 합니다.",
+      "hint_en": "Because multiples of 6 are also multiples of 2 and 3, test the most specific condition (divisible by 6) first at the top.",
       "targetCode": "n = int(input())\nif n % 6 == 0:\n    print(\"6x\")\nelif n % 2 == 0:\n    print(\"2x\")\nelif n % 3 == 0:\n    print(\"3x\")\nelse:\n    print(\"None\")",
       "testCases": [
         {
@@ -232,8 +232,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 반전 논리 키워드와 이하 비교 기호를 채워 체력이 0이면 Dead, 30 이하면 Low, 초과면 Safe를 출력해보세요.",
       "prompt_en": "Fill in the logical negation keyword and less-or-equal operator to classify hp.",
-      "hint_ko": "hp가 0일 때 참이 되도록 not hp를 쓰고, 30 이하 조건에는 <=를 입력하세요.",
-      "hint_en": "Use not on line 2 and <= on line 4.",
+      "hint_ko": "체력이 0(거짓)일 때 첫 조건이 참이 되도록 영어로 부정을 뜻하는 세 글자 키워드를 앞에 붙이고, 둘째 분기에는 작거나 같음(부등호+등호) 기호를 넣으세요.",
+      "hint_en": "Invert truthiness on line 2 with the three-letter English negation word so 0 triggers the branch, and use less-or-equal on line 4.",
       "templateCode": "hp = int(input())\nif §§§ hp:\n    state = \"Dead\"\nelif hp §§ 30:\n    state = \"Low\"\nelse:\n    state = \"Safe\"\nprint(state)",
       "targetCode": "hp = int(input())\nif not hp:\n    state = \"Dead\"\nelif hp <= 30:\n    state = \"Low\"\nelse:\n    state = \"Safe\"\nprint(state)",
       "testCases": [
@@ -260,8 +260,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "type": "block",
       "prompt_ko": "체온 temp를 실수(float)로 입력받아 37.5 이상은 \"Fever\", 36.0 이상은 \"Normal\", 미만은 \"Low\"를 출력해보세요.",
       "prompt_en": "Read float temp and print \"Fever\" (>=37.5), \"Normal\" (>=36.0), or \"Low\".",
-      "hint_ko": "temp = float(input())으로 실수를 입력받은 뒤 37.5와 36.0 순서로 비교하세요.",
-      "hint_en": "Use float(input()) and compare against 37.5 in if and 36.0 in elif.",
+      "hint_ko": "소수점이 있는 체온을 실수형으로 변환해 입력받은 뒤, 높은 온도 기준부터 낮은 온도 기준 순서로 분기를 배치해보세요.",
+      "hint_en": "Convert the input into a floating-point number first, then test the higher temperature threshold before the normal threshold.",
       "targetCode": "temp = float(input())\nif temp >= 37.5:\n    print(\"Fever\")\nelif temp >= 36.0:\n    print(\"Normal\")\nelse:\n    print(\"Low\")",
       "testCases": [
         {
@@ -288,8 +288,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸에 복합 대입 기호를 채워 30000 이상은 5000 차감, 15000 이상은 2000 차감, 미만은 2500 추가 후 출력해보세요.",
       "prompt_en": "Fill in the compound operators to apply tiered discounts or add a 2500 shipping fee.",
-      "hint_ko": "금액을 뺄 때는 -=를, 배송비를 더할 때는 +=를 사용합니다.",
-      "hint_en": "Enter -= on line 3 and += on line 7.",
+      "hint_ko": "할인 구간에서는 빼기 기호와 등호를 합친 차감 연산자를, 배송비가 붙는 구간에서는 더하기 기호와 등호를 합친 누적 연산자를 써보세요.",
+      "hint_en": "Subtract the discount in place using minus-equals on line 3, and add the shipping fee using plus-equals on line 7.",
       "templateCode": "price = int(input())\nif price >= 30000:\n    price §§ 5000\nelif price >= 15000:\n    price -= 2000\nelse:\n    price §§ 2500\nprint(price)",
       "targetCode": "price = int(input())\nif price >= 30000:\n    price -= 5000\nelif price >= 15000:\n    price -= 2000\nelse:\n    price += 2500\nprint(price)",
       "testCases": [
@@ -317,8 +317,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "다중 조건 키워드를 두 단어로 잘못 적어 발생한 문법 오류를 수정해 무게 등급을 출력해보세요.",
       "prompt_en": "Fix the SyntaxError caused by writing the multi-way branch keyword as two words.",
-      "hint_ko": "파이썬에서는 else if 대신 네 글자로 줄인 단일 키워드 elif를 사용합니다.",
-      "hint_en": "Replace else if on line 4 with elif.",
+      "hint_ko": "파이썬은 추가 조건 분기를 띄어쓰기가 있는 두 단어로 쓰지 않고, 앞부분을 따서 네 글자로 합친 단일 키워드를 사용합니다.",
+      "hint_en": "Python does not write its additional-condition branch as two separate words—contract them into the single four-letter keyword.",
       "templateCode": "w = float(input())\nif w >= 10.0:\n    print(\"Heavy\")\nelse if w >= 5.0:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
       "targetCode": "w = float(input())\nif w >= 10.0:\n    print(\"Heavy\")\nelif w >= 5.0:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
       "testCases": [
@@ -346,8 +346,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "실수 점수 구간에 따라 포인트를 누적하는 코드 아래에 한 줄을 추가하여 최종 pts를 출력해보세요.",
       "prompt_en": "Add one line at the end to print the final accumulated pts.",
-      "hint_ko": "들여쓰기 없이 맨 아래 줄에 print(pts)를 작성하면 모든 분기가 끝난 뒤 점수가 출력됩니다.",
-      "hint_en": "Write print(pts) without indentation on the last line.",
+      "hint_ko": "조건에 관계없이 최종 누적 포인트를 한 번 출력해야 하므로, 들여쓰기 없이 바깥쪽 줄에서 포인트 변수를 출력해보세요.",
+      "hint_en": "Without indentation at the bottom, call the print function on the accumulated points variable so it always outputs once.",
       "templateCode": "s = float(input())\npts = 10\nif s >= 9.0:\n    pts += 5\nelif s >= 7.0:\n    pts += 2\n§§§§§§§§§§",
       "targetCode": "s = float(input())\npts = 10\nif s >= 9.0:\n    pts += 5\nelif s >= 7.0:\n    pts += 2\nprint(pts)",
       "testCases": [
@@ -375,8 +375,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "입력값으로 3.5가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "When 3.5 is given as input, select the exact output of the following Python code.",
-      "hint_ko": "첫 묶음에서 3.5 >= 2.0이 참이라 fee는 2500이 되고 elif는 건너뜁니다. 아래 독립 if 3.5 >= 3.0도 참이라 300이 빠져 2200입니다.",
-      "hint_en": "t >= 2.0 adds 1500 (2500) and skips elif; the separate if t >= 3.0 subtracts 300 -> 2200.",
+      "hint_ko": "위쪽 묶음에서는 첫 조건이 참일 때 이어진 추가 분기를 건너뛰지만, 그 아래에 새로 시작하는 독립 조건문은 별도로 다시 검사된다는 점에 주목해보세요.",
+      "hint_en": "Notice that the first multi-way chain stops after its first matching branch, whereas the separate conditional statement below it is evaluated independently.",
       "targetCode": "t = float(input())\nfee = 1000\nif t >= 2.0:\n    fee += 1500\nelif t >= 1.0:\n    fee += 500\nif t >= 3.0:\n    fee -= 300\nprint(fee)",
       "choices": [
         "2500",

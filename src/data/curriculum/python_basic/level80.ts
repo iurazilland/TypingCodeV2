@@ -32,8 +32,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "type": "block",
       "prompt_ko": "nums의 모든 수가 양수인지 all(...)로, 20 이상인 수가 하나라도 있는지 any(...)로 검사해 나란히 출력해보세요.",
       "prompt_en": "Check whether all numbers in nums are positive with all() and whether any is >= 20 with any(), then print both.",
-      "hint_ko": "all(조건들)은 모두 True일 때만 True이고, any(조건들)는 하나라도 True이면 True를 반환합니다.",
-      "hint_en": "all() returns True only if every element is truthy; any() returns True if at least one element is truthy.",
+      "hint_ko": "'모두'를 뜻하는 함수는 전달된 조건이 전부 참일 때만 참을, '하나라도'를 뜻하는 함수는 단 하나만 참이어도 참을 반환합니다.",
+      "hint_en": "The universal check returns True only when every condition holds, while the existential check returns True if at least one holds.",
       "targetCode": "nums = [12, 8, 25]\nall_pos = all([x > 0 for x in nums])\nhas_big = any([x >= 20 for x in nums])\nprint(all_pos, has_big)",
       "expectedVariables": {
         "all_pos": true,
@@ -54,8 +54,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸을 채워 입력된 비밀번호 문자열에 숫자 문자가 하나라도 포함되어 있는지(True/False) 출력해보세요.",
       "prompt_en": "Fill in both blanks to check whether the input password contains at least one digit character.",
-      "hint_ko": "각 글자 ch에 ch.isdigit() 메서드를 적용한 리스트를 any(...)에 넘기면 숫자 포함 여부를 한 줄로 판별합니다.",
-      "hint_en": "Test each character with ch.isdigit() and pass the list to any() to check if at least one digit exists.",
+      "hint_ko": "'어느 하나라도' 참인지 묻는 3글자 내장 함수 안에, 글자가 숫자인지 묻는 'is' + '숫자(digit)' 결합 7글자 메서드를 쓰세요.",
+      "hint_en": "Wrap the list in the 3-letter 'at least one' built-in, testing each character with the 7-letter method combining 'is' + 'digit'.",
       "templateCode": "pw = input()\nhas_num = §§§([ch.§§§§§§§() for ch in pw])\nprint(has_num)",
       "targetCode": "pw = input()\nhas_num = any([ch.isdigit() for ch in pw])\nprint(has_num)",
       "testCases": [
@@ -77,8 +77,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "type": "block",
       "prompt_ko": "isinstance(값, 타입)으로 a가 int인지, b와 c가 (int, float) 숫자 타입 중 하나인지 차례대로 출력해보세요.",
       "prompt_en": "Use isinstance() to check whether a is int and whether b and c are (int, float), printing each result.",
-      "hint_ko": "isinstance(x, (int, float))처럼 두 번째 인자에 타입 튜플을 넣으면 여러 타입 중 하나인지 한 번에 확인합니다.",
-      "hint_en": "Pass a tuple of types like (int, float) as the second argument of isinstance() to match any of them.",
+      "hint_ko": "타입 확인 함수의 두 번째 인자에 여러 타입을 소괄호 튜플로 묶어 전달하면 그중 어느 하나에 해당하는지 한 번에 검사합니다.",
+      "hint_en": "Passing a tuple of types as the second argument checks whether the value belongs to any of those types at once.",
       "targetCode": "a = 42\nb = 3.5\nc = \"42\"\nprint(isinstance(a, int))\nprint(isinstance(b, (int, float)))\nprint(isinstance(c, (int, float)))",
       "testCases": [
         {
@@ -95,8 +95,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "여러 자료형이 섞인 data에서 정수 타입 원소만 골라낸 리스트의 합계를 출력하도록 두 빈칸을 채워보세요. (출력: 40)",
       "prompt_en": "Fill in both blanks to filter only integer elements from the mixed list data and print their sum.",
-      "hint_ko": "컴프리헨션의 조건절 if isinstance(x, int)를 사용하면 문자열과 실수를 제외하고 정수만 안전하게 추려냅니다.",
-      "hint_en": "Use if isinstance(x, int) in the list comprehension to keep only integers.",
+      "hint_ko": "'~의 사례(실체)인가?'를 뜻하는 두 단어(is + instance)를 붙여 쓴 10글자 함수와, '정수(integer)'의 앞 세 글자 타입을 채우세요.",
+      "hint_en": "Combine 'is' + 'instance' into the 10-letter type-checking built-in, and pass the 3-letter integer type from 'integer'.",
       "templateCode": "data = [10, \"hi\", 25, 3.5, 5]\nints = [x for x in data if §§§§§§§§§§(x, §§§)]\nprint(sum(ints))",
       "targetCode": "data = [10, \"hi\", 25, 3.5, 5]\nints = [x for x in data if isinstance(x, int)]\nprint(sum(ints))",
       "testCases": [
@@ -113,8 +113,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "type": "block",
       "prompt_ko": "입력 칸 리스트 forms의 각 문자열을 bool(s)로 변환한 뒤 모두 채워졌는지(all)와 하나라도 채워졌는지(any) 출력해보세요.",
       "prompt_en": "Convert each string in forms with bool(s), then print all(filled) and any(filled).",
-      "hint_ko": "빈 문자열 \"\"은 bool(\"\")이 False이고 글자가 있는 문자열은 True가 되므로 필수 입력란 검증에 자주 쓰입니다.",
-      "hint_en": "Non-empty strings are Truthy (True) and \"\" is Falsy (False), making all() and any() ideal for form checks.",
+      "hint_ko": "빈 문자열은 거짓(False)이 되고 글자가 있는 문자열은 참(True)이 되므로 필수 입력란의 전체·부분 입력 여부를 손쉽게 검사할 수 있습니다.",
+      "hint_en": "Empty strings evaluate to False while non-empty strings evaluate to True, enabling clean full or partial form checks.",
       "targetCode": "forms = [\"Kim\", \"seoul\", \"\"]\nfilled = [bool(s) for s in forms]\nprint(all(filled), any(filled))",
       "testCases": [
         {
@@ -131,8 +131,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸들을 채워 6자 이상이면서 숫자와 알파벳이 각각 하나 이상 모두 포함됐는지 검증하는 함수를 완성해보세요.",
       "prompt_en": "Fill in the blanks so check_pw verifies length >= 6, at least one digit, and at least one letter.",
-      "hint_ko": "숫자 존재 여부와 영문자 존재 여부는 각각 any(...)로 확인하고, 세 조건을 모두 만족하는지는 all([...])로 묶습니다.",
-      "hint_en": "Use any() for has_num and has_abc, then combine all three boolean flags with all([long_ok, has_num, has_abc]).",
+      "hint_ko": "숫자나 알파벳이 '어느 하나라도' 있는지는 3글자 부분 참 함수로 각각 확인하고, 세 규칙을 '모두' 만족하는지는 3글자 전체 참 함수로 묶으세요.",
+      "hint_en": "Check 'at least one' digit and letter using the 3-letter existential quantifier twice, then require 'every' condition with the 3-letter universal quantifier.",
       "templateCode": "def check_pw(pw):\n    long_ok = len(pw) >= 6\n    has_num = §§§([c.isdigit() for c in pw])\n    has_abc = §§§([c.isalpha() for c in pw])\n    return §§§([long_ok, has_num, has_abc])\nprint(check_pw(input()))",
       "targetCode": "def check_pw(pw):\n    long_ok = len(pw) >= 6\n    has_num = any([c.isdigit() for c in pw])\n    has_abc = any([c.isalpha() for c in pw])\n    return all([long_ok, has_num, has_abc])\nprint(check_pw(input()))",
       "testCases": [
@@ -159,8 +159,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "type": "block",
       "prompt_ko": "사용자 정의 클래스 Hero의 인스턴스 h와 문자열 tag에 각각 isinstance(..., Hero)를 실행해 결과를 확인해보세요.",
       "prompt_en": "Define class Hero, create h = Hero(\"Aria\"), and check isinstance(h, Hero) and isinstance(tag, Hero).",
-      "hint_ko": "isinstance(객체, 클래스명)은 int, str 같은 기본 타입뿐 아니라 직접 만든 클래스의 인스턴스인지도 판별합니다.",
-      "hint_en": "isinstance(obj, Hero) works on user-defined classes, returning True for Hero instances and False otherwise.",
+      "hint_ko": "타입 확인 함수는 기본 내장 자료형뿐 아니라 직접 만든 클래스의 인스턴스인지 판별할 때도 동일하게 작동합니다.",
+      "hint_en": "Runtime type checking works on user-defined classes as well, distinguishing class instances from plain strings.",
       "targetCode": "class Hero:\n    def __init__(self, name):\n        self.name = name\nh = Hero(\"Aria\")\ntag = \"slime\"\nprint(h.name, isinstance(h, Hero))\nprint(isinstance(tag, Hero))",
       "testCases": [
         {
@@ -177,8 +177,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "혼합 리스트 units에서 영웅 클래스 인스턴스만 골라 체력(hp) 합계를 출력하도록 두 빈칸을 채워보세요. (출력: 180)",
       "prompt_en": "Fill in both blanks to extract hp values only from Hero instances in units and print their sum.",
-      "hint_ko": "문자열 \"NPC\"에는 .hp 속성이 없으므로 if isinstance(u, Hero) 조건으로 영웅 객체만 골라내야 안전합니다.",
-      "hint_en": "Filter with if isinstance(u, Hero) before accessing u.hp so non-Hero items like \"NPC\" are skipped safely.",
+      "hint_ko": "첫 빈칸은 아래 리스트에서 생성 중인 클래스 이름을 적고, 둘째 빈칸은 'is'와 'instance'를 붙인 10글자 타입 확인 함수를 적으세요.",
+      "hint_en": "Match the class name instantiated in the list below, and filter safely using the 10-letter function combining 'is' + 'instance'.",
       "templateCode": "class §§§§:\n    def __init__(self, hp):\n        self.hp = hp\nunits = [Hero(100), \"NPC\", Hero(80)]\nhps = [u.hp for u in units if §§§§§§§§§§(u, Hero)]\nprint(sum(hps))",
       "targetCode": "class Hero:\n    def __init__(self, hp):\n        self.hp = hp\nunits = [Hero(100), \"NPC\", Hero(80)]\nhps = [u.hp for u in units if isinstance(u, Hero)]\nprint(sum(hps))",
       "testCases": [
@@ -195,8 +195,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "type": "block",
       "prompt_ko": "모든 과목이 40점 이상(all)이고 90점 이상 과목이 하나라도(any) 있으면 Honor, 아니면 Normal을 출력해보세요.",
       "prompt_en": "Print Honor if all input scores are >= 40 and any score is >= 90; otherwise print Normal.",
-      "hint_ko": "no_fail = all([s >= 40 for s in scores])와 has_ace = any([s >= 90 for s in scores])를 and로 결합합니다.",
-      "hint_en": "Compute no_fail with all() and has_ace with any(), then branch on if no_fail and has_ace:.",
+      "hint_ko": "전 과목 기준 통과 여부는 전체 참 함수로, 우수 과목 존재 여부는 부분 참 함수로 각각 구해 논리곱(and) 조건으로 묶습니다.",
+      "hint_en": "Verify that every score meets 40 and at least one score reaches 90, then combine both boolean flags with and.",
       "targetCode": "scores = list(map(int, input().split()))\nno_fail = all([s >= 40 for s in scores])\nhas_ace = any([s >= 90 for s in scores])\nif no_fail and has_ace:\n    print(\"Honor\")\nelse:\n    print(\"Normal\")",
       "testCases": [
         {
@@ -223,8 +223,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸을 채워 리스트 안의 정수 또는 실수만 안전하게 더한 뒤 소수 첫째 자리로 반올림해 출력해보세요. (출력: 16.7)",
       "prompt_en": "Fill in both blanks so sum_nums adds only int or float values in items and rounds to 1 decimal place.",
-      "hint_ko": "if isinstance(v, (int, float)):으로 숫자 자료형만 통과시켜 total += v로 누적한 뒤 round(total, 1)을 반환합니다.",
-      "hint_en": "Check if isinstance(v, (int, float)): to accumulate numeric items and skip strings.",
+      "hint_ko": "'is' + 'instance'를 붙인 10글자 타입 검사 함수를 쓰고, 타입 튜플에는 '부동소수점(floating-point)'의 앞 다섯 글자를 딴 실수 타입을 넣으세요.",
+      "hint_en": "Call the 10-letter 'is' + 'instance' function, pairing int with the 5-letter real-number type abbreviated from 'floating-point'.",
       "templateCode": "def sum_nums(items):\n    total = 0\n    for v in items:\n        if §§§§§§§§§§(v, (int, §§§§§)):\n            total += v\n    return round(total, 1)\nbox = [10, 2.5, \"skip\", 4.2]\nprint(sum_nums(box))",
       "targetCode": "def sum_nums(items):\n    total = 0\n    for v in items:\n        if isinstance(v, (int, float)):\n            total += v\n    return round(total, 1)\nbox = [10, 2.5, \"skip\", 4.2]\nprint(sum_nums(box))",
       "testCases": [
@@ -242,8 +242,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "여러 타입을 동시에 검사하려다 인자 개수 오류(TypeError)가 난 줄을 고쳐 숫자 원소들의 합계 15.5를 출력해보세요.",
       "prompt_en": "Fix the TypeError when checking multiple types at once so numeric items sum to 15.5.",
-      "hint_ko": "isinstance()는 인자를 2개만 받으므로 여러 타입을 검사할 때는 (int, float)처럼 괄호로 묶어 하나의 튜플로 넘겨야 합니다.",
-      "hint_en": "Wrap multiple types in a single tuple as isinstance(x, (int, float)) instead of passing 3 arguments.",
+      "hint_ko": "타입 확인 함수는 (값, 타입정보) 딱 2개의 인자만 받습니다. 두 개 이상의 타입을 검사할 때는 소괄호로 감싸 하나의 튜플로 묶어 전달하세요.",
+      "hint_en": "This type-checking function takes only 2 arguments; wrap multiple candidate types in parentheses as a single tuple.",
       "templateCode": "raw = [10, 3.5, \"7\", 2]\ntotal = 0\nfor x in raw:\n    if isinstance(x, int, float):\n        total += x\nprint(total)",
       "targetCode": "raw = [10, 3.5, \"7\", 2]\ntotal = 0\nfor x in raw:\n    if isinstance(x, (int, float)):\n        total += x\nprint(total)",
       "testCases": [
@@ -261,8 +261,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "점수 리스트 scores 아래에 한 줄을 추가하여 모든 점수가 60 이상인지 all로 검사한 결과를 출력해보세요.",
       "prompt_en": "Add one line below scores to print whether every score is >= 60 using all().",
-      "hint_ko": "둘째 줄에 print(all([s >= 60 for s in scores]))를 작성하면 전체 합격 여부가 True/False로 출력됩니다.",
-      "hint_en": "Write print(all([s >= 60 for s in scores])) on the second line.",
+      "hint_ko": "각 점수가 60 이상인지 비교한 리스트 컴프리헨션을 '모두 참인지' 판별하는 내장 함수에 넘겨 결과를 출력해보세요.",
+      "hint_en": "Build a list comprehension checking whether each score is >= 60, pass it to the universal quantifier built-in, and print it.",
       "templateCode": "scores = list(map(int, input().split()))\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "scores = list(map(int, input().split()))\nprint(all([s >= 60 for s in scores]))",
       "testCases": [
@@ -285,8 +285,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "Select the exact output of the following Python code.",
-      "hint_ko": "data의 원소는 모두 int이므로 c1은 True, -2 때문에 모두 양수는 아니므로 c2는 False, 음수가 존재하므로 c3는 True입니다.",
-      "hint_en": "All elements are ints (c1=True), not all are > 0 because of -2 (c2=False), and -2 < 0 makes c3=True.",
+      "hint_ko": "음수 정수도 정수 타입에 속한다는 점에 유의하며, 세 원소가 '전부 정수인지', '전부 양수인지', '하나라도 음수인지' 차례대로 판별해보세요.",
+      "hint_en": "Remember that negative whole numbers are still integers, then check whether every item is int, whether every item is positive, and whether any item is negative.",
       "targetCode": "data = [4, -2, 8]\nc1 = all([isinstance(x, int) for x in data])\nc2 = all([x > 0 for x in data])\nc3 = any([x < 0 for x in data])\nprint(c1, c2, c3)",
       "choices": [
         "True False True",

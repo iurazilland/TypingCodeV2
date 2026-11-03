@@ -30,8 +30,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "type": "block",
       "prompt_ko": "bag = {\"key\": 1, \"potion\": 3}에 \"key\"가 있는지(in)와 \"map\"이 없는지(not in)를 나란히 출력해보세요.",
       "prompt_en": "On bag = {\"key\": 1, \"potion\": 3}, print whether \"key\" is in bag and whether \"map\" is not in bag.",
-      "hint_ko": "딕셔너리에 in / not in을 사용하면 값이 아닌 키(Key)의 존재 여부를 True / False로 알려줍니다.",
-      "hint_en": "Using in and not in on a dict checks whether the given key exists.",
+      "hint_ko": "사전에 포함 연산자와 부정 포함 연산자를 쓰면 값이 아니라 '키(Key)'가 등록되어 있는지 여부를 참/거짓으로 판별합니다.",
+      "hint_en": "Membership operators on a dictionary check whether the target exists among its keys rather than its values.",
       "targetCode": "bag = {\"key\": 1, \"potion\": 3}\nprint(\"key\" in bag, \"map\" not in bag)",
       "testCases": [
         {
@@ -48,8 +48,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 삭제 키워드를 채워 임시 항목을 제거한 뒤 남은 길이와 키 존재 여부를 출력해보세요.",
       "prompt_en": "Fill in the deletion keyword to remove the temporary entry, then print the length and key check.",
-      "hint_ko": "딕셔너리에서 특정 키-값 쌍을 제거할 때는 del 딕셔너리[키] 구문을 사용합니다.",
-      "hint_en": "Use the del keyword before cfg[\"temp\"] to delete that key-value pair.",
+      "hint_ko": "영어로 '삭제하다(delete)'의 앞 세 글자를 딴 파이썬 키워드를 앞에 적어 해당 키-값 쌍을 지워보세요.",
+      "hint_en": "Write the 3-letter Python keyword derived from the start of 'delete' before the bracketed dictionary entry.",
       "templateCode": "cfg = {\"host\": \"local\", \"temp\": 99}\n§§§ cfg[\"temp\"]\nprint(len(cfg), \"temp\" in cfg)",
       "targetCode": "cfg = {\"host\": \"local\", \"temp\": 99}\ndel cfg[\"temp\"]\nprint(len(cfg), \"temp\" in cfg)",
       "testCases": [
@@ -66,8 +66,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "type": "block",
       "prompt_ko": "prices = {\"pen\": 500, \"note\": 1200}을 .items()로 순회하며 상품명(name)과 가격(cost)을 출력해보세요.",
       "prompt_en": "Loop over prices = {\"pen\": 500, \"note\": 1200} with .items() and print each name and cost.",
-      "hint_ko": "for name, cost in prices.items():를 사용하면 매 반복마다 키와 값을 동시에 꺼낼 수 있습니다.",
-      "hint_en": "Use for name, cost in prices.items(): to unpack each key and value.",
+      "hint_ko": "사전의 '항목들'을 뜻하는 복수형 메서드를 호출해 순회하면 매 차례마다 키와 값을 쌍으로 동시에 꺼낼 수 있습니다.",
+      "hint_en": "Calling the plural method meaning 'entries/things' on a dictionary lets the loop unpack each key and value together.",
       "targetCode": "prices = {\"pen\": 500, \"note\": 1200}\nfor name, cost in prices.items():\n    print(name, cost)",
       "testCases": [
         {
@@ -84,8 +84,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "딕셔너리의 키와 값을 쌍으로 꺼내는 메서드 이름을 빈칸에 채워 능력치를 출력해보세요. (출력 예: HP=120)",
       "prompt_en": "Fill in the dictionary method that yields key-value pairs to print each stat (e.g., HP=120).",
-      "hint_ko": "for문에서 키(k)와 값(v) 두 변수로 동시에 순회할 때는 .items() 메서드를 호출합니다.",
-      "hint_en": "Call .items() on stats to iterate over (key, value) pairs.",
+      "hint_ko": "사전 안의 키-값 '항목들'을 쌍으로 묶어 꺼내 주는 다섯 글자 복수형 영단어 메서드 이름을 적어보세요.",
+      "hint_en": "Fill in the 5-letter plural dictionary method meaning 'entries' so each key-value pair unpacks into the two loop variables.",
       "templateCode": "stats = {\"HP\": 120, \"MP\": 60}\nfor k, v in stats.§§§§§():\n    print(f\"{k}={v}\")",
       "targetCode": "stats = {\"HP\": 120, \"MP\": 60}\nfor k, v in stats.items():\n    print(f\"{k}={v}\")",
       "testCases": [
@@ -102,8 +102,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "type": "block",
       "prompt_ko": "cnt = {\"A\": 2}에 입력받은 키 k가 있으면 값을 1 늘리고, 없으면 1로 등록한 뒤 cnt[k]를 출력해보세요.",
       "prompt_en": "Read k; if k is in cnt = {\"A\": 2} increment cnt[k] by 1, else set cnt[k] = 1, then print cnt[k].",
-      "hint_ko": "if k in cnt: 조건으로 기존 키 여부를 먼저 확인하면 KeyError 없이 안전하게 개수를 누적할 수 있습니다.",
-      "hint_en": "Check if k in cnt: to run cnt[k] += 1; otherwise initialize cnt[k] = 1.",
+      "hint_ko": "입력된 키가 사전에 이미 들어 있는지 먼저 확인해 있으면 1을 더하고, 처음 나온 키라면 1로 새로 등록하세요.",
+      "hint_en": "Test key membership first: increment the existing count by 1 when found, or initialize the new key to 1 otherwise.",
       "targetCode": "cnt = {\"A\": 2}\nk = input()\nif k in cnt:\n    cnt[k] += 1\nelse:\n    cnt[k] = 1\nprint(cnt[k])",
       "testCases": [
         {
@@ -125,8 +125,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "입력받은 키가 재고에 존재할 때만 해당 항목을 삭제하도록 빈칸을 채워 남은 항목 수를 출력해보세요.",
       "prompt_en": "Fill in the blanks to delete target from stock only if it exists, then print len(stock).",
-      "hint_ko": "없는 키를 바로 삭제하면 KeyError가 나므로 포함 연산자로 확인한 뒤 삭제 키워드를 실행합니다.",
-      "hint_en": "Check membership with in before deleting the entry with del.",
+      "hint_ko": "없는 키를 바로 지우면 오류가 나므로 '~ 안에' 있는지 두 글자 포함 연산자로 먼저 확인한 뒤, '삭제하다(delete)' 앞 세 글자 키워드로 지우세요.",
+      "hint_en": "Check key presence first with the 2-letter membership operator, then remove the entry using the first three letters of 'delete'.",
       "templateCode": "stock = {\"milk\": 2, \"egg\": 0}\ntarget = input()\nif target §§ stock:\n    §§§ stock[target]\nprint(len(stock))",
       "targetCode": "stock = {\"milk\": 2, \"egg\": 0}\ntarget = input()\nif target in stock:\n    del stock[target]\nprint(len(stock))",
       "testCases": [
@@ -148,8 +148,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "type": "block",
       "prompt_ko": "입력받은 단어(word)의 각 글자 등장 횟수를 counts 딕셔너리에 집계한 뒤 글자 \"a\"의 개수를 출력해보세요.",
       "prompt_en": "Count each character frequency of input word in counts = {} and print counts[\"a\"].",
-      "hint_ko": "for ch in word:로 한 글자씩 순회하며 if ch in counts: 분기로 개수를 1씩 누적하세요.",
-      "hint_en": "Loop for ch in word:, increment counts[ch] += 1 if present else set counts[ch] = 1.",
+      "hint_ko": "단어를 한 글자씩 순회하면서 사전에 이미 등록된 글자면 횟수를 1 올리고, 없는 글자면 1로 등록해 빈도수를 완성하세요.",
+      "hint_en": "Iterate character by character, incrementing existing keys by 1 and setting unseen keys to 1 before printing the target letter's count.",
       "targetCode": "word = input()\ncounts = {}\nfor ch in word:\n    if ch in counts:\n        counts[ch] += 1\n    else:\n        counts[ch] = 1\nprint(counts[\"a\"])",
       "testCases": [
         {
@@ -171,8 +171,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "단어별 등장 횟수를 집계한 뒤 키와 값을 순회하며 출력하도록 빈칸을 채워보세요. (출력 예: red:2)",
       "prompt_en": "Count word frequencies from input and iterate over key-value pairs to print them (e.g., red:2).",
-      "hint_ko": "처음 본 단어(not in)면 0으로 초기화한 뒤 1을 더하고, 마지막에 .items()로 키와 값을 출력합니다.",
-      "hint_en": "Use not in to initialize unseen words to 0, then loop over freq.items().",
+      "hint_ko": "사전에 아직 '들어 있지 않은' 단어일 때 0으로 준비해 두고, 집계 후에는 다섯 글자 복수형 '항목들' 메서드로 키와 횟수를 함께 순회하세요.",
+      "hint_en": "Initialize words that are absent using the two-word negated membership check, then loop over pairs with the 5-letter 'entries' method.",
       "templateCode": "words = input().split()\nfreq = {}\nfor w in words:\n    if w §§§ §§ freq:\n        freq[w] = 0\n    freq[w] += 1\nfor w, c in freq.§§§§§():\n    print(f\"{w}:{c}\")",
       "targetCode": "words = input().split()\nfreq = {}\nfor w in words:\n    if w not in freq:\n        freq[w] = 0\n    freq[w] += 1\nfor w, c in freq.items():\n    print(f\"{w}:{c}\")",
       "testCases": [
@@ -194,8 +194,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "type": "block",
       "prompt_ko": "scores = {\"Kim\": 75, \"Lee\": 92, \"Park\": 88}을 .items()로 순회해 최고 득점자와 점수를 출력해보세요. (출력 예: Lee:92)",
       "prompt_en": "Iterate over scores.items() starting from top_name = None to find and print the top scorer (Lee:92).",
-      "hint_ko": "sc > top_val일 때마다 top_val = sc와 top_name = name으로 갱신한 뒤 f-string으로 출력하세요.",
-      "hint_en": "Whenever sc > top_val, update top_val and top_name, then print(f\"{top_name}:{top_val}\").",
+      "hint_ko": "이름과 점수를 쌍으로 꺼내 순회하면서 현재 최고 점수보다 더 큰 점수가 나올 때마다 최고 점수와 이름을 함께 갱신하세요.",
+      "hint_en": "Unpack each name and score pair in a loop, updating both the best score and best name whenever a higher score appears.",
       "targetCode": "scores = {\"Kim\": 75, \"Lee\": 92, \"Park\": 88}\ntop_name = None\ntop_val = 0\nfor name, sc in scores.items():\n    if sc > top_val:\n        top_val = sc\n        top_name = name\nprint(f\"{top_name}:{top_val}\")",
       "testCases": [
         {
@@ -212,8 +212,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "while문으로 제거 목록(drops)의 키가 있으면 삭제하고, 남은 항목을 순회해 출력해보세요. (출력 예: gold:50)",
       "prompt_en": "Remove any existing keys listed in drops via a while loop, then print remaining items (e.g., gold:50).",
-      "hint_ko": "첫 빈칸에는 항목 삭제 키워드를, 둘째 빈칸에는 키-값 쌍 순회 메서드 이름을 입력하세요.",
-      "hint_en": "Use del to remove box[k] and .items() to iterate over the remaining entries.",
+      "hint_ko": "'삭제하다(delete)'의 앞 세 글자를 딴 키워드로 존재하는 항목을 지우고, 남은 키-값 '항목들'을 꺼내는 다섯 글자 메서드로 순회하세요.",
+      "hint_en": "Remove matching entries with the 3-letter keyword from 'delete', then iterate over remaining pairs using the 5-letter 'entries' method.",
       "templateCode": "box = {\"gold\": 50, \"tmp\": 0, \"gem\": 30}\ndrops = [\"tmp\", \"dust\"]\ni = 0\nwhile i < len(drops):\n    k = drops[i]\n    if k in box:\n        §§§ box[k]\n    i += 1\nfor name, val in box.§§§§§():\n    print(f\"{name}:{val}\")",
       "targetCode": "box = {\"gold\": 50, \"tmp\": 0, \"gem\": 30}\ndrops = [\"tmp\", \"dust\"]\ni = 0\nwhile i < len(drops):\n    k = drops[i]\n    if k in box:\n        del box[k]\n    i += 1\nfor name, val in box.items():\n    print(f\"{name}:{val}\")",
       "testCases": [
@@ -231,8 +231,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "딕셔너리에서 키와 값을 동시에 꺼내려다 발생한 언패킹 오류(ValueError)를 수정해 출력해보세요. (출력 예: apple:1000)",
       "prompt_en": "Fix the ValueError when unpacking key and value in the for loop so apple:1000 is printed.",
-      "hint_ko": "딕셔너리만 그냥 순회하면 키 문자열만 나옵니다. 키와 값을 쌍으로 꺼내려면 뒤에 .items()를 붙여야 합니다.",
-      "hint_en": "Iterating directly over menu yields only keys; call menu.items() to unpack k, v.",
+      "hint_ko": "사전 변수만 그대로 순회하면 값 없이 키만 하나씩 나오므로 두 변수로 나눌 수 없습니다. 키-값 쌍을 돌려주는 메서드를 뒤에 호출하세요.",
+      "hint_en": "Looping over a plain dictionary yields only keys, causing an unpacking error for two variables; call the key-value pair method on the dict.",
       "templateCode": "menu = {\"apple\": 1000, \"milk\": 1500}\nfor k, v in menu:\n    print(f\"{k}:{v}\")",
       "targetCode": "menu = {\"apple\": 1000, \"milk\": 1500}\nfor k, v in menu.items():\n    print(f\"{k}:{v}\")",
       "testCases": [
@@ -250,8 +250,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "사용이 끝난 쿠폰 항목을 삭제한 코드 아래에 한 줄을 추가하여 남은 cart 딕셔너리를 출력해보세요.",
       "prompt_en": "Add one line below the del statement to print the remaining cart dictionary.",
-      "hint_ko": "마지막 줄에 print(cart)를 작성하여 쿠폰이 제거된 딕셔너리를 확인하세요.",
-      "hint_en": "Write print(cart) on the third line.",
+      "hint_ko": "불필요한 키 항목이 삭제된 뒤 남아 있는 사전 변수 자체를 출력 함수에 넣어 결과를 확인해보세요.",
+      "hint_en": "Pass the dictionary variable directly to the output function on the final line to display the remaining entries.",
       "templateCode": "cart = {\"book\": 15000, \"coupon\": 0}\ndel cart[\"coupon\"]\n§§§§§§§§§§§",
       "targetCode": "cart = {\"book\": 15000, \"coupon\": 0}\ndel cart[\"coupon\"]\nprint(cart)",
       "testCases": [
@@ -269,8 +269,8 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
       "prompt_en": "Select the exact output produced when the following Python code runs.",
-      "hint_ko": "키 \"b\"가 삭제된 뒤 남은 (\"a\", 10)과 (\"c\", 30)을 순회하여 이어 붙이고 양끝 공백을 제거합니다.",
-      "hint_en": "After deleting \"b\", iterating over d.items() builds \"a10 c30 \", and .strip() outputs \"a10 c30\".",
+      "hint_ko": "중간 키가 지워진 뒤 남은 쌍들이 어떤 모양으로 문자열에 이어 붙는지 확인하고, 마지막 공백 다듬기가 끝에 붙은 띄어쓰기를 어떻게 처리하는지 보세요.",
+      "hint_en": "Check which two key-value pairs remain after deletion, how each formats into the accumulator string, and what trimming removes at the end.",
       "targetCode": "d = {\"a\": 10, \"b\": 20, \"c\": 30}\ndel d[\"b\"]\nres = \"\"\nfor k, v in d.items():\n    res += f\"{k}{v} \"\nprint(res.strip())",
       "choices": [
         "a10 c30",

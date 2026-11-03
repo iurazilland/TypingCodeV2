@@ -30,8 +30,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "type": "block",
       "prompt_ko": "리스트 nums = [10, 20]의 맨 뒤에 30을 추가하고 변경된 리스트를 출력해보세요.",
       "prompt_en": "Append 30 to the end of nums = [10, 20] and print the updated list.",
-      "hint_ko": "nums.append(30) 블록을 실행한 뒤 print(nums)로 결과를 확인하세요.",
-      "hint_en": "Call nums.append(30) and then run print(nums).",
+      "hint_ko": "리스트 맨 뒤에 요소를 '덧붙이다'라는 뜻의 메서드를 실행해 원본 리스트에 값을 넣은 뒤 리스트 변수를 출력하세요.",
+      "hint_en": "Invoke the list method meaning 'attach to the end' with 30, then print the list variable.",
       "targetCode": "nums = [10, 20]\nnums.append(30)\nprint(nums)",
       "testCases": [
         {
@@ -48,8 +48,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈 리스트 cart를 만들고 맨 끝에 \"milk\"와 \"egg\"를 순서대로 추가해 출력해보세요.",
       "prompt_en": "Initialize an empty list cart, add \"milk\" and \"egg\" to the end in order, and print cart.",
-      "hint_ko": "빈 리스트는 []로 선언하며, 맨 뒤에 요소를 하나씩 넣는 메서드는 append입니다.",
-      "hint_en": "Use [] for an empty list and the .append() method to add each item.",
+      "hint_ko": "대괄호를 비워 빈 리스트를 만들고, 맨 끝에 항목을 '덧붙이다'라는 뜻의 여섯 글자 영단어 메서드를 두 번 호출하세요.",
+      "hint_en": "Initialize an empty list with empty square brackets, then call the 6-letter method meaning 'attach to the tail' on each line.",
       "templateCode": "cart = §§\ncart.§§§§§§(\"milk\")\ncart.§§§§§§(\"egg\")\nprint(cart)",
       "targetCode": "cart = []\ncart.append(\"milk\")\ncart.append(\"egg\")\nprint(cart)",
       "testCases": [
@@ -66,8 +66,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "type": "block",
       "prompt_ko": "stack = [10, 20, 30]에서 맨 마지막 요소를 꺼내 last에 저장하고, last와 남은 stack을 각각 출력해보세요.",
       "prompt_en": "Pop the last element from stack = [10, 20, 30] into last, then print last and stack.",
-      "hint_ko": "last = stack.pop()을 실행하면 30이 꺼내져 last에 담기고 stack에는 [10, 20]만 남습니다.",
-      "hint_en": "Assign last = stack.pop(), then print(last) and print(stack).",
+      "hint_ko": "맨 끝 요소를 '톡 꺼내다'라는 뜻의 세 글자 메서드는 리스트에서 마지막 값을 제거함과 동시에 그 값을 돌려줍니다.",
+      "hint_en": "The 3-letter removal method takes the last item off the list and returns it so you can save it in a variable.",
       "targetCode": "stack = [10, 20, 30]\nlast = stack.pop()\nprint(last)\nprint(stack)",
       "testCases": [
         {
@@ -84,8 +84,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "리스트에서 맨 앞 요소를 꺼내 first에, 맨 뒤 요소를 꺼내 last에 담고 남은 리스트와 함께 출력해보세요.",
       "prompt_en": "Pop the first item into first and the last item into last from queue, then print all three.",
-      "hint_ko": "꺼내기 메서드 pop에 인덱스 0을 넣으면 맨 앞 요소를, 비워두면 맨 뒤 요소를 꺼내 반환합니다.",
-      "hint_en": "Use .pop(0) for the first element and .pop() for the last element.",
+      "hint_ko": "요소를 '톡 꺼내다'라는 뜻의 세 글자 메서드 괄호에 맨 앞 위치 번호를 넣으면 첫 요소가, 비워두면 맨 끝 요소가 꺼내집니다.",
+      "hint_en": "Use the 3-letter item-extracting method: pass the 0-based front index to take the first item, and leave parentheses empty for the last.",
       "templateCode": "queue = [\"A\", \"B\", \"C\"]\nfirst = queue.§§§(§)\nlast = queue.§§§()\nprint(first, last, queue)",
       "targetCode": "queue = [\"A\", \"B\", \"C\"]\nfirst = queue.pop(0)\nlast = queue.pop()\nprint(first, last, queue)",
       "testCases": [
@@ -102,8 +102,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "type": "block",
       "prompt_ko": "1부터 3까지 반복하며 i * 10을 빈 리스트 nums에 추가한 뒤 개수와 리스트를 출력해보세요. (출력 예: Count:3,Data:[10, 20, 30])",
       "prompt_en": "Loop i from 1 to 3, append i * 10 to nums, and print Count and Data.",
-      "hint_ko": "for i in range(1, 4): 안에서 nums.append(i * 10)을 호출한 뒤 f-string으로 출력하세요.",
-      "hint_en": "Inside for i in range(1, 4):, call nums.append(i * 10), then print with an f-string.",
+      "hint_ko": "1부터 3까지 반복하는 동안 매번 10을 곱한 값을 빈 리스트 끝에 덧붙이고, 반복이 끝난 뒤 길이와 리스트 전체를 포맷팅해 출력하세요.",
+      "hint_en": "Loop through 1 to 3 adding each multiple of 10 onto the list, then print the formatted count and list outside the loop.",
       "targetCode": "nums = []\nfor i in range(1, 4):\n    nums.append(i * 10)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
       "testCases": [
         {
@@ -120,8 +120,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "정수 n번 반복하며 공백을 제거한 입력 단어 앞에 번호를 붙여 words 리스트에 추가하고 출력해보세요.",
       "prompt_en": "Loop n times, strip each input word, append \"i:w\" to words, and print words.",
-      "hint_ko": "횟수 반복에는 range(n)을 사용하고, 리스트 맨 뒤에 문자열을 추가할 때는 append를 호출합니다.",
-      "hint_en": "Use range(n) for the loop and words.append(...) to collect formatted strings.",
+      "hint_ko": "0부터 지정 횟수 직전까지 숫자 '범위'를 만드는 다섯 글자 함수와, 리스트 맨 끝에 요소를 '덧붙이는' 여섯 글자 메서드를 채우세요.",
+      "hint_en": "Use the 5-letter sequence-generating function for the loop count, and the 6-letter tail-insertion method to collect each formatted string.",
       "templateCode": "n = int(input())\nwords = []\nfor i in §§§§§(n):\n    w = input().strip()\n    words.§§§§§§(f\"{i}:{w}\")\nprint(words)",
       "targetCode": "n = int(input())\nwords = []\nfor i in range(n):\n    w = input().strip()\n    words.append(f\"{i}:{w}\")\nprint(words)",
       "testCases": [
@@ -143,8 +143,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "type": "block",
       "prompt_ko": "stack = [10, 20, 30]이 빌 때까지 마지막 요소를 하나씩 꺼내 total에 더하고 합계와 남은 길이를 출력해보세요. (출력 예: Sum:60,Left:0)",
       "prompt_en": "While stack = [10, 20, 30] is non-empty, pop the last value into total and print Sum and Left.",
-      "hint_ko": "while stack: 조건은 리스트에 요소가 남아 있는 동안만 반복됩니다. 안에서 val = stack.pop()을 꺼내 누적하세요.",
-      "hint_en": "while stack: runs until stack becomes []. Pop each value and add to total.",
+      "hint_ko": "리스트 이름을 조건식에 그대로 두면 요소가 남아 있는 동안만 반복됩니다. 매번 끝 요소를 꺼내 합산한 뒤 결과를 출력하세요.",
+      "hint_en": "Using the list itself as the loop condition repeats until all items are removed; extract the last value each turn and accumulate it.",
       "targetCode": "stack = [10, 20, 30]\ntotal = 0\nwhile stack:\n    val = stack.pop()\n    total += val\nprint(f\"Sum:{total},Left:{len(stack)}\")",
       "testCases": [
         {
@@ -161,8 +161,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "단어 리스트가 빌 때까지 맨 앞 요소를 차례대로 꺼내 대괄호 모양으로 이어 붙여 출력해보세요. (출력 예: [A][B])",
       "prompt_en": "While tasks has items, pop from index 0 and append \"[cur]\" onto log, then print log.",
-      "hint_ko": "while 조건에 리스트 이름을 쓰고, 맨 앞 요소를 순서대로 꺼내려면 인덱스 0으로 꺼내기 메서드를 호출하세요.",
-      "hint_en": "Loop with while tasks: and remove from the front using tasks.pop(0).",
+      "hint_ko": "리스트가 빌 때까지 '~하는 동안' 반복하는 키워드를 쓰고, 대기열의 맨 앞 요소를 순서대로 '톡 꺼내도록' 메서드와 첫 위치 번호를 적으세요.",
+      "hint_en": "Use the condition-based loop keyword, then call the 3-letter extraction method with the front index so items come out in order.",
       "templateCode": "tasks = input().split()\nlog = \"\"\n§§§§§ tasks:\n    cur = tasks.§§§(§)\n    log += f\"[{cur}]\"\nprint(log)",
       "targetCode": "tasks = input().split()\nlog = \"\"\nwhile tasks:\n    cur = tasks.pop(0)\n    log += f\"[{cur}]\"\nprint(log)",
       "testCases": [
@@ -184,8 +184,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "type": "block",
       "prompt_ko": "raw = [5, -1, 8]에서 맨 앞 요소를 하나씩 꺼내 양수일 때만 2배로 만들어 clean에 추가하고 출력해보세요.",
       "prompt_en": "Pop items from index 0 of raw = [5, -1, 8]; if positive, append x * 2 to clean and print clean.",
-      "hint_ko": "while raw: 안에서 x = raw.pop(0)을 실행하고 if x > 0:일 때 clean.append(x * 2)를 호출하세요.",
-      "hint_en": "Inside while raw:, set x = raw.pop(0) and if x > 0: call clean.append(x * 2).",
+      "hint_ko": "원본 리스트가 빌 때까지 맨 앞(0번) 요소를 하나씩 꺼내어, 0보다 큰 양수일 때만 2배 한 값을 새 리스트 끝에 덧붙이세요.",
+      "hint_en": "Repeatedly extract from the front of the source list until empty, adding doubled values to the result list only when positive.",
       "targetCode": "raw = [5, -1, 8]\nclean = []\nwhile raw:\n    x = raw.pop(0)\n    if x > 0:\n        clean.append(x * 2)\nprint(clean)",
       "testCases": [
         {
@@ -202,8 +202,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "입력이 \"use\"이면 마지막 아이템을 꺼내고, 아니면 입력값을 추가한 뒤 결과와 가방의 논리값을 출력해보세요. (출력 예: Used:potion,Has:False)",
       "prompt_en": "If cmd is \"use\", pop the last item; otherwise append cmd, printing the item and whether bag is non-empty.",
-      "hint_ko": "마지막 요소를 꺼내는 메서드, 리스트 비어 있음 여부를 판별하는 논리형 변환 함수, 요소 추가 메서드를 채우세요.",
-      "hint_en": "Use .pop() to remove the last item, bool(bag) for truthiness, and .append(cmd) to add.",
+      "hint_ko": "맨 끝 요소를 '톡 꺼내는' 세 글자 메서드, '불리언(boolean)' 앞 네 글자를 딴 참/거짓 변환 함수, 맨 뒤에 '덧붙이는' 여섯 글자 메서드를 채우세요.",
+      "hint_en": "Fill in the 3-letter tail-removal method, the 4-letter truthiness function from 'boolean', and the 6-letter tail-insertion method.",
       "templateCode": "bag = [\"potion\"]\ncmd = input().strip()\nif cmd == \"use\":\n    used = bag.§§§()\n    print(f\"Used:{used},Has:{§§§§(bag)}\")\nelse:\n    bag.§§§§§§(cmd)\n    print(f\"Added:{bag[-1]},Has:{bool(bag)}\")",
       "targetCode": "bag = [\"potion\"]\ncmd = input().strip()\nif cmd == \"use\":\n    used = bag.pop()\n    print(f\"Used:{used},Has:{bool(bag)}\")\nelse:\n    bag.append(cmd)\n    print(f\"Added:{bag[-1]},Has:{bool(bag)}\")",
       "testCases": [
@@ -226,8 +226,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "리스트의 맨 앞 요소부터 차례로 꺼내려다 인덱스 오류가 발생하는 버그를 고쳐 A, B, C가 순서대로 출력되게 해보세요.",
       "prompt_en": "Fix the index argument bug when popping from the front so A, B, C print without an IndexError.",
-      "hint_ko": "요소가 1개 남았을 때는 1번 인덱스가 존재하지 않습니다. 맨 앞 요소를 가리키는 인덱스 번호로 수정하세요.",
-      "hint_en": "The front of a list is index 0, not index 1.",
+      "hint_ko": "리스트의 맨 앞 위치는 1번이 아닙니다. 두 번째 위치를 꺼내다 보면 요소가 하나 남았을 때 범위 오류가 나므로 첫 위치 번호로 고쳐보세요.",
+      "hint_en": "Index 1 targets the second slot and fails when only one item remains; change the argument to the 0-based front index.",
       "templateCode": "items = [\"A\", \"B\", \"C\"]\nwhile items:\n    print(items.pop(1))",
       "targetCode": "items = [\"A\", \"B\", \"C\"]\nwhile items:\n    print(items.pop(0))",
       "testCases": [
@@ -245,8 +245,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "주어진 코드 아래에 한 줄을 추가하여 마지막 요소를 꺼낸 값과 남은 리스트의 길이를 형식에 맞게 출력해보세요. (출력 예: Pop:30,Len:2)",
       "prompt_en": "Add one line below to pop the last item and print it with the remaining length (e.g., Pop:30,Len:2).",
-      "hint_ko": "셋째 줄에 print(f\"Pop:{stack.pop()},Len:{len(stack)}\")를 작성해보세요.",
-      "hint_en": "Write print(f\"Pop:{stack.pop()},Len:{len(stack)}\") on line 3.",
+      "hint_ko": "포맷 문자열 안에서 먼저 맨 끝 요소를 꺼내는 메서드 호출을 배치하고, 그 뒤 중괄호에서 남은 리스트의 길이를 구해 한 줄로 출력해보세요.",
+      "hint_en": "Format a single print line that extracts the last element in the first brace expression and checks the remaining length in the second.",
       "templateCode": "stack = [10, 20]\nstack.append(30)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "stack = [10, 20]\nstack.append(30)\nprint(f\"Pop:{stack.pop()},Len:{len(stack)}\")",
       "testCases": [
@@ -264,8 +264,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
       "prompt_en": "Select the exact output printed when the following Python code runs.",
-      "hint_ko": "맨 앞 1을 꺼내 10으로 만들어 뒤에 추가하면 [2, 3, 10]이 되고, 다시 맨 뒤 요소를 꺼내면 y는 10, q는 [2, 3]입니다.",
-      "hint_en": "pop(0) gets 1 leaving [2, 3]; append(10) makes [2, 3, 10]; pop() returns 10 leaving [2, 3].",
+      "hint_ko": "맨 앞에서 꺼낸 값이 10배가 되어 리스트 어느 쪽에 들어가는지 적고, 이어서 인자 없이 꺼낼 때 어느 위치 값이 빠져나오는지 추적해보세요.",
+      "hint_en": "Trace the list state step by step: removing from the front, attaching the multiplied number to the back, and then removing from the back.",
       "targetCode": "q = [1, 2, 3]\nx = q.pop(0)\nq.append(x * 10)\ny = q.pop()\nprint(f\"{y}:{q}\")",
       "choices": [
         "10:[2, 3]",

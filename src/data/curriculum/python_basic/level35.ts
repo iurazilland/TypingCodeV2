@@ -22,8 +22,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       type: 'block',
       prompt_ko: "text에 \"Python3\"을 저장하고 in 연산자로 \"Py\"가 포함되어 있는지 결과를 출력해보세요.",
       prompt_en: "Store \"Python3\" in text and print whether \"Py\" is contained in text using in.",
-      hint_ko: "print(\"Py\" in text)는 부분 문자열이 들어 있으면 True, 없으면 False를 출력합니다.",
-      hint_en: "Use print(\"Py\" in text) to output True.",
+      hint_ko: "'~ 안에'라는 뜻의 두 글자 포함 연산자 왼쪽에 찾을 부분 문자열을, 오른쪽에 전체 문자열 변수를 놓아 결과를 출력하세요.",
+      hint_en: "Place the target substring on the left and the text variable on the right of the membership operator meaning 'inside'.",
       targetCode: "text = \"Python3\"\nprint(\"Py\" in text)",
       testCases: [
         {
@@ -40,8 +40,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 email에 공백(\" \")이 들어 있지 않은지 확인해 True 또는 False를 출력해보세요. (예: a@b.com -> True)",
       prompt_en: "Check that a space (\" \") does not appear in email and print the boolean result.",
-      hint_ko: "특정 문자가 포함되어 있지 않을 때 참이 되는 연산자는 not in입니다.",
-      hint_en: "Fill in not and in to form the not in membership operator.",
+      hint_ko: "'아니다'를 뜻하는 부정어와 '~ 안에'를 뜻하는 포함 연산자를 나란히 적어 특정 문자가 없는지 확인해보세요.",
+      hint_en: "Combine the negation keyword and the membership keyword to check that a space does not appear inside the string.",
       templateCode: "email = input()\nprint(\" \" §§§ §§ email)",
       targetCode: "email = input()\nprint(\" \" not in email)",
       testCases: [
@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       type: 'block',
       prompt_ko: "word에 \"Code\"를 저장하고 for ch in word: 반복문으로 한 글자씩 출력해보세요.",
       prompt_en: "Store \"Code\" in word and print each character on its own line with for ch in word:.",
-      hint_ko: "문자열을 for 문에 넣으면 첫 글자부터 끝 글자까지 순서대로 변수 ch에 대입됩니다.",
-      hint_en: "Iterating with for ch in word: assigns each character to ch in sequence.",
+      hint_ko: "문자열 자체를 순회 대상 자리에 두면 첫 글자부터 마지막 글자까지 한 글자씩 차례대로 반복 변수에 담깁니다.",
+      hint_en: "Looping directly over a string assigns one character at a time from start to finish to the loop variable.",
       targetCode: "word = \"Code\"\nfor ch in word:\n    print(ch)",
       testCases: [
         {
@@ -81,8 +81,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 s의 각 글자를 순서대로 순회하며 대괄호로 감싸 한 줄씩 출력해보세요. (출력 예: [A])",
       prompt_en: "Iterate through every character ch of s and print each wrapped in brackets (e.g., [A]).",
-      hint_ko: "for 변수 in 문자열: 구조로 순회 키워드를 채우고 중괄호로 {ch}를 출력합니다.",
-      hint_en: "Use in in the for header and {ch} inside the f-string.",
+      hint_ko: "반복문 머리부에는 '~ 안에 있는 요소를 꺼낸다'는 뜻의 두 글자 키워드를 적고, 대괄호 안쪽에는 현재 글자 변수를 중괄호로 감싸 넣으세요.",
+      hint_en: "Fill in the two-letter iteration keyword in the loop header, and wrap the character variable in curly braces inside the brackets.",
       templateCode: "s = input()\nfor ch §§ s:\n    print(f\"[§§§§]\")",
       targetCode: "s = input()\nfor ch in s:\n    print(f\"[{ch}]\")",
       testCases: [
@@ -104,8 +104,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       type: 'block',
       prompt_ko: "문자열 mail에 \"@\"와 \".\"이 모두 포함되어 있으면 \"Valid\", 아니면 \"Invalid\"를 출력해보세요.",
       prompt_en: "Print \"Valid\" if both \"@\" and \".\" appear in mail, otherwise print \"Invalid\".",
-      hint_ko: "if \"@\" in mail and \".\" in mail: 조건식으로 두 기호의 포함 여부를 동시에 확인하세요.",
-      hint_en: "Combine \"@\" in mail and \".\" in mail in the if condition.",
+      hint_ko: "두 기호가 각각 문자열에 포함되어 있는지 확인하는 두 조건식을 '그리고'를 뜻하는 논리 연산자로 묶어 검사하세요.",
+      hint_en: "Check membership of each required symbol separately and join both checks with the logical conjunction operator.",
       targetCode: "mail = input()\nif \"@\" in mail and \".\" in mail:\n    print(\"Valid\")\nelse:\n    print(\"Invalid\")",
       testCases: [
         {
@@ -132,8 +132,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "소문자 단어 s를 순회하며 모음(\"aeiou\")의 개수를 세어 출력하도록 빈칸을 채워보세요. (예: apple -> Vowels: 2)",
       prompt_en: "Count how many characters in lowercase word s are vowels (\"aeiou\") and print the result.",
-      hint_ko: "글자 ch가 \"aeiou\" 안에 포함되는지 확인하고 맞으면 cnt를 1씩 누적 증가시킵니다.",
-      hint_en: "Check if ch in \"aeiou\": and increment cnt += 1.",
+      hint_ko: "현재 글자가 모음 모음집 문자열 안에 들어 있는지 포함 연산자로 검사하고, 참일 때 개수 변수에 1을 누적해 더하세요.",
+      hint_en: "Test whether the current character belongs to the vowel string, and use the compound addition operator to add 1 to the count.",
       templateCode: "s = input()\ncnt = 0\nfor ch in s:\n    if ch §§ \"aeiou\":\n        cnt §§ 1\nprint(f\"Vowels: {cnt}\")",
       targetCode: "s = input()\ncnt = 0\nfor ch in s:\n    if ch in \"aeiou\":\n        cnt += 1\nprint(f\"Vowels: {cnt}\")",
       testCases: [
@@ -155,8 +155,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       type: 'block',
       prompt_ko: "문자열 raw를 순회하며 \"-/\"에 속하지 않는 글자만 clean에 이어 붙여 출력해보세요. (예: 010-12/34 -> 0101234)",
       prompt_en: "Build clean by appending characters of raw that are not in \"-/\", then print clean.",
-      hint_ko: "if ch not in \"-/\": 조건이 참일 때 clean += ch로 하이픈과 슬래시를 제외한 글자만 모읍니다.",
-      hint_en: "Check if ch not in \"-/\": and append clean += ch.",
+      hint_ko: "순회 중인 글자가 제거할 기호 묶음에 속하지 않을 때만 결과 문자열 뒤에 한 글자씩 이어 붙이세요.",
+      hint_en: "Append each character onto the result string only when it is absent from the unwanted symbol string.",
       targetCode: "raw = input()\nclean = \"\"\nfor ch in raw:\n    if ch not in \"-/\":\n        clean += ch\nprint(clean)",
       testCases: [
         {
@@ -178,8 +178,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 s에서 숫자 글자(\"0123456789\")만 골라 정수로 바꿔 합산한 total을 출력해보세요. (예: a2b5c3 -> 10)",
       prompt_en: "Sum the integer values of all digit characters (\"0123456789\") found in s and print total.",
-      hint_ko: "현재 글자 ch가 숫자 문자열 안에 있는지 검사하고, 정수 변환 함수로 바꿔 total에 더합니다.",
-      hint_en: "Test ch in \"0123456789\" and add int(ch) to total.",
+      hint_ko: "반복 중인 글자 변수가 숫자 문자열 안에 포함되는지 확인한 뒤, '정수(integer)'의 앞 세 글자를 딴 변환 함수로 숫자로 바꿔 누적하세요.",
+      hint_en: "Check if the loop character is inside the digit string, then convert it using the first three letters of 'integer' before adding.",
       templateCode: "s = input()\ntotal = 0\nfor ch in s:\n    if §§ §§ \"0123456789\":\n        total += §§§(ch)\nprint(total)",
       targetCode: "s = input()\ntotal = 0\nfor ch in s:\n    if ch in \"0123456789\":\n        total += int(ch)\nprint(total)",
       testCases: [
@@ -201,8 +201,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       type: 'block',
       prompt_ko: "문자열 s를 순회하다 \"_\"를 만나면 continue로 건너뛰고 나머지 글자만 out에 모아 출력해보세요. (예: a_b_c -> abc)",
       prompt_en: "Skip \"_\" characters using continue while iterating s, appending all other chars to out.",
-      hint_ko: "if ch == \"_\":일 때 continue를 실행하면 아래 out += ch를 건너뛰고 다음 글자로 넘어갑니다.",
-      hint_en: "Inside for ch in s:, if ch == \"_\": continue, then out += ch.",
+      hint_ko: "특정 기호를 만났을 때 아래 줄을 실행하지 않고 즉시 다음 글자 차례로 '계속 진행'하게 하는 제어문을 활용하세요.",
+      hint_en: "When the underscore appears, use the loop control statement meaning 'keep going to the next turn' to skip appending it.",
       targetCode: "s = input()\nout = \"\"\nfor ch in s:\n    if ch == \"_\":\n        continue\n    out += ch\nprint(out)",
       testCases: [
         {
@@ -224,8 +224,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 s를 순회하다 \"#\"이 나오면 즉시 반복을 멈추고, 앞부분 문자열과 그 길이를 출력해보세요. (예: run#1 -> run(3))",
       prompt_en: "Stop iterating s when \"#\" is encountered, then print the collected prefix cmd and its length.",
-      hint_ko: "반복을 즉시 종료하는 키워드와 문자열 cmd의 길이를 구하는 표현식을 빈칸에 채워보세요.",
-      hint_en: "Use break to exit the loop early and {len(cmd)} inside the f-string.",
+      hint_ko: "반복 흐름을 그 자리에서 '깨고 탈출하다'라는 뜻의 다섯 글자 키워드와, 모인 문자열의 '길이(length)'를 구하는 중괄호 표현식을 채우세요.",
+      hint_en: "Use the 5-letter keyword meaning to shatter/exit the loop immediately, and place the string's length expression inside curly braces.",
       templateCode: "s = input()\ncmd = \"\"\nfor ch in s:\n    if ch == \"#\":\n        §§§§§\n    cmd += ch\nprint(f\"{cmd}(§§§§§§§§§§)\")",
       targetCode: "s = input()\ncmd = \"\"\nfor ch in s:\n    if ch == \"#\":\n        break\n    cmd += ch\nprint(f\"{cmd}({len(cmd)})\")",
       testCases: [
@@ -248,8 +248,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: "금지 문자 \"X\"가 없을 때 \"Pass\", 포함되어 있을 때 \"Blocked\"가 출력되어야 하지만 반대로 동작합니다. 조건식을 수정해보세요.",
       prompt_en: "Fix the condition so \"Pass\" prints when \"X\" is absent from code and \"Blocked\" when present.",
-      hint_ko: "\"X\"가 포함되어 있지 않을 때 참이 되도록 포함 연산자를 부정 형태로 고쳐보세요.",
-      hint_en: "Change in to not in so the if branch runs when \"X\" is absent.",
+      hint_ko: "현재 조건식은 금지 문자가 들어 있을 때 통과시키고 있습니다. 금지 문자가 '포함되어 있지 않을 때' 참이 되도록 조건 연산자를 수정하세요.",
+      hint_en: "The current condition passes when the forbidden letter is present; negate the membership operator so it passes only when absent.",
       templateCode: "code = input()\nif \"X\" in code:\n    print(\"Pass\")\nelse:\n    print(\"Blocked\")",
       targetCode: "code = input()\nif \"X\" not in code:\n    print(\"Pass\")\nelse:\n    print(\"Blocked\")",
       testCases: [
@@ -272,8 +272,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'one_line',
       prompt_ko: "\"ABC\"에 속하는 글자 수를 cnt에 세는 코드 아래에 한 줄을 추가하여 결과를 포맷팅해 출력해보세요. (출력 예: Count=2)",
       prompt_en: "Add one line after the counting loop to print the formatted count (e.g., Count=2).",
-      hint_ko: "반복문 바깥 마지막 줄에 print(f\"Count={cnt}\")를 작성하세요.",
-      hint_en: "Write print(f\"Count={cnt}\") unindented on the last line.",
+      hint_ko: "반복문이 모두 끝난 뒤 들여쓰기 없는 맨 왼쪽 줄에서, 예시 형식에 맞춰 누적된 개수 변수를 포맷 문자열로 출력하세요.",
+      hint_en: "Outside the loop with no indentation, print a formatted string matching the example label and the accumulated counter variable.",
       templateCode: "s = input()\ncnt = 0\nfor ch in s:\n    if ch in \"ABC\":\n        cnt += 1\n§§§§§§§§§§§§§§§§§§§§§",
       targetCode: "s = input()\ncnt = 0\nfor ch in s:\n    if ch in \"ABC\":\n        cnt += 1\nprint(f\"Count={cnt}\")",
       testCases: [
@@ -296,8 +296,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: "다음 슬라이싱과 문자열 for 순회(continue, break) 코드의 실행 결과를 예측해보세요.",
       prompt_en: "Predict the output of the following string slicing and for-loop iteration code.",
-      hint_ko: "s[2:]인 \"a1b2#c3\"에서 숫자는 건너뛰고 \"#\"에서 멈추므로 res에는 \"ab\"만 모입니다.",
-      hint_en: "Iterating s[2:] (\"a1b2#c3\") skips digits \"1\", \"2\" and breaks at \"#\", leaving \"ab\" of length 2.",
+      hint_ko: "슬라이싱으로 어디부터 순회가 시작되는지 먼저 확인한 뒤, 건너뛰는 글자와 반복이 즉시 멈추는 지점을 차례로 따라가 보세요.",
+      hint_en: "First check where the slice starts, then trace which characters are skipped and at which symbol the loop stops early.",
       targetCode: "s = \"P-a1b2#c3\"\nres = \"\"\nfor ch in s[2:]:\n    if ch in \"123\":\n        continue\n    if ch == \"#\":\n        break\n    res += ch\nprint(f\"{res}:{len(res)}\")",
       choices: ["P-ab:4", "ab:2", "abc:3", "a1b2:4"],
       correctChoiceIndex: 1,

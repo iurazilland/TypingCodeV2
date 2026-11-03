@@ -28,8 +28,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "type": "block",
       "prompt_ko": "i = 1부터 while i <= 4인 동안 i를 출력하고 1씩 증가시켜 1부터 4까지 출력해보세요.",
       "prompt_en": "Starting from i = 1, print i and increment i by 1 while i <= 4.",
-      "hint_ko": "while i <= 4: 안에서 print(i) 다음에 i += 1을 꼭 실행해야 무한 반복을 피할 수 있습니다.",
-      "hint_en": "Inside while i <= 4:, run print(i) followed by i += 1.",
+      "hint_ko": "조건 반복문 안에서 현재 값을 먼저 출력한 뒤 변수를 1씩 증가시켜야 언젠가 조건이 거짓이 되어 멈춥니다.",
+      "hint_en": "Output the current value inside the loop body, then increment the variable by 1 so the loop eventually stops.",
       "targetCode": "i = 1\nwhile i <= 4:\n    print(i)\n    i += 1",
       "testCases": [
         {
@@ -46,8 +46,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "조건 반복 키워드와 감소 연산자를 채워 입력받은 n부터 1까지 카운트다운한 뒤 \"Go!\"를 출력해보세요.",
       "prompt_en": "Fill in the conditional loop keyword and decrement operator to count down from n to 1, then print \"Go!\".",
-      "hint_ko": "조건이 참인 동안 반복하는 while과 값을 1씩 줄이는 -= 연산자를 입력하세요.",
-      "hint_en": "Use while for the loop header and -= to decrease n by 1.",
+      "hint_ko": "영어로 '~하는 동안'을 뜻하는 다섯 글자 반복 키워드와, 뺄셈 기호에 등호를 붙인 감소 연산자를 채워보세요.",
+      "hint_en": "Start with the 5-letter loop keyword meaning \"during the time that\", and use the minus-equals operator to count down.",
       "templateCode": "n = int(input())\n§§§§§ n > 0:\n    print(n)\n    n §§ 1\nprint(\"Go!\")",
       "targetCode": "n = int(input())\nwhile n > 0:\n    print(n)\n    n -= 1\nprint(\"Go!\")",
       "testCases": [
@@ -74,8 +74,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "type": "block",
       "prompt_ko": "1부터 차례로 자연수를 더하다가 누적합 total이 입력값 limit 이상이 되면 멈추고 total을 출력해보세요.",
       "prompt_en": "Add 1, 2, 3... while total < limit, then print the resulting total.",
-      "hint_ko": "total = 0, i = 1로 두고 while total < limit: 동안 total += i와 i += 1을 실행하세요.",
-      "hint_en": "Start total = 0 and i = 1; while total < limit, execute total += i and i += 1.",
+      "hint_ko": "누적합이 기준값보다 작은 동안 자연수를 더하고 번호를 1씩 키운 뒤, 반복이 끝나면 바깥에서 합계를 출력하세요.",
+      "hint_en": "Keep adding the counter and incrementing it as long as the sum stays below limit, then print the sum outside.",
       "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile total < limit:\n    total += i\n    i += 1\nprint(total)",
       "testCases": [
         {
@@ -102,8 +102,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "비교 연산자와 곱셈 복합 대입 연산자를 채워 1에서 2씩 곱해 target 이상이 되는 첫 값을 출력해보세요.",
       "prompt_en": "Fill in the comparison and multiplication-assignment operators to double val until it reaches target.",
-      "hint_ko": "val이 아직 target보다 작을 동안(<) 반복하며 *= 연산자로 2를 곱합니다.",
-      "hint_en": "Keep doubling with *= while val is strictly less than (<) target.",
+      "hint_ko": "값이 목표치보다 작음을 뜻하는 왼쪽 꺾쇠 비교 기호와, 별표에 등호를 붙인 곱셈 대입 연산자를 채워보세요.",
+      "hint_en": "Use the left-pointing less-than symbol for the loop condition and the asterisk-equals operator to double val.",
       "templateCode": "target = int(input())\nval = 1\nwhile val § target:\n    val §§ 2\nprint(val)",
       "targetCode": "target = int(input())\nval = 1\nwhile val < target:\n    val *= 2\nprint(val)",
       "testCases": [
@@ -130,8 +130,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "type": "block",
       "prompt_ko": "양의 정수 n을 입력받아 while n > 0 동안 일의 자리(n % 10)를 s에 더하고 n //= 10으로 줄여 자릿수 합을 출력해보세요.",
       "prompt_en": "Read positive integer n and sum all its digits using n % 10 and n //= 10 while n > 0.",
-      "hint_ko": "n % 10은 마지막 자릿수를 꺼내고, n //= 10은 마지막 자릿수를 잘라냅니다.",
-      "hint_en": "n % 10 extracts the ones digit and n //= 10 removes it via floor division.",
+      "hint_ko": "10으로 나눈 나머지로 가장 오른쪽 일의 자리를 떼어 더하고, 10으로 나눈 정수 몫으로 끝자리를 잘라내며 반복하세요.",
+      "hint_en": "Extract the ones digit via remainder by 10 to add to the sum, then drop that digit using floor division by 10.",
       "targetCode": "n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s)",
       "testCases": [
         {
@@ -158,8 +158,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "Truthy 조건 while n을 완성하고 몫 복합 대입 연산자를 채워 양의 정수 n의 자릿수 개수를 출력해보세요.",
       "prompt_en": "Fill in the while keyword and floor-division assignment operator to count the digits of n.",
-      "hint_ko": "양의 정수 n은 0이 되기 전까지 참(Truthy)이므로 while n:으로 반복하고 //=로 10씩 나눕니다.",
-      "hint_en": "Non-zero n is Truthy in while n:, and n //= 10 drops one digit per step.",
+      "hint_ko": "'~하는 동안'을 뜻하는 다섯 글자 키워드로 n이 0이 될 때까지 돌리고, 슬래시 두 개와 등호를 붙인 연산자로 자릿수를 줄이세요.",
+      "hint_en": "Use the 5-letter conditional loop keyword until n reaches zero, and the double-slash-equals operator to strip each digit.",
       "templateCode": "n = int(input())\ncnt = 0\n§§§§§ n:\n    cnt += 1\n    n §§§ 10\nprint(cnt)",
       "targetCode": "n = int(input())\ncnt = 0\nwhile n:\n    cnt += 1\n    n //= 10\nprint(cnt)",
       "testCases": [
@@ -186,8 +186,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "type": "block",
       "prompt_ko": "양의 정수 n을 입력받아 while n 동안 각 자릿수 d = n % 10 중 짝수 자릿수만 더한 합을 출력해보세요.",
       "prompt_en": "Read positive integer n and use while n to sum only the even digits of n.",
-      "hint_ko": "while n: 안에서 d = n % 10을 구해 if d % 2 == 0:일 때만 even_s += d를 실행하고 n //= 10으로 줄이세요.",
-      "hint_en": "Inside while n:, extract d = n % 10, add to even_s if d % 2 == 0, then run n //= 10.",
+      "hint_ko": "매 반복마다 일의 자리를 구해 짝수일 때만 합산하고, 자릿수 줄이기는 조건문 바깥(반복문 안)에서 매번 실행하세요.",
+      "hint_en": "Extract the ones digit each turn, add it only inside the even check, and divide n down by 10 on every turn.",
       "targetCode": "n = int(input())\neven_s = 0\nwhile n:\n    d = n % 10\n    if d % 2 == 0:\n        even_s += d\n    n //= 10\nprint(even_s)",
       "testCases": [
         {
@@ -214,8 +214,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 나머지 연산자를 채워 양의 정수 n의 자릿수를 거꾸로 뒤집은 정수를 출력해보세요. (예: 123 -> 321)",
       "prompt_en": "Fill in the modulo operator to reverse the digits of positive integer n.",
-      "hint_ko": "기존 rev에 10을 곱해 자릿수를 밀고 n을 10으로 나눈 나머지(일의 자리)를 더합니다.",
-      "hint_en": "Use % to extract the last digit n % 10 and append it onto rev * 10.",
+      "hint_ko": "뒤집힌 수에 10을 곱해 자릿수를 밀어 올린 뒤, 10으로 나눈 나머지를 구하는 퍼센트 기호로 끝자리를 떼어 더해보세요.",
+      "hint_en": "Shift rev left by multiplying by 10, then use the percent remainder symbol to extract and add the ones digit.",
       "templateCode": "n = int(input())\nrev = 0\nwhile n:\n    rev = rev * 10 + n § 10\n    n //= 10\nprint(rev)",
       "targetCode": "n = int(input())\nrev = 0\nwhile n:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(rev)",
       "testCases": [
@@ -242,8 +242,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "type": "block",
       "prompt_ko": "실수 무게 w를 입력받아 w >= 1.0인 동안 절반(w = w / 2)으로 줄이며 몇 번 나누었는지 cnt를 출력해보세요.",
       "prompt_en": "Read float w, halve it (w = w / 2) while w >= 1.0, and print the step count cnt.",
-      "hint_ko": "w = float(input())과 cnt = 0을 만든 뒤 while w >= 1.0: 안에서 w = w / 2와 cnt += 1을 실행하세요.",
-      "hint_en": "Read w = float(input()), loop while w >= 1.0 running w = w / 2 and cnt += 1, then print cnt.",
+      "hint_ko": "실수로 입력받은 무게가 1.0 이상인 동안 절반으로 나누고 횟수를 1씩 늘린 뒤, 반복문 밖에서 횟수를 출력하세요.",
+      "hint_en": "Halve the float weight and increment the counter as long as weight stays at least 1.0, then print the count outside.",
       "targetCode": "w = float(input())\ncnt = 0\nwhile w >= 1.0:\n    w = w / 2\n    cnt += 1\nprint(cnt)",
       "testCases": [
         {
@@ -270,8 +270,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 문자열 변환 함수를 채워 양의 정수 n을 2로 나눈 나머지를 앞에 이어 붙인 이진수 문자열을 출력해보세요. (예: 5 -> Bin:101)",
       "prompt_en": "Fill in the string conversion function to build and print the binary representation of positive integer n.",
-      "hint_ko": "정수 나머지 n % 2를 문자열 res 앞에 결합하려면 str() 함수로 감싸야 합니다.",
-      "hint_en": "Wrap n % 2 with str() to prepend each binary digit to res.",
+      "hint_ko": "2로 나눈 정수 나머지를 기존 문자열의 앞쪽에 이어 붙일 수 있도록 문자열(string)의 앞 세 글자를 딴 함수로 감싸세요.",
+      "hint_en": "Wrap the remainder in the conversion function named from the first 3 letters of \"string\" before prepending it.",
       "templateCode": "n = int(input())\nres = \"\"\nwhile n > 0:\n    res = §§§(n % 2) + res\n    n //= 2\nprint(\"Bin:\" + res)",
       "targetCode": "n = int(input())\nres = \"\"\nwhile n > 0:\n    res = str(n % 2) + res\n    n //= 2\nprint(\"Bin:\" + res)",
       "testCases": [
@@ -299,8 +299,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "while 조건식의 비교 연산자 버그를 고쳐 양의 정수 n의 모든 자릿수 합이 출력되게 해보세요.",
       "prompt_en": "Fix the comparison operator bug in the while condition so the digits of positive integer n are summed.",
-      "hint_ko": "양의 정수 n은 0보다 큰 상태에서 시작하므로 n이 양수일 동안 반복되어야 합니다.",
-      "hint_en": "Since n starts positive, loop while n is greater than 0 rather than less than 0.",
+      "hint_ko": "양의 정수는 0보다 큰 상태에서 출발하는데, 현재 조건식은 0보다 작을 때만 돌도록 부등호 방향이 반대로 되어 있습니다.",
+      "hint_en": "Because a positive integer starts above zero, the reversed inequality sign prevents the loop from ever running.",
       "templateCode": "n = int(input())\ns = 0\nwhile n < 0:\n    s += n % 10\n    n //= 10\nprint(s)",
       "targetCode": "n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s)",
       "testCases": [
@@ -328,8 +328,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "while 반복문 아래에 한 줄을 추가하여 모든 자릿수를 곱한 최종 결과 prod를 출력해보세요.",
       "prompt_en": "Add one line after the while loop to print the final product of digits prod.",
-      "hint_ko": "반복문이 끝난 뒤 들여쓰기 없이 print(prod)를 작성하세요.",
-      "hint_en": "Without indentation after the while loop, write print(prod).",
+      "hint_ko": "모든 자릿수 곱셈이 완료된 뒤 한 번만 실행되도록 들여쓰기 없이 누적된 곱 변수를 출력해보세요.",
+      "hint_en": "Add an unindented output line after the loop finishes to display the accumulated digit product.",
       "templateCode": "n = int(input())\nprod = 1\nwhile n:\n    prod *= n % 10\n    n //= 10\n§§§§§§§§§§§",
       "targetCode": "n = int(input())\nprod = 1\nwhile n:\n    prod *= n % 10\n    n //= 10\nprint(prod)",
       "testCases": [
@@ -357,8 +357,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
       "prompt_en": "Select the exact output produced when the following Python code runs.",
-      "hint_ko": "305의 자릿수 5, 0, 3이 더해져 s=8, 3번 반복해 cnt=3이 되고 반복 종료 시 n은 0이므로 bool(n)은 False입니다.",
-      "hint_en": "Digits 5, 0, 3 sum to s=8 over cnt=3 steps; n ends at 0 so bool(n) is False.",
+      "hint_ko": "일의 자리부터 차례로 떼어 더해지는 합계와 자릿수만큼 늘어나는 반복 횟수, 그리고 반복 직후 n의 불리언 판정을 추적해보세요.",
+      "hint_en": "Trace each digit stripped from 305 to find the sum and step count, then check the truthiness of n once the loop ends.",
       "targetCode": "n = 305\ns = 0\ncnt = 0\nwhile n:\n    s += n % 10\n    n //= 10\n    cnt += 1\nprint(s, cnt, bool(n))",
       "choices": [
         "8 3 False",

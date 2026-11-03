@@ -22,8 +22,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       type: 'block',
       prompt_ko: "raw에 \"  Python  \"을 저장하고 .strip()으로 양끝 공백을 제거한 clean을 대괄호 안에 출력해보세요. (출력 예: [Python])",
       prompt_en: "Store \"  Python  \" in raw, trim outer spaces with .strip() into clean, and print f\"[{clean}]\".",
-      hint_ko: "raw.strip()은 문자열 앞뒤의 공백을 깔끔하게 제거한 새 문자열을 반환합니다.",
-      hint_en: "Assign clean = raw.strip() and call print(f\"[{clean}]\").",
+      hint_ko: "양끝에 붙은 불필요한 공백 껍질을 '벗겨내다'라는 뜻의 메서드로 다듬은 새 문자열을 변수에 담아 대괄호 포맷으로 출력하세요.",
+      hint_en: "Trim outer whitespace from both ends into the variable, then print it wrapped in square brackets using a formatted string.",
       targetCode: "raw = \"  Python  \"\nclean = raw.strip()\nprint(f\"[{clean}]\")",
       testCases: [
         {
@@ -40,8 +40,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "입력값의 앞뒤 공백을 제거해 name에 저장하고 이름과 글자 수를 출력해보세요. (예: \"  Kim  \" -> Kim:3)",
       prompt_en: "Trim outer whitespace from input() into name and print \"<name>:<length>\".",
-      hint_ko: "문자열 양끝의 공백과 줄바꿈을 제거하는 메서드는 .strip()입니다.",
-      hint_en: "Chain .strip() onto input().",
+      hint_ko: "문자열 앞뒤에 붙은 불필요한 공백이나 줄바꿈 껍질을 '벗겨내다'라는 뜻의 다섯 글자 영단어 메서드 이름을 적어보세요.",
+      hint_en: "Fill in the 5-letter string method meaning to peel off or remove whitespace from both ends.",
       templateCode: "name = input().§§§§§()\nprint(f\"{name}:{len(name)}\")",
       targetCode: "name = input().strip()\nprint(f\"{name}:{len(name)}\")",
       testCases: [
@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       type: 'block',
       prompt_ko: "date에 \"2026-11-01\"을 저장하고 .replace()로 모든 \"-\"를 \"/\"로 바꾼 결과를 출력해보세요.",
       prompt_en: "Store \"2026-11-01\" in date and replace every \"-\" with \"/\" using .replace().",
-      hint_ko: "date.replace(\"-\", \"/\")를 print() 안에 넣으면 하이픈이 슬래시로 치환되어 출력됩니다.",
-      hint_en: "Call print(date.replace(\"-\", \"/\")).",
+      hint_ko: "'대체하다·바꿔 끼우다'라는 뜻의 메서드 괄호 안에 (찾을 옛 글자, 바꿀 새 글자) 순서로 인자를 넣어 출력하세요.",
+      hint_en: "Pass the old character first and the new replacement character second to the string substitution method.",
       targetCode: "date = \"2026-11-01\"\nprint(date.replace(\"-\", \"/\"))",
       testCases: [
         {
@@ -81,8 +81,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 code 안의 모든 공백(\" \")을 빈 문자열(\"\")로 치환해 제거한 res를 출력해보세요. (예: A B C -> ABC)",
       prompt_en: "Remove all spaces in code by replacing \" \" with \"\" and print res.",
-      hint_ko: "부분 문자열을 다른 문자열로 바꾸는 메서드 이름은 replace입니다.",
-      hint_en: "Use the replace method: code.replace(\" \", \"\").",
+      hint_ko: "기존 부분 문자열을 다른 문자열로 '교체하다·대체하다'라는 뜻의 일곱 글자 영단어 메서드 이름을 빈칸에 채우세요.",
+      hint_en: "Fill in the 7-letter string method meaning to substitute all occurrences of one substring with another.",
       templateCode: "code = input()\nres = code.§§§§§§§(\" \", \"\")\nprint(res)",
       targetCode: "code = input()\nres = code.replace(\" \", \"\")\nprint(res)",
       testCases: [
@@ -104,8 +104,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       type: 'block',
       prompt_ko: "입력값 raw의 양끝 공백을 지우고 쉼표(\",\")를 제거한 clean을 정수로 바꿔 100을 더해 출력해보세요. (예: \" 1,900 \" -> 2000)",
       prompt_en: "Trim raw, remove commas with .replace(\",\", \"\"), convert clean to int, and print int(clean) + 100.",
-      hint_ko: "raw.strip().replace(\",\", \"\")처럼 메서드를 연속으로 연결해 공백과 쉼표를 차례로 제거할 수 있습니다.",
-      hint_en: "Chain clean = raw.strip().replace(\",\", \"\") before int(clean) + 100.",
+      hint_ko: "문자열 메서드는 점으로 연달아 이어 붙일 수 있습니다. 양끝 공백 제거와 쉼표 빈 문자열 치환을 차례로 거친 뒤 정수로 변환해 더하세요.",
+      hint_en: "Chain trimming and comma removal back-to-back with dots, then convert the cleaned digits to an integer before adding 100.",
       targetCode: "raw = input()\nclean = raw.strip().replace(\",\", \"\")\nprint(int(clean) + 100)",
       testCases: [
         {
@@ -127,8 +127,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "한 줄 입력의 양끝 공백을 다듬고 쉼표(\",\") 기준으로 item과 price에 분리해 출력해보세요. (예: \"Sword,300\" -> Sword=300G)",
       prompt_en: "Trim line and split it on \",\" into item and price, then print f\"{item}={price}G\".",
-      hint_ko: "앞뒤 공백 제거 메서드와 구분자 기준 분리 메서드를 순서대로 연결해 두 변수에 다중 할당합니다.",
-      hint_en: "Chain .strip() and .split(\",\") to unpack item and price.",
+      hint_ko: "먼저 양끝 공백을 '벗겨내는' 다섯 글자 메서드를 부르고, 이어서 쉼표 기준으로 문자열을 '쪼개는' 다섯 글자 메서드를 연결해보세요.",
+      hint_en: "First call the 5-letter method that removes outer spaces, then chain the 5-letter method that divides text by a separator.",
       templateCode: "line = input()\nitem, price = line.§§§§§().§§§§§(\",\")\nprint(f\"{item}={price}G\")",
       targetCode: "line = input()\nitem, price = line.strip().split(\",\")\nprint(f\"{item}={price}G\")",
       testCases: [
@@ -150,8 +150,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       type: 'block',
       prompt_ko: "\"시:분:초\" 문자열 t를 \":\" 기준으로 h, m, s에 분리하고 총 초(sec)를 계산해 출력해보세요. (예: 01:02:05 -> 3725s)",
       prompt_en: "Split \"HH:MM:SS\" string t on \":\" into h, m, s and print total seconds as f\"{sec}s\".",
-      hint_ko: "h, m, s = t.split(\":\")으로 나눈 뒤 int(h) * 3600 + int(m) * 60 + int(s)로 총 초를 구합니다.",
-      hint_en: "Unpack h, m, s = t.split(\":\") and compute int(h) * 3600 + int(m) * 60 + int(s).",
+      hint_ko: "콜론 기호를 기준으로 시·분·초 세 문자열 변수에 나누어 담은 뒤, 각각 정수로 변환해 1시간(3600초)과 1분(60초) 단위를 곱해 합산하세요.",
+      hint_en: "Unpack the colon-separated string into three variables, convert each to an integer, and sum hours*3600, minutes*60, and seconds.",
       targetCode: "t = input().strip()\nh, m, s = t.split(\":\")\nsec = int(h) * 3600 + int(m) * 60 + int(s)\nprint(f\"{sec}s\")",
       testCases: [
         {
@@ -173,8 +173,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "\"키=실수값\" 입력을 \"=\" 기준으로 k와 v에 분리한 뒤, 실수 val이 1.0 이상이면 OK, 아니면 LOW를 출력해보세요.",
       prompt_en: "Split \"key=value\" on \"=\" into k and v, convert v to float val, and print \"<k>:OK\" or \"<k>:LOW\".",
-      hint_ko: "문자열 분리 메서드와 실수형 변환 함수를 각각 빈칸에 채워보세요.",
-      hint_en: "Use split to separate on \"=\" and float to convert v.",
+      hint_ko: "등호 기호를 기준으로 문자열을 '쪼개는' 메서드와, 소수점을 다루는 '부동소수점(floating-point)' 앞 다섯 글자를 딴 실수 변환 함수를 채우세요.",
+      hint_en: "Use the 5-letter method that divides a string at =, and convert the value using the first five letters of 'floating-point'.",
       templateCode: "line = input()\nk, v = line.strip().§§§§§(\"=\")\nval = §§§§§(v)\nif val >= 1.0:\n    print(f\"{k}:OK\")\nelse:\n    print(f\"{k}:LOW\")",
       targetCode: "line = input()\nk, v = line.strip().split(\"=\")\nval = float(v)\nif val >= 1.0:\n    print(f\"{k}:OK\")\nelse:\n    print(f\"{k}:LOW\")",
       testCases: [
@@ -196,8 +196,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       type: 'block',
       prompt_ko: "while True: 안에서 양끝 공백을 제거한 cmd가 \"quit\"이면 종료하고, 이전까지의 입력 횟수를 출력해보세요. (출력 예: Done:2)",
       prompt_en: "Read trimmed lines in while True:, break on \"quit\", and print the count of prior commands as f\"Done:{cnt}\".",
-      hint_ko: "cmd = input().strip()으로 공백을 다듬은 뒤 if cmd == \"quit\": break로 탈출하면 공백이 섞여도 정확히 종료됩니다.",
-      hint_en: "Use cmd = input().strip() inside while True: so \" quit \" cleanly matches \"quit\".",
+      hint_ko: "매 줄 입력을 받을 때마다 양끝 공백부터 제거해 저장하면, 앞뒤에 공백이 섞인 종료 명령어도 정확히 비교해 탈출할 수 있습니다.",
+      hint_en: "Trim outer whitespace as you read each line so padded exit commands match cleanly before incrementing the counter.",
       targetCode: "cnt = 0\nwhile True:\n    cmd = input().strip()\n    if cmd == \"quit\":\n        break\n    cnt += 1\nprint(f\"Done:{cnt}\")",
       testCases: [
         {
@@ -219,8 +219,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "\"END\"가 입력될 때까지 \"이름 점수\" 줄을 공백 기준으로 분리해 누적 점수(total)를 출력해보세요. (출력 예: Kim:10)",
       prompt_en: "Until \"END\" is read, split each line into name and pt, add int(pt) to total, and print f\"{name}:{total}\".",
-      hint_ko: "종료 조건에서는 반복 탈출 키워드를, 아래에서는 공백 기준 분리 메서드를 입력하세요.",
-      hint_en: "Use break when row == \"END\" and split on row to unpack name, pt.",
+      hint_ko: "종료 문자열을 만나면 반복문을 즉시 '깨고 탈출하는' 키워드를 실행하고, 그 외에는 공백 기준으로 문자열을 '쪼개는' 메서드로 두 변수에 나누세요.",
+      hint_en: "Exit the loop immediately with the 5-letter loop-stopping keyword on the sentinel word, and divide other lines by whitespace into two variables.",
       templateCode: "total = 0\nwhile True:\n    row = input().strip()\n    if row == \"END\":\n        §§§§§\n    name, pt = row.§§§§§()\n    total += int(pt)\n    print(f\"{name}:{total}\")",
       targetCode: "total = 0\nwhile True:\n    row = input().strip()\n    if row == \"END\":\n        break\n    name, pt = row.split()\n    total += int(pt)\n    print(f\"{name}:{total}\")",
       testCases: [
@@ -243,8 +243,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: "하이픈(\"-\")을 모두 제거한 문자열을 출력하려 했지만 원본 그대로 출력됩니다. 치환 결과가 반영되도록 수정해보세요.",
       prompt_en: "Fix the bug where hyphens remain in s because the replaced string is discarded.",
-      hint_ko: "파이썬 문자열은 원본이 직접 바뀌지 않으므로 메서드가 반환한 새 문자열을 다시 변수 s에 대입해야 합니다.",
-      hint_en: "Strings are immutable in Python; assign s = s.replace(\"-\", \"\").",
+      hint_ko: "파이썬 문자열은 한 번 만들어지면 원본 자체가 바뀌지 않는 불변 자료형입니다. 치환 메서드가 돌려준 새 문자열을 변수에 다시 대입해야 반영됩니다.",
+      hint_en: "Python strings are immutable, so calling a replacement method alone discards the new string unless you reassign its return value to the variable.",
       templateCode: "s = input().strip()\ns.replace(\"-\", \"\")\nprint(s)",
       targetCode: "s = input().strip()\ns = s.replace(\"-\", \"\")\nprint(s)",
       testCases: [
@@ -267,8 +267,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'one_line',
       prompt_ko: "하이픈 기준으로 tag와 code를 분리하는 코드 아래에 한 줄을 추가하여 지정된 형식으로 출력해보세요. (예: KR-101 -> [KR] 101)",
       prompt_en: "Add one line below tag, code = raw.split(\"-\") to print f\"[{tag}] {code}\".",
-      hint_ko: "셋째 줄에 print(f\"[{tag}] {code}\")를 작성해 대괄호 태그와 코드를 출력하세요.",
-      hint_en: "Write print(f\"[{tag}] {code}\") on line 3.",
+      hint_ko: "위에서 분리해 둔 두 변수를 사용해, 앞 변수는 대괄호로 감싸고 한 칸 띄운 뒤 뒷변수가 이어지도록 포맷 문자열로 출력하세요.",
+      hint_en: "Print a formatted string placing the first unpacked variable inside square brackets, followed by a space and the second variable.",
       templateCode: "raw = input().strip()\ntag, code = raw.split(\"-\")\n§§§§§§§§§§§§§§§§§§§§§§§§",
       targetCode: "raw = input().strip()\ntag, code = raw.split(\"-\")\nprint(f\"[{tag}] {code}\")",
       testCases: [
@@ -291,8 +291,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: "다음 문자열 정제(.strip, .replace, .split)와 슬라이싱 코드의 실행 결과를 예측해보세요.",
       prompt_en: "Predict the output of the following string cleaning, splitting, and slicing code.",
-      hint_ko: "clean은 \"A:10,B:25\"가 되어 left=\"A:10\", right=\"B:25\"로 나뉘고, 뒷부분 정수의 합은 10 + 25 = 35입니다.",
-      hint_en: "left is \"A:10\" and right is \"B:25\", so n1 + n2 = 35 and the output is A+B=35.",
+      hint_ko: "공백 제거와 기호 치환을 거친 문자열이 쉼표 기준으로 어떻게 두 조각으로 나뉘는지 적고, 각 조각의 앞 슬라이싱 글자와 뒤 슬라이싱 정수 합을 추적해보세요.",
+      hint_en: "Trace the string step by step through trimming, character replacement, and comma-splitting, then check what the prefix slices and integer-converted suffix slices produce.",
       targetCode: "raw = \"  A-10,B-25  \"\nclean = raw.strip().replace(\"-\", \":\")\nleft, right = clean.split(\",\")\nn1 = int(left[2:])\nn2 = int(right[2:])\nprint(f\"{left[:1]}+{right[:1]}={n1 + n2}\")",
       choices: ["A+B=35", "A+B=1025", "A:+B:=35", " +A=35"],
       correctChoiceIndex: 0,

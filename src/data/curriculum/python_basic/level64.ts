@@ -28,8 +28,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "type": "block",
       "prompt_ko": "변수 word에 \"python\"을 저장하고 대문자로 변환한 결과를 res에 담아 출력해보세요. (출력 예: PYTHON)",
       "prompt_en": "Store \"python\" in word, convert it to uppercase in res, and print res (e.g., PYTHON).",
-      "hint_ko": "문자열 뒤에 .upper()를 붙이면 모든 알파벳을 대문자로 바꾼 새 문자열을 돌려줍니다.",
-      "hint_en": "Call word.upper() to get a new string with all letters converted to uppercase.",
+      "hint_ko": "인쇄소 활자판의 '위쪽 칸'에서 대문자라는 뜻이 유래했습니다. '더 위쪽의'를 뜻하는 다섯 글자 메서드를 문자열 뒤에 호출해보세요.",
+      "hint_en": "Named after the top printer's tray holding capital letters, call the 5-letter method meaning 'higher in position' on the string.",
       "targetCode": "word = \"python\"\nres = word.upper()\nprint(res)",
       "testCases": [
         {
@@ -46,8 +46,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "입력받은 문자열을 모두 대문자로 바꾸어 출력하도록 빈칸에 알맞은 메서드 이름을 채워보세요. (예: ab12 -> AB12)",
       "prompt_en": "Fill in the method name to convert the input string to uppercase and print it (e.g., ab12 -> AB12).",
-      "hint_ko": "소문자 알파벳을 대문자로 변환할 때는 .upper() 메서드를 사용합니다.",
-      "hint_en": "Use the .upper() method to convert lowercase letters to uppercase.",
+      "hint_ko": "인쇄 활자판의 '위쪽(윗단)'을 뜻하는 다섯 글자 영어 단어를 메서드 이름으로 적어 모든 알파벳을 대문자로 바꿔보세요.",
+      "hint_en": "Type the 5-letter English word meaning 'higher in position'—from the top printer's tray for capital letters—as the method name.",
       "targetCode": "code = input()\nprint(code.upper())",
       "templateCode": "code = input()\nprint(code.§§§§§())",
       "testCases": [
@@ -69,8 +69,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "type": "block",
       "prompt_ko": "변수 tag에 \"HELLO\"를 저장하고 모두 소문자로 변환한 결과를 small에 담아 출력해보세요. (출력 예: hello)",
       "prompt_en": "Store \"HELLO\" in tag, convert it to lowercase in small, and print small (e.g., hello).",
-      "hint_ko": "문자열 뒤에 .lower()를 붙이면 모든 알파벳을 소문자로 바꾼 새 문자열을 얻을 수 있습니다.",
-      "hint_en": "Call tag.lower() to return a lowercase copy of the string.",
+      "hint_ko": "소문자 활자를 보관하던 '아래쪽 칸'을 뜻하는 다섯 글자 메서드를 문자열 뒤에 붙이면 모든 알파벳을 소문자로 바꾼 새 문자열을 얻습니다.",
+      "hint_en": "Call the 5-letter string method meaning 'positioned further down' (from the bottom printer's tray for small letters) to get a small-letter copy.",
       "targetCode": "tag = \"HELLO\"\nsmall = tag.lower()\nprint(small)",
       "testCases": [
         {
@@ -87,8 +87,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "입력값을 소문자로 통일해 \"yes\"와 일치하는지 비교한 불리언 결과를 출력해보세요. (예: YES -> True)",
       "prompt_en": "Normalize the input to lowercase and print whether it equals \"yes\" (e.g., YES -> True).",
-      "hint_ko": "대소문자가 섞인 입력을 비교할 때는 ans.lower() == \"yes\"처럼 소문자로 통일한 뒤 비교합니다.",
-      "hint_en": "Use ans.lower() == \"yes\" to compare case-insensitively.",
+      "hint_ko": "대소문자가 섞인 입력을 비교할 수 있도록 '더 아래쪽의'를 뜻하는 다섯 글자 소문자 변환 메서드를 빈칸에 채워보세요.",
+      "hint_en": "Normalize the input to small letters before comparing by typing the 5-letter method name meaning 'further down' (opposite of higher).",
       "targetCode": "ans = input()\nprint(ans.lower() == \"yes\")",
       "templateCode": "ans = input()\nprint(ans.§§§§§() == \"yes\")",
       "testCases": [
@@ -110,8 +110,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "type": "block",
       "prompt_ko": "리스트 tags([\"py\", \"web\", \"ai\"])의 요소들을 하이픈(\"-\")으로 이어 붙인 문자열을 line에 저장해 출력해보세요. (출력 예: py-web-ai)",
       "prompt_en": "Join tags ([\"py\", \"web\", \"ai\"]) with \"-\" into line and print it (e.g., py-web-ai).",
-      "hint_ko": "\"구분자\".join(리스트) 형태로 작성하므로 \"-\".join(tags)를 line에 대입합니다.",
-      "hint_en": "Call join on the separator string: \"-\".join(tags).",
+      "hint_ko": "구분자 문자열을 주체로 삼아 '연결하다·합류하다'를 뜻하는 네 글자 메서드를 호출하고 괄호 안에 문자열 리스트를 넘기면 하나로 이어 붙일 수 있습니다.",
+      "hint_en": "On the separator string itself, call the 4-letter method meaning 'connect or unite together' and pass the list of strings as its argument.",
       "targetCode": "tags = [\"py\", \"web\", \"ai\"]\nline = \"-\".join(tags)\nprint(line)",
       "testCases": [
         {
@@ -128,8 +128,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "공백 기준으로 나눈 단어 리스트를 하이픈(-)으로 연결해 한 줄로 출력해보세요. (예: go fast -> go-fast)",
       "prompt_en": "Join the whitespace-split word list with hyphens (-) and print the result (e.g., go fast -> go-fast).",
-      "hint_ko": ".split()으로 쪼갠 문자열 리스트를 다시 하나의 문자열로 합칠 때는 \"-\".join(words)를 사용합니다.",
-      "hint_en": "Use \"-\".join(words) to combine a list of strings with \"-\".",
+      "hint_ko": "하이픈 구분자 뒤에 '결합하다·합치다'를 뜻하는 네 글자 영어 동사를 메서드로 적어 단어 리스트를 한 줄로 이어보세요.",
+      "hint_en": "After the hyphen string, enter the 4-letter English verb meaning 'unite or connect together' to combine the list elements.",
       "targetCode": "words = input().split()\nprint(\"-\".join(words))",
       "templateCode": "words = input().split()\nprint(\"-\".§§§§(words))",
       "testCases": [
@@ -151,8 +151,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "type": "block",
       "prompt_ko": "입력을 소문자로 바꾼 뒤 공백 단위로 나누고, 밑줄(\"_\")로 결합해 slug에 담아 출력해보세요. (예: Py Code -> py_code)",
       "prompt_en": "Lowercase the input, split by whitespace, join with \"_\" into slug, and print slug (e.g., Py Code -> py_code).",
-      "hint_ko": "input().lower() 결과를 .split()으로 나누어 리스트로 만든 뒤 \"_\".join(parts)로 결합합니다.",
-      "hint_en": "Use input().lower(), then raw.split(), and finally \"_\".join(parts).",
+      "hint_ko": "입력을 소문자로 통일한 뒤 공백 기준으로 쪼개 단어 리스트를 만들고, 밑줄 문자열을 구분자로 삼아 결합 메서드로 묶어보세요.",
+      "hint_en": "Convert the input to small letters, break it into a word list by whitespace, and combine that list on the underscore separator string.",
       "targetCode": "raw = input().lower()\nparts = raw.split()\nslug = \"_\".join(parts)\nprint(slug)",
       "testCases": [
         {
@@ -174,8 +174,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "입력을 대문자로 정규화해 딕셔너리 ranks에 키가 존재하면 값을, 없으면 0을 출력해보세요. (예: vip -> 20)",
       "prompt_en": "Normalize input to uppercase and print its value in ranks, or 0 if missing (e.g., vip -> 20).",
-      "hint_ko": "input().upper()로 대문자 키를 만들고 if key in ranks: 조건으로 딕셔너리 포함 여부를 확인합니다.",
-      "hint_en": "Convert input with .upper() and check membership using if key in ranks:.",
+      "hint_ko": "딕셔너리 키가 모두 대문자이므로 먼저 다섯 글자 대문자 변환 메서드로 정규화한 뒤, '~ 안에'를 뜻하는 두 글자 포함 연산자로 키 존재 여부를 검사하세요.",
+      "hint_en": "Since the dictionary keys are all capitals, normalize the input with the 5-letter capitalizing method, then test membership with the 2-letter 'inside' keyword.",
       "targetCode": "ranks = {\"VIP\": 20, \"GOLD\": 10}\nkey = input().upper()\nif key in ranks:\n    print(ranks[key])\nelse:\n    print(0)",
       "templateCode": "ranks = {\"VIP\": 20, \"GOLD\": 10}\nkey = input().§§§§§()\nif key §§ ranks:\n    print(ranks[key])\nelse:\n    print(0)",
       "testCases": [
@@ -197,8 +197,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "type": "block",
       "prompt_ko": "리스트 raw의 각 문자열에서 양쪽 공백을 지우고 대문자로 바꿔 clean에 추가한 뒤 \"/\"로 이어 출력해보세요. (출력 예: SEOUL/BUSAN)",
       "prompt_en": "Strip and uppercase each item in raw, append to clean, and print joined by \"/\" (e.g., SEOUL/BUSAN).",
-      "hint_ko": "for 반복문 안에서 clean.append(s.strip().upper())를 실행한 뒤 \"/\".join(clean)을 출력하세요.",
-      "hint_en": "Append s.strip().upper() inside the loop, then print \"/\".join(clean).",
+      "hint_ko": "반복문 안에서 각 문자열의 양쪽 공백 제거와 대문자 변환을 연달아 호출해 새 리스트에 담고, 마지막에 슬래시 구분자로 결합해 출력해보세요.",
+      "hint_en": "Inside the loop, chain whitespace trimming and capital-letter conversion on each item before appending it, then combine the list using the slash separator.",
       "targetCode": "raw = [\" Seoul \", \" busan \"]\nclean = []\nfor s in raw:\n    clean.append(s.strip().upper())\nprint(\"/\".join(clean))",
       "testCases": [
         {
@@ -215,8 +215,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "문자열을 대문자로 바꾸고 공백으로 나눈 뒤 \"#\"으로 묶어 돌려주는 함수 make_tag를 완성해보세요. (출력 예: PY#CODE)",
       "prompt_en": "Complete make_tag so it uppercases text, splits by spaces, and returns items joined with \"#\" (e.g., PY#CODE).",
-      "hint_ko": "text.upper().split()으로 대문자 단어 리스트를 만든 뒤 return \"#\".join(items)로 결과를 반환합니다.",
-      "hint_en": "Use text.upper().split() and return \"#\".join(items).",
+      "hint_ko": "다섯 글자 대문자 변환 메서드로 글자를 키운 뒤, 함수 결과를 돌려주는 여섯 글자 키워드와 샵 구분자 뒤의 네 글자 결합 메서드를 차례로 채워보세요.",
+      "hint_en": "Fill in the 5-letter capitalizing method, the 6-letter keyword that sends a value back from a function, and the 4-letter list-combining method on \"#\".",
       "targetCode": "def make_tag(text):\n    items = text.upper().split()\n    return \"#\".join(items)\n\nprint(make_tag(\"py code\"))",
       "templateCode": "def make_tag(text):\n    items = text.§§§§§().split()\n    §§§§§§ \"#\".§§§§(items)\n\nprint(make_tag(\"py code\"))",
       "testCases": [
@@ -234,8 +234,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "3개의 단어를 소문자로 모아 쉼표(,)로 연결해 출력하려다 발생한 메서드 호출 주체 오류를 고쳐보세요. (출력 예: a,b,c)",
       "prompt_en": "Fix the AttributeError caused by calling join on the list instead of the separator string (e.g., a,b,c).",
-      "hint_ko": "리스트에는 .join() 메서드가 없습니다. 구분자 문자열 앞에 두고 \",\".join(items) 형태로 호출해야 합니다.",
-      "hint_en": "Lists do not have .join(); call \",\".join(items) on the separator string instead.",
+      "hint_ko": "문자열 결합 메서드는 리스트가 아니라 '사이에 끼워 넣을 구분자 문자열'이 가지고 있으므로, 호출 주체와 괄호 안 인자의 위치를 서로 바꿔야 합니다.",
+      "hint_en": "The list-combining method belongs to the separator string rather than the list object, so swap the caller and the argument inside the parentheses.",
       "templateCode": "items = []\ni = 0\nwhile i < 3:\n    items.append(input().lower())\n    i += 1\nprint(items.join(\",\"))",
       "targetCode": "items = []\ni = 0\nwhile i < 3:\n    items.append(input().lower())\n    i += 1\nprint(\",\".join(items))",
       "testCases": [
@@ -258,8 +258,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "소문자로 변환해 분리한 단어 리스트 코드 아래에 한 줄을 추가하여 단일 공백(\" \")으로 결합한 문자열을 출력해보세요. (예: py code)",
       "prompt_en": "Add one line below to join the words list with a single space (\" \") and print it (e.g., py code).",
-      "hint_ko": "둘째 줄에 print(\" \".join(words))를 작성하면 단어들이 한 칸 공백으로 깔끔하게 연결됩니다.",
-      "hint_en": "Write print(\" \".join(words)) on the second line.",
+      "hint_ko": "한 칸짜리 공백 문자열을 구분자 주체로 두고 단어 리스트를 인자로 넘겨 하나로 합친 결과를 출력 함수로 감싸 작성해보세요.",
+      "hint_en": "Call the string-combining method on a single-space string literal with the word list as its argument, and pass the result to the output function.",
       "targetCode": "words = input().lower().split()\nprint(\" \".join(words))",
       "templateCode": "words = input().lower().split()\n§§§§§§§§§§§§§§§§§§§§§§",
       "testCases": [
@@ -282,8 +282,8 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "Select the exact output of the following Python code.",
-      "hint_ko": "길이가 2이면서 \"AI\"가 아닌 \"Py\"와 \"go\"만 대문자가 되고, \"AI\"는 else로 가서 소문자 \"ai\"가 된 뒤 \"-\"로 결합됩니다.",
-      "hint_en": "\"Py\" and \"go\" become uppercase (\"PY\", \"GO\"), while \"AI\" goes to else (\"ai\"), joining into PY-ai-GO.",
+      "hint_ko": "세 단어 중 글자 수가 2이면서 특정 문자열과 같지 않은 두 조건을 모두 만족하는 단어만 대문자가 되고, 그렇지 않은 단어는 소문자로 바뀌어 하이픈으로 연결됩니다.",
+      "hint_en": "Check each word against both halves of the compound condition: only two-character words not matching the excluded string become capitals, while the rest turn small.",
       "targetCode": "words = [\"Py\", \"AI\", \"go\"]\nout = []\nfor w in words:\n    if len(w) == 2 and w != \"AI\":\n        out.append(w.upper())\n    else:\n        out.append(w.lower())\nprint(\"-\".join(out))",
       "choices": [
         "PY-ai-GO",

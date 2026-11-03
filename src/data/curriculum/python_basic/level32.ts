@@ -22,8 +22,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       type: 'block',
       prompt_ko: "변수 name에 \"Alice\"를 저장하고 f-string으로 감싸 인사말을 출력해보세요. (출력 예: Hi, Alice!)",
       prompt_en: "Store \"Alice\" in name and print a greeting using an f-string (e.g., Hi, Alice!).",
-      hint_ko: "따옴표 앞에 f를 붙이고 중괄호 안에 변수 이름을 적어 f\"Hi, {name}!\"을 출력하세요.",
-      hint_en: "Prefix the string with f and place name inside braces: f\"Hi, {name}!\".",
+      hint_ko: "'형식화하다(format)'의 첫 글자를 여는 따옴표 바로 앞에 붙이고, 변수가 들어갈 자리를 중괄호로 감싸 출력해보세요.",
+      hint_en: "Prefix the opening quote with the first letter of 'format' and wrap the variable name in curly braces.",
       targetCode: "name = \"Alice\"\nprint(f\"Hi, {name}!\")",
       testCases: [
         {
@@ -40,8 +40,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "이름 user를 입력받아 환영 문구를 출력하도록 f-string 빈칸을 채워보세요. (예: Kim -> Welcome, Kim!)",
       prompt_en: "Read user and fill in the f-string blanks to print a welcome message (e.g., Kim -> Welcome, Kim!).",
-      hint_ko: "문자열 따옴표 앞에 f를 붙이고 중괄호로 감싼 {user}를 빈칸에 입력하세요.",
-      hint_en: "Put f before the opening quote and {user} inside the string.",
+      hint_ko: "따옴표 바로 앞에는 '형식화(format)'의 첫 글자를 적고, 문자열 안에는 입력받은 변수를 중괄호로 감싸 넣어보세요.",
+      hint_en: "Put the first letter of 'format' right before the quote, and wrap the input variable in curly braces.",
       templateCode: "user = input()\nprint(§\"Welcome, §§§§§§!\")",
       targetCode: "user = input()\nprint(f\"Welcome, {user}!\")",
       testCases: [
@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       type: 'block',
       prompt_ko: "item에 \"Potion\", gold에 50을 저장하고 f-string으로 한 줄에 출력해보세요. (출력 예: Potion: 50G)",
       prompt_en: "Store \"Potion\" in item and 50 in gold, then print them on one line with an f-string (e.g., Potion: 50G).",
-      hint_ko: "f\"{item}: {gold}G\"처럼 문자열과 정수 변수를 중괄호에 넣으면 str() 변환 없이 바로 합쳐집니다.",
-      hint_en: "Write f\"{item}: {gold}G\" inside print(); integers format automatically inside braces.",
+      hint_ko: "포맷 문자열 안의 중괄호에 문자열 변수와 정수 변수를 각각 넣으면 별도의 형변환 없이 한 줄로 합쳐집니다.",
+      hint_en: "Place both the text variable and integer variable inside separate curly braces so they format together automatically.",
       targetCode: "item = \"Potion\"\ngold = 50\nprint(f\"{item}: {gold}G\")",
       testCases: [
         {
@@ -81,8 +81,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "정수 lv와 hp를 차례로 입력받아 상태 문자열을 msg에 저장하고 출력해보세요. (출력 예: Lv.5 / HP:120)",
       prompt_en: "Read integers lv and hp, format the status string into msg, and print msg (e.g., Lv.5 / HP:120).",
-      hint_ko: "f-string 안에서 변수 값을 넣을 자리마다 중괄호로 감싼 {lv}와 {hp}를 작성합니다.",
-      hint_en: "Use {lv} after Lv. and {hp} after HP: inside the f-string.",
+      hint_ko: "각 항목 기호 바로 뒤에 해당 변수 이름을 중괄호로 감싸 넣으면 입력된 정수 값이 그 자리에 채워집니다.",
+      hint_en: "Wrap each corresponding variable name in curly braces right after its label inside the formatted string.",
       templateCode: "lv = int(input())\nhp = int(input())\nmsg = f\"Lv.§§§§ / HP:§§§§\"\nprint(msg)",
       targetCode: "lv = int(input())\nhp = int(input())\nmsg = f\"Lv.{lv} / HP:{hp}\"\nprint(msg)",
       testCases: [
@@ -104,8 +104,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       type: 'block',
       prompt_ko: "a에 12, b에 8을 저장하고 f-string 안에서 덧셈식과 합계를 함께 출력해보세요. (출력 예: 12 + 8 = 20)",
       prompt_en: "Set a to 12 and b to 8, then print the addition equation and sum via an f-string (e.g., 12 + 8 = 20).",
-      hint_ko: "중괄호 안에는 수식도 넣을 수 있으므로 f\"{a} + {b} = {a + b}\"를 출력하세요.",
-      hint_en: "Expressions work inside braces: print(f\"{a} + {b} = {a + b}\").",
+      hint_ko: "중괄호 안에는 단일 변수뿐만 아니라 두 변수를 더하는 계산식 자체도 직접 넣어 결과값을 출력할 수 있습니다.",
+      hint_en: "Curly braces can hold arithmetic expressions directly as well as individual variables.",
       targetCode: "a = 12\nb = 8\nprint(f\"{a} + {b} = {a + b}\")",
       testCases: [
         {
@@ -122,8 +122,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "단가 price와 수량 qty를 입력받아 두 값의 곱을 총액 형식으로 출력해보세요. (예: 500, 3 -> Total: 1500 won)",
       prompt_en: "Read price and qty, then print their product inside an f-string (e.g., 500, 3 -> Total: 1500 won).",
-      hint_ko: "중괄호 안에 곱셈 수식 {price * qty}를 넣으면 계산된 결과가 문자열에 삽입됩니다.",
-      hint_en: "Write {price * qty} inside the f-string to interpolate the product.",
+      hint_ko: "중괄호 안에 단가와 수량을 곱하는 수식을 직접 작성하면 계산된 총액이 문자열에 삽입됩니다.",
+      hint_en: "Write the multiplication expression of unit price and quantity inside curly braces to insert the product.",
       templateCode: "price = int(input())\nqty = int(input())\nprint(f\"Total: §§§§§§§§§§§§§ won\")",
       targetCode: "price = int(input())\nqty = int(input())\nprint(f\"Total: {price * qty} won\")",
       testCases: [
@@ -145,8 +145,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       type: 'block',
       prompt_ko: "정수 n을 입력받아 for 문으로 1부터 3까지 곱한 구구단 세 줄을 출력해보세요. (출력 예: 5 x 1 = 5)",
       prompt_en: "Read integer n and use a for loop from 1 to 3 to print three multiplication lines (e.g., 5 x 1 = 5).",
-      hint_ko: "range(1, 4)로 i를 1, 2, 3까지 반복하며 print(f\"{n} x {i} = {n * i}\")를 실행하세요.",
-      hint_en: "Loop i over range(1, 4) and print(f\"{n} x {i} = {n * i}\").",
+      hint_ko: "끝 번호 직전까지 생성하는 범위 규칙에 맞춰 1부터 3까지 반복하며, 단수·반복 변수·두 값의 곱을 각각 중괄호로 묶어 출력하세요.",
+      hint_en: "Remember the stop value of a range is exclusive; loop through 1 to 3 and place the base, counter, and product in braces.",
       targetCode: "n = int(input())\nfor i in range(1, 4):\n    print(f\"{n} x {i} = {n * i}\")",
       testCases: [
         {
@@ -168,8 +168,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "점수 score가 60 이상이면 합격, 아니면 불합격 결과를 점수와 함께 출력해보세요. (예: 75 -> 75: Pass)",
       prompt_en: "If score is at least 60, print \"<score>: Pass\", otherwise \"<score>: Fail\".",
-      hint_ko: "이상 비교 연산자는 >=이며, 두 출력문 모두 중괄호 {score}로 점수를 삽입합니다.",
-      hint_en: "Use >= for the condition and {score} in both f-strings.",
+      hint_ko: "'크거나 같다'를 뜻하는 비교 기호로 조건을 세우고, 두 출력문 모두 점수 변수를 중괄호로 감싸 앞에 배치하세요.",
+      hint_en: "Use the 'greater than or equal to' operator for the check, and wrap the score variable in curly braces in both branches.",
       templateCode: "score = int(input())\nif score §§ 60:\n    print(f\"§§§§§§§: Pass\")\nelse:\n    print(f\"§§§§§§§: Fail\")",
       targetCode: "score = int(input())\nif score >= 60:\n    print(f\"{score}: Pass\")\nelse:\n    print(f\"{score}: Fail\")",
       testCases: [
@@ -196,8 +196,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       type: 'block',
       prompt_ko: "sec에 3을 저장하고 sec > 0인 동안 while 문으로 카운트다운하며 1씩 줄여보세요. (출력 예: T-3)",
       prompt_en: "Set sec to 3 and count down while sec > 0, printing f\"T-{sec}\" and decrementing sec by 1.",
-      hint_ko: "while sec > 0: 안에서 print(f\"T-{sec}\")를 실행한 뒤 sec -= 1로 값을 줄여줍니다.",
-      hint_en: "Inside while sec > 0:, call print(f\"T-{sec}\") and update sec -= 1.",
+      hint_ko: "반복문 안에서 현재 초를 포맷 문자열의 중괄호에 넣어 먼저 출력한 뒤, 복합 대입으로 값을 1씩 줄여가세요.",
+      hint_en: "Inside the loop, print the formatted countdown string first, then decrement the counter variable by 1.",
       targetCode: "sec = 3\nwhile sec > 0:\n    print(f\"T-{sec}\")\n    sec -= 1",
       testCases: [
         {
@@ -214,8 +214,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "두 실수 base와 bonus를 입력받아 base에 bonus를 누적합산한 뒤 비율 형식으로 출력해보세요. (출력 예: Rate: 4.0%)",
       prompt_en: "Read floats base and bonus, add bonus into base with +=, and print the formatted rate.",
-      hint_ko: "실수 변환 함수 float, 복합 대입 연산자 +=, 중괄호 보간 {base}를 차례로 채워보세요.",
-      hint_en: "Fill in float, +=, and {base} respectively.",
+      hint_ko: "둘째 줄과 같은 실수 변환 함수로 입력을 받고, 기존 값에 누적해 더하는 복합 대입 연산자와 중괄호 변수를 차례로 채우세요.",
+      hint_en: "Convert the first input to a floating-point number, add the bonus in place with a compound operator, and put the updated variable in braces.",
       templateCode: "base = §§§§§(input())\nbonus = float(input())\nbase §§ bonus\nprint(f\"Rate: §§§§§§%\")",
       targetCode: "base = float(input())\nbonus = float(input())\nbase += bonus\nprint(f\"Rate: {base}%\")",
       testCases: [
@@ -238,8 +238,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: "변수 값이 문자열에 삽입되지 않고 중괄호가 글자 그대로 출력되는 버그를 수정해보세요. (예: Leo, 90 -> Leo scored 90)",
       prompt_en: "Fix the bug where curly braces are printed literally instead of interpolating variables.",
-      hint_ko: "문자열 여는 따옴표 바로 앞에 f 접두사를 붙여야 중괄호 안의 변수가 실제 값으로 치환됩니다.",
-      hint_en: "Add the f prefix right before the opening quote of the string.",
+      hint_ko: "일반 문자열에서는 중괄호가 단순 글자로 취급됩니다. 변수가 치환되도록 여는 따옴표 바로 앞에 '형식화(format)'의 첫 글자를 붙여보세요.",
+      hint_en: "Plain strings treat braces literally; add the first letter of 'format' right before the opening quote to interpolate variables.",
       templateCode: "name = input()\npt = int(input())\nprint(\"{name} scored {pt}\")",
       targetCode: "name = input()\npt = int(input())\nprint(f\"{name} scored {pt}\")",
       testCases: [
@@ -262,8 +262,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'one_line',
       prompt_ko: "가로와 세로를 곱해 area를 구하는 코드 아래에 한 줄을 추가하여 넓이를 포맷팅해 출력해보세요. (출력 예: Area=24)",
       prompt_en: "Add one line below the area calculation to print the formatted result (e.g., Area=24).",
-      hint_ko: "마지막 줄에 print(f\"Area={area}\")를 작성해 계산된 넓이를 출력하세요.",
-      hint_en: "Write print(f\"Area={area}\") on the third line.",
+      hint_ko: "예시 출력의 등호 앞뒤 형식에 맞춰, 위에서 계산한 넓이 변수를 포맷 문자열의 중괄호 안에 넣어 화면에 출력해보세요.",
+      hint_en: "Print a formatted string matching the label and equals sign in the example, placing the computed area variable in curly braces.",
       templateCode: "w, h = input().split()\narea = int(w) * int(h)\n§§§§§§§§§§§§§§§§§§§§§",
       targetCode: "w, h = input().split()\narea = int(w) * int(h)\nprint(f\"Area={area}\")",
       testCases: [
@@ -286,8 +286,8 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: "다음 while 반복문과 f-string 코드의 실행 결과를 예측해보세요.",
       prompt_en: "Predict the output of the following while loop and f-string code.",
-      hint_ko: "n이 2, 3, 4일 때 total에 더해져 합계는 9가 되고, 마지막에 n += 1이 실행되어 반복 종료 시 n은 5입니다.",
-      hint_en: "total accumulates 2 + 3 + 4 = 9, and n increments to 5 when exiting the loop.",
+      hint_ko: "조건이 거짓이 되어 반복문을 빠져나오는 순간의 변수 값과, 그때까지 누적된 합계를 각각 끝까지 추적해보세요.",
+      hint_en: "Trace both the accumulated total and the final value of the counter right when it fails the loop condition.",
       targetCode: "n = 2\ntotal = 0\nwhile n <= 4:\n    total += n\n    n += 1\nprint(f\"n={n}, sum={total}\")",
       choices: ["n=4, sum=9", "n=5, sum=9", "n=5, sum=5", "n={n}, sum={total}"],
       correctChoiceIndex: 1,

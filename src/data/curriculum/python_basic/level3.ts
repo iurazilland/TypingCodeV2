@@ -252,8 +252,8 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '예제 코드 아래에 한 줄을 추가하여 문자열 라벨과 숫자를 나란히 연결한 Level: 3을 출력해보세요.',
       prompt_en: 'Type the example code and add a line below to connect the label and number to print Level: 3.',
-      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print("Level:", 3)을 입력하세요.',
-      hint_en: 'Type the first line example, press Enter, and write print("Level:", 3) on the second line.',
+      hint_ko: '첫째 줄처럼 라벨 문자열을 따옴표로 감싸고, 쉼표 뒤에 숫자를 따옴표 없이 적어 나란히 출력해보세요.',
+      hint_en: 'Follow line 1 by enclosing the label string in quotes, followed by a comma and the number.',
       templateCode: 'print("Score:", 100)\n§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("Score:", 100)\nprint("Level:", 3)',
       testCases: [

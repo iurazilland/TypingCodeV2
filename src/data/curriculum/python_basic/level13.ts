@@ -28,8 +28,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       type: 'block',
       prompt_ko: 'input()으로 전달되는 이름을 변수 name에 저장하고, "Hello,"와 name을 출력해보세요. (예: Alice 입력 시 Hello, Alice 출력)',
       prompt_en: 'Store the input name in variable name using input(), and print "Hello," and name (e.g., Alice -> Hello, Alice).',
-      hint_ko: '첫째 블록 왼쪽에 name을 입력하고(input() 칸은 비워둡니다), 둘째 print 블록에 "Hello,", name을 입력하세요.',
-      hint_en: 'Enter name on the left of input() (leave input() empty), and enter "Hello,", name in print().',
+      hint_ko: '입력 블록의 괄호 안은 비워둔 채 왼쪽 변수에 입력값을 받아 저장하고, 출력 블록에서 인사말 문자열과 변수를 나란히 출력해보세요.',
+      hint_en: 'Leave the input block\'s parentheses empty to store user input in the left variable, then list the greeting text and variable in print().',
       targetCode: 'name = input()\nprint("Hello,", name)',
       testCases: [
         {
@@ -51,8 +51,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '빈칸에 사용자 입력을 받는 함수 이름을 채워 입력된 도시명 앞에 City: 를 붙여 출력해보세요. (예: Seoul 입력 시 City: Seoul)',
       prompt_en: 'Fill in the blank with the user-input function name to print City: followed by the input city (e.g., Seoul -> City: Seoul).',
-      hint_ko: '표준 입력으로부터 한 줄의 문자열을 읽어오는 파이썬 내장 함수는 input()입니다.',
-      hint_en: 'Use the built-in input() function to read a line of text from standard input.',
+      hint_ko: '사용자가 키보드로 입력한 한 줄을 읽어올 때는 영어로 입력을 뜻하는 다섯 글자 내장 함수를 사용합니다.',
+      hint_en: 'To read a line typed by the user, call the five-letter built-in function that means data coming "in" to the program.',
       templateCode: 'city = §§§§§()\nprint("City:", city)',
       targetCode: 'city = input()\nprint("City:", city)',
       testCases: [
@@ -78,8 +78,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       type: 'block',
       prompt_ko: '숫자 100이 입력될 때 input()의 결과를 변수 raw에 저장하고, print(type( ))에 raw를 넣어 자료형이 str인지 확인해보세요.',
       prompt_en: 'When 100 is given as input, store input() in raw and pass raw into print(type( )) to see that its type is str.',
-      hint_ko: 'input() 함수가 읽어온 값은 숫자 모양이어도 항상 문자열(<class \'str\'>)입니다. 왼쪽에 raw, 아래 type( )에 raw를 넣으세요.',
-      hint_en: 'input() always returns a string (<class \'str\'>), even for digits. Set raw = input() and print(type(raw)).',
+      hint_ko: '입력 함수로 읽어온 값은 숫자 모양을 입력하더라도 파이썬에서는 항상 문자열로 취급됩니다. 변수를 자료형 확인 블록에 넣어 직접 확인해보세요.',
+      hint_en: 'Values read from standard input always start out as text strings, even if digits are entered. Pass the variable into the type block to verify.',
       targetCode: 'raw = input()\nprint(type(raw))',
       testCases: [
         {
@@ -96,8 +96,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '두 빈칸을 채워 입력값을 val에 받은 뒤 2를 곱한 반복 결과와 자료형을 함께 출력해보세요. (예: 7 입력 시 77 <class \'str\'>)',
       prompt_en: 'Fill in the blanks to read input into val and print val * 2 alongside its data type (e.g., 7 -> 77 <class \'str\'>).',
-      hint_ko: '첫째 줄에는 입력을 받는 input을, 둘째 줄에는 자료형을 확인하는 type을 입력하세요.',
-      hint_en: 'Enter input on line 1 to read text, and type on line 2 to inspect its data type.',
+      hint_ko: '첫째 줄에는 입력을 뜻하는 다섯 글자 함수를, 둘째 줄에는 값의 유형을 확인하는 네 글자 함수를 각각 채워보세요.',
+      hint_en: 'Use the five-letter function for reading user entry on line 1, and the four-letter function for checking its data category on line 2.',
       templateCode: 'val = §§§§§()\nprint(val * 2, §§§§(val))',
       targetCode: 'val = input()\nprint(val * 2, type(val))',
       testCases: [
@@ -123,8 +123,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       type: 'block',
       prompt_ko: 'int(input()) 블록으로 입력값을 정수 변환해 변수 age에 저장하고, age + 1을 출력해보세요. (예: 19 입력 시 20 출력)',
       prompt_en: 'Store the integer-converted input in variable age using int(input()), and print age + 1 (e.g., 19 -> 20).',
-      hint_ko: '첫째 블록 왼쪽 칸에 age를 입력하고, 둘째 print 블록에 age + 1을 입력하면 정수 덧셈이 수행됩니다.',
-      hint_en: 'Enter age on the left of int(input()), then enter age + 1 inside print().',
+      hint_ko: '입력 블록을 정수 변환 블록이 감싸고 있으면 읽어온 문자열이 즉시 정수로 바뀌어 저장되므로 산술 덧셈이 가능해집니다.',
+      hint_en: 'Wrapping the input block inside integer conversion turns the incoming text into a whole number right away so you can add 1.',
       targetCode: 'age = int(input())\nprint(age + 1)',
       testCases: [
         {
@@ -146,8 +146,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '두 빈칸을 채워 입력받은 문자열을 정수로 바꾸어 num에 저장하고 3을 곱한 값을 출력해보세요. (예: 12 입력 시 36 출력)',
       prompt_en: 'Fill in the blanks to read an integer input into num and print num * 3 (e.g., 12 -> 36).',
-      hint_ko: '안쪽에서 문자열을 입력받는 input()을 바깥쪽 정수 변환 함수 int()로 감싸 int(input())으로 작성합니다.',
-      hint_en: 'Wrap input() inside int() as int(input()) to convert user input directly into an integer.',
+      hint_ko: '안쪽에서는 입력을 뜻하는 함수로 문자열을 읽어오고, 바깥쪽에서는 정수(integer)의 앞 세 글자 함수로 감싸 숫자로 변환합니다.',
+      hint_en: 'Read the text inside with the five-letter user-entry function, and wrap it outside with the three-letter function from "integer".',
       templateCode: 'num = §§§(§§§§§())\nprint(num * 3)',
       targetCode: 'num = int(input())\nprint(num * 3)',
       testCases: [
@@ -173,8 +173,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       type: 'block',
       prompt_ko: '두 줄에 걸쳐 입력되는 두 정수를 각각 변수 a와 b에 저장하고, 두 수의 합 a + b를 출력해보세요. (예: 15, 27 입력 시 42)',
       prompt_en: 'Read two integers on separate lines into a and b, and print their sum a + b (e.g., 15 and 27 -> 42).',
-      hint_ko: 'input()은 호출될 때마다 한 줄씩 순서대로 읽습니다. 첫째 블록에 a, 둘째 블록에 b, 셋째 print 블록에 a + b를 넣으세요.',
-      hint_en: 'Each input() reads the next line. Set a on line 1, b on line 2, and print(a + b) on line 3.',
+      hint_ko: '입력 함수는 한 번 실행될 때마다 입력창에서 한 줄씩 순서대로 읽어옵니다. 두 변수에 각각 정수를 받아 합계를 출력해보세요.',
+      hint_en: 'Each input call reads the next line in order. Store the two converted integers in separate variables and print their sum.',
       targetCode: 'a = int(input())\nb = int(input())\nprint(a + b)',
       testCases: [
         {
@@ -196,8 +196,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '두 빈칸에 정수 변환 함수 이름을 채워 두 줄로 입력되는 가로(w)와 세로(h)의 곱을 출력해보세요. (예: 6, 9 입력 시 54)',
       prompt_en: 'Fill in both blanks with the integer conversion function to print w * h for two input lines (e.g., 6 and 9 -> 54).',
-      hint_ko: '두 입력값을 모두 정수로 바꾸어야 곱셈(*)이 가능하므로 두 빈칸에 모두 int를 입력하세요.',
-      hint_en: 'Enter int in both blanks so w and h are converted to integers before multiplying.',
+      hint_ko: '두 줄에서 읽어온 문자열을 모두 숫자 곱셈이 가능한 정수로 바꿀 수 있도록 integer의 앞 세 글자 변환 함수를 각각 적어보세요.',
+      hint_en: 'Convert both input strings into whole numbers before multiplying by using the three-letter function derived from "integer".',
       templateCode: 'w = §§§(input())\nh = §§§(input())\nprint(w * h)',
       targetCode: 'w = int(input())\nh = int(input())\nprint(w * h)',
       testCases: [
@@ -223,8 +223,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       type: 'block',
       prompt_ko: '소수점이 있는 입력값을 float(input()) 블록으로 변수 kg에 저장하고, kg * 2를 출력해보세요. (예: 2.5 입력 시 5.0)',
       prompt_en: 'Read a decimal input into variable kg using float(input()) and print kg * 2 (e.g., 2.5 -> 5.0).',
-      hint_ko: '소수점이 포함된 숫자 입력은 int가 아닌 float로 변환해야 합니다. 왼쪽에 kg, 아래 print에 kg * 2를 넣으세요.',
-      hint_en: 'Decimal inputs require float() instead of int(). Enter kg on line 1 and kg * 2 inside print().',
+      hint_ko: '소수점이 들어 있는 숫자 입력은 정수 변환 대신 부동소수점 실수 변환 블록으로 감싸야 오류 없이 읽어올 수 있습니다.',
+      hint_en: 'Decimal inputs contain a dot, so use the floating-point conversion block rather than integer conversion before multiplying.',
       targetCode: 'kg = float(input())\nprint(kg * 2)',
       testCases: [
         {
@@ -246,8 +246,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '두 빈칸을 채워 소수점이 포함된 실수 입력값을 변수 r에 저장하고 0.5를 더한 결과를 출력해보세요. (예: 3.2 입력 시 3.7)',
       prompt_en: 'Fill in the blanks to read a floating-point input into r and print r + 0.5 (e.g., 3.2 -> 3.7).',
-      hint_ko: '실수 형변환 함수 float() 안에 입력 함수 input()을 넣어 float(input())을 완성하세요.',
-      hint_en: 'Wrap input() inside float() as float(input()).',
+      hint_ko: '안쪽의 입력 함수가 읽어온 소수점 문자열을 바깥쪽에서 부동소수점(floating-point)의 앞 다섯 글자 함수로 감싸 실수로 변환해보세요.',
+      hint_en: 'Read the line with the five-letter entry function inside, and wrap it with the five-letter function from "floating-point" outside.',
       templateCode: 'r = §§§§§(§§§§§())\nprint(r + 0.5)',
       targetCode: 'r = float(input())\nprint(r + 0.5)',
       testCases: [
@@ -274,8 +274,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '입력값을 정수로 변환하지 않고 500을 더해 발생한 오류(TypeError)를 수정해보세요. (예: 1500 입력 시 2000 출력)',
       prompt_en: 'Fix the TypeError caused by adding 500 to raw input() without integer conversion (e.g., 1500 -> 2000).',
-      hint_ko: 'input()의 결과는 문자열이므로 int(input())으로 감싸 정수로 변환해야 숫자 500을 더할 수 있습니다.',
-      hint_en: 'input() returns a string, so wrap it as int(input()) before adding 500.',
+      hint_ko: '입력 함수가 반환한 값은 아직 문자열 상태여서 숫자 500과 바로 더할 수 없습니다. 입력값을 정수형으로 변환해 저장하도록 고쳐보세요.',
+      hint_en: 'Raw user input is a string and cannot be added to 500 directly—convert the input into an integer when storing or calculating.',
       templateCode: 'price = input()\nprint(price + 500)',
       targetCode: 'price = int(input())\nprint(price + 500)',
       testCases: [
@@ -302,8 +302,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '정수 n을 입력받는 코드 아래에 한 줄을 추가하여 n과 n을 곱한 제곱값을 출력해보세요. (예: 9 입력 시 81 출력)',
       prompt_en: 'Type line 1 and add a line below to print n multiplied by n (e.g., 9 -> 81).',
-      hint_ko: '첫째 줄을 입력하고 Enter를 누른 뒤, 둘째 줄에 print(n * n)을 입력하세요.',
-      hint_en: 'Type line 1, press Enter, and write print(n * n) on line 2.',
+      hint_ko: '위에서 정수로 변환해 저장한 변수를 자기 자신과 곱하는 식을 출력 함수 안에 작성해보세요.',
+      hint_en: 'Inside the print function on the next line, multiply the integer variable stored above by itself.',
       templateCode: 'n = int(input())\n§§§§§§§§§§§§',
       targetCode: 'n = int(input())\nprint(n * n)',
       testCases: [
@@ -330,8 +330,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: '첫째 줄에 10, 둘째 줄에 20이 입력될 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.',
       prompt_en: 'When 10 and 20 are given on lines 1 and 2, select the exact output of the following Python code.',
-      hint_ko: 'a와 b는 문자열 "10", "20"이므로 a + b는 문자열 결합 "1020"이 되고, int(a) + int(b)는 정수 덧셈 30이 됩니다.',
-      hint_en: 'a and b are strings "10" and "20", so a + b concatenates to 1020 while int(a) + int(b) adds to 30.',
+      hint_ko: '형변환 전의 두 변수가 어떤 자료형인지 확인하고, 셋째 줄의 문자열 덧셈과 넷째 줄의 정수 덧셈이 각각 어떻게 다른 결과를 내는지 비교해보세요.',
+      hint_en: 'Check the data type of the raw inputs first, then compare string concatenation on line 3 with integer addition on line 4.',
       targetCode: 'a = input()\nb = input()\nprint(a + b)\nprint(int(a) + int(b))',
       choices: ['1020\n30', '30\n30', '1020\n1020', '10 20\n30'],
       correctChoiceIndex: 0,

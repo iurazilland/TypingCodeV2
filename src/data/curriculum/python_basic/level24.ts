@@ -27,8 +27,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "type": "block",
       "prompt_ko": "range(4)를 사용해 0부터 3까지의 정수를 한 줄에 하나씩 순서대로 출력해보세요.",
       "prompt_en": "Use range(4) to print integers from 0 to 3 one per line in order.",
-      "hint_ko": "for i in range(4): 블록 안에 print(i) 블록을 넣으면 0, 1, 2, 3이 차례로 출력됩니다.",
-      "hint_en": "Place print(i) inside for i in range(4): to output 0, 1, 2, 3.",
+      "hint_ko": "range(4)는 0부터 끝값 4 직전까지의 정수를 차례로 꺼내 주며, 반복문 안쪽에 들여써서 출력 블록을 배치합니다.",
+      "hint_en": "range(4) yields integers from 0 up to right before 4; place the output block indented inside the loop.",
       "targetCode": "for i in range(4):\n    print(i)",
       "testCases": [
         {
@@ -45,8 +45,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸에 반복문 키워드를 채워 0부터 2까지의 정수를 차례대로 출력해보세요.",
       "prompt_en": "Fill in the two loop keywords to print integers from 0 through 2.",
-      "hint_ko": "파이썬 횟수 반복문은 for 변수 in range(끝): 형태로 작성합니다.",
-      "hint_en": "Write a counted loop in Python using the form: for variable in range(stop):.",
+      "hint_ko": "'~동안·~마다'를 뜻하는 세 글자 반복 키워드와 '~안에'를 뜻하는 두 글자 포함 키워드를 차례대로 채워보세요.",
+      "hint_en": "Pair the 3-letter counted-loop keyword with the 2-letter membership keyword that pulls items from a sequence.",
       "templateCode": "§§§ i §§ range(3):\n    print(i)",
       "targetCode": "for i in range(3):\n    print(i)",
       "testCases": [
@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "type": "block",
       "prompt_ko": "range(3) 반복문으로 문자열 \"Ready\"와 현재 번호 i를 함께 3번 출력해보세요.",
       "prompt_en": "Use a range(3) loop to print \"Ready\" alongside the current index i three times.",
-      "hint_ko": "for i in range(3): 안에서 print(\"Ready\", i)를 실행하면 Ready 0부터 Ready 2까지 출력됩니다.",
-      "hint_en": "Run print(\"Ready\", i) inside for i in range(3): to print Ready 0 through Ready 2.",
+      "hint_ko": "반복 블록 내부의 출력문에서 고정 문자열과 반복 변수를 쉼표로 나란히 전달하면 매 반복마다 공백으로 이어 출력됩니다.",
+      "hint_en": "Pass the fixed label string and loop variable separated by a comma inside the loop's print block.",
       "targetCode": "for i in range(3):\n    print(\"Ready\", i)",
       "testCases": [
         {
@@ -81,8 +81,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 숫자 범위를 만드는 함수를 채워 \"Hello\"를 총 4번 반복 출력해보세요.",
       "prompt_en": "Fill in the range-generating function name to print \"Hello\" 4 times.",
-      "hint_ko": "0부터 끝값 직전까지의 정수 시퀀스를 만들 때는 range() 함수를 사용합니다.",
-      "hint_en": "Use range(4) to repeat the loop body 4 times.",
+      "hint_ko": "영어로 '범위·구간'을 뜻하는 다섯 글자 내장 함수를 사용해 0부터 지정한 횟수 직전까지의 숫자 흐름을 만듭니다.",
+      "hint_en": "Use the 5-letter built-in function meaning a numeric span or extent to repeat the body a set number of times.",
       "templateCode": "for i in §§§§§(4):\n    print(\"Hello\")",
       "targetCode": "for i in range(4):\n    print(\"Hello\")",
       "testCases": [
@@ -99,8 +99,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "type": "block",
       "prompt_ko": "정수 n을 입력받아 range(n)과 i + 1을 활용해 1부터 n까지 순서대로 출력해보세요.",
       "prompt_en": "Read integer n and print 1 through n using range(n) and i + 1.",
-      "hint_ko": "range(n)은 0부터 n-1까지 변하므로 print(i + 1)을 출력하면 1부터 n까지 나옵니다.",
-      "hint_en": "Since range(n) produces 0..n-1, printing i + 1 outputs 1..n.",
+      "hint_ko": "반복 변수는 0부터 시작해 n-1에서 끝나므로, 출력할 때 1을 더해주면 1부터 n까지의 수열이 됩니다.",
+      "hint_en": "Because the loop index runs from 0 through n-1, adding 1 when printing shifts the output to 1 through n.",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(i + 1)",
       "testCases": [
         {
@@ -127,8 +127,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 줄바꿈 대신 공백을 넣는 옵션 이름을 채워 0부터 n-1까지 한 줄에 출력해보세요. (예: 4 -> 0 1 2 3)",
       "prompt_en": "Fill in the print keyword option name to output 0 through n-1 on a single line separated by spaces.",
-      "hint_ko": "print()의 end 옵션에 \" \"를 지정하면 줄을 바꾸지 않고 공백으로 이어 출력합니다.",
-      "hint_en": "Set end=\" \" in print() to separate outputs with a space instead of a newline.",
+      "hint_ko": "영어로 '끝·마무리'를 뜻하는 세 글자 출력 옵션에 공백을 지정하면 줄바꿈 대신 한 줄로 이어 출력합니다.",
+      "hint_en": "Use the 3-letter print option meaning \"finish\" to replace the default trailing newline with a space.",
       "templateCode": "n = int(input())\nfor i in range(n):\n    print(i, §§§=\" \")",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(i, end=\" \")",
       "testCases": [
@@ -155,8 +155,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "type": "block",
       "prompt_ko": "정수 n을 입력받아 문자열 반복 연산(*)으로 별(\"*\")을 1개부터 n개까지 줄마다 출력해보세요.",
       "prompt_en": "Read integer n and print 1 to n stars (\"*\") per line using string repetition (*).",
-      "hint_ko": "for i in range(n): 안에서 print(\"*\" * (i + 1))을 실행하면 별 개수가 1개씩 늘어납니다.",
-      "hint_en": "Inside for i in range(n):, run print(\"*\" * (i + 1)) to grow the stars from 1 to n.",
+      "hint_ko": "0부터 시작하는 반복 변수에 1을 더한 횟수만큼 별 문자열을 반복 연산해 매 줄마다 길이를 늘려 출력하세요.",
+      "hint_en": "Repeat the star character (i + 1) times inside the loop so each line grows by one star.",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(\"*\" * (i + 1))",
       "testCases": [
         {
@@ -183,8 +183,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸에 문자열 반복 연산자를 채워 줄마다 \"-\"가 i개씩 앞에 붙은 화살표를 n줄 출력해보세요. (예: 3 -> > / -> / -->)",
       "prompt_en": "Fill in the string repetition operator to print n lines of arrows with i leading hyphens.",
-      "hint_ko": "문자열에 정수를 곱하는 * 연산자를 쓰면 \"-\"가 i번 반복된 뒤 \">\"와 결합됩니다.",
-      "hint_en": "Use * to repeat \"-\" i times before concatenating \">\".",
+      "hint_ko": "문자열 뒤에 별표 모양의 곱셈 연산자를 쓰면 오른쪽 정수만큼 문자가 반복된 뒤 화살촉 문자열과 이어집니다.",
+      "hint_en": "Use the asterisk multiplication symbol to repeat the hyphen string i times before joining the arrow tip.",
       "templateCode": "n = int(input())\nfor i in range(n):\n    print(\"-\" § i + \">\")",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(\"-\" * i + \">\")",
       "testCases": [
@@ -211,8 +211,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "type": "block",
       "prompt_ko": "정수 n을 입력받아 0부터 n-1까지 짝수면 숫자와 \"Even\", 홀수면 숫자와 \"Odd\"를 출력해보세요.",
       "prompt_en": "Read integer n and for 0..n-1 print the number with \"Even\" if even or \"Odd\" if odd.",
-      "hint_ko": "for i in range(n): 안에 if i % 2 == 0: 조건과 else: 블록을 넣어 분기 출력하세요.",
-      "hint_en": "Use if i % 2 == 0: and else: inside for i in range(n):.",
+      "hint_ko": "반복문 안에 조건 분기 블록을 중첩해 2로 나눈 나머지가 0인지에 따라 서로 다른 문자열을 함께 출력하세요.",
+      "hint_en": "Nest a two-way conditional branch inside the loop to check divisibility by 2 and print the matching label.",
       "targetCode": "n = int(input())\nfor i in range(n):\n    if i % 2 == 0:\n        print(i, \"Even\")\n    else:\n        print(i, \"Odd\")",
       "testCases": [
         {
@@ -239,8 +239,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸을 채워 i가 0일 때는 \"Start\", 그 외에는 \"Lv.\" 뒤에 번호를 붙인 문자열을 출력해보세요. (예: 3 -> Start / Lv.1 / Lv.2)",
       "prompt_en": "Fill in both blanks to print \"Start\" when i is 0 and \"Lv.\" + i otherwise.",
-      "hint_ko": "조건이 거짓일 때 분기하는 키워드 else와 정수를 문자열로 바꾸는 함수 str을 입력하세요.",
-      "hint_en": "Use else for the fallback branch and str(i) to concatenate i with \"Lv.\".",
+      "hint_ko": "'그밖에'를 뜻하는 네 글자 분기 키워드와, 문자열(string)의 앞 세 글자를 딴 변환 함수를 각각 채워보세요.",
+      "hint_en": "Enter the 4-letter fallback keyword meaning \"otherwise\" and the conversion function from the first 3 letters of \"string\".",
       "templateCode": "n = int(input())\nfor i in range(n):\n    if i == 0:\n        print(\"Start\")\n    §§§§:\n        print(\"Lv.\" + §§§(i))",
       "targetCode": "n = int(input())\nfor i in range(n):\n    if i == 0:\n        print(\"Start\")\n    else:\n        print(\"Lv.\" + str(i))",
       "testCases": [
@@ -268,8 +268,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "반복 횟수 버그를 고쳐 0부터 n-1까지 총 n개의 정수가 빠짐없이 출력되도록 수정해보세요.",
       "prompt_en": "Fix the range stop bug so all n integers from 0 through n-1 are printed.",
-      "hint_ko": "range(끝)은 끝값 직전까지만 반복하므로 n번 반복하려면 n - 1이 아니라 n을 넣어야 합니다.",
-      "hint_en": "range(stop) stops before stop, so pass n instead of n - 1 to get 0..n-1.",
+      "hint_ko": "범위 함수는 끝값 직전까지만 숫자를 만드는데, 끝값에서 1을 더 빼 버려서 마지막 반복이 누락되고 있습니다.",
+      "hint_en": "Because the stop bound is already excluded, subtracting 1 from it drops the last expected number.",
       "templateCode": "n = int(input())\nfor i in range(n - 1):\n    print(i)",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(i)",
       "testCases": [
@@ -297,8 +297,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "반복문 안에 한 줄을 추가하여 0부터 n-1까지의 각 정수에 2를 곱한 값을 공백으로 이어 출력해보세요. (예: 4 -> 0 2 4 6)",
       "prompt_en": "Add one line inside the loop to print i * 2 for 0..n-1 separated by spaces.",
-      "hint_ko": "공백 4칸 들여쓰기 후 print(i * 2, end=\" \")를 작성하세요.",
-      "hint_en": "Indent by 4 spaces and write print(i * 2, end=\" \").",
+      "hint_ko": "반복문 안쪽 들여쓰기에 맞춰 현재 변수에 2를 곱한 값과 줄 끝 공백 옵션을 함께 출력하도록 작성해보세요.",
+      "hint_en": "Indent inside the loop body and print twice the loop variable while setting the line-ending option to a space.",
       "templateCode": "n = int(input())\nfor i in range(n):\n    §§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(i * 2, end=\" \")",
       "testCases": [
@@ -326,8 +326,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
       "prompt_en": "Select the exact output produced when the following Python code runs.",
-      "hint_ko": "range(4)는 i가 0, 1, 2, 3으로 변합니다. i=0일 때 \"Go\", 이후 1, 2, 3개의 \"*\"가 출력됩니다.",
-      "hint_en": "i runs through 0, 1, 2, 3: i=0 prints \"Go\", and i=1, 2, 3 print 1, 2, and 3 stars.",
+      "hint_ko": "0부터 시작해 끝값 4 직전까지 변하는 i의 값들을 적고, 첫 번째 값과 나머지 값에서 각각 무엇이 찍히는지 추적해보세요.",
+      "hint_en": "List the values i takes from 0 up to right before 4, then trace the zero branch versus the star-repeating branch.",
       "targetCode": "for i in range(4):\n    if i == 0:\n        print(\"Go\")\n    else:\n        print(\"*\" * i)",
       "choices": [
         "Go\n*\n**\n***",

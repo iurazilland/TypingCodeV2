@@ -233,8 +233,8 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '틀린 곳을 수정하여 덧셈 계산 결과(30)가 화면에 출력되도록 해보세요.',
       prompt_en: 'Fix the error so that the addition result (30) is printed on the screen.',
-      hint_ko: '화면에 값을 출력하는 명령어의 영어 철자가 틀렸습니다. pritn을 올바른 함수명 print로 고쳐보세요.',
-      hint_en: 'The output function name is misspelled. Fix pritn to print.',
+      hint_ko: '화면에 값을 출력하는 기본 명령어의 마지막 두 알파벳 순서가 뒤바뀌어 있습니다.',
+      hint_en: 'Check the spelling of the output function—the last two letters are swapped.',
       templateCode: 'pritn(10+20)',
       targetCode: 'print(10+20)',
       testCases: [
@@ -252,8 +252,8 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '예제 코드 아래에 한 줄을 추가하여 3과 7을 먼저 더한 뒤 5를 곱한 결과(50)를 출력해보세요.',
       prompt_en: 'Type the example code and add a line below to add 3 and 7 first, then multiply by 5 to print 50.',
-      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print((3+7)*5)를 입력하세요.',
-      hint_en: 'Type the first line example, press Enter, and write print((3+7)*5) on the second line.',
+      hint_ko: '첫째 줄 예제처럼 먼저 더할 두 숫자를 소괄호로 감싼 뒤 곱셈 연산자를 이어 작성해보세요.',
+      hint_en: 'Follow line 1 by wrapping the two numbers to add in parentheses before multiplying.',
       templateCode: 'print((10+20)*2)\n§§§§§§§§§§§§§§',
       targetCode: 'print((10+20)*2)\nprint((3+7)*5)',
       testCases: [

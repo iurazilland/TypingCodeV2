@@ -31,8 +31,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "type": "block",
       "prompt_ko": "try에서 문자열 \"25\"를 정수로 변환하고, 오류가 없을 때만 실행되는 else에서 n * 2를 출력해 50을 확인하세요.",
       "prompt_en": "Convert \"25\" to int inside try, and print n * 2 inside else (which runs only when no error occurs) to output 50.",
-      "hint_ko": "try 블록에서 예외가 발생하지 않으면 except를 건너뛰고 else 블록이 실행됩니다.",
-      "hint_en": "When no exception occurs in try, Python skips except and runs the else block.",
+      "hint_ko": "시도 블록에서 예외가 전혀 발생하지 않으면 예외 처리 절을 건너뛰고 정상 후속 분기 블록이 실행됩니다.",
+      "hint_en": "When no exception occurs inside try, Python skips the error handler and executes the no-error branch.",
       "targetCode": "try:\n    n = int(\"25\")\nexcept ValueError:\n    print(\"Error\")\nelse:\n    print(n * 2)",
       "testCases": [
         {
@@ -49,8 +49,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸을 채워 정수 변환에 성공했을 때만 n + 10을 출력하고, 실패하면 Bad를 출력해보세요. (예: 15 -> 25)",
       "prompt_en": "Fill in the blank so n + 10 prints only when int conversion succeeds, and Bad prints on failure.",
-      "hint_ko": "try에서 예외가 발생하지 않았을 때만 실행할 코드는 except 뒤에 else: 블록으로 작성합니다.",
-      "hint_en": "Use an else: clause after except to run code only when try succeeds without error.",
+      "hint_ko": "예외가 발생하지 않은 '그 밖의(정상인) 경우'에만 실행되도록 예외 절 뒤에 4글자 분기 키워드를 적으세요.",
+      "hint_en": "Write the 4-letter 'otherwise' branch keyword that runs only when try succeeds without error.",
       "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\n§§§§:\n    print(n + 10)",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\nelse:\n    print(n + 10)",
       "testCases": [
@@ -72,8 +72,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "type": "block",
       "prompt_ko": "0으로 나눌 때 Zero를 출력하고, 예외 발생 여부와 관계없이 항상 실행되는 finally에서 End를 출력해보세요.",
       "prompt_en": "Print Zero on ZeroDivisionError, and always print End inside finally regardless of errors.",
-      "hint_ko": "finally 블록은 예외가 발생하든 발생하지 않든 마지막에 반드시 실행됩니다.",
-      "hint_en": "The finally block always executes at the end whether an exception occurred or not.",
+      "hint_ko": "'마침내/마지막에'라는 뜻의 마무리 블록은 예외가 발생하든 발생하지 않든 맨 마지막에 반드시 실행됩니다.",
+      "hint_en": "Meaning 'at the very end,' this cleanup block always runs whether an exception occurred or not.",
       "targetCode": "try:\n    print(10 // 0)\nexcept ZeroDivisionError:\n    print(\"Zero\")\nfinally:\n    print(\"End\")",
       "testCases": [
         {
@@ -90,8 +90,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "두 빈칸을 채워 변환 성공 시 OK:값, 실패 시 Err를 출력한 뒤 항상 마지막에 Done을 출력하세요. (예: 7 -> OK:7, Done)",
       "prompt_en": "Fill in both blanks to print OK:x on success or Err on error, followed always by Done.",
-      "hint_ko": "예외가 없을 때 실행되는 절은 else이고, 마무리 정리를 위해 항상 실행되는 절은 finally입니다.",
-      "hint_en": "Use else for the no-error branch and finally for the cleanup branch that always runs.",
+      "hint_ko": "오류가 없을 때 실행되는 4글자 '그 외' 분기 키워드와, '마지막(final)'에 부사 어미(-ly)를 붙여 항상 실행되는 7글자 키워드를 차례로 쓰세요.",
+      "hint_en": "Use the 4-letter 'otherwise' keyword for the no-error branch, and add '-ly' to 'final' for the 7-letter unconditional cleanup block.",
       "templateCode": "try:\n    x = int(input())\nexcept ValueError:\n    print(\"Err\")\n§§§§:\n    print(f\"OK:{x}\")\n§§§§§§§:\n    print(\"Done\")",
       "targetCode": "try:\n    x = int(input())\nexcept ValueError:\n    print(\"Err\")\nelse:\n    print(f\"OK:{x}\")\nfinally:\n    print(\"Done\")",
       "testCases": [
@@ -113,8 +113,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "type": "block",
       "prompt_ko": "age가 0보다 작으면 raise로 ValueError(\"Invalid\")를 직접 발생시키고 except에서 Invalid를 출력해보세요.",
       "prompt_en": "If age < 0, raise ValueError(\"Invalid\") intentionally and catch it in except to print Invalid.",
-      "hint_ko": "문법 오류가 아니더라도 값 검증에 실패했을 때 raise ValueError(\"메시지\")로 예외를 직접 일으킬 수 있습니다.",
-      "hint_en": "Use raise ValueError(\"Invalid\") to trigger a validation error when age is negative.",
+      "hint_ko": "문법 오류가 없더라도 입력값이 조건에 어긋날 때 예외를 직접 위로 '일으켜' 예외 처리 절로 즉시 이동시킬 수 있습니다.",
+      "hint_en": "Even without a crash, you can intentionally throw a validation exception to jump directly into the error handler.",
       "targetCode": "age = -3\ntry:\n    if age < 0:\n        raise ValueError(\"Invalid\")\n    print(age)\nexcept ValueError:\n    print(\"Invalid\")",
       "testCases": [
         {
@@ -131,8 +131,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸을 채워 음수 나이가 입력되면 ValueError를 발생시키고 예외 객체 e에 담긴 메시지를 출력하세요. (예: -5 -> Invalid)",
       "prompt_en": "Fill in the blanks to raise ValueError on negative age and print the exception object e.",
-      "hint_ko": "예외를 발생시킬 때는 raise를 쓰고, 발생한 예외 메시지를 변수로 받으려면 except ValueError as e:를 사용합니다.",
-      "hint_en": "Use raise to throw ValueError and except ValueError as e: to capture the error message in e.",
+      "hint_ko": "예외를 위로 '들어 올리다/일으키다'라는 5글자 키워드로 오류를 던지고, 발생한 예외 객체를 변수 'e로서' 받도록 2글자 별칭 키워드를 쓰세요.",
+      "hint_en": "Throw the error with the 5-letter keyword meaning 'to lift up', and bind the exception object to e using the 2-letter alias keyword.",
       "templateCode": "age = int(input())\ntry:\n    if age < 0:\n        §§§§§ ValueError(\"Invalid\")\n    print(f\"Age:{age}\")\nexcept ValueError §§ e:\n    print(e)",
       "targetCode": "age = int(input())\ntry:\n    if age < 0:\n        raise ValueError(\"Invalid\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
       "testCases": [
@@ -154,8 +154,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "type": "block",
       "prompt_ko": "함수 check_score에서 isinstance로 정수 여부와 0 이상인지를 검사해 예외를 일으키고, 정상일 때 95를 출력해보세요.",
       "prompt_en": "Validate int type and s >= 0 with isinstance and raise inside check_score, then print 95 in else.",
-      "hint_ko": "not isinstance(s, int) 또는 s < 0이면 ValueError를 발생시키고, 정상이면 s + 5를 반환합니다.",
-      "hint_en": "Raise ValueError if s is not an int or s < 0; otherwise return s + 5 and print res in else.",
+      "hint_ko": "정수가 아니거나 음수일 때 직접 값 예외를 일으키면, 정상 점수가 들어왔을 때만 반환값이 계산되어 후속 절에서 출력됩니다.",
+      "hint_en": "Throwing a value error when validation fails ensures only valid integer scores return a result to the no-error branch.",
       "targetCode": "def check_score(s):\n    if not isinstance(s, int) or s < 0:\n        raise ValueError(\"Bad\")\n    return s + 5\n\ntry:\n    res = check_score(90)\nexcept ValueError:\n    print(\"Fail\")\nelse:\n    print(res)",
       "testCases": [
         {
@@ -172,8 +172,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸을 채워 홀수면 Odd 예외를 발생시키는 함수 half_even을 완성하고 마지막에 항상 Checked를 출력하세요.",
       "prompt_en": "Fill in the blanks so half_even raises ValueError(\"Odd\") on odd numbers and finally prints Checked.",
-      "hint_ko": "홀수일 때 raise ValueError(\"Odd\")를 실행하고, 마지막 마무리 출력은 finally: 블록에 작성합니다.",
-      "hint_en": "Use raise ValueError(\"Odd\") inside half_even and finally: at the end of try-except.",
+      "hint_ko": "예외를 '일으키는' 5글자 키워드 뒤에 '값(Value)'과 '오류(Error)'를 파스칼 표기법으로 합친 예외를 적고, 맨 끝에는 '마지막에'(final + -ly) 7글자 키워드를 쓰세요.",
+      "hint_en": "Throw using the 5-letter 'lift up' keyword with PascalCase 'Value'+'Error', and close with the 7-letter keyword ('final' + '-ly').",
       "templateCode": "def half_even(n):\n    if n % 2 != 0:\n        §§§§§ §§§§§§§§§§(\"Odd\")\n    return n // 2\n\ntry:\n    print(half_even(int(input())))\nexcept ValueError as e:\n    print(e)\n§§§§§§§:\n    print(\"Checked\")",
       "targetCode": "def half_even(n):\n    if n % 2 != 0:\n        raise ValueError(\"Odd\")\n    return n // 2\n\ntry:\n    print(half_even(int(input())))\nexcept ValueError as e:\n    print(e)\nfinally:\n    print(\"Checked\")",
       "testCases": [
@@ -195,8 +195,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "type": "block",
       "prompt_ko": "while True 반복문에서 양의 정수가 입력될 때까지 Retry를 출력하고, 성공 시 total에 더해 반복을 종료해보세요.",
       "prompt_en": "Loop with while True printing Retry on invalid or non-positive inputs, then add n to total and break in else.",
-      "hint_ko": "n <= 0일 때 raise로 예외를 발생시키면 숫자 변환 실패와 범위 오류를 같은 except에서 처리할 수 있습니다.",
-      "hint_en": "Raising ValueError when n <= 0 lets one except ValueError block handle both non-digits and <= 0.",
+      "hint_ko": "0 이하 숫자에도 직접 값 예외를 일으키면 숫자가 아닌 입력과 범위 오류를 하나의 예외 처리 블록에서 함께 재시도할 수 있습니다.",
+      "hint_en": "Throwing the same value exception when n <= 0 lets one handler catch both non-numeric text and non-positive numbers.",
       "targetCode": "total = 10\nwhile True:\n    try:\n        n = int(input())\n        if n <= 0:\n            raise ValueError(\"NonPos\")\n    except ValueError:\n        print(\"Retry\")\n    else:\n        total += n\n        break\nprint(total)",
       "testCases": [
         {
@@ -218,8 +218,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "세 빈칸을 채워 1 이상의 정수가 들어올 때까지 시도 횟수(tries)를 항상 1씩 늘리며 검증해보세요.",
       "prompt_en": "Fill in the three blanks to validate n >= 1 in a while True loop while incrementing tries in finally.",
-      "hint_ko": "else에서 break가 실행되더라도 루프를 빠져나가기 직전에 finally 블록의 tries += 1이 반드시 실행됩니다.",
-      "hint_en": "Even when break runs inside else, finally executes tries += 1 right before exiting the loop.",
+      "hint_ko": "예외를 '일으키는' 5글자 키워드, 정상일 때 실행되는 4글자 '그 외' 키워드, 루프 탈출 직전에도 '마지막으로'(final + -ly) 실행되는 7글자 키워드를 채우세요.",
+      "hint_en": "Use the 5-letter 'lift up' error keyword, the 4-letter 'otherwise' branch keyword, and the 7-letter 'final' + '-ly' block that runs even before break.",
       "templateCode": "tries = 0\nwhile True:\n    try:\n        n = int(input())\n        if n < 1:\n            §§§§§ ValueError(\"Min1\")\n    except ValueError as e:\n        print(e)\n    §§§§:\n        print(f\"Val:{n}\")\n        break\n    §§§§§§§:\n        tries += 1\nprint(f\"Tries:{tries}\")",
       "targetCode": "tries = 0\nwhile True:\n    try:\n        n = int(input())\n        if n < 1:\n            raise ValueError(\"Min1\")\n    except ValueError as e:\n        print(e)\n    else:\n        print(f\"Val:{n}\")\n        break\n    finally:\n        tries += 1\nprint(f\"Tries:{tries}\")",
       "testCases": [
@@ -242,8 +242,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "0~100 범위를 벗어날 때 예외가 실제로 발생하지 않는 버그를 고쳐 RangeErr가 출력되게 하세요. (예: 150 -> RangeErr)",
       "prompt_en": "Fix the bug where out-of-range input creates an exception object without raising it (e.g., 150 -> RangeErr).",
-      "hint_ko": "ValueError(\"RangeErr\")만 적으면 예외 객체만 만들어지고 무시됩니다. 앞에 raise 키워드를 붙여야 예외가 발생합니다.",
-      "hint_en": "Calling ValueError(\"RangeErr\") alone does not throw an exception; prepend raise before ValueError.",
+      "hint_ko": "예외 생성자만 호출하면 예외 객체가 만들어지기만 하고 무시됩니다. 실제로 예외를 발동시키도록 앞에 예외 발생 키워드를 붙이세요.",
+      "hint_en": "Calling the exception class alone merely constructs an unused object; prepend the 5-letter 'lift up' keyword to actually throw it.",
       "templateCode": "pct = int(input())\ntry:\n    if pct < 0 or pct > 100:\n        ValueError(\"RangeErr\")\nexcept ValueError as e:\n    print(e)\nelse:\n    print(f\"{pct}%\")",
       "targetCode": "pct = int(input())\ntry:\n    if pct < 0 or pct > 100:\n        raise ValueError(\"RangeErr\")\nexcept ValueError as e:\n    print(e)\nelse:\n    print(f\"{pct}%\")",
       "testCases": [
@@ -266,8 +266,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "finally 아래에 한 줄을 추가하여 예외 여부와 관계없이 항상 Cleanup을 출력해보세요. (예: 4 -> 12, Cleanup)",
       "prompt_en": "Add one line inside finally to always print Cleanup regardless of errors (e.g., 4 -> 12, Cleanup).",
-      "hint_ko": "finally: 다음 줄에 들여쓰기 4칸을 맞추어 print(\"Cleanup\")을 작성하세요.",
-      "hint_en": "Indented by 4 spaces under finally:, write print(\"Cleanup\").",
+      "hint_ko": "마무리 절 내부의 들여쓰기 위치에 지정된 문자열을 출력하는 문을 작성해보세요.",
+      "hint_en": "At the indented line inside the cleanup block, call the output function with the required string literal.",
       "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Fail\")\nelse:\n    print(n * 3)\nfinally:\n    §§§§§§§§§§§§§§§§",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Fail\")\nelse:\n    print(n * 3)\nfinally:\n    print(\"Cleanup\")",
       "testCases": [
@@ -290,8 +290,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "리스트 [4, -1]을 순서대로 순회할 때 다음 파이썬 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "Select the exact output when the loop processes [4, -1] through try-except-else-finally.",
-      "hint_ko": "x=4일 때는 예외가 없으므로 else(OK:4)와 finally(F)가 실행되고, x=-1일 때는 except(Neg)와 finally(F)가 실행됩니다.",
-      "hint_en": "For 4: else appends OK:4 then finally appends F. For -1: except appends Neg then finally appends F.",
+      "hint_ko": "양수일 때는 정상 분기 뒤 마무리 절이 실행되고, 음수일 때는 예외 분기 뒤 마무리 절이 실행된다는 점(마무리 절은 매 반복마다 실행됨!)을 추적해보세요.",
+      "hint_en": "Trace each loop turn: a valid number runs the no-error branch plus cleanup, while a negative number runs the handler plus cleanup on every turn.",
       "targetCode": "log = []\nfor x in [4, -1]:\n    try:\n        if x < 0:\n            raise ValueError(\"Neg\")\n    except ValueError as e:\n        log.append(str(e))\n    else:\n        log.append(f\"OK:{x}\")\n    finally:\n        log.append(\"F\")\nprint(\",\".join(log))",
       "choices": [
         "OK:4,F,Neg,F",

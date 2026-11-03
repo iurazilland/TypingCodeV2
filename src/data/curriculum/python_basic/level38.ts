@@ -28,8 +28,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "type": "block",
       "prompt_ko": "숫자 10, 20, 30이 순서대로 담긴 리스트 nums를 만들고 전체 리스트를 출력해보세요.",
       "prompt_en": "Create a list nums containing 10, 20, and 30, then print the entire list.",
-      "hint_ko": "리스트 블록에 변수명 nums와 요소 10, 20, 30을 넣고 print(nums)로 출력하세요.",
-      "hint_en": "Set the list variable nums to [10, 20, 30] and run print(nums).",
+      "hint_ko": "대괄호 안에 세 숫자를 쉼표로 나열해 리스트 변수에 저장한 뒤, 변수 자체를 그대로 출력해보세요.",
+      "hint_en": "Store the three comma-separated numbers inside square brackets in the variable, then print the variable directly.",
       "targetCode": "nums = [10, 20, 30]\nprint(nums)",
       "testCases": [
         {
@@ -46,8 +46,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "대괄호 기호를 채워 과일 리스트 fruits와 아무 요소도 없는 빈 리스트 empty를 만들어 각각 출력해보세요.",
       "prompt_en": "Fill in the square brackets to create fruits and an empty list empty, then print both.",
-      "hint_ko": "파이썬 리스트는 대괄호 [ ]로 감싸며, 안을 비운 []는 요소가 0개인 빈 리스트가 됩니다.",
-      "hint_en": "Wrap list items in [ ], and use [] to create an empty list.",
+      "hint_ko": "파이썬 리스트는 대괄호 기호로 양끝을 감싸 만들며, 안을 비워두면 요소가 없는 빈 리스트가 됩니다.",
+      "hint_en": "Enclose list items inside square brackets, and place an empty pair of square brackets for an empty list.",
       "templateCode": "fruits = §\"apple\", \"banana\"§\nempty = §§\nprint(fruits)\nprint(empty)",
       "targetCode": "fruits = [\"apple\", \"banana\"]\nempty = []\nprint(fruits)\nprint(empty)",
       "testCases": [
@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "type": "block",
       "prompt_ko": "리스트 nums = [10, 20, 30, 40]의 길이와 첫 번째 요소, 마지막 요소(음수 인덱스)를 차례로 출력해보세요.",
       "prompt_en": "Print the length, first element, and last element (negative index) of nums = [10, 20, 30, 40].",
-      "hint_ko": "길이는 len(nums), 첫 번째 요소는 nums[0], 마지막 요소는 nums[-1]로 가져옵니다.",
-      "hint_en": "Use len(nums) for length, nums[0] for the first item, and nums[-1] for the last item.",
+      "hint_ko": "'길이(length)'의 앞 세 글자를 딴 함수로 개수를 구하고, 앞에서 첫 위치(0부터 시작)와 뒤에서 첫 위치(음수 시작)로 요소를 꺼내세요.",
+      "hint_en": "Measure the count with the 3-letter function from 'length', then access the 0-based first item and negative-indexed last item.",
       "targetCode": "nums = [10, 20, 30, 40]\nprint(len(nums))\nprint(nums[0], nums[-1])",
       "testCases": [
         {
@@ -82,8 +82,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈칸을 채워 colors 리스트의 요소 개수와 두 번째 요소(\"green\"), 맨 마지막 요소를 출력해보세요.",
       "prompt_en": "Fill in the blanks to print the length of colors, its second element, and its last element.",
-      "hint_ko": "개수를 세는 함수는 len이며, 두 번째 요소는 인덱스 1, 맨 마지막 요소는 음수 인덱스 -1입니다.",
-      "hint_en": "Use len() for count, index 1 for the second item, and -1 for the last item.",
+      "hint_ko": "'길이(length)'의 앞 세 글자를 딴 내장 함수와, 0부터 세는 두 번째 위치 번호 및 거꾸로 세는 맨 끝 음수 번호를 차례로 채우세요.",
+      "hint_en": "Fill in the 3-letter function from 'length', the 0-based index for the second item, and the negative index for the last item.",
       "templateCode": "colors = [\"red\", \"green\", \"blue\"]\nprint(§§§(colors))\nprint(colors[§], colors[§§])",
       "targetCode": "colors = [\"red\", \"green\", \"blue\"]\nprint(len(colors))\nprint(colors[1], colors[-1])",
       "testCases": [
@@ -100,8 +100,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "type": "block",
       "prompt_ko": "문자열 text = \"red green blue\"를 공백 기준으로 쪼개 words 리스트에 담고 개수와 첫 단어를 출력해보세요.",
       "prompt_en": "Split text = \"red green blue\" into words, then print its length and first word.",
-      "hint_ko": "words = text.split()은 단어들이 담긴 리스트를 반환합니다. len(words)와 words[0]을 출력하세요.",
-      "hint_en": "text.split() returns a list of words. Print len(words) and words[0].",
+      "hint_ko": "문자열을 공백 단위로 '쪼개는' 메서드를 호출하면 단어들이 담긴 새 리스트가 만들어집니다. 그 개수와 첫 요소를 차례로 출력하세요.",
+      "hint_en": "Dividing a string by whitespace produces a list of words; print its element count on one line and its first element on the next.",
       "targetCode": "text = \"red green blue\"\nwords = text.split()\nprint(len(words))\nprint(words[0])",
       "testCases": [
         {
@@ -118,8 +118,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "한 줄 입력을 공백 기준으로 나눈 리스트에서 첫 단어와 마지막 단어를 출력해보세요. (출력 예: First:py)",
       "prompt_en": "Split the input line by spaces and print the first and last words (e.g., First:py).",
-      "hint_ko": "문자열 분리 메서드는 split()이며, 첫 요소는 인덱스 0, 마지막 요소는 인덱스 -1로 접근합니다.",
-      "hint_en": "Use .split() to split into a list, then access index 0 and index -1.",
+      "hint_ko": "공백 기준으로 문자열을 '쪼개다'라는 뜻의 다섯 글자 메서드로 리스트를 만든 뒤, 맨 앞 번호와 맨 뒤 음수 번호를 각각 적으세요.",
+      "hint_en": "Call the 5-letter method meaning to divide text by spaces, then index the very first position and the negative last position.",
       "templateCode": "words = input().§§§§§()\nprint(f\"First:{words[§]}\")\nprint(f\"Last:{words[§§]}\")",
       "targetCode": "words = input().split()\nprint(f\"First:{words[0]}\")\nprint(f\"Last:{words[-1]}\")",
       "testCases": [
@@ -141,8 +141,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "type": "block",
       "prompt_ko": "items = [\"sword\", \"shield\"]에 요소가 있으면 개수와 첫 아이템을 형식에 맞게 출력해보세요. (출력 예: Bag:2,Main:sword)",
       "prompt_en": "If items = [\"sword\", \"shield\"] is non-empty, print its count and first item (e.g., Bag:2,Main:sword).",
-      "hint_ko": "비어 있지 않은 리스트는 조건문 if items:에서 참(True)으로 평가됩니다.",
-      "hint_en": "A non-empty list evaluates to True in an if items: check.",
+      "hint_ko": "요소가 하나라도 들어 있는 리스트는 조건문에 변수명만 적어도 참으로 판정됩니다. 그 안에서 개수와 첫 요소를 포맷팅해 출력하세요.",
+      "hint_en": "A non-empty list evaluates as truthy directly in a condition; inside the branch, format its length and first element.",
       "targetCode": "items = [\"sword\", \"shield\"]\nif items:\n    print(f\"Bag:{len(items)},Main:{items[0]}\")",
       "testCases": [
         {
@@ -159,8 +159,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "빈 리스트의 논리값을 확인하고, items가 비어 있지 않을 때 개수와 마지막 요소를 출력해보세요. (출력 예: Ready:2,End:map)",
       "prompt_en": "Print the boolean value of empty, and if items is truthy, print its count and last element.",
-      "hint_ko": "논리형 변환 함수 bool([])은 False를 반환하며, 요소가 있는 리스트는 if 조건에서 True가 됩니다.",
-      "hint_en": "bool([]) returns False, while a non-empty list is truthy in an if statement.",
+      "hint_ko": "'불리언(boolean)' 앞 네 글자를 딴 논리 변환 함수, 조건 분기 키워드, 그리고 '길이(length)' 앞 세 글자를 딴 개수 함수를 차례로 채우세요.",
+      "hint_en": "Use the 4-letter truth-conversion function from 'boolean', the conditional keyword, and the 3-letter count function from 'length'.",
       "templateCode": "empty = []\nitems = [\"key\", \"map\"]\nprint(§§§§(empty))\n§§ items:\n    print(f\"Ready:{§§§(items)},End:{items[-1]}\")",
       "targetCode": "empty = []\nitems = [\"key\", \"map\"]\nprint(bool(empty))\nif items:\n    print(f\"Ready:{len(items)},End:{items[-1]}\")",
       "testCases": [
@@ -177,8 +177,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "type": "block",
       "prompt_ko": "while 반복문과 인덱스 i로 nums = [10, 20, 30]의 모든 요소를 total에 누적해 출력해보세요. (출력 예: Sum:60)",
       "prompt_en": "Use a while loop and index i to sum all elements of nums = [10, 20, 30] and print Sum:60.",
-      "hint_ko": "while i < len(nums): 안에서 total += nums[i]와 i += 1을 순서대로 실행하세요.",
-      "hint_en": "Loop while i < len(nums):, adding total += nums[i] and incrementing i += 1.",
+      "hint_ko": "인덱스 변수가 리스트 길이보다 작을 동안 현재 위치의 숫자를 합계 변수에 누적하고, 매번 인덱스를 1씩 증가시키세요.",
+      "hint_en": "While the index stays strictly below the list's length, add the element at that index to the running sum and increment the index by 1.",
       "targetCode": "nums = [10, 20, 30]\ni = 0\ntotal = 0\nwhile i < len(nums):\n    total += nums[i]\n    i += 1\nprint(f\"Sum:{total}\")",
       "testCases": [
         {
@@ -195,8 +195,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "인덱스 i가 리스트 길이보다 작을 동안 반복하며 번호와 요소를 한 줄씩 출력해보세요. (출력 예: 0:A)",
       "prompt_en": "Loop while index i is less than the list length and print each index and item (e.g., 0:A).",
-      "hint_ko": "조건식 i < len(tags)가 참인 동안 tags[i]를 출력하고 i를 1씩 증가시킵니다.",
-      "hint_en": "Repeat while i < len(tags):, printing tags[i] and incrementing i += 1.",
+      "hint_ko": "'~하는 동안'을 뜻하는 조건 반복 키워드와 '길이(length)' 앞 세 글자 함수로 범위를 잡고, 대괄호 안에 현재 인덱스 변수를 넣으세요.",
+      "hint_en": "Start with the loop keyword meaning 'as long as', compare against the 3-letter length function, and index the list with the loop counter.",
       "templateCode": "tags = [\"A\", \"B\", \"C\"]\ni = 0\n§§§§§ i < §§§(tags):\n    print(f\"{i}:{tags[§]}\")\n    i += 1",
       "targetCode": "tags = [\"A\", \"B\", \"C\"]\ni = 0\nwhile i < len(tags):\n    print(f\"{i}:{tags[i]}\")\n    i += 1",
       "testCases": [
@@ -214,8 +214,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "반복 조건의 비교 연산자 버그로 인해 발생하는 인덱스 범위 오류를 고쳐 10, 20, 30을 한 줄씩 출력해보세요.",
       "prompt_en": "Fix the comparison operator bug in the while condition that causes an IndexError.",
-      "hint_ko": "길이가 3인 리스트의 유효한 인덱스는 0, 1, 2뿐이므로 i가 길이와 같아지기 전까지만 반복해야 합니다.",
-      "hint_en": "Valid indices for length 3 are 0, 1, 2, so stop strictly before len(nums).",
+      "hint_ko": "0번부터 시작하는 리스트의 마지막 유효 인덱스는 '전체 길이 - 1'입니다. 인덱스가 길이와 같아지기 전에 반복이 멈추도록 비교 연산자를 고치세요.",
+      "hint_en": "Valid 0-based list indices stop one short of the list's length; change the comparison operator so the loop halts before reaching the length.",
       "templateCode": "nums = [10, 20, 30]\ni = 0\nwhile i <= len(nums):\n    print(nums[i])\n    i += 1",
       "targetCode": "nums = [10, 20, 30]\ni = 0\nwhile i < len(nums):\n    print(nums[i])\n    i += 1",
       "testCases": [
@@ -233,8 +233,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "단어 리스트 생성 코드 아래에 한 줄을 추가하여 단어 개수와 마지막 단어를 콜론으로 이어 출력해보세요. (출력 예: 3:go)",
       "prompt_en": "Add one line below to print the word count and last word separated by a colon (e.g., 3:go).",
-      "hint_ko": "둘째 줄에 print(f\"{len(words)}:{words[-1]}\")를 작성해보세요.",
-      "hint_en": "Write print(f\"{len(words)}:{words[-1]}\") on the second line.",
+      "hint_ko": "분리된 단어 리스트의 전체 요소 개수와 음수 인덱스로 꺼낸 맨 마지막 단어를 콜론 양옆에 두어 포맷 문자열로 출력해보세요.",
+      "hint_en": "Print a formatted string joining the list's element count and its negative-indexed last word with a colon.",
       "templateCode": "words = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "words = input().split()\nprint(f\"{len(words)}:{words[-1]}\")",
       "testCases": [
@@ -257,8 +257,8 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
       "prompt_en": "Select the exact output printed when the following Python code runs.",
-      "hint_ko": "items는 [\"A\", \"B\", \"C\", \"D\"]로 길이 4(참), empty는 빈 리스트(거짓)이며 items[1]은 B, items[-1]은 D입니다.",
-      "hint_en": "items has 4 elements (True), empty is False, items[1] is B, and items[-1] is D.",
+      "hint_ko": "요소가 든 리스트와 빈 리스트의 참/거짓 판정값을 먼저 비교한 뒤, 전체 요소 개수와 두 번째 위치 및 맨 끝 음수 위치의 문자를 차례로 확인하세요.",
+      "hint_en": "Compare the truthiness of a populated list versus an empty list, then check the item count alongside the 2nd item and last item.",
       "targetCode": "items = \"A-B-C-D\".split(\"-\")\nempty = []\nprint(bool(items), bool(empty))\nprint(f\"{len(items)}:{items[1]}{items[-1]}\")",
       "choices": [
         "True False\n4:BD",

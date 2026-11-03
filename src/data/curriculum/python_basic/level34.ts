@@ -22,8 +22,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       type: 'block',
       prompt_ko: "word에 \"Python\"을 저장하고 슬라이싱 word[0:2]로 앞 두 글자를 잘라 출력해보세요. (출력 예: Py)",
       prompt_en: "Store \"Python\" in word and print its first two characters using word[0:2] (e.g., Py).",
-      hint_ko: "슬라이싱 [0:2]는 0번부터 2번 직전(1번)까지의 부분 문자열 \"Py\"를 가져옵니다.",
-      hint_en: "word[0:2] slices characters from index 0 up to (but excluding) index 2.",
+      hint_ko: "대괄호 안의 시작:끝 슬라이싱은 시작 번호부터 끝 번호 직전 위치까지만 잘라내어 반환합니다.",
+      hint_en: "In start:stop slicing inside brackets, characters are extracted from the start index up to—but excluding—the stop index.",
       targetCode: "word = \"Python\"\nprint(word[0:2])",
       testCases: [
         {
@@ -40,8 +40,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 s에서 인덱스 1번부터 3번까지의 부분 문자열을 슬라이싱해 출력해보세요. (예: ABCDEF -> BCD)",
       prompt_en: "Slice and print characters from index 1 through index 3 of input string s (e.g., ABCDEF -> BCD).",
-      hint_ko: "끝 인덱스는 포함되지 않으므로 3번 인덱스까지 가져오려면 [1:4]로 작성해야 합니다.",
-      hint_en: "Since the stop index is exclusive, write [1:4] to include indices 1, 2, and 3.",
+      hint_ko: "슬라이싱 [시작:끝]에서 끝 번호는 결과에 포함되지 않습니다. 목표 끝 위치보다 1 큰 숫자를 끝 번호 자리에 적어보세요.",
+      hint_en: "Because the stop index in [start:stop] is exclusive, set the stop number to one past the last index you want to include.",
       templateCode: "s = input()\nprint(s§§§§§)",
       targetCode: "s = input()\nprint(s[1:4])",
       testCases: [
@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       type: 'block',
       prompt_ko: "code에 \"KOR2026\"을 저장하고 시작 인덱스를 생략한 code[:3]으로 앞 세 글자를 출력해보세요.",
       prompt_en: "Store \"KOR2026\" in code and print the first three characters using code[:3].",
-      hint_ko: "콜론 앞을 비운 [:3]은 맨 처음(0번)부터 2번 인덱스까지 세 글자를 잘라냅니다.",
-      hint_en: "Omitting the start index in code[:3] slices from the beginning up to index 3.",
+      hint_ko: "콜론 앞의 시작 번호를 비워두면 문자열의 맨 처음(0번 위치)부터 끝 번호 직전까지 잘라냅니다.",
+      hint_en: "Leaving the start position blank before the colon automatically slices from the very beginning up to the stop index.",
       targetCode: "code = \"KOR2026\"\nprint(code[:3])",
       testCases: [
         {
@@ -81,8 +81,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 tag에서 인덱스 3번부터 끝까지 잘라 출력하도록 슬라이싱 빈칸을 채워보세요. (예: ID_905 -> 905)",
       prompt_en: "Fill in the slice to print tag from index 3 to the end (e.g., ID_905 -> 905).",
-      hint_ko: "콜론 뒤의 끝 인덱스를 생략한 [3:]을 붙이면 3번 위치부터 문자열 끝까지 추출합니다.",
-      hint_en: "Omit the stop index as [3:] to slice from index 3 through the end.",
+      hint_ko: "대괄호 안에서 시작 번호 뒤에 콜론만 적고 끝 번호를 비워두면 해당 위치부터 문자열 맨 끝까지 추출됩니다.",
+      hint_en: "Write the starting index followed by a colon and omit the stop index inside square brackets to slice all the way to the end.",
       templateCode: "tag = input()\nprint(tag§§§§)",
       targetCode: "tag = input()\nprint(tag[3:])",
       testCases: [
@@ -104,8 +104,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       type: 'block',
       prompt_ko: "8자리 날짜 d를 입력받아 앞 4글자(yr)와 나머지(md)로 슬라이싱해 출력해보세요. (예: 20261101 -> 2026-1101)",
       prompt_en: "Slice 8-digit date d into yr (first 4 chars) and md (remaining chars) and print f\"{yr}-{md}\".",
-      hint_ko: "yr = d[:4]와 md = d[4:]로 나눈 뒤 print(f\"{yr}-{md}\")로 출력하세요.",
-      hint_en: "Set yr = d[:4] and md = d[4:], then print(f\"{yr}-{md}\").",
+      hint_ko: "같은 기준 번호를 중심으로 앞부분은 시작 번호 생략 슬라이싱, 뒷부분은 끝 번호 생략 슬라이싱을 쓰면 겹침 없이 두 조각으로 나뉩니다.",
+      hint_en: "Using the same boundary index with omitted-start slicing and omitted-stop slicing cleanly splits a string into two parts.",
       targetCode: "d = input()\nyr = d[:4]\nmd = d[4:]\nprint(f\"{yr}-{md}\")",
       testCases: [
         {
@@ -127,8 +127,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "전화번호 phone에서 음수 인덱스 슬라이싱으로 끝 4자리를 뽑아 마스킹 형식으로 출력해보세요. (출력 예: ****-5678)",
       prompt_en: "Extract the last 4 digits of phone using a negative start index and print f\"****-{last4}\".",
-      hint_ko: "뒤에서 네 번째 글자부터 끝까지 가져오려면 [-4:]를 사용합니다.",
-      hint_en: "Use [-4:] to slice the last four characters.",
+      hint_ko: "뒤에서부터 거꾸로 세는 음수 시작 위치를 적고, 콜론 뒤의 끝 위치를 비워두면 끝부분 네 글자만 잘라낼 수 있습니다.",
+      hint_en: "Start at the negative index four positions from the back and leave the stop index after the colon empty.",
       templateCode: "phone = input()\nlast4 = phone§§§§§\nprint(f\"****-{last4}\")",
       targetCode: "phone = input()\nlast4 = phone[-4:]\nprint(f\"****-{last4}\")",
       testCases: [
@@ -150,8 +150,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       type: 'block',
       prompt_ko: "대괄호로 감싸진 숫자 raw에서 양끝 한 글자씩 제외한 raw[1:-1]을 정수로 바꿔 10을 더해 출력해보세요. (예: [25] -> 35)",
       prompt_en: "Strip the outer brackets of raw with raw[1:-1], convert to int, and print num + 10 (e.g., [25] -> 35).",
-      hint_ko: "raw[1:-1]은 첫 글자와 마지막 글자를 제외한 안쪽 문자열을 잘라냅니다.",
-      hint_en: "raw[1:-1] slices from index 1 up to the last character, leaving only the digits.",
+      hint_ko: "첫 글자 다음 위치부터 마지막 글자(음수 첫 위치) 직전까지 슬라이싱한 뒤, '정수(integer)' 앞 세 글자를 딴 함수로 변환해 계산하세요.",
+      hint_en: "Slice from the second character up to (excluding) the last character, convert to an integer, and add 10.",
       targetCode: "raw = input()\nnum = int(raw[1:-1])\nprint(num + 10)",
       testCases: [
         {
@@ -173,8 +173,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 s의 앞 두 글자가 \"PY\"이면 나머지 뒷부분을 출력하고, 아니면 \"Other\"를 출력해보세요. (예: PY30 -> Code:30)",
       prompt_en: "If s starts with \"PY\" via slicing, print \"Code:<rest>\", otherwise print \"Other\".",
-      hint_ko: "앞 두 글자는 s[:2]로 비교하고, 2번 인덱스부터 끝까지는 {s[2:]}로 출력합니다.",
-      hint_en: "Check s[:2] == \"PY\" and interpolate {s[2:]} in the f-string.",
+      hint_ko: "조건문에서는 시작을 생략한 슬라이싱으로 앞 두 글자를 확인하고, 출력문 중괄호 안에서는 끝을 생략한 슬라이싱으로 나머지 뒷부분을 넣으세요.",
+      hint_en: "Slice the first two characters by omitting the start index in the condition, and slice from that boundary onward inside braces.",
       templateCode: "s = input()\nif §§§§§ == \"PY\":\n    print(f\"Code:§§§§§§§\")\nelse:\n    print(\"Other\")",
       targetCode: "s = input()\nif s[:2] == \"PY\":\n    print(f\"Code:{s[2:]}\")\nelse:\n    print(\"Other\")",
       testCases: [
@@ -201,8 +201,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       type: 'block',
       prompt_ko: "단어 s의 길이가 0보다 큰 동안 s를 출력하고 끝 글자를 하나씩 잘라내는(s[:-1]) while 문을 완성해보세요.",
       prompt_en: "While len(s) > 0, print s and shorten it by removing its last character with s = s[:-1].",
-      hint_ko: "s[:-1]은 맨 마지막 글자만 제외한 앞부분 문자열을 반환하므로 반복할 때마다 한 글자씩 줄어듭니다.",
-      hint_en: "Assign s = s[:-1] after print(s) inside while len(s) > 0:.",
+      hint_ko: "반복문 안에서 현재 문자열을 먼저 출력한 뒤, 맨 끝 글자 직전까지만 남기는 음수 끝 번호 슬라이싱 결과를 다시 변수에 대입하세요.",
+      hint_en: "Print the current string first, then reassign the variable to a slice that stops right before the last character.",
       targetCode: "s = input()\nwhile len(s) > 0:\n    print(s)\n    s = s[:-1]",
       testCases: [
         {
@@ -224,8 +224,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "정수 num에 2를 곱한 값을 문자열 txt로 바꾼 뒤, 앞 두 글자와 뒤 두 글자를 출력해보세요. (예: 12345 -> 24..90)",
       prompt_en: "Convert num * 2 to string txt with str(), then print its first 2 and last 2 characters.",
-      hint_ko: "문자열 변환 함수 str을 쓰고, 앞 두 글자는 {txt[:2]}, 뒤 두 글자는 {txt[-2:]}로 슬라이싱합니다.",
-      hint_en: "Use str for conversion, then {txt[:2]} and {txt[-2:]} in the f-string.",
+      hint_ko: "'문자열(string)'의 앞 세 글자를 딴 변환 함수로 숫자를 글자로 바꾼 뒤, 중괄호 안에서 각각 앞 두 글자와 뒤 두 글자를 슬라이싱하세요.",
+      hint_en: "Convert the doubled number using the first three letters of 'string', then slice the first two and last two characters inside braces.",
       templateCode: "num = int(input())\ntxt = §§§(num * 2)\nprint(f\"§§§§§§§§§..§§§§§§§§§§\")",
       targetCode: "num = int(input())\ntxt = str(num * 2)\nprint(f\"{txt[:2]}..{txt[-2:]}\")",
       testCases: [
@@ -248,8 +248,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: "문자열 s의 맨 앞 세 글자를 출력하려 했지만 두 글자만 출력됩니다. 슬라이싱 끝 범위를 수정해보세요. (예: PYTHON -> PYT)",
       prompt_en: "Fix the slice stop index so that the first three characters of s are printed instead of two.",
-      hint_ko: "슬라이싱 끝 인덱스는 포함되지 않으므로 0, 1, 2번 세 글자를 자르려면 끝 인덱스가 3이어야 합니다.",
-      hint_en: "Change the exclusive stop index from 2 to 3 so indices 0, 1, and 2 are included.",
+      hint_ko: "슬라이싱의 끝 번호는 잘라낼 범위에 포함되지 않고 그 직전까지만 가져옵니다. 세 글자가 모두 포함되도록 끝 번호를 조정해보세요.",
+      hint_en: "The stop index in a slice is never included in the result; adjust the stop value so three characters are captured.",
       templateCode: "s = input()\nprint(s[0:2])",
       targetCode: "s = input()\nprint(s[0:3])",
       testCases: [
@@ -272,8 +272,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'one_line',
       prompt_ko: "앞 두 글자를 head에 저장한 코드 아래에 한 줄을 추가하여 앞부분과 나머지를 하이픈으로 이어 출력해보세요. (예: AB123 -> AB-123)",
       prompt_en: "Add one line below head = s[:2] to print head and the remaining suffix joined by a hyphen.",
-      hint_ko: "마지막 줄에 print(f\"{head}-{s[2:]}\")를 입력하면 앞 두 글자와 뒷부분이 하이픈으로 연결됩니다.",
-      hint_en: "Write print(f\"{head}-{s[2:]}\") on line 3.",
+      hint_ko: "위에서 구한 앞부분 변수와, 세 번째 글자 위치부터 끝까지 잘라낸 나머지 슬라이싱을 하이픈 사이에 넣어 포맷 문자열로 출력하세요.",
+      hint_en: "Print a formatted string that joins the prefix variable and a slice of the remaining suffix with a hyphen.",
       templateCode: "s = input()\nhead = s[:2]\n§§§§§§§§§§§§§§§§§§§§§§§§",
       targetCode: "s = input()\nhead = s[:2]\nprint(f\"{head}-{s[2:]}\")",
       testCases: [
@@ -296,8 +296,8 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: "다음 str() 변환과 while 슬라이싱 반복 코드의 실행 결과를 예측해보세요.",
       prompt_en: "Predict the output of the following str() conversion and while-loop slicing code.",
-      hint_ko: "\"202650\"에서 앞 두 글자씩 \"20\", \"26\"을 출력하며 잘라내면 길이가 2인 \"50\"이 남아 반복이 종료됩니다.",
-      hint_en: "Each iteration prints s[:2] (\"20\", then \"26\") and trims s = s[2:], leaving \"50\".",
+      hint_ko: "매 반복마다 앞 두 글자를 출력하고 잘라낼 때 길이가 어떻게 줄어드는지, 그리고 반복 조건이 거짓이 되는 시점에 어떤 글자가 남는지 추적해보세요.",
+      hint_en: "Track which 2-character chunks print as the front is trimmed each turn, and see what remains once the length is no longer greater than 2.",
       targetCode: "n = 202650\ns = str(n)\nwhile len(s) > 2:\n    print(s[:2])\n    s = s[2:]\nprint(f\"left={s}\")",
       choices: ["20\n26\nleft=50", "20\n26\n50\nleft=", "202\n650\nleft=50", "20\n26\nleft=2650"],
       correctChoiceIndex: 0,

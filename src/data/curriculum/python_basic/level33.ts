@@ -22,8 +22,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       type: 'block',
       prompt_ko: "변수 word에 \"Python\"을 저장하고 len() 함수로 전체 글자 수를 출력해보세요.",
       prompt_en: "Store \"Python\" in word and print its total character count using len().",
-      hint_ko: "print(len(word))를 실행하면 문자열의 길이 6이 출력됩니다.",
-      hint_en: "Call print(len(word)) to output 6.",
+      hint_ko: "영어로 '길이(length)'의 앞 세 글자를 딴 내장 함수에 문자열 변수를 넣고 그 결과를 출력해보세요.",
+      hint_en: "Pass the string variable to the built-in function named after the first three letters of 'length' and print the result.",
       targetCode: "word = \"Python\"\nprint(len(word))",
       testCases: [
         {
@@ -40,8 +40,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 msg를 입력받아 전체 글자 수를 출력하도록 빈칸에 알맞은 함수를 채워보세요. (예: Hello -> 5)",
       prompt_en: "Read msg and fill in the built-in function name to print its length (e.g., Hello -> 5).",
-      hint_ko: "문자열의 길이(글자 수)를 구하는 내장 함수는 len입니다.",
-      hint_en: "Use the built-in len function.",
+      hint_ko: "영어로 '길이(length)'를 뜻하는 단어의 앞 세 글자를 딴 내장 함수 이름을 빈칸에 적어보세요.",
+      hint_en: "Fill in the 3-letter built-in function derived from the start of the word 'length'.",
       templateCode: "msg = input()\nprint(§§§(msg))",
       targetCode: "msg = input()\nprint(len(msg))",
       testCases: [
@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       type: 'block',
       prompt_ko: "word에 \"Coding\"을 저장하고 첫 글자(0번)와 마지막 글자(-1번)를 나란히 출력해보세요. (출력 예: C g)",
       prompt_en: "Store \"Coding\" in word and print its first (index 0) and last (index -1) characters (e.g., C g).",
-      hint_ko: "앞에서 첫 글자는 word[0], 뒤에서 첫 글자는 word[-1]로 접근합니다.",
-      hint_en: "Use word[0] for the first character and word[-1] for the last character.",
+      hint_ko: "파이썬의 위치 번호는 앞에서 셀 때 0부터 시작하고, 뒤에서 거꾸로 셀 때는 음수 -1부터 시작합니다.",
+      hint_en: "Python positions start at 0 from the front and count backward starting at -1 from the end.",
       targetCode: "word = \"Coding\"\nprint(word[0], word[-1])",
       testCases: [
         {
@@ -81,8 +81,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 code의 두 번째 글자와 뒤에서 두 번째 글자를 공백으로 구분해 출력해보세요. (예: ABCDE -> B D)",
       prompt_en: "Read code and print its 2nd character and 2nd-to-last character separated by a space.",
-      hint_ko: "0부터 시작하므로 두 번째 글자는 [1], 뒤에서 두 번째 글자는 음수 인덱스 [-2]입니다.",
-      hint_en: "The 2nd character is at [1] and the 2nd-to-last is at [-2].",
+      hint_ko: "앞에서 첫 글자가 0번이므로 두 번째 글자의 번호와, 끝 글자가 -1번일 때 뒤에서 두 번째 글자의 음수 번호를 대괄호로 감싸 적어보세요.",
+      hint_en: "Use square brackets with 0-based forward numbering for the 2nd character and negative backward numbering from -1 for the 2nd-to-last.",
       templateCode: "code = input()\nprint(code§§§, code§§§§)",
       targetCode: "code = input()\nprint(code[1], code[-2])",
       testCases: [
@@ -104,8 +104,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       type: 'block',
       prompt_ko: "단어 w를 입력받아 첫 글자, 끝 글자, 전체 길이를 f-string으로 출력해보세요. (예: Star -> S..r (4))",
       prompt_en: "Read word w and print its first char, last char, and length in an f-string (e.g., Star -> S..r (4)).",
-      hint_ko: "f\"{w[0]}..{w[-1]} ({len(w)})\" 형식으로 인덱싱과 len()을 중괄호 안에 넣어보세요.",
-      hint_en: "Format with print(f\"{w[0]}..{w[-1]} ({len(w)})\").",
+      hint_ko: "포맷 문자열의 각 중괄호 자리에 첫 위치 인덱싱, 끝 위치 음수 인덱싱, 그리고 문자열 길이를 구하는 함수 호출을 차례로 배치하세요.",
+      hint_en: "Inside the formatted string's braces, place the first-character index, last-character negative index, and the length function call.",
       targetCode: "w = input()\nprint(f\"{w[0]}..{w[-1]} ({len(w)})\")",
       testCases: [
         {
@@ -127,8 +127,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "단어 s의 첫 글자와 마지막 글자가 같으면 \"Match\", 다르면 \"Diff\"를 출력하도록 빈칸을 채워보세요.",
       prompt_en: "Print \"Match\" if the first and last characters of s are equal, otherwise print \"Diff\".",
-      hint_ko: "첫 글자 s[0]과 마지막 글자 s[-1]을 == 연산자로 비교합니다.",
-      hint_en: "Compare s[0] and s[-1] with ==.",
+      hint_ko: "대괄호 인덱싱으로 문자열의 맨 앞(0부터 시작) 글자와 맨 뒤(음수 인덱스 시작) 글자를 각각 꺼내 같은지 비교해보세요.",
+      hint_en: "Index the very first character (0-based) and the very last character (negative index) of the string on either side of ==.",
       templateCode: "s = input()\nif §§§§ == §§§§§:\n    print(\"Match\")\nelse:\n    print(\"Diff\")",
       targetCode: "s = input()\nif s[0] == s[-1]:\n    print(\"Match\")\nelse:\n    print(\"Diff\")",
       testCases: [
@@ -155,8 +155,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       type: 'block',
       prompt_ko: "비밀번호 pw의 길이가 8 이상이면 \"Strong\", 4 이상이면 \"Normal\", 그 외에는 \"Weak\"를 출력해보세요.",
       prompt_en: "Print \"Strong\" if len(pw) >= 8, \"Normal\" if len(pw) >= 4, otherwise \"Weak\".",
-      hint_ko: "if len(pw) >= 8:, elif len(pw) >= 4:, else: 순서로 길이를 검사하세요.",
-      hint_en: "Chain if len(pw) >= 8:, elif len(pw) >= 4:, and else:.",
+      hint_ko: "문자열 길이를 구하는 함수 결과를 큰 기준값부터 차례대로 다중 조건문으로 검사해 알맞은 등급을 출력하세요.",
+      hint_en: "Check the password's character count from the highest threshold downward using chained conditional branches.",
       targetCode: "pw = input()\nif len(pw) >= 8:\n    print(\"Strong\")\nelif len(pw) >= 4:\n    print(\"Normal\")\nelse:\n    print(\"Weak\")",
       testCases: [
         {
@@ -183,8 +183,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "홀수 길이 문자열 s의 가운데 인덱스를 mid에 구하고 해당 위치의 글자를 출력해보세요. (예: KOREA -> Mid: R)",
       prompt_en: "Compute the middle index mid of odd-length string s and print the character at mid.",
-      hint_ko: "전체 길이 len(s)를 2로 나눈 몫이 가운데 인덱스이며, 중괄호 안에 {s[mid]}를 넣습니다.",
-      hint_en: "Divide len(s) by 2 using // 2, then interpolate {s[mid]}.",
+      hint_ko: "문자열 전체 길이를 구해 2로 나눈 몫을 구한 뒤, 포맷 문자열의 중괄호 안에서 그 변수를 인덱스로 사용해 글자를 꺼내보세요.",
+      hint_en: "Find the string's total length before integer-dividing by 2, then index the string with that middle position inside curly braces.",
       templateCode: "s = input()\nmid = §§§§§§ // 2\nprint(f\"Mid: §§§§§§§§\")",
       targetCode: "s = input()\nmid = len(s) // 2\nprint(f\"Mid: {s[mid]}\")",
       testCases: [
@@ -206,8 +206,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       type: 'block',
       prompt_ko: "문자열 s를 입력받아 while 문(i < len(s))으로 인덱스 번호와 글자를 한 줄씩 출력해보세요. (출력 예: 0:H)",
       prompt_en: "Iterate over s using while i < len(s): and print \"<index>:<char>\" on each line (e.g., 0:H).",
-      hint_ko: "i = 0부터 시작해 while i < len(s): 안에서 print(f\"{i}:{s[i]}\") 후 i += 1을 수행하세요.",
-      hint_en: "Start at i = 0; while i < len(s):, print(f\"{i}:{s[i]}\") and increment i += 1.",
+      hint_ko: "인덱스 변수를 0부터 문자열 길이보다 작을 때까지 1씩 늘려가며, 번호와 해당 위치의 글자를 콜론으로 묶어 출력하세요.",
+      hint_en: "Start an index counter at 0 and increment by 1 while strictly less than the string length, printing the index and character at each step.",
       targetCode: "s = input()\ni = 0\nwhile i < len(s):\n    print(f\"{i}:{s[i]}\")\n    i += 1",
       testCases: [
         {
@@ -229,8 +229,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "문자열 s를 끝까지 순회하며 느낌표(\"!\") 개수를 세고, s의 불리언 판정값과 개수를 출력해보세요. (예: Go!! -> True 2)",
       prompt_en: "Count \"!\" characters in s with a while loop, then print bool(s) and the count.",
-      hint_ko: "반복 범위는 len(s), 현재 글자는 s[i], 비어 있지 않은지 불리언 변환은 bool(s)로 작성합니다.",
-      hint_en: "Use len(s) in the while header, s[i] in the if check, and bool(s) in print().",
+      hint_ko: "반복 범위에는 문자열의 전체 길이를, 조건식에는 현재 위치 번호의 글자를, 출력문에는 '불리언(boolean)' 앞 네 글자를 딴 변환식을 채우세요.",
+      hint_en: "Loop up to the string's length, inspect the character at the current index, and convert the string with the 4-letter function from 'boolean'.",
       templateCode: "s = input()\ncnt = 0\ni = 0\nwhile i < §§§§§§:\n    if §§§§ == \"!\":\n        cnt += 1\n    i += 1\nprint(§§§§§§§, cnt)",
       targetCode: "s = input()\ncnt = 0\ni = 0\nwhile i < len(s):\n    if s[i] == \"!\":\n        cnt += 1\n    i += 1\nprint(bool(s), cnt)",
       testCases: [
@@ -253,8 +253,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: "문자열 s의 글자를 순서대로 한 줄씩 출력하려다 마지막에 인덱스 범위 오류가 발생합니다. 조건식을 수정해보세요.",
       prompt_en: "Fix the while loop condition that causes an out-of-range IndexError at the end of string s.",
-      hint_ko: "유효한 인덱스는 0부터 len(s) - 1까지이므로 i가 len(s)와 같아지기 전까지만 반복해야 합니다.",
-      hint_en: "Valid indices stop at len(s) - 1, so loop while i < len(s) rather than <=.",
+      hint_ko: "인덱스가 0부터 시작하면 마지막 글자의 번호는 항상 '전체 길이 - 1'입니다. 인덱스가 길이와 같아질 때도 실행되지 않도록 비교 기호를 고쳐보세요.",
+      hint_en: "0-based indices end at one less than the total length; adjust the comparison operator so the loop stops before reaching the exact length.",
       templateCode: "s = input()\ni = 0\nwhile i <= len(s):\n    print(s[i])\n    i += 1",
       targetCode: "s = input()\ni = 0\nwhile i < len(s):\n    print(s[i])\n    i += 1",
       testCases: [
@@ -277,8 +277,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'one_line',
       prompt_ko: "마지막 인덱스 last를 구하는 코드 아래에 한 줄을 추가하여 마지막 번호와 끝 글자를 출력해보세요. (예: Sky -> 2:y)",
       prompt_en: "Add one line below last = len(s) - 1 to print \"<last>:<last_char>\" (e.g., Sky -> 2:y).",
-      hint_ko: "마지막 줄에 print(f\"{last}:{s[last]}\")를 입력해 인덱스와 해당 글자를 함께 출력하세요.",
-      hint_en: "Write print(f\"{last}:{s[last]}\") on line 3.",
+      hint_ko: "위에서 구한 마지막 인덱스 변수와, 그 변수를 대괄호에 넣어 꺼낸 끝 글자를 콜론으로 이어 포맷 문자열로 출력해보세요.",
+      hint_en: "Print a formatted string joining the computed last-index variable and the character at that index with a colon.",
       templateCode: "s = input()\nlast = len(s) - 1\n§§§§§§§§§§§§§§§§§§§§§§§§§§",
       targetCode: "s = input()\nlast = len(s) - 1\nprint(f\"{last}:{s[last]}\")",
       testCases: [
@@ -301,8 +301,8 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: "다음 불리언 변환과 문자열 인덱싱 반복 코드의 실행 결과를 예측해보세요.",
       prompt_en: "Predict the output of the following boolean conversion and string indexing loop.",
-      hint_ko: "빈 문자열의 bool(\"\")은 False이고, 인덱스 1과 3의 글자를 모으면 \"B2\", 뒤에서 세 번째 s[-3]은 \"B\"입니다.",
-      hint_en: "bool(\"\") is False, indices 1 and 3 of \"AB12\" give \"B2\", and s[-3] is \"B\".",
+      hint_ko: "글자가 하나도 없는 빈 문자열의 참/거짓 판정값, 1번 위치부터 두 칸씩 건너뛰며 모은 글자, 뒤에서 세 번째 음수 인덱스의 글자를 차례로 따져보세요.",
+      hint_en: "Evaluate the truthiness of an empty string, trace which indices are visited when stepping by 2 from index 1, and count 3 positions back from the end.",
       targetCode: "s = \"AB12\"\nempty = \"\"\ni = 1\nout = \"\"\nwhile i < len(s):\n    out += s[i]\n    i += 2\nprint(bool(empty), out, s[-3])",
       choices: ["True B2 B", "False A1 B", "False B2 B", "False B2 1"],
       correctChoiceIndex: 2,

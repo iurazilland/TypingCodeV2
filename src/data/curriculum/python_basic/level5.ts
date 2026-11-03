@@ -233,8 +233,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '틀린 곳을 수정하여 공백 없이 이어진 Lv.5가 오류 없이 출력되도록 해보세요.',
       prompt_en: 'Fix the error so that Lv.5 prints without spaces or a type error.',
-      hint_ko: '파이썬에서는 문자열("Lv.")과 숫자(5)를 + 기호로 바로 더할 수 없습니다. 숫자 5를 따옴표로 감싸 "5"로 바꿔보세요.',
-      hint_en: 'In Python, you cannot concatenate a string ("Lv.") and an integer (5) with +. Enclose 5 in quotes as "5".',
+      hint_ko: '파이썬에서는 문자열과 숫자를 덧셈 기호로 바로 합칠 수 없습니다. 뒤의 숫자도 문자열이 되도록 따옴표로 감싸보세요.',
+      hint_en: 'Strings and numbers cannot be joined directly with +; enclose the number in quotes so both are strings.',
       templateCode: 'print("Lv."+5)',
       targetCode: 'print("Lv."+"5")',
       testCases: [
@@ -252,8 +252,8 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '예제 코드 아래에 한 줄을 추가하여 별 기호 글자가 10번 연속 반복된 **********를 출력해보세요.',
       prompt_en: 'Type the example code and add a line below using string repetition to print 10 asterisks (**********).',
-      hint_ko: '첫째 줄 예제를 입력하고 Enter를 누른 뒤, 둘째 줄에 print("*"*10)을 입력하세요.',
-      hint_en: 'Type the first line example, press Enter, and write print("*"*10) on the second line.',
+      hint_ko: '첫째 줄의 문자열 반복 구조를 참고하여, 따옴표 안의 문자만 별 기호로 바꾸어 10번 반복해보세요.',
+      hint_en: 'Follow the string repetition pattern on line 1, changing the quoted character to an asterisk.',
       templateCode: 'print("="*10)\n§§§§§§§§§§§§§',
       targetCode: 'print("="*10)\nprint("*"*10)',
       testCases: [
