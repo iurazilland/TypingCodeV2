@@ -227,11 +227,11 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '틀린 곳을 수정하여 세 알파벳이 하이픈(-)으로 구분된 A-B-C가 문법 오류 없이 출력되도록 해보세요.',
-      prompt_en: 'Fix the syntax error so the three letters print on one line separated by hyphens (-) as A-B-C.',
-      hint_ko: '파이썬 함수에 옵션을 지정할 때는 콜론(:)이 아니라 등호(=)를 사용해 sep="-"처럼 작성해야 합니다.',
-      hint_en: 'Keyword options in Python functions use an equals sign (sep="-"), not a colon (:).',
-      templateCode: 'print("A", "B", "C", sep:"-")',
+      prompt_ko: '틀린 옵션 이름을 수정하여 세 알파벳이 하이픈(-)으로 구분된 A-B-C가 출력되도록 해보세요.',
+      prompt_en: 'Fix the wrong option name so the three letters print separated by hyphens (-) as A-B-C.',
+      hint_ko: '출력 끝을 바꾸는 end가 아니라, 항목 사이를 구분하는 sep 옵션을 사용해 sep="-"로 작성해야 합니다.',
+      hint_en: 'Use sep="-" to separate the items instead of end, which changes the ending string.',
+      templateCode: 'print("A", "B", "C", end="-")',
       targetCode: 'print("A", "B", "C", sep="-")',
       testCases: [
         {
