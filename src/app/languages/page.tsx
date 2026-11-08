@@ -31,8 +31,8 @@ export default function LanguagesPage() {
   const { user } = useAuth();
   const isEn = language === 'en';
 
-  // Default: 'starter' (🌱 코딩 첫걸음: 파이썬 베이직 -> 어드밴스 -> 빅데이터 -> 인공지능)
-  const [selectedRoadmapId, setSelectedRoadmapId] = useState<string | null>('starter');
+  // Default: 'ai-data' (🤖 파이썬 · AI 마스터: 파이썬 베이직 -> 어드밴스 -> 빅데이터 -> 인공지능)
+  const [selectedRoadmapId, setSelectedRoadmapId] = useState<string | null>('ai-data');
   const [selectedTrackId, setSelectedTrackId] = useState<string>('python');
   const [isTopBarOpen, setIsTopBarOpen] = useState<boolean>(false);
   const [isSelectHovered, setIsSelectHovered] = useState<boolean>(false);
@@ -77,7 +77,6 @@ export default function LanguagesPage() {
   }, []);
 
   const getShortTrackLabel = (track: LanguageTrack) => {
-    if (track.id === 'vb') return 'Visual Basic';
     if (track.id === 'linux') return 'Linux';
     if (track.id === 'csharp') return 'C#';
     if (track.id === 'swift') return 'Swift';
