@@ -6,13 +6,10 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronDown,
-  ChevronRight,
   Code2,
   Compass,
   Lock,
-  PanelLeftOpen,
   Play,
-  X,
 } from 'lucide-react';
 import {
   CURRICULUM_TRACKS,
@@ -37,7 +34,7 @@ export default function LanguagesPage() {
   // Default: 'starter' (🌱 코딩 첫걸음: 파이썬 베이직 -> 어드밴스 -> 빅데이터 -> 인공지능)
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<string | null>('starter');
   const [selectedTrackId, setSelectedTrackId] = useState<string>('python');
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isTopBarOpen, setIsTopBarOpen] = useState<boolean>(false);
   const [progressByModule, setProgressByModule] = useState<Record<string, number>>({});
 
   // Sync progress for unlocked modules
@@ -69,16 +66,6 @@ export default function LanguagesPage() {
     window.addEventListener(PROGRESS_SYNCED_EVENT, recomputeProgress);
     return () => window.removeEventListener(PROGRESS_SYNCED_EVENT, recomputeProgress);
   }, [user]);
-
-  // Close sidebar on Escape key
-  useEffect(() => {
-    if (!isSidebarOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsSidebarOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSidebarOpen]);
 
   // Soft ice-cyan body background
   useEffect(() => {
@@ -122,7 +109,7 @@ export default function LanguagesPage() {
     return CURRICULUM_TRACKS.find((t) => t.id === selectedTrackId) || CURRICULUM_TRACKS[0];
   }, [selectedRoadmapId, selectedTrackId]);
 
-  // Normalize current view into sequential stages so both Roadmaps and Language Tracks share the same clean stepper layout
+  // Normalize current view into sequential stages
   const sequentialStages = useMemo(() => {
     let runningOrder = 0;
 
@@ -189,7 +176,6 @@ export default function LanguagesPage() {
     const isStarted = !locked && progressPercent > 0;
     const diffColor = DIFFICULTY_COLORS[module.difficulty] || '#10b981';
 
-    // Horizontal wide card when there is 1 course in the stage (e.g., 코딩 첫걸음 1~4단계)
     if (isSingleInStage) {
       const innerHorizontal = (
         <div
@@ -202,7 +188,7 @@ export default function LanguagesPage() {
             width: '100%',
           }}
         >
-          {/* Left: Language Icon + Badges + Title + Description */}
+          {/* Left: Language Icon + Badges + Title + Skills */}
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', flex: '1 1 320px', minWidth: 0 }}>
             <div
               style={{
@@ -267,7 +253,6 @@ export default function LanguagesPage() {
                 {isEn ? module.title_en : module.title_ko}
               </h3>
 
-              {/* Skills Chips */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
                 {module.skills.map((skill, idx) => (
                   <span
@@ -437,7 +422,6 @@ export default function LanguagesPage() {
       );
     }
 
-    // Multi-card stage fallback (when a stage has 2+ courses)
     const cardInner = (
       <>
         <div>
@@ -656,259 +640,47 @@ export default function LanguagesPage() {
     : activeLanguageTrack?.color || '#10b981';
 
   return (
-    <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '28px 20px 96px', position: 'relative' }}>
+    <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '28px 20px 96px' }}>
       {/* =====================================================================
-          HIDDEN SLIDE-OVER SIDEBAR DRAWER (Opens when clicking Selector Button)
-          ===================================================================== */}
-      {isSidebarOpen && (
-        <div
-          onClick={() => setIsSidebarOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(15, 23, 42, 0.35)',
-            backdropFilter: 'blur(2px)',
-            zIndex: 1100,
-            display: 'flex',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <aside
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: 'min(360px, 88vw)',
-              height: '100%',
-              background: '#ffffff',
-              borderRight: '1.5px solid #cbd5e1',
-              boxShadow: '12px 0 32px rgba(15, 23, 42, 0.15)',
-              padding: '22px 20px 32px',
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '24px',
-            }}
-          >
-            {/* Sidebar Header */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingBottom: '14px',
-                borderBottom: '1.5px solid #e2e8f0',
-              }}
-            >
-              <span style={{ fontSize: '1.02rem', fontWeight: 900, color: '#0f172a' }}>
-                {isEn ? 'Select Curriculum or Language' : '커리큘럼 · 언어 선택'}
-              </span>
-              <button
-                onClick={() => setIsSidebarOpen(false)}
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  border: '1px solid #cbd5e1',
-                  background: '#f8fafc',
-                  color: '#475569',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
-                aria-label="Close sidebar"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            {/* Section 1: Curated Learning Roadmaps */}
-            <div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '0.78rem',
-                  fontWeight: 800,
-                  color: '#475569',
-                  marginBottom: '10px',
-                }}
-              >
-                <Compass size={15} color="#0891b2" />
-                <span>{isEn ? 'RECOMMENDED CURRICULUMS' : '추천 학습 커리큘럼'}</span>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {LEARNING_ROADMAPS.map((rm) => {
-                  const isSelected = selectedRoadmapId === rm.id;
-                  return (
-                    <button
-                      key={rm.id}
-                      onClick={() => {
-                        setSelectedRoadmapId(rm.id);
-                        setIsSidebarOpen(false);
-                      }}
-                      style={{
-                        width: '100%',
-                        textAlign: 'left',
-                        padding: '11px 13px',
-                        borderRadius: '14px',
-                        background: isSelected ? `${rm.color}14` : '#f8fafc',
-                        border: isSelected ? `1.5px solid ${rm.color}` : '1.5px solid #e2e8f0',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '10px',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                        <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{rm.icon}</span>
-                        <div style={{ minWidth: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span
-                              style={{
-                                fontSize: '0.88rem',
-                                fontWeight: 800,
-                                color: isSelected ? rm.color : '#0f172a',
-                              }}
-                            >
-                              {isEn ? rm.title_en : rm.title_ko}
-                            </span>
-                            {rm.id === 'starter' && (
-                              <span
-                                style={{
-                                  fontSize: '0.65rem',
-                                  fontWeight: 800,
-                                  padding: '1px 6px',
-                                  borderRadius: '5px',
-                                  background: '#d1fae5',
-                                  color: '#047857',
-                                }}
-                              >
-                                {isEn ? 'Default' : '기본'}
-                              </span>
-                            )}
-                          </div>
-                          <div
-                            style={{
-                              fontSize: '0.73rem',
-                              color: '#64748b',
-                              fontWeight: 600,
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}
-                          >
-                            {isEn ? rm.target_en : rm.target_ko}
-                          </div>
-                        </div>
-                      </div>
-                      <ChevronRight size={15} color={isSelected ? rm.color : '#94a3b8'} />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Section 2: Individual Programming Languages */}
-            <div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '0.78rem',
-                  fontWeight: 800,
-                  color: '#475569',
-                  marginBottom: '10px',
-                }}
-              >
-                <Code2 size={15} color="#0284c7" />
-                <span>{isEn ? 'BY PROGRAMMING LANGUAGE' : '프로그래밍 언어별 과정'}</span>
-              </div>
-
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '8px',
-                }}
-              >
-                {CURRICULUM_TRACKS.map((track) => {
-                  const isSelected = selectedRoadmapId === null && selectedTrackId === track.id;
-                  const hasOpen = track.modules.some((m) => !m.isLocked);
-                  return (
-                    <button
-                      key={track.id}
-                      onClick={() => {
-                        setSelectedRoadmapId(null);
-                        setSelectedTrackId(track.id);
-                        setIsSidebarOpen(false);
-                      }}
-                      style={{
-                        padding: '9px 10px',
-                        borderRadius: '12px',
-                        background: isSelected ? `${track.color}15` : '#f8fafc',
-                        border: isSelected ? `1.5px solid ${track.color}` : '1.5px solid #e2e8f0',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '6px',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px', minWidth: 0 }}>
-                        <LanguageIcon language={track.id} size={20} />
-                        <span
-                          style={{
-                            fontSize: '0.8rem',
-                            fontWeight: 800,
-                            color: isSelected ? track.color : '#0f172a',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {getShortTrackLabel(track)}
-                        </span>
-                      </div>
-                      {!hasOpen && <Lock size={11} color="#94a3b8" style={{ flexShrink: 0 }} />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </aside>
-        </div>
-      )}
-
-      {/* =====================================================================
-          TOP HEADER BAR: SIDEBAR TOGGLE + CURRENT CURRICULUM TITLE & STEP PIPELINE
+          TOP HEADER + SMOOTH PUSH-DOWN COLLAPSIBLE BAR
+          (Click the title/header area or bottom handle tab to expand/collapse)
           ===================================================================== */}
       <div
         style={{
           background: '#ffffff',
           borderRadius: '24px',
-          border: '1.5px solid #cbd5e1',
-          padding: '22px 26px',
+          border: isTopBarOpen ? `2px solid ${activeAccentColor}` : '1.5px solid #cbd5e1',
           marginBottom: '28px',
-          boxShadow: '0 6px 20px -4px rgba(15, 23, 42, 0.05)',
+          boxShadow: isTopBarOpen
+            ? '0 14px 32px -6px rgba(15, 23, 42, 0.1)'
+            : '0 6px 20px -4px rgba(15, 23, 42, 0.05)',
+          transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+          overflow: 'hidden',
         }}
       >
+        {/* Clickable Header Area (Title Switcher) */}
         <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsTopBarOpen((prev) => !prev)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsTopBarOpen((prev) => !prev);
+            }
+          }}
           style={{
+            padding: '22px 26px 18px',
+            cursor: 'pointer',
+            userSelect: 'none',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
             gap: '16px',
-            marginBottom: '18px',
+            background: isTopBarOpen ? '#f8fafc' : '#ffffff',
+            transition: 'background-color 0.2s ease',
           }}
         >
-          {/* Left: Current Curriculum / Language Title */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
             <div
               style={{
@@ -940,15 +712,28 @@ export default function LanguagesPage() {
                     color: '#0f172a',
                     margin: 0,
                     letterSpacing: '-0.02em',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
                   }}
                 >
-                  {activeRoadmap
-                    ? isEn
-                      ? activeRoadmap.title_en
-                      : activeRoadmap.title_ko
-                    : activeLanguageTrack
-                    ? getTrackName(activeLanguageTrack, isEn)
-                    : ''}
+                  <span>
+                    {activeRoadmap
+                      ? isEn
+                        ? activeRoadmap.title_en
+                        : activeRoadmap.title_ko
+                      : activeLanguageTrack
+                      ? getTrackName(activeLanguageTrack, isEn)
+                      : ''}
+                  </span>
+                  <ChevronDown
+                    size={20}
+                    color={activeAccentColor}
+                    style={{
+                      transform: isTopBarOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
+                    }}
+                  />
                 </h1>
                 <span
                   style={{
@@ -986,38 +771,188 @@ export default function LanguagesPage() {
             </div>
           </div>
 
-          {/* Right: Sidebar Drawer Trigger Button */}
-          <button
-            onClick={() => setIsSidebarOpen(true)}
+          {/* Subtle Mini Icon Cluster Preview on the Right */}
+          <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: '10px 16px',
-              borderRadius: '14px',
-              background: '#f8fafc',
-              border: '1.5px solid #cbd5e1',
-              color: '#0f172a',
-              fontSize: '0.86rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
-              transition: 'all 0.15s ease',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '999px',
+              background: '#f1f5f9',
+              border: '1px solid #cbd5e1',
               flexShrink: 0,
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#0891b2';
-              e.currentTarget.style.background = '#f0f9ff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#cbd5e1';
-              e.currentTarget.style.background = '#f8fafc';
-            }}
           >
-            <PanelLeftOpen size={17} color="#0891b2" />
-            <span>{isEn ? 'Change Curriculum / Language' : '다른 커리큘럼 · 언어 선택'}</span>
-            <ChevronDown size={15} color="#64748b" />
-          </button>
+            <LanguageIcon language="python" size={16} />
+            <LanguageIcon language="c" size={16} />
+            <LanguageIcon language="javascript" size={16} />
+            <LanguageIcon language="java" size={16} />
+            <ChevronDown
+              size={14}
+              color="#475569"
+              style={{
+                transform: isTopBarOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* =================================================================
+            SMOOTH PUSH-DOWN ACCORDION PANEL (grid-template-rows: 0fr -> 1fr)
+            Pushes down the timeline naturally when opened
+            ================================================================= */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateRows: isTopBarOpen ? '1fr' : '0fr',
+            opacity: isTopBarOpen ? 1 : 0,
+            transition:
+              'grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease',
+          }}
+        >
+          <div style={{ overflow: 'hidden' }}>
+            <div
+              style={{
+                padding: '18px 26px 22px',
+                borderTop: '1px solid #e2e8f0',
+                background: '#f8fafc',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '18px',
+              }}
+            >
+              {/* 1. Curated Learning Roadmaps Row */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    color: '#475569',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <Compass size={14} color="#0891b2" />
+                  <span>{isEn ? 'RECOMMENDED CURRICULUMS' : '추천 커리큘럼'}</span>
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+                    gap: '8px',
+                  }}
+                >
+                  {LEARNING_ROADMAPS.map((rm) => {
+                    const isSelected = selectedRoadmapId === rm.id;
+                    return (
+                      <button
+                        key={rm.id}
+                        onClick={() => {
+                          setSelectedRoadmapId(rm.id);
+                          setIsTopBarOpen(false);
+                        }}
+                        style={{
+                          textAlign: 'left',
+                          padding: '10px 12px',
+                          borderRadius: '12px',
+                          background: isSelected ? `${rm.color}16` : '#ffffff',
+                          border: isSelected ? `1.5px solid ${rm.color}` : '1.5px solid #cbd5e1',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '3px',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontSize: '1.05rem' }}>{rm.icon}</span>
+                          <span
+                            style={{
+                              fontSize: '0.84rem',
+                              fontWeight: 800,
+                              color: isSelected ? rm.color : '#0f172a',
+                            }}
+                          >
+                            {isEn ? rm.title_en : rm.title_ko}
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            fontSize: '0.71rem',
+                            color: '#64748b',
+                            fontWeight: 600,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {isEn ? rm.target_en : rm.target_ko}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. Programming Languages Row */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    color: '#475569',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <Code2 size={14} color="#0284c7" />
+                  <span>{isEn ? 'BY LANGUAGE' : '언어별 과정'}</span>
+                </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {CURRICULUM_TRACKS.map((track) => {
+                    const isSelected = selectedRoadmapId === null && selectedTrackId === track.id;
+                    const hasOpen = track.modules.some((m) => !m.isLocked);
+                    return (
+                      <button
+                        key={track.id}
+                        onClick={() => {
+                          setSelectedRoadmapId(null);
+                          setSelectedTrackId(track.id);
+                          setIsTopBarOpen(false);
+                        }}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '7px',
+                          padding: '7px 12px',
+                          borderRadius: '11px',
+                          background: isSelected ? `${track.color}18` : '#ffffff',
+                          border: isSelected ? `1.5px solid ${track.color}` : '1.5px solid #cbd5e1',
+                          cursor: 'pointer',
+                          fontSize: '0.8rem',
+                          fontWeight: 800,
+                          color: isSelected ? track.color : '#0f172a',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <LanguageIcon language={track.id} size={18} />
+                        <span>{getShortTrackLabel(track)}</span>
+                        {!hasOpen && <Lock size={11} color="#94a3b8" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Horizontal Sequential Step Summary Bar (STEP 01 -> STEP 02 -> STEP 03 -> STEP 04) */}
@@ -1026,8 +961,9 @@ export default function LanguagesPage() {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            paddingTop: '14px',
+            padding: '12px 26px 14px',
             borderTop: '1px solid #e2e8f0',
+            background: '#ffffff',
             overflowX: 'auto',
             scrollbarWidth: 'none',
           }}
@@ -1044,7 +980,7 @@ export default function LanguagesPage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '7px 12px',
+                    padding: '6px 11px',
                     borderRadius: '10px',
                     background: isOpen ? '#ecfdf5' : '#f8fafc',
                     border: isOpen ? '1.5px solid #6ee7b7' : '1px solid #e2e8f0',
@@ -1162,7 +1098,6 @@ export default function LanguagesPage() {
                   paddingBottom: isLast ? '0px' : '28px',
                 }}
               >
-                {/* Stage Header */}
                 <div
                   style={{
                     display: 'flex',
@@ -1187,7 +1122,6 @@ export default function LanguagesPage() {
                   </span>
                 </div>
 
-                {/* Course Card(s) in this Stage */}
                 {isSingle ? (
                   renderSequentialCourseCard(
                     stage.items[0].module,
