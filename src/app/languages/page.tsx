@@ -35,6 +35,7 @@ export default function LanguagesPage() {
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<string | null>('starter');
   const [selectedTrackId, setSelectedTrackId] = useState<string>('python');
   const [isTopBarOpen, setIsTopBarOpen] = useState<boolean>(false);
+  const [isSelectHovered, setIsSelectHovered] = useState<boolean>(false);
   const [progressByModule, setProgressByModule] = useState<Record<string, number>>({});
 
   // Sync progress for unlocked modules
@@ -658,83 +659,138 @@ export default function LanguagesPage() {
           overflow: 'hidden',
         }}
       >
-        {/* Clickable Header Area (Title Switcher) */}
+        {/* Header Row with Tactile Dropdown Select Capsule */}
         <div
-          role="button"
-          tabIndex={0}
-          onClick={() => setIsTopBarOpen((prev) => !prev)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setIsTopBarOpen((prev) => !prev);
-            }
-          }}
           style={{
-            padding: '22px 26px 18px',
-            cursor: 'pointer',
-            userSelect: 'none',
+            padding: '20px 26px 18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
             gap: '16px',
             background: isTopBarOpen ? '#f8fafc' : '#ffffff',
             transition: 'background-color 0.2s ease',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
-            <div
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              flexWrap: 'wrap',
+              minWidth: 0,
+              flex: 1,
+            }}
+          >
+            {/* Tactile Select Box Capsule: [ 🌱 코딩 첫걸음 | ▾ ] */}
+            <button
+              type="button"
+              onClick={() => setIsTopBarOpen((prev) => !prev)}
+              onMouseEnter={() => setIsSelectHovered(true)}
+              onMouseLeave={() => setIsSelectHovered(false)}
+              aria-expanded={isTopBarOpen}
               style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '14px',
-                background: `${activeAccentColor}14`,
-                border: `1.5px solid ${activeAccentColor}45`,
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.45rem',
+                gap: '12px',
+                padding: '8px 10px 8px 12px',
+                borderRadius: '16px',
+                background: isTopBarOpen
+                  ? '#ffffff'
+                  : isSelectHovered
+                  ? '#f8fafc'
+                  : '#f8fafc',
+                border:
+                  isTopBarOpen || isSelectHovered
+                    ? `2px solid ${activeAccentColor}`
+                    : '2px solid #94a3b8',
+                boxShadow:
+                  isTopBarOpen || isSelectHovered
+                    ? `0 6px 18px -4px ${activeAccentColor}35, inset 0 1px 0 #ffffff`
+                    : '0 3px 8px rgba(15, 23, 42, 0.06), inset 0 1px 0 #ffffff',
+                cursor: 'pointer',
+                transition: 'all 0.18s ease',
                 flexShrink: 0,
               }}
             >
-              {activeRoadmap ? (
-                activeRoadmap.icon
-              ) : (
-                <LanguageIcon language={activeLanguageTrack?.id || 'python'} size={28} />
-              )}
-            </div>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '11px',
+                  background: `${activeAccentColor}16`,
+                  border: `1.5px solid ${activeAccentColor}45`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.22rem',
+                  flexShrink: 0,
+                }}
+              >
+                {activeRoadmap ? (
+                  activeRoadmap.icon
+                ) : (
+                  <LanguageIcon language={activeLanguageTrack?.id || 'python'} size={22} />
+                )}
+              </div>
 
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                <h1
+              <span
+                style={{
+                  fontSize: 'clamp(1.12rem, 2vw, 1.35rem)',
+                  fontWeight: 900,
+                  color: '#0f172a',
+                  letterSpacing: '-0.02em',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {activeRoadmap
+                  ? isEn
+                    ? activeRoadmap.title_en
+                    : activeRoadmap.title_ko
+                  : activeLanguageTrack
+                  ? getTrackName(activeLanguageTrack, isEn)
+                  : ''}
+              </span>
+
+              {/* Select Box Divider + Dropdown Chevron Badge */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  paddingLeft: '10px',
+                  marginLeft: '2px',
+                  borderLeft: '1.5px solid #cbd5e1',
+                }}
+              >
+                <div
                   style={{
-                    fontSize: 'clamp(1.25rem, 2.2vw, 1.55rem)',
-                    fontWeight: 900,
-                    color: '#0f172a',
-                    margin: 0,
-                    letterSpacing: '-0.02em',
-                    display: 'inline-flex',
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '9px',
+                    background:
+                      isTopBarOpen || isSelectHovered ? activeAccentColor : '#e2e8f0',
+                    color: isTopBarOpen || isSelectHovered ? '#ffffff' : '#334155',
+                    display: 'flex',
                     alignItems: 'center',
-                    gap: '6px',
+                    justifyContent: 'center',
+                    transition: 'all 0.18s ease',
                   }}
                 >
-                  <span>
-                    {activeRoadmap
-                      ? isEn
-                        ? activeRoadmap.title_en
-                        : activeRoadmap.title_ko
-                      : activeLanguageTrack
-                      ? getTrackName(activeLanguageTrack, isEn)
-                      : ''}
-                  </span>
                   <ChevronDown
-                    size={20}
-                    color={activeAccentColor}
+                    size={17}
+                    strokeWidth={2.6}
                     style={{
                       transform: isTopBarOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                       transition: 'transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
                     }}
                   />
-                </h1>
+                </div>
+              </div>
+            </button>
+
+            {/* Target Badge + 1-Line Curriculum Summary */}
+            <div style={{ minWidth: '220px', flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
                 <span
                   style={{
                     padding: '2px 9px',
@@ -754,7 +810,7 @@ export default function LanguagesPage() {
               </div>
               <p
                 style={{
-                  margin: '4px 0 0 0',
+                  margin: 0,
                   fontSize: '0.86rem',
                   color: '#64748b',
                   fontWeight: 500,
@@ -769,33 +825,6 @@ export default function LanguagesPage() {
                   : activeLanguageTrack?.tagline_ko}
               </p>
             </div>
-          </div>
-
-          {/* Subtle Mini Icon Cluster Preview on the Right */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: '999px',
-              background: '#f1f5f9',
-              border: '1px solid #cbd5e1',
-              flexShrink: 0,
-            }}
-          >
-            <LanguageIcon language="python" size={16} />
-            <LanguageIcon language="c" size={16} />
-            <LanguageIcon language="javascript" size={16} />
-            <LanguageIcon language="java" size={16} />
-            <ChevronDown
-              size={14}
-              color="#475569"
-              style={{
-                transform: isTopBarOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
-              }}
-            />
           </div>
         </div>
 
