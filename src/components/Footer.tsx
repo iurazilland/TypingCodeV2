@@ -71,7 +71,7 @@ export default function Footer() {
           flexWrap: 'wrap',
         }}>
           {[
-            { href: '/languages', ko: '언어학습', en: 'Learn' },
+            { href: '/practice/python_basic', ko: '언어학습', en: 'Learn' },
             { href: '/code-typing', ko: '코드타자', en: 'Code Typing' },
             { href: '/problems', ko: '문제풀이', en: 'Problems' },
             { href: '/compiler', ko: '컴파일러', en: 'Compiler' },

@@ -94,13 +94,13 @@ function LoginPageContent() {
 
   useEffect(() => {
     if (user) {
-      router.replace(safeNext || '/languages');
+      router.replace(safeNext || '/practice/python_basic');
     }
   }, [user, safeNext, router]);
 
   const buildCallbackUrl = () => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const target = safeNext || '/languages';
+    const target = safeNext || '/practice/python_basic';
     return `${origin}/auth/callback?next=${encodeURIComponent(target)}`;
   };
 
@@ -172,7 +172,7 @@ function LoginPageContent() {
       }
 
       await refreshSessionAndProfile();
-      router.replace(safeNext || '/languages');
+      router.replace(safeNext || '/practice/python_basic');
       router.refresh();
     } catch {
       setErrorMessage(
@@ -296,7 +296,7 @@ function LoginPageContent() {
           .eq('id', data.user.id);
 
         await refreshSessionAndProfile();
-        router.replace(safeNext || '/languages');
+        router.replace(safeNext || '/practice/python_basic');
         router.refresh();
       } else {
         setInfoMessage(

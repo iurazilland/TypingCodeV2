@@ -5,7 +5,7 @@ import { getSupabaseEnv } from '@/lib/supabase/env';
 
 function sanitizeNextPath(rawNext: string | null): string {
   if (!rawNext || !rawNext.startsWith('/') || rawNext.startsWith('//')) {
-    return '/languages';
+    return '/practice/python_basic';
   }
   return rawNext;
 }

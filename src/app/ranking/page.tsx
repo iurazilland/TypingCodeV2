@@ -350,7 +350,7 @@ function RankingPageContent() {
           </button>
 
           <Link
-            href={activeTab === 'learning' ? '/languages' : '/code-typing'}
+            href={activeTab === 'learning' ? '/practice/python_basic' : '/code-typing'}
             className="tactile-btn tactile-btn-primary"
             style={{ padding: '9px 16px', fontSize: '0.86rem', textDecoration: 'none' }}
           >
