@@ -7196,7 +7196,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 {isBlockUnlocked('type') && (
                   <div
                     draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'type')}
+                    onDragStart={(e) => handleDragStartFromToolbox(e, 'int')}
                     style={{
                       display: 'inline-flex',
                       width: 'fit-content',
@@ -7215,11 +7215,11 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                       userSelect: 'none',
                       position: 'relative',
                     }}
-                    title="자료형/형변환 함수 블록 (기본값: type, 드롭다운에서 type, int, float, str, bool 선택 가능)"
+                    title="형변환 함수 블록 (기본값: int, 드롭다운에서 int, str, bool 등 선택 가능)"
                   >
                     <PuzzleNotch borderColor={BLOCK_THEMES.type.border} />
                     <PuzzleTab borderColor={BLOCK_THEMES.type.border} bg={BLOCK_THEMES.type.bg} />
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>type ▼</span>
+                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>int ▼</span>
                     <span>(</span>
                     <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
                     <span>)</span>
