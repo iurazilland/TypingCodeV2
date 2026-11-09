@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "숫자 10, 20, 30이 순서대로 담긴 리스트 nums를 만들고 전체 리스트를 출력해보세요.",
-      "prompt_en": "Create a list nums containing 10, 20, and 30, then print the entire list.",
-      "hint_ko": "대괄호 안에 세 숫자를 쉼표로 나열해 리스트 변수에 저장한 뒤, 변수 자체를 그대로 출력해보세요.",
-      "hint_en": "Store the three comma-separated numbers inside square brackets in the variable, then print the variable directly.",
+      "prompt_ko": "파이썬 리스트(list)는 대괄호([]) 안에 여러 값을 쉼표로 구분해 순서대로 담아 관리하는 자료구조입니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A Python list stores multiple items in order inside square brackets ([]) separated by commas. Follow the blocks and type the code.",
+      "hint_ko": "대괄호로 감싼 값들을 변수에 대입하면 하나의 리스트로 묶여 저장되며, print()로 리스트 전체를 확인할 수 있습니다.",
+      "hint_en": "Assigning comma-separated values inside square brackets creates a list that can be printed all at once.",
       "targetCode": "nums = [10, 20, 30]\nprint(nums)",
       "testCases": [
         {
@@ -62,10 +62,10 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "리스트 nums = [10, 20, 30, 40]의 길이와 첫 번째 요소, 마지막 요소(음수 인덱스)를 차례로 출력해보세요.",
-      "prompt_en": "Print the length, first element, and last element (negative index) of nums = [10, 20, 30, 40].",
-      "hint_ko": "'길이(length)'의 앞 세 글자를 딴 함수로 개수를 구하고, 앞에서 첫 위치(0부터 시작)와 뒤에서 첫 위치(음수 시작)로 요소를 꺼내세요.",
-      "hint_en": "Measure the count with the 3-letter function from 'length', then access the 0-based first item and negative-indexed last item.",
+      "prompt_ko": "len() 함수는 리스트에 담긴 요소의 개수를 구해주며, 대괄호 인덱스 [0]은 첫 번째 요소를, [-1]은 맨 마지막 요소를 가리킵니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The len() function returns the number of items in a list, while index [0] accesses the first item and [-1] accesses the last item. Follow the blocks and type the code.",
+      "hint_ko": "리스트 인덱싱도 문자열과 마찬가지로 앞에서부터는 0부터, 뒤에서부터는 -1부터 시작합니다.",
+      "hint_en": "Just like strings, list indexing starts at 0 from the front and -1 from the back.",
       "targetCode": "nums = [10, 20, 30, 40]\nprint(len(nums))\nprint(nums[0], nums[-1])",
       "testCases": [
         {
@@ -98,10 +98,10 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "문자열 text = \"red green blue\"를 공백 기준으로 쪼개 words 리스트에 담고 개수와 첫 단어를 출력해보세요.",
-      "prompt_en": "Split text = \"red green blue\" into words, then print its length and first word.",
-      "hint_ko": "문자열을 공백 단위로 '쪼개는' 메서드를 호출하면 단어들이 담긴 새 리스트가 만들어집니다. 그 개수와 첫 요소를 차례로 출력하세요.",
-      "hint_en": "Dividing a string by whitespace produces a list of words; print its element count on one line and its first element on the next.",
+      "prompt_ko": "문자열에 .split()을 호출하면 공백을 기준으로 단어들이 쪼개져 담긴 새 리스트가 반환됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Calling .split() on a string divides it by whitespace and returns a new list of words. Follow the blocks and type the code.",
+      "hint_ko": ".split()의 결과는 리스트이므로 len()으로 단어 개수를 세거나 [0]으로 첫 번째 단어를 꺼낼 수 있습니다.",
+      "hint_en": "Because .split() returns a list, you can pass it to len() or index its elements like words[0].",
       "targetCode": "text = \"red green blue\"\nwords = text.split()\nprint(len(words))\nprint(words[0])",
       "testCases": [
         {
@@ -139,10 +139,10 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "items = [\"sword\", \"shield\"]에 요소가 있으면 개수와 첫 아이템을 형식에 맞게 출력해보세요. (출력 예: Bag:2,Main:sword)",
-      "prompt_en": "If items = [\"sword\", \"shield\"] is non-empty, print its count and first item (e.g., Bag:2,Main:sword).",
-      "hint_ko": "요소가 하나라도 들어 있는 리스트는 조건문에 변수명만 적어도 참으로 판정됩니다. 그 안에서 개수와 첫 요소를 포맷팅해 출력하세요.",
-      "hint_en": "A non-empty list evaluates as truthy directly in a condition; inside the branch, format its length and first element.",
+      "prompt_ko": "if 조건문에 리스트 변수를 그대로 쓰면 요소가 하나라도 있을 때 참(True), 빈 리스트([])일 때 거짓(False)으로 판별됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Using a list directly in an if condition evaluates to True when the list is non-empty and False when it is empty ([]). Follow the blocks and type the code.",
+      "hint_ko": "len(items) > 0이라고 길게 쓰지 않아도 if items:만으로 리스트가 비어 있지 않은지 간결하게 검사할 수 있습니다.",
+      "hint_en": "Writing if items: is the idiomatic Python way to check that a list has at least one element.",
       "targetCode": "items = [\"sword\", \"shield\"]\nif items:\n    print(f\"Bag:{len(items)},Main:{items[0]}\")",
       "testCases": [
         {
@@ -175,10 +175,10 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "while 반복문과 인덱스 i로 nums = [10, 20, 30]의 모든 요소를 total에 누적해 출력해보세요. (출력 예: Sum:60)",
-      "prompt_en": "Use a while loop and index i to sum all elements of nums = [10, 20, 30] and print Sum:60.",
-      "hint_ko": "인덱스 변수가 리스트 길이보다 작을 동안 현재 위치의 숫자를 합계 변수에 누적하고, 매번 인덱스를 1씩 증가시키세요.",
-      "hint_en": "While the index stays strictly below the list's length, add the element at that index to the running sum and increment the index by 1.",
+      "prompt_ko": "while i < len(리스트): 조건을 사용하면 0번 인덱스부터 마지막 인덱스까지 리스트의 모든 요소를 순서대로 방문해 누적할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Using while i < len(list): lets you step through every valid index from 0 to the end of the list. Follow the blocks and type the code.",
+      "hint_ko": "0부터 시작하는 인덱스 i를 매 반복마다 1씩 늘리면서 nums[i]로 각 위치의 값을 꺼내 합산합니다.",
+      "hint_en": "Start index i at 0, add nums[i] to the running total each turn, and increment i by 1.",
       "targetCode": "nums = [10, 20, 30]\ni = 0\ntotal = 0\nwhile i < len(nums):\n    total += nums[i]\n    i += 1\nprint(f\"Sum:{total}\")",
       "testCases": [
         {

@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "리스트 컴프리헨션 [x * 2 for x in nums]로 nums의 모든 숫자를 2배로 만든 새 리스트를 출력해보세요.",
-      "prompt_en": "Create doubled = [x * 2 for x in nums] using a list comprehension and print doubled.",
-      "hint_ko": "빈 리스트를 만들고 반복문으로 추가하던 코드를 대괄호 안에 [변환식 + 순회절] 순서로 한 줄에 압축해 작성합니다.",
-      "hint_en": "Inside square brackets, write the output expression first followed by the loop clause to build a new list in one line.",
+      "prompt_ko": "리스트 컴프리헨션([표현식 for 변수 in 시퀀스])은 시퀀스의 각 원소를 변환해 새 리스트에 담는 과정을 대괄호 한 줄로 압축합니다.",
+      "prompt_en": "A list comprehension ([expr for var in seq]) transforms every element of a sequence into a new list in a single bracketed line.",
+      "hint_ko": "대괄호 맨 앞에 새 리스트에 넣을 계산식(x * 2)을 먼저 적고, 그 뒤에 for x in nums 순회절을 이어 씁니다.",
+      "hint_en": "Write the output expression (x * 2) first inside the square brackets, followed by the for x in nums loop clause.",
       "targetCode": "nums = [1, 2, 3, 4]\ndoubled = [x * 2 for x in nums]\nprint(doubled)",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "단어 리스트 words의 각 단어를 대문자로 바꾼 [w.upper() for w in words]를 loud에 저장하고 출력해보세요.",
-      "prompt_en": "Convert every word in words to uppercase with [w.upper() for w in words] and print loud.",
-      "hint_ko": "컴프리헨션 앞쪽의 변환식 자리에는 산술 연산뿐 아니라 문자열 메서드 호출도 자유롭게 넣을 수 있습니다.",
-      "hint_en": "You can call string methods directly on the loop variable in the leading output expression of a comprehension.",
+      "prompt_ko": "리스트 컴프리헨션의 앞쪽 표현식 자리에는 w.upper()처럼 메서드를 호출하여 모든 문자열 원소를 일괄 변환할 수 있습니다.",
+      "prompt_en": "Calling a string method like w.upper() in the leading expression of a list comprehension transforms every string in the list at once.",
+      "hint_ko": "words에서 꺼낸 각 단어 w마다 .upper()가 실행된 결과들이 순서대로 새 리스트에 모입니다.",
+      "hint_en": "Each word w from words has .upper() applied to it, collecting the uppercase results in order.",
       "targetCode": "words = [\"py\", \"code\", \"ai\"]\nloud = [w.upper() for w in words]\nprint(loud)",
       "testCases": [
         {
@@ -107,10 +107,10 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "컴프리헨션 뒤에 if x % 2 == 0 조건을 붙여 nums에서 짝수만 골라낸 리스트 evens를 출력해보세요.",
-      "prompt_en": "Filter even numbers from nums using [x for x in nums if x % 2 == 0] and print evens.",
-      "hint_ko": "반복절 맨 뒤에 조건절을 붙이면 그 조건이 참인 원소만 골라 새 리스트에 담는 필터 역할을 합니다.",
-      "hint_en": "A trailing condition clause at the end of a comprehension acts as a filter, keeping only matching items.",
+      "prompt_ko": "리스트 컴프리헨션의 for절 뒤에 if 조건절을 붙이면, 조건이 참인 원소만 골라 담는 필터(Filter) 역할을 합니다.",
+      "prompt_en": "Adding a trailing if condition after the for clause in a list comprehension filters the sequence, keeping only matching elements.",
+      "hint_ko": "원소를 걸러내는 단독 if절은 else 없이 컴프리헨션의 맨 오른쪽 끝에 작성합니다.",
+      "hint_en": "A filtering if clause without else always goes at the very end of the list comprehension, after the for clause.",
       "targetCode": "nums = [1, 2, 3, 4, 5, 6]\nevens = [x for x in nums if x % 2 == 0]\nprint(evens)",
       "testCases": [
         {
@@ -143,10 +143,10 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "원소를 버리지 않고 모두 유지하되 음수만 0으로 바꾸는 [x if x > 0 else 0 for x in nums]를 clean에 담아 출력해보세요.",
-      "prompt_en": "Replace negative values with 0 while keeping all items using [x if x > 0 else 0 for x in nums].",
-      "hint_ko": "원소를 걸러내 버릴 때는 반복절 뒤에 조건만 쓰지만, 조건의 참/거짓에 따라 두 값 중 하나로 바꿀 때는 반복절 앞에 삼항 표현식을 씁니다.",
-      "hint_en": "Filtering goes after the loop clause, whereas replacing values without dropping items puts a ternary expression before the loop.",
+      "prompt_ko": "원소를 걸러내지 않고 조건에 따라 다른 값으로 바꾸어 모두 담을 때는 for절 앞쪽에 삼항 조건 표현식(참값 if 조건 else 거짓값)을 배치합니다.",
+      "prompt_en": "To replace values conditionally while keeping every element, place a ternary expression (true_val if cond else false_val) before the for clause.",
+      "hint_ko": "for절 뒤의 if는 원소를 제외하는 필터이고, for절 앞의 if-else는 모든 원소를 두 값 중 하나로 변환하는 식입니다.",
+      "hint_en": "An if after for filters out items, whereas an if-else before for maps every item to one of two values.",
       "targetCode": "nums = [10, -4, 7, -1, 5]\nclean = [x if x > 0 else 0 for x in nums]\nprint(clean)",
       "testCases": [
         {
@@ -179,10 +179,10 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "2차원 격자 grid의 각 행 합계를 리스트 컴프리헨션 [sum(row) for row in grid]로 한 줄에 반환하는 함수를 완성해보세요.",
-      "prompt_en": "Complete row_totals(grid) returning [sum(row) for row in grid] and print the result for m.",
-      "hint_ko": "2차원 격자의 각 행 리스트를 꺼내 앞쪽 합계 내장 함수에 넘기면 행별 합계 리스트가 한 줄로 완성됩니다.",
-      "hint_en": "Mapping each inner row list through the summation built-in builds a list of row totals in one expression.",
+      "prompt_ko": "2차원 리스트 grid에 리스트 컴프리헨션 [sum(row) for row in grid]를 적용하면 각 행의 합계를 모은 1차원 리스트를 한 줄로 반환할 수 있습니다.",
+      "prompt_en": "Applying [sum(row) for row in grid] to a 2D list computes the sum of each inner row list and returns a 1D list of row totals.",
+      "hint_ko": "grid에서 꺼낸 각 행 리스트 row를 내장 함수 sum()에 전달해 행별 합계를 바로 계산합니다.",
+      "hint_en": "Each inner row list unpacked from grid is passed directly to sum() to produce its row total.",
       "targetCode": "def row_totals(grid):\n    return [sum(row) for row in grid]\n\nm = [[1, 2, 3], [10, 20, 30]]\nprint(row_totals(m))",
       "testCases": [
         {

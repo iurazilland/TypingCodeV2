@@ -20,10 +20,10 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: "text에 \"Python3\"을 저장하고 in 연산자로 \"Py\"가 포함되어 있는지 결과를 출력해보세요.",
-      prompt_en: "Store \"Python3\" in text and print whether \"Py\" is contained in text using in.",
-      hint_ko: "'~ 안에'라는 뜻의 두 글자 포함 연산자 왼쪽에 찾을 부분 문자열을, 오른쪽에 전체 문자열 변수를 놓아 결과를 출력하세요.",
-      hint_en: "Place the target substring on the left and the text variable on the right of the membership operator meaning 'inside'.",
+      prompt_ko: "in 연산자는 왼쪽 부분 문자열이 오른쪽 전체 문자열 안에 포함되어 있으면 True, 없으면 False를 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "The in operator returns True if the left substring appears inside the right string, and False otherwise. Trace the block code.",
+      hint_ko: "\"Python3\" 안에 \"Py\"가 들어 있으므로 \"Py\" in text의 결과로 True가 출력됩니다.",
+      hint_en: "Because \"Py\" appears inside \"Python3\", \"Py\" in text evaluates to True.",
       targetCode: "text = \"Python3\"\nprint(\"Py\" in text)",
       testCases: [
         {
@@ -61,10 +61,10 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: "word에 \"Code\"를 저장하고 for ch in word: 반복문으로 한 글자씩 출력해보세요.",
-      prompt_en: "Store \"Code\" in word and print each character on its own line with for ch in word:.",
-      hint_ko: "문자열 자체를 순회 대상 자리에 두면 첫 글자부터 마지막 글자까지 한 글자씩 차례대로 반복 변수에 담깁니다.",
-      hint_en: "Looping directly over a string assigns one character at a time from start to finish to the loop variable.",
+      prompt_ko: "for ch in 문자열: 반복문은 range()나 인덱스 번호 없이도 문자열의 첫 글자부터 끝 글자까지 한 글자씩 순서대로 변수 ch에 담아 순회합니다. 블록의 코드를 따라 쳐보세요.",
+      prompt_en: "A for ch in string: loop iterates directly over a string, assigning each character from start to finish to ch without needing range() or indices. Trace the block code.",
+      hint_ko: "\"Code\"의 각 글자 'C', 'o', 'd', 'e'가 차례대로 ch에 담겨 한 줄에 하나씩 출력됩니다.",
+      hint_en: "Each character of \"Code\" ('C', 'o', 'd', 'e') is assigned to ch in order and printed on its own line.",
       targetCode: "word = \"Code\"\nfor ch in word:\n    print(ch)",
       testCases: [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: "문자열 mail에 \"@\"와 \".\"이 모두 포함되어 있으면 \"Valid\", 아니면 \"Invalid\"를 출력해보세요. (터미널 입력: user@site.com)",
-      prompt_en: "Print \"Valid\" if both \"@\" and \".\" appear in mail, otherwise print \"Invalid\". (Terminal input: user@site.com)",
-      hint_ko: "두 기호가 각각 문자열에 포함되어 있는지 확인하는 두 조건식을 '그리고'를 뜻하는 논리 연산자로 묶어 검사하세요.",
-      hint_en: "Check membership of each required symbol separately and join both checks with the logical conjunction operator.",
+      prompt_ko: "if 조건식에서 여러 개의 in 포함 검사를 and 연산자로 연결하면 필수 기호(\"@\"와 \".\")가 문자열에 모두 들어 있는지 한 번에 판별할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: user@site.com)",
+      prompt_en: "Joining multiple in membership checks with and inside an if condition verifies whether all required symbols (\"@\" and \".\") appear in a string. Trace the block code. (Terminal input: user@site.com)",
+      hint_ko: "두 기호 중 하나라도 빠져 있으면 and 조건이 거짓이 되어 else 분기의 \"Invalid\"가 출력됩니다.",
+      hint_en: "If either symbol is missing, the and condition is False and the else branch prints \"Invalid\".",
       targetCode: "mail = input()\nif \"@\" in mail and \".\" in mail:\n    print(\"Valid\")\nelse:\n    print(\"Invalid\")",
       testCases: [
         {
@@ -153,10 +153,10 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: "문자열 raw를 순회하며 \"-/\"에 속하지 않는 글자만 clean에 이어 붙여 출력해보세요. (터미널 입력: 010-12/34)",
-      prompt_en: "Build clean by appending characters of raw that are not in \"-/\", then print clean. (Terminal input: 010-12/34)",
-      hint_ko: "순회 중인 글자가 제거할 기호 묶음에 속하지 않을 때만 결과 문자열 뒤에 한 글자씩 이어 붙이세요.",
-      hint_en: "Append each character onto the result string only when it is absent from the unwanted symbol string.",
+      prompt_ko: "문자열을 for ch in raw:로 순회하며 not in 연산자로 특정 기호(\"-/\")에 속하지 않는 글자만 빈 문자열(clean = \"\")에 +=로 이어 붙이면 원하는 문자만 남길 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 010-12/34)",
+      prompt_en: "Iterating with for ch in raw: and using not in to append (+=) only characters absent from \"-/\" into an empty string (clean = \"\") strips out unwanted symbols. Trace the block code. (Terminal input: 010-12/34)",
+      hint_ko: "ch가 '-'나 '/'가 아닐 때만 clean += ch가 실행되어 숫자 글자들만 차곡차곡 모입니다.",
+      hint_en: "clean += ch runs only when ch is neither '-' nor '/', collecting just the digits.",
       targetCode: "raw = input()\nclean = \"\"\nfor ch in raw:\n    if ch not in \"-/\":\n        clean += ch\nprint(clean)",
       testCases: [
         {
@@ -199,10 +199,10 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: "문자열 s를 순회하다 \"_\"를 만나면 continue로 건너뛰고 나머지 글자만 out에 모아 출력해보세요. (터미널 입력: a_b_c)",
-      prompt_en: "Skip \"_\" characters using continue while iterating s, appending all other chars to out. (Terminal input: a_b_c)",
-      hint_ko: "특정 기호를 만났을 때 아래 줄을 실행하지 않고 즉시 다음 글자 차례로 '계속 진행'하게 하는 제어문을 활용하세요.",
-      hint_en: "When the underscore appears, use the loop control statement meaning 'keep going to the next turn' to skip appending it.",
+      prompt_ko: "문자열 for 순회 안에서 특정 글자(\"_\")를 만났을 때 continue를 실행하면 아래쪽 문자열 누적(out += ch)을 건너뛰고 다음 글자로 넘어갑니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: a_b_c)",
+      prompt_en: "Using continue inside a string for loop skips appending (out += ch) whenever the target character (\"_\") is encountered. Trace the block code. (Terminal input: a_b_c)",
+      hint_ko: "ch == \"_\"일 때 continue가 동작해 밑줄 기호는 건너뛰고 알파벳만 out에 이어 붙여집니다.",
+      hint_en: "When ch == \"_\", continue jumps to the next character so only letters are appended to out.",
       targetCode: "s = input()\nout = \"\"\nfor ch in s:\n    if ch == \"_\":\n        continue\n    out += ch\nprint(out)",
       testCases: [
         {

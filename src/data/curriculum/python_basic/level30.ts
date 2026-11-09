@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "바깥 r은 range(2), 안쪽 c는 range(3)으로 중첩해 모든 행·열 좌표 쌍 r, c를 출력해보세요.",
-      "prompt_en": "Nest c in range(3) inside r in range(2) and print each coordinate pair r, c.",
-      "hint_ko": "바깥 행 반복이 한 차례 돌 때마다 안쪽 열 반복이 처음부터 끝까지 모두 실행된 뒤 다음 행으로 넘어갑니다.",
-      "hint_en": "For each single turn of the outer row loop, the inner column loop runs all the way through its sequence.",
+      "prompt_ko": "for 반복문 안에 또 다른 for 반복문을 넣는 '중첩 반복문'에서는 바깥 변수(r)가 한 번 바뀔 때마다 안쪽 변수(c)가 처음부터 끝까지 모두 순회합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "In nested for loops, the inner loop (c) runs through its entire sequence for every single step of the outer loop (r). Trace the block code.",
+      "hint_ko": "r이 0일 때 c가 0, 1, 2를 돌고, 이어서 r이 1일 때 다시 c가 0, 1, 2를 돌아 총 6번 출력됩니다.",
+      "hint_en": "When r is 0, c runs 0, 1, 2; then when r is 1, c runs 0, 1, 2 again for 6 total outputs.",
       "targetCode": "for r in range(2):\n    for c in range(3):\n        print(r, c)",
       "testCases": [
         {
@@ -65,10 +65,10 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "중첩 for문과 end=\"\" 및 바깥 print()를 사용해 2줄 4칸짜리 별(\"*\") 직사각형을 출력해보세요.",
-      "prompt_en": "Use nested for loops, end=\"\", and an outer print() to print a 2-by-4 rectangle of stars.",
-      "hint_ko": "안쪽 루프에서는 줄바꿈 없이 별을 가로로 이어 찍고, 안쪽 루프가 끝나는 바깥 들여쓰기 위치에서 빈 출력문으로 줄을 바꾸세요.",
-      "hint_en": "Suppress newlines inside the inner loop to print stars across, then place an empty output call at outer indentation per row.",
+      "prompt_ko": "안쪽 루프에서 end=\"\"로 줄바꿈 없이 가로로 문자를 이어 찍고, 안쪽 루프가 끝난 직후 바깥 루프 위치에서 빈 print()로 줄을 바꾸면 2차원 직사각형을 그릴 수 있습니다. 블록의 코드를 따라 쳐보세요.",
+      "prompt_en": "Using end=\"\" in the inner loop prints characters across a row, and calling an empty print() at the outer loop level advances to the next line. Trace the block code.",
+      "hint_ko": "빈 print()는 안쪽 for문과 같은 들여쓰기(4칸) 위치에 두어야 한 줄(4칸)이 완성될 때마다 줄바꿈이 일어납니다.",
+      "hint_en": "Place the empty print() at the same 4-space indentation as the inner for header so a newline happens once per row.",
       "targetCode": "for r in range(2):\n    for c in range(4):\n        print(\"*\", end=\"\")\n    print()",
       "testCases": [
         {
@@ -111,10 +111,10 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 1층부터 n층까지 별(\"*\")이 1개씩 늘어나는 계단 삼각형을 출력해보세요. (터미널 입력: 3)",
-      "prompt_en": "Read integer n and print a staircase triangle of stars growing from 1 up to n. (Terminal input: 3)",
-      "hint_ko": "바깥 행 번호가 1부터 n까지 커질 때 안쪽 반복 횟수를 현재 행 번호만큼 주면 줄마다 별 개수가 1개씩 늘어납니다.",
-      "hint_en": "Let the outer row variable run from 1 through n, and pass that row variable to the inner range before changing lines.",
+      "prompt_ko": "안쪽 반복문의 횟수를 바깥 행 변수 r에 연동(for c in range(r):)하면 행이 내려갈수록 출력 개수가 늘어나는 계단 패턴을 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 3)",
+      "prompt_en": "Linking the inner loop's range to the outer row variable (for c in range(r):) makes each row print one more character than the last. Trace the block code. (Terminal input: 3)",
+      "hint_ko": "r이 1부터 n까지 커짐에 따라 안쪽 루프가 1번, 2번, ..., n번 반복되며 별을 가로로 찍습니다.",
+      "hint_en": "As r grows from 1 through n, the inner loop repeats 1, 2, ..., n times across each row.",
       "targetCode": "n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print(\"*\", end=\"\")\n    print()",
       "testCases": [
         {
@@ -167,10 +167,10 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 n x n 격자에서 (r + c) % 2 == 0이면 \"O\", 아니면 \"X\"를 출력해 체스판을 만들어보세요. (터미널 입력: 3)",
-      "prompt_en": "Read integer n and print an n-by-n checkerboard of \"O\" where (r + c) % 2 == 0 and \"X\" otherwise. (Terminal input: 3)",
-      "hint_ko": "안쪽 반복에서 행과 열의 합이 짝수인지 분기해 줄바꿈 없이 문자를 찍고, 한 행이 끝날 때마다 바깥에서 줄을 바꾸세요.",
-      "hint_en": "Branch on whether r + c is even inside the inner loop without newlines, then advance to the next line once per outer row.",
+      "prompt_ko": "2차원 중첩 루프 안에서 행과 열 번호의 합이 짝수인지((r + c) % 2 == 0) 판별하면 두 문자가 번갈아 나오는 체스판 격자를 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 3)",
+      "prompt_en": "Testing whether the sum of row and column indices is even ((r + c) % 2 == 0) inside nested loops alternates characters in a checkerboard pattern. Trace the block code. (Terminal input: 3)",
+      "hint_ko": "안쪽 if - else에서는 end=\"\"로 가로 출력을 이어가고, 한 행이 끝나면 바깥 print()로 줄을 바꿉니다.",
+      "hint_en": "Both branches inside the inner loop use end=\"\", and the outer print() starts a new row.",
       "targetCode": "n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if (r + c) % 2 == 0:\n            print(\"O\", end=\"\")\n        else:\n            print(\"X\", end=\"\")\n    print()",
       "testCases": [
         {
@@ -223,10 +223,10 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "1부터 n까지 중첩 반복하며 c > r이 되는 순간 안쪽 루프를 break로 멈춰 숫자 계단을 출력해보세요. (터미널 입력: 3)",
-      "prompt_en": "In nested 1..n loops, break the inner loop when c > r to print a number staircase. (Terminal input: 3)",
-      "hint_ko": "안쪽 열 번호가 현재 행 번호보다 커지는 즉시 안쪽 반복만 종료하고, 바깥 반복 끝에서 줄을 바꿔 다음 층을 출력하세요.",
-      "hint_en": "Exit only the inner loop as soon as column c exceeds row r, printing c across the row before advancing the line outside.",
+      "prompt_ko": "중첩 반복문의 안쪽 루프에서 break를 실행하면 바깥 루프는 유지된 채 안쪽 루프만 즉시 종료하고 다음 행으로 넘어갑니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 3)",
+      "prompt_en": "Executing break inside an inner loop exits only that inner loop while the outer loop continues to the next row. Trace the block code. (Terminal input: 3)",
+      "hint_ko": "열 번호 c가 현재 행 번호 r보다 커지는 순간 안쪽 루프를 탈출하고 print()로 줄을 바꿉니다.",
+      "hint_en": "As soon as column c exceeds row r, break exits the inner loop and print() moves to the next line.",
       "targetCode": "n = int(input())\nfor r in range(1, n + 1):\n    for c in range(1, n + 1):\n        if c > r:\n            break\n        print(c, end=\"\")\n    print()",
       "testCases": [
         {

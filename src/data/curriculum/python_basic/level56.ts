@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "입력값을 정수로 바꾸어 10을 곱해 출력하고, 값 변환 실패(ValueError) 시 \"NotInt\"를 출력해보세요. (터미널 입력: 4)",
-      "prompt_en": "Convert input to int and print n * 10, catching ValueError specifically to print \"NotInt\". (Terminal input: 4)",
-      "hint_ko": "정수 변환과 곱셈 출력을 시도 블록에 두고, 부적절한 값 변환 오류 타입만 지정한 예외 블록에서 안내문을 출력하세요.",
-      "hint_en": "Put conversion and printing in the attempt block, and specify the invalid-value exception type on the catch header.",
+      "prompt_ko": "except 뒤에 ValueError를 명시하면, 숫자가 아닌 문자열을 int()로 변환할 때처럼 값의 형식이 부적절할 때 발생하는 에러만 골라서 처리합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 4)",
+      "prompt_en": "Specifying ValueError after except catches only errors raised when a function like int() receives an argument with an inappropriate value. Trace the block code. (Terminal input: 4)",
+      "hint_ko": "except ValueError: 처럼 예외 이름을 지정하면 다른 종류의 에러와 명확히 구분하여 대응할 수 있습니다.",
+      "hint_en": "Naming the exception as except ValueError: lets you target invalid-value conversion failures specifically.",
       "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(n * 10)\nexcept ValueError:\n    print(\"NotInt\")",
       "testCases": [
         {
@@ -76,10 +76,10 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "정수 입력 n으로 60 // n을 출력하되, 0으로 나눌 때(ZeroDivisionError) \"ZeroDiv\"를 출력해보세요. (터미널 입력: 15)",
-      "prompt_en": "Print 60 // n for integer input n, catching ZeroDivisionError to print \"ZeroDiv\". (Terminal input: 15)",
-      "hint_ko": "몫 나눗셈 출력을 시도 블록에 넣고, 0으로 나눌 때 발생하는 전용 예외 타입을 지정해 안내 문구를 출력하세요.",
-      "hint_en": "Guard the floor division in the attempt block and catch the specific division-by-zero exception type below.",
+      "prompt_ko": "숫자를 0으로 나누려 할 때는 ZeroDivisionError가 발생하며, except ZeroDivisionError: 블록으로 이를 안전하게 가로챌 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 15)",
+      "prompt_en": "Dividing a number by zero raises ZeroDivisionError, which you can safely intercept using an except ZeroDivisionError: block. Trace the block code. (Terminal input: 15)",
+      "hint_ko": "나눗셈(/)이나 몫(//), 나머지(%) 연산 모두 분모가 0이면 ZeroDivisionError를 발생시킵니다.",
+      "hint_en": "Standard division (/), floor division (//), and modulo (%) all raise ZeroDivisionError when the divisor is 0.",
       "targetCode": "n = int(input())\ntry:\n    print(60 // n)\nexcept ZeroDivisionError:\n    print(\"ZeroDiv\")",
       "testCases": [
         {
@@ -122,10 +122,10 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "리스트 [10, 20, 30]에서 입력 인덱스 idx 위치를 출력하고, 범위를 벗어나면(IndexError) \"NoIndex\"를 출력해보세요. (터미널 입력: 2)",
-      "prompt_en": "Print nums[idx] from [10, 20, 30], catching IndexError to print \"NoIndex\". (Terminal input: 2)",
-      "hint_ko": "리스트의 위치 번호가 범위를 벗어날 때 발생하는 인덱스 예외 타입을 지정해 안전하게 안내문을 출력하세요.",
-      "hint_en": "Attempt printing the list element at the input position, and catch the out-of-bounds sequence index exception.",
+      "prompt_ko": "리스트나 튜플에서 유효한 범위를 벗어난 인덱스를 조회하면 IndexError가 발생하며, except IndexError:로 범위 초과 상황에 대응합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 2)",
+      "prompt_en": "Accessing a list or tuple index outside its valid range raises IndexError, which can be handled with except IndexError:. Trace the block code. (Terminal input: 2)",
+      "hint_ko": "원소가 3개인 리스트의 유효 인덱스는 0, 1, 2(음수는 -1 ~ -3)이며 그 밖의 번호는 IndexError를 일으킵니다.",
+      "hint_en": "A 3-item list has valid indices 0, 1, and 2 (or -1 to -3); any index outside that range raises IndexError.",
       "targetCode": "nums = [10, 20, 30]\nidx = int(input())\ntry:\n    print(nums[idx])\nexcept IndexError:\n    print(\"NoIndex\")",
       "testCases": [
         {
@@ -168,10 +168,10 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력값을 정수로 바꿔 100 // n을 출력하되, ValueError면 \"ValErr\", ZeroDivisionError면 \"ZeroErr\"를 각각 출력해보세요. (터미널 입력: 20)",
-      "prompt_en": "Print 100 // int(s), handling ValueError with \"ValErr\" and ZeroDivisionError with \"ZeroErr\". (Terminal input: 20)",
-      "hint_ko": "하나의 시도 블록 아래에 값 변환 예외 블록과 0 나눗셈 예외 블록을 나란히 배치해 원인별로 다른 문구를 출력하세요.",
-      "hint_en": "Attach two separate specific catch blocks beneath one attempt block—one for bad number text and one for dividing by zero.",
+      "prompt_ko": "하나의 try 블록 아래에 여러 개의 except 절을 나란히 연결하면, ValueError와 ZeroDivisionError처럼 에러 원인에 따라 서로 다른 처리를 수행할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 20)",
+      "prompt_en": "Chaining multiple except clauses beneath a single try block lets you branch into different handlers depending on whether ValueError or ZeroDivisionError occurs. Trace the block code. (Terminal input: 20)",
+      "hint_ko": "try 블록에서 에러가 발생하면 위에서부터 일치하는 첫 번째 except 블록 하나만 실행됩니다.",
+      "hint_en": "When an error occurs in try, Python runs only the first matching except block from top to bottom.",
       "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(100 // n)\nexcept ValueError:\n    print(\"ValErr\")\nexcept ZeroDivisionError:\n    print(\"ZeroErr\")",
       "testCases": [
         {
@@ -224,10 +224,10 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "pts[k] // cnts[k]를 반환하되 키가 없으면 -1, 0으로 나누면 0을 반환하는 avg_pt 함수를 정의해 \"A\", \"B\", \"C\" 결과를 출력해보세요.",
-      "prompt_en": "Define avg_pt(pts, cnts, k) returning pts[k] // cnts[k], -1 on KeyError, or 0 on ZeroDivisionError.",
-      "hint_ko": "함수 안의 시도 블록에서 두 딕셔너리 조회의 몫을 반환하고, 키 누락 예외와 0 나눗셈 예외에서 각각 대체 정수를 반환하세요.",
-      "hint_en": "Inside the function, attempt returning the quotient of the two lookups, with separate catch branches for missing keys and zero divisors.",
+      "prompt_ko": "함수 내부에서도 try와 여러 except(KeyError, ZeroDivisionError)를 사용해, 딕셔너리 키가 없거나 분모가 0일 때 각각 지정된 대체값을 return할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Inside a function, you can combine try with multiple except branches (KeyError, ZeroDivisionError) to return distinct fallback values when a dictionary key is missing or a divisor is zero. Trace the block code.",
+      "hint_ko": "try 블록이나 except 블록 안에서 return이 실행되면 그 즉시 함수가 종료되며 결과값을 돌려줍니다.",
+      "hint_en": "Executing return inside either the try block or an except block immediately exits the function with that value.",
       "targetCode": "def avg_pt(pts, cnts, k):\n    try:\n        return pts[k] // cnts[k]\n    except KeyError:\n        return -1\n    except ZeroDivisionError:\n        return 0\np = {\"A\": 90, \"B\": 50}\nc = {\"A\": 3, \"B\": 0}\nprint(avg_pt(p, c, \"A\"), avg_pt(p, c, \"B\"))\nprint(avg_pt(p, c, \"C\"))",
       "testCases": [
         {

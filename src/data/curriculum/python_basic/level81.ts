@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "인자 개수에 상관없이 전달된 모든 숫자를 튜플로 받아 합계를 반환하는 def add_all(*nums): 함수를 만들고 호출해보세요.",
-      "prompt_en": "Define def add_all(*nums): returning sum(nums) and print add_all(10, 20) and add_all(1, 2, 3, 4).",
-      "hint_ko": "매개변수 이름 앞에 별표 기호를 붙이면 호출할 때 넘긴 여러 위치 인자들이 하나의 튜플로 묶여 들어옵니다.",
-      "hint_en": "Prefixing a parameter with an asterisk packs any number of positional arguments into a single tuple.",
+      "prompt_ko": "함수 매개변수 이름 앞에 별표(*)를 붙인 가변 인자(*nums)는 호출 시 전달된 위치 인자들을 개수에 상관없이 하나의 튜플로 묶어 받습니다.",
+      "prompt_en": "A variadic parameter prefixed with an asterisk (*nums) packs any number of positional arguments into a single tuple inside the function.",
+      "hint_ko": "함수 내부에서 nums는 튜플이므로 sum(nums)처럼 시퀀스 내장 함수를 그대로 사용할 수 있습니다.",
+      "hint_en": "Inside the function, nums is a tuple, so you can pass it directly to built-in functions like sum(nums).",
       "targetCode": "def add_all(*nums):\n    return sum(nums)\nprint(add_all(10, 20))\nprint(add_all(1, 2, 3, 4))",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "한 줄 익명 함수 lambda x: x * 2와 map(lambda n: n + 10, nums)를 사용해 14와 변환된 리스트를 출력해보세요.",
-      "prompt_en": "Create double = lambda x: x * 2 and map(lambda n: n + 10, nums), then print double(7) and res.",
-      "hint_ko": "그리스 문자에서 유래한 익명 함수 문법은 이름 선언이나 반환 키워드 없이 콜론 뒤 표현식의 결과를 자동으로 돌려줍니다.",
-      "hint_en": "Named after a Greek letter, this inline function syntax evaluates the expression after the colon and returns it automatically.",
+      "prompt_ko": "익명 함수(lambda 매개변수: 표현식)는 def나 return 없이 콜론(:) 뒤 계산식의 결과를 즉시 반환하며, map()의 변환 함수로도 바로 넘길 수 있습니다.",
+      "prompt_en": "An anonymous function (lambda param: expr) evaluates and returns the expression after the colon without def or return, and works inline inside map().",
+      "hint_ko": "lambda 안에는 return 키워드를 쓰지 않으며, 콜론 뒤의 식 자체가 반환값이 됩니다.",
+      "hint_en": "Do not write return inside a lambda; the expression after the colon is returned automatically.",
       "targetCode": "double = lambda x: x * 2\nnums = [3, 5, 8]\nres = list(map(lambda n: n + 10, nums))\nprint(double(7), res)",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "입력된 단어들을 글자 수(len(w)) 기준 내림차순(reverse=True)으로 정렬해 공백으로 이어 출력해보세요. (터미널 입력: hi python code)",
-      "prompt_en": "Sort input words by word length descending with key=lambda w: len(w), reverse=True and print joined by space. (Terminal input: hi python code)",
-      "hint_ko": "정렬 기준 함수가 각 단어의 글자 수를 반환하도록 지정하고 역순 옵션을 켜면 긴 단어부터 앞에 배치됩니다.",
-      "hint_en": "Returning word length from the sort key function alongside the reverse option places the longest words first.",
+      "prompt_ko": "sorted()에 key=lambda w: len(w)와 reverse=True를 함께 지정하면 각 원소의 길이를 기준으로 내림차순(긴 단어부터) 정렬합니다. (터미널 입력: hi python code)",
+      "prompt_en": "Passing key=lambda w: len(w) and reverse=True to sorted() orders elements by their length from longest to shortest. (Terminal input: hi python code)",
+      "hint_ko": "key 함수가 반환한 글자 수(len(w))를 비교 기준으로 삼아 원본 단어들을 재배열합니다.",
+      "hint_en": "sorted() compares the lengths returned by the key function while keeping the original words in the result list.",
       "targetCode": "a = input().split()\nr = sorted(a, key=lambda w: len(w), reverse=True)\nprint(\" \".join(r))",
       "testCases": [
         {
@@ -143,10 +143,10 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "점수 딕셔너리의 .items()를 점수 기준 내림차순 정렬해 높은 점수부터 차례대로 출력해보세요. (출력 예: Lee:95)",
-      "prompt_en": "Sort scores.items() by score descending using key=lambda x: x[1], reverse=True and print each name:score.",
-      "hint_ko": "딕셔너리의 항목 쌍 뷰는 (이름, 점수) 튜플들을 제공하므로, 1번 인덱스 요소를 기준으로 역순 정렬하면 높은 점수순이 됩니다.",
-      "hint_en": "Key-value pair tuples expose scores at index 1, allowing custom descending sort to rank highest scores first.",
+      "prompt_ko": "딕셔너리의 .items()가 반환하는 (키, 값) 튜플들을 sorted(..., key=lambda x: x[1], reverse=True)로 정렬하면 값(점수)이 큰 순서대로 순회할 수 있습니다.",
+      "prompt_en": "Sorting dictionary .items() tuples with key=lambda x: x[1] and reverse=True orders the key-value pairs by their value from highest to lowest.",
+      "hint_ko": "각 (이름, 점수) 튜플 x에서 1번 인덱스(x[1])가 점수이므로 이를 정렬 기준으로 지정합니다.",
+      "hint_en": "In each (name, score) tuple x, index 1 (x[1]) holds the score used as the sort key.",
       "targetCode": "scores = {\"Kim\": 78, \"Lee\": 95, \"Park\": 88}\nit = scores.items()\ntop = sorted(it, key=lambda x: x[1], reverse=True)\nfor name, sc in top:\n    print(f\"{name}:{sc}\")",
       "testCases": [
         {
@@ -179,10 +179,10 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "n명의 이름과 점수를 while 반복문으로 입력받아 튜플 리스트에 모은 뒤 최고 득점자의 이름과 점수를 출력해보세요. (터미널 입력: 3, Kim 80, Lee 95, Park 88 한 줄씩)",
-      "prompt_en": "Read n (name, score) pairs with a while loop, then find and print the highest scorer via max(..., key=lambda x: x[1]). (Terminal input: 3, Kim 80, Lee 95, Park 88 line by line)",
-      "hint_ko": "반복문 안에서 점수를 정수로 바꿔 (이름, 점수) 튜플로 추가한 뒤, 두 번째 원소 기준으로 최댓값 튜플을 찾습니다.",
-      "hint_en": "Append (name, integer score) tuples during the loop, then pick the tuple with the largest second element afterward.",
+      "prompt_ko": "내장 함수 max()에도 key=lambda x: x[1] 옵션을 지정하면, 튜플 리스트에서 두 번째 요소(점수)가 가장 큰 튜플 전체를 찾아 반환합니다. (터미널 입력: 3, Kim 80, Lee 95, Park 88 한 줄씩)",
+      "prompt_en": "Passing key=lambda x: x[1] to max() compares tuples by their second element (score) and returns the entire winning tuple. (Terminal input: 3, Kim 80, Lee 95, Park 88 line by line)",
+      "hint_ko": "max()가 반환한 최고 득점 튜플 best에서 best[0]은 이름, best[1]은 점수입니다.",
+      "hint_en": "From the winning tuple best returned by max(), best[0] is the name and best[1] is the score.",
       "targetCode": "n = int(input())\nrows = []\nwhile n > 0:\n    name, sc = input().split()\n    rows.append((name, int(sc)))\n    n -= 1\nbest = max(rows, key=lambda x: x[1])\nprint(best[0], best[1])",
       "testCases": [
         {

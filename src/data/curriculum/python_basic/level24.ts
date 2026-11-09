@@ -25,10 +25,10 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "range(4)를 사용해 0부터 3까지의 정수를 한 줄에 하나씩 순서대로 출력해보세요.",
-      "prompt_en": "Use range(4) to print integers from 0 to 3 one per line in order.",
-      "hint_ko": "range(4)는 0부터 끝값 4 직전까지의 정수를 차례로 꺼내 주며, 반복문 안쪽에 들여써서 출력 블록을 배치합니다.",
-      "hint_en": "range(4) yields integers from 0 up to right before 4; place the output block indented inside the loop.",
+      "prompt_ko": "for i in range(n): 반복문은 0부터 끝값 n 직전(n-1)까지의 정수를 변수 i에 차례대로 담아 들여쓰기된 블록을 반복 실행합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A for i in range(n): loop assigns integers from 0 up to n-1 to i in order and repeats the indented block. Trace the block code.",
+      "hint_ko": "range(4)는 끝값 4를 포함하지 않고 0, 1, 2, 3 네 개의 숫자를 순서대로 만들어 냅니다.",
+      "hint_en": "range(4) excludes the stop value 4 and generates the four integers 0, 1, 2, 3 in sequence.",
       "targetCode": "for i in range(4):\n    print(i)",
       "testCases": [
         {
@@ -61,10 +61,10 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "range(3) 반복문으로 문자열 \"Ready\"와 현재 번호 i를 함께 3번 출력해보세요.",
-      "prompt_en": "Use a range(3) loop to print \"Ready\" alongside the current index i three times.",
-      "hint_ko": "반복 블록 내부의 출력문에서 고정 문자열과 반복 변수를 쉼표로 나란히 전달하면 매 반복마다 공백으로 이어 출력됩니다.",
-      "hint_en": "Pass the fixed label string and loop variable separated by a comma inside the loop's print block.",
+      "prompt_ko": "for 반복문 안의 print()에서 고정 문자열과 반복 변수 i를 쉼표(,)로 함께 전달하면 매 반복마다 번호가 바뀌며 출력됩니다. 블록의 코드를 따라 쳐보세요.",
+      "prompt_en": "Passing a fixed string and the loop variable i separated by a comma inside print() outputs the label with the changing index on each turn. Trace the block code.",
+      "hint_ko": "range(3)으로 3번 반복되는 동안 i의 값이 0, 1, 2로 변하며 \"Ready\" 뒤에 나란히 출력됩니다.",
+      "hint_en": "Across the 3 iterations of range(3), i changes from 0 to 1 to 2 and prints next to \"Ready\".",
       "targetCode": "for i in range(3):\n    print(\"Ready\", i)",
       "testCases": [
         {
@@ -97,10 +97,10 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 range(n)과 i + 1을 활용해 1부터 n까지 순서대로 출력해보세요. (터미널 입력: 3)",
-      "prompt_en": "Read integer n and print 1 through n using range(n) and i + 1. (Terminal input: 3)",
-      "hint_ko": "반복 변수는 0부터 시작해 n-1에서 끝나므로, 출력할 때 1을 더해주면 1부터 n까지의 수열이 됩니다.",
-      "hint_en": "Because the loop index runs from 0 through n-1, adding 1 when printing shifts the output to 1 through n.",
+      "prompt_ko": "range(n)의 반복 변수 i는 0부터 시작하므로, 출력할 때 i + 1 수식을 사용하면 1부터 n까지의 자연수를 순서대로 얻을 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 3)",
+      "prompt_en": "Because i in range(n) starts at 0, using the expression i + 1 inside print() shifts the sequence to run from 1 through n. Trace the block code. (Terminal input: 3)",
+      "hint_ko": "i가 0, 1, ..., n-1로 변할 때 i + 1은 1, 2, ..., n이 되어 출력됩니다.",
+      "hint_en": "As i steps through 0, 1, ..., n-1, the expression i + 1 evaluates to 1, 2, ..., n.",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(i + 1)",
       "testCases": [
         {
@@ -153,10 +153,10 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 문자열 반복 연산(*)으로 별(\"*\")을 1개부터 n개까지 줄마다 출력해보세요. (터미널 입력: 3)",
-      "prompt_en": "Read integer n and print 1 to n stars (\"*\") per line using string repetition (*). (Terminal input: 3)",
-      "hint_ko": "0부터 시작하는 반복 변수에 1을 더한 횟수만큼 별 문자열을 반복 연산해 매 줄마다 길이를 늘려 출력하세요.",
-      "hint_en": "Repeat the star character (i + 1) times inside the loop so each line grows by one star.",
+      "prompt_ko": "for 반복문 안에서 문자열 반복 연산자(*)와 (i + 1)을 결합하면 매 줄마다 글자 수가 1개씩 늘어나는 계단 모양을 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 3)",
+      "prompt_en": "Combining the string repetition operator (*) with (i + 1) inside a for loop prints a growing staircase pattern line by line. Trace the block code. (Terminal input: 3)",
+      "hint_ko": "덧셈을 먼저 계산하도록 (i + 1)에 괄호를 씌운 뒤 \"*\" 문자열에 곱해 반복 횟수를 지정합니다.",
+      "hint_en": "Wrap (i + 1) in parentheses so addition runs before multiplying with the \"*\" string.",
       "targetCode": "n = int(input())\nfor i in range(n):\n    print(\"*\" * (i + 1))",
       "testCases": [
         {
@@ -209,10 +209,10 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 0부터 n-1까지 짝수면 숫자와 \"Even\", 홀수면 숫자와 \"Odd\"를 출력해보세요. (터미널 입력: 3)",
-      "prompt_en": "Read integer n and for 0..n-1 print the number with \"Even\" if even or \"Odd\" if odd. (Terminal input: 3)",
-      "hint_ko": "반복문 안에 조건 분기 블록을 중첩해 2로 나눈 나머지가 0인지에 따라 서로 다른 문자열을 함께 출력하세요.",
-      "hint_en": "Nest a two-way conditional branch inside the loop to check divisibility by 2 and print the matching label.",
+      "prompt_ko": "for 반복문 내부에 if - else 조건문을 중첩하면 매 반복마다 바뀌는 i의 값이 짝수인지 홀수인지 판별해 서로 다른 출력을 실행할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 3)",
+      "prompt_en": "Nesting an if - else statement inside a for loop lets you test each value of i for even or odd and branch on every turn. Trace the block code. (Terminal input: 3)",
+      "hint_ko": "반복문 안에 조건문이 들어갈 때는 들여쓰기가 한 단계씩 더 깊어지며 매 차례마다 조건 검사가 수행됩니다.",
+      "hint_en": "Statements inside the nested conditional are indented one level deeper and evaluated on every loop iteration.",
       "targetCode": "n = int(input())\nfor i in range(n):\n    if i % 2 == 0:\n        print(i, \"Even\")\n    else:\n        print(i, \"Odd\")",
       "testCases": [
         {

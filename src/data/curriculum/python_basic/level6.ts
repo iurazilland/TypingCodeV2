@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '줄바꿈 기호(\\n)를 사용해 "Hello\\nWorld"를 넣어 두 줄로 출력해보세요.',
-      prompt_en: 'Use the newline escape (\\n) to insert "Hello\\nWorld" and print on two lines.',
-      hint_ko: '문자열 안에 \\n을 넣으면 그 위치에서 줄이 바뀝니다. print() 슬롯에 "Hello\\nWorld"를 입력하세요.',
-      hint_en: 'Inserting \\n inside a string starts a new line. Enter "Hello\\nWorld" in the print() slot.',
+      prompt_ko: '문자열 안에 줄바꿈 이스케이프 문자(\\n)를 넣으면 한 번의 print() 호출로도 그 위치에서 줄을 바꾸어 출력할 수 있습니다. 블록의 문자열을 따라 입력해보세요.',
+      prompt_en: 'Inserting the newline escape character (\\n) inside a string breaks the line at that position within a single print() call. Trace the block code.',
+      hint_ko: '역슬래시(\\)와 소문자 n을 붙여 쓰면 화면에는 글자 대신 줄바꿈으로 나타납니다.',
+      hint_en: 'A backslash (\\) followed by n starts a new line instead of printing literal characters.',
       targetCode: 'print("Hello\\nWorld")',
       testCases: [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '탭 기호(\\t)를 사용해 "Name\\tScore"를 넣어 넓은 간격으로 출력해보세요.',
-      prompt_en: 'Use the tab escape (\\t) to insert "Name\\tScore" and print with tab spacing.',
-      hint_ko: '문자열 안에 \\t를 넣으면 키보드의 Tab 키를 누른 것처럼 일정한 간격이 벌어집니다. "Name\\tScore"를 입력하세요.',
-      hint_en: 'Inserting \\t adds a horizontal tab gap. Enter "Name\\tScore" in the print() slot.',
+      prompt_ko: '문자열 안에 탭 이스케이프 문자(\\t)를 넣으면 키보드의 Tab 키를 누른 것처럼 넓은 간격을 띄워 정렬할 수 있습니다. 블록의 문자열을 따라 입력해보세요.',
+      prompt_en: 'Inserting the tab escape character (\\t) inside a string adds a horizontal tab space, just like pressing the Tab key. Trace the block code.',
+      hint_ko: '역슬래시(\\)와 소문자 t를 붙여 쓰면 두 단어 사이에 일정한 탭 간격이 벌어집니다.',
+      hint_en: 'A backslash (\\) followed by t inserts a tab gap between the two words.',
       targetCode: 'print("Name\\tScore")',
       testCases: [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: "따옴표 이스케이프(\\')를 사용해 'It\\'s'를 넣어 작은따옴표까지 출력해보세요.",
-      prompt_en: "Use an escaped quote (\\') to insert 'It\\'s' and print the apostrophe.",
-      hint_ko: "작은따옴표 문자열 안에서 작은따옴표를 글자로 출력하려면 앞에 역슬래시를 붙여 \\'로 작성합니다. 'It\\'s'를 입력하세요.",
-      hint_en: "Prefix the inner single quote with a backslash (\\') so Python prints it as a character. Enter 'It\\'s'.",
+      prompt_ko: "작은따옴표('') 문자열 안에서 작은따옴표를 글자로 넣어야 할 때는 앞에 역슬래시를 붙인 \\' 이스케이프 문자를 사용합니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "To include an apostrophe inside a single-quoted ('') string without ending it early, prefix it with a backslash (\\'). Trace the block code.",
+      hint_ko: '역슬래시 뒤의 따옴표는 문자열을 닫는 기호가 아니라 일반 글자로 취급됩니다.',
+      hint_en: 'The backslash tells Python to treat the quote as a literal character rather than the end of the string.',
       targetCode: "print('It\\'s')",
       testCases: [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '역슬래시를 두 번(\\\\) 사용해 "C:\\\\Python"을 넣어 폴더 경로를 출력해보세요.',
-      prompt_en: 'Use a double backslash (\\\\) to insert "C:\\\\Python" and print the folder path.',
-      hint_ko: '역슬래시(\\) 자체를 화면에 한 개 출력하려면 \\\\처럼 두 번 연속 적어주어야 합니다.',
-      hint_en: 'Writing \\\\ inside a string outputs a single literal backslash (\\).',
+      prompt_ko: '역슬래시(\\) 자체를 화면에 글자로 출력하려면 이스케이프 기호로 오인되지 않도록 역슬래시를 두 번 연속(\\\\) 적어야 합니다. 블록의 경로 문자열을 따라 입력해보세요.',
+      prompt_en: 'To print a literal backslash (\\) character, write two backslashes (\\\\) in a row so it is not treated as an escape sequence. Trace the folder path in the block.',
+      hint_ko: '코드에는 \\\\처럼 두 개를 적지만 실제 출력 결과에는 \\ 한 개만 나타납니다.',
+      hint_en: 'Two backslashes (\\\\) in code produce a single backslash (\\) in the output.',
       targetCode: 'print("C:\\\\Python")',
       testCases: [
         {
@@ -190,10 +190,10 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '탭(\\t)과 줄바꿈(\\n)을 사용해 "Item\\tPrice\\nPen\\t500"을 넣어 2줄 가격표를 출력해보세요.',
-      prompt_en: 'Use \\t and \\n to insert "Item\\tPrice\\nPen\\t500" and print a two-line price table.',
-      hint_ko: '\\t로 항목 사이 간격을 맞추고 \\n으로 다음 줄로 넘어가 깔끔한 표를 출력합니다.',
-      hint_en: 'Combine \\t for column spacing and \\n for a new row: "Item\\tPrice\\nPen\\t500".',
+      prompt_ko: '하나의 문자열 안에 탭(\\t)과 줄바꿈(\\n) 이스케이프 문자를 함께 조합하면 여러 줄로 정렬된 표를 한 번에 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Combining tab (\\t) and newline (\\n) escape characters inside one string lets you print a multi-line aligned table at once. Trace the block code.',
+      hint_ko: '\\t는 같은 줄의 열 간격을 띄우고, \\n은 다음 행(줄)으로 넘어갑니다.',
+      hint_en: '\\t aligns columns on the same line, while \\n moves down to the next row.',
       targetCode: 'print("Item\\tPrice\\nPen\\t500")',
       testCases: [
         {

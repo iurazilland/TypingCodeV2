@@ -32,10 +32,10 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "while True 안에서 정수를 입력받아 성공하면 break로 탈출해 2배를 출력하고, ValueError면 \"Retry\"를 출력해 재시도해보세요. (터미널 입력: 첫째 줄 abc, 둘째 줄 15)",
-      "prompt_en": "Loop with while True to read int(input()) and break on success, or print \"Retry\" on ValueError; then print n * 2. (Terminal input: line 1 abc, line 2 15)",
-      "hint_ko": "무한 반복문 안의 시도 블록에서 정수 변환 바로 아랫줄에 탈출문을 두면 정상 정수가 들어온 순간에만 반복이 끝납니다.",
-      "hint_en": "Place the loop-exit statement right after integer conversion inside the attempt block so only valid numbers leave the retry loop.",
+      "prompt_ko": "while True 무한 반복문 안에 try - except를 넣고 변환 성공 직후 break를 실행하면, 올바른 정수가 입력될 때까지 계속 재시도하는 안전한 입력 루프를 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 abc, 둘째 줄 15)",
+      "prompt_en": "Placing try - except inside a while True loop and calling break right after int(input()) creates a retry loop that keeps asking until a valid integer is entered. Trace the block code. (Terminal input: line 1 abc, line 2 15)",
+      "hint_ko": "int(input())에서 ValueError가 발생하면 break 줄을 건너뛰고 except 블록으로 넘어가 다음 반복을 이어갑니다.",
+      "hint_en": "If int(input()) raises ValueError, Python skips the break line, runs the except block, and repeats the loop.",
       "targetCode": "while True:\n    try:\n        n = int(input())\n        break\n    except ValueError:\n        print(\"Retry\")\nprint(n * 2)",
       "testCases": [
         {
@@ -78,10 +78,10 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "0이 아닌 정수가 입력될 때까지 반복하며 100 // d를 구하고, 문자면 \"NeedInt\", 0이면 \"NoZero\"를 출력한 뒤 결과를 출력해보세요. (터미널 입력: hi, 0, 25 한 줄씩)",
-      "prompt_en": "Retry until 100 // int(input()) succeeds, printing \"NeedInt\" on ValueError and \"NoZero\" on ZeroDivisionError. (Terminal input: hi, 0, 25 line by line)",
-      "hint_ko": "정수 변환과 나눗셈 계산이 모두 성공한 다음 줄에 탈출문을 배치하고, 값 변환 오류와 0 나눗셈 오류를 각각 분기하세요.",
-      "hint_en": "Put the loop exit only after both integer parsing and floor division succeed, with separate catch blocks for text and zero.",
+      "prompt_ko": "while True 재시도 루프에서 여러 except 절을 함께 사용하면, 정수 변환 실패(ValueError)와 0 나눗셈 실패(ZeroDivisionError)를 각각 안내하며 두 조건을 모두 통과할 때만 break로 탈출합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: hi, 0, 25 한 줄씩)",
+      "prompt_en": "Combining multiple except clauses in a while True retry loop lets you report ValueError and ZeroDivisionError separately and break only when both parsing and division succeed. Trace the block code. (Terminal input: hi, 0, 25 line by line)",
+      "hint_ko": "정수 변환과 나눗셈 계산이 모두 에러 없이 끝난 마지막 줄에 break를 두어야 안전한 결과만 루프 밖으로 나갑니다.",
+      "hint_en": "Place break on the final line of the try block so the loop exits only after both conversion and division succeed.",
       "targetCode": "while True:\n    try:\n        d = int(input())\n        ans = 100 // d\n        break\n    except ValueError:\n        print(\"NeedInt\")\n    except ZeroDivisionError:\n        print(\"NoZero\")\nprint(ans)",
       "testCases": [
         {
@@ -124,10 +124,10 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "[\"10\", \"bad\", \"25\", \"--\", \"5\"]를 순회하며 정상 정수만 nums에 추가하고 실패 항목은 continue로 건너뛴 뒤 nums와 합계를 출력해보세요.",
-      "prompt_en": "Collect valid integers from [\"10\", \"bad\", \"25\", \"--\", \"5\"] into nums, skipping ValueError items, then print nums and sum(nums).",
-      "hint_ko": "반복문 안의 시도 블록에서는 변환된 정수를 리스트에 추가하고, 값 변환 예외 블록에서는 다음 순회로 건너뛰게 배치하세요.",
-      "hint_en": "Append parsed integers inside the attempt block and skip bad tokens in the conversion-error block before printing the list and sum.",
+      "prompt_ko": "for 반복문 안에서 try와 except ValueError: continue를 조합하면, 변환에 실패한 문자열은 즉시 다음 순회로 건너뛰고 정상 정수만 리스트에 모을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Pairing try with except ValueError: continue inside a for loop skips unconvertible strings and collects only valid integers into a list. Trace the block code.",
+      "hint_ko": "continue는 현재 반복의 남은 부분을 건너뛰고 곧바로 리스트의 다음 원소 순회로 넘어갑니다.",
+      "hint_en": "continue skips the remainder of the current iteration and immediately moves on to the next item in the loop.",
       "targetCode": "raw = [\"10\", \"bad\", \"25\", \"--\", \"5\"]\nnums = []\nfor s in raw:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        continue\nprint(nums, sum(nums))",
       "testCases": [
         {
@@ -165,10 +165,10 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "딕셔너리 d에서 키 k를 조회해 반환하되 KeyError가 나면 None을 반환하는 safe_get(d, k)를 정의하고 \"lv\"와 \"age\" 결과를 확인해보세요.",
-      "prompt_en": "Define safe_get(d, k) returning d[k] or None on KeyError, then test \"lv\" and safe_get(user, \"age\") is None.",
-      "hint_ko": "함수 안의 시도 블록에서 딕셔너리 값을 바로 반환하고, 키 누락 예외 블록에서 값 없음 상수를 반환하도록 도우미 함수를 구성하세요.",
-      "hint_en": "Inside the helper function, attempt returning the dictionary lookup and send back Python's null constant when the key is missing.",
+      "prompt_ko": "함수(def) 안에서 try - except KeyError로 딕셔너리 조회를 감싸고 키가 없을 때 None을 반환하면, 에러 없이 안전하게 값을 꺼내는 도우미 함수를 만들 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Wrapping a dictionary lookup in try - except KeyError inside a def function and returning None when the key is missing creates a reusable safe-lookup helper. Trace the block code.",
+      "hint_ko": "반환된 값이 None인지 확인할 때는 is None 연산자로 비교하면 참·거짓을 명확히 판별할 수 있습니다.",
+      "hint_en": "Use the is None operator to check whether the returned result is Python's null value.",
       "targetCode": "def safe_get(d, k):\n    try:\n        return d[k]\n    except KeyError:\n        return None\nuser = {\"id\": \"kim\", \"lv\": 5}\nprint(safe_get(user, \"lv\"))\nprint(safe_get(user, \"age\") is None)",
       "testCases": [
         {
@@ -201,10 +201,10 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "시퀀스 items에서 idx 위치를 반환하되 IndexError면 None을 반환하는 safe_at(items, idx)에 튜플 (\"Py\", \"JS\", \"Go\")를 전달해보세요.",
-      "prompt_en": "Define safe_at(items, idx) returning items[idx] or None on IndexError, and test indices 1 and 9 on (\"Py\", \"JS\", \"Go\").",
-      "hint_ko": "튜플을 포함한 시퀀스의 해당 위치 값을 시도 블록에서 반환하고, 순번 범위 초과 예외가 발생하면 값 없음 상수를 반환하세요.",
-      "hint_en": "Attempt returning the sequence item at the given position, and fall back to Python's null constant on an out-of-range index.",
+      "prompt_ko": "시퀀스 인덱싱을 try - except IndexError로 감싼 도우미 함수를 정의하면, 리스트나 튜플에서 범위를 벗어난 번호를 조회해도 프로그램이 멈추지 않고 None을 돌려줍니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Defining a helper function that wraps sequence indexing in try - except IndexError safely returns None instead of crashing on out-of-range indices. Trace the block code.",
+      "hint_ko": "인덱싱 문법 items[idx]는 리스트뿐만 아니라 튜플이나 문자열 같은 모든 시퀀스 자료형에 동일하게 작동합니다.",
+      "hint_en": "The indexing syntax items[idx] works identically across all sequence types, including lists, tuples, and strings.",
       "targetCode": "def safe_at(items, idx):\n    try:\n        return items[idx]\n    except IndexError:\n        return None\ntags = (\"Py\", \"JS\", \"Go\")\nprint(safe_at(tags, 1), safe_at(tags, 9))",
       "testCases": [
         {

@@ -27,10 +27,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "변수 name에 \"report_v1.pdf\"를 담고, \"report\"로 시작하는지와 \".pdf\"로 끝나는지를 각각 출력해보세요.",
-      "prompt_en": "Store \"report_v1.pdf\" in name, then print whether it starts with \"report\" and ends with \".pdf\".",
-      "hint_ko": "'~로 시작한다(starts + with)'와 '~로 끝난다(ends + with)'를 띄어쓰기 없이 이어 쓴 두 문자열 메서드는 각각 접두사·접미사 일치 여부를 불리언으로 돌려줍니다.",
-      "hint_en": "Combine 'starts' or 'ends' (keeping the third-person 's') with 'with' into single-word methods to test a string's prefix and suffix.",
+      "prompt_ko": "문자열의 .startswith(접두사)와 .endswith(접미사) 메서드는 문자열이 각각 지정한 글자로 시작하는지, 끝나는지를 검사하여 불리언(True/False)으로 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The string .startswith(prefix) and .endswith(suffix) methods check whether a string begins or ends with the specified substring and return a boolean (True/False). Trace the block code.",
+      "hint_ko": "파일 이름의 머리말이나 확장자(.pdf)가 맞는지 확인할 때 슬라이싱 없이도 직관적으로 검사할 수 있습니다.",
+      "hint_en": "These methods let you check file prefixes and extensions like .pdf cleanly without manual slicing.",
       "targetCode": "name = \"report_v1.pdf\"\nprint(name.startswith(\"report\"))\nprint(name.endswith(\".pdf\"))",
       "testCases": [
         {
@@ -68,10 +68,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "변수 pin(\"2026\")이 숫자로만 이루어졌는지와 tag(\"Python\")가 글자로만 이루어졌는지를 한 줄에 출력해보세요. (출력 예: True True)",
-      "prompt_en": "Print whether pin (\"2026\") is all digits and tag (\"Python\") is all letters on one line (e.g., True True).",
-      "hint_ko": "질문형 접두사 is 뒤에 '아라비아 숫자 한 자리(digit)'를 붙인 메서드와 '알파벳(alphabet)'의 앞 다섯 글자를 붙인 메서드로 숫자·글자 구성을 판별해보세요.",
-      "hint_en": "Prefix 'digit' (numeric character) and the first 5 letters of 'alphabet' with 'is' to test whether each string contains only numbers or only letters.",
+      "prompt_ko": ".isdigit()는 문자열이 숫자로만 이루어졌는지, .isalpha()는 공백이나 기호 없이 글자(알파벳·한글 등)로만 이루어졌는지를 판별하여 불리언을 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": ".isdigit() returns True if all characters in a string are digits, while .isalpha() returns True if all characters are letters with no spaces or symbols. Trace the block code.",
+      "hint_ko": "빈 문자열(\"\")이거나 공백·특수기호가 한 글자라도 섞여 있으면 두 메서드 모두 False를 반환합니다.",
+      "hint_en": "Both methods return False if the string is empty or contains any whitespace or punctuation.",
       "targetCode": "pin = \"2026\"\ntag = \"Python\"\nprint(pin.isdigit(), tag.isalpha())",
       "testCases": [
         {
@@ -109,10 +109,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "파일 리스트 files에서 대소문자 구분 없이 \".png\"로 끝나는 항목만 imgs에 모아 쉼표(,)로 이어 출력해보세요. (출력 예: a.PNG,b.png)",
-      "prompt_en": "Filter files ending with \".png\" (case-insensitive) into imgs and print them joined by \",\" (e.g., a.PNG,b.png).",
-      "hint_ko": "파일명을 소문자로 바꾼 결과에 접미사 검사 메서드를 이어 호출해 확장자를 판별하되, 리스트에 추가할 때는 원본 파일명을 그대로 담고 쉼표로 결합하세요.",
-      "hint_en": "Chain small-letter conversion with the suffix-checking method in the condition, append the original filename when true, and combine matches with a comma.",
+      "prompt_ko": "조건식에서 f.lower().endswith(\".png\")처럼 소문자 변환과 접미사 검사를 연결하면, 대소문자 확장자(.PNG, .png)를 모두 걸러내어 리스트에 모을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Chaining f.lower().endswith(\".png\") in a condition matches both uppercase and lowercase file extensions while preserving the original filenames. Trace the block code.",
+      "hint_ko": "조건 검사에만 f.lower()를 쓰고 imgs.append(f)에는 원본 변수 f를 넣으면 원래 대소문자가 그대로 유지됩니다.",
+      "hint_en": "Using f.lower() only in the if test while appending f keeps the original casing intact in the result list.",
       "targetCode": "files = [\"a.PNG\", \"doc.txt\", \"b.png\"]\nimgs = []\nfor f in files:\n    if f.lower().endswith(\".png\"):\n        imgs.append(f)\nprint(\",\".join(imgs))",
       "testCases": [
         {
@@ -150,10 +150,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력이 부호 없이 숫자로만 되어 있으면 \"POS 값\", 음수 등 부호 있는 정수면 try-except로 \"SIGNED 값\", 아니면 \"NAN\"을 출력해보세요. (터미널 입력: 25)",
-      "prompt_en": "Print \"POS n\" if s.isdigit(), else try printing \"SIGNED n\" via int(s), or \"NAN\" on ValueError. (Terminal input: 25)",
-      "hint_ko": "음수 기호(-)가 붙은 문자열은 숫자 구성 판별 메서드에서 거짓이 되지만, else 분기 안의 예외 처리 블록에서 정수 변환 함수를 쓰면 부호 있는 정수로 읽어낼 수 있습니다.",
-      "hint_en": "A minus sign makes the numeric-character check false, so handle signed numbers in the else branch by wrapping integer conversion in an exception block.",
+      "prompt_ko": ".isdigit()는 순수 아라비아 숫자만 True로 판정하므로 음수 기호(-)가 붙은 문자열은 걸러내며, 음수를 포함한 부호 있는 정수 변환은 try - except ValueError와 int()로 처리합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 25)",
+      "prompt_en": "Because .isdigit() returns False when a minus sign (-) is present, you can check unsigned digits with .isdigit() first and handle signed integers in else using try - except ValueError with int(). Trace the block code. (Terminal input: 25)",
+      "hint_ko": "\"-10\"처럼 부호가 붙은 숫자 문자열은 s.isdigit()가 False이지만 int(s)는 정상적으로 -10을 반환합니다.",
+      "hint_en": "A signed string like \"-10\" evaluates to False for s.isdigit(), but int(s) parses it cleanly as -10.",
       "targetCode": "s = input().strip()\nif s.isdigit():\n    print(\"POS\", int(s))\nelse:\n    try:\n        print(\"SIGNED\", int(s))\n    except ValueError:\n        print(\"NAN\")",
       "testCases": [
         {
@@ -201,10 +201,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "입력이 \"ID-\"로 시작하고 뒷부분이 숫자면 정수에 1을 더해 출력하고, 아니면 None을 반환해 \"INVALID\"를 출력해보세요. (예: ID-9 -> 10) (터미널 입력: ID-109)",
-      "prompt_en": "Return int(s[3:]) if s starts with \"ID-\" and s[3:] is digits, else None; print res + 1 or \"INVALID\". (Terminal input: ID-109)",
-      "hint_ko": "접두사 검사로 앞 세 글자 형식을 확인하고 3번 인덱스부터 잘라낸 뒷부분이 모두 숫자인지 함께 검사해 정수를 돌려주며, 실패 시 빈 값 상수를 반환해 바깥에서 분기하세요.",
-      "hint_en": "Verify the 3-character prefix and check that slice s[3:] contains only numeric characters before converting; otherwise return the empty-value singleton and branch outside.",
+      "prompt_ko": ".startswith(\"ID-\")로 앞부분 접두사 형식을 확인하고 슬라이싱한 뒷부분에 s[3:].isdigit()를 결합하면, 규격에 맞는 코드만 안전하게 정수로 파싱하는 함수를 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: ID-109)",
+      "prompt_en": "Combining .startswith(\"ID-\") with s[3:].isdigit() on the remaining slice validates structured ID strings before converting the numeric part with int(). Trace the block code. (Terminal input: ID-109)",
+      "hint_ko": "\"ID-\"가 3글자이므로 인덱스 3부터 끝까지 잘라낸 s[3:]이 숫자 부분에 해당합니다.",
+      "hint_en": "Since \"ID-\" is 3 characters long, the slice s[3:] extracts everything after the prefix.",
       "targetCode": "def parse_id(s):\n    if s.startswith(\"ID-\") and s[3:].isdigit():\n        return int(s[3:])\n    return None\n\nres = parse_id(input())\nif res is None:\n    print(\"INVALID\")\nelse:\n    print(res + 1)",
       "testCases": [
         {

@@ -27,10 +27,10 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "실수 avg(87.456)는 소수점 둘째 자리까지, 정수 price(1250000)는 천 단위 쉼표를 넣어 \"87.46 / 1,250,000\"으로 출력해보세요.",
-      "prompt_en": "Format avg (87.456) to 2 decimal places and price (1250000) with commas as \"87.46 / 1,250,000\".",
-      "hint_ko": "f-string 중괄호 안 콜론(:) 뒤에 소수점 기호·자리수·고정 소수점(fixed-point)의 첫 글자를 붙이면 자리수를 맞추고, 쉼표 기호만 적으면 천 단위 구분자를 넣습니다.",
-      "hint_en": "Inside f-string braces after the colon, place a dot, digit count, and the first letter of 'fixed-point' for decimals, or a comma symbol for thousands separators.",
+      "prompt_ko": "f-string의 중괄호 안에서 콜론(:) 뒤에 :.2f를 붙이면 실수를 소수점 둘째 자리까지 반올림해 표시하고, :,를 붙이면 천 단위마다 쉼표(,) 구분 기호를 넣어줍니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Inside f-string braces, adding :.2f after a value formats a float to 2 decimal places (rounded), while adding :, inserts thousands-separator commas. Trace the block code.",
+      "hint_ko": "서식 지정자의 f는 고정 소수점(fixed-point)을 뜻하며, 앞의 숫자(.2)로 표시할 소수점 자릿수를 정합니다.",
+      "hint_en": "The f in :.2f stands for fixed-point notation, and .2 specifies two digits after the decimal point.",
       "targetCode": "avg = 87.456\nprice = 1250000\nprint(f\"{avg:.2f} / {price:,}\")",
       "testCases": [
         {
@@ -68,10 +68,10 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "문자열 word(\"ABCDEF\")를 역순으로 뒤집은 결과와 처음부터 한 글자씩 건너뛰며(step 2) 추출한 결과를 차례로 출력해보세요.",
-      "prompt_en": "Print word (\"ABCDEF\") reversed with [::-1] on line 1 and every second character with [::2] on line 2.",
-      "hint_ko": "슬라이싱 [시작:끝:증감폭]에서 시작과 끝을 비워 콜론 두 개를 연속으로 쓰고, 세 번째 자리에 음수 한 칸(-1) 또는 양수 두 칸(2) 간격을 넣어 추출해보세요.",
-      "hint_en": "Leave start and stop empty in [start:stop:step] using two colons, then supply -1 for backward order and 2 for every second character.",
+      "prompt_ko": "슬라이싱 [시작:끝:증감폭]에서 시작과 끝을 비운 채 [::-1]을 쓰면 문자열 전체를 역순으로 뒤집고, [::2]를 쓰면 처음부터 2칸 간격으로 한 글자씩 건너뛰며 추출합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "In [start:stop:step] slicing, [::-1] reverses the entire string from back to front, while [::2] extracts every second character from the start. Trace the block code.",
+      "hint_ko": "콜론 두 개(::)는 시작과 끝 인덱스를 생략해 문자열 처음부터 끝까지 전체 범위를 선택한다는 뜻입니다.",
+      "hint_en": "Two colons (::) omit start and stop so the step applies across the entire string.",
       "targetCode": "word = \"ABCDEF\"\nprint(word[::-1])\nprint(word[::2])",
       "testCases": [
         {
@@ -109,10 +109,10 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "문자 \"A\"의 코드 번호를 code에 담고, 1을 더한 번호에 해당하는 문자를 next_ch에 담아 함께 출력해보세요. (출력 예: 65 B)",
-      "prompt_en": "Store ord(\"A\") in code and chr(code + 1) in next_ch, then print code and next_ch (e.g., 65 B).",
-      "hint_ko": "문자의 '순서 번호(ordinal)' 앞 세 글자를 딴 함수로 정수 코드를 구하고, '문자(char)'에서 모음 a를 뺀 세 글자 함수로 번호를 다시 글자로 바꿔보세요.",
-      "hint_en": "Get the integer code using the first 3 letters of 'ordinal', then turn the incremented number back into a letter with the 3-letter 'char'-without-'a' function.",
+      "prompt_ko": "내장 함수 ord(문자)는 한 글자의 유니코드(ASCII) 정수 번호를 반환하고, chr(정수)는 코드 번호에 해당하는 문자를 다시 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The built-in ord(char) function returns the Unicode (ASCII) integer code of a single character, while chr(code) converts an integer code back into its character. Trace the block code.",
+      "hint_ko": "대문자 \"A\"의 코드 번호(65)에 1을 더한 뒤 chr()에 넣으면 바로 다음 알파벳인 \"B\"가 됩니다.",
+      "hint_en": "Adding 1 to the code of \"A\" (65) and passing it to chr() yields the next letter in the alphabet, \"B\".",
       "targetCode": "code = ord(\"A\")\nnext_ch = chr(code + 1)\nprint(code, next_ch)",
       "testCases": [
         {
@@ -150,10 +150,10 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력을 대문자로 바꾼 뒤 각 글자를 다음 코드 문자로 1칸씩 밀어 이어 붙이고, 역순으로 뒤집어 출력해보세요. (터미널 입력: ABC)",
-      "prompt_en": "Uppercase input, shift each character by +1 into enc, and print enc reversed (Terminal input: ABC).",
-      "hint_ko": "반복문에서 각 글자의 순서 번호에 1을 더해 다시 문자로 바꾼 값을 누적한 뒤, 마지막 출력에서 역방향 증감폭 슬라이싱으로 뒤집어 찍어보세요.",
-      "hint_en": "Inside the loop, convert each letter's code number plus 1 back into a character and append it, then output the accumulated string sliced in reverse.",
+      "prompt_ko": "반복문에서 chr(ord(c) + 1)로 각 글자를 다음 코드 문자로 한 칸씩 밀어 누적한 뒤 [::-1]로 역순 슬라이싱하면 간단한 문자열 암호화를 구현할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: ABC)",
+      "prompt_en": "Shifting each character forward by 1 with chr(ord(c) + 1) in a loop and reversing the result with [::-1] performs a simple string cipher. Trace the block code. (Terminal input: ABC)",
+      "hint_ko": "문자열을 먼저 .upper()로 대문자 통일한 뒤 문자 코드를 이동시키고, 출력할 때 [::-1]로 순서를 뒤집습니다.",
+      "hint_en": "Normalize the input with .upper() before shifting character codes, then reverse the accumulated string with [::-1].",
       "targetCode": "raw = input().upper()\nenc = \"\"\nfor c in raw:\n    enc += chr(ord(c) + 1)\nprint(enc[::-1])",
       "testCases": [
         {
@@ -196,10 +196,10 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "글자일 때만 문자 코드를 k칸 밀고 기호·숫자는 유지하는 함수 shift_word를 만들어 \"A-1\"을 2칸 민 결과를 출력해보세요. (출력 예: C-1)",
-      "prompt_en": "Write shift_word(s, k) that shifts alphabetic characters by k and keeps others unchanged, then print shift_word(\"A-1\", 2).",
-      "hint_ko": "글자 판별 메서드가 참일 때만 문자 순서 번호에 k를 더해 다시 문자로 변환해 이어 붙이고, 숫자와 기호는 else 분기에서 원본 그대로 덧붙이세요.",
-      "hint_en": "When the alphabetic check passes, shift the character's ordinal code by k and convert back to a character; otherwise concatenate the original character unchanged.",
+      "prompt_ko": "함수 안에서 c.isalpha()로 알파벳 여부를 먼저 검사하면, 글자일 때만 chr(ord(c) + k)로 문자 코드를 이동시키고 숫자나 기호는 원본 그대로 유지할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Checking c.isalpha() inside a function lets you shift only alphabetic characters via chr(ord(c) + k) while leaving digits and symbols unchanged. Trace the block code.",
+      "hint_ko": "빈 문자열 out = \"\"을 준비해 조건에 따라 변환된 문자 또는 원본 문자를 +=로 한 글자씩 이어 붙인 뒤 반환합니다.",
+      "hint_en": "Start with an empty string out = \"\", append either the shifted letter or original character each iteration, and return out.",
       "targetCode": "def shift_word(s, k):\n    out = \"\"\n    for c in s:\n        if c.isalpha():\n            out += chr(ord(c) + k)\n        else:\n            out += c\n    return out\n\nprint(shift_word(\"A-1\", 2))",
       "testCases": [
         {

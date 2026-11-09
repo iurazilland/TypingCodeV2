@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "range(1, 5)를 사용해 1부터 4까지의 정수를 순서대로 출력해보세요.",
-      "prompt_en": "Use range(1, 5) to print integers from 1 through 4 in order.",
-      "hint_ko": "두 인자를 넣은 범위 함수는 첫 번째 시작값부터 출발해 두 번째 끝값 바로 직전 정수에서 멈춥니다.",
-      "hint_en": "A two-argument range starts at the first number and stops right before reaching the second number.",
+      "prompt_ko": "range(시작, 끝)처럼 두 인자를 전달하면 첫 번째 시작값부터 출발해 두 번째 끝값 바로 직전(끝-1)까지 반복합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Passing two arguments to range(start, stop) generates integers starting at start and stopping right before stop (stop - 1). Trace the block code.",
+      "hint_ko": "range(1, 5)에서 시작값 1은 포함되고 끝값 5는 제외되어 1, 2, 3, 4가 차례로 i에 담깁니다.",
+      "hint_en": "In range(1, 5), the start value 1 is included while the stop value 5 is excluded, yielding 1, 2, 3, 4.",
       "targetCode": "for i in range(1, 5):\n    print(i)",
       "testCases": [
         {
@@ -72,10 +72,10 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "range(2, 11, 2)를 사용해 2부터 10까지의 짝수를 순서대로 출력해보세요.",
-      "prompt_en": "Use range(2, 11, 2) to print even numbers from 2 through 10.",
-      "hint_ko": "범위 함수의 세 번째 자리는 매 반복마다 현재 숫자에 더해지는 증감 간격을 뜻합니다.",
-      "hint_en": "The third argument specifies the step interval added to the loop variable after each turn.",
+      "prompt_ko": "range(시작, 끝, 간격)의 세 번째 인자는 매 반복마다 더해지는 증감 간격(step)을 지정합니다. 2씩 건너뛰며 짝수를 만드는 블록 코드를 따라 쳐보세요.",
+      "prompt_en": "The third argument in range(start, stop, step) sets the step interval added on each turn. Trace the block code to step by 2 through even numbers.",
+      "hint_ko": "2에서 시작해 11 직전까지 2씩 더해지므로 2, 4, 6, 8, 10이 순서대로 출력됩니다.",
+      "hint_en": "Starting at 2 and stepping by 2 up to (but excluding) 11 prints 2, 4, 6, 8, 10.",
       "targetCode": "for i in range(2, 11, 2):\n    print(i)",
       "testCases": [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 n부터 1까지 거꾸로 공백으로 이어 한 줄에 출력해보세요. (터미널 입력: 4)",
-      "prompt_en": "Read integer n and count down from n to 1 on one line separated by spaces. (Terminal input: 4)",
-      "hint_ko": "시작값 n부터 끝 경계 0 직전까지 음수 간격으로 줄여 가며, 줄 끝 옵션을 공백으로 두어 한 줄에 이어 출력하세요.",
-      "hint_en": "Count down from n to right above 0 with a negative step, using a space as the print line-ending option.",
+      "prompt_ko": "range(n, 0, -1)처럼 음수 간격(-1)을 주면 큰 수 n에서 시작해 끝값 0 바로 위인 1까지 1씩 감소하며 역순으로 반복합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 4)",
+      "prompt_en": "Using a negative step like range(n, 0, -1) counts down by 1 from n to 1 (stopping right above 0). Trace the block code. (Terminal input: 4)",
+      "hint_ko": "end=\" \" 옵션과 함께 사용하여 줄바꿈 없이 한 줄에 카운트다운 숫자를 이어서 출력합니다.",
+      "hint_en": "Combined with end=\" \", the countdown numbers are printed on a single line separated by spaces.",
       "targetCode": "n = int(input())\nfor i in range(n, 0, -1):\n    print(i, end=\" \")",
       "testCases": [
         {
@@ -164,10 +164,10 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "range(1, 5)와 거듭제곱 연산자(**)를 사용해 2의 1제곱부터 2의 4제곱까지 출력해보세요.",
-      "prompt_en": "Use range(1, 5) and ** to print powers of 2 from 2**1 through 2**4.",
-      "hint_ko": "1부터 4까지 변하는 반복 변수를 지수 자리에 두어 밑이 2인 거듭제곱 값을 차례대로 출력하세요.",
-      "hint_en": "Use the loop variable running from 1 through 4 as the exponent on base 2 inside the print block.",
+      "prompt_ko": "range(1, 5)로 1부터 4까지 변하는 반복 변수 i를 거듭제곱 연산자(**)의 지수 자리에 놓으면 2의 거듭제곱 수열을 차례대로 계산할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Placing the loop variable i from range(1, 5) as the exponent in 2 ** i computes successive powers of 2. Trace the block code.",
+      "hint_ko": "i가 1, 2, 3, 4로 바뀔 때마다 2 ** i가 계산되어 2, 4, 8, 16이 출력됩니다.",
+      "hint_en": "As i steps through 1, 2, 3, 4, the expression 2 ** i evaluates to 2, 4, 8, 16.",
       "targetCode": "for i in range(1, 5):\n    print(2 ** i)",
       "testCases": [
         {
@@ -210,10 +210,10 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "한 줄에 시작값 a, 끝값 b, 간격 s를 공백으로 입력받아 range(int(a), int(b), int(s))의 각 값을 출력해보세요. (터미널 입력: 1 10 3)",
-      "prompt_en": "Read space-separated a, b, s and print each value in range(int(a), int(b), int(s)). (Terminal input: 1 10 3)",
-      "hint_ko": "공백으로 분리해 받은 세 문자열을 각각 정수로 변환하여 범위 함수의 시작, 끝, 간격 자리에 차례로 배치하세요.",
-      "hint_en": "Split the input into three strings, convert each to an integer for start, stop, and step, and print each value.",
+      "prompt_ko": "range()의 시작, 끝, 간격 인자에는 고정된 숫자뿐만 아니라 int()로 변환한 변수나 수식도 자유롭게 넣을 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 1 10 3)",
+      "prompt_en": "The start, stop, and step arguments of range() can take variables or expressions converted with int() just like fixed numbers. Trace the block code. (Terminal input: 1 10 3)",
+      "hint_ko": "input().split()으로 나눈 세 문자열은 반드시 int()로 정수 변환해야 range()에 전달할 수 있습니다.",
+      "hint_en": "Strings unpacked from input().split() must be converted to integers with int() before being passed to range().",
       "targetCode": "a, b, s = input().split()\nfor i in range(int(a), int(b), int(s)):\n    print(i)",
       "testCases": [
         {

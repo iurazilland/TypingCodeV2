@@ -24,10 +24,10 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 0보다 크면 \"Positive\", 0과 같으면 \"Zero\", 그 외에는 \"Negative\"를 출력해보세요. (터미널 입력: 7)",
-      "prompt_en": "Read integer n; print \"Positive\" (>0), \"Zero\" (==0), or \"Negative\" (otherwise). (Terminal input: 7)",
-      "hint_ko": "다중 분기는 위에서부터 차례로 조건을 검사하며, 첫 조건이 거짓일 때 그밖에 만약(else if)을 줄인 두 번째 분기로 넘어갑니다.",
-      "hint_en": "Multi-way branching checks conditions top to bottom; when the first check fails, it moves to the second check shortened from \"else if\".",
+      "prompt_ko": "elif는 'else if'의 줄임말로, 앞선 if 조건이 거짓일 때 새로운 조건을 이어서 검사합니다. 블록의 다중 분기 코드를 따라 입력해보세요. (터미널 입력: 7)",
+      "prompt_en": "elif (short for 'else if') tests an additional condition when the preceding if condition is False. Trace the multi-way branching block code. (Terminal input: 7)",
+      "hint_ko": "위에서부터 차례대로 조건을 검사해 처음으로 참이 되는 한 갈래만 실행하고 전체 조건문을 빠져나갑니다.",
+      "hint_en": "Conditions are checked top to bottom; only the first True branch runs before exiting the entire chain.",
       "targetCode": "n = int(input())\nif n > 0:\n    print(\"Positive\")\nelif n == 0:\n    print(\"Zero\")\nelse:\n    print(\"Negative\")",
       "testCases": [
         {
@@ -80,10 +80,10 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "점수 score를 입력받아 90 이상은 \"A\", 80 이상은 \"B\", 70 이상은 \"C\", 미만은 \"F\"를 출력해보세요. (터미널 입력: 85)",
-      "prompt_en": "Read integer score and print \"A\" (>=90), \"B\" (>=80), \"C\" (>=70), or \"F\" (<70). (Terminal input: 85)",
-      "hint_ko": "가장 높은 점수 기준부터 차례로 내려오며 검사하면, 처음으로 참이 된 구간의 실행문 하나만 동작하고 전체 분기를 빠져나갑니다.",
-      "hint_en": "Checking thresholds from highest to lowest ensures that only the first matching grade prints before exiting the entire chain.",
+      "prompt_ko": "elif는 필요한 만큼 여러 개를 연달아 연결해 점수 구간처럼 세분화된 다중 조건을 차례대로 판별할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 85)",
+      "prompt_en": "You can chain multiple elif branches in sequence to classify values across several grade thresholds. Trace the block code. (Terminal input: 85)",
+      "hint_ko": "90 이상 조건이 거짓일 때만 80 이상(elif score >= 80:)을 검사하므로 상한 조건을 중복해서 적을 필요가 없습니다.",
+      "hint_en": "Because elif score >= 80: is only reached when score >= 90 is False, there is no need to re-check the upper bound.",
       "targetCode": "score = int(input())\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelif score >= 70:\n    print(\"C\")\nelse:\n    print(\"F\")",
       "testCases": [
         {
@@ -141,10 +141,10 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "레벨 lv를 입력받아 50 이상이면 \"Master\", 20 이상이면 \"Pro\", 미만이면 \"Rookie\"를 rank에 담아 출력해보세요. (터미널 입력: 25)",
-      "prompt_en": "Read integer lv, set rank to \"Master\" (>=50), \"Pro\" (>=20), or \"Rookie\", and print rank. (Terminal input: 25)",
-      "hint_ko": "각 구간 분기 안에서는 등급 변수에 알맞은 문자열만 대입하고, 분기가 모두 끝난 바깥 마지막 줄에서 변수를 한 번만 출력해보세요.",
-      "hint_en": "Assign the appropriate title string to the variable inside each branch, then print that variable once outside at the end.",
+      "prompt_ko": "각 if - elif - else 분기 안에서 변수에 결과 값을 저장해 두고, 분기가 끝난 바깥에서 한 번만 print()로 출력하는 패턴도 자주 쓰입니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 25)",
+      "prompt_en": "A common pattern is assigning a result variable inside each if - elif - else branch and calling print() once outside at the end. Trace the block code. (Terminal input: 25)",
+      "hint_ko": "어느 한 분기는 반드시 실행되므로 rank 변수에 등급 문자열이 저장된 뒤 마지막 줄에서 출력됩니다.",
+      "hint_en": "Since exactly one branch always executes, rank receives a title string before the final print(rank) line runs.",
       "targetCode": "lv = int(input())\nif lv >= 50:\n    rank = \"Master\"\nelif lv >= 20:\n    rank = \"Pro\"\nelse:\n    rank = \"Rookie\"\nprint(rank)",
       "testCases": [
         {
@@ -197,10 +197,10 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 6의 배수면 \"6x\", 2의 배수면 \"2x\", 3의 배수면 \"3x\", 모두 아니면 \"None\"을 출력해보세요. (터미널 입력: 12)",
-      "prompt_en": "Read integer n; print \"6x\" (%6==0), \"2x\" (%2==0), \"3x\" (%3==0), or \"None\". (Terminal input: 12)",
-      "hint_ko": "6의 배수는 2의 배수 조건도 함께 만족하므로, 범위가 가장 좁고 까다로운 6의 배수 조건을 맨 위에서 먼저 검사해야 합니다.",
-      "hint_en": "Because multiples of 6 are also multiples of 2 and 3, test the most specific condition (divisible by 6) first at the top.",
+      "prompt_ko": "다중 조건문은 위에서부터 첫 번째로 참인 분기만 실행하므로, 범위가 더 좁고 까다로운 조건(6의 배수)을 가장 먼저 검사해야 합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 12)",
+      "prompt_en": "Because multi-way branching stops at the first True condition, always place the most specific check (multiples of 6) at the top. Trace the block code. (Terminal input: 12)",
+      "hint_ko": "만약 2의 배수 조건을 맨 위에 두면 6의 배수도 첫 분기에서 걸러져 아래쪽 6의 배수 분기에 도달하지 못합니다.",
+      "hint_en": "If the multiple-of-2 check came first, multiples of 6 would be caught there and never reach the multiple-of-6 branch.",
       "targetCode": "n = int(input())\nif n % 6 == 0:\n    print(\"6x\")\nelif n % 2 == 0:\n    print(\"2x\")\nelif n % 3 == 0:\n    print(\"3x\")\nelse:\n    print(\"None\")",
       "testCases": [
         {
@@ -258,10 +258,10 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "체온 temp를 정수(int)로 입력받아 38 이상은 \"Fever\", 36 이상은 \"Normal\", 미만은 \"Low\"를 출력해보세요. (터미널 입력: 39)",
-      "prompt_en": "Read integer temp and print \"Fever\" (>=38), \"Normal\" (>=36), or \"Low\". (Terminal input: 39)",
-      "hint_ko": "체온을 정수형으로 변환해 입력받은 뒤, 높은 온도 기준부터 낮은 온도 기준 순서로 분기를 배치해보세요.",
-      "hint_en": "Convert the input into an integer first, then test the higher temperature threshold before the normal threshold.",
+      "prompt_ko": "높은 기준값부터 낮은 기준값 순서로 if - elif - else를 구성하면 숫자의 구간별 상태를 깔끔하게 분류할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 39)",
+      "prompt_en": "Structuring if - elif - else from highest threshold to lowest cleanly classifies numeric ranges. Trace the block code. (Terminal input: 39)",
+      "hint_ko": "38 이상인지 먼저 확인하고, 아닐 때만 36 이상인지 검사하며, 둘 다 아니면 else로 넘어갑니다.",
+      "hint_en": "It checks >= 38 first, then tests >= 36 only if the first check was False, and falls back to else otherwise.",
       "targetCode": "temp = int(input())\nif temp >= 38:\n    print(\"Fever\")\nelif temp >= 36:\n    print(\"Normal\")\nelse:\n    print(\"Low\")",
       "testCases": [
         {

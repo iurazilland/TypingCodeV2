@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "매개변수 name을 받아 인사말을 출력하는 greet(name) 함수를 만들고 \"Mina\"를 전달해 호출해보세요. (출력 예: Hi, Mina!)",
-      "prompt_en": "Define greet(name) to print f\"Hi, {name}!\" and call greet(\"Mina\").",
-      "hint_ko": "함수 선언부 괄호 안에 매개변수를 넣어 서식 문자열로 출력하고, 바깥에서 이름 문자열을 인자로 전달해 호출하세요.",
-      "hint_en": "Declare the parameter in the function header, format it inside the print block, and pass the name string when calling.",
+      "prompt_ko": "함수 정의 괄호 안에 매개변수(parameter)를 선언하면, 함수를 호출할 때 전달한 인자(argument) 값을 함수 내부 변수처럼 받아 사용할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Declaring a parameter inside the function header parentheses lets the function receive an argument value passed at call time. Follow the blocks and type the code.",
+      "hint_ko": "호출할 때 소괄호 안에 넣은 문자열이 함수 선언부의 매개변수 자리에 그대로 전달됩니다.",
+      "hint_en": "The string argument passed inside the call parentheses is assigned to the parameter variable in the function header.",
       "targetCode": "def greet(name):\n    print(f\"Hi, {name}!\")\ngreet(\"Mina\")",
       "testCases": [
         {
@@ -65,10 +65,10 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "두 매개변수 a, b를 받아 두 수의 합을 출력하는 show_add(a, b) 함수를 정의하고 15와 25로 호출해보세요.",
-      "prompt_en": "Define show_add(a, b) to print a + b, then call show_add(15, 25).",
-      "hint_ko": "선언부 괄호 안에 두 매개변수를 쉼표로 나란히 적고, 호출할 때도 두 숫자 인자를 쉼표로 구분해 전달하세요.",
-      "hint_en": "Separate both parameters with a comma in the header, and pass the two numbers separated by a comma when calling.",
+      "prompt_ko": "괄호 안에 쉼표(,)로 여러 개의 매개변수를 선언하면, 호출할 때 전달한 여러 인자가 위치 순서대로 각각의 매개변수에 대입됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Separating multiple parameters with commas in the function header binds each positional argument in order when the function is called. Follow the blocks and type the code.",
+      "hint_ko": "호출부의 첫 번째 인자는 첫 번째 매개변수에, 두 번째 인자는 두 번째 매개변수에 순서대로 전달됩니다.",
+      "hint_en": "The first argument goes to the first parameter and the second argument goes to the second parameter.",
       "targetCode": "def show_add(a, b):\n    print(a + b)\nshow_add(15, 25)",
       "testCases": [
         {
@@ -101,10 +101,10 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 온도 t를 받아 30 이상이면 Hot, 아니면 Cool을 출력하는 check_temp(t)를 만들고 정수 입력값을 전달해보세요. (터미널 입력: 31)",
-      "prompt_en": "Define check_temp(t) printing Hot if t >= 30 else Cool, then pass int(input()) to it. (Terminal input: 31)",
-      "hint_ko": "매개변수를 기준 온도와 비교해 분기 출력하는 함수를 만든 뒤, 정수로 변환한 입력값을 함수에 넘겨 호출하세요.",
-      "hint_en": "Build the conditional print inside the parameterized function, then read an integer input outside and pass it into the call.",
+      "prompt_ko": "함수 밖에서 입력받아 변환한 변수도 함수 호출 시 인자로 전달하면 매개변수를 통해 함수 안의 if / else 조건문에서 판별할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 31)",
+      "prompt_en": "A value read and converted outside a function can be passed as an argument into the function for conditional checking. Follow the blocks and type the code. (Terminal input: 31)",
+      "hint_ko": "바깥에서 int(input())으로 받은 정수를 변수에 담아 함수 호출 괄호 안에 넣어 전달합니다.",
+      "hint_en": "Read the integer input into a variable outside the function, then pass that variable into the function call.",
       "targetCode": "def check_temp(t):\n    if t >= 30:\n        print(\"Hot\")\n    else:\n        print(\"Cool\")\nval = int(input())\ncheck_temp(val)",
       "testCases": [
         {
@@ -147,10 +147,10 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "리스트를 매개변수 nums로 받아 길이와 합계를 한 줄에 출력하는 list_info(nums)를 만들고 [10, 20, 30]을 전달해보세요.",
-      "prompt_en": "Define list_info(nums) to print len(nums) and sum(nums), then pass [10, 20, 30].",
-      "hint_ko": "매개변수로 받은 리스트의 길이와 합계를 한 줄에 출력하는 함수를 정의한 뒤, 숫자 리스트를 인자로 넘겨 호출하세요.",
-      "hint_en": "Print the length and sum of the list parameter inside the function, then pass the three-element list when calling.",
+      "prompt_ko": "숫자나 문자열뿐만 아니라 리스트(list) 전체도 하나의 인자로 함수에 전달해 함수 안에서 len()이나 sum()으로 처리할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "You can pass an entire list as a single argument to a function and use list operations like len() and sum() on the parameter. Follow the blocks and type the code.",
+      "hint_ko": "리스트 변수를 인자로 넘기면 함수 내부 매개변수가 그 리스트를 받아 길이와 합계를 계산합니다.",
+      "hint_en": "Passing the list variable assigns that list to the function's parameter so len() and sum() can inspect it.",
       "targetCode": "def list_info(nums):\n    print(len(nums), sum(nums))\nscores = [10, 20, 30]\nlist_info(scores)",
       "testCases": [
         {
@@ -183,10 +183,10 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "집합 vips와 이름 user를 받아 집합에 있으면 이름:VIP, 없으면 이름:Guest를 출력하는 check_vip 함수를 호출해보세요.",
-      "prompt_en": "Define check_vip(vips, user) to check membership in set vips and print user:VIP or user:Guest.",
-      "hint_ko": "전달받은 이름이 집합 매개변수 안에 포함되는지 검사해 등급 문구를 분기 출력하고, 집합과 이름을 인자로 넘겨 호출하세요.",
-      "hint_en": "Branch on whether the user parameter belongs to the set parameter, then invoke the function with the club set and name.",
+      "prompt_ko": "집합(set)과 찾을 값을 두 개의 매개변수로 전달받으면, 함수 안에서 in 연산자로 포함 여부를 검사해 결과를 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Passing both a set and a target value as parameters lets the function check membership with the in operator inside its body. Follow the blocks and type the code.",
+      "hint_ko": "첫 번째 인자로 집합 변수를, 두 번째 인자로 검색할 문자열을 순서에 맞춰 함수에 전달합니다.",
+      "hint_en": "Pass the set as the first argument and the name string to check as the second argument.",
       "targetCode": "def check_vip(vips, user):\n    if user in vips:\n        print(f\"{user}:VIP\")\n    else:\n        print(f\"{user}:Guest\")\nclub = {\"Kim\", \"Park\"}\ncheck_vip(club, \"Kim\")",
       "testCases": [
         {

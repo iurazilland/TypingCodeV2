@@ -31,10 +31,10 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "2차원 리스트 grid에서 0번 행 1번 열(grid[0][1])과 1번 행 0번 열(grid[1][0]) 값을 나란히 출력해보세요.",
-      "prompt_en": "Print grid[0][1] and grid[1][0] from the 2D list grid=[[10, 20], [30, 40]].",
-      "hint_ko": "2차원 리스트는 앞쪽 대괄호에 가로줄(행) 번호를, 뒤쪽 대괄호에 세로칸(열) 번호를 적으며 둘 다 0부터 시작합니다.",
-      "hint_en": "Index 2D lists with [row][col] brackets in order, remembering that both row and column indices start at 0.",
+      "prompt_ko": "2차원 리스트는 리스트 안에 또 다른 리스트를 담은 격자 구조로, grid[행][열]처럼 대괄호를 두 번 연속 써서 특정 위치의 값을 꺼냅니다.",
+      "prompt_en": "A 2D list stores inner lists as rows, and double-bracket indexing grid[row][col] accesses the element at a specific row and column.",
+      "hint_ko": "앞쪽 대괄호에는 가로줄(행) 번호를, 뒤쪽 대괄호에는 세로칸(열) 번호를 적으며 둘 다 0번부터 시작합니다.",
+      "hint_en": "The first bracket selects the outer row index and the second selects the inner column index, both starting at 0.",
       "targetCode": "grid = [[10, 20], [30, 40]]\nprint(grid[0][1], grid[1][0])",
       "testCases": [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "grid[0][1] 값을 9로 수정한 뒤, 전체 행의 개수(len(grid))와 첫 번째 행(grid[0])을 출력해보세요.",
-      "prompt_en": "Update grid[0][1] to 9, then print len(grid) and grid[0].",
-      "hint_ko": "2차원 리스트 전체의 길이를 구하면 바깥 리스트에 들어 있는 안쪽 행 리스트가 몇 줄인지 알려줍니다.",
-      "hint_en": "Measuring the length of a 2D list returns how many inner row lists it holds.",
+      "prompt_ko": "grid[행][열] = 값 형태로 특정 칸의 원소를 직접 수정할 수 있으며, len(grid)는 전체 행(안쪽 리스트)의 개수를 반환합니다.",
+      "prompt_en": "Assigning to grid[row][col] updates a single cell in place, while len(grid) returns the number of row lists.",
+      "hint_ko": "grid[0]처럼 인덱스를 하나만 쓰면 첫 번째 행 리스트 전체를 가리킵니다.",
+      "hint_en": "Using a single index like grid[0] refers to the entire first inner row list.",
       "targetCode": "grid = [[1, 2], [3, 4]]\ngrid[0][1] = 9\nprint(len(grid), grid[0])",
       "testCases": [
         {
@@ -103,10 +103,10 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "for row in grid: 반복문으로 각 행 리스트를 하나씩 꺼내 행별 합계(sum(row))를 줄마다 출력해보세요.",
-      "prompt_en": "Loop over each row in grid and print sum(row) on each line.",
-      "hint_ko": "2차원 리스트를 바로 순회하면 반복 변수에 각 가로줄(1차원 리스트)이 차례대로 담기므로 곧바로 합산할 수 있습니다.",
-      "hint_en": "Iterating directly over a 2D list binds the loop variable to each inner 1D list in turn.",
+      "prompt_ko": "for row in grid:처럼 2차원 리스트를 바로 순회하면 반복 변수에 각 행(1차원 리스트)이 차례대로 담겨 sum(row)로 행별 합계를 구할 수 있습니다.",
+      "prompt_en": "Iterating directly with for row in grid: yields each inner row list one by one, making row-level calculations like sum(row) simple.",
+      "hint_ko": "반복 변수 row 자체가 숫자 리스트이므로 내장 함수 sum()에 곧바로 전달할 수 있습니다.",
+      "hint_en": "Because row is already a list of numbers on each turn, you can pass it directly into sum().",
       "targetCode": "grid = [[10, 20, 30], [5, 15, 25]]\nfor row in grid:\n    print(sum(row))",
       "testCases": [
         {
@@ -139,10 +139,10 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "중첩 for문으로 모든 행(r)과 열(c)을 돌면서 grid[r][c]가 0보다 큰 칸의 개수를 세어 출력해보세요.",
-      "prompt_en": "Use nested index loops over r and c to count how many cells in grid are greater than 0.",
-      "hint_ko": "바깥 반복문은 행 개수만큼, 안쪽 반복문은 각 행의 열 개수만큼 인덱스를 생성해 모든 격자 칸을 방문합니다.",
-      "hint_en": "Generate row indices from the outer list length and column indices from each inner row's length.",
+      "prompt_ko": "바깥 for문으로 행 번호(r)를, 안쪽 for문으로 열 번호(c)를 순회하는 중첩 반복문을 사용하면 2차원 격자의 모든 칸(grid[r][c])을 빠짐없이 검사할 수 있습니다.",
+      "prompt_en": "Nested loops over row index r and column index c visit every cell grid[r][c] in a 2D list to test and count matching values.",
+      "hint_ko": "range(len(grid))는 행 인덱스 범위를, range(len(grid[r]))는 해당 행의 열 인덱스 범위를 만들어 줍니다.",
+      "hint_en": "range(len(grid)) generates row indices while range(len(grid[r])) generates column indices for each row.",
       "targetCode": "grid = [[1, 0, 2], [0, 3, 4]]\ncnt = 0\nfor r in range(len(grid)):\n    for c in range(len(grid[r])):\n        if grid[r][c] > 0:\n            cnt += 1\nprint(cnt)",
       "testCases": [
         {
@@ -175,10 +175,10 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "2차원 격자 안에 target 값이 몇 번 등장하는지 세어 반환하는 count_cell(grid, target) 함수를 완성해보세요.",
-      "prompt_en": "Complete count_cell(grid, target) using nested for loops to count occurrences of target in grid.",
-      "hint_ko": "바깥 반복문으로 행 리스트를 하나씩 꺼내고, 안쪽 반복문으로 그 행의 원소를 하나씩 꺼내 찾는 값과 비교합니다.",
-      "hint_en": "Nest an element loop inside a row loop to inspect every value in the 2D list.",
+      "prompt_ko": "함수 안에서 for row in grid: 안에 for item in row:를 중첩하면 인덱스 번호 없이도 2차원 격자의 모든 원소를 하나씩 꺼내 비교할 수 있습니다.",
+      "prompt_en": "Nesting for item in row: inside for row in grid: lets a function inspect every element of a 2D list directly without index numbers.",
+      "hint_ko": "모든 행과 열의 탐색이 끝난 뒤 바깥 반복문과 같은 들여쓰기 위치에서 누적된 개수를 return으로 반환합니다.",
+      "hint_en": "Return the accumulated count after both nested loops finish, aligned with the outer loop indentation.",
       "targetCode": "def count_cell(grid, target):\n    hits = 0\n    for row in grid:\n        for item in row:\n            if item == target:\n                hits += 1\n    return hits\n\nm = [[1, 2, 1], [3, 1, 4]]\nprint(count_cell(m, 1))",
       "testCases": [
         {

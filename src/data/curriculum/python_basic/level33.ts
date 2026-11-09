@@ -20,10 +20,10 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: "변수 word에 \"Python\"을 저장하고 len() 함수로 전체 글자 수를 출력해보세요.",
-      prompt_en: "Store \"Python\" in word and print its total character count using len().",
-      hint_ko: "영어로 '길이(length)'의 앞 세 글자를 딴 내장 함수에 문자열 변수를 넣고 그 결과를 출력해보세요.",
-      hint_en: "Pass the string variable to the built-in function named after the first three letters of 'length' and print the result.",
+      prompt_ko: "내장 함수 len()은 문자열 안에 들어 있는 전체 글자 수(길이)를 정수로 반환합니다. 블록의 코드를 따라 입력해 문자열 길이를 확인해보세요.",
+      prompt_en: "The built-in len() function returns the total number of characters in a string as an integer. Trace the block code to check the length.",
+      hint_ko: "\"Python\"은 6글자이므로 len(word)의 결과로 정수 6이 출력됩니다.",
+      hint_en: "Because \"Python\" has 6 characters, len(word) evaluates to the integer 6.",
       targetCode: "word = \"Python\"\nprint(len(word))",
       testCases: [
         {
@@ -61,10 +61,10 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: "word에 \"Coding\"을 저장하고 첫 글자(0번)와 마지막 글자(-1번)를 나란히 출력해보세요. (출력 예: C g)",
-      prompt_en: "Store \"Coding\" in word and print its first (index 0) and last (index -1) characters (e.g., C g).",
-      hint_ko: "파이썬의 위치 번호는 앞에서 셀 때 0부터 시작하고, 뒤에서 거꾸로 셀 때는 음수 -1부터 시작합니다.",
-      hint_en: "Python positions start at 0 from the front and count backward starting at -1 from the end.",
+      prompt_ko: "문자열 뒤에 대괄호 [인덱스]를 붙이는 인덱싱에서 앞에서 첫 글자는 0번, 뒤에서 마지막 글자는 -1번으로 가리킵니다. 블록의 코드를 따라 쳐보세요.",
+      prompt_en: "In string indexing with square brackets [index], 0 refers to the first character from the front and -1 refers to the last character from the back. Trace the block code.",
+      hint_ko: "word[0]은 맨 앞 글자 'C'를, word[-1]은 맨 끝 글자 'g'를 꺼내 공백으로 나란히 출력합니다.",
+      hint_en: "word[0] fetches the first character 'C' and word[-1] fetches the last character 'g'.",
       targetCode: "word = \"Coding\"\nprint(word[0], word[-1])",
       testCases: [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: "단어 w를 입력받아 첫 글자, 끝 글자, 전체 길이를 f-string으로 출력해보세요. (예: Star -> S..r (4)) (터미널 입력: Star)",
-      prompt_en: "Read word w and print its first char, last char, and length in an f-string (e.g., Star -> S..r (4)). (Terminal input: Star)",
-      hint_ko: "포맷 문자열의 각 중괄호 자리에 첫 위치 인덱싱, 끝 위치 음수 인덱싱, 그리고 문자열 길이를 구하는 함수 호출을 차례로 배치하세요.",
-      hint_en: "Inside the formatted string's braces, place the first-character index, last-character negative index, and the length function call.",
+      prompt_ko: "f-string의 중괄호 안에서도 문자열 인덱싱(w[0], w[-1])과 길이 함수(len(w))를 직접 호출해 한 줄의 요약 문자열로 조합할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: Star)",
+      prompt_en: "You can place string indexing (w[0], w[-1]) and len(w) directly inside f-string curly braces to format a summary string. Trace the block code. (Terminal input: Star)",
+      hint_ko: "중괄호마다 각각의 표현식이 계산되어 첫 글자, 끝 글자, 전체 글자 수가 차례로 삽입됩니다.",
+      hint_en: "Each brace expression is evaluated in turn to insert the first character, last character, and length.",
       targetCode: "w = input()\nprint(f\"{w[0]}..{w[-1]} ({len(w)})\")",
       testCases: [
         {
@@ -153,10 +153,10 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: "비밀번호 pw의 길이가 8 이상이면 \"Strong\", 4 이상이면 \"Normal\", 그 외에는 \"Weak\"를 출력해보세요. (터미널 입력: secret99)",
-      prompt_en: "Print \"Strong\" if len(pw) >= 8, \"Normal\" if len(pw) >= 4, otherwise \"Weak\". (Terminal input: secret99)",
-      hint_ko: "문자열 길이를 구하는 함수 결과를 큰 기준값부터 차례대로 다중 조건문으로 검사해 알맞은 등급을 출력하세요.",
-      hint_en: "Check the password's character count from the highest threshold downward using chained conditional branches.",
+      prompt_ko: "len(pw)가 반환하는 글자 수를 if - elif - else 조건식에서 기준값과 비교하면 문자열 길이에 따라 등급을 나눌 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: secret99)",
+      prompt_en: "Comparing len(pw) against thresholds in an if - elif - else chain lets you classify strings by their length. Trace the block code. (Terminal input: secret99)",
+      hint_ko: "8글자 이상인지 먼저 검사하고, 아닐 때 4글자 이상인지 순서대로 판별합니다.",
+      hint_en: "It checks whether the length is at least 8 first, then tests at least 4 if the first check was False.",
       targetCode: "pw = input()\nif len(pw) >= 8:\n    print(\"Strong\")\nelif len(pw) >= 4:\n    print(\"Normal\")\nelse:\n    print(\"Weak\")",
       testCases: [
         {
@@ -204,10 +204,10 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: "문자열 s를 입력받아 while 문(i < len(s))으로 인덱스 번호와 글자를 한 줄씩 출력해보세요. (출력 예: 0:H) (터미널 입력: Hi)",
-      prompt_en: "Iterate over s using while i < len(s): and print \"<index>:<char>\" on each line (e.g., 0:H). (Terminal input: Hi)",
-      hint_ko: "인덱스 변수를 0부터 문자열 길이보다 작을 때까지 1씩 늘려가며, 번호와 해당 위치의 글자를 콜론으로 묶어 출력하세요.",
-      hint_en: "Start an index counter at 0 and increment by 1 while strictly less than the string length, printing the index and character at each step.",
+      prompt_ko: "인덱스 변수 i를 0부터 시작해 while i < len(s): 동안 1씩 증가시키면 s[i]로 문자열의 모든 글자를 처음부터 끝까지 순회할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: Hi)",
+      prompt_en: "Starting i at 0 and incrementing by 1 while i < len(s): lets you access every character in order via s[i]. Trace the block code. (Terminal input: Hi)",
+      hint_ko: "유효한 양수 인덱스는 0부터 len(s) - 1까지이므로 조건식에 등호 없는 < 연산자를 사용합니다.",
+      hint_en: "Valid forward indices run from 0 through len(s) - 1, so the loop condition uses strict <.",
       targetCode: "s = input()\ni = 0\nwhile i < len(s):\n    print(f\"{i}:{s[i]}\")\n    i += 1",
       testCases: [
         {

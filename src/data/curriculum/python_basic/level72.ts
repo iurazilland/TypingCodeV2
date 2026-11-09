@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "stock.get(\"pen\"), 없는 키를 조회한 stock.get(\"note\"), 기본값 0을 준 stock.get(\"note\", 0)을 순서대로 출력해보세요.",
-      "prompt_en": "Print stock.get(\"pen\"), stock.get(\"note\"), and stock.get(\"note\", 0) on separate lines.",
-      "hint_ko": "'얻다/가져오다'라는 뜻의 안전 조회 메서드는 키가 없을 때 오류 대신 None을 반환하며, 두 번째 인자로 대체 기본값을 지정할 수 있습니다.",
-      "hint_en": "Instead of raising an error on a missing key, this safe lookup method returns None or the fallback value passed second.",
+      "prompt_ko": "딕셔너리의 .get(키, 기본값) 메서드는 찾는 키가 없을 때 KeyError 대신 None(또는 두 번째 인자로 지정한 기본값)을 안전하게 반환합니다.",
+      "prompt_en": "The dictionary method .get(key, default) safely looks up a key, returning None (or the specified fallback value) instead of raising a KeyError.",
+      "hint_ko": "대괄호 인덱싱은 없는 키에서 오류가 발생하지만, .get()은 프로그램이 멈추지 않고 기본값을 돌려줍니다.",
+      "hint_en": "Unlike bracket indexing, .get() never crashes on missing keys and cleanly falls back to the second argument.",
       "targetCode": "stock = {\"pen\": 5}\nprint(stock.get(\"pen\"))\nprint(stock.get(\"note\"))\nprint(stock.get(\"note\", 0))",
       "testCases": [
         {
@@ -71,10 +71,10 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "\"banana\"의 각 글자를 돌며 counts.get(ch, 0) + 1 패턴으로 글자 빈도수를 세고 \"a\"와 \"n\"의 개수를 출력해보세요.",
-      "prompt_en": "Count character frequencies in \"banana\" with counts.get(ch, 0) + 1 and print counts of \"a\" and \"n\".",
-      "hint_ko": "처음 나온 글자는 기본값 0으로 읽히므로, 거기에 1을 더하면 별도의 조건문 없이도 빈도수를 누적할 수 있습니다.",
-      "hint_en": "An unseen character safely evaluates to the default 0, so adding 1 initializes and increments counts in a single line.",
+      "prompt_ko": "counts[ch] = counts.get(ch, 0) + 1 패턴은 처음 등장한 키를 기본값 0으로 읽어 온 뒤 1을 더해 별도의 조건문 없이도 빈도수를 누적합니다.",
+      "prompt_en": "The pattern counts[ch] = counts.get(ch, 0) + 1 reads 0 for unseen keys and adds 1, counting frequencies without an if-else check.",
+      "hint_ko": "이미 등장했던 글자는 현재 저장된 개수가 반환되고, 처음 나온 글자는 기본값 0이 반환되어 거기에 1이 더해집니다.",
+      "hint_en": "Existing characters return their current count while new characters default to 0 before adding 1.",
       "targetCode": "word = \"banana\"\ncounts = {}\nfor ch in word:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts[\"a\"], counts[\"n\"])",
       "testCases": [
         {
@@ -112,10 +112,10 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "scores.pop(\"park\")으로 값을 꺼내 지운 뒤, 꺼낸 값과 남은 키 리스트(list(scores.keys())), 값 합계(sum(scores.values()))를 출력해보세요.",
-      "prompt_en": "Pop \"park\" from scores, then print the popped value, list(scores.keys()), and sum(scores.values()).",
-      "hint_ko": "지정한 키의 항목을 삭제하며 그 값을 반환한 뒤, 남은 '키 목록'과 '값 목록' 뷰를 각각 리스트 변환과 합산에 활용합니다.",
-      "hint_en": "Removing a key with extraction returns its value, while the key and value views expose the remaining entries.",
+      "prompt_ko": ".pop(키)는 해당 항목을 삭제하며 값을 꺼내 반환하고, .keys()와 .values()는 각각 남은 키 목록과 값 목록 뷰를 제공합니다.",
+      "prompt_en": ".pop(key) removes an entry and returns its value, while .keys() and .values() expose views of the remaining keys and values.",
+      "hint_ko": ".keys() 뷰를 list()로 감싸면 일반 리스트가 되고, .values() 뷰를 sum()에 넘기면 모든 값을 바로 합산할 수 있습니다.",
+      "hint_en": "Wrap .keys() in list() to build a list of keys, and pass .values() directly into sum() to total the values.",
       "targetCode": "scores = {\"kim\": 80, \"lee\": 90, \"park\": 70}\nout = scores.pop(\"park\")\nnames = list(scores.keys())\nprint(out, names, sum(scores.values()))",
       "testCases": [
         {
@@ -148,10 +148,10 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "튜플 쌍 리스트로 dict([(\"hp\", 100), (\"mp\", 40)])을 만들고 p1.update(p2)로 병합한 뒤 hp, mp, atk를 출력해보세요.",
-      "prompt_en": "Create p1 and p2 via the dict() pair-list constructor, update p1 with p2, and print hp, mp, atk.",
-      "hint_ko": "'사전(dictionary)'의 앞 네 글자를 딴 생성자에 (키, 값) 튜플 리스트를 넘기면 딕셔너리가 만들어지며, 병합 시 중복 키는 새 값으로 갱신됩니다.",
-      "hint_en": "Passing (key, value) pairs to the dictionary constructor creates a dict, and merging overwrites overlapping keys with new values.",
+      "prompt_ko": "dict() 생성자에 (키, 값) 튜플 리스트를 넘기면 딕셔너리가 만들어지며, .update() 메서드는 다른 딕셔너리의 항목들을 한꺼번에 병합·갱신합니다.",
+      "prompt_en": "The dict() constructor builds a dictionary from (key, value) pairs, and .update() merges another dictionary in place, overwriting duplicate keys.",
+      "hint_ko": ".update() 실행 시 이미 있던 키(\"hp\")는 새 값으로 덮어써지고, 없던 키(\"atk\")는 새로 추가됩니다.",
+      "hint_en": "During .update(), existing keys like \"hp\" are overwritten with the new value while new keys like \"atk\" are added.",
       "targetCode": "p1 = dict([(\"hp\", 100), (\"mp\", 40)])\np2 = dict([(\"hp\", 120), (\"atk\", 25)])\np1.update(p2)\nprint(p1[\"hp\"], p1[\"mp\"], p1[\"atk\"])",
       "testCases": [
         {
@@ -184,10 +184,10 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "입력 키를 ranks.get(k)로 조회해 None이면 unranked를, 있으면 Rank:숫자 형식으로 출력해보세요. (출력 예: Rank:1) (터미널 입력: gold)",
-      "prompt_en": "Look up input k with ranks.get(k); if res is None print unranked, else print Rank:{res}. (Terminal input: gold)",
-      "hint_ko": "기본값 없이 안전 조회 메서드를 호출하면 없는 키일 때 None이 반환되므로, is None 조건으로 깔끔하게 분기할 수 있습니다.",
-      "hint_en": "Calling the safe lookup method without a default returns None for missing keys, letting you branch cleanly with is None.",
+      "prompt_ko": "기본값 없이 .get(k)를 호출하면 없는 키일 때 None이 반환되므로, if res is None: 조건문으로 키의 존재 여부를 깔끔하게 분기할 수 있습니다. (터미널 입력: gold)",
+      "prompt_en": "Calling .get(k) without a fallback returns None for missing keys, allowing clean branching with if res is None:. (Terminal input: gold)",
+      "hint_ko": "None인지 확인할 때는 등호(==) 대신 객체 동일성 연산자인 is None을 사용하는 것이 파이썬 표준 관례입니다.",
+      "hint_en": "Checking for None with is None is the standard Python idiom after a default-free .get() lookup.",
       "targetCode": "ranks = {\"gold\": 1, \"silver\": 2}\nk = input()\nres = ranks.get(k)\nif res is None:\n    print(\"unranked\")\nelse:\n    print(f\"Rank:{res}\")",
       "testCases": [
         {

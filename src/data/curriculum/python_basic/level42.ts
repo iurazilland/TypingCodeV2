@@ -27,10 +27,10 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "nums = [10, 40, 20, 30]의 전체 합계를 첫 줄에, 최댓값과 최솟값을 둘째 줄에 출력해보세요.",
-      "prompt_en": "Print the sum of nums = [10, 40, 20, 30] on line 1, and its max and min on line 2.",
-      "hint_ko": "총합을 뜻하는 영단어 함수와, '최댓값(maximum)'·'최솟값(minimum)'의 앞 세 글자를 딴 두 내장 함수를 활용해 각각 출력하세요.",
-      "hint_en": "Use the built-in total function on line 1, and the 3-letter functions from 'maximum' and 'minimum' on line 2.",
+      "prompt_ko": "숫자 리스트에 sum()을 쓰면 전체 합계를, max()와 min()을 쓰면 각각 가장 큰 값과 가장 작은 값을 한 번에 구할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Passing a numeric list to sum() calculates its total, while max() and min() return its largest and smallest values. Follow the blocks and type the code.",
+      "hint_ko": "반복문 없이도 파이썬 내장 집계 함수 sum(), max(), min()에 리스트를 전달해 즉시 통계값을 얻을 수 있습니다.",
+      "hint_en": "Built-in functions sum(), max(), and min() accept a list directly without needing a loop.",
       "targetCode": "nums = [10, 40, 20, 30]\nprint(sum(nums))\nprint(max(nums), min(nums))",
       "testCases": [
         {
@@ -63,10 +63,10 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "nums = [30, 10, 40, 20]을 작은 수부터 큰 수 순서(오름차순)로 정렬하고 출력해보세요.",
-      "prompt_en": "Sort nums = [30, 10, 40, 20] in ascending order in place and print nums.",
-      "hint_ko": "순서대로 '정렬하다'라는 뜻의 네 글자 리스트 메서드를 단독으로 호출해 원본 리스트 순서를 바꾼 뒤 리스트를 출력하세요.",
-      "hint_en": "Invoke the 4-letter in-place ordering method on the list first, then print the updated list on the next line.",
+      "prompt_ko": ".sort() 메서드는 리스트의 요소들을 작은 값부터 큰 값 순서(오름차순)로 원본 리스트 안에서 직접 정렬합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The .sort() method rearranges a list's elements in ascending order directly in place. Follow the blocks and type the code.",
+      "hint_ko": ".sort()는 원본 리스트의 순서를 직접 바꾸고 None을 반환하므로, 단독으로 호출한 뒤 다음 줄에서 리스트를 출력합니다.",
+      "hint_en": "Because .sort() mutates the list in place and returns None, call it on its own line before printing the list.",
       "targetCode": "nums = [30, 10, 40, 20]\nnums.sort()\nprint(nums)",
       "testCases": [
         {
@@ -99,10 +99,10 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "scores = [70, 80, 90]의 합계를 요소 개수로 나눈 실수 평균 avg를 구해 출력해보세요. (출력 예: Avg:80.0)",
-      "prompt_en": "Compute the float average avg of scores = [70, 80, 90] using sum and len, then print Avg:80.0.",
-      "hint_ko": "리스트의 전체 합계 함수 결과를 요소 개수 함수 결과로 실수 나눗셈(/)하면 평균이 구해집니다.",
-      "hint_en": "Divide the total of the list elements by the count of elements using / to compute the floating-point average.",
+      "prompt_ko": "숫자 리스트의 평균은 전체 합계를 구하는 sum() 결과를 요소 개수를 구하는 len() 결과로 나누어(sum(리스트) / len(리스트)) 계산합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Dividing sum(list) by len(list) computes the floating-point average of a numeric list. Follow the blocks and type the code.",
+      "hint_ko": "실수 나눗셈 연산자(/)를 사용하면 합계를 개수로 나눈 평균값이 소수점까지 포함된 실수(float)로 계산됩니다.",
+      "hint_en": "Using the / division operator produces a floating-point average from the sum and length.",
       "targetCode": "scores = [70, 80, 90]\navg = sum(scores) / len(scores)\nprint(f\"Avg:{avg}\")",
       "testCases": [
         {
@@ -140,10 +140,10 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "scores = [50, 90, 80, 100, 70]을 오름차순 정렬한 뒤 최솟값(맨 앞)과 최댓값(맨 뒤)을 꺼내 제외하고 합계를 출력해보세요. (출력 예: TrimSum:240)",
-      "prompt_en": "Sort scores ascending, pop the lowest (index 0) and highest (last) items, and print TrimSum:240.",
-      "hint_ko": "오름차순 정렬을 마친 뒤 맨 앞(0번)과 맨 끝 요소를 각각 꺼내 제거하고, 남은 리스트의 합계를 포맷팅해 출력하세요.",
-      "hint_en": "Order the list ascending first, extract both the front element and the back element, then format the total of the remaining scores.",
+      "prompt_ko": "리스트를 .sort()로 오름차순 정렬하면 맨 앞(0번)에는 최솟값이, 맨 뒤에는 최댓값이 놓이므로 .pop(0)과 .pop()으로 양끝 극단값을 손쉽게 제거할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "After sorting a list in ascending order with .sort(), the minimum sits at index 0 and the maximum at the end, so .pop(0) and .pop() remove both extremes. Follow the blocks and type the code.",
+      "hint_ko": "정렬 후 맨 앞 요소(.pop(0))와 맨 뒤 요소(.pop())를 차례로 꺼내 제외하고 남은 요소들을 sum()으로 합산합니다.",
+      "hint_en": "Sort first, then pop the first and last elements before summing the remaining middle scores.",
       "targetCode": "scores = [50, 90, 80, 100, 70]\nscores.sort()\nscores.pop(0)\nscores.pop()\nprint(f\"TrimSum:{sum(scores)}\")",
       "testCases": [
         {
@@ -181,10 +181,10 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "입력 점수들의 평균 avg가 90 이상이면 \"A\", 80 이상이면 \"B\", 그 외에는 \"C\"를 grade에 담아 평균과 출력해보세요. (출력 예: B:85.0) (터미널 입력: 80 90)",
-      "prompt_en": "Compute avg of input integers, set grade to \"A\" (>=90), \"B\" (>=80), or \"C\", and print grade:avg. (Terminal input: 80 90)",
-      "hint_ko": "합계와 길이 함수로 실수 평균을 먼저 구한 뒤, 높은 점수 기준부터 다중 조건문으로 등급 변수를 정해 함께 출력하세요.",
-      "hint_en": "Calculate the float average from total and length first, then assign the letter grade through descending conditional checks.",
+      "prompt_ko": "공백으로 입력된 점수들을 정수 리스트로 모은 뒤 sum() / len()으로 평균을 구하고, if / elif / else 다중 조건문으로 구간별 등급을 판정할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 80 90)",
+      "prompt_en": "After collecting space-separated integers into a list, you can compute the average with sum() / len() and classify it using if / elif / else branches. Follow the blocks and type the code. (Terminal input: 80 90)",
+      "hint_ko": "평균값을 먼저 변수에 계산해 두면 여러 조건 분기에서 중복 계산 없이 깔끔하게 비교할 수 있습니다.",
+      "hint_en": "Store the computed average in a variable first so you can compare it cleanly across each condition.",
       "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\navg = sum(nums) / len(nums)\nif avg >= 90:\n    grade = \"A\"\nelif avg >= 80:\n    grade = \"B\"\nelse:\n    grade = \"C\"\nprint(f\"{grade}:{avg}\")",
       "testCases": [
         {

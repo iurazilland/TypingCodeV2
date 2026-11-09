@@ -27,10 +27,10 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "Pet 클래스에 __init__(self, name) 생성자를 만들어 self.name = name을 저장하고, Pet(\"Coco\")의 이름을 출력해보세요.",
-      "prompt_en": "Define __init__(self, name) in Pet to store self.name = name, create Pet(\"Coco\"), and print its name.",
-      "hint_ko": "클래스 안의 초기화 생성자에서 전달받은 이름을 인스턴스 자신의 속성에 저장하고, 생성한 객체의 이름 속성을 출력하세요.",
-      "hint_en": "Store the passed name onto the instance inside the initializer method, instantiate the pet with the string argument, and print its attribute.",
+      "prompt_ko": "클래스의 __init__(self, ...) 생성자 메서드는 인스턴스가 생성될 때 자동으로 호출되며, 첫 매개변수 self를 통해 방금 만들어진 인스턴스 자신에게 초기 속성을 저장합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A class's __init__(self, ...) initializer method runs automatically when an instance is created, binding initial attributes onto the new object via the first parameter self. Trace the block code.",
+      "hint_ko": "인스턴스를 생성할 때 괄호 안에 넘긴 인자는 __init__의 두 번째 매개변수(self 다음)부터 차례대로 전달됩니다.",
+      "hint_en": "Arguments passed inside ClassName(...) are forwarded starting from the second parameter of __init__ (after self).",
       "targetCode": "class Pet:\n    def __init__(self, name):\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
       "testCases": [
         {
@@ -63,10 +63,10 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "hp=100 기본값을 가진 Hero 생성자를 정의하고, Hero(\"Leo\")와 Hero(\"Mia\", 150)의 이름과 체력을 각각 출력해보세요.",
-      "prompt_en": "Define Hero with __init__(self, name, hp=100), create Hero(\"Leo\") and Hero(\"Mia\", 150), and print both.",
-      "hint_ko": "생성자의 체력 매개변수에 기본값을 지정해 정의한 뒤, 인자 1개로 만든 인스턴스와 2개로 덮어쓴 인스턴스의 속성을 차례로 출력하세요.",
-      "hint_en": "Give the health parameter a default in the initializer, then create and print one instance relying on the default and another overriding it.",
+      "prompt_ko": "__init__ 생성자 매개변수에도 일반 함수처럼 기본값(hp=100)을 지정할 수 있어, 인자를 생략하면 기본값이 적용되고 인자를 전달하면 새 값으로 덮어써집니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Parameters in __init__ can have default values (like hp=100), using the default when omitted or overriding it when an argument is supplied. Trace the block code.",
+      "hint_ko": "기본값이 없는 필수 매개변수(name)를 앞에 두고, 기본값이 있는 선택 매개변수(hp=100)를 뒤에 배치합니다.",
+      "hint_en": "Place required parameters without defaults (name) before optional parameters with defaults (hp=100).",
       "targetCode": "class Hero:\n    def __init__(self, name, hp=100):\n        self.name = name\n        self.hp = hp\na = Hero(\"Leo\")\nb = Hero(\"Mia\", 150)\nprint(a.name, a.hp)\nprint(b.name, b.hp)",
       "testCases": [
         {
@@ -99,10 +99,10 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "입력받은 아이디로 기본 레벨 1인 User 인스턴스를 생성하고 형식에 맞게 출력해보세요. (터미널 입력: neo)",
-      "prompt_en": "Create a User instance with default level=1 from input() and print it formatted (Terminal input: neo).",
-      "hint_ko": "레벨 기본값이 1인 생성자를 정의하고, 입력 문자열로 생성한 사용자 인스턴스의 두 속성을 서식 문자열로 이어 출력하세요.",
-      "hint_en": "Define the initializer with default level 1, pass the input string when creating the user object, and format both attributes in the output.",
+      "prompt_ko": "input()으로 입력받은 값을 클래스 생성자의 인자로 바로 전달하면, 사용자 입력에 맞춘 인스턴스를 동적으로 생성할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: neo)",
+      "prompt_en": "Passing a value read from input() into a class initializer lets you dynamically create instances tailored to user input. Trace the block code. (Terminal input: neo)",
+      "hint_ko": "f-string 안에서 인스턴스의 속성(u.uid, u.level)을 중괄호로 감싸 원하는 출력 형식을 만들 수 있습니다.",
+      "hint_en": "Wrap instance attributes (u.uid, u.level) in braces inside an f-string to format the output.",
       "targetCode": "class User:\n    def __init__(self, uid, level=1):\n        self.uid = uid\n        self.level = level\nname = input()\nu = User(name)\nprint(f\"{u.uid}:Lv{u.level}\")",
       "testCases": [
         {
@@ -145,10 +145,10 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "생성자에서 self.guild = None으로 초기화한 Knight 인스턴스 k를 만들고, 길드가 None이면 \"Round\"로 바꿔 출력해보세요. (출력 예: Arthur-Round)",
-      "prompt_en": "Initialize self.guild = None in Knight, set k.guild = \"Round\" if k.guild is None, and print Arthur-Round.",
-      "hint_ko": "생성자에서 소속 속성을 '값 없음' 상수로 초기화한 뒤, 바깥 조건문에서 동일성 비교로 비어 있는지 확인해 새 문자열을 대입하고 출력하세요.",
-      "hint_en": "Initialize the guild attribute to Python's null constant, check identity outside before assigning the guild name, and print both attributes.",
+      "prompt_ko": "__init__ 생성자에서는 매개변수로 받지 않은 속성도 self.속성 = None처럼 초기 빈 값으로 미리 선언해 두고, 나중에 조건문(is None)으로 확인해 값을 채울 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Inside __init__, you can initialize attributes not passed as parameters to a placeholder like self.guild = None and assign them later after checking with is None. Trace the block code.",
+      "hint_ko": "아직 정해지지 않은 객체 속성을 표시할 때는 파이썬의 빈 값 상수인 None으로 초기화해 두는 패턴을 자주 사용합니다.",
+      "hint_en": "Initializing an unset attribute to None in __init__ is a standard Python pattern for attributes assigned later.",
       "targetCode": "class Knight:\n    def __init__(self, name):\n        self.name = name\n        self.guild = None\nk = Knight(\"Arthur\")\nif k.guild is None:\n    k.guild = \"Round\"\nprint(f\"{k.name}-{k.guild}\")",
       "testCases": [
         {
@@ -186,10 +186,10 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "초기 높이 3으로 생성한 Plant 인스턴스 p의 높이가 10 미만인 동안 4씩 키우며 일수 days를 세어 days와 p.height를 출력해보세요.",
-      "prompt_en": "Create Plant(3) and while p.height < 10 add 4 to p.height and 1 to days, then print days and p.height.",
-      "hint_ko": "초기 높이 3으로 식물 객체를 생성한 뒤, 높이 속성이 10 미만인 동안 반복하며 높이와 일수를 함께 증가시키고 두 값을 출력하세요.",
-      "hint_en": "Create the plant starting at height 3, loop while its height stays below 10 adding 4 and counting days, then print the day count and final height.",
+      "prompt_ko": "__init__ 생성자로 초기 속성값을 설정한 인스턴스를 만들고, while 반복문으로 목표치에 도달할 때까지 속성을 누적 갱신할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "After initializing an instance's starting state via __init__, you can repeatedly update its attribute in a while loop until it reaches a target threshold. Trace the block code.",
+      "hint_ko": "Plant(3)처럼 인자를 전달하면 생성자의 기본값(height=2) 대신 전달한 값(3)으로 속성이 초기화됩니다.",
+      "hint_en": "Passing an argument as in Plant(3) overrides the initializer's default parameter (height=2) with 3.",
       "targetCode": "class Plant:\n    def __init__(self, height=2):\n        self.height = height\np = Plant(3)\ndays = 0\nwhile p.height < 10:\n    p.height += 4\n    days += 1\nprint(days, p.height)",
       "testCases": [
         {

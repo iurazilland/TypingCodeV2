@@ -23,10 +23,10 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "변수 is_ready에 참을 뜻하는 불리언 값 True를 저장하고 출력해보세요.",
-      "prompt_en": "Store True in variable is_ready and print its value.",
-      "hint_ko": "파이썬의 참·거짓 불리언 상수는 따옴표를 쓰지 않고 반드시 첫 글자만 대문자로 표기합니다.",
-      "hint_en": "Python boolean constants are written without quotes and always start with a capital letter.",
+      "prompt_ko": "참(True)과 거짓(False)을 나타내는 불리언(bool) 자료형은 따옴표 없이 첫 글자만 대문자로 적어 변수에 저장합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Boolean (bool) values representing truth (True) and falsehood (False) are written without quotes and with a capital first letter. Trace the block code.",
+      "hint_ko": "\"True\"처럼 따옴표를 붙이면 문자열이 되므로 따옴표 없이 True로 작성합니다.",
+      "hint_en": "Omit quotes around True so Python treats it as a boolean constant rather than a string.",
       "targetCode": "is_ready = True\nprint(is_ready)",
       "expectedVariables": {
         "is_ready": true
@@ -65,10 +65,10 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "a에 15, b에 10을 저장한 뒤 a > b와 a < b의 비교 결과를 각각 출력해보세요.",
-      "prompt_en": "Set a to 15 and b to 10, then print the results of a > b and a < b.",
-      "hint_ko": "비교 연산식의 결과는 항상 참 또는 거짓을 나타내는 불리언 값으로 계산됩니다.",
-      "hint_en": "Comparison expressions always evaluate to a boolean truth value.",
+      "prompt_ko": "부등호 비교 연산자(>, <)는 두 값의 크기를 비교하여 조건이 맞으면 True, 틀리면 False를 결과로 반환합니다. 블록의 코드를 따라 입력해 비교 결과를 확인해보세요.",
+      "prompt_en": "Comparison operators (>, <) compare two values and evaluate to True if the condition holds, or False otherwise. Trace the block code to check both results.",
+      "hint_ko": "15는 10보다 크므로 첫 번째 비교는 True, 두 번째 비교는 False가 출력됩니다.",
+      "hint_en": "Since 15 is greater than 10, a > b evaluates to True and a < b evaluates to False.",
       "targetCode": "a = 15\nb = 10\nprint(a > b)\nprint(a < b)",
       "testCases": [
         {
@@ -101,10 +101,10 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "pw에 \"1234\"를 저장하고, pw == \"1234\"와 pw != \"1234\"를 각각 출력해 같음과 다름을 확인해보세요.",
-      "prompt_en": "Set pw to \"1234\", then print pw == \"1234\" and pw != \"1234\" to test equality and inequality.",
-      "hint_ko": "등호 한 개는 값을 저장하는 대입 기호이므로, 같음을 비교할 때는 등호 두 개를, 다름을 비교할 때는 느낌표와 등호 조합을 사용합니다.",
-      "hint_en": "A single equals sign assigns a value; use double equals to test equality and an exclamation mark before equals to test inequality.",
+      "prompt_ko": "두 값이 서로 같은지 비교할 때는 등호 두 개(==)를, 서로 다른지 비교할 때는 느낌표와 등호(!=)를 사용합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Use double equals (==) to check if two values are equal, and an exclamation mark with equals (!=) to check if they are different. Trace the block code.",
+      "hint_ko": "등호 한 개(=)는 변수에 값을 저장할 때만 쓰고, 비교할 때는 항상 == 또는 !=를 씁니다.",
+      "hint_en": "A single = assigns a value to a variable, whereas == and != compare two values.",
       "targetCode": "pw = \"1234\"\nprint(pw == \"1234\")\nprint(pw != \"1234\")",
       "testCases": [
         {
@@ -137,10 +137,10 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "x에 25, y에 4 * 6을 저장한 뒤, x > y와 x == y + 1의 결과를 차례로 출력해보세요.",
-      "prompt_en": "Set x = 25 and y = 4 * 6, then print x > y and x == y + 1.",
-      "hint_ko": "한 식 안에 산술 연산과 비교 연산이 섞여 있으면 덧셈·곱셈 같은 산술 계산이 먼저 끝난 뒤 크기를 비교합니다.",
-      "hint_en": "When arithmetic and comparison operators appear together, arithmetic is evaluated first before comparing the two sides.",
+      "prompt_ko": "하나의 식에 사칙연산(+, *)과 비교 연산자(>, ==)가 함께 있으면 사칙연산이 먼저 계산된 뒤 두 값의 크기를 비교합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "When arithmetic operators (+, *) and comparison operators (>, ==) appear in the same expression, Python finishes the arithmetic calculation first before comparing the values. Trace the block code.",
+      "hint_ko": "y + 1이 먼저 25로 계산된 다음 x == 25가 비교되어 True가 출력됩니다.",
+      "hint_en": "y + 1 evaluates to 25 first, and then x == 25 evaluates to True.",
       "targetCode": "x = 25\ny = 4 * 6\nprint(x > y)\nprint(x == y + 1)",
       "testCases": [
         {
@@ -173,10 +173,10 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 2로 나눈 나머지가 0과 같은지(짝수 여부)를 res에 저장하고 출력해보세요. (터미널 입력: 12)",
-      "prompt_en": "Read integer n, store whether n % 2 == 0 in res, and print res. (Terminal input: 12)",
-      "hint_ko": "입력받은 정수를 2로 나눈 나머지가 0과 같은지 비교한 불리언 결과값 자체도 일반 값처럼 변수에 담아 출력할 수 있습니다.",
-      "hint_en": "Compare the remainder when divided by 2 against 0, then store that boolean comparison result directly in the variable.",
+      "prompt_ko": "나머지 연산(%)과 같음 비교(==)를 조합한 식(n % 2 == 0)의 불리언 결과(True 또는 False)도 등호(=)를 사용해 변수에 그대로 저장할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 12)",
+      "prompt_en": "The boolean result (True or False) of a comparison expression like n % 2 == 0 can also be assigned directly to a variable with =. Trace the block code. (Terminal input: 12)",
+      "hint_ko": "n % 2 == 0이 먼저 판정되어 참·거짓 값이 구해진 뒤 왼쪽 변수 res에 대입됩니다.",
+      "hint_en": "Python evaluates n % 2 == 0 first and stores the resulting boolean in res.",
       "targetCode": "n = int(input())\nres = n % 2 == 0\nprint(res)",
       "testCases": [
         {

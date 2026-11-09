@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '따옴표를 사용해 문자열 "3 + 5"를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use quotes to insert the string "3 + 5" and print it on the screen.',
-      hint_ko: '따옴표 안에 "3 + 5"를 적으면 덧셈이 계산되지 않고 글자 그대로 출력됩니다.',
-      hint_en: 'Writing an expression inside quotes outputs "3 + 5" literally without evaluating it.',
+      prompt_ko: '숫자와 연산 기호(+)라도 따옴표("") 안에 적으면 수식으로 계산되지 않고 글자 그대로 출력됩니다. 블록의 문자열을 따라 입력해보세요.',
+      prompt_en: 'Even numbers and operators (+) written inside quotes ("") are treated as text and printed literally without being calculated. Trace the block code.',
+      hint_ko: '따옴표로 감싼 수식은 덧셈 결과인 8이 아니라 적은 글자 그대로 화면에 나타납니다.',
+      hint_en: 'A quoted expression prints the exact characters rather than the sum 8.',
       targetCode: 'print("3 + 5")',
       testCases: [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 "3 + 5 =", 3+5를 넣어 계산식과 결과를 동시에 출력해보세요.',
-      prompt_en: 'Use a comma (,) to insert "3 + 5 =", 3+5 and print both the formula and result.',
-      hint_ko: 'print() 괄호 안에 "3 + 5 =", 3+5를 입력하면 "3 + 5 = 8"로 한 줄에 출력됩니다.',
-      hint_en: 'Entering "3 + 5 =", 3+5 outputs "3 + 5 = 8" on a single line.',
+      prompt_ko: '따옴표로 감싼 수식 문자열과 따옴표 없는 실제 계산식을 쉼표(,)로 나열하면 식과 정답을 한 줄에 함께 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Combining a quoted formula string and an unquoted calculation with a comma (,) prints both the expression and its answer on one line. Trace the block code.',
+      hint_ko: '쉼표 앞은 문자열로 그대로 출력되고, 쉼표 뒤는 덧셈이 계산된 결과값이 출력됩니다.',
+      hint_en: 'The part before the comma prints as text, while the expression after the comma is evaluated.',
       targetCode: 'print("3 + 5 =", 3+5)',
       testCases: [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '어떤 수를 2로 나눈 나머지가 0이면 짝수임을 확인할 수 있습니다. print()에 10%2를 넣어 결과를 출력해보세요.',
-      prompt_en: 'If the remainder when divided by 2 is 0, the number is even. Insert 10%2 into print() to check the result.',
-      hint_ko: 'print() 괄호 안에 10%2를 입력하세요. 2로 나눈 나머지가 0이면 그 수는 짝수입니다.',
-      hint_en: '10%2 produces 0. A remainder of 0 when divided by 2 confirms the number is even.',
+      prompt_ko: '나머지 연산자(%)로 어떤 정수를 2로 나누었을 때 나머지가 0이면 짝수, 1이면 홀수임을 판별할 수 있습니다. 블록의 수식을 따라 입력해 짝수 여부를 확인해보세요.',
+      prompt_en: 'Using the modulo operator (%) to divide an integer by 2 gives a remainder of 0 for even numbers and 1 for odd numbers. Trace the expression in the block.',
+      hint_ko: '10을 2로 나누면 남는 나머지가 없으므로 0이 출력됩니다.',
+      hint_en: '10 divided by 2 leaves no remainder, so 0 is printed.',
       targetCode: 'print(10%2)',
       testCases: [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '어떤 수를 10으로 나눈 나머지는 일의 자리 숫자가 됩니다. 쉼표(,)를 사용해 "Last digit:", 47%10을 출력해보세요.',
-      prompt_en: 'The remainder when divided by 10 gives the last digit. Use a comma (,) to print "Last digit:", 47%10.',
-      hint_ko: 'print() 괄호 안에 "Last digit:", 47%10을 입력하면 47의 일의 자리 숫자인 "Last digit: 7"이 출력됩니다.',
-      hint_en: 'Enter "Last digit:", 47%10 inside print() to output "Last digit: 7".',
+      prompt_ko: '십진수 정수를 10으로 나눈 나머지(% 10)를 구하면 항상 그 숫자의 일의 자리 숫자만 추출할 수 있습니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Finding the remainder when dividing a base-10 integer by 10 (% 10) always extracts its ones digit. Trace the block code.',
+      hint_ko: '47을 10으로 나눈 몫은 4이고 나머지는 일의 자리 숫자인 7이 됩니다.',
+      hint_en: '47 divided by 10 has a quotient of 4 and a remainder of 7, which is its last digit.',
       targetCode: 'print("Last digit:", 47%10)',
       testCases: [
         {
@@ -190,10 +190,10 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 몫과 나머지를 나타내는 "Quotient:", 20//3, "Remainder:", 20%3을 넣어 한 줄에 출력해보세요.',
-      prompt_en: 'Use commas (,) to insert "Quotient:", 20//3, "Remainder:", 20%3 and print them on one line.',
-      hint_ko: 'print() 괄호 안에 "Quotient:", 20//3, "Remainder:", 20%3을 입력하면 "Quotient: 6 Remainder: 2"가 출력됩니다.',
-      hint_en: 'Enter "Quotient:", 20//3, "Remainder:", 20%3 to print "Quotient: 6 Remainder: 2".',
+      prompt_ko: 'print() 안에서 여러 문자열 라벨과 몫(//)·나머지(%) 수식을 쉼표(,)로 번갈아 나열해 한 줄로 깔끔하게 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'You can alternate multiple text labels and floor division (//) or modulo (%) expressions with commas (,) inside print(). Trace the block code.',
+      hint_ko: '쉼표로 구분된 네 항목이 각각 공백 한 칸을 사이에 두고 순서대로 출력됩니다.',
+      hint_en: 'All four comma-separated items are printed in order with a single space between each.',
       targetCode: 'print("Quotient:", 20//3, "Remainder:", 20%3)',
       testCases: [
         {

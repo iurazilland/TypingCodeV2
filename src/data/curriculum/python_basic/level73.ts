@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "두 집합 a와 b에 공통으로 들어 있는 교집합(a & b)을 구해 sorted()로 오름차순 리스트를 출력해보세요.",
-      "prompt_en": "Compute the intersection a & b and print it in ascending order using sorted().",
-      "hint_ko": "'그리고(AND)'를 뜻하는 교집합 기호는 두 집합 모두에 공통으로 포함된 원소만 모아 새 집합을 만듭니다.",
-      "hint_en": "The intersection operator creates a new set containing only the elements present in both sets.",
+      "prompt_ko": "집합의 교집합 연산자(&)는 두 집합 양쪽에 모두 들어 있는 공통 원소만 골라 새로운 집합을 만듭니다.",
+      "prompt_en": "The set intersection operator (&) returns a new set containing only the elements common to both sets.",
+      "hint_ko": "집합은 순서가 없으므로 sorted()에 넘기면 오름차순으로 정렬된 리스트를 얻을 수 있습니다.",
+      "hint_en": "Because sets are unordered, passing the result to sorted() produces a list in ascending order.",
       "targetCode": "a = {\"py\", \"js\", \"sql\"}\nb = {\"js\", \"go\", \"py\"}\nboth = a & b\nprint(sorted(both))",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "두 팀 집합을 합집합(team1 | team2)으로 합쳐 전체 인원수와 오름차순 명단을 출력해보세요.",
-      "prompt_en": "Unite team1 and team2 with | and print the total unique member count and sorted member list.",
-      "hint_ko": "세로 막대 합집합 기호는 중복된 원소를 자동으로 한 번만 남기고 두 집합의 모든 원소를 합칩니다.",
-      "hint_en": "The vertical bar union operator combines all elements from both sets without duplicates.",
+      "prompt_ko": "합집합 연산자(|)는 두 집합의 모든 원소를 하나로 합치며, 양쪽에 중복된 원소는 자동으로 한 번만 남깁니다.",
+      "prompt_en": "The set union operator (|) combines all elements from both sets into a single set, automatically removing duplicates.",
+      "hint_ko": "합집합 결과에 len()을 쓰면 중복을 제외한 전체 고유 원소의 개수를 구할 수 있습니다.",
+      "hint_en": "Applying len() to the union set gives the total count of unique elements across both sets.",
       "targetCode": "team1 = {\"kim\", \"lee\"}\nteam2 = {\"lee\", \"park\"}\nall_members = team1 | team2\nprint(len(all_members), sorted(all_members))",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "집합 tags에서 .discard(\"sale\")과 없는 원소 .discard(\"vip\")를 차례로 실행하고 정렬된 결과를 출력해보세요.",
-      "prompt_en": "Call tags.discard(\"sale\") and tags.discard(\"vip\") and print sorted(tags).",
-      "hint_ko": "불필요한 카드를 조용히 '버리다'(dis- + card)라는 뜻처럼, 집합에 없는 원소를 넘겨도 오류를 내지 않고 안전하게 지나갑니다.",
-      "hint_en": "Meaning 'to throw away,' this safe-removal method deletes an item if present and quietly does nothing if absent.",
+      "prompt_ko": "집합의 .discard(값) 메서드는 지정한 원소가 있으면 삭제하고, 집합에 없는 원소를 넘겨도 KeyError 없이 조용히 넘어갑니다.",
+      "prompt_en": "The set method .discard(elem) removes an element if present and quietly does nothing if it is absent, avoiding KeyError.",
+      "hint_ko": ".remove()는 없는 원소를 지울 때 오류를 내지만, .discard()는 조건 검사 없이도 안전하게 호출할 수 있습니다.",
+      "hint_en": "Unlike .remove(), .discard() never raises an error on missing elements, so no prior membership check is needed.",
       "targetCode": "tags = {\"new\", \"sale\"}\ntags.discard(\"sale\")\ntags.discard(\"vip\")\nprint(sorted(tags))",
       "testCases": [
         {
@@ -143,10 +143,10 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "두 줄의 단어 입력을 각각 set()으로 중복 제거해 담은 뒤, 합집합 크기와 정렬된 교집합 리스트를 출력해보세요. (터미널 입력: 첫째 줄 a b a c, 둘째 줄 b c d)",
-      "prompt_en": "Convert two lines of space-separated words into sets s1 and s2, then print len(s1 | s2) and sorted(s1 & s2). (Terminal input: line 1 a b a c, line 2 b c d)",
-      "hint_ko": "각 줄의 단어들을 집합으로 묶어 중복을 없앤 뒤, 세로 막대 합집합과 앰퍼샌드 교집합 연산자를 각각 적용합니다.",
-      "hint_en": "Deduplicate each split line into a set, then apply the union bar and intersection ampersand operators.",
+      "prompt_ko": "입력된 단어 리스트를 set()으로 감싸 중복을 제거한 뒤, 합집합(|)과 교집합(&) 연산자로 전체 고유 단어 수와 공통 단어를 한 번에 구합니다. (터미널 입력: 첫째 줄 a b a c, 둘째 줄 b c d)",
+      "prompt_en": "Wrapping split input tokens in set() removes duplicates so union (|) and intersection (&) can compute unique and shared words directly. (Terminal input: line 1 a b a c, line 2 b c d)",
+      "hint_ko": "len(s1 | s2)는 두 줄을 합친 고유 단어 수를, sorted(s1 & s2)는 두 줄에 공통으로 등장한 단어의 정렬 리스트를 반환합니다.",
+      "hint_en": "len(s1 | s2) counts all distinct words, while sorted(s1 & s2) lists the words shared by both lines in order.",
       "targetCode": "s1 = set(input().split())\ns2 = set(input().split())\nprint(len(s1 | s2), sorted(s1 & s2))",
       "testCases": [
         {
@@ -184,10 +184,10 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "두 집합 중 한쪽에만 들어 있는 원소들((a - b) | (b - a))을 오름차순 리스트로 반환하는 only_one(a, b) 함수를 완성해보세요.",
-      "prompt_en": "Complete only_one(a, b) returning sorted((a - b) | (b - a)) and print the result for x and y.",
-      "hint_ko": "첫째 집합에만 있는 차집합과 둘째 집합에만 있는 차집합을 각각 구한 뒤 합집합으로 묶으면 한쪽에만 속한 원소들이 모입니다.",
-      "hint_en": "Combine the elements exclusive to the first set with those exclusive to the second set using union.",
+      "prompt_ko": "차집합 연산자(-)는 왼쪽 집합에서 오른쪽 집합의 원소를 빼내며, (a - b) | (b - a)처럼 조합하면 한쪽 집합에만 속한 원소들을 구할 수 있습니다.",
+      "prompt_en": "The set difference operator (-) subtracts elements of the right set from the left, so (a - b) | (b - a) collects items exclusive to either set.",
+      "hint_ko": "소괄호로 각 차집합을 먼저 계산한 뒤 세로 막대(|) 합집합으로 묶어 양쪽의 고유 원소를 합칩니다.",
+      "hint_en": "Parentheses evaluate each directional difference first before the union bar (|) merges them together.",
       "targetCode": "def only_one(a, b):\n    diff = (a - b) | (b - a)\n    return sorted(diff)\n\nx = {1, 2, 3}\ny = {2, 3, 4}\nprint(only_one(x, y))",
       "testCases": [
         {

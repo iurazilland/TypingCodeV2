@@ -23,10 +23,10 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "score에 90을 저장하고 if score >= 80: 조건이 참일 때 \"Pass\"를 출력해보세요.",
-      "prompt_en": "Store 90 in score and print \"Pass\" inside if score >= 80:.",
-      "hint_ko": "조건문 블록 안쪽에 들여쓰기되어 끼워진 실행문은 제시된 조건식이 참일 때만 실행됩니다.",
-      "hint_en": "Statements indented inside the conditional block execute only when its condition evaluates to true.",
+      "prompt_ko": "if 조건문은 조건식이 참(True)일 때만 콜론(:) 아래 4칸 들여쓰기된 블록을 실행합니다. 블록의 코드를 따라 입력해 조건문 동작을 확인해보세요.",
+      "prompt_en": "An if statement executes the 4-space indented block beneath the colon (:) only when its condition is True. Trace the block code to see it in action.",
+      "hint_ko": "조건식 score >= 80이 참이므로 if 블록 안쪽에 끼워진 print(\"Pass\")가 실행됩니다.",
+      "hint_en": "Because score >= 80 is True, the print(\"Pass\") statement nested inside the if block runs.",
       "targetCode": "score = 90\nif score >= 80:\n    print(\"Pass\")",
       "testCases": [
         {
@@ -59,10 +59,10 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "score에 60을 저장하고 if score >= 80: 안에는 \"Pass\", 바깥 아래에는 \"Done\"을 넣어 출력해보세요.",
-      "prompt_en": "Set score = 60, put \"Pass\" inside if score >= 80:, and print \"Done\" outside below it.",
-      "hint_ko": "조건식이 거짓이면 들여쓰기된 안쪽 줄만 건너뛰고, 들여쓰기가 없는 바깥쪽 아래 줄은 조건과 상관없이 항상 실행됩니다.",
-      "hint_en": "When the condition is false, the indented line inside is skipped, while the unindented line outside always runs.",
+      "prompt_ko": "if 조건식이 거짓(False)이면 들여쓰기된 내부 블록은 건너뛰고, 들여쓰기가 없는 바깥쪽 코드는 조건과 상관없이 실행됩니다. 블록 코드를 따라 쳐보세요.",
+      "prompt_en": "When the if condition is False, the indented inner block is skipped while unindented outer statements always run. Trace the block code.",
+      "hint_ko": "블록 안쪽에 끼워진 실행문과 블록 바깥 아래에 연결된 실행문의 실행 차이를 비교해보세요.",
+      "hint_en": "Compare the statement nested inside the if block with the unindented statement placed below it.",
       "targetCode": "score = 60\nif score >= 80:\n    print(\"Pass\")\nprint(\"Done\")",
       "testCases": [
         {
@@ -95,10 +95,10 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "msg에 \"Notice\"를 저장하고, if msg: 조건으로 문자열이 비어 있지 않을 때 msg를 출력해보세요.",
-      "prompt_en": "Store \"Notice\" in msg and use if msg: to print msg when it is non-empty.",
-      "hint_ko": "비교 연산자 없이 조건 자리에 변수를 바로 놓으면 파이썬이 값의 비어 있음 여부를 바탕으로 참·거짓을 자동 판별합니다.",
-      "hint_en": "Placing a variable directly in the condition lets Python automatically check whether its value is non-empty (truthy).",
+      "prompt_ko": "if 조건 자리에 변수를 바로 쓰면 비어 있지 않은 문자열이나 0이 아닌 숫자를 자동으로 참(Truthy)으로 판별합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Placing a variable directly in an if condition automatically evaluates non-empty strings and non-zero numbers as Truthy. Trace the block code.",
+      "hint_ko": "빈 문자열(\"\")은 거짓(Falsy), 글자가 한 글자라도 들어 있는 문자열은 참(Truthy)으로 취급됩니다.",
+      "hint_en": "An empty string (\"\") is Falsy, whereas any string with at least one character is Truthy.",
       "targetCode": "msg = \"Notice\"\nif msg:\n    print(msg)",
       "testCases": [
         {
@@ -136,10 +136,10 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "price에 6000을 저장하고 5000 이상이면 price -= 1000과 \"Sale\" 출력을 실행한 뒤 바깥에서 price를 출력해보세요.",
-      "prompt_en": "Set price = 6000; if price >= 5000, subtract 1000 and print \"Sale\", then print price outside.",
-      "hint_ko": "조건문 아래에서 같은 간격(4칸)으로 들여쓰기된 여러 줄은 하나의 묶음이 되어 조건이 참일 때 함께 실행됩니다.",
-      "hint_en": "Multiple lines indented at the same 4-space level form a single block and all run together when the condition holds.",
+      "prompt_ko": "if 블록 안쪽에 같은 간격(4칸)으로 들여쓰기된 여러 줄은 하나의 묶음이 되어 조건이 참일 때 순서대로 모두 실행됩니다. 블록 코드를 따라 입력해보세요.",
+      "prompt_en": "Multiple statements indented at the same 4-space level inside an if block form a single group and all run in order when the condition is True. Trace the block code.",
+      "hint_ko": "할인 차감(price -= 1000)과 \"Sale\" 출력이 if 블록 안에서 함께 실행된 뒤, 바깥쪽 print(price)로 이어집니다.",
+      "hint_en": "Both the discount (price -= 1000) and \"Sale\" print run inside the if block before the outer print(price) executes.",
       "targetCode": "price = 6000\nif price >= 5000:\n    price -= 1000\n    print(\"Sale\")\nprint(price)",
       "expectedVariables": {
         "price": 5000
@@ -180,10 +180,10 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "정수 dmg와 crit를 입력받아 if crit:가 참이면 dmg *= 2로 두 배로 만든 뒤 dmg를 출력해보세요. (터미널 입력: 첫째 줄 30, 둘째 줄 1)",
-      "prompt_en": "Read integers dmg and crit; if crit is truthy, double dmg with *= 2, then print dmg. (Terminal input: line 1 30, line 2 1)",
-      "hint_ko": "두 번째 입력 변수가 0이 아닌 숫자일 때만 조건문 안쪽의 두 배 곱셈 갱신이 수행되고, 마지막 출력은 조건문 바깥에서 실행됩니다.",
-      "hint_en": "Only a non-zero second input triggers the indented doubling step, while the final print runs outside regardless.",
+      "prompt_ko": "정수형 변수도 0이면 거짓(Falsy), 0이 아니면 참(Truthy)으로 동작하므로 if crit:처럼 조건식에 바로 사용할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 30, 둘째 줄 1)",
+      "prompt_en": "Integers are Falsy when 0 and Truthy when non-zero, so you can use if crit: directly as a condition. Trace the block code. (Terminal input: line 1 30, line 2 1)",
+      "hint_ko": "crit가 0이 아닐 때만 안쪽의 복합 대입 연산(dmg *= 2)이 실행되고, 마지막 출력문은 항상 실행됩니다.",
+      "hint_en": "Only a non-zero crit triggers the indented doubling (dmg *= 2), while the final print runs regardless.",
       "targetCode": "dmg = int(input())\ncrit = int(input())\nif crit:\n    dmg *= 2\nprint(dmg)",
       "testCases": [
         {

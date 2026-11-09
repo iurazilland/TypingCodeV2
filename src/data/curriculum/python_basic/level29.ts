@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "1부터 6까지 반복하다가 i == 4가 되면 break로 즉시 멈추고 1부터 3까지만 출력해보세요.",
-      "prompt_en": "Loop from 1 to 6, break immediately when i == 4, and print only 1 through 3.",
-      "hint_ko": "출력 블록보다 위쪽에 종료 조건 블록을 먼저 배치해야 목표 숫자에 도달한 즉시 출력 없이 멈출 수 있습니다.",
-      "hint_en": "Place the conditional exit block above the output block so the loop stops before printing 4.",
+      "prompt_ko": "break 키워드는 반복문이 아직 남아 있더라도 그 즉시 반복문 전체를 종료하고 바깥으로 탈출합니다. 블록의 코드를 따라 입력해 동작을 확인해보세요.",
+      "prompt_en": "The break keyword immediately terminates the entire loop and exits, even if iterations remain. Trace the block code to see how it works.",
+      "hint_ko": "print(i)보다 위에서 if i == 4: 조건으로 break를 실행하므로 4부터는 출력되지 않고 멈춥니다.",
+      "hint_en": "Because break runs inside if i == 4: before print(i), the loop stops before printing 4.",
       "targetCode": "for i in range(1, 7):\n    if i == 4:\n        break\n    print(i)",
       "testCases": [
         {
@@ -75,10 +75,10 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "1부터 5까지 반복하며 i == 3일 때만 continue로 건너뛰어 1, 2, 4, 5를 출력해보세요.",
-      "prompt_en": "From 1 to 5, use continue when i == 3 to skip 3 and print 1, 2, 4, 5.",
-      "hint_ko": "출력문보다 먼저 조건을 검사해 건너뛰기 블록을 실행하면 해당 숫자만 건너뛰고 다음 번호 반복으로 넘어갑니다.",
-      "hint_en": "Check the condition before printing so the skip block jumps straight to the next iteration when matched.",
+      "prompt_ko": "continue 키워드는 현재 차례의 아래쪽 코드를 건너뛰고 곧바로 다음 반복 차례로 넘어갑니다. 특정 값만 건너뛰는 블록 코드를 따라 쳐보세요.",
+      "prompt_en": "The continue keyword skips the remaining statements in the current iteration and jumps straight to the next turn. Trace the block code.",
+      "hint_ko": "i가 3일 때만 continue를 만나 print(i)를 건너뛰고, 4와 5는 정상적으로 이어서 출력됩니다.",
+      "hint_en": "When i is 3, continue skips print(i) for that turn, and the loop continues with 4 and 5.",
       "targetCode": "for i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)",
       "testCases": [
         {
@@ -121,10 +121,10 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "while True 무한 반복에서 문자열을 입력받아 \"q\"이면 break로 종료하고, 아니면 \"Run:\" + cmd를 출력해보세요. (터미널 입력: go, test, q 한 줄씩)",
-      "prompt_en": "In a while True loop, read cmd and break on \"q\"; otherwise print \"Run:\" + cmd. (Terminal input: go, test, q line by line)",
-      "hint_ko": "무한 반복문 안에서 입력을 먼저 받은 뒤 종료 문자와 같으면 즉시 탈출하고, 아닐 때만 접두사를 붙여 출력하세요.",
-      "hint_en": "Read input at the top of the endless loop, exit immediately on the sentinel letter, and print otherwise.",
+      "prompt_ko": "while True:는 조건이 항상 참인 무한 루프를 만들며, 루프 안에서 종료 신호(\"q\")가 입력되었을 때 if와 break로 탈출합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: go, test, q 한 줄씩)",
+      "prompt_en": "while True: creates an infinite loop that keeps running until a sentinel input (\"q\") triggers an if check with break. Trace the block code. (Terminal input: go, test, q line by line)",
+      "hint_ko": "\"q\"가 입력되면 print()에 도달하기 전에 break가 실행되어 루프가 즉시 종료됩니다.",
+      "hint_en": "When \"q\" is entered, break runs before print(), exiting the loop immediately.",
       "targetCode": "while True:\n    cmd = input()\n    if cmd == \"q\":\n        break\n    print(\"Run:\" + cmd)",
       "testCases": [
         {
@@ -177,10 +177,10 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "while True 반복에서 0이 입력되면 break로 멈추고, 음수(x < 0)는 continue로 건너뛰어 양수만의 합을 출력해보세요. (터미널 입력: 5, -3, 7, 0 한 줄씩)",
-      "prompt_en": "In a while True loop, break on 0, skip negatives with continue, and print the sum of positives. (Terminal input: 5, -3, 7, 0 line by line)",
-      "hint_ko": "입력을 받은 뒤 0이면 전체 반복을 종료하고, 음수면 이번 차례만 건너뛰어 양수만 누적 합계에 더해지게 배치하세요.",
-      "hint_en": "After reading each integer, test for zero to exit the loop and test for negatives to skip before adding to total.",
+      "prompt_ko": "while True: 루프 안에서 break와 continue를 함께 사용하면 특정 값(0)에서는 반복을 종료하고 원치 않는 값(음수)은 건너뛰며 양수만 합산할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 5, -3, 7, 0 한 줄씩)",
+      "prompt_en": "Combining break and continue inside while True: lets you exit on a sentinel value (0) and skip unwanted values (negatives) to sum only positives. Trace the block code. (Terminal input: 5, -3, 7, 0 line by line)",
+      "hint_ko": "x == 0이면 루프를 탈출하고, x < 0이면 total += x를 건너뛰어 다음 입력을 받으러 올라갑니다.",
+      "hint_en": "x == 0 exits the loop, while x < 0 skips total += x and jumps to the next input.",
       "targetCode": "total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    if x < 0:\n        continue\n    total += x\nprint(total)",
       "testCases": [
         {
@@ -233,10 +233,10 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "1부터 차례로 더하다가 total >= limit가 되는 순간 break로 멈추고, res = str(total)을 사용해 \"Sum:\" + res를 출력해보세요. (터미널 입력: 10)",
-      "prompt_en": "Add 1, 2, 3... in a while True loop, break when total >= limit, store res = str(total), and print \"Sum:\" + res. (Terminal input: 10)",
-      "hint_ko": "현재 숫자 i를 먼저 더한 직후 기준값 도달 여부를 검사해 탈출하고, 반복문 밖에서 res = str(total)로 변환해 출력하세요.",
-      "hint_en": "Add i to total first, break when total >= limit, then store str(total) in res and print outside.",
+      "prompt_ko": "while True: 안에서 값을 누적한 직후 if total >= limit: 조건으로 break를 걸면 목표치에 도달한 바로 그 순간에 반복을 멈출 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 10)",
+      "prompt_en": "Checking if total >= limit: with break right after accumulating inside while True: stops the loop the exact moment the threshold is reached. Trace the block code. (Terminal input: 10)",
+      "hint_ko": "break가 실행되면 아래쪽 i += 1을 거치지 않고 곧바로 루프 바깥의 res = str(total) 줄로 이동합니다.",
+      "hint_en": "When break executes, it skips i += 1 and jumps directly to res = str(total) outside the loop.",
       "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile True:\n    total += i\n    if total >= limit:\n        break\n    i += 1\nres = str(total)\nprint(\"Sum:\" + res)",
       "testCases": [
         {

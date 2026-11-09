@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "딕셔너리 menu = {\"apple\": 1000, \"milk\": 1500}을 만들고 menu[\"apple\"]과 len(menu)를 출력해보세요.",
-      "prompt_en": "Create menu = {\"apple\": 1000, \"milk\": 1500} and print menu[\"apple\"] and len(menu).",
-      "hint_ko": "중괄호 안에 키: 값 쌍으로 사전을 만들고, 숫자 인덱스 대신 대괄호 안에 찾을 키 문자열을 넣어 값을 꺼내세요.",
-      "hint_en": "Define key: value pairs inside curly braces, then look up a value by placing its key inside square brackets.",
+      "prompt_ko": "딕셔너리(dict)는 중괄호({}) 안에 키(Key): 값(Value) 쌍을 묶어 저장하며, 대괄호 안에 키(딕셔너리[키])를 넣어 대응하는 값을 조회합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A dictionary stores key: value pairs inside curly braces ({}), and you look up a value by placing its key inside square brackets (dict[key]). Follow the blocks and type the code.",
+      "hint_ko": "딕셔너리에 len()을 사용하면 저장된 키-값 쌍(항목)의 전체 개수를 반환합니다.",
+      "hint_en": "Passing a dictionary to len() returns the total number of key-value pairs it contains.",
       "targetCode": "menu = {\"apple\": 1000, \"milk\": 1500}\nprint(menu[\"apple\"], len(menu))",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "빈 딕셔너리 bag = {}을 만든 뒤 \"coin\"에 50, \"gem\"에 3을 추가하고 bag과 len(bag)을 출력해보세요.",
-      "prompt_en": "Create an empty dict bag = {}, add \"coin\": 50 and \"gem\": 3, then print bag and len(bag).",
-      "hint_ko": "빈 중괄호로 빈 사전을 만든 뒤, 대괄호 안에 새 키를 적고 등호로 값을 대입하면 항목이 하나씩 등록됩니다.",
-      "hint_en": "Start with empty curly braces for an empty dictionary, then assign values to bracketed keys to insert new entries.",
+      "prompt_ko": "빈 중괄호({})로 빈 딕셔너리를 만든 뒤, 딕셔너리[새_키] = 값 형태로 대입하면 새로운 키-값 항목이 추가됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "After creating an empty dictionary with {}, assigning dict[new_key] = value inserts a new key-value entry. Follow the blocks and type the code.",
+      "hint_ko": "아직 없는 키를 대괄호에 적어 값을 대입하면 딕셔너리에 해당 키와 값이 새로 등록됩니다.",
+      "hint_en": "Assigning to a key that does not yet exist in the dictionary adds that key-value pair.",
       "targetCode": "bag = {}\nbag[\"coin\"] = 50\nbag[\"gem\"] = 3\nprint(bag, len(bag))",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "hero = {\"hp\": 100, \"mp\": 40}에서 복합 대입으로 \"hp\"를 25 늘린 뒤 지정 형식으로 출력해보세요. (출력 예: HP:125)",
-      "prompt_en": "Increase \"hp\" by 25 on hero = {\"hp\": 100, \"mp\": 40} and print it formatted as HP:125.",
-      "hint_ko": "대괄호 키 조회 식에 복합 덧셈 연산자를 써서 기존 수치를 올린 뒤, 갱신된 값을 꺼내 포맷 문자열로 출력하세요.",
-      "hint_en": "Apply compound addition directly to the bracketed key lookup, then format and print the updated value.",
+      "prompt_ko": "이미 존재하는 키에 대입(=)하거나 복합 대입 연산자(+=, -=)를 사용하면 해당 키에 연결된 기존 값을 직접 수정할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Using = or a compound assignment like += on an existing dictionary key updates its stored value in place. Follow the blocks and type the code.",
+      "hint_ko": "hero[\"hp\"] += 25는 \"hp\" 키의 기존 값에 25를 더한 결과로 값을 덮어씁니다.",
+      "hint_en": "hero[\"hp\"] += 25 adds 25 to the current value of \"hp\" and stores the updated number back under that key.",
       "targetCode": "hero = {\"hp\": 100, \"mp\": 40}\nhero[\"hp\"] += 25\nhp = hero[\"hp\"]\nprint(f\"HP:{hp}\")",
       "testCases": [
         {
@@ -136,10 +136,10 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "rates = {\"A\": 100, \"B\": 80, \"C\": 60}에서 입력받은 등급(grade)의 점수를 조회해 출력해보세요. (출력 예: A=100) (터미널 입력: A)",
-      "prompt_en": "Read grade from input(), look up its score in rates, and print it formatted as A=100. (Terminal input: A)",
-      "hint_ko": "입력받은 문자열 변수를 따옴표 없이 대괄호 안에 그대로 넣으면 그 변수에 담긴 글자를 키로 삼아 점수를 찾아옵니다.",
-      "hint_en": "Put the input variable unquoted inside square brackets to look up the matching key dynamically, then format both.",
+      "prompt_ko": "딕셔너리를 조회할 때 대괄호 안에 문자열 리터럴 대신 입력받은 변수를 넣으면, 변수에 담긴 문자열을 키로 삼아 동적으로 값을 찾아옵니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: A)",
+      "prompt_en": "Placing a variable inside square brackets (rates[grade]) dynamically looks up the dictionary value matching the string stored in that variable. Follow the blocks and type the code. (Terminal input: A)",
+      "hint_ko": "변수 이름을 따옴표 없이 대괄호 안에 넣어야 변수가 가리키는 입력 문자열로 키를 조회합니다.",
+      "hint_en": "Put the variable name unquoted inside the brackets so Python uses its string value as the lookup key.",
       "targetCode": "rates = {\"A\": 100, \"B\": 80, \"C\": 60}\ngrade = input()\nscore = rates[grade]\nprint(f\"{grade}={score}\")",
       "testCases": [
         {
@@ -177,10 +177,10 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "while문으로 두 줄에 걸쳐 상품명과 가격을 입력받아 store에 저장한 뒤 \"pen\"과 \"note\" 가격 합을 출력해보세요. (터미널 입력: 첫째 줄 pen 500, 둘째 줄 note 1200)",
-      "prompt_en": "Use a while loop to read 2 item-price lines into store, then print store[\"pen\"] + store[\"note\"]. (Terminal input: line 1 pen 500, line 2 note 1200)",
-      "hint_ko": "공백으로 나눈 상품명과 가격 문자열 중 가격을 정수로 변환해 사전의 키에 저장한 뒤, 두 상품 키의 값을 더해 출력하세요.",
-      "hint_en": "Unpack each line into name and price, store the integer-converted price under that key, and print the sum of the two keys.",
+      "prompt_ko": "반복문 안에서 input().split()으로 키와 값을 분리해 입력받고, store[k] = int(v)로 딕셔너리에 차곡차곡 등록해 활용할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 pen 500, 둘째 줄 note 1200)",
+      "prompt_en": "Inside a loop, you can unpack each input line with input().split() and store the integer-converted value under its key with store[k] = int(v). Follow the blocks and type the code. (Terminal input: line 1 pen 500, line 2 note 1200)",
+      "hint_ko": "공백으로 분리된 두 문자열 중 가격은 산술 덧셈을 위해 int()로 변환해 딕셔너리 값으로 저장합니다.",
+      "hint_en": "Convert the second unpacked string with int() before storing it so you can add the prices later.",
       "targetCode": "store = {}\ni = 0\nwhile i < 2:\n    k, v = input().split()\n    store[k] = int(v)\n    i += 1\nprint(store[\"pen\"] + store[\"note\"])",
       "testCases": [
         {

@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "1부터 9까지 반복하며 3의 배수(i % 3 == 0)만 골라 출력해보세요.",
-      "prompt_en": "Loop from 1 to 9 and print only multiples of 3 (i % 3 == 0).",
-      "hint_ko": "반복문 안에 조건 블록을 중첩하고, 3으로 나눈 나머지가 0일 때만 한 단계 더 들여써서 출력 블록을 실행하세요.",
-      "hint_en": "Nest the remainder check inside the loop and indent the print block inside that condition.",
+      "prompt_ko": "for 반복문 안에 단일 if 조건문을 중첩하면 조건식이 참인 값(3의 배수)만 골라내고 나머지는 건너뛰는 필터링을 할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Nesting a single if statement inside a for loop filters the sequence so only values matching the condition (multiples of 3) are printed. Trace the block code.",
+      "hint_ko": "i % 3 == 0이 참일 때만 안쪽 print(i)가 실행되고, 거짓이면 아무 출력 없이 다음 숫자로 넘어갑니다.",
+      "hint_en": "Only when i % 3 == 0 is True does the inner print(i) run; otherwise the loop moves on to the next number.",
       "targetCode": "for i in range(1, 10):\n    if i % 3 == 0:\n        print(i)",
       "testCases": [
         {
@@ -72,10 +72,10 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 1부터 n까지 n의 약수가 총 몇 개인지 cnt에 세어 출력해보세요. (터미널 입력: 6)",
-      "prompt_en": "Read integer n, count how many divisors n has in 1..n, and print cnt. (Terminal input: 6)",
-      "hint_ko": "나머지가 0인 약수 조건 안쪽에서만 개수 변수를 1씩 늘리고, 반복문을 빠져나온 뒤 최종 개수를 출력하세요.",
-      "hint_en": "Increment the counter only inside the zero-remainder branch, then print the total count after the loop.",
+      "prompt_ko": "1부터 n까지 반복하며 n % i == 0이 참일 때만 카운터 변수(cnt += 1)를 증가시키면 정수 n의 약수 개수를 구할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 6)",
+      "prompt_en": "Incrementing a counter (cnt += 1) only when n % i == 0 holds True across 1..n counts all divisors of n. Trace the block code. (Terminal input: 6)",
+      "hint_ko": "cnt += 1은 if 블록 안쪽에 들여쓰기하고, 최종 개수 출력 print(cnt)는 반복문 바깥에 배치합니다.",
+      "hint_en": "Indent cnt += 1 inside the if block, and place the final print(cnt) outside after the loop finishes.",
       "targetCode": "n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        cnt += 1\nprint(cnt)",
       "testCases": [
         {
@@ -128,10 +128,10 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "1부터 입력받은 n까지 중 2의 배수이면서 동시에 3의 배수인 공배수만 출력해보세요. (터미널 입력: 15)",
-      "prompt_en": "Print numbers from 1 through n that are divisible by both 2 and 3. (Terminal input: 15)",
-      "hint_ko": "2로 나누어떨어지는 조건과 3으로 나누어떨어지는 조건을 동시 만족 논리 연산자로 묶어 공배수만 출력하세요.",
-      "hint_en": "Connect both remainder-zero checks with a simultaneous-truth logical operator inside the loop.",
+      "prompt_ko": "반복문 안의 if 조건식에서 두 나머지 비교를 and 연산자로 묶으면 두 수로 동시에 나누어떨어지는 공배수만 걸러낼 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 15)",
+      "prompt_en": "Joining two remainder checks with and inside a loop's if condition filters for common multiples divisible by both numbers. Trace the block code. (Terminal input: 15)",
+      "hint_ko": "2의 배수 조건(i % 2 == 0)과 3의 배수 조건(i % 3 == 0)을 모두 만족하는 6의 배수만 출력됩니다.",
+      "hint_en": "Only multiples of 6 that satisfy both i % 2 == 0 and i % 3 == 0 are printed.",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 3 == 0:\n        print(i)",
       "testCases": [
         {
@@ -184,10 +184,10 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "1부터 n까지 6의 배수면 \"AB\", 아니고 2의 배수면 \"A\", 그 외에는 숫자 i를 그대로 출력해보세요. (터미널 입력: 6)",
-      "prompt_en": "From 1 to n, print \"AB\" for multiples of 6, else \"A\" for multiples of 2, else i. (Terminal input: 6)",
-      "hint_ko": "6의 배수는 2의 배수에도 포함되므로 더 좁은 조건인 6의 배수를 가장 먼저 검사한 뒤 차례로 분기하세요.",
-      "hint_en": "Because multiples of 6 are also multiples of 2, test the narrower multiple-of-6 condition first before the others.",
+      "prompt_ko": "반복문 안에 if - elif - else 다중 분기를 넣으면 매 반복마다 숫자를 여러 기준으로 분류해 서로 다른 값을 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 6)",
+      "prompt_en": "Nesting an if - elif - else chain inside a loop classifies each number across multiple rules on every iteration. Trace the block code. (Terminal input: 6)",
+      "hint_ko": "6의 배수는 2의 배수이기도 하므로 범위가 더 좁은 i % 6 == 0을 맨 위 if에서 먼저 검사합니다.",
+      "hint_en": "Because multiples of 6 are also multiples of 2, check the more specific condition i % 6 == 0 first.",
       "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 6 == 0:\n        print(\"AB\")\n    elif i % 2 == 0:\n        print(\"A\")\n    else:\n        print(i)",
       "testCases": [
         {
@@ -240,10 +240,10 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "초기 체력 hp = 50에서 n번 정수를 입력받아 양수면 hp += d, 0 이하면 hp -= 10을 적용한 뒤 res = str(hp)를 사용해 \"HP:\" + res를 출력해보세요. (터미널 입력: 3, 20, 0, 15 한 줄씩)",
-      "prompt_en": "Starting at hp = 50, read n integers: if d > 0 add d to hp, else subtract 10, then store res = str(hp) and print \"HP:\" + res. (Terminal input: 3, 20, 0, 15 line by line)",
-      "hint_ko": "반복문 안에서 입력값의 부호에 따라 체력을 더하거나 빼고, 모든 반복이 끝난 뒤 res 변수에 문자열 변환 값을 저장해 접두사와 이어 출력하세요.",
-      "hint_en": "Branch on each input's sign inside the loop to adjust hp, then store str(hp) in res for the final output outside.",
+      "prompt_ko": "반복문 안의 if - else로 입력값의 부호에 따라 누적 덧셈(+=)과 뺄셈(-=)을 나누어 수행하면 상태 값의 변화를 시뮬레이션할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 3, 20, 0, 15 한 줄씩)",
+      "prompt_en": "Branching between += and -= inside a loop with if - else lets you simulate state changes across multiple inputs. Trace the block code. (Terminal input: 3, 20, 0, 15 line by line)",
+      "hint_ko": "반복이 모두 끝난 뒤 바깥에서 최종 체력 hp를 str(hp)로 변환해 \"HP:\" 뒤에 이어 붙여 출력합니다.",
+      "hint_en": "After all iterations complete, convert the final hp with str(hp) outside the loop and concatenate it onto \"HP:\".",
       "targetCode": "hp = 50\nn = int(input())\nfor i in range(n):\n    d = int(input())\n    if d > 0:\n        hp += d\n    else:\n        hp -= 10\nres = str(hp)\nprint(\"HP:\" + res)",
       "testCases": [
         {

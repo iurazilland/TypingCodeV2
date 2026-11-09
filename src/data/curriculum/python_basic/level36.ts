@@ -20,10 +20,10 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: "raw에 \"  Python  \"을 저장하고 .strip()으로 양끝 공백을 제거한 clean을 대괄호 안에 출력해보세요. (출력 예: [Python])",
-      prompt_en: "Store \"  Python  \" in raw, trim outer spaces with .strip() into clean, and print f\"[{clean}]\".",
-      hint_ko: "양끝에 붙은 불필요한 공백 껍질을 '벗겨내다'라는 뜻의 메서드로 다듬은 새 문자열을 변수에 담아 대괄호 포맷으로 출력하세요.",
-      hint_en: "Trim outer whitespace from both ends into the variable, then print it wrapped in square brackets using a formatted string.",
+      prompt_ko: "문자열의 .strip() 메서드는 양쪽 끝에 붙은 불필요한 공백이나 줄바꿈을 깔끔하게 제거한 새 문자열을 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "The .strip() string method removes leading and trailing whitespace and returns the cleaned string. Follow the blocks and type the code.",
+      hint_ko: "문자열 변수 뒤에 .strip()을 호출하면 원본 양끝의 공백이 제거된 결과가 새 변수에 저장됩니다.",
+      hint_en: "Calling .strip() on a string variable stores the trimmed text into the new variable for formatted printing.",
       targetCode: "raw = \"  Python  \"\nclean = raw.strip()\nprint(f\"[{clean}]\")",
       testCases: [
         {
@@ -61,10 +61,10 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: "date에 \"2026-11-01\"을 저장하고 .replace()로 모든 \"-\"를 \"/\"로 바꾼 결과를 출력해보세요.",
-      prompt_en: "Store \"2026-11-01\" in date and replace every \"-\" with \"/\" using .replace().",
-      hint_ko: "'대체하다·바꿔 끼우다'라는 뜻의 메서드 괄호 안에 (찾을 옛 글자, 바꿀 새 글자) 순서로 인자를 넣어 출력하세요.",
-      hint_en: "Pass the old character first and the new replacement character second to the string substitution method.",
+      prompt_ko: ".replace(찾을문자열, 바꿀문자열) 메서드는 문자열 안의 특정 부분 문자열을 모두 찾아 새 문자열로 치환합니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "The .replace(old, new) method substitutes every occurrence of a substring with a new substring. Follow the blocks and type the code.",
+      hint_ko: ".replace()의 첫 번째 인자에는 바꿀 대상 문자를, 두 번째 인자에는 새로 넣을 문자를 순서대로 전달합니다.",
+      hint_en: "Pass the target substring to find as the first argument and the replacement substring as the second argument.",
       targetCode: "date = \"2026-11-01\"\nprint(date.replace(\"-\", \"/\"))",
       testCases: [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: "입력값 raw의 양끝 공백을 지우고 쉼표(\",\")를 제거한 clean을 정수로 바꿔 100을 더해 출력해보세요. (터미널 입력:  1,900 )",
-      prompt_en: "Trim raw, remove commas with .replace(\",\", \"\"), convert clean to int, and print int(clean) + 100. (Terminal input:  1,900 )",
-      hint_ko: "문자열 메서드는 점으로 연달아 이어 붙일 수 있습니다. 양끝 공백 제거와 쉼표 빈 문자열 치환을 차례로 거친 뒤 정수로 변환해 더하세요.",
-      hint_en: "Chain trimming and comma removal back-to-back with dots, then convert the cleaned digits to an integer before adding 100.",
+      prompt_ko: ".strip()과 .replace(\",\", \"\")를 점(.)으로 연달아 연결(메서드 체이닝)하면 양끝 공백과 천 단위 쉼표를 한 번에 제거해 int()로 변환할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력:  1,900 )",
+      prompt_en: "Chaining .strip() and .replace(\",\", \"\") removes outer spaces and commas in one line so the string can be converted with int(). Follow the blocks and type the code. (Terminal input:  1,900 )",
+      hint_ko: "문자열 메서드가 새 문자열을 반환하므로 그 뒤에 다시 점(.)을 찍어 다음 메서드를 이어 호출할 수 있습니다.",
+      hint_en: "Because each string method returns a new string, you can chain another method call right after it with a dot.",
       targetCode: "raw = input()\nclean = raw.strip().replace(\",\", \"\")\nprint(int(clean) + 100)",
       testCases: [
         {
@@ -148,10 +148,10 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: "\"시:분:초\" 문자열 t를 \":\" 기준으로 h, m, s에 분리하고 총 초(sec)를 계산해 출력해보세요. (터미널 입력: 01:02:05)",
-      prompt_en: "Split \"HH:MM:SS\" string t on \":\" into h, m, s and print total seconds as f\"{sec}s\". (Terminal input: 01:02:05)",
-      hint_ko: "콜론 기호를 기준으로 시·분·초 세 문자열 변수에 나누어 담은 뒤, 각각 정수로 변환해 1시간(3600초)과 1분(60초) 단위를 곱해 합산하세요.",
-      hint_en: "Unpack the colon-separated string into three variables, convert each to an integer, and sum hours*3600, minutes*60, and seconds.",
+      prompt_ko: ".split(\":\")처럼 구분자를 지정하면 해당 기호를 기준으로 문자열을 쪼개 여러 변수에 동시에 나누어 대입(다중 할당)할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 01:02:05)",
+      prompt_en: "Passing a delimiter like .split(\":\") divides a string at that character so you can unpack the parts into multiple variables at once. Follow the blocks and type the code. (Terminal input: 01:02:05)",
+      hint_ko: ".split(\":\")으로 분리된 각 조각은 아직 문자열이므로 산술 계산을 하기 전에 각각 int()로 변환합니다.",
+      hint_en: "Each piece unpacked from .split(\":\") is still a string, so wrap each one in int() before doing arithmetic.",
       targetCode: "t = input().strip()\nh, m, s = t.split(\":\")\nsec = int(h) * 3600 + int(m) * 60 + int(s)\nprint(f\"{sec}s\")",
       testCases: [
         {
@@ -194,10 +194,10 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: "while True: 안에서 양끝 공백을 제거한 cmd가 \"quit\"이면 종료하고, 이전까지의 입력 횟수를 출력해보세요. (출력 예: Done:2) (터미널 입력:  run , jump,  quit  한 줄씩)",
-      prompt_en: "Read trimmed lines in while True:, break on \"quit\", and print the count of prior commands as f\"Done:{cnt}\". (Terminal input:  run , jump,  quit  line by line)",
-      hint_ko: "매 줄 입력을 받을 때마다 양끝 공백부터 제거해 저장하면, 앞뒤에 공백이 섞인 종료 명령어도 정확히 비교해 탈출할 수 있습니다.",
-      hint_en: "Trim outer whitespace as you read each line so padded exit commands match cleanly before incrementing the counter.",
+      prompt_ko: "while True: 반복문 안에서 input().strip()으로 입력값의 양끝 공백을 즉시 제거하면 공백이 섞인 종료 명령어도 정확히 비교해 break로 탈출할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력:  run , jump,  quit  한 줄씩)",
+      prompt_en: "Using input().strip() inside a while True: loop trims each input line immediately so padded exit commands match cleanly for break. Follow the blocks and type the code. (Terminal input:  run , jump,  quit  line by line)",
+      hint_ko: "입력 직후 .strip()으로 정제해 두면 조건문에서 불필요한 공백 때문에 비교가 실패하는 일을 막을 수 있습니다.",
+      hint_en: "Cleaning input with .strip() right away prevents extra spaces from breaking your equality check.",
       targetCode: "cnt = 0\nwhile True:\n    cmd = input().strip()\n    if cmd == \"quit\":\n        break\n    cnt += 1\nprint(f\"Done:{cnt}\")",
       testCases: [
         {

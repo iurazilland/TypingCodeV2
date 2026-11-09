@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "변수 word에 \"python\"을 저장하고 대문자로 변환한 결과를 res에 담아 출력해보세요. (출력 예: PYTHON)",
-      "prompt_en": "Store \"python\" in word, convert it to uppercase in res, and print res (e.g., PYTHON).",
-      "hint_ko": "인쇄소 활자판의 '위쪽 칸'에서 대문자라는 뜻이 유래했습니다. '더 위쪽의'를 뜻하는 다섯 글자 메서드를 문자열 뒤에 호출해보세요.",
-      "hint_en": "Named after the top printer's tray holding capital letters, call the 5-letter method meaning 'higher in position' on the string.",
+      "prompt_ko": "문자열의 .upper() 메서드는 모든 알파벳을 대문자로 변환한 새로운 문자열을 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The string .upper() method returns a new string with all alphabetic characters converted to uppercase. Trace the block code.",
+      "hint_ko": "원본 문자열은 그대로 유지되므로 .upper()의 반환값을 변수에 저장해 출력합니다.",
+      "hint_en": "Because strings are immutable, store the new uppercase string returned by .upper() into a variable before printing.",
       "targetCode": "word = \"python\"\nres = word.upper()\nprint(res)",
       "testCases": [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "변수 tag에 \"HELLO\"를 저장하고 모두 소문자로 변환한 결과를 small에 담아 출력해보세요. (출력 예: hello)",
-      "prompt_en": "Store \"HELLO\" in tag, convert it to lowercase in small, and print small (e.g., hello).",
-      "hint_ko": "소문자 활자를 보관하던 '아래쪽 칸'을 뜻하는 다섯 글자 메서드를 문자열 뒤에 붙이면 모든 알파벳을 소문자로 바꾼 새 문자열을 얻습니다.",
-      "hint_en": "Call the 5-letter string method meaning 'positioned further down' (from the bottom printer's tray for small letters) to get a small-letter copy.",
+      "prompt_ko": "문자열의 .lower() 메서드는 문자열 내의 모든 대문자 알파벳을 소문자로 변환한 새 문자열을 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The string .lower() method returns a new string with all uppercase letters converted to lowercase. Trace the block code.",
+      "hint_ko": "대소문자가 섞인 입력값을 비교하기 전에 .lower()로 소문자 통일을 해 두면 일관되게 처리할 수 있습니다.",
+      "hint_en": "Normalizing text with .lower() is a common way to perform case-insensitive comparisons.",
       "targetCode": "tag = \"HELLO\"\nsmall = tag.lower()\nprint(small)",
       "testCases": [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "리스트 tags([\"py\", \"web\", \"ai\"])의 요소들을 하이픈(\"-\")으로 이어 붙인 문자열을 line에 저장해 출력해보세요. (출력 예: py-web-ai)",
-      "prompt_en": "Join tags ([\"py\", \"web\", \"ai\"]) with \"-\" into line and print it (e.g., py-web-ai).",
-      "hint_ko": "구분자 문자열을 주체로 삼아 '연결하다·합류하다'를 뜻하는 네 글자 메서드를 호출하고 괄호 안에 문자열 리스트를 넘기면 하나로 이어 붙일 수 있습니다.",
-      "hint_en": "On the separator string itself, call the 4-letter method meaning 'connect or unite together' and pass the list of strings as its argument.",
+      "prompt_ko": "구분자문자열.join(문자열리스트) 메서드는 리스트의 각 문자열 요소 사이에 구분자를 끼워 넣어 하나로 합친 문자열을 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Calling separator.join(string_list) concatenates all strings in the list into a single string with the separator placed between each item. Trace the block code.",
+      "hint_ko": ".join()은 리스트가 아니라 사이에 끼워 넣을 구분자 문자열(\"-\")에서 호출하고, 괄호 안에 리스트를 인자로 넘깁니다.",
+      "hint_en": "Invoke .join() on the separator string (\"-\") itself and pass the list of strings inside the parentheses.",
       "targetCode": "tags = [\"py\", \"web\", \"ai\"]\nline = \"-\".join(tags)\nprint(line)",
       "testCases": [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력을 소문자로 바꾼 뒤 공백 단위로 나누고, 밑줄(\"_\")로 결합해 slug에 담아 출력해보세요. (예: Py Code -> py_code) (터미널 입력: My First Post)",
-      "prompt_en": "Lowercase the input, split by whitespace, join with \"_\" into slug, and print slug (e.g., Py Code -> py_code). (Terminal input: My First Post)",
-      "hint_ko": "입력을 소문자로 통일한 뒤 공백 기준으로 쪼개 단어 리스트를 만들고, 밑줄 문자열을 구분자로 삼아 결합 메서드로 묶어보세요.",
-      "hint_en": "Convert the input to small letters, break it into a word list by whitespace, and combine that list on the underscore separator string.",
+      "prompt_ko": ".lower()로 소문자로 통일한 뒤 .split()으로 공백 기준 단어 리스트를 만들고, \"_\".join()으로 다시 묶으면 깔끔한 슬러그(slug) 문자열을 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: My First Post)",
+      "prompt_en": "Chaining .lower(), .split(), and \"_\".join() normalizes text to lowercase, splits it by whitespace, and rejoins the words into a clean underscore slug. Trace the block code. (Terminal input: My First Post)",
+      "hint_ko": ".split()은 문자열을 쪼개 리스트로 만들고, .join()은 그 리스트를 지정한 구분자로 다시 하나의 문자열로 합칩니다.",
+      "hint_en": ".split() breaks a string into a list of words, while .join() glues that list back together with the chosen separator.",
       "targetCode": "raw = input().lower()\nparts = raw.split()\nslug = \"_\".join(parts)\nprint(slug)",
       "testCases": [
         {
@@ -195,10 +195,10 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "리스트 raw의 각 문자열에서 양쪽 공백을 지우고 대문자로 바꿔 clean에 추가한 뒤 \"/\"로 이어 출력해보세요. (출력 예: SEOUL/BUSAN)",
-      "prompt_en": "Strip and uppercase each item in raw, append to clean, and print joined by \"/\" (e.g., SEOUL/BUSAN).",
-      "hint_ko": "반복문 안에서 각 문자열의 양쪽 공백 제거와 대문자 변환을 연달아 호출해 새 리스트에 담고, 마지막에 슬래시 구분자로 결합해 출력해보세요.",
-      "hint_en": "Inside the loop, chain whitespace trimming and capital-letter conversion on each item before appending it, then combine the list using the slash separator.",
+      "prompt_ko": "문자열 메서드는 s.strip().upper()처럼 점(.)으로 연달아 체이닝(chaining)하여 양쪽 공백 제거와 대문자 변환을 한 번에 처리한 뒤 .join()으로 결합할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "String methods can be chained together like s.strip().upper() to trim whitespace and uppercase each item in one expression before combining them with .join(). Trace the block code.",
+      "hint_ko": "s.strip()이 공백을 지운 새 문자열을 반환하므로 그 뒤에 바로 .upper()를 이어 붙여 호출할 수 있습니다.",
+      "hint_en": "Because s.strip() returns a new string, you can immediately call .upper() on that returned string.",
       "targetCode": "raw = [\" Seoul \", \" busan \"]\nclean = []\nfor s in raw:\n    clean.append(s.strip().upper())\nprint(\"/\".join(clean))",
       "testCases": [
         {

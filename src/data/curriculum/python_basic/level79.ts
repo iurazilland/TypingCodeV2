@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "names와 scores의 같은 위치 원소끼리 짝지은 list(zip(names, scores))를 pairs에 저장하고 출력해보세요.",
-      "prompt_en": "Pair elements of names and scores in parallel using list(zip(names, scores)) and print pairs.",
-      "hint_ko": "옷의 지퍼(zipper)가 양쪽 이를 맞물리듯 두 리스트의 같은 위치 원소들을 튜플 쌍으로 묶어 주며, 리스트로 감싸 결과를 확인합니다.",
-      "hint_en": "Like a zipper interlocking two sides, this function pairs elements at matching indices into tuples.",
+      "prompt_ko": "내장 함수 zip(시퀀스1, 시퀀스2)은 두 시퀀스에서 같은 위치에 있는 원소끼리 짝지어 튜플 쌍으로 묶어 줍니다.",
+      "prompt_en": "The built-in function zip(seq1, seq2) pairs up elements at matching positions from both sequences into tuples.",
+      "hint_ko": "zip()이 반환하는 반복자를 list()로 감싸면 짝지어진 (이름, 점수) 튜플들의 리스트를 한눈에 확인할 수 있습니다.",
+      "hint_en": "Wrapping the zip() iterator in list() materializes the paired tuples into a printable list.",
       "targetCode": "names = [\"Kim\", \"Lee\"]\nscores = [90, 85]\npairs = list(zip(names, scores))\nprint(pairs)",
       "testCases": [
         {
@@ -65,10 +65,10 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "list(reversed(nums))로 역순 리스트를, \"\".join(reversed(\"code\"))로 뒤집힌 문자열을 만들어 나란히 출력해보세요.",
-      "prompt_en": "Build a reversed list with list(reversed(nums)) and a reversed string with \"\".join(reversed(\"code\")), then print both.",
-      "hint_ko": "원본을 직접 바꾸지 않고 뒤에서부터 꺼내는 역순 반복자를 반환하므로, 리스트 변환이나 문자열 결합과 함께 사용합니다.",
-      "hint_en": "Returning a non-mutating reverse iterator, it combines cleanly with list conversion or empty-string joining.",
+      "prompt_ko": "내장 함수 reversed(시퀀스)는 원본을 변경하지 않고 맨 뒤 원소부터 거꾸로 꺼내는 역순 반복자를 반환합니다.",
+      "prompt_en": "The built-in reversed(seq) returns a reverse iterator that yields elements from back to front without mutating the original sequence.",
+      "hint_ko": "역순 반복자를 list()로 감싸면 뒤집힌 리스트가 되고, \"\".join()에 넣으면 뒤집힌 문자열이 만들어집니다.",
+      "hint_en": "Pass the reverse iterator to list() for a reversed list, or to \"\".join() for a reversed string.",
       "targetCode": "nums = [10, 20, 30]\nrev_nums = list(reversed(nums))\nrev_word = \"\".join(reversed(\"code\"))\nprint(rev_nums, rev_word)",
       "expectedVariables": {
         "rev_word": "edoc"
@@ -104,10 +104,10 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "상품명 줄과 가격 줄을 dict(zip(...))으로 묶어 store를 만들고, 찾는 상품 가격(없으면 0)을 .get()으로 출력해보세요. (터미널 입력: apple milk, 1500 2000, milk 한 줄씩)",
-      "prompt_en": "Build store from two input lines via dict(zip(keys, vals)) and print store.get(target, 0). (Terminal input: apple milk, 1500 2000, milk line by line)",
-      "hint_ko": "두 번째 줄을 정수 리스트로 바꾼 뒤 상품명과 가격을 나란히 묶어 딕셔너리를 만들고, 기본값 0을 지정한 안전 조회로 값을 출력합니다.",
-      "hint_en": "Parse the second line into integers, pair names with prices into a dictionary, and look up the target with a default of 0.",
+      "prompt_ko": "dict(zip(키_리스트, 값_리스트)) 패턴을 사용하면 두 리스트를 나란히 짝지어 한 번에 딕셔너리로 생성할 수 있습니다. (터미널 입력: apple milk, 1500 2000, milk 한 줄씩)",
+      "prompt_en": "The dict(zip(keys, vals)) idiom pairs a list of keys with a list of values to construct a dictionary in a single step. (Terminal input: apple milk, 1500 2000, milk line by line)",
+      "hint_ko": "생성된 딕셔너리에서 .get(target, 0)으로 조회하면 없는 상품일 때도 오류 없이 0을 반환합니다.",
+      "hint_en": "Looking up the target with .get(target, 0) returns 0 safely when the item is not in the dictionary.",
       "targetCode": "keys = input().split()\nvals = list(map(int, input().split()))\nstore = dict(zip(keys, vals))\ntarget = input()\nprint(store.get(target, 0))",
       "testCases": [
         {
@@ -145,10 +145,10 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 작업 기록 logs를 reversed(logs)로 최근 항목부터 역순 순회하며 취소 메시지를 출력해보세요. (출력 예: Undo:save) (터미널 입력: open edit save)",
-      "prompt_en": "Iterate input logs in reverse order with reversed(logs) and print Undo:<item> for each. (Terminal input: open edit save)",
-      "hint_ko": "역순 반복자 내장 함수를 쓰면 원본 기록 리스트를 변경하지 않고 맨 마지막 작업부터 첫 작업까지 차례대로 꺼낼 수 있습니다.",
-      "hint_en": "Iterating with the reverse-iterator built-in visits items from last to first without mutating the original list.",
+      "prompt_ko": "for item in reversed(시퀀스): 구문을 사용하면 원본 리스트의 순서를 보존한 채 가장 마지막 항목부터 역순으로 순회합니다. (터미널 입력: open edit save)",
+      "prompt_en": "Using for item in reversed(seq): iterates through a sequence from the last element to the first while leaving the original list intact. (Terminal input: open edit save)",
+      "hint_ko": ".reverse() 메서드는 원본 리스트 자체를 뒤집지만, reversed() 함수는 순회 순서만 거꾸로 제공합니다.",
+      "hint_en": "Unlike list.reverse(), which mutates the list in place, reversed() yields items in reverse order cleanly.",
       "targetCode": "logs = input().split()\nfor item in reversed(logs):\n    print(f\"Undo:{item}\")",
       "testCases": [
         {
@@ -186,10 +186,10 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "소문자로 통일한 단어와 \"\".join(reversed(clean)) 결과가 같은지 회문 여부를 반환하는 is_pal 함수를 완성해보세요. (터미널 입력: Level)",
-      "prompt_en": "Define is_pal(word) using .lower() and \"\".join(reversed(clean)) to check case-insensitive palindromes. (Terminal input: Level)",
-      "hint_ko": "소문자로 맞춘 문자열을 역순 반복자와 빈 문자열 결합으로 뒤집은 뒤, 원래 소문자 문자열과 일치하는지 비교해 반환합니다.",
-      "hint_en": "Normalize the word to lowercase, join its reverse iterator into a string, and return whether the two strings match.",
+      "prompt_ko": ".lower()로 대소문자를 통일한 뒤 \"\".join(reversed(clean))으로 뒤집은 문자열과 비교하면, 앞에서 읽으나 뒤에서 읽으나 같은 회문(Palindrome)인지 판별할 수 있습니다. (터미널 입력: Level)",
+      "prompt_en": "Normalizing case with .lower() and comparing against \"\".join(reversed(clean)) checks whether a word is a case-insensitive palindrome. (Terminal input: Level)",
+      "hint_ko": "비교 연산자(==)의 결과 자체가 불리언(True/False)이므로 return clean == rev로 바로 반환합니다.",
+      "hint_en": "Because == already evaluates to True or False, return clean == rev directly.",
       "targetCode": "def is_pal(word):\n    clean = word.lower()\n    rev = \"\".join(reversed(clean))\n    return clean == rev\ntext = input()\nprint(is_pal(text))",
       "testCases": [
         {

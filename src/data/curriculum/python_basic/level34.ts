@@ -20,10 +20,10 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: "word에 \"Python\"을 저장하고 슬라이싱 word[0:2]로 앞 두 글자를 잘라 출력해보세요. (출력 예: Py)",
-      prompt_en: "Store \"Python\" in word and print its first two characters using word[0:2] (e.g., Py).",
-      hint_ko: "대괄호 안의 시작:끝 슬라이싱은 시작 번호부터 끝 번호 직전 위치까지만 잘라내어 반환합니다.",
-      hint_en: "In start:stop slicing inside brackets, characters are extracted from the start index up to—but excluding—the stop index.",
+      prompt_ko: "문자열 슬라이싱 s[시작:끝]은 시작 인덱스부터 끝 인덱스 바로 직전(끝-1)까지의 부분 문자열을 잘라냅니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "String slicing s[start:stop] extracts a substring from the start index up to—but excluding—the stop index (stop - 1). Trace the block code.",
+      hint_ko: "word[0:2]는 0번과 1번 글자만 포함하고 끝 번호인 2번 글자는 제외하여 \"Py\"를 반환합니다.",
+      hint_en: "word[0:2] includes indices 0 and 1 while excluding index 2, returning \"Py\".",
       targetCode: "word = \"Python\"\nprint(word[0:2])",
       testCases: [
         {
@@ -61,10 +61,10 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: "code에 \"KOR2026\"을 저장하고 시작 인덱스를 생략한 code[:3]으로 앞 세 글자를 출력해보세요.",
-      prompt_en: "Store \"KOR2026\" in code and print the first three characters using code[:3].",
-      hint_ko: "콜론 앞의 시작 번호를 비워두면 문자열의 맨 처음(0번 위치)부터 끝 번호 직전까지 잘라냅니다.",
-      hint_en: "Leaving the start position blank before the colon automatically slices from the very beginning up to the stop index.",
+      prompt_ko: "슬라이싱에서 콜론 앞의 시작 번호를 생략한 s[:끝]은 문자열 맨 처음(0번)부터 끝 번호 직전까지 잘라냅니다. 블록의 코드를 따라 쳐보세요.",
+      prompt_en: "Omitting the start index before the colon in s[:stop] automatically slices from the beginning (index 0) up to stop. Trace the block code.",
+      hint_ko: "code[:3]은 code[0:3]과 같으며 맨 앞 세 글자인 \"KOR\"을 추출합니다.",
+      hint_en: "code[:3] is equivalent to code[0:3] and extracts the first three characters, \"KOR\".",
       targetCode: "code = \"KOR2026\"\nprint(code[:3])",
       testCases: [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: "8자리 날짜 d를 입력받아 앞 4글자(yr)와 나머지(md)로 슬라이싱해 출력해보세요. (터미널 입력: 20261101)",
-      prompt_en: "Slice 8-digit date d into yr (first 4 chars) and md (remaining chars) and print f\"{yr}-{md}\". (Terminal input: 20261101)",
-      hint_ko: "같은 기준 번호를 중심으로 앞부분은 시작 번호 생략 슬라이싱, 뒷부분은 끝 번호 생략 슬라이싱을 쓰면 겹침 없이 두 조각으로 나뉩니다.",
-      hint_en: "Using the same boundary index with omitted-start slicing and omitted-stop slicing cleanly splits a string into two parts.",
+      prompt_ko: "같은 경계 번호 4를 기준으로 시작을 생략한 d[:4]와 끝을 생략한 d[4:]를 쓰면 문자열을 앞 4글자와 나머지 뒷부분으로 겹침 없이 나눌 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 20261101)",
+      prompt_en: "Using the same boundary index 4 in d[:4] (omitted start) and d[4:] (omitted stop) cleanly splits a string into its first 4 characters and the rest. Trace the block code. (Terminal input: 20261101)",
+      hint_ko: "d[:4]는 0~3번 글자를, d[4:]는 4번부터 끝까지의 글자를 가져옵니다.",
+      hint_en: "d[:4] takes indices 0..3, while d[4:] takes everything from index 4 to the end.",
       targetCode: "d = input()\nyr = d[:4]\nmd = d[4:]\nprint(f\"{yr}-{md}\")",
       testCases: [
         {
@@ -148,10 +148,10 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: "대괄호로 감싸진 숫자 raw에서 양끝 한 글자씩 제외한 raw[1:-1]을 정수로 바꿔 10을 더해 출력해보세요. (터미널 입력: [25])",
-      prompt_en: "Strip the outer brackets of raw with raw[1:-1], convert to int, and print num + 10 (Terminal input: [25]).",
-      hint_ko: "첫 글자 다음 위치부터 마지막 글자(음수 첫 위치) 직전까지 슬라이싱한 뒤, '정수(integer)' 앞 세 글자를 딴 함수로 변환해 계산하세요.",
-      hint_en: "Slice from the second character up to (excluding) the last character, convert to an integer, and add 10.",
+      prompt_ko: "슬라이싱 raw[1:-1]은 첫 글자(0번)와 마지막 글자(-1번)를 양끝에서 제외하고 안쪽 문자열만 추출합니다. int() 변환과 함께 블록의 코드를 따라 입력해보세요. (터미널 입력: [25])",
+      prompt_en: "Slicing with raw[1:-1] strips both the first character (index 0) and the last character (index -1), leaving only the inner substring. Trace the block code with int(). (Terminal input: [25])",
+      hint_ko: "끝 인덱스 -1은 결과에 포함되지 않으므로 마지막 닫는 대괄호 직전까지의 숫자 문자열만 잘라내어 정수로 변환합니다.",
+      hint_en: "Because stop index -1 is excluded, everything up to just before the closing bracket is sliced and converted to int.",
       targetCode: "raw = input()\nnum = int(raw[1:-1])\nprint(num + 10)",
       testCases: [
         {
@@ -199,10 +199,10 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: "단어 s의 길이가 0보다 큰 동안 s를 출력하고 끝 글자를 하나씩 잘라내는(s[:-1]) while 문을 완성해보세요. (터미널 입력: ABC)",
-      prompt_en: "While len(s) > 0, print s and shorten it by removing its last character with s = s[:-1]. (Terminal input: ABC)",
-      hint_ko: "반복문 안에서 현재 문자열을 먼저 출력한 뒤, 맨 끝 글자 직전까지만 남기는 음수 끝 번호 슬라이싱 결과를 다시 변수에 대입하세요.",
-      hint_en: "Print the current string first, then reassign the variable to a slice that stops right before the last character.",
+      prompt_ko: "s[:-1]은 마지막 한 글자만 제외한 앞부분 전체를 반환하므로, while 반복문 안에서 s = s[:-1]을 반복하면 문자열을 뒤에서부터 한 글자씩 줄여나갈 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: ABC)",
+      prompt_en: "Because s[:-1] returns everything except the last character, reassigning s = s[:-1] inside a while loop trims the string by one character each turn. Trace the block code. (Terminal input: ABC)",
+      hint_ko: "문자열이 한 글자씩 짧아지다가 빈 문자열(\"\")이 되면 len(s)가 0이 되어 반복문이 종료됩니다.",
+      hint_en: "As the string shrinks character by character, it eventually becomes empty (\"\") and len(s) > 0 stops the loop.",
       targetCode: "s = input()\nwhile len(s) > 0:\n    print(s)\n    s = s[:-1]",
       testCases: [
         {

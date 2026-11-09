@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "Hero 클래스에 __str__ 메서드를 정의하여 print(hero)를 호출했을 때 Aria(100)이 출력되도록 해보세요.",
-      "prompt_en": "Define __str__ on Hero so calling print(hero) automatically outputs Aria(100).",
-      "hint_ko": "문자열(string)의 앞 세 글자 양옆에 밑줄 두 개씩 붙인 특별 메서드에서 문자열을 반환하면, 객체를 출력할 때 그 문자열이 자동 사용됩니다.",
-      "hint_en": "Returning a formatted string from the double-underscore string method makes printing the object display that text automatically.",
+      "prompt_ko": "클래스에 __str__(self) 특별 메서드를 정의하여 문자열을 반환하면, print(객체)를 호출할 때 그 문자열이 자동으로 출력됩니다.",
+      "prompt_en": "Defining the __str__(self) special method to return a string makes print(obj) automatically display that formatted string.",
+      "hint_ko": "__str__ 메서드 내부에서는 print()를 쓰지 않고 반드시 문자열을 return으로 반환해야 합니다.",
+      "hint_en": "Inside __str__, always return a string rather than calling print().",
       "targetCode": "class Hero:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def __str__(self):\n        return f\"{self.name}({self.hp})\"\n\nhero = Hero(\"Aria\", 100)\nprint(hero)",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "Point 객체 p에 __str__을 구현하고 str(p)로 변환한 문자열을 이용해 Pos:(3,7)을 출력해보세요.",
-      "prompt_en": "Implement __str__ on Point, convert p via str(p), and print Pos:(3,7).",
-      "hint_ko": "문자열 표현 특별 메서드를 정의해 두면 직접 출력할 때뿐 아니라 문자열 변환 함수나 f-string 안에서도 동일한 서식이 적용됩니다.",
-      "hint_en": "Defining the string dunder method makes explicit string conversion and f-strings automatically use that same format.",
+      "prompt_ko": "__str__(self)를 구현해 두면 print()뿐 아니라 str(객체) 변환 함수나 f-string 중괄호 안에서도 동일한 문자열 표현이 자동으로 사용됩니다.",
+      "prompt_en": "Once __str__(self) is defined on a class, both str(obj) and f-strings automatically use that custom string representation.",
+      "hint_ko": "str(p)가 호출될 때 내부적으로 p.__str__()의 반환값인 \"(3,7)\"이 반환됩니다.",
+      "hint_en": "Calling str(p) internally invokes p.__str__() and returns \"(3,7)\".",
       "targetCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = str(p)\nprint(f\"Pos:{text}\")",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "출금액이 잔액보다 크면 withdraw 메서드에서 ValueError(\"Lack\")를 발생시켜 잔액 100이 안전하게 유지되게 하세요.",
-      "prompt_en": "Raise ValueError(\"Lack\") in withdraw when amt > self.balance so balance stays safe at 100.",
-      "hint_ko": "잔액을 빼기 전에 먼저 한도 초과 여부를 검사해 예외를 일으키면, 출금 실패 시에도 기존 잔액 상태가 안전하게 보존됩니다.",
-      "hint_en": "Checking the withdrawal limit and throwing an error before subtracting protects the balance from invalid updates.",
+      "prompt_ko": "클래스 메서드 안에서 속성값을 변경하기 전에 조건을 검사해 raise ValueError를 일으키면, 잘못된 요청이 들어와도 객체의 기존 상태(잔액)가 안전하게 보호됩니다.",
+      "prompt_en": "Raising ValueError inside a method before modifying self attributes protects the object's state from invalid updates.",
+      "hint_ko": "if amt > self.balance:에서 예외가 발생하므로 아랫줄의 self.balance -= amt는 실행되지 않습니다.",
+      "hint_en": "Because raise executes when amt > self.balance, the subtraction line below it is skipped.",
       "targetCode": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n\n    def withdraw(self, amt):\n        if amt > self.balance:\n            raise ValueError(\"Lack\")\n        self.balance -= amt\n\n    def __str__(self):\n        return f\"Bal:{self.balance}\"\n\nacc = Account(100)\ntry:\n    acc.withdraw(150)\nexcept ValueError:\n    print(\"Lack\")\nprint(acc)",
       "testCases": [
         {
@@ -148,10 +148,10 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "최대 2개까지만 담기는 Box 클래스의 add 메서드에서 정원 초과 시 Full 예외를 발생시키고 최종 개수를 출력하세요.",
-      "prompt_en": "Raise ValueError(\"Full\") in Box.add when len(self.items) >= 2, then print box showing Count:2.",
-      "hint_ko": "현재 담긴 개수가 정원 이상일 때 먼저 예외를 일으켜 추가를 차단하면, 초과분은 리스트에 들어가지 못합니다.",
-      "hint_en": "Checking capacity and throwing an exception before appending prevents extra items from entering the list.",
+      "prompt_ko": "리스트 속성을 가진 클래스의 메서드에서 len(self.items)로 최대 수용 인원을 먼저 검사해 raise로 차단하면, 정원 초과 없이 안전하게 원소를 관리할 수 있습니다.",
+      "prompt_en": "Checking len(self.items) and raising ValueError before .append() enforces a capacity limit on an object's internal list.",
+      "hint_ko": "세 번째 원소 \"C\"를 추가할 때 예외가 발생해 except 블록이 실행되며, 상자 안에는 2개만 남습니다.",
+      "hint_en": "Adding the third item \"C\" raises ValueError into the except block, leaving exactly 2 items in box.",
       "targetCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, item):\n        if len(self.items) >= 2:\n            raise ValueError(\"Full\")\n        self.items.append(item)\n\n    def __str__(self):\n        return f\"Count:{len(self.items)}\"\n\nbox = Box()\nfor x in [\"A\", \"B\", \"C\"]:\n    try:\n        box.add(x)\n    except ValueError:\n        print(\"Full\")\nprint(box)",
       "testCases": [
         {
@@ -189,10 +189,10 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "Wallet의 deposit에서 0 이하 입금을 차단하고, __str__에서 천 단위 쉼표(:,) 서식으로 잔액을 출력해보세요. (터미널 입력: 5500)",
-      "prompt_en": "Reject <= 0 deposits in Wallet.deposit and format cash with thousands commas (:,) in __str__. (Terminal input: 5500)",
-      "hint_ko": "0 이하 입금액은 예외로 막고, 문자열 표현 메서드의 f-string 변수 뒤에 콜론과 쉼표 서식 지정자를 붙이면 세 자리마다 쉼표가 표시됩니다.",
-      "hint_en": "Block non-positive amounts with an error, and use the colon-comma format specifier inside the f-string for thousands separators.",
+      "prompt_ko": "메서드의 입력값 검증(raise)과 __str__의 천 단위 쉼표 서식({self.cash:,})을 결합하면 상태 보호와 깔끔한 출력 형식을 동시에 갖춘 클래스를 만들 수 있습니다. (터미널 입력: 5500)",
+      "prompt_en": "Combining input validation (raise) in a method with thousands-comma formatting ({self.cash:,}) in __str__ keeps object state safe and neatly formatted. (Terminal input: 5500)",
+      "hint_ko": "f-string의 중괄호 안에서 숫자 변수 뒤에 :,를 붙이면 세 자리마다 쉼표가 자동으로 들어갑니다.",
+      "hint_en": "Adding :, after a numeric variable inside f-string braces inserts thousands commas automatically.",
       "targetCode": "class Wallet:\n    def __init__(self, owner, cash):\n        self.owner = owner\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            raise ValueError(\"Invalid\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"{self.owner}:{self.cash:,}\"\n\nw = Wallet(\"Sua\", 10000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError:\n    print(\"Err\")\nprint(w)",
       "testCases": [
         {

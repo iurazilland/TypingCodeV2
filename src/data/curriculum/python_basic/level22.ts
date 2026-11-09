@@ -24,10 +24,10 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 두 점수를 정수 kor, eng에 담고 둘 다 60 이상이면 \"Pass\", 아니면 \"Fail\"을 출력해보세요. (터미널 입력: 75 80)",
-      "prompt_en": "Split two scores into integers kor and eng; print \"Pass\" if both >= 60, else \"Fail\". (Terminal input: 75 80)",
-      "hint_ko": "두 과목 점수가 모두 기준 이상이어야 합격이므로, 두 비교식을 동시 만족 논리 연산자로 연결해 조건문을 구성해보세요.",
-      "hint_en": "Since both subjects must meet the threshold, join the two >= 60 comparisons with the conjunction operator inside the condition.",
+      "prompt_ko": "if 조건식에 and 연산자를 사용하면 두 비교식이 모두 참일 때만 합격(Pass) 분기를 실행할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 75 80)",
+      "prompt_en": "Using the and operator in an if condition runs the Pass branch only when both comparisons hold True. Trace the block code. (Terminal input: 75 80)",
+      "hint_ko": "두 과목 중 하나라도 60 미만이면 and 조건이 거짓이 되어 else 블록의 \"Fail\"이 출력됩니다.",
+      "hint_en": "If either score is below 60, the and condition evaluates to False and the else branch prints \"Fail\".",
       "targetCode": "a, b = input().split()\nkor = int(a)\neng = int(b)\nif kor >= 60 and eng >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")",
       "testCases": [
         {
@@ -70,10 +70,10 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "정수 n이 양수일 때 안쪽 if-else로 짝수면 \"Plus Even\", 홀수면 \"Plus Odd\"를, 0 이하면 \"Zero or Minus\"를 출력해보세요. (터미널 입력: 8)",
-      "prompt_en": "If n > 0, nest an if-else to print \"Plus Even\" or \"Plus Odd\"; otherwise print \"Zero or Minus\". (Terminal input: 8)",
-      "hint_ko": "바깥 조건문에서 양수 여부를 먼저 가른 뒤, 참인 블록 안쪽에 또 하나의 조건문을 중첩해 짝수와 홀수를 판별해보세요.",
-      "hint_en": "Test whether the number is positive in the outer branch first, then nest another two-way check inside it to separate even and odd.",
+      "prompt_ko": "조건문 블록 안에 또 다른 if - else 조건문을 들여써서 넣는 구조를 '중첩 조건문'이라고 합니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 8)",
+      "prompt_en": "Placing an if - else statement indented inside another conditional block is called a nested conditional. Trace the block code. (Terminal input: 8)",
+      "hint_ko": "바깥 조건(n > 0)이 참일 때만 안쪽 조건문(n % 2 == 0)으로 들어가 짝수·홀수를 추가로 판별합니다.",
+      "hint_en": "Only when the outer check (n > 0) is True does execution enter the inner check (n % 2 == 0) to separate even and odd.",
       "targetCode": "n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print(\"Plus Even\")\n    else:\n        print(\"Plus Odd\")\nelse:\n    print(\"Zero or Minus\")",
       "testCases": [
         {
@@ -121,10 +121,10 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 temp를 입력받아 18 <= temp <= 26 범위이면 \"Good\", 벗어나면 \"Adjust\"를 출력해보세요. (터미널 입력: 22)",
-      "prompt_en": "Read integer temp; print \"Good\" if 18 <= temp <= 26, otherwise print \"Adjust\". (Terminal input: 22)",
-      "hint_ko": "파이썬에서는 수학의 부등식처럼 변수 양옆에 이하 기호를 연달아 적어 구간 범위를 한 번에 비교할 수 있습니다.",
-      "hint_en": "Python supports chained comparisons just like math notation, letting you place the variable directly between both bounds.",
+      "prompt_ko": "파이썬은 18 <= temp <= 26처럼 부등호를 연속으로 연결하는 '연쇄 비교(Chained Comparison)' 문법을 지원합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 22)",
+      "prompt_en": "Python supports chained comparisons like 18 <= temp <= 26, letting you test both bounds in a single expression. Trace the block code. (Terminal input: 22)",
+      "hint_ko": "18 <= temp <= 26은 18 <= temp and temp <= 26과 동일하게 동작하며 수학 부등식처럼 간결하게 읽힙니다.",
+      "hint_en": "18 <= temp <= 26 works identically to 18 <= temp and temp <= 26 while reading cleanly like math notation.",
       "targetCode": "temp = int(input())\nif 18 <= temp <= 26:\n    print(\"Good\")\nelse:\n    print(\"Adjust\")",
       "testCases": [
         {
@@ -172,10 +172,10 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "아이디가 \"admin\"이면 안쪽에서 비밀번호가 \"1234\"일 때 \"Admin OK\", 아니면 \"Wrong PW\"를, 아이디가 다르면 \"No User\"를 출력해보세요. (터미널 입력: 첫째 줄 admin, 둘째 줄 1234)",
-      "prompt_en": "Check id_in == \"admin\", nest pw_in == \"1234\" for \"Admin OK\" vs \"Wrong PW\", else print \"No User\". (Terminal input: line 1 admin, line 2 1234)",
-      "hint_ko": "바깥 조건문에서 아이디 일치 여부를 먼저 걸러내고, 아이디가 맞을 때만 안쪽 조건문으로 들어가 비밀번호를 확인하도록 배치해보세요.",
-      "hint_en": "Verify the user ID in the outer condition first, and check the password inside the nested branch only when the ID matches.",
+      "prompt_ko": "중첩 if - else문을 활용하면 바깥에서 아이디 일치 여부를 먼저 확인하고, 일치할 때만 안쪽에서 비밀번호를 검사하는 단계별 인증 흐름을 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 admin, 둘째 줄 1234)",
+      "prompt_en": "Nested if - else statements let you verify the ID in the outer check first and only test the password inside when the ID matches. Trace the block code. (Terminal input: line 1 admin, line 2 1234)",
+      "hint_ko": "바깥 조건(id_in == \"admin\")이 거짓이면 안쪽 비밀번호 검사는 아예 실행되지 않고 바깥쪽 else로 이동합니다.",
+      "hint_en": "If the outer check (id_in == \"admin\") is False, the inner password check is skipped completely and the outer else runs.",
       "targetCode": "id_in = input()\npw_in = input()\nif id_in == \"admin\":\n    if pw_in == \"1234\":\n        print(\"Admin OK\")\n    else:\n        print(\"Wrong PW\")\nelse:\n    print(\"No User\")",
       "testCases": [
         {
@@ -228,10 +228,10 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 3과 5의 공배수면 \"FizzBuzz\", 3의 배수면 \"Fizz\", 5의 배수면 \"Buzz\", 아니면 n을 출력해보세요. (터미널 입력: 15)",
-      "prompt_en": "Print \"FizzBuzz\" if n is divisible by 3 and 5, \"Fizz\" if by 3, \"Buzz\" if by 5, else n. (Terminal input: 15)",
-      "hint_ko": "3과 5의 공배수는 개별 배수 조건도 모두 참이 되므로, 두 배수 조건을 동시에 만족하는 경우를 맨 위 첫 분기에 두어야 합니다.",
-      "hint_en": "Numbers divisible by both 3 and 5 also match the single-divisor checks, so place the combined condition at the very top.",
+      "prompt_ko": "두 조건을 동시에 만족하는 공배수 판별(n % 3 == 0 and n % 5 == 0)을 맨 위 if에 배치하고 개별 배수를 elif로 이어가면 FizzBuzz 문제를 정확히 분기할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 15)",
+      "prompt_en": "Placing the combined check (n % 3 == 0 and n % 5 == 0) in the top if and single-divisor checks in elif branches cleanly solves FizzBuzz. Trace the block code. (Terminal input: 15)",
+      "hint_ko": "3과 5의 공배수는 3의 배수이자 5의 배수이므로, 두 조건을 and로 묶은 복합 조건을 가장 먼저 검사해야 합니다.",
+      "hint_en": "Multiples of both 3 and 5 also match the individual divisor checks, so the combined and condition must come first.",
       "targetCode": "n = int(input())\nif n % 3 == 0 and n % 5 == 0:\n    print(\"FizzBuzz\")\nelif n % 3 == 0:\n    print(\"Fizz\")\nelif n % 5 == 0:\n    print(\"Buzz\")\nelse:\n    print(n)",
       "testCases": [
         {

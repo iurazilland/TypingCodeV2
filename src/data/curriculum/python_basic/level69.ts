@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "리스트 [10, 30]의 인덱스 1 위치에 .insert(1, 20)으로 20을 끼워 넣고 리스트를 출력해보세요.",
-      "prompt_en": "Insert 20 at index 1 of [10, 30] using .insert(1, 20) and print the list.",
-      "hint_ko": "'안으로(in-) 끼워 넣다(sert)'라는 뜻의 이 메서드는 (인덱스, 값) 순서로 인자를 받아 해당 자리에 요소를 넣고 뒤 요소들을 한 칸씩 밀어줍니다.",
-      "hint_en": "Pass (index, value) in order to place the new item at that position while shifting subsequent items to the right.",
+      "prompt_ko": "리스트의 .insert(인덱스, 값) 메서드는 지정한 인덱스 위치에 새 요소를 끼워 넣고 기존 요소들을 뒤로 한 칸씩 밀어냅니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The list .insert(index, value) method places a new element at the specified index and shifts existing elements one position to the right. Trace the block code.",
+      "hint_ko": "맨 끝에 추가하는 .append()와 달리 (인덱스, 값) 순서로 두 인자를 전달해 원하는 위치에 삽입합니다.",
+      "hint_en": "Unlike .append() which adds to the end, pass (index, value) in order to insert at any position.",
       "targetCode": "nums = [10, 30]\nnums.insert(1, 20)\nprint(nums)",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "리스트에서 .remove(\"apple\")로 첫 번째 \"apple\"만 찾아 삭제한 뒤 남은 리스트를 출력해보세요.",
-      "prompt_en": "Remove the first matching \"apple\" from fruits using .remove(\"apple\") and print fruits.",
-      "hint_ko": "인덱스 번호로 꺼내는 .pop()과 달리, 앞에서부터 탐색해 처음 일치하는 값 하나만 찾아 지웁니다.",
-      "hint_en": "Unlike index-based .pop(), this method scans from the left and deletes only the first matching value.",
+      "prompt_ko": "리스트의 .remove(값) 메서드는 리스트를 앞에서부터 탐색하여 전달한 값과 일치하는 첫 번째 요소 하나만 삭제합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The list .remove(value) method scans from the beginning of the list and deletes only the first element that matches value. Trace the block code.",
+      "hint_ko": "같은 값이 여러 개 들어 있더라도 가장 앞에 있는 첫 번째 일치 요소만 지워지고 나머지는 그대로 남습니다.",
+      "hint_en": "Even if duplicates exist, only the earliest matching element is removed while later ones remain.",
       "targetCode": "fruits = [\"apple\", \"banana\", \"apple\"]\nfruits.remove(\"apple\")\nprint(fruits)",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "리스트 a 뒤에 리스트 b의 모든 원소를 .extend(b)로 한 줄에 이어 붙이고 a를 출력해보세요.",
-      "prompt_en": "Extend list a with all elements of list b using .extend(b) and print a.",
-      "hint_ko": "'밖으로(ex-) 뻗어 늘리다(tend)'라는 뜻처럼, 다른 리스트 안의 원소들을 낱개로 풀어 기존 리스트 끝에 이어 붙입니다.",
-      "hint_en": "Meaning 'to stretch out,' this method unpacks elements from another list and appends each item individually.",
+      "prompt_ko": "리스트의 .extend(다른리스트) 메서드는 다른 리스트에 들어 있는 모든 원소를 낱개로 풀어 기존 리스트 끝에 차례대로 이어 붙입니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The list .extend(other_list) method unpacks all elements from another list and appends them individually to the end of the original list. Trace the block code.",
+      "hint_ko": ".extend()는 새 리스트를 반환하지 않고 호출한 원본 리스트 a 자체를 직접 확장합니다.",
+      "hint_en": ".extend() mutates the original list a in place rather than returning a new list.",
       "targetCode": "a = [1, 2]\nb = [3, 4]\na.extend(b)\nprint(a)",
       "testCases": [
         {
@@ -136,10 +136,10 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력받은 문자열 target이 tags 안에 있을 때만 안전하게 .remove(target)으로 삭제하고 tags를 출력해보세요. (터미널 입력: js)",
-      "prompt_en": "Read target and safely remove it with .remove(target) only if target is in tags, then print tags. (Terminal input: js)",
-      "hint_ko": "리스트에 없는 값을 바로 삭제하려 하면 오류가 발생하므로, 먼저 포함 여부(in) 조건으로 확인한 뒤 지웁니다.",
-      "hint_en": "Deleting a missing value raises an error, so check membership with in before calling the removal method.",
+      "prompt_ko": ".remove(값)는 찾는 값이 리스트에 없으면 ValueError를 일으키므로, if target in tags: 조건으로 포함 여부를 먼저 확인한 뒤 삭제하면 안전합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: js)",
+      "prompt_en": "Because .remove(value) raises ValueError when the value is absent, checking membership first with if target in tags: lets you delete items safely. Trace the block code. (Terminal input: js)",
+      "hint_ko": "in 연산자가 True일 때만 .remove()가 실행되므로 없는 값을 입력해도 에러 없이 기존 리스트가 유지됩니다.",
+      "hint_en": "Since .remove() runs only when in evaluates to True, missing inputs leave the list untouched without crashing.",
       "targetCode": "tags = [\"py\", \"js\", \"go\"]\ntarget = input()\nif target in tags:\n    tags.remove(target)\nprint(tags)",
       "testCases": [
         {
@@ -182,10 +182,10 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "while 반복문으로 data 안에 0이 남아 있는 동안 0을 하나씩 지우며 removed를 1씩 늘리고, 남은 리스트와 삭제 횟수를 출력해보세요.",
-      "prompt_en": "Use a while loop to remove every 0 from data while incrementing removed, then print data and removed.",
-      "hint_ko": "값 삭제 메서드는 한 번에 첫 번째 일치 값만 지우므로, 리스트 안에 0이 남아 있는 동안 반복해야 모든 0이 사라집니다.",
-      "hint_en": "Value removal deletes only one match per call, so keep looping while 0 is still present in the list.",
+      "prompt_ko": ".remove()는 한 번 호출할 때 첫 번째 일치 값만 지우므로, while 값 in 리스트: 반복문과 결합하면 중복된 특정 값을 끝까지 모두 제거할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Since .remove() deletes only one match per call, pairing it with a while value in list: loop removes all occurrences of that value. Trace the block code.",
+      "hint_ko": "반복할 때마다 removed += 1을 함께 수행하면 총 몇 개의 원소가 삭제되었는지도 정확히 셀 수 있습니다.",
+      "hint_en": "Incrementing removed += 1 on each iteration also counts exactly how many elements were deleted.",
       "targetCode": "data = [0, 5, 0, 8, 0]\nremoved = 0\nwhile 0 in data:\n    data.remove(0)\n    removed += 1\nprint(data, removed)",
       "testCases": [
         {

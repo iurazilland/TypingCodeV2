@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "두 수의 합을 return으로 반환하는 add(a, b) 함수를 만들고, add(12, 8)의 반환값을 res에 담아 출력해보세요.",
-      "prompt_en": "Define add(a, b) to return a + b, store add(12, 8) in res, and print res.",
-      "hint_ko": "함수 안에서 덧셈 결과를 호출한 자리로 돌려주게 만들고, 바깥에서 호출 결과를 변수에 대입한 뒤 출력하세요.",
-      "hint_en": "Send the sum back from inside the function, capture the call result in a variable outside, and print that variable.",
+      "prompt_ko": "return 키워드는 함수 안에서 계산한 결과값을 함수를 호출한 자리로 되돌려주며, 그 반환값을 변수에 저장해 활용할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The return keyword sends a computed result back to the caller so you can store the function call's result in a variable. Follow the blocks and type the code.",
+      "hint_ko": "print()는 화면에 보여주기만 하지만, return은 계산 결과를 호출부로 돌려주어 변수에 대입할 수 있게 합니다.",
+      "hint_en": "Unlike print(), return hands the value back to the caller where it can be assigned to a variable.",
       "targetCode": "def add(a, b):\n    return a + b\nres = add(12, 8)\nprint(res)",
       "testCases": [
         {
@@ -65,10 +65,10 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "n * 2를 반환하는 double(n) 함수를 정의하고, double(5) + double(10)의 합을 total에 저장해 출력해보세요.",
-      "prompt_en": "Define double(n) returning n * 2, compute total = double(5) + double(10), and print total.",
-      "hint_ko": "값을 반환하는 함수 호출식은 그 자체가 계산 결과값으로 평가되므로 두 호출식을 덧셈으로 바로 연결해 저장하세요.",
-      "hint_en": "Define the function to send back twice its parameter, then add the two function calls directly and print the variable.",
+      "prompt_ko": "return으로 값을 반환하는 함수 호출식은 그 자체가 반환된 값으로 바뀌므로, 여러 함수 호출 결과를 수식(+)으로 바로 연결해 계산할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Because a function call with return evaluates to its returned value, you can combine multiple function calls directly in arithmetic expressions (+). Follow the blocks and type the code.",
+      "hint_ko": "각 함수 호출이 반환한 두 숫자가 덧셈 연산자로 더해져 결과 변수에 저장됩니다.",
+      "hint_en": "Each function call evaluates to its returned number, allowing the + operator to sum both results.",
       "targetCode": "def double(n):\n    return n * 2\ntotal = double(5) + double(10)\nprint(total)",
       "testCases": [
         {
@@ -101,10 +101,10 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "홀수면 None을, 짝수면 n // 2를 반환하는 half_even(n)을 만들고 half_even(7)의 결과가 None인지 출력해보세요.",
-      "prompt_en": "Define half_even(n) returning None for odd n or n // 2 for even n, then print res is None for 7.",
-      "hint_ko": "홀수 조건에서 '값 없음' 상수를 조기 반환하고 짝수일 때 몫을 반환한 뒤, 바깥에서 객체 동일성 연산자로 결과를 확인하세요.",
-      "hint_en": "Exit early with Python's null constant when odd, otherwise send back half the integer, then print the identity check.",
+      "prompt_ko": "함수 실행 도중 return을 만나면 그 즉시 함수를 종료하므로, 예외 조건에서 return None으로 조기 반환(early return)해 이후 코드를 건너뛸 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Because return exits a function immediately, you can use an early return None on invalid inputs and check the result with is None. Follow the blocks and type the code.",
+      "hint_ko": "if 조건이 참이어서 첫 번째 return이 실행되면 함수가 바로 끝나고 아래의 두 번째 return은 실행되지 않습니다.",
+      "hint_en": "When the if condition triggers the first return, the function exits immediately without reaching the second return.",
       "targetCode": "def half_even(n):\n    if n % 2 != 0:\n        return None\n    return n // 2\nres = half_even(7)\nprint(res is None)",
       "testCases": [
         {
@@ -142,10 +142,10 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "몫(a // b)과 나머지(a % b)를 동시에 반환하는 div_mod(a, b)를 만들고, 17과 5로 호출해 q, r에 언패킹하여 출력해보세요. (출력 예: Q:3 R:2)",
-      "prompt_en": "Define div_mod(a, b) returning a // b, a % b, unpack div_mod(17, 5) into q, r, and print Q:3 R:2.",
-      "hint_ko": "함수에서 두 계산식을 쉼표로 나란히 반환하면 호출부 등호 왼쪽에 두 변수를 나란히 두어 한 번에 나누어 받을 수 있습니다.",
-      "hint_en": "Send back the quotient and remainder separated by a comma, unpack the call into two variables, and print the formatted output.",
+      "prompt_ko": "return 뒤에 여러 값을 쉼표(,)로 나열하면 하나의 튜플로 묶여 반환되며, 호출부에서 여러 변수로 동시에 언패킹해 받을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Returning multiple comma-separated values packs them into a tuple that can be unpacked into multiple variables at the call site. Follow the blocks and type the code.",
+      "hint_ko": "함수에서 쉼표로 구분해 반환한 두 계산 결과가 호출부 등호 왼쪽의 두 변수에 순서대로 나뉘어 저장됩니다.",
+      "hint_en": "The two comma-separated return values unpack in order into the two variables on the left of =.",
       "targetCode": "def div_mod(a, b):\n    return a // b, a % b\nq, r = div_mod(17, 5)\nprint(f\"Q:{q} R:{r}\")",
       "testCases": [
         {
@@ -178,10 +178,10 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "딕셔너리 board에 name이 있으면 점수를, 없으면 None을 반환하는 get_score 함수를 만들고 \"Kim\"과 \"Park\"을 조회해 출력해보세요.",
-      "prompt_en": "Define get_score(board, name) returning board[name] if found else None, and test \"Kim\" and \"Park\".",
-      "hint_ko": "키 포함 조건문 안에서는 해당 점수를 즉시 반환하고, 조건문을 통과한 아랫줄에서는 값 없음 상수를 반환하도록 구성하세요.",
-      "hint_en": "Send back the dictionary value inside the membership check, and fall through to Python's null constant when not found.",
+      "prompt_ko": "딕셔너리에서 키가 있을 때만 값을 return하고 없을 때는 None을 반환하도록 함수를 만들면, 없는 키를 조회할 때 오류 없이 안전하게 처리할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Checking if a key is in a dictionary before returning its value—and returning None otherwise—creates a safe lookup function. Follow the blocks and type the code.",
+      "hint_ko": "키가 존재하면 if문 안에서 값을 즉시 반환하고, 존재하지 않으면 조건문을 지나 None을 반환합니다.",
+      "hint_en": "If the key exists, the function returns the value right away; otherwise it falls through and returns None.",
       "targetCode": "def get_score(board, name):\n    if name in board:\n        return board[name]\n    return None\nsc = {\"Kim\": 95, \"Lee\": 88}\nprint(get_score(sc, \"Kim\"), get_score(sc, \"Park\"))",
       "testCases": [
         {

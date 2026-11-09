@@ -23,10 +23,10 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "age에 20, ticket에 True를 저장하고 age >= 18 and ticket을 출력해 동시 만족 여부를 확인해보세요.",
-      "prompt_en": "Set age to 20 and ticket to True, then print age >= 18 and ticket.",
-      "hint_ko": "동시 만족 논리 연산자는 왼쪽과 오른쪽 조건이 둘 다 참일 때만 최종 결과를 참으로 판단합니다.",
-      "hint_en": "The conjunction operator evaluates to true only when both the left and right conditions are true.",
+      "prompt_ko": "and 연산자는 양쪽 조건이 모두 참(True)일 때만 최종 결과를 True로 판단합니다. 블록의 코드를 따라 입력해 동시 만족 결과를 확인해보세요.",
+      "prompt_en": "The and operator evaluates to True only when both conditions on either side are True. Trace the block code to check the result.",
+      "hint_ko": "변수에 값을 저장한 뒤 print() 안에서 비교식과 불리언 변수를 and로 연결해 출력합니다.",
+      "hint_en": "Store the values in variables, then join the comparison and boolean variable with and inside print().",
       "targetCode": "age = 20\nticket = True\nprint(age >= 18 and ticket)",
       "testCases": [
         {
@@ -59,10 +59,10 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "is_vip에 False, coupon에 True를 저장한 뒤 is_vip or coupon의 결과를 출력해보세요.",
-      "prompt_en": "Set is_vip = False and coupon = True, then print is_vip or coupon.",
-      "hint_ko": "선택 논리 연산자는 양쪽 조건 가운데 어느 한쪽이라도 참이면 전체 결과를 참으로 판단합니다.",
-      "hint_en": "The disjunction operator evaluates to true whenever at least one of the two sides is true.",
+      "prompt_ko": "or 연산자는 양쪽 조건 중 어느 하나라도 참(True)이면 전체 결과를 True로 판단합니다. 블록에 표시된 코드를 따라 쳐보세요.",
+      "prompt_en": "The or operator evaluates to True whenever at least one of the two conditions is True. Trace the code shown in the blocks.",
+      "hint_ko": "두 조건이 모두 False일 때만 전체 결과가 False가 되며, 하나라도 True이면 True가 출력됩니다.",
+      "hint_en": "The result is False only when both sides are False; if either side is True, True is printed.",
       "targetCode": "is_vip = False\ncoupon = True\nprint(is_vip or coupon)",
       "testCases": [
         {
@@ -95,10 +95,10 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "day에 \"Sun\"을 저장하고 day == \"Sat\" or day == \"Sun\"을 출력해 주말 여부를 확인해보세요.",
-      "prompt_en": "Store \"Sun\" in day and print day == \"Sat\" or day == \"Sun\".",
-      "hint_ko": "비교 연산이 논리 연산보다 우선순위가 높으므로 양쪽의 같음 비교가 각각 먼저 계산된 뒤 하나라도 참인지 판별합니다.",
-      "hint_en": "Equality comparisons run before logical operators, checking each day match first and then testing whether either one holds.",
+      "prompt_ko": "비교 연산자(==)는 논리 연산자(or)보다 먼저 계산되므로, 두 같음 비교를 각각 판별한 뒤 하나라도 참인지 확인합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Comparison operators (==) run before logical operators (or), evaluating each equality check first before testing if either holds. Trace the block code.",
+      "hint_ko": "특정 변수가 여러 값 중 하나와 일치하는지 확인할 때도 각 비교식을 완결된 형태로 적은 뒤 or로 연결해야 합니다.",
+      "hint_en": "When testing a variable against multiple values, write each full equality comparison and join them with or.",
       "targetCode": "day = \"Sun\"\nprint(day == \"Sat\" or day == \"Sun\")",
       "testCases": [
         {
@@ -131,10 +131,10 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "score에 85를 저장하고 score >= 80 and score < 90을 출력해 80점대 구간인지 확인해보세요.",
-      "prompt_en": "Store 85 in score and print score >= 80 and score < 90.",
-      "hint_ko": "특정 숫자 구간에 속하는지 확인할 때는 하한 비교식과 상한 비교식을 모두 만족하도록 논리 연산자로 이어줍니다.",
-      "hint_en": "To check whether a number falls within a range, connect the lower-bound check and upper-bound check so both must hold.",
+      "prompt_ko": "숫자가 특정 구간에 속하는지 확인할 때는 하한 비교식(>=)과 상한 비교식(<)을 and 연산자로 연결합니다. 블록 코드를 따라 입력해 구간 판별 결과를 확인해보세요.",
+      "prompt_en": "To check if a number falls within a range, connect the lower-bound (>=) and upper-bound (<) comparisons with and. Trace the block code to verify.",
+      "hint_ko": "왼쪽 조건과 오른쪽 조건이 모두 참이어야 해당 점수 구간에 속한 것으로 판정되어 True가 출력됩니다.",
+      "hint_en": "Both the lower-bound and upper-bound checks must evaluate to True for the range check to print True.",
       "targetCode": "score = 85\nprint(score >= 80 and score < 90)",
       "testCases": [
         {
@@ -167,10 +167,10 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 두 수를 정수 x, y에 담고 x > 0 and y % 2 == 0의 결과를 출력해보세요. (터미널 입력: 5 8)",
-      "prompt_en": "Split two numbers into integers x, y and print x > 0 and y % 2 == 0. (Terminal input: 5 8)",
-      "hint_ko": "공백으로 나눈 두 입력값을 각각 정수로 변환한 뒤, 양수 조건과 짝수 조건을 동시 만족 연산자로 묶어 출력해보세요.",
-      "hint_en": "Split the input into two strings, convert both to integers, and combine the positive check with the even check.",
+      "prompt_ko": "input().split()과 int()로 변환한 두 정수에 대해 양수 조건(> 0)과 짝수 조건(% 2 == 0)을 and로 결합할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 5 8)",
+      "prompt_en": "You can combine a positive check (> 0) and an even check (% 2 == 0) with and on two integers parsed via input().split() and int(). Trace the block code. (Terminal input: 5 8)",
+      "hint_ko": "산술 연산(%)이 비교 연산(>, ==)보다 먼저 수행되고, 마지막에 and가 두 조건의 참·거짓을 종합합니다.",
+      "hint_en": "Arithmetic (%) runs before comparisons (>, ==), and finally and combines both boolean results.",
       "targetCode": "a, b = input().split()\nx = int(a)\ny = int(b)\nprint(x > 0 and y % 2 == 0)",
       "testCases": [
         {

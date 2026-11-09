@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: 'input()으로 받은 문자열 raw를 둘째 블록의 int( ) 안에 넣어 정수 num으로 저장한 뒤, num + 10을 출력해보세요. (터미널 입력: 25)',
-      prompt_en: 'Read raw via input(), convert raw to integer num using int( ), and print num + 10 (Terminal input: 25).',
-      hint_ko: '입력 함수로 읽어온 숫자 모양 문자열을 정수 변환 블록에 넣으면 실제 덧셈 계산이 가능한 정수로 바뀝니다.',
-      hint_en: 'Passing the input string variable into the integer conversion block turns it into a whole number that can be added.',
+      prompt_ko: 'int() 함수는 숫자 모양의 문자열을 실제 산술 계산이 가능한 정수(integer) 자료형으로 변환해줍니다. 블록의 코드를 따라 입력해 덧셈 결과를 출력해보세요. (터미널 입력: 25)',
+      prompt_en: 'The int() function converts a numeric string into an integer data type so you can perform arithmetic with it. Trace the block code to print the sum (Terminal input: 25).',
+      hint_ko: 'input()으로 받은 문자열 변수를 int() 괄호 안에 넣어 정수로 바꾼 뒤 숫자를 더합니다.',
+      hint_en: 'Pass the string variable from input() inside int() to convert it into a whole number before adding.',
       targetCode: 'raw = input()\nnum = int(raw)\nprint(num + 10)',
       testCases: [
         {
@@ -76,10 +76,10 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: 'int(input()) 블록으로 입력값을 바로 정수로 변환해 age에 저장하고, age + 1을 출력해보세요. (터미널 입력: 19)',
-      prompt_en: 'Store the integer-converted input in variable age using int(input()), and print age + 1 (Terminal input: 19).',
-      hint_ko: '입력 블록을 정수 변환 블록으로 감싸면 읽어온 문자열이 즉시 정수로 바뀌어 변수에 저장됩니다.',
-      hint_en: 'Wrapping the input block inside integer conversion turns the incoming text into a whole number right away.',
+      prompt_ko: 'int(input())처럼 input() 함수를 int()로 바로 감싸면, 입력받은 문자열을 한 줄에서 즉시 정수로 변환해 변수에 저장할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 19)',
+      prompt_en: 'Wrapping input() directly inside int() as int(input()) reads user input and converts it into an integer in a single line. Trace the block code (Terminal input: 19).',
+      hint_ko: '안쪽의 input()이 먼저 실행되어 문자열을 읽어오고, 바깥쪽의 int()가 그 값을 정수로 바꿉니다.',
+      hint_en: 'The inner input() reads the text first, and the outer int() immediately converts it into an integer.',
       targetCode: 'age = int(input())\nprint(age + 1)',
       testCases: [
         {
@@ -126,10 +126,10 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: '두 줄로 입력되는 두 정수를 각각 a와 b에 저장하고, 두 수의 합 a + b를 출력해보세요. (터미널 입력: 첫째 줄 15, 둘째 줄 27)',
-      prompt_en: 'Read two integers on separate lines into a and b, and print their sum a + b (Terminal input: line 1 15, line 2 27).',
-      hint_ko: '두 변수에 각각 정수로 변환된 입력값을 저장한 뒤, 출력 블록에서 두 변수를 더한 값을 출력해보세요.',
-      hint_en: 'Store the two converted integers in separate variables and print their sum.',
+      prompt_ko: '두 줄에 걸쳐 입력되는 숫자를 각각 int(input())으로 받아 저장하면, 문자열 이어붙이기가 아닌 두 정수의 덧셈(+) 합계를 구할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 15, 둘째 줄 27)',
+      prompt_en: 'Reading two lines with int(input()) converts both inputs into integers so the + operator computes their numeric sum instead of concatenating strings. Trace the block code (Terminal input: line 1 15, line 2 27).',
+      hint_ko: '두 변수 모두 정수형으로 변환되었기 때문에 + 기호가 숫자 덧셈으로 동작합니다.',
+      hint_en: 'Since both variables hold integers, + performs arithmetic addition.',
       targetCode: 'a = int(input())\nb = int(input())\nprint(a + b)',
       testCases: [
         {
@@ -176,10 +176,10 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: '정수 lv를 입력받아 1을 더한 뒤, str(lv)로 문자열로 변환한 값을 다시 lv에 저장하고 "Lv." + lv를 출력해보세요. (터미널 입력: 9)',
-      prompt_en: 'Read integer lv, add 1, store str(lv) back into lv, and print "Lv." + lv (Terminal input: 9).',
-      hint_ko: '숫자 계산이 끝난 변수를 문자열 변환 블록(str)으로 감싸 다시 저장하면, 앞선 글자와 더하기 기호로 빈틈없이 이어붙일 수 있습니다.',
-      hint_en: 'After adding 1 to the number, convert lv into a string with str(lv) and store it back so you can join it with "Lv." using +.',
+      prompt_ko: 'str() 함수는 숫자를 문자열(string)로 변환해주어, 계산이 끝난 숫자를 다른 문자열과 덧셈 기호(+)로 빈틈없이 이어붙일 수 있게 해줍니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 9)',
+      prompt_en: 'The str() function converts a number into a string so you can concatenate it with other strings using +. Trace the block code (Terminal input: 9).',
+      hint_ko: '정수 상태에서 1을 더한 뒤 str()로 문자열로 바꾸어 저장해야 문자열과 +로 합칠 수 있습니다.',
+      hint_en: 'Add 1 while the value is an integer, then convert it with str() before joining it with "Lv." using +.',
       targetCode: 'lv = int(input())\nlv += 1\nlv = str(lv)\nprint("Lv." + lv)',
       testCases: [
         {
@@ -226,10 +226,10 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: '두 정수를 입력받아 더한 total을 구한 뒤, res에 str(total)을 저장하고 "합계:" + res를 출력해보세요. (터미널 입력: 첫째 줄 30, 둘째 줄 70)',
-      prompt_en: 'Read two integers, sum them into total, store str(total) in res, and print "합계:" + res (Terminal input: line 1 30, line 2 70).',
-      hint_ko: '입력받을 때는 정수 변환으로 덧셈을 수행하고, 출력하기 전에는 결과 변수를 문자열 변환 블록에 넣어 글자로 바꾼 뒤 이어붙입니다.',
-      hint_en: 'Use int() to add the two inputs as numbers, then store str(total) in res before concatenating with the label.',
+      prompt_ko: '입력값을 계산할 때는 int()로 정수로 바꾸어 더하고, 계산 결과를 앞뒤 문자열과 +로 합쳐 출력할 때는 다시 str()로 변환합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 30, 둘째 줄 70)',
+      prompt_en: 'Use int() to convert inputs for numeric addition, then use str() to convert the sum back into a string before concatenating it with a text label using +. Trace the block code (Terminal input: line 1 30, line 2 70).',
+      hint_ko: '산술 덧셈은 정수 상태에서 수행하고, 문자열 결합(+)은 str() 변환 후에 수행합니다.',
+      hint_en: 'Perform addition while the values are integers, and concatenate with + after converting the sum via str().',
       targetCode: 'a = int(input())\nb = int(input())\ntotal = a + b\nres = str(total)\nprint("합계:" + res)',
       testCases: [
         {

@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "Hello!를 출력하는 greet 함수를 정의하고, 아래에서 함수를 호출해 인사말을 출력해보세요.",
-      "prompt_en": "Define a function greet() that prints Hello!, then call greet() below.",
-      "hint_ko": "함수 정의 블록 안에 출력문을 들여쓰기해 배치하고, 블록 바깥 아래에서 함수 이름 뒤에 빈 괄호를 붙여 호출하세요.",
-      "hint_en": "Indent the print statement inside the function block, then invoke the function with empty parentheses at the top level below.",
+      "prompt_ko": "def 함수이름(): 구문으로 자주 쓸 코드 묶음을 함수로 정의해 두면, 아래에서 함수이름() 형태로 호출할 때마다 본문이 실행됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Defining a reusable code block with def function_name(): lets you execute its body whenever you call function_name(). Follow the blocks and type the code.",
+      "hint_ko": "함수를 정의(def)한 것만으로는 실행되지 않으며, 반드시 블록 바깥에서 소괄호를 붙여 호출해야 출력됩니다.",
+      "hint_en": "Defining a function with def does not run it automatically; you must call it with parentheses outside the block.",
       "targetCode": "def greet():\n    print(\"Hello!\")\ngreet()",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "===와 GO!를 두 줄로 출력하는 banner 함수를 정의한 뒤, 두 번 연속 호출해보세요.",
-      "prompt_en": "Define banner() to print === and GO! on two lines, then call banner() twice.",
-      "hint_ko": "함수 본문 안에 두 출력문을 순서대로 넣고, 정의가 끝난 바깥에서 함수를 두 번 연속 호출해 재사용하세요.",
-      "hint_en": "Place both print statements inside the function body, then invoke the function twice at the top level.",
+      "prompt_ko": "함수 본문에 여러 줄의 명령을 넣어 한 번 정의해 두면, 같은 코드를 반복 작성하지 않고 함수를 여러 번 호출해 재사용할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Once you group multiple statements inside a function body, you can run all of them repeatedly just by calling the function multiple times. Follow the blocks and type the code.",
+      "hint_ko": "함수를 한 번 호출할 때마다 들여쓰기된 본문의 두 print() 문이 위에서 아래로 차례대로 실행됩니다.",
+      "hint_en": "Each time you call the function, both indented print() statements inside its body execute in order.",
       "targetCode": "def banner():\n    print(\"===\")\n    print(\"GO!\")\nbanner()\nbanner()",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "Win!을 출력하는 cheer 함수를 만들고, for 반복문으로 번호(1~3)와 함께 3번 호출해보세요. (출력 예: #1 다음 줄 Win!)",
-      "prompt_en": "Define cheer() to print Win!, then use a for loop to print #1..#3 and call cheer() 3 times.",
-      "hint_ko": "응원 문구를 출력하는 함수를 먼저 정의한 뒤, 3회 반복문 안에서 번호 출력과 함수 호출이 차례로 실행되게 배치하세요.",
-      "hint_en": "Define the cheering function first, then inside a 3-step loop print the 1-based label followed immediately by the function call.",
+      "prompt_ko": "정의해 둔 함수를 for 반복문 안에서 호출하면 매 반복 회차마다 함수 본문이 실행되어 반복 작업과 함수를 깔끔하게 결합할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Calling a defined function inside a for loop executes the function body on every iteration of the loop. Follow the blocks and type the code.",
+      "hint_ko": "함수를 먼저 정의한 뒤 for문 본문 안에서 번호 출력과 함수 호출이 함께 반복되도록 작성합니다.",
+      "hint_en": "Define the function at the top, then call it inside the for loop right after printing the step number.",
       "targetCode": "def cheer():\n    print(\"Win!\")\nfor i in range(3):\n    print(f\"#{i + 1}\")\n    cheer()",
       "testCases": [
         {
@@ -138,10 +138,10 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "Open과 Close를 각각 출력하는 두 함수를 정의하고, 입력값이 \"o\"이면 열기 함수를, 아니면 닫기 함수를 호출해보세요. (터미널 입력: o)",
-      "prompt_en": "Define open_box() and close_box(), then call open_box() if input is \"o\", else close_box(). (Terminal input: o)",
-      "hint_ko": "열기와 닫기 함수를 각각 먼저 정의한 뒤, 입력값 비교 조건문의 참·거짓 분기마다 알맞은 함수 호출을 배치하세요.",
-      "hint_en": "Define both action functions first, then invoke the matching one inside the true and false branches of the input check.",
+      "prompt_ko": "역할별로 함수를 각각 정의해 두고 if / else 조건문 안에서 상황에 맞는 함수를 선택해 호출하도록 분기할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: o)",
+      "prompt_en": "You can define separate functions for different actions and use an if / else statement to call the matching function based on input. Follow the blocks and type the code. (Terminal input: o)",
+      "hint_ko": "두 함수를 먼저 정의해 둔 뒤, 입력값 비교 결과에 따라 참 분기와 거짓 분기에서 알맞은 함수를 호출합니다.",
+      "hint_en": "Define both functions first, then invoke the appropriate one inside each branch of the if / else check.",
       "targetCode": "def open_box():\n    print(\"Open\")\ndef close_box():\n    print(\"Close\")\ncmd = input()\nif cmd == \"o\":\n    open_box()\nelse:\n    close_box()",
       "testCases": [
         {
@@ -184,10 +184,10 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "함수 안에서 리스트 [\"Kim\", \"Lee\", \"Park\"]을 만들고 인원수를 f-string으로 출력하는 show_team을 정의해 호출해보세요. (출력 예: Team:3)",
-      "prompt_en": "Define show_team() to create [\"Kim\", \"Lee\", \"Park\"] and print f\"Team:{len(members)}\", then call it.",
-      "hint_ko": "함수 본문 안에서 리스트 생성과 길이 서식 출력을 차례로 수행하고, 함수 바깥 아래에서 한 번 호출하세요.",
-      "hint_en": "Build the member list and print its formatted length inside the function body, then invoke the function outside.",
+      "prompt_ko": "함수 본문 안에서는 단순 출력뿐만 아니라 리스트 생성과 len() 계산 등 여러 단계의 데이터 처리를 묶어 실행할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Inside a function body, you can group data creation and calculations like list creation and len() before printing the result. Follow the blocks and type the code.",
+      "hint_ko": "함수 내부에서 만든 리스트의 길이를 len()으로 구해 출력하고, 마지막 줄에서 함수를 호출해 실행합니다.",
+      "hint_en": "Create the list and print its length inside the function, then call the function on the last line.",
       "targetCode": "def show_team():\n    members = [\"Kim\", \"Lee\", \"Park\"]\n    print(f\"Team:{len(members)}\")\nshow_team()",
       "testCases": [
         {

@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "중복 값이 포함된 집합 s = {10, 20, 10, 30}을 만들고 고유 요소 개수 len(s)와 20 in s를 출력해보세요.",
-      "prompt_en": "Create set s = {10, 20, 10, 30} and print len(s) and 20 in s.",
-      "hint_ko": "콜론 없이 중괄호로 값만 나열해 만든 집합은 똑같은 값을 하나만 남기고 중복을 자동으로 걸러냅니다.",
-      "hint_en": "Listing values inside curly braces without colons builds a set that automatically keeps only one copy of any duplicate.",
+      "prompt_ko": "집합(set)은 중괄호({}) 안에 콜론 없이 값들을 나열해 만들며, 중복된 값을 자동으로 제거해 고유한 원소만 보관합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A set is created by listing values inside curly braces ({}) without colons, automatically discarding duplicates to keep only unique elements. Follow the blocks and type the code.",
+      "hint_ko": "똑같은 값을 여러 번 넣어도 집합 안에는 하나만 남으며, len()과 in 연산자로 원소 개수와 포함 여부를 확인할 수 있습니다.",
+      "hint_en": "Duplicate elements collapse into one inside a set, and you can use len() and in to check its size and membership.",
       "targetCode": "s = {10, 20, 10, 30}\nprint(len(s), 20 in s)",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "집합 tags = {\"py\"}에 .add()로 \"web\"과 중복 값 \"py\"를 차례로 추가한 뒤 len(tags)와 \"web\" in tags를 출력해보세요.",
-      "prompt_en": "On tags = {\"py\"}, call .add(\"web\") and .add(\"py\"), then print len(tags) and \"web\" in tags.",
-      "hint_ko": "집합에는 순서가 없어 끝에 덧붙이는 대신 '더하다·추가하다'라는 뜻의 세 글자 메서드를 쓰며, 이미 있는 값은 무시됩니다.",
-      "hint_en": "Sets are unordered, so insert elements with the short 3-letter addition method; re-inserting an existing value leaves size unchanged.",
+      "prompt_ko": "집합에는 순서가 없으므로 .append() 대신 .add(값) 메서드로 원소를 추가하며, 이미 들어 있는 값을 다시 .add()해도 중복 추가되지 않습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Because sets are unordered, you insert elements using .add(value), and adding a value that already exists in the set has no effect. Follow the blocks and type the code.",
+      "hint_ko": "새로운 값은 집합에 추가되어 길이가 늘어나지만, 이미 존재하는 값은 무시되어 크기가 그대로 유지됩니다.",
+      "hint_en": "Adding a new element increases the set's size, while adding an existing element leaves the set unchanged.",
       "targetCode": "tags = {\"py\"}\ntags.add(\"web\")\ntags.add(\"py\")\nprint(len(tags), \"web\" in tags)",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "리스트 nums = [5, 10, 5, 20, 10]을 set(nums)로 변환해 중복을 없앤 뒤 고유 개수와 합계(sum)를 출력해보세요.",
-      "prompt_en": "Deduplicate nums = [5, 10, 5, 20, 10] with uniq = set(nums) and print len(uniq) and sum(uniq).",
-      "hint_ko": "중복이 섞인 리스트를 집합 변환 함수에 넣으면 고유한 숫자만 남으며, 여기에 길이와 합계 함수를 바로 적용할 수 있습니다.",
-      "hint_en": "Converting a list to a set strips out duplicates at once, allowing you to measure the unique count and unique sum directly.",
+      "prompt_ko": "중복 요소가 섞인 리스트를 set(리스트) 함수에 전달하면 중복이 한 번에 제거된 새 집합이 만들어집니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Passing a list with duplicates to set(list) converts it into a set containing only unique values. Follow the blocks and type the code.",
+      "hint_ko": "집합에도 len()과 sum() 함수를 그대로 적용해 고유 원소의 개수와 합계를 바로 구할 수 있습니다.",
+      "hint_en": "You can pass the deduplicated set directly to len() and sum() to get the unique count and total.",
       "targetCode": "nums = [5, 10, 5, 20, 10]\nuniq = set(nums)\nprint(len(uniq), sum(uniq))",
       "testCases": [
         {
@@ -141,10 +141,10 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "coins = [100, 500, 100, 50, 500]의 중복을 제거한 집합 uniq를 for문으로 순회해 고유 동전 총합을 출력해보세요.",
-      "prompt_en": "Deduplicate coins = [100, 500, 100, 50, 500] into uniq = set(coins) and sum them with a for loop.",
-      "hint_ko": "동전 리스트를 집합으로 변환해 중복 동전을 제거한 뒤, 그 집합의 원소를 하나씩 순회하며 합계 변수에 더하세요.",
-      "hint_en": "Convert the coin list into a set to drop duplicates first, then loop over the unique coins to accumulate their total.",
+      "prompt_ko": "리스트를 set()으로 변환해 중복을 먼저 없앤 뒤 for 반복문으로 순회하면 각 고유 값을 한 번씩만 처리할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Converting a list to a set with set() before iterating with a for loop ensures each unique value is processed only once. Follow the blocks and type the code.",
+      "hint_ko": "집합은 순서가 보장되지 않지만, 모든 고유 원소를 빠짐없이 한 번씩 꺼내 누적 합계를 구할 때는 문제없이 사용할 수 있습니다.",
+      "hint_en": "Although sets have no fixed order, iterating over a set visits every unique element exactly once.",
       "targetCode": "coins = [100, 500, 100, 50, 500]\nuniq = set(coins)\ntotal = 0\nfor c in uniq:\n    total += c\nprint(total)",
       "testCases": [
         {
@@ -182,10 +182,10 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "빈 집합 picks에 고유 아이템이 3개 모일 때까지 while문으로 입력받아 추가하고 크기와 \"gold\" 포함 여부를 출력해보세요. (터미널 입력: ruby, ruby, gold, jade 한 줄씩)",
-      "prompt_en": "Loop while len(picks) < 3 to read and .add() items into picks = set(), then print size and \"gold\" in picks. (Terminal input: ruby, ruby, gold, jade line by line)",
-      "hint_ko": "중복된 입력은 집합 크기를 늘리지 않으므로, 집합 길이가 3보다 작은 동안 입력받아 원소를 추가하면 고유 아이템 3개가 모입니다.",
-      "hint_en": "Duplicates don't increase set length, so looping while the size is under 3 and inserting each input gathers 3 distinct items.",
+      "prompt_ko": "빈 집합은 {}가 아닌 set()으로 생성하며, while len(집합) < 목표개수: 조건으로 .add()를 반복하면 중복 입력을 제외하고 서로 다른 값이 목표 개수만큼 모일 때까지 입력받을 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: ruby, ruby, gold, jade 한 줄씩)",
+      "prompt_en": "An empty set is created with set() (not {}), and looping with while len(set) < target: and .add() collects inputs until you have the desired number of distinct items. Follow the blocks and type the code. (Terminal input: ruby, ruby, gold, jade line by line)",
+      "hint_ko": "중복된 값을 .add()해도 집합의 길이(len)는 늘어나지 않으므로, 고유한 값 3개가 채워질 때까지 반복문이 계속 실행됩니다.",
+      "hint_en": "Because duplicate .add() calls do not increase len(picks), the loop continues until 3 unique items are collected.",
       "targetCode": "picks = set()\nwhile len(picks) < 3:\n    item = input()\n    picks.add(item)\nprint(len(picks), \"gold\" in picks)",
       "testCases": [
         {

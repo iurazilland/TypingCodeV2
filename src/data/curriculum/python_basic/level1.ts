@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '숫자 10을 넣어 화면에 출력해보세요.',
-      prompt_en: 'Insert the number 10 and print it on the screen.',
-      hint_ko: '미리 연결된 print() 블록의 빈칸에 숫자 10을 입력하고 실행 버튼을 눌러보세요.',
-      hint_en: 'Enter 10 inside the pre-placed print() block slot and click Run.',
+      prompt_ko: 'print() 함수는 괄호 안에 적은 값을 화면에 출력합니다. 블록의 숫자를 따라 입력해 출력 결과를 확인해보세요.',
+      prompt_en: 'The print() function displays the value inside its parentheses on the screen. Trace the number in the block to print it.',
+      hint_ko: '숫자를 출력할 때는 따옴표 없이 숫자만 그대로 입력합니다.',
+      hint_en: 'Numbers are entered directly inside print() without quotes.',
       targetCode: 'print(10)',
       testCases: [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '덧셈 기호(+)를 사용해 10+5를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use the addition symbol (+) to insert 10+5 and print it on the screen.',
-      hint_ko: 'print() 블록의 입력 슬롯에 10+5를 입력하면 파이썬이 덧셈을 계산하여 15를 출력합니다.',
-      hint_en: 'Enter 10+5 into the print() slot to have Python calculate and print 15.',
+      prompt_ko: 'print() 괄호 안에 덧셈 기호(+)로 수식을 적으면 파이썬이 계산한 결과를 출력합니다. 블록의 덧셈식을 따라 입력해보세요.',
+      prompt_en: 'Writing an addition expression with + inside print() outputs the calculated result. Trace the addition expression in the block.',
+      hint_ko: '10+5처럼 수식을 입력하면 식 자체가 아닌 계산 결과 15가 화면에 출력됩니다.',
+      hint_en: 'Python evaluates 10+5 first and prints the sum 15.',
       targetCode: 'print(10+5)',
       testCases: [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '곱셈 기호(*)를 사용해 4*5를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use the multiplication symbol (*) to insert 4*5 and print it on the screen.',
-      hint_ko: '파이썬에서 곱셈은 키보드의 별표(*) 기호를 사용합니다. 4*5를 넣으면 20이 출력됩니다.',
-      hint_en: 'In Python, multiplication uses the asterisk (*) operator. 4*5 produces 20.',
+      prompt_ko: '파이썬에서 곱셈은 영문자 x 대신 별표(*) 기호를 사용합니다. 블록의 곱셈식을 따라 입력해 계산 결과를 출력해보세요.',
+      prompt_en: 'In Python, multiplication uses the asterisk (*) symbol instead of x. Trace the multiplication expression in the block to print the result.',
+      hint_ko: '키보드의 Shift + 8을 눌러 별표(*) 연산자를 입력할 수 있습니다.',
+      hint_en: 'Press Shift + 8 on your keyboard to type the asterisk (*) operator.',
       targetCode: 'print(4*5)',
       testCases: [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '나눗셈 기호(/)를 사용해 20/4를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use the division symbol (/) to insert 20/4 and print it on the screen.',
-      hint_ko: '파이썬에서 나눗셈은 슬래시(/) 기호를 사용합니다. 20/4를 넣으면 계산 결과로 실수 형태인 5.0이 출력됩니다.',
-      hint_en: 'In Python, division uses the slash (/) operator. Inserting 20/4 calculates and outputs 5.0 as a float.',
+      prompt_ko: '나눗셈은 슬래시(/) 기호를 사용하며, 나누어떨어지더라도 결과는 항상 소수점이 있는 실수로 출력됩니다. 블록의 나눗셈식을 따라 입력해보세요.',
+      prompt_en: 'Division uses the slash (/) operator and always returns a float with a decimal point. Trace the division expression in the block.',
+      hint_ko: '20/4의 계산 결과는 정수 5가 아니라 실수 형태인 5.0으로 출력됩니다.',
+      hint_en: 'Even when evenly divisible, 20/4 outputs 5.0 as a floating-point number.',
       targetCode: 'print(20/4)',
       testCases: [
         {
@@ -190,10 +190,10 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '우선 계산되는 괄호를 활용해 (10+20)*3을 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use parentheses () for prioritized calculation to insert (10+20)*3 and print it on the screen.',
-      hint_ko: '괄호 ()로 묶은 10+20(=30)이 가장 먼저 계산되고, 그 결과에 3을 곱해 90이 출력됩니다.',
-      hint_en: 'Parentheses () take the highest priority: 10+20 (=30) evaluates first, then multiplied by 3 to produce 90.',
+      prompt_ko: '사칙연산에서는 곱셈과 나눗셈이 먼저 계산되지만, 소괄호 ( )로 묶은 식은 가장 먼저 계산됩니다. 블록의 수식을 따라 입력해보세요.',
+      prompt_en: 'Multiplication and division normally run before addition, but parentheses ( ) force the enclosed expression to evaluate first. Trace the expression in the block.',
+      hint_ko: '괄호 안의 덧셈이 먼저 계산된 뒤 바깥의 곱셈이 수행되어 90이 출력됩니다.',
+      hint_en: 'The addition inside the parentheses evaluates first, and its sum is then multiplied by 3 to print 90.',
       targetCode: 'print((10+20)*3)',
       testCases: [
         {

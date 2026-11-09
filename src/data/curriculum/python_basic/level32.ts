@@ -20,10 +20,10 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: "변수 name에 \"Alice\"를 저장하고 f-string으로 감싸 인사말을 출력해보세요. (출력 예: Hi, Alice!)",
-      prompt_en: "Store \"Alice\" in name and print a greeting using an f-string (e.g., Hi, Alice!).",
-      hint_ko: "'형식화하다(format)'의 첫 글자를 여는 따옴표 바로 앞에 붙이고, 변수가 들어갈 자리를 중괄호로 감싸 출력해보세요.",
-      hint_en: "Prefix the opening quote with the first letter of 'format' and wrap the variable name in curly braces.",
+      prompt_ko: "f-string은 따옴표 바로 앞에 f를 붙이고 중괄호 {변수} 자리에 변수 값을 자연스럽게 끼워 넣는 문자열 포맷팅 문법입니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "An f-string prefixes the opening quote with f and interpolates variable values directly inside curly braces {var}. Trace the block code.",
+      hint_ko: "f\"Hi, {name}!\"에서 {name} 자리가 변수에 저장된 문자열 값으로 치환되어 출력됩니다.",
+      hint_en: "In f\"Hi, {name}!\", {name} is replaced with the string value stored in the variable.",
       targetCode: "name = \"Alice\"\nprint(f\"Hi, {name}!\")",
       testCases: [
         {
@@ -61,10 +61,10 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: "item에 \"Potion\", gold에 50을 저장하고 f-string으로 한 줄에 출력해보세요. (출력 예: Potion: 50G)",
-      prompt_en: "Store \"Potion\" in item and 50 in gold, then print them on one line with an f-string (e.g., Potion: 50G).",
-      hint_ko: "포맷 문자열 안의 중괄호에 문자열 변수와 정수 변수를 각각 넣으면 별도의 형변환 없이 한 줄로 합쳐집니다.",
-      hint_en: "Place both the text variable and integer variable inside separate curly braces so they format together automatically.",
+      prompt_ko: "f-string 안에는 여러 개의 중괄호 {}를 사용할 수 있으며, 정수 변수도 str() 변환 없이 문자열과 한 번에 합쳐집니다. 블록의 코드를 따라 쳐보세요.",
+      prompt_en: "An f-string can hold multiple {} placeholders and automatically formats integers alongside text without calling str(). Trace the block code.",
+      hint_ko: "문자열 변수 {item}과 정수 변수 {gold}가 각각 지정된 위치에 끼워져 한 줄의 문자열이 됩니다.",
+      hint_en: "Both the string {item} and integer {gold} are interpolated in place into a single string.",
       targetCode: "item = \"Potion\"\ngold = 50\nprint(f\"{item}: {gold}G\")",
       testCases: [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: "a에 12, b에 8을 저장하고 f-string 안에서 덧셈식과 합계를 함께 출력해보세요. (출력 예: 12 + 8 = 20)",
-      prompt_en: "Set a to 12 and b to 8, then print the addition equation and sum via an f-string (e.g., 12 + 8 = 20).",
-      hint_ko: "중괄호 안에는 단일 변수뿐만 아니라 두 변수를 더하는 계산식 자체도 직접 넣어 결과값을 출력할 수 있습니다.",
-      hint_en: "Curly braces can hold arithmetic expressions directly as well as individual variables.",
+      prompt_ko: "f-string의 중괄호 안에는 단순 변수뿐만 아니라 {a + b}처럼 산술 수식을 직접 넣어 계산 결과를 바로 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      prompt_en: "Curly braces in an f-string can evaluate arithmetic expressions like {a + b} directly and insert the result. Trace the block code.",
+      hint_ko: "앞의 {a}, {b}에는 각 변수 값이 들어가고 마지막 {a + b}에는 두 수를 더한 결과가 들어갑니다.",
+      hint_en: "{a} and {b} show each operand, while {a + b} evaluates and inserts their sum.",
       targetCode: "a = 12\nb = 8\nprint(f\"{a} + {b} = {a + b}\")",
       testCases: [
         {
@@ -143,10 +143,10 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: "정수 n을 입력받아 for 문으로 1부터 3까지 곱한 구구단 세 줄을 출력해보세요. (출력 예: 5 x 1 = 5) (터미널 입력: 5)",
-      prompt_en: "Read integer n and use a for loop from 1 to 3 to print three multiplication lines (Terminal input: 5).",
-      hint_ko: "끝 번호 직전까지 생성하는 범위 규칙에 맞춰 1부터 3까지 반복하며, 단수·반복 변수·두 값의 곱을 각각 중괄호로 묶어 출력하세요.",
-      hint_en: "Remember the stop value of a range is exclusive; loop through 1 to 3 and place the base, counter, and product in braces.",
+      prompt_ko: "for 반복문과 f-string을 결합하면 매 반복마다 바뀌는 변수 i와 곱셈 수식 {n * i}를 깔끔한 구구단 형식으로 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 5)",
+      prompt_en: "Combining a for loop with an f-string lets you format the loop variable i and product {n * i} into clean multiplication lines. Trace the block code. (Terminal input: 5)",
+      hint_ko: "range(1, 4)를 통해 i가 1, 2, 3으로 변하며 세 줄의 구구단 문자열이 출력됩니다.",
+      hint_en: "As i steps through 1, 2, 3 in range(1, 4), three formatted multiplication lines are printed.",
       targetCode: "n = int(input())\nfor i in range(1, 4):\n    print(f\"{n} x {i} = {n * i}\")",
       testCases: [
         {
@@ -194,10 +194,10 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: "sec에 3을 저장하고 sec > 0인 동안 while 문으로 카운트다운하며 1씩 줄여보세요. (출력 예: T-3)",
-      prompt_en: "Set sec to 3 and count down while sec > 0, printing f\"T-{sec}\" and decrementing sec by 1.",
-      hint_ko: "반복문 안에서 현재 초를 포맷 문자열의 중괄호에 넣어 먼저 출력한 뒤, 복합 대입으로 값을 1씩 줄여가세요.",
-      hint_en: "Inside the loop, print the formatted countdown string first, then decrement the counter variable by 1.",
+      prompt_ko: "while 반복문 안에서 f-string(f\"T-{sec}\")과 감소 연산(sec -= 1)을 함께 사용하면 접두사가 붙은 카운트다운 문구를 차례대로 출력할 수 있습니다. 블록의 코드를 따라 쳐보세요.",
+      prompt_en: "Pairing an f-string (f\"T-{sec}\") with a decrement (sec -= 1) inside a while loop prints formatted countdown lines in order. Trace the block code.",
+      hint_ko: "현재 sec 값을 먼저 포맷팅해 출력한 뒤 1을 줄여야 T-3부터 T-1까지 순서대로 출력됩니다.",
+      hint_en: "Print the formatted string with the current sec value before decrementing it by 1.",
       targetCode: "sec = 3\nwhile sec > 0:\n    print(f\"T-{sec}\")\n    sec -= 1",
       testCases: [
         {

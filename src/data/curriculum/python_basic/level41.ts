@@ -31,10 +31,10 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "for 반복문으로 리스트 nums = [10, 20, 30]의 요소를 처음부터 끝까지 한 줄에 하나씩 출력해보세요.",
-      "prompt_en": "Use a for loop to print each element of nums = [10, 20, 30] on its own line.",
-      "hint_ko": "리스트 변수를 순회 대상에 두면 첫 번째 요소부터 마지막 요소까지 순서대로 하나씩 꺼내 반복 변수에 담아줍니다.",
-      "hint_en": "Iterating directly over a list assigns each element from start to finish to the loop variable one turn at a time.",
+      "prompt_ko": "for 변수 in 리스트: 구문은 인덱스 번호 없이도 리스트의 첫 번째 요소부터 마지막 요소까지 순서대로 하나씩 변수에 담아 반복합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A for item in list: loop iterates directly over a list, assigning each element in order to the loop variable. Follow the blocks and type the code.",
+      "hint_ko": "in 뒤에 리스트 변수를 두면 매 반복마다 리스트 안의 값이 순서대로 반복 변수에 대입됩니다.",
+      "hint_en": "Placing the list after in assigns each element one by one to the loop variable on every pass.",
       "targetCode": "nums = [10, 20, 30]\nfor x in nums:\n    print(x)",
       "testCases": [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "roles = [\"user\", \"vip\", \"admin\"]에 \"vip\"가 포함되어 있는지와 \"guest\"가 없는지를 각각 출력해보세요.",
-      "prompt_en": "Print whether \"vip\" is in roles = [\"user\", \"vip\", \"admin\"] and whether \"guest\" is not in roles.",
-      "hint_ko": "리스트에도 포함 연산자와 부정 포함 연산자를 그대로 써서 특정 요소가 들어 있는지 또는 없는지를 참/거짓으로 확인할 수 있습니다.",
-      "hint_en": "Membership and negated membership operators work on lists too, returning booleans for whether an item is present or absent.",
+      "prompt_ko": "리스트에서 in 연산자는 특정 요소가 포함되어 있는지, not in 연산자는 포함되어 있지 않은지를 확인해 True 또는 False로 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "On a list, the in operator checks whether an item is present and not in checks whether it is absent, returning True or False. Follow the blocks and type the code.",
+      "hint_ko": "찾고자 하는 값과 리스트 사이에 in 또는 not in을 적어 포함 여부를 논리값으로 바로 확인할 수 있습니다.",
+      "hint_en": "Place in or not in between the target value and the list to evaluate membership as a boolean.",
       "targetCode": "roles = [\"user\", \"vip\", \"admin\"]\nprint(\"vip\" in roles)\nprint(\"guest\" not in roles)",
       "testCases": [
         {
@@ -103,10 +103,10 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "scores = [65, 85, 90, 72]를 순회하며 80 이상인 점수만 빈 리스트 passed에 모아 출력해보세요.",
-      "prompt_en": "Filter values >= 80 from scores = [65, 85, 90, 72] into passed and print passed.",
-      "hint_ko": "점수 리스트를 하나씩 순회하면서 기준 점수 이상인 조건을 통과할 때만 빈 결과 리스트 끝에 추가한 뒤, 반복문 바깥에서 출력하세요.",
-      "hint_en": "Iterate over all scores, attach only values meeting the threshold onto the result list, and print the list after the loop finishes.",
+      "prompt_ko": "for 반복문으로 리스트를 순회하면서 if 조건문을 통과한 요소만 새 리스트에 .append()하면 원하는 데이터만 골라내는 필터링을 구현할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Iterating through a list with a for loop and calling .append() inside an if statement filters only the elements that meet your condition. Follow the blocks and type the code.",
+      "hint_ko": "조건을 만족하는 값만 결과 리스트에 추가되고, 조건을 만족하지 않는 값은 자연스럽게 건너뛰어집니다.",
+      "hint_en": "Only values satisfying the if condition are appended to the result list, while others are skipped.",
       "targetCode": "scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s >= 80:\n        passed.append(s)\nprint(passed)",
       "testCases": [
         {
@@ -139,10 +139,10 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "한 줄에 공백으로 입력된 숫자 문자열들을 순회하며 각각 정수로 변환해 nums 리스트에 담고 출력해보세요. (터미널 입력: 10 20 30)",
-      "prompt_en": "Iterate over input().split(), convert each token to int, append to nums, and print nums. (Terminal input: 10 20 30)",
-      "hint_ko": "입력 줄을 공백으로 쪼갠 문자열 리스트를 바로 순회하면서, 각 조각을 정수로 변환해 결과 리스트 끝에 하나씩 덧붙이세요.",
-      "hint_en": "Loop directly over the whitespace-divided input tokens, converting each string token to an integer as you add it to the list.",
+      "prompt_ko": "for 변수 in input().split(): 구문을 사용하면 한 줄에 공백으로 구분되어 입력된 문자열 조각들을 하나씩 순회하며 int()로 변환해 정수 리스트를 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 10 20 30)",
+      "prompt_en": "Looping with for s in input().split(): lets you iterate over space-separated input tokens and convert each one with int() into a list of integers. Follow the blocks and type the code. (Terminal input: 10 20 30)",
+      "hint_ko": "input().split()이 만든 문자열 리스트의 각 요소를 돌면서 int()로 정수로 바꾼 뒤 .append()로 저장합니다.",
+      "hint_en": "Each token from input().split() is a string, so wrap it in int() before appending to the list.",
       "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(nums)",
       "testCases": [
         {
@@ -185,10 +185,10 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "logs = [10, -5, 20, 0, 30]에서 음수는 건너뛰고 0이 나오면 즉시 중단하며 양수 합계를 출력해보세요. (출력 예: Valid:30)",
-      "prompt_en": "Loop over logs = [10, -5, 20, 0, 30]; skip negatives, stop at 0, and print Valid:30.",
-      "hint_ko": "음수일 때는 이번 차례만 건너뛰어 다음 요소로 넘어가고, 0일 때는 반복문 전체를 즉시 탈출하도록 제어문을 배치하세요.",
-      "hint_en": "Skip to the next iteration on negative numbers and exit the loop completely when zero is encountered before adding to the sum.",
+      "prompt_ko": "리스트를 for문으로 순회할 때 continue는 현재 요소만 건너뛰고 다음 요소로 넘어가며, break는 반복문 전체를 즉시 종료합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "When iterating over a list with a for loop, continue skips the current item and moves to the next, while break exits the loop immediately. Follow the blocks and type the code.",
+      "hint_ko": "합산 식(total += x)보다 앞에 continue와 break 조건을 두어야 제외할 값이나 종료 값 이후의 값이 더해지지 않습니다.",
+      "hint_en": "Place the continue and break checks before total += x so skipped or post-stop values are never added.",
       "targetCode": "logs = [10, -5, 20, 0, 30]\ntotal = 0\nfor x in logs:\n    if x < 0:\n        continue\n    if x == 0:\n        break\n    total += x\nprint(f\"Valid:{total}\")",
       "testCases": [
         {

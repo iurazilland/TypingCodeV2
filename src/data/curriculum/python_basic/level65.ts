@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "변수 text에 \"banana\"를 저장한 뒤, \"na\"의 첫 위치와 없는 문자 \"z\"의 탐색 결과(-1)를 차례로 출력해보세요.",
-      "prompt_en": "Store \"banana\" in text, then print text.find(\"na\") and text.find(\"z\") on separate lines.",
-      "hint_ko": "'찾아내다·발견하다'를 뜻하는 네 글자 문자열 메서드는 부분 문자열이 처음 시작하는 인덱스를 돌려주고, 없으면 에러 대신 -1을 돌려줍니다.",
-      "hint_en": "The 4-letter string method meaning 'locate or discover' returns the starting index of the first match, or -1 when absent.",
+      "prompt_ko": "문자열의 .find(부분문자열) 메서드는 찾는 문자열이 처음 등장하는 시작 인덱스를 반환하며, 존재하지 않으면 에러 대신 -1을 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The string .find(sub) method returns the starting index of the first occurrence of sub, or -1 (instead of raising an error) when it is not found. Trace the block code.",
+      "hint_ko": "문자열 인덱스는 0번부터 시작하며, \"banana\"에서 \"na\"는 2번 인덱스에서 처음 시작합니다.",
+      "hint_en": "String indices start at 0, so the first \"na\" in \"banana\" begins at index 2.",
       "targetCode": "text = \"banana\"\nprint(text.find(\"na\"))\nprint(text.find(\"z\"))",
       "testCases": [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "문자열 log(\"ok,err,ok,ok\")에서 \"ok\"가 몇 번 등장하는지 세어 cnt에 저장하고 출력해보세요. (출력 예: 3)",
-      "prompt_en": "Count how many times \"ok\" appears in log (\"ok,err,ok,ok\"), store it in cnt, and print cnt (e.g., 3).",
-      "hint_ko": "'개수를 세다'를 뜻하는 다섯 글자 문자열 메서드를 호출하면 인자로 넘긴 부분 문자열이 겹치지 않고 몇 번 등장하는지 정수로 알려줍니다.",
-      "hint_en": "Call the 5-letter string method meaning 'tally up how many' to get the integer number of non-overlapping occurrences.",
+      "prompt_ko": "문자열의 .count(부분문자열) 메서드는 대상 문자열 안에서 지정한 부분 문자열이 겹치지 않고 몇 번 등장하는지 정수로 세어 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The string .count(sub) method counts and returns the integer number of non-overlapping occurrences of sub inside the string. Trace the block code.",
+      "hint_ko": "찾는 부분 문자열이 한 번도 등장하지 않으면 .count()는 0을 반환합니다.",
+      "hint_en": "If the substring does not appear at all, .count() simply returns 0.",
       "targetCode": "log = \"ok,err,ok,ok\"\ncnt = log.count(\"ok\")\nprint(cnt)",
       "testCases": [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "문자열 raw(\"  py  \")의 왼쪽 공백만 지운 left와 오른쪽 공백만 지운 right를 \"[py  ]/[  py]\" 형식으로 출력해보세요.",
-      "prompt_en": "Strip left spaces of raw (\"  py  \") into left and right spaces into right, then print f\"[{left}]/[{right}]\".",
-      "hint_ko": "양쪽을 벗겨 내는 strip 앞에 왼쪽(left)의 첫 글자나 오른쪽(right)의 첫 글자를 붙이면 원하는 한쪽 방향의 공백만 지울 수 있습니다.",
-      "hint_en": "Prefixing strip with the first letter of 'left' or 'right' trims whitespace from only that single side of the string.",
+      "prompt_ko": ".lstrip()은 문자열의 왼쪽(left) 끝 공백만 제거하고, .rstrip()은 오른쪽(right) 끝 공백만 제거하여 반대쪽 공백은 그대로 유지합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": ".lstrip() removes leading whitespace from the left side only, while .rstrip() removes trailing whitespace from the right side only. Trace the block code.",
+      "hint_ko": "양쪽을 모두 지우는 .strip()과 달리 원하는 방향의 여백이나 문자만 선택적으로 제거할 때 사용합니다.",
+      "hint_en": "Unlike .strip() which trims both ends, .lstrip() and .rstrip() trim only one chosen direction.",
       "targetCode": "raw = \"  py  \"\nleft = raw.lstrip()\nright = raw.rstrip()\nprint(f\"[{left}]/[{right}]\")",
       "testCases": [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "양쪽 공백을 지운 입력에서 \"@\" 위치를 찾아 있으면 그 뒤 도메인을, 없으면 \"NONE\"을 출력해보세요. (터미널 입력: a@py.kr)",
-      "prompt_en": "Find \"@\" in stripped input; if found, print the domain after \"@\", otherwise print \"NONE\" (Terminal input: a@py.kr).",
-      "hint_ko": "탐색 메서드로 구한 위치가 실패 값(-1)이 아닐 때, 찾은 인덱스 바로 다음 칸(pos + 1)부터 끝까지 슬라이싱해 도메인만 잘라내 보세요.",
-      "hint_en": "Locate the symbol's index; when the result is not -1, slice from one position past that index to the end of the string.",
+      "prompt_ko": ".find()로 특정 구분 기호의 위치(pos)를 찾고 pos != -1인지 확인한 뒤, 슬라이싱 mail[pos + 1:]을 사용하면 기호 바로 뒷부분 문자열만 안전하게 추출할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: a@py.kr)",
+      "prompt_en": "Locating a delimiter's index pos with .find(), checking pos != -1, and slicing mail[pos + 1:] safely extracts everything after the delimiter. Trace the block code. (Terminal input: a@py.kr)",
+      "hint_ko": "pos는 구분 기호 자체의 위치이므로, 기호를 제외한 뒷부분을 잘라내려면 시작 인덱스를 pos + 1로 지정합니다.",
+      "hint_en": "Since pos is the index of the delimiter itself, start the slice at pos + 1 to exclude the delimiter.",
       "targetCode": "mail = input().strip()\npos = mail.find(\"@\")\nif pos != -1:\n    print(mail[pos + 1:])\nelse:\n    print(\"NONE\")",
       "testCases": [
         {
@@ -195,10 +195,10 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "문자열 msg(\"a  b    c\")에 두 칸 공백(\"  \")이 없을 때까지 한 칸 공백으로 줄인 뒤, 결과와 공백 수를 출력해보세요. (출력 예: a b c 2)",
-      "prompt_en": "Repeatedly replace \"  \" with \" \" in msg (\"a  b    c\") while \"  \" is found, then print msg and space count (e.g., a b c 2).",
-      "hint_ko": "두 칸 연속 공백의 탐색 위치가 -1이 아닌 동안 한 칸 공백으로 치환해 변수에 다시 담고, 반복이 끝나면 남은 한 칸 공백의 개수를 세어 함께 출력하세요.",
-      "hint_en": "Keep replacing double spaces with a single space while the search index is not -1, then output the final string alongside its single-space tally.",
+      "prompt_ko": "while 반복문 조건에서 .find(\"  \") != -1로 연속된 공백이 남아 있는지 검사하며 .replace()를 반복하면, 여러 칸 벌어졌던 공백을 모두 한 칸 공백으로 압축할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Looping with while msg.find(\"  \") != -1: and calling .replace(\"  \", \" \") repeatedly collapses any run of multiple spaces down to a single space. Trace the block code.",
+      "hint_ko": "반복이 끝난 뒤 .count(\" \")를 호출하면 최종 문자열에 남은 단일 공백의 개수를 확인할 수 있습니다.",
+      "hint_en": "Calling .count(\" \") after the loop finishes counts the remaining single spaces in the normalized string.",
       "targetCode": "msg = \"a  b    c\"\nwhile msg.find(\"  \") != -1:\n    msg = msg.replace(\"  \", \" \")\nprint(msg, msg.count(\" \"))",
       "testCases": [
         {

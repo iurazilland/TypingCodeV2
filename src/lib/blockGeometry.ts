@@ -67,6 +67,7 @@ export interface IfBranch {
   id: string;
   kind: 'if' | 'elif' | 'else' | 'try' | 'except' | 'finally';
   condition?: string;
+  targetCondition?: string;
   innerBlocks: CanvasBlock[];
 }
 
@@ -76,17 +77,24 @@ export interface CanvasBlock {
   id: string;
   type: BlockType;
   varName?: string;
+  targetVarName?: string;
   assignOp?: AssignOperator;
   content?: string;
+  targetContent?: string;
   items?: string[];
+  targetItems?: string[];
   dictPairs?: DictPair[];
+  targetDictPairs?: DictPair[];
   isIfElse?: boolean;
   hasReturn?: boolean;
   returnVal?: string;
+  targetReturnVal?: string;
   hasSep?: boolean;
   sepVal?: string;
+  targetSepVal?: string;
   hasEnd?: boolean;
   endVal?: string;
+  targetEndVal?: string;
   methodName?: string;
   attachedMethodId?: string;
   attachedToBlockId?: string;
@@ -190,7 +198,7 @@ export const getBlockInputWidth = (val: string | undefined | null, minChars: num
     }
   }
   const effectiveLen = Math.max(minChars, units);
-  return Math.max(BASE_WIDTH, Math.round(effectiveLen * 7.5 + 13));
+  return Math.max(BASE_WIDTH, Math.round(effectiveLen * 7.8 + 14));
 };
 
 export interface SnapTarget {

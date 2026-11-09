@@ -32,10 +32,10 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "생성자에서 self.items = []를 초기화한 Bag 클래스에 add 메서드를 만들고, \"Key\"와 \"Map\"을 담아 리스트와 개수를 출력해보세요.",
-      "prompt_en": "Initialize self.items = [] in Bag, add \"Key\" and \"Map\" via add(), and print b.items and len(b.items).",
-      "hint_ko": "생성자에서 빈 리스트 속성을 준비하고, 추가 메서드 안에서 리스트 끝에 원소를 덧붙이도록 정의한 뒤 리스트와 길이를 출력하세요.",
-      "hint_en": "Initialize an empty list attribute in the initializer, append items inside the method, and print both the list attribute and its length.",
+      "prompt_ko": "__init__ 생성자에서 self.items = []처럼 빈 리스트 속성을 초기화하면, 인스턴스 메서드 안에서 self.items.append()로 해당 객체만의 목록에 원소를 차곡차곡 담을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Initializing an empty list attribute like self.items = [] in __init__ lets instance methods append elements directly to that object's own list via self.items.append(). Trace the block code.",
+      "hint_ko": "객체의 리스트 속성도 일반 리스트와 똑같이 len(b.items)로 원소 개수를 구할 수 있습니다.",
+      "hint_en": "An instance's list attribute works just like any list, so len(b.items) returns its item count.",
       "targetCode": "class Bag:\n    def __init__(self):\n        self.items = []\n    def add(self, item):\n        self.items.append(item)\nb = Bag()\nb.add(\"Key\")\nb.add(\"Map\")\nprint(b.items, len(b.items))",
       "testCases": [
         {
@@ -68,10 +68,10 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "self.scores = {}를 가진 Report 클래스에 과목과 점수를 저장하는 record 메서드를 만들고, \"Math\" 점수와 과목 수를 출력해보세요.",
-      "prompt_en": "Initialize self.scores = {} in Report, store \"Math\": 95 and \"Code\": 100 via record(), and print Math score and len.",
-      "hint_ko": "생성자에서 빈 딕셔너리 속성을 만들고, 기록 메서드 안에서 과목 이름을 키로 점수를 저장한 뒤 조회값과 길이를 출력하세요.",
-      "hint_en": "Create an empty dictionary attribute in the initializer, assign each subject key to its score in the method, and print the target lookup and length.",
+      "prompt_ko": "__init__에서 self.scores = {}로 빈 딕셔너리 속성을 초기화하고, 메서드에서 self.scores[키] = 값 형태로 키-값 쌍을 등록하거나 수정할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Initializing an empty dictionary attribute self.scores = {} in __init__ allows methods to store or update key-value pairs using self.scores[key] = val. Trace the block code.",
+      "hint_ko": "인스턴스의 딕셔너리 속성에 저장된 값은 r.scores[\"Math\"]처럼 대괄호 키 조회로 바로 읽을 수 있습니다.",
+      "hint_en": "Values stored in an instance's dictionary attribute can be read with bracket notation like r.scores[\"Math\"].",
       "targetCode": "class Report:\n    def __init__(self):\n        self.scores = {}\n    def record(self, sub, val):\n        self.scores[sub] = val\nr = Report()\nr.record(\"Math\", 95)\nr.record(\"Code\", 100)\nprint(r.scores[\"Math\"], len(r.scores))",
       "testCases": [
         {
@@ -104,10 +104,10 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "딕셔너리 속성 조회 시 없는 키면 try-except KeyError로 None을 반환하는 Board.lookup(k)를 구현해 \"Leo\"와 \"Mia\"를 조회해보세요.",
-      "prompt_en": "Implement Board.lookup(self, k) using try-except KeyError to return None on missing keys, and query \"Leo\" and \"Mia\".",
-      "hint_ko": "조회 메서드 안의 시도 블록에서 딕셔너리 속성 값을 반환하고, 키 누락 예외가 발생하면 값 없음 상수를 반환하도록 작성하세요.",
-      "hint_en": "Attempt returning the score from the dictionary attribute inside the lookup method, catching missing-key errors to send back Python's null constant.",
+      "prompt_ko": "딕셔너리 속성을 조회하는 인스턴스 메서드 안에 try - except KeyError를 결합하면, 등록되지 않은 키를 찾더라도 에러 대신 None을 안전하게 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Combining try - except KeyError inside a dictionary-lookup method safely returns None instead of raising an error when a requested key is missing. Trace the block code.",
+      "hint_ko": "데이터 저장 메서드(put)와 안전 조회 메서드(lookup)를 나누어 정의하면 딕셔너리 속성을 체계적으로 관리할 수 있습니다.",
+      "hint_en": "Separating storage (put) and safe retrieval (lookup) into dedicated methods keeps dictionary state management clean.",
       "targetCode": "class Board:\n    def __init__(self):\n        self.scores = {}\n    def put(self, k, v):\n        self.scores[k] = v\n    def lookup(self, k):\n        try:\n            return self.scores[k]\n        except KeyError:\n            return None\nb = Board()\nb.put(\"Leo\", 90)\nprint(b.lookup(\"Leo\"))\nprint(b.lookup(\"Mia\"))",
       "testCases": [
         {
@@ -140,10 +140,10 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "독립된 두 장바구니 a, b를 생성해 a에는 입력 상품을, b에는 \"Milk\"를 담고 두 리스트를 출력해보세요. (터미널 입력: Bread)",
-      "prompt_en": "Create two independent Cart instances a and b, add input() to a and \"Milk\" to b, and print a.items, b.items. (Terminal input: Bread)",
-      "hint_ko": "생성자 안에서 빈 리스트 속성을 만들면 두 장바구니 인스턴스가 각자 독립된 리스트를 갖게 됩니다. 각각 다른 항목을 담고 출력하세요.",
-      "hint_en": "Initializing the empty list inside the initializer gives each cart its own list; add the input to the first, the string to the second, and print both.",
+      "prompt_ko": "__init__ 생성자 안에서 self.items = []를 초기화하면, 인스턴스를 여러 개 만들었을 때 각 객체가 서로 섞이지 않는 독립된 리스트를 갖게 됩니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: Bread)",
+      "prompt_en": "Initializing self.items = [] inside __init__ gives each created instance its own separate list that does not interfere with other instances. Trace the block code. (Terminal input: Bread)",
+      "hint_ko": "a.add()는 인스턴스 a의 리스트에만 원소를 추가하므로 인스턴스 b의 리스트에는 영향을 주지 않습니다.",
+      "hint_en": "Calling a.add() mutates only instance a's list, leaving instance b's list completely independent.",
       "targetCode": "class Cart:\n    def __init__(self):\n        self.items = []\n    def add(self, x):\n        self.items.append(x)\na = Cart()\nb = Cart()\na.add(input())\nb.add(\"Milk\")\nprint(a.items, b.items)",
       "testCases": [
         {
@@ -186,10 +186,10 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "리스트 속성에서 값을 꺼내는 Stack 클래스를 만들고, 10과 20을 넣은 뒤 빌 때까지 while로 꺼내 더해 합계와 남은 개수를 출력해보세요.",
-      "prompt_en": "Push 10 and 20 into Stack, pop and sum items while len(st.tasks) > 0, then print total and len(st.tasks).",
-      "hint_ko": "리스트 속성의 끝 원소를 pop()으로 꺼내 반환하는 메서드를 만들고, 리스트 길이가 양수인 동안 반복해 꺼낸 값을 합산한 뒤 출력하세요.",
-      "hint_en": "Implement pop on the list attribute, loop while items remain to accumulate each popped number, and print the total alongside the remaining count.",
+      "prompt_ko": "리스트 속성의 .append()와 .pop()을 메서드로 감싸면, 마지막에 넣은 데이터를 먼저 꺼내는 스택(Stack) 동작을 구현해 while 반복문으로 빌 때까지 처리할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Wrapping a list attribute's .append() and .pop() in methods implements a last-in, first-out Stack that you can drain in a while loop until empty. Trace the block code.",
+      "hint_ko": "self.tasks.pop()은 리스트의 맨 끝 원소를 제거하면서 그 값을 동시에 반환하므로 합계에 바로 더할 수 있습니다.",
+      "hint_en": "self.tasks.pop() removes and returns the last element of the list, so its return value can be added directly to total.",
       "targetCode": "class Stack:\n    def __init__(self):\n        self.tasks = []\n    def push(self, t):\n        self.tasks.append(t)\n    def pop_item(self):\n        return self.tasks.pop()\nst = Stack()\nst.push(10)\nst.push(20)\ntotal = 0\nwhile len(st.tasks) > 0:\n    total += st.pop_item()\nprint(total, len(st.tasks))",
       "testCases": [
         {

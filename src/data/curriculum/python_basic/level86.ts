@@ -34,10 +34,10 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "Product 객체 리스트 items에서 가격이 5000 이상인 상품의 이름(p.name)만 리스트 컴프리헨션으로 추출해보세요.",
-      "prompt_en": "Use a list comprehension to extract p.name for products in items with p.price >= 5000.",
-      "hint_ko": "리스트 컴프리헨션 안에서 점(.) 연산자로 각 객체의 속성에 접근해 조건 필터링과 값 추출을 한 줄로 처리할 수 있습니다.",
-      "hint_en": "Inside a list comprehension, use dot notation on the loop variable to both filter by one attribute and extract another.",
+      "prompt_ko": "객체들이 담긴 리스트에 리스트 컴프리헨션([p.name for p in items if p.price >= 5000])을 적용하면, 특정 속성 조건을 만족하는 객체의 원하는 속성만 한 줄로 추출할 수 있습니다.",
+      "prompt_en": "Using a list comprehension like [p.name for p in items if p.price >= 5000] filters objects by one attribute and extracts another in a single line.",
+      "hint_ko": "반복 변수 p가 각 Product 객체를 가리키므로 p.price로 가격을 비교하고 p.name으로 이름을 꺼냅니다.",
+      "hint_en": "Because loop variable p refers to each Product instance, use p.price in the filter and p.name in the output expression.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\np1 = Product(\"Book\", 12000)\np2 = Product(\"Pen\", 1500)\np3 = Product(\"Bag\", 25000)\nitems = [p1, p2, p3]\npicks = [p.name for p in items if p.price >= 5000]\nprint(picks)",
       "testCases": [
         {
@@ -70,10 +70,10 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "Player 객체 리스트 ps를 sorted와 key=lambda p: p.score, reverse=True로 점수 내림차순 정렬해 출력하세요.",
-      "prompt_en": "Sort Player objects descending by p.score using sorted(ps, key=lambda p: p.score, reverse=True).",
-      "hint_ko": "직접 만든 클래스 객체들은 기본 크기 비교 기준이 없으므로, 기준 함수로 어떤 속성을 비교할지 알려주어야 정렬됩니다.",
-      "hint_en": "Custom class instances lack a built-in sort order, so provide a key function that returns the numeric attribute to compare.",
+      "prompt_ko": "사용자 정의 객체 리스트를 정렬할 때는 sorted()에 key=lambda p: p.속성 형태로 비교 기준이 될 속성을 지정합니다.",
+      "prompt_en": "When sorting a list of custom objects with sorted(), pass key=lambda p: p.attr to specify which attribute to compare.",
+      "hint_ko": "reverse=True를 함께 주면 점수(p.score)가 높은 객체부터 내림차순으로 정렬되며, 출력 시 각 객체의 __str__이 자동 호출됩니다.",
+      "hint_en": "Adding reverse=True sorts from highest p.score to lowest, and printing each object invokes its __str__ method.",
       "targetCode": "class Player:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\n    def __str__(self):\n        return f\"{self.name}:{self.score}\"\n\nps = [Player(\"Min\", 75), Player(\"Ara\", 92)]\nps.append(Player(\"Leo\", 84))\ns = sorted(ps, key=lambda p: p.score, reverse=True)\nfor p in s:\n    print(p)",
       "testCases": [
         {
@@ -106,10 +106,10 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "3줄의 상품 입력을 파싱할 때 정수가 아니거나 음수 가격이면 Skip을 출력하고 유효한 객체 개수만 세어 출력하세요. (터미널 입력: Book 12000, Pen abc, Bag -500 한 줄씩)",
-      "prompt_en": "Parse 3 product lines, print Skip on non-int or negative price via try-except, and print valid item count. (Terminal input: Book 12000, Pen abc, Bag -500 line by line)",
-      "hint_ko": "문자열의 정수 변환 오류와 음수일 때 직접 발생시킨 값 예외를 하나의 예외 블록에서 잡아 정상 객체만 리스트에 담습니다.",
-      "hint_en": "Catch both integer-conversion failures and manually thrown negative-price errors in one handler so only valid objects are stored.",
+      "prompt_ko": "입력 줄을 파싱해 객체를 생성할 때 try-except 블록과 raise를 함께 쓰면, 숫자가 아닌 가격이나 음수 가격을 걸러내고 정상적인 객체만 리스트에 모을 수 있습니다. (터미널 입력: Book 12000, Pen abc, Bag -500 한 줄씩)",
+      "prompt_en": "Wrapping input parsing and a negative-value raise inside try-except skips invalid lines and appends only valid Product instances. (Terminal input: Book 12000, Pen abc, Bag -500 line by line)",
+      "hint_ko": "int(raw) 변환 실패와 price < 0일 때 직접 발생시킨 ValueError 모두 같은 except ValueError: 블록에서 처리됩니다.",
+      "hint_en": "Both failed int(raw) conversions and the manual raise ValueError(\"Neg\") are caught by the same except ValueError: block.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = []\nfor line in [input(), input(), input()]:\n    name, raw = line.split()\n    try:\n        price = int(raw)\n        if price < 0:\n            raise ValueError(\"Neg\")\n        items.append(Product(name, price))\n    except ValueError:\n        print(\"Skip\")\nprint(len(items))",
       "testCases": [
         {
@@ -152,10 +152,10 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "상품을 가격 내림차순으로 정렬한 뒤 enumerate(s, 1)과 __str__의 천 단위 쉼표(:,)로 순위표를 출력하세요.",
-      "prompt_en": "Sort products descending by price and print a 1-based leaderboard using enumerate(s, 1) and __str__.",
-      "hint_ko": "내림차순 정렬된 객체 리스트를 시작 번호 1로 열거하며 f-string에 넣으면 순위 번호와 천 단위 쉼표 문자열 표현이 결합됩니다.",
-      "hint_en": "Enumerating the sorted objects from 1 and placing each instance in an f-string combines rank numbering with comma formatting.",
+      "prompt_ko": "sorted(..., key=lambda p: p.price, reverse=True)로 정렬한 객체 리스트를 enumerate(s, 1)로 순회하면, 1위부터 순위 번호가 붙은 리더보드를 깔끔하게 출력할 수 있습니다.",
+      "prompt_en": "Iterating over a descending-sorted object list with enumerate(s, 1) pairs each ranked object with a 1-based position number.",
+      "hint_ko": "f-string의 {item} 자리에 객체가 들어가면 클래스에 정의된 __str__의 천 단위 쉼표 서식이 자동으로 적용됩니다.",
+      "hint_en": "Placing {item} inside the f-string automatically formats the object using its __str__ method with thousands commas.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}:{self.price:,}\"\n\nps = [Product(\"Pen\", 1500), Product(\"Book\", 12000)]\ns = sorted(ps, key=lambda p: p.price, reverse=True)\nfor rank, item in enumerate(s, 1):\n    print(f\"{rank}.{item}\")",
       "testCases": [
         {
@@ -188,10 +188,10 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "Item과 할인 상품 SaleItem(Item)이 섞인 리스트를 실제 결제 금액 x.cost() 순으로 정렬하고 합계를 출력하세요.",
-      "prompt_en": "Sort mixed Item and SaleItem(Item) instances by x.cost() and print sorted names with comma-formatted total.",
-      "hint_ko": "정렬 기준 함수에서 각 객체의 결제 금액 메서드를 호출하면 다형성에 의해 할인이 반영된 실제 금액 순으로 정렬됩니다.",
-      "hint_en": "Calling the cost method inside the sort key function leverages polymorphism to order items by their actual post-discount price.",
+      "prompt_ko": "부모·자식 클래스 객체가 섞인 리스트에서 key=lambda x: x.cost()로 메서드를 호출해 정렬하면, 다형성에 의해 각 객체의 실제 결제 금액 기준으로 정렬 및 합산이 이루어집니다.",
+      "prompt_en": "Using key=lambda x: x.cost() on a list of parent and child instances leverages polymorphism to sort and sum items by their actual calculated cost.",
+      "hint_ko": "SaleItem은 재정의된 cost()에 의해 1000원 할인된 금액을 반환하고, Item은 원래 가격을 그대로 반환합니다.",
+      "hint_en": "SaleItem returns its discounted price via the overridden cost() method, while Item returns its original price.",
       "targetCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def cost(self):\n        return self.price\n\nclass SaleItem(Item):\n    def cost(self):\n        return self.price - 1000\n\nbag = [SaleItem(\"Book\", 9000), Item(\"Pen\", 2000)]\ns = sorted(bag, key=lambda x: x.cost())\nnames = [x.name for x in s]\ntotal = sum([x.cost() for x in s])\nprint(\",\".join(names), f\"{total:,}\")",
       "testCases": [
         {

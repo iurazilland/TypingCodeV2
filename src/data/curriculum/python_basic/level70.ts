@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "리스트 votes에서 \"B\"의 위치(.index)와 \"A\"의 개수(.count)를 공백으로 나란히 출력해보세요.",
-      "prompt_en": "Print the index of \"B\" and the count of \"A\" in votes separated by a space.",
-      "hint_ko": "책의 '색인(위치 번호)'을 뜻하는 메서드는 첫 등장 인덱스를(0부터 시작), '세다'라는 뜻의 메서드는 등장 횟수를 각각 반환합니다.",
-      "hint_en": "The position-lookup method returns the 0-based index of the first match, while the counting method tallies total occurrences.",
+      "prompt_ko": "리스트의 .index(값) 메서드는 해당 값이 처음 등장하는 위치 번호(0부터 시작)를 반환하고, .count(값) 메서드는 해당 값이 리스트에 몇 개 들어 있는지 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The list .index(value) method returns the 0-based index of the first matching element, while .count(value) returns how many times that value appears in the list. Trace the block code.",
+      "hint_ko": "\"B\"는 1번 인덱스에 위치하고, \"A\"는 리스트 안에 총 3번 등장합니다.",
+      "hint_en": "\"B\" sits at index 1, and \"A\" appears a total of 3 times in the list.",
       "targetCode": "votes = [\"A\", \"B\", \"A\", \"C\", \"A\"]\nprint(votes.index(\"B\"), votes.count(\"A\"))",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "리스트 steps의 현재 순서를 .reverse()로 제자리에서 거꾸로 뒤집고 출력해보세요.",
-      "prompt_en": "Reverse the order of steps in place using .reverse() and print steps.",
-      "hint_ko": "크기순으로 정렬하는 것이 아니라, 현재 들어 있는 원소들의 앞뒤 순서만 제자리에서 정반대로 뒤집어 원본을 바꿉니다.",
-      "hint_en": "Rather than sorting by size, this method flips the existing element order backward in place.",
+      "prompt_ko": "리스트의 .reverse() 메서드는 크기순 정렬과 상관없이 현재 리스트에 들어 있는 요소들의 앞뒤 순서를 제자리에서 정반대로 뒤집습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The list .reverse() method flips the current order of elements backward in place without sorting them by value. Trace the block code.",
+      "hint_ko": ".reverse()는 원본 리스트 자체를 직접 변경하므로 호출 후 리스트 변수를 출력하면 뒤집힌 순서를 확인할 수 있습니다.",
+      "hint_en": "Because .reverse() mutates the list in place, print the list variable itself after calling the method.",
       "targetCode": "steps = [\"first\", \"second\", \"third\"]\nsteps.reverse()\nprint(steps)",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "sorted(raw)로 정렬된 새 사본을 ordered에 저장한 뒤, 원본 raw와 사본 ordered를 각각 한 줄씩 출력해보세요.",
-      "prompt_en": "Store a sorted copy of raw in ordered with sorted(raw), then print raw and ordered on separate lines.",
-      "hint_ko": "원본을 직접 바꾸는 제자리 메서드와 달리, '정렬된'이라는 과거분사형 내장 함수는 원본을 보존한 채 정렬된 새 리스트를 반환합니다.",
-      "hint_en": "Unlike the in-place list method, this past-participle built-in function leaves the original list untouched and returns a new ordered list.",
+      "prompt_ko": "내장 함수 sorted(리스트)는 원본 리스트의 순서를 그대로 보존한 채, 오름차순으로 정렬된 새로운 리스트 사본을 만들어 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The built-in sorted(list) function leaves the original list unchanged and returns a new list sorted in ascending order. Trace the block code.",
+      "hint_ko": "원본을 직접 바꾸는 .sort() 메서드와 달리 sorted()는 정렬된 새 리스트를 반환하므로 변수에 대입해 사용합니다.",
+      "hint_en": "Unlike the in-place .sort() method, sorted() returns a new sorted list that you assign to a variable.",
       "targetCode": "raw = [40, 10, 30]\nordered = sorted(raw)\nprint(raw)\nprint(ordered)",
       "testCases": [
         {
@@ -138,10 +138,10 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력받은 좌석 코드의 위치를 seats.index(code)로 출력하되, 없으면 ValueError를 잡아 -1을 출력해보세요. (터미널 입력: A2)",
-      "prompt_en": "Print seats.index(code) for input code, or catch ValueError and print -1 if not found. (Terminal input: A2)",
-      "hint_ko": "위치 탐색 메서드는 찾는 값이 리스트에 없을 때 값 오류를 일으키므로, 예외 처리 블록으로 감싸 안전하게 분기합니다.",
-      "hint_en": "Searching for the position of a missing item raises a value exception, so wrap the lookup in a try-except block.",
+      "prompt_ko": "리스트의 .index(값) 메서드는 찾는 값이 리스트에 없을 때 ValueError를 발생시키므로, try - except ValueError로 감싸면 없는 값일 때 -1을 안전하게 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: A2)",
+      "prompt_en": "Because list .index(value) raises ValueError when the value is not in the list, wrapping it in try - except ValueError lets you safely print -1 when missing. Trace the block code. (Terminal input: A2)",
+      "hint_ko": "-1을 반환하는 문자열 .find()와 달리 리스트 .index()는 예외를 발생시킨다는 점을 기억하세요.",
+      "hint_en": "Unlike string .find() which returns -1, list .index() raises ValueError when an item is not found.",
       "targetCode": "seats = [\"A1\", \"A2\", \"A3\"]\ncode = input()\ntry:\n    idx = seats.index(code)\n    print(idx)\nexcept ValueError:\n    print(-1)",
       "testCases": [
         {
@@ -179,10 +179,10 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "원본 리스트를 바꾸지 않고 가장 큰 두 수의 합을 반환하는 top_two_sum(nums) 함수를 완성해 결과와 data[0]을 출력해보세요.",
-      "prompt_en": "Complete top_two_sum(nums) using sorted(nums, reverse=True) without mutating data, then print sum and data[0].",
-      "hint_ko": "함수 안에서 사본 정렬 함수를 내림차순으로 사용하면 호출한 쪽의 원본 리스트 첫 번째 값이 안전하게 보존됩니다.",
-      "hint_en": "Sorting a descending copy inside the function lets you sum the top two numbers while keeping the caller's list intact.",
+      "prompt_ko": "함수 안에서 sorted(nums, reverse=True)를 사용하면 호출자가 넘긴 원본 리스트(data)를 변형하지 않고도 내림차순 사본에서 가장 큰 값들을 뽑아 계산할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Using sorted(nums, reverse=True) inside a function creates a descending copy so you can compute with the largest values without mutating the caller's original list. Trace the block code.",
+      "hint_ko": "내림차순으로 정렬된 ranked의 0번과 1번 인덱스가 가장 큰 두 수이며, 바깥의 data[0]은 원래 첫 값(15)을 그대로 유지합니다.",
+      "hint_en": "Indices 0 and 1 of the descending copy ranked hold the two largest numbers, while data[0] outside keeps its original value (15).",
       "targetCode": "def top_two_sum(nums):\n    ranked = sorted(nums, reverse=True)\n    return ranked[0] + ranked[1]\n\ndata = [15, 40, 25, 30]\nprint(top_two_sum(data), data[0])",
       "testCases": [
         {

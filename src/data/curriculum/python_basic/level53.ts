@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "세금 기본값이 10인 calc(price, tax=10) 함수를 정의하고, calc(100)과 calc(100, 25)의 반환값을 각각 출력해보세요.",
-      "prompt_en": "Define calc(price, tax=10) returning price + tax, then print calc(100) and calc(100, 25).",
-      "hint_ko": "선언부의 두 번째 매개변수에 등호로 기본값을 지정하고, 인자 1개 호출과 2개 호출 결과를 차례로 출력하세요.",
-      "hint_en": "Assign the default value in the function header, then print one call using the default and another overriding it.",
+      "prompt_ko": "함수 선언부에서 매개변수=기본값 형태로 기본값을 지정해 두면, 호출할 때 해당 인자를 생략해도 자동으로 기본값이 사용됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Specifying parameter=default in a function header assigns a default value when that argument is omitted, while still allowing you to override it. Follow the blocks and type the code.",
+      "hint_ko": "인자를 1개만 전달하면 두 번째 매개변수는 기본값이 적용되고, 2개를 전달하면 전달한 새 값으로 덮어써집니다.",
+      "hint_en": "Calling with one argument uses the default for the second parameter, while passing two arguments overrides the default.",
       "targetCode": "def calc(price, tax=10):\n    return price + tax\nprint(calc(100))\nprint(calc(100, 25))",
       "testCases": [
         {
@@ -65,10 +65,10 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "w * h + border를 반환하는 make_box(w, h=10, border=1)을 만들고, make_box(5)와 키워드 인자로 border만 지정한 make_box(5, border=3)을 출력해보세요.",
-      "prompt_en": "Define make_box(w, h=10, border=1) returning w * h + border, then print make_box(5) and make_box(5, border=3).",
-      "hint_ko": "뒤쪽 두 매개변수에 기본값을 두고, 두 번째 호출에서는 세 번째 매개변수 이름을 등호로 지정해 중간 기본값을 유지하세요.",
-      "hint_en": "Define defaults for the last two parameters, and pass the third parameter by name on the second call to keep the middle default.",
+      "prompt_ko": "기본값 매개변수가 여러 개일 때 호출부에서 매개변수이름=값(키워드 인자) 형태로 지정하면, 중간 매개변수는 기본값으로 둔 채 원하는 매개변수만 선택해 바꿀 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "When a function has multiple default parameters, passing a keyword argument (name=value) lets you update a specific parameter while keeping earlier defaults. Follow the blocks and type the code.",
+      "hint_ko": "두 번째 호출에서 키워드 인자로 세 번째 매개변수만 지정하면 두 번째 매개변수는 기본값이 그대로 유지됩니다.",
+      "hint_en": "Passing the third parameter by keyword keeps the second parameter at its default value.",
       "targetCode": "def make_box(w, h=10, border=1):\n    return w * h + border\nprint(make_box(5))\nprint(make_box(5, border=3))",
       "testCases": [
         {
@@ -101,10 +101,10 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "함수 안에서 지역변수 hp = 50을 만들어 In:50을 출력하는 reset_hp()를 정의하고, 바깥 변수 hp = 100이 유지되는지 확인해보세요.",
-      "prompt_en": "Set local hp = 50 inside reset_hp() printing In:50, and verify outer hp = 100 prints Out:100.",
-      "hint_ko": "함수 안에서 대입한 변수는 함수 내부에서만 유효한 지역변수이므로, 함수 호출 뒤 바깥 변수를 출력해 값이 독립적인지 확인하세요.",
-      "hint_en": "Assigning inside a function creates an isolated local variable; call the function and then print the outer variable below.",
+      "prompt_ko": "함수 안에서 값을 대입해 만든 지역변수(local variable)는 함수 내부에서만 유효하므로, 이름이 같더라도 함수 바깥의 변수 값은 변경되지 않습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A variable assigned inside a function is a local variable isolated to that function, so it does not overwrite an outer variable with the same name. Follow the blocks and type the code.",
+      "hint_ko": "함수 내부의 변수는 함수가 끝나면 사라지며, 바깥 변수는 원래 값을 그대로 유지합니다.",
+      "hint_en": "The local variable exists only while the function runs, leaving the outer variable untouched.",
       "targetCode": "def reset_hp():\n    hp = 50\n    print(f\"In:{hp}\")\nhp = 100\nreset_hp()\nprint(f\"Out:{hp}\")",
       "testCases": [
         {
@@ -137,10 +137,10 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "양끝 공백을 제거하고 사이 공백을 \"_\"로 바꾼 뒤 앞에 mark=\"#\"을 붙여 반환하는 clean_tag(raw, mark=\"#\")에 입력값을 넣어 출력해보세요. (터미널 입력:   py code  )",
-      "prompt_en": "Define clean_tag(raw, mark=\"#\") using .strip() and .replace(\" \", \"_\"), then print clean_tag(input()). (Terminal input:   py code  )",
-      "hint_ko": "매개변수의 양끝 공백을 먼저 제거한 뒤 내부 공백을 밑줄로 치환하고, 기본값 접두사 기호를 앞에 이어 붙여 반환하세요.",
-      "hint_en": "Trim outer whitespace first, substitute inner spaces with underscores, and prepend the default prefix parameter before returning.",
+      "prompt_ko": "문자열 정제(.strip(), .replace()) 로직을 기본값 매개변수가 있는 함수로 만들어 두면, 입력 문자열만 전달해도 깔끔하게 다듬어진 태그 문자열을 반환받을 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력:   py code  )",
+      "prompt_en": "Combining string methods (.strip(), .replace()) with a default parameter inside a function lets you clean and prefix text with a single argument call. Follow the blocks and type the code. (Terminal input:   py code  )",
+      "hint_ko": "두 번째 인자를 생략하고 호출하면 선언부에 설정된 기본 접두사 기호가 자동으로 앞에 붙어 반환됩니다.",
+      "hint_en": "Omitting the second argument uses the default prefix character defined in the function header.",
       "targetCode": "def clean_tag(raw, mark=\"#\"):\n    txt = raw.strip()\n    return mark + txt.replace(\" \", \"_\")\ns = input()\nprint(clean_tag(s))",
       "testCases": [
         {
@@ -183,10 +183,10 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "리스트 원소들을 새 리스트 res에 복사하고 extra=5를 추가한 뒤 오름차순 정렬해 반환하는 add_sorted([9, 2, 7]) 결과를 출력해보세요.",
-      "prompt_en": "Copy nums into local list res, append extra=5, sort res, and return it for [9, 2, 7].",
-      "hint_ko": "함수 안에서 빈 지역 리스트를 새로 만들어 원소들과 기본값 매개변수를 모두 추가한 뒤, 오름차순 정렬해 반환하세요.",
-      "hint_en": "Create a fresh local list, add each input element plus the default parameter, sort the list in place, and send it back.",
+      "prompt_ko": "함수 안에서 새 지역 리스트(res = [])를 만들어 요소들과 기본값 매개변수를 .append()하고 .sort()로 정렬해 반환하면, 원본 리스트를 건드리지 않고 정렬된 새 리스트를 얻을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Creating a new local list inside a function to copy items, .append() a default parameter, and .sort() returns a sorted result without mutating the original list. Follow the blocks and type the code.",
+      "hint_ko": "전달받은 리스트의 원소들과 기본값 매개변수를 지역 리스트에 모두 담은 뒤 .sort()로 정렬해 return합니다.",
+      "hint_en": "Append all input items and the default value into the local list, sort it in place, and return it.",
       "targetCode": "def add_sorted(nums, extra=5):\n    res = []\n    for x in nums:\n        res.append(x)\n    res.append(extra)\n    res.sort()\n    return res\nprint(add_sorted([9, 2, 7]))",
       "testCases": [
         {

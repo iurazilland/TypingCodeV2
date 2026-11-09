@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "try 블록 안에서 10 // 0을 출력 시도하고, 에러가 발생하면 except 블록에서 \"Error\"를 출력해보세요.",
-      "prompt_en": "Try printing 10 // 0 inside a try block and catch the crash in except to print \"Error\".",
-      "hint_ko": "에러가 발생할 수 있는 나눗셈 출력은 시도 블록 안에, 에러 발생 시 대체 출력은 예외 블록 안에 들여쓰기해 배치하세요.",
-      "hint_en": "Indent the risky division print inside the attempt block, and place the fallback message print inside the error block.",
+      "prompt_ko": "try - except 구문은 try 블록 안에서 런타임 에러가 발생해도 프로그램을 멈추지 않고 except 블록으로 흐름을 넘겨 안전하게 처리합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A try - except statement catches runtime errors inside the try block and jumps to the except block instead of crashing the program. Trace the block code to practice.",
+      "hint_ko": "0으로 나누는 연산처럼 에러가 발생하는 코드는 try 블록 안에, 에러 발생 시 대체할 출력은 except 블록 안에 들여쓰기해 작성합니다.",
+      "hint_en": "Place the risky division inside the indented try block, and put the fallback print inside the except block.",
       "targetCode": "try:\n    print(10 // 0)\nexcept:\n    print(\"Error\")",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "try에서 100 // 0을 시도하고 except에서 \"Skip\"을 출력한 뒤, 블록 바깥 마지막 줄에서 \"Done\"이 이어서 출력되게 해보세요.",
-      "prompt_en": "Catch 100 // 0 to print \"Skip\", then print \"Done\" after the try - except block finishes.",
-      "hint_ko": "예외 블록에서 에러를 안전하게 처리하면 프로그램이 강제 종료되지 않으므로, 블록 바깥 맨 아래에 마무리 출력문을 두면 이어서 실행됩니다.",
-      "hint_en": "Handle the crash inside the error block first, then place the final print statement unindented below so execution continues.",
+      "prompt_ko": "try 블록에서 에러가 발생하는 즉시 해당 블록의 남은 줄은 건너뛰고 except 블록이 실행된 뒤, try - except 바깥의 다음 코드가 정상적으로 이어집니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "As soon as an error occurs in try, the remaining lines in try are skipped, the except block runs, and execution continues normally after the try - except structure. Trace the block code.",
+      "hint_ko": "except 블록이 에러를 처리하고 나면 들여쓰기가 끝난 바깥쪽 마지막 출력문까지 프로그램이 멈추지 않고 실행됩니다.",
+      "hint_en": "Once the except block handles the error, the unindented print statement below the block continues to execute.",
       "targetCode": "try:\n    res = 100 // 0\n    print(res)\nexcept:\n    print(\"Skip\")\nprint(\"Done\")",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "입력값을 정수로 변환해 10을 더한 값을 출력하고, 숫자가 아닌 입력이면 \"NaN\"을 출력해보세요. (터미널 입력: 15)",
-      "prompt_en": "Convert input() to int and print n + 10 inside try, or print \"NaN\" in except if conversion fails. (Terminal input: 15)",
-      "hint_ko": "정수 변환과 덧셈 출력을 시도 블록 안에 함께 묶어 넣고, 변환 실패 시 출력할 문구를 예외 블록에 배치하세요.",
-      "hint_en": "Group both the integer conversion and the addition print inside the attempt block, and put the fallback text in the error block.",
+      "prompt_ko": "int() 변환과 산술 연산을 try 블록 안에 함께 묶어 두면, 숫자가 아닌 입력이 들어왔을 때 except 블록에서 안전하게 안내 문구를 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 15)",
+      "prompt_en": "Grouping int() conversion and arithmetic inside a try block lets you safely print a fallback message in except when non-numeric input is given. Trace the block code. (Terminal input: 15)",
+      "hint_ko": "try 블록에서 에러 없이 모든 줄이 끝나면 except 블록은 자동으로 건너뜁니다.",
+      "hint_en": "When every line inside the try block succeeds without error, the except block is skipped automatically.",
       "targetCode": "raw = input()\ntry:\n    n = int(raw)\n    print(n + 10)\nexcept:\n    print(\"NaN\")",
       "testCases": [
         {
@@ -148,10 +148,10 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력값을 정수로 바꾸어 100 // d 결과를 Ans:결과 형식으로 출력하고, 에러 발생 시 \"Cannot divide\"를 출력해보세요. (출력 예: Ans:4) (터미널 입력: 25)",
-      "prompt_en": "Convert input to int d and print f\"Ans:{100 // d}\" in try, or \"Cannot divide\" in except. (Terminal input: 25)",
-      "hint_ko": "정수 변환과 몫 나눗셈 출력을 시도 블록에 함께 두면, 문자 입력과 0 입력에서 나는 두 종류의 에러를 예외 블록이 모두 받아 처리합니다.",
-      "hint_en": "Place both integer conversion and floor-division printing in the attempt block so either invalid text or zero triggers the fallback message.",
+      "prompt_ko": "하나의 try 블록 안에 int() 변환과 // 나눗셈을 함께 배치하면, 문자 입력 에러와 0 나눗셈 에러를 모두 except 블록에서 잡아낼 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 25)",
+      "prompt_en": "Placing both int() conversion and // division inside a single try block catches both invalid text errors and division-by-zero errors in the except block. Trace the block code. (Terminal input: 25)",
+      "hint_ko": "f-string 중괄호 안에서도 수식을 바로 계산할 수 있으며, 수식 계산 중 에러가 발생하면 즉시 except로 이동합니다.",
+      "hint_en": "Expressions inside f-string braces are evaluated directly, and any error during evaluation jumps straight to except.",
       "targetCode": "s = input()\ntry:\n    d = int(s)\n    print(f\"Ans:{100 // d}\")\nexcept:\n    print(\"Cannot divide\")",
       "testCases": [
         {
@@ -199,10 +199,10 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "리스트 [\"10\", \"x\", \"25\", \"y\"]를 순회하며 정수로 변환 가능한 값만 total에 누적해 합계 35를 출력해보세요.",
-      "prompt_en": "Loop over [\"10\", \"x\", \"25\", \"y\"], add int(s) to total inside try, add 0 in except, and print total.",
-      "hint_ko": "반복문 안에 예외 처리 블록을 넣으면 문자 원소를 만나도 중단되지 않고 다음 원소로 넘어가 끝까지 합계를 구할 수 있습니다.",
-      "hint_en": "Nest the error-handling structure inside the loop body so non-numeric strings are safely absorbed without stopping the summation.",
+      "prompt_ko": "for 반복문 안에 try - except와 pass를 조합하면, 리스트를 순회하다 변환 불가능한 원소를 만나도 아무 동작 없이 건너뛰고 끝까지 합계를 구할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Combining try - except with pass inside a for loop lets you silently ignore unconvertible items and continue summing the rest of the list. Trace the block code.",
+      "hint_ko": "pass 키워드는 문법적으로 블록 내용은 필요하지만 실행할 동작이 없을 때 사용하는 빈 실행문입니다.",
+      "hint_en": "The pass keyword is a null statement used when a block is syntactically required but no action is needed.",
       "targetCode": "items = [\"10\", \"x\", \"25\", \"y\"]\ntotal = 0\nfor s in items:\n    try:\n        total += int(s)\n    except:\n        pass\nprint(total)",
       "testCases": [
         {

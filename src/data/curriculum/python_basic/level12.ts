@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: 'input()으로 이름을 변수 name에 입력받고, "Hello"와 name을 나란히 출력해보세요. (터미널 입력: Alice)',
-      prompt_en: 'Read a name into variable name using input(), and print "Hello" and name (Terminal input: Alice).',
-      hint_ko: '입력 블록의 괄호 안은 비워둔 채 왼쪽 변수에 입력값을 받아 저장하고, 출력 블록에서 인사말 문자열과 변수를 쉼표로 나란히 출력해보세요.',
-      hint_en: 'Leave the input block\'s parentheses empty to store user input in the left variable, then list the greeting text and variable in print().',
+      prompt_ko: 'input() 함수는 사용자가 키보드로 입력한 한 줄을 문자열로 읽어와 변수에 저장합니다. 블록의 코드를 따라 입력해 인사말을 출력해보세요. (터미널 입력: Alice)',
+      prompt_en: 'The input() function reads a line typed by the user as a string and stores it in a variable. Trace the block code to print the greeting (Terminal input: Alice).',
+      hint_ko: 'input()의 괄호 안은 비워두며, 입력받은 변수와 문자열을 쉼표(,)로 나란히 출력합니다.',
+      hint_en: 'Leave the parentheses of input() empty, then print the greeting string and variable separated by a comma (,).',
       targetCode: 'name = input()\nprint("Hello", name)',
       testCases: [
         {
@@ -76,10 +76,10 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: 'input()으로 입력받은 아이디를 user에 저장한 뒤, msg에 "ID:" + user를 저장하고 출력해보세요. (터미널 입력: hero)',
-      prompt_en: 'Read user via input(), store "ID:" + user in msg, and print msg (Terminal input: hero).',
-      hint_ko: '입력 함수로 읽어온 값은 문자열이므로 앞선 문자열과 더하기 기호로 빈틈없이 이어붙여 새 변수에 저장할 수 있습니다.',
-      hint_en: 'Since user input is a string, you can concatenate it with the prefix string using + and store the result in msg.',
+      prompt_ko: 'input()으로 읽어온 값은 문자열이므로 덧셈 기호(+)를 사용해 다른 문자열과 빈틈없이 이어붙일 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: hero)',
+      prompt_en: 'Because input() returns a string, you can concatenate it directly with another string using the plus (+) operator. Trace the block code (Terminal input: hero).',
+      hint_ko: '앞선 문자열 라벨과 입력받은 문자열 변수를 +로 합쳐 새 변수에 저장한 뒤 출력합니다.',
+      hint_en: 'Join the prefix string and the input variable with + and store the combined string before printing.',
       targetCode: 'user = input()\nmsg = "ID:" + user\nprint(msg)',
       testCases: [
         {
@@ -126,10 +126,10 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: '두 줄에 걸쳐 두 단어를 first와 second에 차례로 입력받고, first + second를 출력해보세요. (터미널 입력: 첫째 줄 Py, 둘째 줄 thon)',
-      prompt_en: 'Read two lines into first and second using input(), then print first + second (Terminal input: line 1 Py, line 2 thon).',
-      hint_ko: '입력 블록은 실행될 때마다 한 줄씩 순서대로 읽어옵니다. 두 변수에 각각 입력을 받은 뒤 더하기 기호로 이어붙여 출력해보세요.',
-      hint_en: 'Each input() call reads the next line in order. Store the two lines in separate variables and concatenate them with +.',
+      prompt_ko: 'input()은 호출될 때마다 한 줄씩 순서대로 읽어오므로, 여러 줄의 입력은 여러 번의 input()으로 각각 받아 합칠 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 첫째 줄 Py, 둘째 줄 thon)',
+      prompt_en: 'Each input() call reads one line in order, so multiple lines of input can be read into separate variables and combined. Trace the block code (Terminal input: line 1 Py, line 2 thon).',
+      hint_ko: '첫 번째와 두 번째 줄의 입력이 각 변수에 차례로 저장된 뒤 + 연산자로 이어붙여집니다.',
+      hint_en: 'The two input lines are stored in separate variables in order and concatenated with +.',
       targetCode: 'first = input()\nsecond = input()\nprint(first + second)',
       testCases: [
         {
@@ -176,10 +176,10 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: 'input()으로 기호를 변수 ch에 입력받고, line에 ch * 5를 저장해 5번 반복된 문자열을 출력해보세요. (터미널 입력: *)',
-      prompt_en: 'Read a symbol into ch with input(), store ch * 5 in line, and print line (Terminal input: *).',
-      hint_ko: '입력받은 문자열 변수에 곱셈 기호로 숫자를 곱하면 해당 글자가 지정한 횟수만큼 반복된 문자열이 만들어집니다.',
-      hint_en: 'Multiplying the input string variable by 5 repeats the text five times.',
+      prompt_ko: 'input()으로 입력받은 문자열 변수에 곱셈 기호(*)로 정수를 곱하면 입력받은 글자를 원하는 횟수만큼 반복할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: *)',
+      prompt_en: 'Multiplying a string variable read via input() by an integer with * repeats the input text that many times. Trace the block code (Terminal input: *).',
+      hint_ko: '입력받은 기호가 * 5 연산을 통해 다섯 번 연속 이어진 문자열로 저장됩니다.',
+      hint_en: 'The input symbol is repeated five times in a row using * 5.',
       targetCode: 'ch = input()\nline = ch * 5\nprint(line)',
       testCases: [
         {
@@ -226,10 +226,10 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: 'input()의 결과를 n에 저장하고 n * 3을 출력해, 21이 아닌 777이 출력되는 것을 확인해보세요. (터미널 입력: 7)',
-      prompt_en: 'Store input() in n and print n * 3 to see that it outputs 777 rather than 21 (Terminal input: 7).',
-      hint_ko: '입력 함수로 읽어온 값은 숫자 모양이더라도 항상 문자열로 저장되므로, 곱셈을 하면 숫자 계산 대신 글자가 반복됩니다.',
-      hint_en: 'Values read by input() are always strings even if digits are typed, so * 3 repeats the character three times.',
+      prompt_ko: 'input()은 숫자를 입력하더라도 항상 문자열(글자)로 읽어오기 때문에, 곱셈 기호(*)를 쓰면 숫자 계산 대신 글자 반복이 일어납니다. 블록의 코드를 따라 입력해 확인해보세요. (터미널 입력: 7)',
+      prompt_en: 'Even when digits are entered, input() always returns a string, so using * repeats the characters instead of multiplying numbers. Trace the block code to see the result (Terminal input: 7).',
+      hint_ko: '문자열 "7"이 세 번 반복되므로 21이 아닌 777이 화면에 출력됩니다.',
+      hint_en: 'Because "7" is a string, repeating it three times prints 777 rather than 21.',
       targetCode: 'n = input()\nprint(n * 3)',
       testCases: [
         {

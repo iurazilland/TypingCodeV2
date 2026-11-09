@@ -24,10 +24,10 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "정수 score를 입력받아 60 이상이면 \"Pass\", 그렇지 않으면(else) \"Fail\"을 출력해보세요. (터미널 입력: 75)",
-      "prompt_en": "Read integer score; print \"Pass\" if score >= 60, otherwise print \"Fail\". (Terminal input: 75)",
-      "hint_ko": "양방향 분기에서는 조건식이 참이면 위쪽 블록만, 거짓이면 아래쪽 나머지 블록만 선택되어 둘 중 하나가 반드시 실행됩니다.",
-      "hint_en": "In two-way branching, either the top block runs when the condition is true, or the fallback block runs when it is false—never both.",
+      "prompt_ko": "if - else 양방향 조건문은 조건식이 참일 때 if 블록을, 거짓일 때 else: 블록을 선택해 둘 중 하나만 실행합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 75)",
+      "prompt_en": "An if - else statement executes the if block when the condition is True, or the else: block when it is False—never both. Trace the block code. (Terminal input: 75)",
+      "hint_ko": "else 뒤에는 별도의 조건식을 적지 않고 바로 콜론(:)을 붙여 나머지 모든 경우를 처리합니다.",
+      "hint_en": "Do not write a condition after else; follow it directly with a colon (:) to handle all remaining cases.",
       "targetCode": "score = int(input())\nif score >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")",
       "testCases": [
         {
@@ -75,10 +75,10 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "문자열 pw를 입력받아 \"py123\"과 일치하면 \"Login\", 다르면 \"Denied\"를 출력해보세요. (터미널 입력: py123)",
-      "prompt_en": "Read string pw; print \"Login\" if pw == \"py123\", otherwise print \"Denied\". (Terminal input: py123)",
-      "hint_ko": "입력받은 비밀번호 문자열이 기준 문자열과 일치하는지 등호 두 개로 비교하여 참일 때와 거짓일 때의 출력을 나누어 배치해보세요.",
-      "hint_en": "Compare the input password against the target string for equality, placing each message in its matching branch.",
+      "prompt_ko": "문자열 일치 여부도 같음 비교 연산자(==)와 if - else 구조로 검사해 참·거짓일 때의 출력을 나눌 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: py123)",
+      "prompt_en": "You can test string equality with == in an if - else structure to branch between two messages. Trace the block code. (Terminal input: py123)",
+      "hint_ko": "대입 연산자(=)가 아닌 비교 연산자(==)로 두 문자열이 정확히 일치하는지 판별합니다.",
+      "hint_en": "Use the equality operator (==) rather than assignment (=) to check if the two strings match.",
       "targetCode": "pw = input()\nif pw == \"py123\":\n    print(\"Login\")\nelse:\n    print(\"Denied\")",
       "testCases": [
         {
@@ -121,10 +121,10 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 n % 2 == 0이면 \"Even\", 아니면 \"Odd\"를 출력하는 홀짝 판별기를 완성해보세요. (터미널 입력: 14)",
-      "prompt_en": "Read integer n and print \"Even\" if n % 2 == 0, or \"Odd\" otherwise. (Terminal input: 14)",
-      "hint_ko": "정수를 2로 나눈 나머지가 0과 같으면 짝수 분기로, 그렇지 않으면 홀수 분기로 나뉘어 출력됩니다.",
-      "hint_en": "Check whether the remainder after dividing by 2 equals zero to separate even numbers from odd numbers.",
+      "prompt_ko": "나머지 연산자(%)를 사용한 조건식 n % 2 == 0으로 2로 나누어떨어지는 짝수와 그렇지 않은 홀수를 양방향 분기할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 14)",
+      "prompt_en": "Using the modulo operator (%) in n % 2 == 0 lets you branch between even numbers (divisible by 2) and odd numbers. Trace the block code. (Terminal input: 14)",
+      "hint_ko": "2로 나눈 나머지가 0이면 if 블록이, 1이면 else 블록이 실행됩니다.",
+      "hint_en": "When the remainder divided by 2 is 0, the if branch runs; when it is 1, the else branch runs.",
       "targetCode": "n = int(input())\nif n % 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")",
       "testCases": [
         {
@@ -167,10 +167,10 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 if n:이 참이면 sep=\":\"으로 Value와 n을, 거짓이면 Empty와 0을 출력해보세요. (출력 예: Value:7) (터미널 입력: 7)",
-      "prompt_en": "Read integer n; if truthy print Value and n with sep=\":\", else print Empty and 0 with sep=\":\". (Terminal input: 7)",
-      "hint_ko": "입력 정수가 0이 아니면 참 분기가, 0이면 나머지 분기가 선택됩니다. 두 출력 블록 모두 구분자 옵션을 콜론으로 맞춰주세요.",
-      "hint_en": "Non-zero integers take the first branch while 0 takes the fallback branch; set the colon separator option on both print blocks.",
+      "prompt_ko": "if n:처럼 정수를 직접 조건으로 쓰면 0이 아닐 때 참 분기가, 0일 때 else 분기가 실행됩니다. print()의 sep 옵션과 함께 블록 코드를 따라 입력해보세요. (터미널 입력: 7)",
+      "prompt_en": "Using an integer directly in if n: runs the if branch when non-zero and the else branch when 0. Trace the block code with the sep option. (Terminal input: 7)",
+      "hint_ko": "sep=\":\" 옵션은 쉼표로 나열된 두 출력값 사이에 공백 대신 콜론(:)을 넣어 이어줍니다.",
+      "hint_en": "The sep=\":\" option joins the two comma-separated values with a colon (:) instead of a space.",
       "targetCode": "n = int(input())\nif n:\n    print(\"Value\", n, sep=\":\")\nelse:\n    print(\"Empty\", 0, sep=\":\")",
       "testCases": [
         {
@@ -213,10 +213,10 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 두 수를 정수 x, y에 담고 둘 중 큰 값(같으면 x)을 sep=\"=\"와 함께 출력해보세요. (출력 예: Max=25) (터미널 입력: 25 18)",
-      "prompt_en": "Split two integers into x, y and print the larger value formatted as Max=25 using sep=\"=\". (Terminal input: 25 18)",
-      "hint_ko": "두 정수의 크기를 비교해 첫째 값이 크거나 같을 때와 그렇지 않을 때 각각 더 큰 변수를 골라 구분자 옵션과 함께 출력해보세요.",
-      "hint_en": "Compare the two integers and print the larger variable in each branch using the equals-sign separator option.",
+      "prompt_ko": "두 변수 x, y의 대소를 if x >= y: 조건문으로 비교해 둘 중 더 큰 값을 골라 출력할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 25 18)",
+      "prompt_en": "Comparing two variables with if x >= y: lets you select and print the larger value in each branch. Trace the block code. (Terminal input: 25 18)",
+      "hint_ko": "x가 y 이상이면 if 블록에서 x를 출력하고, 그렇지 않으면(x < y) else 블록에서 y를 출력합니다.",
+      "hint_en": "If x is greater than or equal to y, the if branch prints x; otherwise (x < y), the else branch prints y.",
       "targetCode": "a, b = input().split()\nx = int(a)\ny = int(b)\nif x >= y:\n    print(\"Max\", x, sep=\"=\")\nelse:\n    print(\"Max\", y, sep=\"=\")",
       "testCases": [
         {

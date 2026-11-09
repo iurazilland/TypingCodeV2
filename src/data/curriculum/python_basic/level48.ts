@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "문자열 \"ABC\"를 list(\"ABC\")로 형변환해 한 글자씩 담긴 리스트 chars를 만들고 chars와 길이를 출력해보세요.",
-      "prompt_en": "Convert string \"ABC\" into a character list with chars = list(\"ABC\") and print chars and len(chars).",
-      "hint_ko": "문자열을 리스트 형변환 함수에 넣으면 한 글자씩 쪼개져 순서대로 담긴 새 리스트가 만들어집니다.",
-      "hint_en": "Passing a string to the list conversion function separates each character into its own element in order.",
+      "prompt_ko": "list() 형변환 함수에 문자열이나 다른 순회 가능 자료형을 넣으면 각 요소가 순서대로 하나씩 담긴 새 리스트로 변환됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Passing a string or other iterable to list() converts it into a new list containing each element in order. Follow the blocks and type the code.",
+      "hint_ko": "공백 기준으로 단어를 쪼개는 .split()과 달리, list(문자열)는 문자열을 한 글자씩 모두 분리해 리스트로 만듭니다.",
+      "hint_en": "Unlike .split(), calling list() on a string breaks every individual character into a separate list item.",
       "targetCode": "chars = list(\"ABC\")\nprint(chars, len(chars))",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "튜플 pt = (10, 20)을 list(pt)로 바꿔 30을 .append()한 뒤, 다시 tuple()로 변환해 출력해보세요.",
-      "prompt_en": "Convert pt = (10, 20) to a list, append 30, convert back with tuple(), and print (10, 20, 30).",
-      "hint_ko": "불변인 튜플은 리스트로 먼저 바꾼 뒤 끝에 요소를 덧붙이고, 수정이 끝나면 다시 튜플로 감싸 변환해 출력합니다.",
-      "hint_en": "Because tuples cannot be modified directly, cast to a list first, attach the new value, and cast back to a tuple.",
+      "prompt_ko": "수정할 수 없는 튜플에 값을 추가해야 할 때는 list()로 변환해 수정한 뒤 다시 tuple()로 감싸 튜플로 되돌리는 방식을 사용합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Because tuples are immutable, you can convert a tuple with list(), modify the list, and convert it back with tuple(). Follow the blocks and type the code.",
+      "hint_ko": "튜플에는 .append()가 없으므로 가변 자료형인 리스트로 잠시 바꾸어 요소를 추가한 뒤 다시 튜플로 변환합니다.",
+      "hint_en": "Tuples lack .append(), so cast to a mutable list first, append the item, and cast back to a tuple.",
       "targetCode": "pt = (10, 20)\ntmp = list(pt)\ntmp.append(30)\npt3 = tuple(tmp)\nprint(pt3)",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 단어들의 중복을 제거하고 오름차순 정렬한 뒤, 튜플로 변환해 출력해보세요. (터미널 입력: pear apple pear banana)",
-      "prompt_en": "Deduplicate input words via list(set(words)), sort them with .sort(), and print tuple(uniq). (Terminal input: pear apple pear banana)",
-      "hint_ko": "집합 변환으로 중복을 제거한 뒤 리스트로 바꿔 오름차순 정렬하고, 마지막에 튜플로 다시 변환해 출력하세요.",
-      "hint_en": "Remove duplicates via a set, convert to a list to order alphabetically, and cast the sorted result into a tuple.",
+      "prompt_ko": "list(set(데이터)) 패턴으로 중복을 제거함과 동시에 리스트로 변환하면, 집합에는 없는 .sort() 정렬 메서드를 바로 사용할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: pear apple pear banana)",
+      "prompt_en": "Wrapping set() inside list() (list(set(data))) removes duplicates and produces a list that can be sorted with .sort(). Follow the blocks and type the code. (Terminal input: pear apple pear banana)",
+      "hint_ko": "집합(set)으로 중복을 없앤 뒤 리스트(list)로 바꾸어 정렬하고, 최종 결과를 튜플(tuple)로 변환합니다.",
+      "hint_en": "Deduplicate with set(), convert to list() to sort in place, and then wrap the sorted list in tuple().",
       "targetCode": "words = input().split()\nuniq = list(set(words))\nuniq.sort()\nres = tuple(uniq)\nprint(res)",
       "testCases": [
         {
@@ -146,10 +146,10 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "user = {\"id\": \"neo\", \"badges\": [3, 1, 3, 2]}의 배지 중복을 제거·정렬해 다시 저장하고 출력해보세요.",
-      "prompt_en": "Deduplicate and sort user[\"badges\"], store it back into user[\"badges\"], and print id and badges.",
-      "hint_ko": "사전 속 배지 리스트를 꺼내 집합과 리스트 변환으로 중복 제거 및 정렬을 마친 뒤, 원래 사전의 같은 키 자리에 다시 대입하세요.",
-      "hint_en": "Deduplicate and order the badge list looked up from the dictionary, then reassign the cleaned list back to that same key.",
+      "prompt_ko": "딕셔너리 안에 저장된 리스트도 키로 꺼내어 list(set(...))과 .sort()로 중복 제거 및 정렬을 수행한 뒤 원래 키에 다시 대입할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "You can look up a list stored inside a dictionary, deduplicate and sort it with list(set(...)) and .sort(), and assign the cleaned list back to the same key. Follow the blocks and type the code.",
+      "hint_ko": "정렬이 끝난 리스트를 user[\"badges\"] = clean으로 다시 저장해야 딕셔너리 내부 데이터가 갱신됩니다.",
+      "hint_en": "Reassigning the sorted list back to user[\"badges\"] updates the dictionary's stored value.",
       "targetCode": "user = {\"id\": \"neo\", \"badges\": [3, 1, 3, 2]}\nclean = list(set(user[\"badges\"]))\nclean.sort()\nuser[\"badges\"] = clean\nprint(user[\"id\"], user[\"badges\"])",
       "testCases": [
         {
@@ -182,10 +182,10 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "while문으로 입력 숫자들을 정수 리스트에 담은 뒤, 중복 제거·정렬한 리스트 uniq와 실수 평균을 출력해보세요. (터미널 입력: 20 10 20 30)",
-      "prompt_en": "Convert input tokens to ints with while, deduplicate and sort into uniq, and print uniq and float mean. (Terminal input: 20 10 20 30)",
-      "hint_ko": "모은 정수들의 중복을 없애고 오름차순 정렬한 리스트를 만든 뒤, 그 고유 리스트의 합계를 개수로 나누어 실수 평균을 구하세요.",
-      "hint_en": "Build a deduplicated, sorted list from the collected integers, then divide its total by its length for the float mean.",
+      "prompt_ko": "문자열 숫자들을 정수 리스트로 변환한 뒤 list(set(nums))와 .sort()로 중복 없는 오름차순 리스트를 만들고, sum() / len()으로 고유 값들의 평균을 구할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 20 10 20 30)",
+      "prompt_en": "After converting input tokens into a list of integers, you can deduplicate and sort them with list(set(nums)) and .sort(), then compute the average of the unique numbers. Follow the blocks and type the code. (Terminal input: 20 10 20 30)",
+      "hint_ko": "중복이 제거된 uniq 리스트를 기준으로 sum(uniq) / len(uniq)를 계산하면 중복을 제외한 평균이 구해집니다.",
+      "hint_en": "Dividing sum(uniq) by len(uniq) calculates the mean of the deduplicated numbers.",
       "targetCode": "raw = input().split()\nnums = []\ni = 0\nwhile i < len(raw):\n    nums.append(int(raw[i]))\n    i += 1\nuniq = list(set(nums))\nuniq.sort()\navg = sum(uniq) / len(uniq)\nprint(uniq, avg)",
       "testCases": [
         {

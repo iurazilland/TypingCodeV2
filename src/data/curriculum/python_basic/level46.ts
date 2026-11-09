@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "bag = {\"key\": 1, \"potion\": 3}에 \"key\"가 있는지(in)와 \"map\"이 없는지(not in)를 나란히 출력해보세요.",
-      "prompt_en": "On bag = {\"key\": 1, \"potion\": 3}, print whether \"key\" is in bag and whether \"map\" is not in bag.",
-      "hint_ko": "사전에 포함 연산자와 부정 포함 연산자를 쓰면 값이 아니라 '키(Key)'가 등록되어 있는지 여부를 참/거짓으로 판별합니다.",
-      "hint_en": "Membership operators on a dictionary check whether the target exists among its keys rather than its values.",
+      "prompt_ko": "딕셔너리에서 in과 not in 연산자는 값이 아니라 특정 '키(Key)'가 딕셔너리에 존재하는지 여부를 확인해 True 또는 False를 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "On a dictionary, the in and not in operators check whether a specific key exists in the dictionary, returning True or False. Follow the blocks and type the code.",
+      "hint_ko": "없는 키를 바로 조회하면 KeyError가 발생하므로, in 연산자로 키가 있는지 먼저 확인하는 습관이 중요합니다.",
+      "hint_en": "Checking key membership with in prevents KeyError before looking up or deleting a key.",
       "targetCode": "bag = {\"key\": 1, \"potion\": 3}\nprint(\"key\" in bag, \"map\" not in bag)",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "prices = {\"pen\": 500, \"note\": 1200}을 .items()로 순회하며 상품명(name)과 가격(cost)을 출력해보세요.",
-      "prompt_en": "Loop over prices = {\"pen\": 500, \"note\": 1200} with .items() and print each name and cost.",
-      "hint_ko": "사전의 '항목들'을 뜻하는 복수형 메서드를 호출해 순회하면 매 차례마다 키와 값을 쌍으로 동시에 꺼낼 수 있습니다.",
-      "hint_en": "Calling the plural method meaning 'entries/things' on a dictionary lets the loop unpack each key and value together.",
+      "prompt_ko": "for 키, 값 in 딕셔너리.items(): 구문을 사용하면 딕셔너리의 모든 키와 값을 쌍으로 동시에 꺼내며 순회할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Looping with for key, value in dict.items(): lets you unpack and iterate over every key-value pair in a dictionary at the same time. Follow the blocks and type the code.",
+      "hint_ko": ".items() 메서드는 (키, 값) 튜플 쌍들을 돌려주므로 for문에서 두 변수로 바로 언패킹해 받습니다.",
+      "hint_en": "Because .items() yields (key, value) pairs, you can unpack both directly in the for loop header.",
       "targetCode": "prices = {\"pen\": 500, \"note\": 1200}\nfor name, cost in prices.items():\n    print(name, cost)",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "cnt = {\"A\": 2}에 입력받은 키 k가 있으면 값을 1 늘리고, 없으면 1로 등록한 뒤 cnt[k]를 출력해보세요. (터미널 입력: A)",
-      "prompt_en": "Read k; if k is in cnt = {\"A\": 2} increment cnt[k] by 1, else set cnt[k] = 1, then print cnt[k]. (Terminal input: A)",
-      "hint_ko": "입력된 키가 사전에 이미 들어 있는지 먼저 확인해 있으면 1을 더하고, 처음 나온 키라면 1로 새로 등록하세요.",
-      "hint_en": "Test key membership first: increment the existing count by 1 when found, or initialize the new key to 1 otherwise.",
+      "prompt_ko": "if 키 in 딕셔너리: 조건문으로 키가 이미 있으면 기존 값에 1을 더하고(+= 1), 없으면 1로 새로 등록(= 1)하는 것은 빈도수 집계의 핵심 패턴입니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: A)",
+      "prompt_en": "Checking if key in dict: to increment an existing count (+= 1) or initialize a new key (= 1) is the core pattern for frequency counting. Follow the blocks and type the code. (Terminal input: A)",
+      "hint_ko": "키가 존재하는지 먼저 검사하기 때문에 처음 등장하는 키가 입력되어도 오류 없이 1로 초기화됩니다.",
+      "hint_en": "Testing membership first ensures existing keys increment while new keys safely initialize to 1.",
       "targetCode": "cnt = {\"A\": 2}\nk = input()\nif k in cnt:\n    cnt[k] += 1\nelse:\n    cnt[k] = 1\nprint(cnt[k])",
       "testCases": [
         {
@@ -146,10 +146,10 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력받은 단어(word)의 각 글자 등장 횟수를 counts 딕셔너리에 집계한 뒤 글자 \"a\"의 개수를 출력해보세요. (터미널 입력: banana)",
-      "prompt_en": "Count each character frequency of input word in counts = {} and print counts[\"a\"]. (Terminal input: banana)",
-      "hint_ko": "단어를 한 글자씩 순회하면서 사전에 이미 등록된 글자면 횟수를 1 올리고, 없는 글자면 1로 등록해 빈도수를 완성하세요.",
-      "hint_en": "Iterate character by character, incrementing existing keys by 1 and setting unseen keys to 1 before printing the target letter's count.",
+      "prompt_ko": "문자열을 for문으로 한 글자씩 순회하면서 빈 딕셔너리에 각 글자의 등장 횟수를 누적하면 글자별 빈도수 사전을 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: banana)",
+      "prompt_en": "Iterating over each character of a string in a for loop and updating counts in a dictionary builds a character frequency table. Follow the blocks and type the code. (Terminal input: banana)",
+      "hint_ko": "이미 나온 글자는 counts[ch] += 1로 횟수를 늘리고, 처음 나온 글자는 counts[ch] = 1로 등록합니다.",
+      "hint_en": "Increment counts[ch] by 1 when the character is already in counts, and set counts[ch] = 1 when it is new.",
       "targetCode": "word = input()\ncounts = {}\nfor ch in word:\n    if ch in counts:\n        counts[ch] += 1\n    else:\n        counts[ch] = 1\nprint(counts[\"a\"])",
       "testCases": [
         {
@@ -192,10 +192,10 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "scores = {\"Kim\": 75, \"Lee\": 92, \"Park\": 88}을 .items()로 순회해 최고 득점자와 점수를 출력해보세요. (출력 예: Lee:92)",
-      "prompt_en": "Iterate over scores.items() starting from top_name = None to find and print the top scorer (Lee:92).",
-      "hint_ko": "이름과 점수를 쌍으로 꺼내 순회하면서 현재 최고 점수보다 더 큰 점수가 나올 때마다 최고 점수와 이름을 함께 갱신하세요.",
-      "hint_en": "Unpack each name and score pair in a loop, updating both the best score and best name whenever a higher score appears.",
+      "prompt_ko": ".items()로 이름과 점수를 함께 순회하면서 현재 최고 점수(top_val)보다 큰 값을 만날 때마다 최고 점수와 이름(top_name)을 동시에 갱신해 최댓값의 주인공을 찾을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "By iterating over .items() and updating both the highest value and its matching key whenever a larger value appears, you can find which key holds the maximum score. Follow the blocks and type the code.",
+      "hint_ko": "sc > top_val 조건이 참일 때 점수와 이름을 함께 저장해 두면 반복이 끝난 뒤 최고 득점자를 알 수 있습니다.",
+      "hint_en": "Updating both top_val and top_name inside the if block keeps the winning key paired with the highest score.",
       "targetCode": "scores = {\"Kim\": 75, \"Lee\": 92, \"Park\": 88}\ntop_name = None\ntop_val = 0\nfor name, sc in scores.items():\n    if sc > top_val:\n        top_val = sc\n        top_name = name\nprint(f\"{top_name}:{top_val}\")",
       "testCases": [
         {

@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "입력 점수 score가 60 이상이면 \"Pass\", 아니면 \"Fail\"을 한 줄 조건 표현식으로 label에 담아 출력해보세요. (터미널 입력: 75)",
-      "prompt_en": "Assign \"Pass\" if score >= 60 else \"Fail\" to label in one line and print label. (Terminal input: 75)",
-      "hint_ko": "파이썬의 한 줄 조건 표현식은 (참일 때의 값)을 맨 앞에 적고, 그 뒤에 조건절과 거짓일 때의 값을 순서대로 배치합니다.",
-      "hint_en": "Python's inline conditional places the true-branch value first, followed by the condition clause and the fallback value.",
+      "prompt_ko": "한 줄 조건 표현식(참값 if 조건 else 거짓값)은 조건의 참·거짓에 따라 두 값 중 하나를 한 줄로 선택해 대입합니다. (터미널 입력: 75)",
+      "prompt_en": "An inline conditional expression (true_val if cond else false_val) evaluates the condition and selects between two values in a single line. (Terminal input: 75)",
+      "hint_ko": "참일 때의 값을 맨 앞에 적고, 그 뒤에 if 조건과 else 거짓값을 콜론(:) 없이 순서대로 이어 씁니다.",
+      "hint_en": "Place the true-branch value first, followed by if condition and else false_val without any colons (:).",
       "targetCode": "score = int(input())\nlabel = \"Pass\" if score >= 60 else \"Fail\"\nprint(label)",
       "testCases": [
         {
@@ -74,10 +74,10 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "입력 체력 raw가 100을 넘으면 100으로 제한하고, 아니면 raw 그대로 hp에 저장해 출력해보세요. (터미널 입력: 135)",
-      "prompt_en": "Clamp raw at a maximum of 100 using 100 if raw > 100 else raw and print hp. (Terminal input: 135)",
-      "hint_ko": "상한선을 초과하는지 조건으로 검사해 참이면 상한값을, 거짓이면 원래 입력값을 선택하도록 한 줄로 작성합니다.",
-      "hint_en": "Check whether the input exceeds the upper cap: select the cap when true, or keep the original value otherwise.",
+      "prompt_ko": "상한값을 초과하는지 검사하는 한 줄 조건 표현식(100 if raw > 100 else raw)을 쓰면 최댓값을 제한(Clamping)하는 로직을 간결하게 작성할 수 있습니다. (터미널 입력: 135)",
+      "prompt_en": "Using an inline conditional like 100 if raw > 100 else raw concisely clamps a numeric value at an upper limit. (Terminal input: 135)",
+      "hint_ko": "조건이 참이면 상한값 100이 선택되고, 거짓이면 입력된 원래 변수 값이 그대로 유지됩니다.",
+      "hint_en": "When the condition holds, the cap 100 is chosen; otherwise the original variable value is kept.",
       "targetCode": "raw = int(input())\nhp = 100 if raw > 100 else raw\nprint(hp)",
       "testCases": [
         {
@@ -120,10 +120,10 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "f-string 중괄호 안에서 temp가 30 이상이면 Hot, 아니면 OK를 붙여 출력해보세요. (출력 예: 33C:Hot) (터미널 입력: 33)",
-      "prompt_en": "Use an inline conditional inside an f-string to format temp as 33C:Hot or 22C:OK. (Terminal input: 33)",
-      "hint_ko": "바깥 f-string이 큰따옴표로 감싸져 있으므로, 중괄호 안의 문자열 값은 작은따옴표로 감싸야 따옴표가 겹치지 않습니다.",
-      "hint_en": "Because the outer f-string uses double quotes, wrap the inner string literals inside { } in single quotes.",
+      "prompt_ko": "f-string의 중괄호 { } 안에도 한 줄 조건 표현식을 직접 넣어 조건에 따라 다른 문자열이 포맷팅되도록 만들 수 있습니다. (터미널 입력: 33)",
+      "prompt_en": "You can embed an inline conditional expression directly inside f-string braces { } to format different labels based on a condition. (Terminal input: 33)",
+      "hint_ko": "바깥 f-string이 큰따옴표(\")로 감싸져 있으므로 중괄호 안의 문자열은 작은따옴표(')로 감싸 구분합니다.",
+      "hint_en": "Because the outer f-string uses double quotes (\"), wrap the string literals inside { } in single quotes (').",
       "targetCode": "temp = int(input())\nmsg = f\"{temp}C:{'Hot' if temp >= 30 else 'OK'}\"\nprint(msg)",
       "testCases": [
         {
@@ -166,10 +166,10 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "나이 age가 8 미만이면 0, 아니면 1500을 한 줄 return으로 반환하는 calc_fee(age) 함수를 완성해보세요.",
-      "prompt_en": "Complete calc_fee(age) with a single-line return 0 if age < 8 else 1500 and test with 6 and 20.",
-      "hint_ko": "반환 키워드 바로 뒤에 한 줄 조건 표현식을 적으면 네 줄짜리 조건 블록을 한 줄로 줄일 수 있습니다.",
-      "hint_en": "Placing an inline conditional right after the return keyword replaces a 4-line branch with a single line.",
+      "prompt_ko": "함수의 return 키워드 바로 뒤에 한 줄 조건 표현식을 작성하면 여러 줄의 if-else 반환문을 한 줄로 깔끔하게 줄일 수 있습니다.",
+      "prompt_en": "Placing an inline conditional expression right after return condenses a multi-line if-else return into a single line.",
+      "hint_ko": "return 뒤의 조건식이 먼저 계산되어 조건에 맞는 숫자 하나가 호출한 곳으로 반환됩니다.",
+      "hint_en": "Python evaluates the conditional expression after return first and sends the selected value back to the caller.",
       "targetCode": "def calc_fee(age):\n    return 0 if age < 8 else 1500\n\nprint(calc_fee(6), calc_fee(20))",
       "testCases": [
         {
@@ -202,10 +202,10 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "tiers를 순회하며 bonus.get(t, 0) 점수가 0보다 크면 그 점수를, 아니면 기본 1점을 total에 더해 출력해보세요.",
-      "prompt_en": "Loop over tiers, look up pts with bonus.get(t, 0), and add pts if pts > 0 else 1 to total.",
-      "hint_ko": "복합 대입 연산자(+=)는 오른쪽의 조건 표현식을 먼저 평가해 결정된 값을 왼쪽 누적 변수에 더해 줍니다.",
-      "hint_en": "Python evaluates the entire conditional expression on the right of += first, then adds that result to the accumulator.",
+      "prompt_ko": "복합 대입 연산자(+=) 오른쪽에 한 줄 조건 표현식을 쓰면, 조건에 따라 결정된 값을 누적 변수에 곧바로 더할 수 있습니다.",
+      "prompt_en": "Writing an inline conditional on the right side of += evaluates the chosen value first and adds it directly to the accumulator.",
+      "hint_ko": ".get(t, 0)으로 안전 조회한 점수가 0보다 크면 그 점수를, 아니면 기본 점수 1을 total에 누적합니다.",
+      "hint_en": "If the score looked up via .get(t, 0) is positive, it adds that score; otherwise it adds the fallback 1.",
       "targetCode": "bonus = {\"vip\": 20, \"std\": 5}\ntiers = [\"vip\", \"free\", \"std\"]\ntotal = 0\nfor t in tiers:\n    pts = bonus.get(t, 0)\n    total += pts if pts > 0 else 1\nprint(total)",
       "testCases": [
         {

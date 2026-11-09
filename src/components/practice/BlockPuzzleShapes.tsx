@@ -1,11 +1,145 @@
 import React from 'react';
-import { BLOCK_GEOMETRY } from '@/lib/blockGeometry';
+import { BLOCK_GEOMETRY, getBlockInputWidth } from '@/lib/blockGeometry';
 
 export interface BlockTheme {
   bg: string;
   shadow: string;
   border: string;
 }
+
+export interface BlockTraceInputProps {
+  value: string;
+  targetValue?: string;
+  onChange: (val: string) => void;
+  minChars?: number;
+  minWidthPx?: number;
+  height?: string;
+  padding?: string;
+  borderRadius?: string;
+  fontSize?: string;
+  fontWeight?: number;
+  fontStyle?: string;
+  background?: string;
+  color?: string;
+  ghostColor?: string;
+  border?: string;
+  boxShadow?: string;
+  allowAnyText?: boolean;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
+}
+
+export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
+  value,
+  targetValue,
+  onChange,
+  minChars = 1,
+  minWidthPx = 0,
+  height = '20px',
+  padding = '1px 5px',
+  borderRadius = '6px',
+  fontSize = '0.76rem',
+  fontWeight = 800,
+  fontStyle = 'normal',
+  background = '#ffffff',
+  color = '#0f172a',
+  ghostColor = 'rgba(15, 23, 42, 0.36)',
+  border = '1px solid rgba(0, 0, 0, 0.25)',
+  boxShadow = 'none',
+  allowAnyText = false,
+  onFocus,
+  onClick,
+}) => {
+  const valStr = value ?? '';
+  const targetStr = targetValue ?? '';
+  const computedWidth = Math.max(
+    minWidthPx,
+    getBlockInputWidth(valStr, minChars),
+    getBlockInputWidth(targetStr, minChars)
+  );
+  const isMismatch =
+    targetValue !== undefined && !allowAnyText && valStr.length > 0 && !targetStr.startsWith(valStr);
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        width: `${computedWidth}px`,
+        height,
+        borderRadius,
+        background,
+        border: isMismatch ? '1.5px solid #ef4444' : border,
+        boxShadow,
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
+      }}
+    >
+      {targetStr.length > 0 && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding,
+            display: 'flex',
+            alignItems: 'center',
+            fontFamily: 'var(--font-mono)',
+            fontSize,
+            fontWeight,
+            fontStyle,
+            whiteSpace: 'pre',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            boxSizing: 'border-box',
+          }}
+        >
+          <span style={{ visibility: 'hidden' }}>{valStr}</span>
+          <span style={{ color: ghostColor }}>{targetStr.slice(valStr.length)}</span>
+        </div>
+      )}
+      <input
+        type="text"
+        value={valStr}
+        placeholder=""
+        spellCheck={false}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        onMouseDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
+        onDragStart={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onFocus={targetValue !== undefined ? undefined : onFocus}
+        onClick={targetValue !== undefined ? undefined : onClick}
+        onChange={(e) => onChange(e.target.value)}
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          width: '100%',
+          height: '100%',
+          padding,
+          margin: 0,
+          border: 'none',
+          background: 'transparent',
+          color: isMismatch ? '#dc2626' : color,
+          fontWeight,
+          fontFamily: 'var(--font-mono)',
+          fontStyle,
+          fontSize,
+          textAlign: 'left',
+          outline: 'none',
+          cursor: 'text',
+          boxSizing: 'border-box',
+        }}
+      />
+    </div>
+  );
+};
 
 // 1. Puzzle Notch (오목한 홈)
 // 연결된 상태(isConnected === true)에서는 들어온 탭과 테두리 색상이 충돌하거나 덮어쓰지 않도록 border를 지웁니다.
@@ -147,6 +281,7 @@ export const SvgBottomClosingArm: React.FC<{
   isDef?: boolean;
   hasReturn?: boolean;
   returnVal?: string;
+  targetReturnVal?: string;
   onToggleDefReturn?: (show: boolean) => void;
   onDefReturnValChange?: (val: string) => void;
   extraButtons?: React.ReactNode;
@@ -158,6 +293,7 @@ export const SvgBottomClosingArm: React.FC<{
   isDef = false,
   hasReturn = false,
   returnVal = '',
+  targetReturnVal,
   onToggleDefReturn,
   onDefReturnValChange,
   extraButtons,
@@ -219,28 +355,14 @@ export const SvgBottomClosingArm: React.FC<{
       {isDef && hasReturn && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', position: 'relative', zIndex: 6, paddingLeft: '8px' }}>
           <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.78rem' }}>return</span>
-          <input
-            type="text"
+          <BlockTraceInput
             value={returnVal}
-            placeholder=""
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onChange={(e) => onDefReturnValChange?.(e.target.value)}
-            style={{
-              width: `${Math.max(46, Math.round((returnVal?.length || 1) * 7.5 + 14))}px`,
-              height: '18px',
-              padding: '1px 5px',
-              borderRadius: '4px',
-              background: '#ffffff',
-              color: '#0f172a',
-              border: '1px solid rgba(0, 0, 0, 0.3)',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.76rem',
-              outline: 'none',
-              cursor: 'text',
-              boxSizing: 'border-box',
-            }}
+            targetValue={targetReturnVal}
+            onChange={(val) => onDefReturnValChange?.(val)}
+            minWidthPx={46}
+            height="18px"
+            borderRadius="4px"
+            fontSize="0.76rem"
           />
         </div>
       )}

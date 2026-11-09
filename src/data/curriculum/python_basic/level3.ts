@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쌍따옴표("")를 사용해 "Hello"를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Use double quotes ("") to insert "Hello" and print it on the screen.',
-      hint_ko: '파이썬에서는 글자나 단어를 쌍따옴표("")로 감싸서 문자열을 만듭니다. print() 괄호 안에 "Hello"를 입력하세요.',
-      hint_en: 'In Python, text strings are enclosed in quotes. Enter "Hello" inside the print() slot.',
+      prompt_ko: '글자나 단어를 뜻하는 문자열(String)은 앞뒤를 큰따옴표("")로 감싸서 표현합니다. 블록의 문자열을 따라 입력해 출력해보세요.',
+      prompt_en: 'A text string in Python is written by enclosing characters inside double quotes (""). Trace the string in the block to print it.',
+      hint_ko: '화면에 출력될 때는 양쪽의 따옴표 기호가 제외되고 안쪽 글자만 나타납니다.',
+      hint_en: 'When printed, the surrounding quotes are not shown—only the text inside appears.',
       targetCode: 'print("Hello")',
       testCases: [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: "작은따옴표('')를 사용해 'Python'을 넣어 화면에 출력해보세요.",
-      prompt_en: "Use single quotes ('') to insert 'Python' and print it on the screen.",
-      hint_ko: "파이썬은 쌍따옴표와 작은따옴표를 동일하게 지원합니다. print() 괄호 안에 'Python'을 입력하세요.",
-      hint_en: "Python treats single quotes identically to double quotes. Enter 'Python' inside the print() slot.",
+      prompt_ko: "파이썬에서는 큰따옴표(\"\")뿐만 아니라 작은따옴표('')로 감싸도 똑같은 문자열로 인식합니다. 블록의 문자열을 따라 입력해보세요.",
+      prompt_en: "Python treats single quotes ('') and double quotes (\"\") identically when creating strings. Trace the single-quoted string in the block.",
+      hint_ko: '열고 닫는 따옴표의 종류만 서로 같게 맞추면 어떤 따옴표든 사용할 수 있습니다.',
+      hint_en: 'Either quote style works as long as the opening and closing quotes match.',
       targetCode: "print('Python')",
       testCases: [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '두 개의 따옴표를 교차 사용해서 "It\'s"를 넣어 화면에 출력해보세요.',
-      prompt_en: 'Alternate the two types of quotes to insert "It\'s" and print it on the screen.',
-      hint_ko: '단어 속에 작은따옴표(\')가 들어있을 때는 바깥쪽을 큰따옴표("")로 감싸 교차 사용합니다. "It\'s"를 입력하세요.',
-      hint_en: 'When text contains a single quote (\'), enclose the outside with double quotes ("") to alternate them.',
+      prompt_ko: '문자열 안에 작은따옴표(\')를 글자로 포함해야 할 때는 바깥쪽을 큰따옴표("")로 감싸 따옴표가 중간에 끊기지 않게 합니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'To include a single quote (\') inside a string, wrap the outside with double quotes ("") so the string does not end early. Trace the block code.',
+      hint_ko: '바깥 따옴표와 다른 종류의 안쪽 따옴표는 일반 글자로 그대로 출력됩니다.',
+      hint_en: 'An inner quote of a different type from the outer quotes is printed as a literal character.',
       targetCode: 'print("It\'s")',
       testCases: [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '공백(띄어쓰기)이 포함된 "Coding is fun"을 넣어 화면에 출력해보세요.',
-      prompt_en: 'Insert "Coding is fun" with spaces and print it on the screen.',
-      hint_ko: '따옴표 안에는 띄어쓰기도 문자열의 일부로 포함됩니다. "Coding is fun"을 입력하세요.',
-      hint_en: 'Spaces inside quotes are preserved as part of the string. Enter "Coding is fun" inside the slot.',
+      prompt_ko: '따옴표 안에 입력한 띄어쓰기(공백)도 문자열의 일부로 그대로 보존되어 출력됩니다. 블록의 문장을 따라 입력해보세요.',
+      prompt_en: 'Spaces inside quotes are preserved as part of the string and printed exactly as written. Trace the sentence in the block.',
+      hint_ko: '단어 사이의 공백도 한 글자처럼 취급되므로 띄어쓰기를 정확히 맞춰 입력하세요.',
+      hint_en: 'Each space between words counts as a character inside the string.',
       targetCode: 'print("Coding is fun")',
       testCases: [
         {
@@ -190,10 +190,10 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 "Score:", 100을 넣어 나란히 출력해보세요.',
-      prompt_en: 'Use a comma (,) to insert "Score:", 100 and print them side by side.',
-      hint_ko: 'print() 안에 쉼표(,)를 찍으면 문자열과 숫자를 한 줄에 공백을 두고 나란히 출력할 수 있습니다. "Score:", 100을 입력하세요.',
-      hint_en: 'Using a comma in print() separates strings and numbers with an automatic space, outputting "Score: 100".',
+      prompt_ko: 'print() 안에서 문자열과 숫자를 쉼표(,)로 나열하면 자료형이 달라도 공백 한 칸을 사이에 두고 나란히 출력됩니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Separating a string and a number with a comma (,) inside print() outputs them side by side with a space. Trace the block code.',
+      hint_ko: '설명 라벨은 따옴표로 감싸고, 숫자 값은 따옴표 없이 쉼표 뒤에 이어 적습니다.',
+      hint_en: 'Enclose the text label in quotes and write the number without quotes after the comma.',
       targetCode: 'print("Score:", 100)',
       testCases: [
         {

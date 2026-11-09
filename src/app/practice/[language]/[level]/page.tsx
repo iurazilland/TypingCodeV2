@@ -148,6 +148,7 @@ interface IfBranch {
   id: string;
   kind: 'if' | 'elif' | 'else' | 'try' | 'except' | 'finally';
   condition?: string;
+  targetCondition?: string;
   innerBlocks: CanvasBlock[];
 }
 
@@ -156,17 +157,24 @@ interface CanvasBlock {
   id: string;
   type: BlockType;
   varName?: string;
+  targetVarName?: string;
   assignOp?: AssignOperator;
   content?: string;
+  targetContent?: string;
   items?: string[];
+  targetItems?: string[];
   dictPairs?: DictPair[];
+  targetDictPairs?: DictPair[];
   isIfElse?: boolean;
   hasReturn?: boolean;
   returnVal?: string;
+  targetReturnVal?: string;
   hasSep?: boolean;
   sepVal?: string;
+  targetSepVal?: string;
   hasEnd?: boolean;
   endVal?: string;
+  targetEndVal?: string;
   // Method block properties
   methodName?: string;
   attachedMethodId?: string;   // Attached to right notch (horizontal method chain)
@@ -687,7 +695,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
       return null;
     };
 
-    const matchPostfixMethod = (s: string): { receiver: string; methodName: string } | null => {
+    const matchPostfixMethod = (s: string): { receiver: string; methodName: string; methodArgs: string } | null => {
       if (!s.endsWith(')')) return null;
       let q: string | null = null;
       let p = 0, b = 0, c = 0;
@@ -718,7 +726,34 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
       if (!dm) return null;
       const rec = dm[1].trim();
       if (!rec || /^[+-]?\d+$/.test(rec)) return null;
-      return { receiver: rec, methodName: dm[2] };
+      return { receiver: rec, methodName: dm[2], methodArgs: s.slice(lastOpenParen + 1, -1).trim() };
+    };
+
+    const splitTopLevelColon = (pairStr: string): DictPair => {
+      let q: string | null = null;
+      let p = 0, b = 0, c = 0;
+      for (let k = 0; k < pairStr.length; k++) {
+        const ch = pairStr[k];
+        if (q) {
+          if (ch === '\\' && k + 1 < pairStr.length) { k++; continue; }
+          if (ch === q) q = null;
+          continue;
+        }
+        if (ch === '"' || ch === "'") { q = ch; continue; }
+        if (ch === '(') p++;
+        else if (ch === ')') p = Math.max(0, p - 1);
+        else if (ch === '[') b++;
+        else if (ch === ']') b = Math.max(0, b - 1);
+        else if (ch === '{') c++;
+        else if (ch === '}') c = Math.max(0, c - 1);
+        else if (p === 0 && b === 0 && c === 0 && ch === ':') {
+          return {
+            key: pairStr.slice(0, k).trim(),
+            value: pairStr.slice(k + 1).trim(),
+          };
+        }
+      }
+      return { key: pairStr.trim(), value: '' };
     };
 
     const matchSingleCall = (expr: string): { fn: BlockType; inner: string } | null => {
@@ -769,6 +804,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
               id: nextId('var'),
               type: 'variable',
               varName: '',
+              targetVarName: mCall.receiver,
               content: '',
               x: 0,
               y: 0,
@@ -776,13 +812,20 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
           }
           if (baseBlk) {
             const mId = nextId('method');
-            baseBlk.attachedMethodId = mId;
+            let tailHost = baseBlk;
+            while (tailHost.attachedMethodId) {
+              const nextM = extraMethodBlocks.find((mb) => mb.id === tailHost.attachedMethodId);
+              if (!nextM) break;
+              tailHost = nextM;
+            }
+            tailHost.attachedMethodId = mId;
             extraMethodBlocks.push({
               id: mId,
               type: 'method',
               methodName: mCall.methodName,
               content: '',
-              attachedToBlockId: baseBlk.id,
+              targetContent: mCall.methodArgs,
+              attachedToBlockId: tailHost.id,
               x: 180,
               y: 66,
               zIndex: 25,
@@ -800,6 +843,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
         id: nextId(call.fn),
         type: call.fn,
         content: '',
+        targetContent: nestedArg ? undefined : call.inner,
         argBlock: nestedArg,
         x: 0,
         y: 0,
@@ -830,6 +874,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('comment'),
             type: 'comment',
             content: '',
+            targetContent: trimmed.slice(1).trim(),
             x: 40,
             y: 66,
           });
@@ -855,6 +900,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('return'),
             type: 'return',
             content: '',
+            targetContent: (retMatch[1] || '').trim(),
             x: 40,
             y: 66,
           });
@@ -868,6 +914,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('raise'),
             type: 'raise',
             content: '',
+            targetContent: (raiseMatch[1] || '').trim(),
             x: 40,
             y: 66,
           });
@@ -886,7 +933,9 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('class'),
             type: 'class',
             varName: '',
+            targetVarName: classMatch[1].trim(),
             content: hasParent ? '' : undefined,
+            targetContent: hasParent ? classMatch[2].trim() : undefined,
             innerBlocks: classBody.blocks,
             x: 40,
             y: 66,
@@ -903,18 +952,23 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
           const defBody = parseSuite(i + 1, bodyIndent);
           const innerBlocks = [...defBody.blocks];
           let hasReturn = false;
+          let targetRetVal: string | undefined = undefined;
           if (innerBlocks.length > 0 && innerBlocks[innerBlocks.length - 1].type === 'return') {
-            innerBlocks.pop();
+            const poppedRet = innerBlocks.pop();
             hasReturn = true;
+            targetRetVal = poppedRet?.targetContent ?? '';
           }
           suiteBlocks.push({
             id: nextId('def'),
             type: 'def',
             varName: '',
+            targetVarName: defMatch[1].trim(),
             content: '',
+            targetContent: defMatch[2].trim(),
             innerBlocks,
             hasReturn: hasReturn ? true : undefined,
             returnVal: hasReturn ? '' : undefined,
+            targetReturnVal: hasReturn ? targetRetVal : undefined,
             x: 40,
             y: 66,
           });
@@ -947,6 +1001,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
                 id: nextId('br-except'),
                 kind: 'except',
                 condition: excMatch[1] ? '' : undefined,
+                targetCondition: excMatch[1] ? excMatch[1].trim() : undefined,
                 innerBlocks: excBody.blocks,
               });
               i = excBody.nextIdx;
@@ -995,13 +1050,16 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             ? parsedLines[i + 1].indent
             : indent + 4;
           const loopBody = parseSuite(i + 1, bodyIndent);
+          const hasRangeBlk = isPaletteAllowed('range');
           suiteBlocks.push({
             id: nextId('for-range'),
             type: 'for_range',
             varName: '',
+            targetVarName: forRangeMatch[1].trim(),
             content: '',
-            argBlock: isPaletteAllowed('range')
-              ? { id: nextId('range'), type: 'range', content: '', x: 0, y: 0 }
+            targetContent: hasRangeBlk ? undefined : `range(${forRangeMatch[2].trim()})`,
+            argBlock: hasRangeBlk
+              ? { id: nextId('range'), type: 'range', content: '', targetContent: forRangeMatch[2].trim(), x: 0, y: 0 }
               : undefined,
             innerBlocks: loopBody.blocks,
             x: 40,
@@ -1017,12 +1075,16 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             ? parsedLines[i + 1].indent
             : indent + 4;
           const loopBody = parseSuite(i + 1, bodyIndent);
+          const iterExpr = forInMatch[2].trim();
+          const iterArgBlk = tryBuildArgBlock(iterExpr);
           suiteBlocks.push({
             id: nextId('for-in'),
             type: 'for_in',
             varName: '',
+            targetVarName: forInMatch[1].trim(),
             content: '',
-            argBlock: tryBuildArgBlock(forInMatch[2].trim()),
+            targetContent: iterArgBlk ? undefined : iterExpr,
+            argBlock: iterArgBlk,
             innerBlocks: loopBody.blocks,
             x: 40,
             y: 66,
@@ -1041,6 +1103,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('while'),
             type: 'while',
             content: '',
+            targetContent: whileMatch[1].trim(),
             innerBlocks: loopBody.blocks,
             x: 40,
             y: 66,
@@ -1049,23 +1112,27 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
           continue;
         }
 
-        if (/^if\s+[\s\S]+:$/.test(trimmed)) {
+        const ifMatch = trimmed.match(/^if\s+([\s\S]+?)\s*:$/);
+        if (ifMatch) {
           const branches: IfBranch[] = [];
           const firstBodyIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
             ? parsedLines[i + 1].indent
             : indent + 4;
           const ifBody = parseSuite(i + 1, firstBodyIndent);
+          const ifCond = ifMatch[1].trim();
           branches.push({
             id: nextId('br-if'),
             kind: 'if',
             condition: '',
+            targetCondition: ifCond,
             innerBlocks: ifBody.blocks,
           });
           i = ifBody.nextIdx;
 
           while (i < parsedLines.length && parsedLines[i].indent === indent) {
             const brTrimmed = parsedLines[i].trimmed;
-            if (/^elif\s+[\s\S]+:$/.test(brTrimmed)) {
+            const elifMatch = brTrimmed.match(/^elif\s+([\s\S]+?)\s*:$/);
+            if (elifMatch) {
               const elifIndent = i + 1 < parsedLines.length && parsedLines[i + 1].indent > indent
                 ? parsedLines[i + 1].indent
                 : indent + 4;
@@ -1074,6 +1141,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
                 id: nextId('br-elif'),
                 kind: 'elif',
                 condition: '',
+                targetCondition: elifMatch[1].trim(),
                 innerBlocks: elifBody.blocks,
               });
               i = elifBody.nextIdx;
@@ -1098,6 +1166,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('if'),
             type: 'if',
             content: '',
+            targetContent: ifCond,
             isIfElse: branches.some((b) => b.kind === 'else') ? true : undefined,
             branches,
             x: 40,
@@ -1109,19 +1178,26 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
         const printMatch = trimmed.match(/^print\s*\(([\s\S]*)\)$/);
         if (printMatch) {
           const args = splitTopLevelArgs(printMatch[1]);
-          const hasSep = args.some((a) => /^sep\s*=(?!=)/.test(a));
-          const hasEnd = args.some((a) => /^end\s*=(?!=)/.test(a));
+          const sepArg = args.find((a) => /^sep\s*=(?!=)/.test(a));
+          const endArg = args.find((a) => /^end\s*=(?!=)/.test(a));
+          const hasSep = Boolean(sepArg);
+          const hasEnd = Boolean(endArg);
+          const targetSep = sepArg ? sepArg.replace(/^sep\s*=\s*/, '').trim() : undefined;
+          const targetEnd = endArg ? endArg.replace(/^end\s*=\s*/, '').trim() : undefined;
           const posArgs = args.filter((a) => !/^[a-zA-Z_]\w*\s*=(?!=)/.test(a));
           const argBlk = !hasSep && !hasEnd && posArgs.length === 1 ? tryBuildArgBlock(posArgs[0]) : undefined;
           suiteBlocks.push({
             id: nextId('print'),
             type: 'print',
             content: '',
+            targetContent: argBlk ? undefined : posArgs.join(', '),
             argBlock: argBlk,
             hasSep: hasSep ? true : undefined,
-            sepVal: hasSep ? '" "' : undefined,
+            sepVal: hasSep ? '' : undefined,
+            targetSepVal: targetSep,
             hasEnd: hasEnd ? true : undefined,
-            endVal: hasEnd ? '"\\n"' : undefined,
+            endVal: hasEnd ? '' : undefined,
+            targetEndVal: targetEnd,
             x: 40,
             y: 66,
           });
@@ -1131,14 +1207,17 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
 
         const compOp = findCompoundOp(trimmed);
         if (compOp && compOp.pos > 0) {
+          const lhsExpr = trimmed.slice(0, compOp.pos).trim();
           const rhsExpr = trimmed.slice(compOp.pos + compOp.op.length).trim();
           const rhsArgBlk = tryBuildArgBlock(rhsExpr);
           suiteBlocks.push({
             id: nextId('var'),
             type: 'variable',
             varName: '',
+            targetVarName: lhsExpr,
             assignOp: compOp.op,
             content: '',
+            targetContent: rhsArgBlk ? undefined : rhsExpr,
             argBlock: rhsArgBlk,
             x: 40,
             y: 66,
@@ -1157,12 +1236,15 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             const listWrap = isWrappedBy(rhsExpr, '[', ']');
             if (listWrap.wraps && !/\bfor\b[\s\S]+\bin\b/.test(rhsExpr.slice(1, -1))) {
               const inner = rhsExpr.slice(1, -1).trim();
-              const itemSlots = inner ? splitTopLevelArgs(inner).map(() => '') : [''];
+              const parsedItems = inner ? splitTopLevelArgs(inner) : [''];
+              const itemSlots = parsedItems.map(() => '');
               suiteBlocks.push({
                 id: nextId('list'),
                 type: 'list',
                 varName: '',
+                targetVarName: lhsExpr,
                 items: itemSlots,
+                targetItems: parsedItems,
                 x: 40,
                 y: 66,
               });
@@ -1173,12 +1255,15 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             const tupleWrap = isWrappedBy(rhsExpr, '(', ')');
             if (rhsExpr === '()' || (tupleWrap.wraps && tupleWrap.hasTopComma)) {
               const inner = rhsExpr.slice(1, -1).trim();
-              const itemSlots = inner ? splitTopLevelArgs(inner).map(() => '') : [''];
+              const parsedItems = inner ? splitTopLevelArgs(inner) : [''];
+              const itemSlots = parsedItems.map(() => '');
               suiteBlocks.push({
                 id: nextId('tuple'),
                 type: 'tuple',
                 varName: '',
+                targetVarName: lhsExpr,
                 items: itemSlots,
+                targetItems: parsedItems,
                 x: 40,
                 y: 66,
               });
@@ -1190,24 +1275,30 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             if (braceWrap.wraps) {
               const inner = rhsExpr.slice(1, -1).trim();
               if (!inner || braceWrap.hasTopColon) {
-                const pairSlots = inner
-                  ? splitTopLevelArgs(inner).map(() => ({ key: '', value: '' }))
+                const parsedPairs = inner
+                  ? splitTopLevelArgs(inner).map(splitTopLevelColon)
                   : [{ key: '', value: '' }];
+                const pairSlots = parsedPairs.map(() => ({ key: '', value: '' }));
                 suiteBlocks.push({
                   id: nextId('dict'),
                   type: 'dict',
                   varName: '',
+                  targetVarName: lhsExpr,
                   dictPairs: pairSlots,
+                  targetDictPairs: parsedPairs,
                   x: 40,
                   y: 66,
                 });
               } else {
-                const itemSlots = splitTopLevelArgs(inner).map(() => '');
+                const parsedItems = splitTopLevelArgs(inner);
+                const itemSlots = parsedItems.map(() => '');
                 suiteBlocks.push({
                   id: nextId('set'),
                   type: 'set',
                   varName: '',
+                  targetVarName: lhsExpr,
                   items: itemSlots,
+                  targetItems: parsedItems,
                   x: 40,
                   y: 66,
                 });
@@ -1222,7 +1313,9 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('var'),
             type: 'variable',
             varName: '',
+            targetVarName: lhsExpr,
             content: '',
+            targetContent: rhsArgBlk ? undefined : rhsExpr,
             argBlock: rhsArgBlk,
             x: 40,
             y: 66,
@@ -1245,6 +1338,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: hostId,
             type: 'variable',
             varName: '',
+            targetVarName: stmtMethod.receiver,
             content: '',
             attachedMethodId: mId,
             x: 40,
@@ -1255,6 +1349,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             type: 'method',
             methodName: stmtMethod.methodName,
             content: '',
+            targetContent: stmtMethod.methodArgs,
             attachedToBlockId: hostId,
             x: 180,
             y: 66,
@@ -1270,6 +1365,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId(singleBuiltin.fn),
             type: singleBuiltin.fn,
             content: '',
+            targetContent: singleBuiltin.inner,
             x: 40,
             y: 66,
           });
@@ -1283,7 +1379,9 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             id: nextId('call'),
             type: 'call',
             varName: '',
+            targetVarName: userCallMatch[1].trim(),
             content: '',
+            targetContent: userCallMatch[2].trim(),
             x: 40,
             y: 66,
           });
@@ -5896,7 +5994,16 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
 
   const handleClearBlockContent = (blockId: string) => {
     setCanvasBlocks((prev) =>
-      prev.map((b) => (b.id === blockId ? { ...b, content: '', items: b.items ? [''] : undefined, dictPairs: b.dictPairs ? [{ key: '', value: '' }] : undefined } : b))
+      updateAnyBlockInTree(prev, blockId, (b) => ({
+        ...b,
+        varName: b.varName !== undefined ? '' : undefined,
+        content: '',
+        items: b.items ? b.items.map(() => '') : undefined,
+        dictPairs: b.dictPairs ? b.dictPairs.map(() => ({ key: '', value: '' })) : undefined,
+        sepVal: b.hasSep ? '' : b.sepVal,
+        endVal: b.hasEnd ? '' : b.endVal,
+        returnVal: b.hasReturn ? '' : b.returnVal,
+      }))
     );
     setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
     showToast('✏️ 블록 내용이 비워졌습니다.');

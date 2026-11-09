@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '몫 연산자(//)를 사용해 17//5를 넣어 몫을 출력해보세요.',
-      prompt_en: 'Use the floor division operator (//) to insert 17//5 and print the quotient.',
-      hint_ko: '슬래시를 두 번 쓴 // 기호는 나눗셈의 몫만 구하는 연산자입니다. 17//5를 입력하면 몫인 3이 출력됩니다.',
-      hint_en: 'The double slash (//) operator performs floor division. Entering 17//5 produces the quotient 3.',
+      prompt_ko: '슬래시를 두 번 이어 쓴 몫 연산자(//)는 나눗셈에서 소수점 아래를 버리고 정수 몫만 구합니다. 블록의 수식을 따라 입력해보세요.',
+      prompt_en: 'The floor division operator (//) divides two numbers and keeps only the integer quotient, discarding any decimal part. Trace the expression in the block.',
+      hint_ko: '일반 나눗셈(/)과 달리 몫 연산자(//)의 결과는 소수점이 없는 정수로 출력됩니다.',
+      hint_en: 'Unlike regular division (/), floor division (//) outputs an integer without a decimal point.',
       targetCode: 'print(17//5)',
       testCases: [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '나머지 연산자(%)를 사용해 17%5를 넣어 나머지를 출력해보세요.',
-      prompt_en: 'Use the modulo operator (%) to insert 17%5 and print the remainder.',
-      hint_ko: '퍼센트(%) 기호는 나눈 후 남은 나머지를 구하는 연산자입니다. 17%5를 입력하면 나머지인 2가 출력됩니다.',
-      hint_en: 'The percent sign (%) operator calculates the remainder. Entering 17%5 leaves a remainder of 2.',
+      prompt_ko: '퍼센트 기호로 쓰는 나머지 연산자(%)는 나눗셈 후 나누어떨어지지 않고 남은 나머지를 구합니다. 블록의 수식을 따라 입력해보세요.',
+      prompt_en: 'The modulo operator (%) calculates the remainder left over after division. Trace the expression in the block.',
+      hint_ko: '17을 5로 나누면 몫이 3이고 나머지가 2이므로 2가 출력됩니다.',
+      hint_en: '17 divided by 5 has a quotient of 3 and a remainder of 2, so 2 is printed.',
       targetCode: 'print(17%5)',
       testCases: [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '거듭제곱 연산자(**)를 사용해 2**4를 넣어 결과를 출력해보세요.',
-      prompt_en: 'Use the exponentiation operator (**) to insert 2**4 and print the result.',
-      hint_ko: '별표를 두 번 쓴 ** 기호는 거듭제곱(제곱수)을 계산합니다. 2**4를 넣으면 2를 4번 곱한 16이 출력됩니다.',
-      hint_en: 'The double asterisk (**) operator calculates powers. 2**4 multiplies 2 four times, producing 16.',
+      prompt_ko: '별표를 두 번 이어 쓴 거듭제곱 연산자(**)는 왼쪽 숫자를 오른쪽 숫자만큼 거듭 곱합니다. 블록의 수식을 따라 입력해보세요.',
+      prompt_en: 'The exponentiation operator (**) raises the left number to the power of the right number. Trace the expression in the block.',
+      hint_ko: '파이썬에서는 거듭제곱에 ^ 기호가 아닌 ** 기호를 사용합니다.',
+      hint_en: 'Python uses ** rather than ^ for exponentiation.',
       targetCode: 'print(2**4)',
       testCases: [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 10, 20을 넣어 나란히 출력해보세요.',
-      prompt_en: 'Use a comma (,) to insert 10, 20 and print them side by side.',
-      hint_ko: 'print() 괄호 안에 쉼표(,)로 값을 구분하면 파이썬이 값 사이에 공백을 자동으로 넣어 한 줄에 출력합니다. 10, 20을 입력하세요.',
-      hint_en: 'Separating items with a comma (,) inside print() automatically inserts a space between them. Enter 10, 20.',
+      prompt_ko: 'print() 괄호 안에서 여러 값을 쉼표(,)로 구분해 나열하면 값 사이에 공백 한 칸이 자동으로 들어가 나란히 출력됩니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Separating multiple values with a comma (,) inside print() prints them side by side with an automatic space in between. Trace the block code.',
+      hint_ko: '쉼표로 구분된 각 값들이 한 줄에 공백을 두고 차례대로 출력됩니다.',
+      hint_en: 'Each comma-separated item is printed on the same line separated by a single space.',
       targetCode: 'print(10, 20)',
       testCases: [
         {
@@ -190,10 +190,10 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 17//5, 17%5를 넣어 몫과 나머지를 한 번에 출력해보세요.',
-      prompt_en: 'Use a comma (,) to insert 17//5, 17%5 and print both the quotient and remainder together.',
-      hint_ko: '17//5, 17%5 와 같이 쉼표로 연결하면 몫(3)과 나머지(2)가 한 칸 띄워져 "3 2"로 출력됩니다.',
-      hint_en: 'Writing 17//5, 17%5 separated by a comma prints the quotient (3) and remainder (2) as "3 2".',
+      prompt_ko: '쉼표(,)를 활용하면 몫 연산자(//)와 나머지 연산자(%)의 계산 결과를 한 줄에 동시에 출력할 수 있습니다. 블록의 수식을 따라 입력해보세요.',
+      prompt_en: 'Using a comma (,) inside print() lets you evaluate and print both the quotient (//) and remainder (%) on a single line. Trace the block code.',
+      hint_ko: '쉼표 앞뒤의 수식이 각각 계산된 뒤 공백 한 칸을 사이에 두고 나란히 출력됩니다.',
+      hint_en: 'Both expressions around the comma are evaluated and printed with a space between them.',
       targetCode: 'print(17//5, 17%5)',
       testCases: [
         {

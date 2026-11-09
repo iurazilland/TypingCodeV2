@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 "Hello", "World"를 넣어 공백을 두고 나란히 출력해보세요.',
-      prompt_en: 'Use a comma (,) to insert "Hello", "World" and print them separated by a space.',
-      hint_ko: 'print() 안에서 쉼표(,)로 두 문자열을 구분하면 사이에 공백 한 칸이 자동으로 들어가 "Hello World"가 출력됩니다.',
-      hint_en: 'Separating two strings with a comma (,) automatically inserts a space, printing "Hello World".',
+      prompt_ko: 'print() 안에서 두 문자열을 쉼표(,)로 구분하면 두 단어 사이에 공백 한 칸이 자동으로 들어갑니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Separating two strings with a comma (,) inside print() automatically inserts a single space between them. Trace the block code.',
+      hint_ko: '각 문자열을 독립된 따옴표로 감싼 뒤 쉼표로 나열합니다.',
+      hint_en: 'Enclose each word in its own pair of quotes and separate them with a comma.',
       targetCode: 'print("Hello", "World")',
       testCases: [
         {
@@ -67,10 +67,10 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '덧셈 기호(+)를 사용해 "Hello"+"World"를 넣어 공백 없이 이어붙여 출력해보세요.',
-      prompt_en: 'Use the plus (+) operator to insert "Hello"+"World" and join them without spaces.',
-      hint_ko: '쉼표(,)와 달리 문자열끼리 + 기호를 사용하면 공백 없이 하나로 이어붙어 "HelloWorld"가 출력됩니다.',
-      hint_en: 'Unlike a comma, using + between strings concatenates them without spaces as "HelloWorld".',
+      prompt_ko: '문자열끼리 덧셈 기호(+)를 사용하면 쉼표와 달리 사이에 공백을 넣지 않고 두 문자열을 빈틈없이 하나로 이어붙입니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Using the plus (+) operator between strings concatenates them directly into one string without any space in between. Trace the block code.',
+      hint_ko: '문자열에서의 + 연산자는 숫자 계산이 아니라 글자 이어붙이기(결합)로 동작합니다.',
+      hint_en: 'Between strings, + joins text together without adding spaces.',
       targetCode: 'print("Hello"+"World")',
       testCases: [
         {
@@ -108,10 +108,10 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '곱셈 기호(*)를 사용해 "="*20을 넣어 20칸 구분선을 출력해보세요.',
-      prompt_en: 'Use the multiplication (*) operator to insert "="*20 and print a 20-character divider.',
-      hint_ko: '문자열에 *20을 곱하면 파이썬이 글자를 20번 연속으로 복제합니다. "="*20을 입력하세요.',
-      hint_en: 'Multiplying a string by 20 duplicates it 20 times. Enter "="*20.',
+      prompt_ko: '문자열에 곱셈 기호(*)로 정수를 곱하면 해당 문자열을 지정한 횟수만큼 연속해서 반복합니다. 블록의 코드를 따라 입력해 구분선을 출력해보세요.',
+      prompt_en: 'Multiplying a string by an integer with the asterisk (*) operator repeats the string that many times. Trace the block code to print a divider line.',
+      hint_ko: '같은 기호를 여러 번 직접 타이핑하지 않고도 * 연산자로 긴 구분선을 간편하게 만들 수 있습니다.',
+      hint_en: 'String repetition with * lets you create long divider lines without typing the character repeatedly.',
       targetCode: 'print("="*20)',
       testCases: [
         {
@@ -149,10 +149,10 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '곱셈 기호(*)를 사용해 "Hi"*3을 넣어 인사말을 3번 연속 출력해보세요.',
-      prompt_en: 'Use the asterisk (*) operator to insert "Hi"*3 and print the greeting 3 times.',
-      hint_ko: '단어 문자열도 곱하기(*) 연산자로 원하는 횟수만큼 반복할 수 있습니다. "Hi"*3을 입력하세요.',
-      hint_en: 'Word strings can also be repeated with the asterisk (*) operator. Enter "Hi"*3.',
+      prompt_ko: '기호 한 글자뿐만 아니라 여러 글자로 이루어진 단어 문자열도 곱셈 기호(*)로 원하는 횟수만큼 반복해 이어붙일 수 있습니다. 블록의 코드를 따라 입력해보세요.',
+      prompt_en: 'Multi-character word strings can also be repeated multiple times in a row using the asterisk (*) operator. Trace the block code.',
+      hint_ko: '반복할 문자열 뒤에는 공백 없이 단어 전체가 횟수만큼 이어져 출력됩니다.',
+      hint_en: 'The entire quoted word is repeated back-to-back without spaces.',
       targetCode: 'print("Hi"*3)',
       testCases: [
         {
@@ -190,10 +190,10 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 9,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '쉼표(,)를 사용해 "3"*3, 3*3을 넣어 글자 반복과 숫자 계산을 나란히 비교해보세요.',
-      prompt_en: 'Use a comma (,) to insert "3"*3, 3*3 and compare string repetition with numeric multiplication.',
-      hint_ko: '따옴표가 있는 "3"*3은 글자 반복(333), 따옴표가 없는 3*3은 숫자 곱셈(9)입니다. "3"*3, 3*3을 입력하세요.',
-      hint_en: 'Quoted "3"*3 repeats text (333), while unquoted 3*3 computes numbers (9). Enter "3"*3, 3*3.',
+      prompt_ko: '같은 곱셈 기호(*)라도 따옴표로 감싼 문자열에 쓰면 글자 반복이 되고, 따옴표 없는 숫자에 쓰면 곱셈 계산이 됩니다. 블록의 코드를 따라 입력해 두 결과를 비교해보세요.',
+      prompt_en: 'The same asterisk (*) operator repeats characters when applied to a quoted string, but performs multiplication when applied to unquoted numbers. Trace the block code to compare both.',
+      hint_ko: '"3"*3은 글자 "3"을 세 번 이어붙이고, 3*3은 숫자 3과 3을 곱한 값을 출력합니다.',
+      hint_en: '"3"*3 repeats the character "3" three times, whereas 3*3 calculates the numeric product.',
       targetCode: 'print("3"*3, 3*3)',
       testCases: [
         {

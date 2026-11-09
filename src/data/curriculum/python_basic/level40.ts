@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "리스트 nums = [10, 20]의 맨 뒤에 30을 추가하고 변경된 리스트를 출력해보세요.",
-      "prompt_en": "Append 30 to the end of nums = [10, 20] and print the updated list.",
-      "hint_ko": "리스트 맨 뒤에 요소를 '덧붙이다'라는 뜻의 메서드를 실행해 원본 리스트에 값을 넣은 뒤 리스트 변수를 출력하세요.",
-      "hint_en": "Invoke the list method meaning 'attach to the end' with 30, then print the list variable.",
+      "prompt_ko": ".append(값) 메서드는 원본 리스트의 맨 끝에 새로운 요소 하나를 덧붙여 추가합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The .append(value) method adds a single new element to the very end of a list in place. Follow the blocks and type the code.",
+      "hint_ko": ".append()는 새 리스트를 반환하지 않고 원본 리스트 자체를 직접 변경하므로 단독 문장으로 호출합니다.",
+      "hint_en": "Because .append() mutates the list directly rather than returning a new list, call it on its own line.",
       "targetCode": "nums = [10, 20]\nnums.append(30)\nprint(nums)",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "stack = [10, 20, 30]에서 맨 마지막 요소를 꺼내 last에 저장하고, last와 남은 stack을 각각 출력해보세요.",
-      "prompt_en": "Pop the last element from stack = [10, 20, 30] into last, then print last and stack.",
-      "hint_ko": "맨 끝 요소를 '톡 꺼내다'라는 뜻의 세 글자 메서드는 리스트에서 마지막 값을 제거함과 동시에 그 값을 돌려줍니다.",
-      "hint_en": "The 3-letter removal method takes the last item off the list and returns it so you can save it in a variable.",
+      "prompt_ko": ".pop() 메서드는 리스트의 맨 마지막 요소를 제거함과 동시에 그 꺼낸 값을 반환해 변수에 저장할 수 있게 해줍니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The .pop() method removes the last element from a list and returns that removed value so you can store it. Follow the blocks and type the code.",
+      "hint_ko": ".pop()을 호출하면 반환된 마지막 값은 변수에 담기고, 원본 리스트에는 나머지 요소들만 남습니다.",
+      "hint_en": "Calling .pop() assigns the removed tail item to the variable and leaves the remaining items in the list.",
       "targetCode": "stack = [10, 20, 30]\nlast = stack.pop()\nprint(last)\nprint(stack)",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "1부터 3까지 반복하며 i * 10을 빈 리스트 nums에 추가한 뒤 개수와 리스트를 출력해보세요. (출력 예: Count:3,Data:[10, 20, 30])",
-      "prompt_en": "Loop i from 1 to 3, append i * 10 to nums, and print Count and Data.",
-      "hint_ko": "1부터 3까지 반복하는 동안 매번 10을 곱한 값을 빈 리스트 끝에 덧붙이고, 반복이 끝난 뒤 길이와 리스트 전체를 포맷팅해 출력하세요.",
-      "hint_en": "Loop through 1 to 3 adding each multiple of 10 onto the list, then print the formatted count and list outside the loop.",
+      "prompt_ko": "빈 리스트([])를 먼저 만든 뒤 for 반복문 안에서 .append()를 호출하면 계산된 값들을 순서대로 모아 리스트를 완성할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Starting with an empty list ([]) and calling .append() inside a for loop lets you dynamically collect computed values. Follow the blocks and type the code.",
+      "hint_ko": "반복문 바깥에서 빈 리스트를 초기화하고, 반복문 본문에서 매 회차 계산 결과를 .append()로 추가합니다.",
+      "hint_en": "Initialize the empty list before the loop and append each calculated value inside the loop body.",
       "targetCode": "nums = []\nfor i in range(1, 4):\n    nums.append(i * 10)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
       "testCases": [
         {
@@ -141,10 +141,10 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "stack = [10, 20, 30]이 빌 때까지 마지막 요소를 하나씩 꺼내 total에 더하고 합계와 남은 길이를 출력해보세요. (출력 예: Sum:60,Left:0)",
-      "prompt_en": "While stack = [10, 20, 30] is non-empty, pop the last value into total and print Sum and Left.",
-      "hint_ko": "리스트 이름을 조건식에 그대로 두면 요소가 남아 있는 동안만 반복됩니다. 매번 끝 요소를 꺼내 합산한 뒤 결과를 출력하세요.",
-      "hint_en": "Using the list itself as the loop condition repeats until all items are removed; extract the last value each turn and accumulate it.",
+      "prompt_ko": "while 리스트: 조건과 .pop()을 결합하면 리스트에 요소가 남아 있는 동안 끝에서부터 하나씩 꺼내 처리하고 빈 리스트가 될 때 자동으로 반복을 멈춥니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Combining while list: with .pop() repeatedly extracts and processes items until the list becomes empty and stops the loop. Follow the blocks and type the code.",
+      "hint_ko": ".pop()을 반복할 때마다 리스트 길이가 1씩 줄어들어 마지막 요소를 꺼낸 뒤에는 while 조건이 거짓이 됩니다.",
+      "hint_en": "Each .pop() shrinks the list by one until it is empty, making the while condition False.",
       "targetCode": "stack = [10, 20, 30]\ntotal = 0\nwhile stack:\n    val = stack.pop()\n    total += val\nprint(f\"Sum:{total},Left:{len(stack)}\")",
       "testCases": [
         {
@@ -182,10 +182,10 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "raw = [5, -1, 8]에서 맨 앞 요소를 하나씩 꺼내 양수일 때만 2배로 만들어 clean에 추가하고 출력해보세요.",
-      "prompt_en": "Pop items from index 0 of raw = [5, -1, 8]; if positive, append x * 2 to clean and print clean.",
-      "hint_ko": "원본 리스트가 빌 때까지 맨 앞(0번) 요소를 하나씩 꺼내어, 0보다 큰 양수일 때만 2배 한 값을 새 리스트 끝에 덧붙이세요.",
-      "hint_en": "Repeatedly extract from the front of the source list until empty, adding doubled values to the result list only when positive.",
+      "prompt_ko": ".pop(0)은 리스트의 맨 앞(0번 인덱스) 요소를 꺼내므로, 대기열(큐)처럼 앞에서부터 순서대로 값을 꺼내 조건에 맞는 값만 새 리스트에 .append()할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Calling .pop(0) removes and returns the front (index 0) item, letting you process items in first-in-first-out order and .append() filtered results. Follow the blocks and type the code.",
+      "hint_ko": "인자 없는 .pop()은 맨 뒤에서 꺼내지만, .pop(0)은 맨 앞에서부터 순서대로 요소를 꺼냅니다.",
+      "hint_en": "While plain .pop() removes from the back, .pop(0) removes from the front in order.",
       "targetCode": "raw = [5, -1, 8]\nclean = []\nwhile raw:\n    x = raw.pop(0)\n    if x > 0:\n        clean.append(x * 2)\nprint(clean)",
       "testCases": [
         {

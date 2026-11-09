@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "강아지 클래스 Dog에 기본 속성 species = \"Canine\"을 정의한 뒤, 인스턴스 d를 생성해 d.species를 출력해보세요.",
-      "prompt_en": "Define class Dog with attribute species = \"Canine\", create instance d = Dog(), and print d.species.",
-      "hint_ko": "클래스 블록 안에 기본 속성을 정의하고, 바깥에서 빈 괄호로 인스턴스 객체를 생성한 뒤 점(.)으로 속성을 읽어 출력하세요.",
-      "hint_en": "Declare the default attribute inside the class body, instantiate an object with parentheses outside, and access its attribute via a dot.",
+      "prompt_ko": "class 키워드로 객체의 설계도인 클래스를 정의하고 클래스명()을 호출해 인스턴스를 생성한 뒤, 점(.) 연산자로 객체의 속성을 읽을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Define a class blueprint with the class keyword, call ClassName() to create an instance, and use dot (.) notation to read its attributes. Trace the block code.",
+      "hint_ko": "클래스 이름은 관례적으로 첫 글자를 대문자(파스칼 표기법)로 작성하며, 클래스명 뒤에 빈 소괄호 ()를 붙여 인스턴스를 만듭니다.",
+      "hint_en": "Class names conventionally start with a capital letter (PascalCase), and empty parentheses () after the class name instantiate an object.",
       "targetCode": "class Dog:\n    species = \"Canine\"\nd = Dog()\nprint(d.species)",
       "testCases": [
         {
@@ -62,10 +62,10 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "hp = 100 속성을 가진 Dog 클래스의 인스턴스 d를 만들고, d.hp에 20을 더한 뒤 d.hp를 출력해보세요.",
-      "prompt_en": "Create instance d of class Dog with hp = 100, add 20 to d.hp, and print d.hp.",
-      "hint_ko": "인스턴스를 생성한 뒤 점(.) 연산자로 숫자 속성에 접근해 값을 갱신하고 출력해보세요.",
-      "hint_en": "Instantiate the class, update its numeric attribute via dot notation, and print it.",
+      "prompt_ko": "생성된 인스턴스의 숫자 속성은 일반 변수처럼 점(.) 연산자와 복합 대입 연산자(+=)를 사용해 값을 직접 수정할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Just like a regular variable, a numeric attribute on an instance can be updated directly using dot (.) notation and compound assignment (+=). Trace the block code.",
+      "hint_ko": "d.hp += 20은 d.hp의 현재 값에 20을 더한 결과를 다시 d.hp 속성에 저장합니다.",
+      "hint_en": "d.hp += 20 adds 20 to the current value of d.hp and stores the result back onto the instance.",
       "targetCode": "class Dog:\n    hp = 100\nd = Dog()\nd.hp += 20\nprint(d.hp)",
       "testCases": [
         {
@@ -98,10 +98,10 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "name = \"Bo\" 속성을 가진 Dog 클래스의 인스턴스 d를 만들고, 복합 대입으로 d.name 뒤에 \"bi\"를 이어 붙인 뒤 출력해보세요. (출력: Bobi)",
-      "prompt_en": "Create instance d of Dog (name = \"Bo\"), append \"bi\" to d.name with +=, and print d.name (output: Bobi).",
-      "hint_ko": "인스턴스를 만든 뒤 점(.)으로 문자열 속성에 접근해 복합 덧셈 연산자로 글자를 이어 붙이고, 바뀐 속성값을 출력하세요.",
-      "hint_en": "After creating the instance, access the string attribute with a dot, append text using +=, and print the updated attribute.",
+      "prompt_ko": "인스턴스의 문자열 속성에도 += 연산자를 사용하여 기존 문자열 뒤에 새로운 글자를 이어 붙여 속성을 갱신할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "You can also apply the += operator to an instance's string attribute to concatenate new text onto the existing value. Trace the block code.",
+      "hint_ko": "문자열 속성에 +=를 적용하면 기존 문자열 끝에 오른쪽 문자열이 이어 붙은 새 문자열로 해당 인스턴스의 속성이 바뀝니다.",
+      "hint_en": "Using += on a string attribute updates that instance's attribute with the concatenated string.",
       "targetCode": "class Dog:\n    name = \"Bo\"\nd = Dog()\nd.name += \"bi\"\nprint(d.name)",
       "testCases": [
         {
@@ -134,10 +134,10 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "hp = 100인 Hero 클래스와 객체의 hp를 50 높여 문자열을 반환하는 boost 함수를 만들고 호출해보세요. (출력 예: HP:150)",
-      "prompt_en": "Define Hero (hp = 100) and a function boost(unit) that adds 50 to unit.hp and returns f\"HP:{unit.hp}\".",
-      "hint_ko": "인스턴스 객체도 함수의 인자로 전달할 수 있습니다. 전달받은 매개변수 객체의 체력 속성을 50 늘린 뒤 서식 문자열을 반환하세요.",
-      "hint_en": "Define the class and a function that mutates the passed object's health attribute before returning the formatted text, then pass a new instance into it.",
+      "prompt_ko": "클래스로 생성한 인스턴스 객체는 함수(def)의 인자로 전달할 수 있으며, 함수 안에서 매개변수.속성 형태로 객체의 상태를 변경할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "An instance object can be passed as an argument to a def function, which can then read or modify the object's state via parameter.attribute. Trace the block code.",
+      "hint_ko": "함수 내부에서 전달받은 인스턴스의 속성을 수정하면 함수 바깥의 원본 인스턴스에도 변경 사항이 그대로 반영됩니다.",
+      "hint_en": "Mutating an attribute on the passed instance inside a function directly updates the original object outside the function.",
       "targetCode": "class Hero:\n    hp = 100\ndef boost(unit):\n    unit.hp += 50\n    return f\"HP:{unit.hp}\"\nh = Hero()\nprint(boost(h))",
       "testCases": [
         {
@@ -175,10 +175,10 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "hp = 25인 Rock 인스턴스 r의 체력이 0보다 큰 동안 10씩 깎으며 타격 횟수 hits를 세고, hits와 r.hp를 출력해보세요.",
-      "prompt_en": "While Rock instance r (hp = 25) has r.hp > 0, subtract 10 and count hits, then print hits and r.hp.",
-      "hint_ko": "바위 인스턴스의 체력 속성이 양수인 동안 조건 반복문을 돌며 매 회차 체력을 10 줄이고 타격 횟수를 1 늘린 뒤 두 값을 출력하세요.",
-      "hint_en": "Loop while the instance's health attribute remains positive, subtracting 10 and incrementing the hit counter each turn before printing both.",
+      "prompt_ko": "while 반복문의 조건식과 본문에서도 인스턴스의 속성(r.hp)을 직접 참조하고 증감시키며 상태 변화를 추적할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "You can reference and update an instance attribute (r.hp) directly in both the condition and body of a while loop to track state changes over time. Trace the block code.",
+      "hint_ko": "반복할 때마다 인스턴스 속성이 줄어들어 조건식이 거짓이 되는 순간 while 루프가 종료됩니다.",
+      "hint_en": "As the instance attribute decreases each iteration, the while loop terminates once the condition becomes False.",
       "targetCode": "class Rock:\n    hp = 25\nr = Rock()\nhits = 0\nwhile r.hp > 0:\n    r.hp -= 10\n    hits += 1\nprint(hits, r.hp)",
       "testCases": [
         {

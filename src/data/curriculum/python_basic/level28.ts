@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "i = 1부터 while i <= 4인 동안 i를 출력하고 1씩 증가시켜 1부터 4까지 출력해보세요.",
-      "prompt_en": "Starting from i = 1, print i and increment i by 1 while i <= 4.",
-      "hint_ko": "조건 반복문 안에서 현재 값을 먼저 출력한 뒤 변수를 1씩 증가시켜야 언젠가 조건이 거짓이 되어 멈춥니다.",
-      "hint_en": "Output the current value inside the loop body, then increment the variable by 1 so the loop eventually stops.",
+      "prompt_ko": "while 조건문은 조건식이 참(True)인 동안 들여쓰기된 블록을 계속 반복합니다. 무한 루프에 빠지지 않도록 블록 안에서 조건 변수(i += 1)를 갱신하며 코드를 따라 입력해보세요.",
+      "prompt_en": "A while loop repeats its indented block as long as its condition evaluates to True. Update the loop variable (i += 1) inside the body and trace the block code.",
+      "hint_ko": "i가 1에서 시작해 매 반복마다 출력된 뒤 1씩 커지다가 5가 되면 i <= 4 조건이 거짓이 되어 종료됩니다.",
+      "hint_en": "Starting at 1, i prints and increments by 1 each turn until it reaches 5 and fails i <= 4.",
       "targetCode": "i = 1\nwhile i <= 4:\n    print(i)\n    i += 1",
       "testCases": [
         {
@@ -72,10 +72,10 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "1부터 차례로 자연수를 더하다가 누적합 total이 입력값 limit 이상이 되면 멈추고 total을 출력해보세요. (터미널 입력: 10)",
-      "prompt_en": "Add 1, 2, 3... while total < limit, then print the resulting total. (Terminal input: 10)",
-      "hint_ko": "누적합이 기준값보다 작은 동안 자연수를 더하고 번호를 1씩 키운 뒤, 반복이 끝나면 바깥에서 합계를 출력하세요.",
-      "hint_en": "Keep adding the counter and incrementing it as long as the sum stays below limit, then print the sum outside.",
+      "prompt_ko": "반복 횟수가 미리 정해져 있지 않고 누적합이 특정 기준에 도달할 때까지 반복해야 할 때 while total < limit: 구조를 사용합니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 10)",
+      "prompt_en": "When the number of iterations isn't known in advance, use while total < limit: to keep accumulating until the threshold is reached. Trace the block code. (Terminal input: 10)",
+      "hint_ko": "total이 limit보다 작은 동안만 자연수 i를 더하고, limit 이상이 되는 순간 반복문을 빠져나와 합계를 출력합니다.",
+      "hint_en": "It adds i while total is strictly less than limit, exiting as soon as total reaches or exceeds limit.",
       "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile total < limit:\n    total += i\n    i += 1\nprint(total)",
       "testCases": [
         {
@@ -128,10 +128,10 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "양의 정수 n을 입력받아 while n > 0 동안 일의 자리(n % 10)를 s에 더하고 n //= 10으로 줄여 자릿수 합을 출력해보세요. (터미널 입력: 482)",
-      "prompt_en": "Read positive integer n and sum all its digits using n % 10 and n //= 10 while n > 0. (Terminal input: 482)",
-      "hint_ko": "10으로 나눈 나머지로 가장 오른쪽 일의 자리를 떼어 더하고, 10으로 나눈 정수 몫으로 끝자리를 잘라내며 반복하세요.",
-      "hint_en": "Extract the ones digit via remainder by 10 to add to the sum, then drop that digit using floor division by 10.",
+      "prompt_ko": "while n > 0: 반복문 안에서 n % 10으로 일의 자리를 꺼내고 n //= 10으로 끝자리를 잘라내면 정수의 모든 자릿수를 하나씩 분리해 합산할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 482)",
+      "prompt_en": "Inside while n > 0:, extracting the ones digit with n % 10 and stripping it with n //= 10 lets you sum every digit of an integer. Trace the block code. (Terminal input: 482)",
+      "hint_ko": "482에서 2, 8, 4가 차례로 꺼내져 s에 더해지고, n이 0이 되면 반복이 멈춥니다.",
+      "hint_en": "Digits 2, 8, and 4 are extracted and added to s in turn until n becomes 0 and the loop stops.",
       "targetCode": "n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s)",
       "testCases": [
         {
@@ -184,10 +184,10 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "양의 정수 n을 입력받아 while n 동안 각 자릿수 d = n % 10 중 짝수 자릿수만 더한 합을 출력해보세요. (터미널 입력: 4729)",
-      "prompt_en": "Read positive integer n and use while n to sum only the even digits of n. (Terminal input: 4729)",
-      "hint_ko": "매 반복마다 일의 자리를 구해 짝수일 때만 합산하고, 자릿수 줄이기는 조건문 바깥(반복문 안)에서 매번 실행하세요.",
-      "hint_en": "Extract the ones digit each turn, add it only inside the even check, and divide n down by 10 on every turn.",
+      "prompt_ko": "while n:은 n이 0이 아닐 때 참(Truthy)으로 동작합니다. 분리한 일의 자리(d = n % 10)가 짝수일 때만 합산하도록 조건문을 중첩한 블록 코드를 따라 입력해보세요. (터미널 입력: 4729)",
+      "prompt_en": "while n: continues as long as n is non-zero (Truthy). Trace the block code with a nested if check to sum only the even digits (d = n % 10). (Terminal input: 4729)",
+      "hint_ko": "자릿수를 줄이는 n //= 10은 홀수·짝수 여부와 관계없이 매 반복마다 실행되도록 if 블록 바깥에 둡니다.",
+      "hint_en": "Keep n //= 10 outside the if block (but inside the while loop) so the digit is stripped on every turn.",
       "targetCode": "n = int(input())\neven_s = 0\nwhile n:\n    d = n % 10\n    if d % 2 == 0:\n        even_s += d\n    n //= 10\nprint(even_s)",
       "testCases": [
         {
@@ -240,10 +240,10 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "정수 무게 w를 입력받아 w >= 1인 동안 2로 나눈 몫(w //= 2)으로 줄이며 몇 번 나누었는지 cnt를 출력해보세요. (터미널 입력: 8)",
-      "prompt_en": "Read integer w, floor-halve it (w //= 2) while w >= 1, and print the step count cnt. (Terminal input: 8)",
-      "hint_ko": "무게가 1 이상인 동안 2로 나눈 몫으로 줄이고 횟수를 1씩 늘린 뒤, 반복문 밖에서 횟수를 출력하세요.",
-      "hint_en": "Floor-divide the weight by 2 and increment the counter while it stays at least 1, then print the count outside.",
+      "prompt_ko": "while 반복문 안에서 정수 몫 복합 대입 연산자(//= 2)와 카운터(cnt += 1)를 함께 쓰면 값이 기준 미만으로 줄어들 때까지 몇 번 나누었는지 셀 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 8)",
+      "prompt_en": "Combining floor-division assignment (//= 2) with a counter (cnt += 1) inside a while loop counts how many halving steps occur before dropping below 1. Trace the block code. (Terminal input: 8)",
+      "hint_ko": "w가 8 -> 4 -> 2 -> 1 -> 0으로 줄어들면서 총 4번 반복된 뒤 cnt가 출력됩니다.",
+      "hint_en": "As w halves through 8 -> 4 -> 2 -> 1 -> 0, the loop runs 4 times before printing cnt.",
       "targetCode": "w = int(input())\ncnt = 0\nwhile w >= 1:\n    w //= 2\n    cnt += 1\nprint(cnt)",
       "testCases": [
         {

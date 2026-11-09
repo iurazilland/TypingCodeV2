@@ -26,10 +26,10 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "리스트 nums = [10, 20, 30]에서 1번 인덱스 값을 50으로 바꾸고 0번 인덱스 값에 5를 더한 뒤 출력해보세요.",
-      "prompt_en": "Set index 1 of nums = [10, 20, 30] to 50, add 5 to index 0, and print nums.",
-      "hint_ko": "대괄호 인덱스를 등호 왼쪽에 두면 해당 칸의 값을 새 값으로 덮어쓰거나 복합 대입으로 증감시킬 수 있습니다.",
-      "hint_en": "Placing a bracketed index on the left of = or += directly overwrites or updates that slot inside the list.",
+      "prompt_ko": "변경 불가능한 문자열과 달리 리스트는 가변(mutable) 자료형이므로 리스트[인덱스] = 값이나 += 연산으로 특정 위치의 요소를 직접 수정할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Unlike immutable strings, lists are mutable, so you can overwrite or update any element in place using list[index] = value or +=. Follow the blocks and type the code.",
+      "hint_ko": "대괄호 인덱스를 등호(=)나 복합 대입 연산자(+=) 왼쪽에 두면 해당 칸의 값만 즉시 바뀝니다.",
+      "hint_en": "Placing a bracketed index on the left of = or += updates that specific slot inside the existing list.",
       "targetCode": "nums = [10, 20, 30]\nnums[1] = 50\nnums[0] += 5\nprint(nums)",
       "testCases": [
         {
@@ -62,10 +62,10 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "nums = [10, 20, 30, 40]에서 [20, 30] 구간을 잘라 mid에, 앞의 2개 요소를 잘라 head에 담아 각각 출력해보세요.",
-      "prompt_en": "Slice [20, 30] into mid and the first 2 items into head from nums = [10, 20, 30, 40], then print both.",
-      "hint_ko": "리스트 슬라이싱도 끝 번호 직전까지만 잘라내며, 시작 번호를 비워두면 맨 앞부터 잘라낸 새 부분 리스트를 반환합니다.",
-      "hint_en": "List slicing also stops right before the stop index, and omitting the start index extracts a new sublist from the beginning.",
+      "prompt_ko": "리스트 슬라이싱 리스트[시작:끝]은 시작 인덱스부터 끝 인덱스 직전까지의 요소들을 잘라낸 새 부분 리스트를 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "List slicing list[start:stop] extracts elements from start up to (but not including) stop as a new sublist. Follow the blocks and type the code.",
+      "hint_ko": "[:2]처럼 콜론 앞의 시작 인덱스를 생략하면 맨 앞(0번 인덱스)부터 지정한 끝 번호 직전까지 잘라냅니다.",
+      "hint_en": "Omitting the start index like [:2] slices from the beginning (index 0) up to index 2.",
       "targetCode": "nums = [10, 20, 30, 40]\nmid = nums[1:3]\nhead = nums[:2]\nprint(mid)\nprint(head)",
       "testCases": [
         {
@@ -98,10 +98,10 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "0이 3번 반복된 리스트 base와 extra = [1, 2]를 이어 붙인 merged 리스트를 만들어 출력해보세요.",
-      "prompt_en": "Create base with three 0s using *, concatenate it with extra = [1, 2] into merged, and print merged.",
-      "hint_ko": "단일 요소 리스트에 곱셈 기호를 쓰면 같은 값이 여러 번 반복된 리스트가 되고, 덧셈 기호를 쓰면 두 리스트가 하나로 이어집니다.",
-      "hint_en": "Multiplying a list repeats its elements, and adding two lists joins them end-to-end into a new combined list.",
+      "prompt_ko": "리스트에 곱셈(*) 연산자를 쓰면 요소를 지정한 횟수만큼 반복한 리스트를 만들고, 덧셈(+) 연산자를 쓰면 두 리스트를 하나로 이어 붙입니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "The * operator repeats a list's elements a given number of times, and the + operator concatenates two lists into one. Follow the blocks and type the code.",
+      "hint_ko": "[0] * 3은 0이 3개 담긴 리스트를 만들며, 여기에 + 연산자로 다른 리스트를 뒤에 연결할 수 있습니다.",
+      "hint_en": "[0] * 3 creates a list of three zeros, and + joins the second list onto the end.",
       "targetCode": "base = [0] * 3\nextra = [1, 2]\nmerged = base + extra\nprint(merged)",
       "testCases": [
         {
@@ -134,10 +134,10 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "문자열 code = \"PY-2026\"의 앞 2글자와 리스트 parts = [\"PY\", \"JS\", \"GO\"]의 앞 2요소를 각각 슬라이싱해 출력해보세요.",
-      "prompt_en": "Slice and print the first 2 chars of code = \"PY-2026\" and the first 2 items of parts = [\"PY\", \"JS\", \"GO\"].",
-      "hint_ko": "문자열과 리스트 모두 시작 번호를 생략한 슬라이싱으로 앞의 두 항목을 잘라낼 수 있으며, 각각 원래와 같은 자료형으로 반환됩니다.",
-      "hint_en": "Both strings and lists support omitted-start slicing for the first two items, returning a substring and a sublist respectively.",
+      "prompt_ko": "슬라이싱([:2])을 문자열에 적용하면 부분 문자열이 반환되고, 리스트에 적용하면 요소들이 담긴 부분 리스트가 반환됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Applying a slice like [:2] to a string returns a substring, while applying it to a list returns a sublist. Follow the blocks and type the code.",
+      "hint_ko": "같은 [:2] 문법이라도 대상 자료형에 따라 문자열은 앞 두 글자를, 리스트는 앞 두 요소를 잘라냅니다.",
+      "hint_en": "The same [:2] slice syntax extracts the first two characters from a string and the first two items from a list.",
       "targetCode": "code = \"PY-2026\"\nparts = [\"PY\", \"JS\", \"GO\"]\nprint(code[:2])\nprint(parts[:2])",
       "testCases": [
         {
@@ -170,10 +170,10 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "정수 입력 bonus가 0보다 크면 rates = [10, 20, 30]의 첫 요소에 더하고, 아니면 5로 바꾼 뒤 앞 2개를 출력해보세요. (출력 예: Head:[15, 20]) (터미널 입력: 5)",
-      "prompt_en": "Read integer bonus; if > 0 add to rates[0], else set rates[0] = 5, then print Head with rates[:2]. (Terminal input: 5)",
-      "hint_ko": "정수로 변환한 입력값을 양수 조건으로 분기해 첫 번째 요소를 갱신한 뒤, 앞 두 요소만 슬라이싱해 포맷 문자열로 출력하세요.",
-      "hint_en": "Read the input as an integer, update the first element in each conditional branch, and format a slice of the first two items.",
+      "prompt_ko": "if / else 조건문 안에서 인덱싱(rates[0])으로 리스트 요소를 조건에 따라 다르게 갱신한 뒤, 슬라이싱(rates[:2])으로 필요한 구간만 잘라 출력할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 5)",
+      "prompt_en": "You can conditionally update a list element via indexing (rates[0]) inside an if/else block and then slice (rates[:2]) the updated list. Follow the blocks and type the code. (Terminal input: 5)",
+      "hint_ko": "조건 분기에 따라 0번 인덱스 값을 수정한 다음, [:2] 슬라이싱으로 앞의 두 요소만 확인합니다.",
+      "hint_en": "Update index 0 in the matching branch first, then use [:2] to display the first two elements.",
       "targetCode": "rates = [10, 20, 30]\nbonus = int(input())\nif bonus > 0:\n    rates[0] += bonus\nelse:\n    rates[0] = 5\nprint(f\"Head:{rates[:2]}\")",
       "testCases": [
         {

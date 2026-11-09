@@ -17,6 +17,7 @@ import {
   SvgBottomClosingArm,
   GhostSnapBlock,
   GhostCShapeBlock,
+  BlockTraceInput,
 } from './BlockPuzzleShapes';
 
 export interface CanvasBlockItemProps {
@@ -344,34 +345,14 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           borderRadius: '6px',
         }}
       >
-        <input
-          type="text"
+        <BlockTraceInput
           value={block.content || ''}
-          placeholder=""
-          onMouseDown={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
-          onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          onFocus={handleInputFocusSelect}
-          onClick={handleInputClickSelect}
-          onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-          style={{
-            width: `${getBlockInputWidth(block.content)}px`,
-            height: '20px',
-            padding: '1px 5px',
-            borderRadius: '6px',
-            background: isArgSlotTarget ? '#fef9c3' : '#ffffff',
-            color: '#0f172a',
-            border: isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)',
-            boxShadow: isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none',
-            fontWeight: 800,
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.76rem',
-            textAlign: 'left',
-            outline: 'none',
-            cursor: 'text',
-            boxSizing: 'border-box',
-            transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
-          }}
+          targetValue={block.targetContent}
+          onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
+          fontSize="0.76rem"
+          background={isArgSlotTarget ? '#fef9c3' : '#ffffff'}
+          border={isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)'}
+          boxShadow={isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none'}
         />
         {!isVarValue && renderSpeechBubble?.(block.id, funcType)}
       </div>
@@ -461,32 +442,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {block.type === 'for_range' || block.type === 'for_in' ? (
             <>
               <span style={{ color: '#ffffff' }}>for</span>
-              <input
-                type="text"
-                value={block.varName ?? (block.type === 'for_range' ? 'i' : 'item')}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.varName ?? (block.type === 'for_range' ? 'i' : 'item'))}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+              <BlockTraceInput
+                value={block.varName ?? (block.targetVarName !== undefined ? '' : (block.type === 'for_range' ? 'i' : 'item'))}
+                targetValue={block.targetVarName}
+                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
               />
               <span style={{ color: '#ffffff' }}>in</span>
               {renderArgSlot(block.type)}
@@ -495,94 +454,28 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           ) : block.type === 'while' ? (
             <>
               <span style={{ color: '#ffffff' }}>while</span>
-              <input
-                type="text"
+              <BlockTraceInput
                 value={block.content ?? ''}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.content ?? '')}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+                targetValue={block.targetContent}
+                onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
               />
               <span>:</span>
             </>
           ) : block.type === 'class' ? (
             <>
               <span style={{ color: '#ffffff' }}>class</span>
-              <input
-                type="text"
-                value={block.varName ?? 'MyClass'}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.varName ?? 'MyClass')}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+              <BlockTraceInput
+                value={block.varName ?? (block.targetVarName !== undefined ? '' : 'MyClass')}
+                targetValue={block.targetVarName}
+                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
               />
-              {block.content !== undefined ? (
+              {block.content !== undefined || block.targetContent !== undefined ? (
                 <>
                   <span>(</span>
-                  <input
-                    type="text"
-                    value={block.content}
-                    placeholder=""
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onFocus={handleInputFocusSelect}
-                    onClick={handleInputClickSelect}
-                    onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                    style={{
-                      width: `${getBlockInputWidth(block.content)}px`,
-                      height: '20px',
-                      padding: '1px 5px',
-                      borderRadius: '6px',
-                      background: '#ffffff',
-                      color: '#0f172a',
-                      border: '1px solid rgba(0, 0, 0, 0.3)',
-                      fontWeight: 800,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      outline: 'none',
-                      cursor: 'text',
-                      boxSizing: 'border-box',
-                    }}
+                  <BlockTraceInput
+                    value={block.content ?? ''}
+                    targetValue={block.targetContent}
+                    onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
                   />
                   <span>):</span>
                 </>
@@ -593,60 +486,16 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           ) : (
             <>
               <span style={{ color: '#ffffff' }}>def</span>
-              <input
-                type="text"
-                value={block.varName ?? 'my_func'}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.varName ?? 'my_func')}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+              <BlockTraceInput
+                value={block.varName ?? (block.targetVarName !== undefined ? '' : 'my_func')}
+                targetValue={block.targetVarName}
+                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
               />
               <span>(</span>
-              <input
-                type="text"
+              <BlockTraceInput
                 value={block.content || ''}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.content || '')}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0, 0, 0, 0.3)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+                targetValue={block.targetContent}
+                onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
               />
               <span>):</span>
             </>
@@ -771,6 +620,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           isDef={block.type === 'def'}
           hasReturn={block.hasReturn}
           returnVal={block.returnVal}
+          targetReturnVal={block.targetReturnVal}
           onToggleDefReturn={(show) => onToggleDefReturn?.(block.id, show)}
           onDefReturnValChange={(val) => onDefReturnValChange?.(block.id, val)}
           hasInnerBlocks={innerBlocks.length > 0 || isMouthSnapTarget}
@@ -808,7 +658,8 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {
             id: `br-if-${block.id}`,
             kind: 'if',
-            condition: block.content || 'False',
+            condition: block.content !== undefined ? block.content : (block.targetContent !== undefined ? '' : 'False'),
+            targetCondition: block.targetContent,
             innerBlocks: block.innerBlocks || [],
           },
         ];
@@ -843,11 +694,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           const branchTheme = theme;
           const condVal = branch.kind === 'except'
             ? (branch.condition ?? '')
-            : (branch.condition !== undefined ? branch.condition : 'False');
-          const dynamicCondWidth = getBlockInputWidth(condVal);
+            : (branch.condition !== undefined ? branch.condition : (branch.targetCondition !== undefined ? '' : 'False'));
           const branchInnerBlocks = branch.innerBlocks || [];
           const showBranchCondInput =
-            branch.kind === 'elif' || (branch.kind === 'except' && branch.condition !== undefined);
+            branch.kind === 'elif' || (branch.kind === 'except' && (branch.condition !== undefined || branch.targetCondition !== undefined));
           const canRemoveBranch =
             branch.kind !== 'if' && branch.kind !== 'try' && (!isTryBlock || branches.length > 2);
 
@@ -902,32 +752,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   ) : (
                     <>
                       <span style={{ color: '#ffffff' }}>if</span>
-                      <input
-                        type="text"
+                      <BlockTraceInput
                         value={condVal}
-                        placeholder=""
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                        onFocus={handleInputFocusSelect}
-                        onClick={handleInputClickSelect}
-                        onChange={(e) => onBranchConditionChange?.(block.id, branch.id, e.target.value)}
-                        style={{
-                          width: `${dynamicCondWidth}px`,
-                          height: '20px',
-                          padding: '1px 5px',
-                          borderRadius: '6px',
-                          background: '#ffffff',
-                          color: '#0f172a',
-                          border: '1px solid rgba(0, 0, 0, 0.3)',
-                          fontWeight: 800,
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.78rem',
-                          textAlign: 'left',
-                          outline: 'none',
-                          cursor: 'text',
-                          boxSizing: 'border-box',
-                        }}
+                        targetValue={branch.targetCondition ?? block.targetContent}
+                        onChange={(val) => onBranchConditionChange?.(block.id, branch.id, val)}
                       />
                       <span>:</span>
                     </>
@@ -983,32 +811,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                     <span style={{ color: '#ffffff' }}>{branch.kind}</span>
                     {showBranchCondInput ? (
                       <>
-                        <input
-                          type="text"
+                        <BlockTraceInput
                           value={condVal}
-                          placeholder=""
-                          onMouseDown={(e) => e.stopPropagation()}
-                          onPointerDown={(e) => e.stopPropagation()}
-                          onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                          onFocus={handleInputFocusSelect}
-                          onClick={handleInputClickSelect}
-                          onChange={(e) => onBranchConditionChange?.(block.id, branch.id, e.target.value)}
-                          style={{
-                            width: `${dynamicCondWidth}px`,
-                            height: '20px',
-                            padding: '1px 5px',
-                            borderRadius: '6px',
-                            background: '#ffffff',
-                            color: '#0f172a',
-                            border: '1px solid rgba(0, 0, 0, 0.3)',
-                            fontWeight: 800,
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.78rem',
-                            textAlign: 'left',
-                            outline: 'none',
-                            cursor: 'text',
-                            boxSizing: 'border-box',
-                          }}
+                          targetValue={branch.targetCondition}
+                          onChange={(val) => onBranchConditionChange?.(block.id, branch.id, val)}
                         />
                         <span>:</span>
                       </>
@@ -1372,32 +1178,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         </div>
 
         <span>(</span>
-        <input
-          type="text"
+        <BlockTraceInput
           value={block.content || ''}
-          placeholder=""
-          onMouseDown={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
-          onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          onFocus={handleInputFocusSelect}
-          onClick={handleInputClickSelect}
-          onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-          style={{
-            width: `${getBlockInputWidth(block.content)}px`,
-            height: '20px',
-            padding: '1px 5px',
-            borderRadius: '5px',
-            background: '#ffffff',
-            color: '#0f172a',
-            border: '1px solid rgba(0, 0, 0, 0.25)',
-            fontWeight: 800,
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.78rem',
-            textAlign: 'left',
-            outline: 'none',
-            cursor: 'text',
-            boxSizing: 'border-box',
-          }}
+          targetValue={block.targetContent}
+          onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
+          borderRadius="5px"
         />
         <span>)</span>
       </div>
@@ -1475,64 +1260,22 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           {block.hasSep && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '-2px' }}>
               <span>, sep=</span>
-              <input
-                type="text"
+              <BlockTraceInput
                 value={block.sepVal ?? ''}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onPrintOptionChange?.(block.id, 'sep', e.target.value)}
-                style={{
-                  width: `${getBlockInputWidth(block.sepVal)}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0,0,0,0.2)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.76rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+                targetValue={block.targetSepVal}
+                onChange={(val) => onPrintOptionChange?.(block.id, 'sep', val)}
+                fontSize="0.76rem"
               />
             </span>
           )}
           {block.hasEnd && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '-2px' }}>
               <span>, end=</span>
-              <input
-                type="text"
+              <BlockTraceInput
                 value={block.endVal ?? ''}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onPrintOptionChange?.(block.id, 'end', e.target.value)}
-                style={{
-                  width: `${getBlockInputWidth(block.endVal)}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0,0,0,0.2)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.76rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+                targetValue={block.targetEndVal}
+                onChange={(val) => onPrintOptionChange?.(block.id, 'end', val)}
+                fontSize="0.76rem"
               />
             </span>
           )}
@@ -1713,32 +1456,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         </>
       ) : block.type === 'call' ? (
         <>
-          <input
-            type="text"
-            value={block.varName ?? 'my_func'}
-            placeholder=""
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onFocus={handleInputFocusSelect}
-            onClick={handleInputClickSelect}
-            onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-            style={{
-              width: `${getBlockInputWidth(block.varName ?? 'my_func')}px`,
-              height: '20px',
-              padding: '1px 5px',
-              borderRadius: '6px',
-              background: '#ffffff',
-              color: '#0f172a',
-              border: '1px solid rgba(0,0,0,0.2)',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.76rem',
-              textAlign: 'left',
-              outline: 'none',
-              cursor: 'text',
-              boxSizing: 'border-box',
-            }}
+          <BlockTraceInput
+            value={block.varName ?? (block.targetVarName !== undefined ? '' : 'my_func')}
+            targetValue={block.targetVarName}
+            onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
+            fontSize="0.76rem"
           />
           <span>(</span>
           {renderArgSlot('call')}
@@ -1746,32 +1468,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         </>
       ) : block.type === 'variable' ? (
         <>
-          <input
-            type="text"
-            value={block.varName ?? 'x'}
-            placeholder=""
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onFocus={handleInputFocusSelect}
-            onClick={handleInputClickSelect}
-            onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-            style={{
-              width: `${getBlockInputWidth(block.varName ?? 'x')}px`,
-              height: '20px',
-              padding: '1px 5px',
-              borderRadius: '6px',
-              background: '#ffffff',
-              color: '#0f172a',
-              border: '1px solid rgba(0,0,0,0.2)',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.76rem',
-              textAlign: 'left',
-              outline: 'none',
-              cursor: 'text',
-              boxSizing: 'border-box',
-            }}
+          <BlockTraceInput
+            value={block.varName ?? (block.targetVarName !== undefined ? '' : 'x')}
+            targetValue={block.targetVarName}
+            onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
+            fontSize="0.76rem"
           />
           {!(
             isSlotArg ||
@@ -1839,64 +1540,31 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       ) : block.type === 'return' || block.type === 'raise' ? (
         <>
           <span>{block.type}</span>
-          <input
-            type="text"
+          <BlockTraceInput
             value={block.content || ''}
-            placeholder=""
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onFocus={handleInputFocusSelect}
-            onClick={handleInputClickSelect}
-            onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-            style={{
-              width: `${getBlockInputWidth(block.content)}px`,
-              height: '20px',
-              padding: '1px 5px',
-              borderRadius: '6px',
-              background: '#ffffff',
-              color: '#0f172a',
-              border: '1px solid rgba(0,0,0,0.2)',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.76rem',
-              textAlign: 'left',
-              outline: 'none',
-              cursor: 'text',
-              boxSizing: 'border-box',
-            }}
+            targetValue={block.targetContent}
+            onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
+            fontSize="0.76rem"
           />
         </>
       ) : block.type === 'comment' ? (
         <>
           <span style={{ color: '#4ade80', fontWeight: 900, marginRight: '3px', fontStyle: 'italic', fontSize: '0.85rem' }}>#</span>
-          <input
-            type="text"
+          <BlockTraceInput
             value={block.content || ''}
-            placeholder=""
-            onMouseDown={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onFocus={handleInputFocusSelect}
-            onClick={handleInputClickSelect}
-            onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-            style={{
-              width: `${Math.max(90, getBlockInputWidth(block.content, 4))}px`,
-              height: '20px',
-              padding: '1px 6px',
-              borderRadius: '6px',
-              background: '#0f172a',
-              color: '#86efac',
-              border: '1px solid rgba(74, 222, 128, 0.35)',
-              fontWeight: 600,
-              fontFamily: 'var(--font-mono)',
-              fontStyle: 'italic',
-              fontSize: '0.76rem',
-              textAlign: 'left',
-              outline: 'none',
-              cursor: 'text',
-              boxSizing: 'border-box',
-            }}
+            targetValue={block.targetContent}
+            allowAnyText={true}
+            minChars={4}
+            minWidthPx={90}
+            background="#0f172a"
+            color="#86efac"
+            ghostColor="rgba(134, 239, 172, 0.38)"
+            border="1px solid rgba(74, 222, 128, 0.35)"
+            fontWeight={600}
+            fontStyle="italic"
+            fontSize="0.76rem"
+            padding="1px 6px"
+            onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
           />
         </>
       ) : block.type === 'break' || block.type === 'continue' ? (
@@ -1905,32 +1573,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         <>
           {block.varName !== undefined && (
             <>
-              <input
-                type="text"
+              <BlockTraceInput
                 value={block.varName}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onVarNameChange?.(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.varName)}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0,0,0,0.2)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.76rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+                targetValue={block.targetVarName}
+                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
+                fontSize="0.76rem"
               />
               <span>=</span>
             </>
@@ -1943,60 +1590,18 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   {block.dictPairs.map((pair, idx) => (
                     <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                       {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
-                      <input
-                        type="text"
+                      <BlockTraceInput
                         value={pair.key}
-                        placeholder=""
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                        onFocus={handleInputFocusSelect}
-                        onClick={handleInputClickSelect}
-                        onChange={(e) => onDictKeyChange?.(block.id, idx, e.target.value)}
-                        style={{
-                          width: `${getBlockInputWidth(pair.key)}px`,
-                          height: '20px',
-                          padding: '1px 5px',
-                          borderRadius: '5px',
-                          background: '#ffffff',
-                          color: '#0f172a',
-                          border: '1px solid rgba(0, 0, 0, 0.3)',
-                          fontWeight: 800,
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.78rem',
-                          textAlign: 'left',
-                          outline: 'none',
-                          cursor: 'text',
-                          boxSizing: 'border-box',
-                        }}
+                        targetValue={block.targetDictPairs?.[idx]?.key}
+                        onChange={(val) => onDictKeyChange?.(block.id, idx, val)}
+                        borderRadius="5px"
                       />
                       <span>:</span>
-                      <input
-                        type="text"
+                      <BlockTraceInput
                         value={pair.value}
-                        placeholder=""
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                        onFocus={handleInputFocusSelect}
-                        onClick={handleInputClickSelect}
-                        onChange={(e) => onDictValChange?.(block.id, idx, e.target.value)}
-                        style={{
-                          width: `${getBlockInputWidth(pair.value)}px`,
-                          height: '20px',
-                          padding: '1px 5px',
-                          borderRadius: '5px',
-                          background: '#ffffff',
-                          color: '#0f172a',
-                          border: '1px solid rgba(0, 0, 0, 0.3)',
-                          fontWeight: 800,
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.78rem',
-                          textAlign: 'left',
-                          outline: 'none',
-                          cursor: 'text',
-                          boxSizing: 'border-box',
-                        }}
+                        targetValue={block.targetDictPairs?.[idx]?.value}
+                        onChange={(val) => onDictValChange?.(block.id, idx, val)}
+                        borderRadius="5px"
                       />
                       {block.dictPairs && block.dictPairs.length > 1 && (
                         <button
@@ -2054,32 +1659,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               ) : (
                 <>
                   <span>&#123;</span>
-                  <input
-                    type="text"
+                  <BlockTraceInput
                     value={block.content || ''}
-                    placeholder=""
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onFocus={handleInputFocusSelect}
-                    onClick={handleInputClickSelect}
-                    onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                    style={{
-                      width: `${getBlockInputWidth(block.content)}px`,
-                      height: '20px',
-                      padding: '1px 5px',
-                      borderRadius: '6px',
-                      background: '#ffffff',
-                      color: '#0f172a',
-                      border: '1px solid rgba(0,0,0,0.2)',
-                      fontWeight: 800,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.76rem',
-                      textAlign: 'left',
-                      outline: 'none',
-                      cursor: 'text',
-                      boxSizing: 'border-box',
-                    }}
+                    targetValue={block.targetContent}
+                    onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
+                    fontSize="0.76rem"
                   />
                   <span>&#125;</span>
                 </>
@@ -2091,32 +1675,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               {block.items.map((it, idx) => (
                 <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                   {idx > 0 && <span style={{ fontWeight: 800, marginRight: '2px' }}>,</span>}
-                  <input
-                    type="text"
+                  <BlockTraceInput
                     value={it}
-                    placeholder=""
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onFocus={handleInputFocusSelect}
-                    onClick={handleInputClickSelect}
-                    onChange={(e) => onItemChange?.(block.id, idx, e.target.value)}
-                    style={{
-                      width: `${getBlockInputWidth(it)}px`,
-                      height: '20px',
-                      padding: '1px 5px',
-                      borderRadius: '6px',
-                      background: '#ffffff',
-                      color: '#0f172a',
-                      border: '1px solid rgba(0, 0, 0, 0.3)',
-                      fontWeight: 800,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      textAlign: 'left',
-                      outline: 'none',
-                      cursor: 'text',
-                      boxSizing: 'border-box',
-                    }}
+                    targetValue={block.targetItems?.[idx]}
+                    onChange={(val) => onItemChange?.(block.id, idx, val)}
                   />
                   {block.items && block.items.length > 1 && (
                     <button
@@ -2174,32 +1736,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           ) : (
             <>
               <span>{block.type === 'list' ? '[' : block.type === 'tuple' ? '(' : block.type === 'set' ? '{' : ''}</span>
-              <input
-                type="text"
+              <BlockTraceInput
                 value={block.content || ''}
-                placeholder=""
-                onMouseDown={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                onFocus={handleInputFocusSelect}
-                onClick={handleInputClickSelect}
-                onChange={(e) => onContentChange(e.target.value, block.id, parentBlockId, cIdx, branchId)}
-                style={{
-                  width: `${getBlockInputWidth(block.content)}px`,
-                  height: '20px',
-                  padding: '1px 5px',
-                  borderRadius: '6px',
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0,0,0,0.2)',
-                  fontWeight: 800,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.76rem',
-                  textAlign: 'left',
-                  outline: 'none',
-                  cursor: 'text',
-                  boxSizing: 'border-box',
-                }}
+                targetValue={block.targetContent}
+                onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
+                fontSize="0.76rem"
               />
               <span>{block.type === 'list' ? ']' : block.type === 'tuple' ? ')' : block.type === 'set' ? '}' : ''}</span>
             </>

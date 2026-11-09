@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "튜플 pt = (10, 20)을 만들고 첫 번째 요소 pt[0]과 전체 길이 len(pt)를 나란히 출력해보세요.",
-      "prompt_en": "Create tuple pt = (10, 20) and print its first item pt[0] and length len(pt).",
-      "hint_ko": "소괄호로 묶어 만든 튜플도 리스트와 똑같이 0부터 시작하는 대괄호 인덱싱과 길이 함수를 사용할 수 있습니다.",
-      "hint_en": "Tuples enclosed in parentheses support 0-based square-bracket indexing and the length function just like lists.",
+      "prompt_ko": "튜플(tuple)은 소괄호(())로 묶어 만드는 불변(immutable) 자료구조로, 리스트처럼 [0] 인덱싱과 len() 함수를 그대로 사용할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A tuple is an immutable sequence created with parentheses (()), supporting [0] indexing and len() just like a list. Follow the blocks and type the code.",
+      "hint_ko": "튜플은 한 번 생성하면 요소를 수정할 수 없지만, 인덱스로 값을 읽거나 길이를 구하는 방법은 리스트와 동일합니다.",
+      "hint_en": "Tuples cannot be modified after creation, but reading elements by index and checking length work the same as lists.",
       "targetCode": "pt = (10, 20)\nprint(pt[0], len(pt))",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "튜플 pt = (30, 70)을 두 변수 x, y에 언패킹(분리 대입)한 뒤 x + y의 합계를 출력해보세요.",
-      "prompt_en": "Unpack tuple pt = (30, 70) into x, y and print x + y.",
-      "hint_ko": "등호 왼쪽에 요소 개수만큼 변수를 쉼표로 나란히 적으면 튜플 안의 값이 순서대로 나뉘어 대입됩니다.",
-      "hint_en": "Listing comma-separated variables on the left of = unpacks the tuple's items into each variable in order.",
+      "prompt_ko": "등호(=) 왼쪽에 튜플의 요소 개수만큼 변수를 쉼표로 나열하면 각 요소가 순서대로 분리되어 대입되는 튜플 언패킹(unpacking)이 일어납니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Listing matching variables separated by commas on the left of = unpacks each element of a tuple into its own variable in order. Follow the blocks and type the code.",
+      "hint_ko": "인덱스 번호를 일일이 쓰지 않아도 x, y = pt 한 줄로 두 요소를 각각의 변수에 나누어 담을 수 있습니다.",
+      "hint_en": "Tuple unpacking lets you assign both coordinates to separate variables in a single line without indexing.",
       "targetCode": "pt = (30, 70)\nx, y = pt\nprint(x + y)",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "target에 None을 저장하고, if target is None: 조건문으로 비어 있는지 확인해 \"Empty\"를 출력해보세요.",
-      "prompt_en": "Set target = None, check if target is None:, and print \"Empty\".",
-      "hint_ko": "빈 값 상수인지 판별할 때는 등호 비교 대신 객체 정체성이 일치하는지 묻는 두 글자 영단어 키워드를 함께 씁니다.",
-      "hint_en": "Check for the empty-value constant using the 2-letter identity keyword rather than the equality operator.",
+      "prompt_ko": "None은 '값이 비어 있음'을 나타내는 파이썬의 특별한 상수이며, 값이 None인지 확인할 때는 == 대신 is None 연산자를 사용합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "None is Python's special constant representing the absence of a value, and you check for it using the identity test is None. Follow the blocks and type the code.",
+      "hint_ko": "파이썬에서 None은 단 하나만 존재하는 객체이므로 정체성을 비교하는 is 키워드로 판별하는 것이 표준 문법입니다.",
+      "hint_en": "Because None is a singleton object in Python, checking identity with is None is the standard convention.",
       "targetCode": "target = None\nif target is None:\n    print(\"Empty\")",
       "testCases": [
         {
@@ -136,10 +136,10 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "튜플 리스트 pts = [(2, 3), (4, 5)]를 순회하며 각 튜플을 x, y로 언패킹해 x * y의 누적합을 출력해보세요.",
-      "prompt_en": "Loop through pts = [(2, 3), (4, 5)], unpack each tuple into x, y, and print the sum of x * y.",
-      "hint_ko": "리스트에서 꺼낸 각 튜플을 두 변수로 나누어 담은 뒤, 두 값의 곱을 합계 변수에 누적하고 반복문 밖에서 출력하세요.",
-      "hint_en": "Unpack each tuple from the list into two variables inside the loop, add their product to the running sum, and print at the end.",
+      "prompt_ko": "튜플들이 담긴 리스트를 for 반복문으로 순회하면서 각 튜플을 두 변수에 언패킹하면 쌍으로 묶인 데이터를 편리하게 계산할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Iterating over a list of tuples with a for loop and unpacking each tuple into two variables makes processing paired data simple. Follow the blocks and type the code.",
+      "hint_ko": "반복문 안에서 꺼낸 튜플을 두 변수로 분리 대입한 뒤, 두 값을 곱해 누적 합계에 더합니다.",
+      "hint_en": "Unpack each tuple inside the loop body, then multiply the two unpacked values and add to the total.",
       "targetCode": "pts = [(2, 3), (4, 5)]\ntotal = 0\nfor pt in pts:\n    x, y = pt\n    total += x * y\nprint(total)",
       "testCases": [
         {
@@ -172,10 +172,10 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "found = None으로 시작해 while문으로 nums = [55, 70, 85, 90]에서 첫 80 이상 값을 찾아 출력해보세요.",
-      "prompt_en": "Start with found = None and use a while loop on nums = [55, 70, 85, 90] to find and print the first value >= 80.",
-      "hint_ko": "결과 변수를 빈 값으로 시작해 조건을 만족하는 첫 숫자를 만나는 즉시 저장하고 반복문을 탈출한 뒤 출력하세요.",
-      "hint_en": "Start the tracker as empty, store the first qualifying number inside the loop, exit the loop immediately, and print the result.",
+      "prompt_ko": "탐색 결과를 담을 변수를 None으로 초기화해 두고, 반복문에서 조건을 만족하는 첫 값을 찾았을 때 변수에 대입한 뒤 break로 탈출하는 패턴입니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Initializing a result variable to None and updating it before breaking out of a loop is a standard pattern for finding the first matching value. Follow the blocks and type the code.",
+      "hint_ko": "처음에 None을 넣어 두면 조건을 만족하는 값을 찾았을 때만 그 값으로 덮어써지고, 즉시 break로 탐색을 멈출 수 있습니다.",
+      "hint_en": "Starting with None clearly marks \"not found yet\" until the first qualifying value overwrites it and triggers break.",
       "targetCode": "nums = [55, 70, 85, 90]\nfound = None\ni = 0\nwhile i < len(nums):\n    if nums[i] >= 80:\n        found = nums[i]\n        break\n    i += 1\nprint(found)",
       "testCases": [
         {

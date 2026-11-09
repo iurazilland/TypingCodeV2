@@ -29,10 +29,10 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "try에서 문자열 \"25\"를 정수로 변환하고, 오류가 없을 때만 실행되는 else에서 n * 2를 출력해 50을 확인하세요.",
-      "prompt_en": "Convert \"25\" to int inside try, and print n * 2 inside else (which runs only when no error occurs) to output 50.",
-      "hint_ko": "시도 블록에서 예외가 전혀 발생하지 않으면 예외 처리 절을 건너뛰고 정상 후속 분기 블록이 실행됩니다.",
-      "hint_en": "When no exception occurs inside try, Python skips the error handler and executes the no-error branch.",
+      "prompt_ko": "try-except 구문 뒤에 붙는 else 블록은 try 블록에서 예외가 전혀 발생하지 않았을 때만 실행되는 정상 후속 분기입니다.",
+      "prompt_en": "In a try-except statement, the optional else block runs only when the try block completes without raising any exception.",
+      "hint_ko": "예외가 발생할 가능성이 있는 코드만 try에 두고, 변환 성공 후 실행할 계산은 else에 분리해 작성합니다.",
+      "hint_en": "Keep only the risky conversion inside try, and place the follow-up calculation in the no-error else block.",
       "targetCode": "try:\n    n = int(\"25\")\nexcept ValueError:\n    print(\"Error\")\nelse:\n    print(n * 2)",
       "testCases": [
         {
@@ -70,10 +70,10 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "0으로 나눌 때 Zero를 출력하고, 예외 발생 여부와 관계없이 항상 실행되는 finally에서 End를 출력해보세요.",
-      "prompt_en": "Print Zero on ZeroDivisionError, and always print End inside finally regardless of errors.",
-      "hint_ko": "'마침내/마지막에'라는 뜻의 마무리 블록은 예외가 발생하든 발생하지 않든 맨 마지막에 반드시 실행됩니다.",
-      "hint_en": "Meaning 'at the very end,' this cleanup block always runs whether an exception occurred or not.",
+      "prompt_ko": "finally 블록은 try 블록에서 예외가 발생하든 발생하지 않든 상관없이 맨 마지막에 항상 실행되는 마무리 블록입니다.",
+      "prompt_en": "The finally block always executes at the very end of a try statement, regardless of whether an exception occurred or was caught.",
+      "hint_ko": "0으로 나누어 except 블록이 실행된 뒤에도 finally 블록의 코드가 빠짐없이 실행됩니다.",
+      "hint_en": "Even after ZeroDivisionError triggers the except block, the finally block still runs afterward.",
       "targetCode": "try:\n    print(10 // 0)\nexcept ZeroDivisionError:\n    print(\"Zero\")\nfinally:\n    print(\"End\")",
       "testCases": [
         {
@@ -111,10 +111,10 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "age가 0보다 작으면 raise로 ValueError(\"Invalid\")를 직접 발생시키고 except에서 Invalid를 출력해보세요.",
-      "prompt_en": "If age < 0, raise ValueError(\"Invalid\") intentionally and catch it in except to print Invalid.",
-      "hint_ko": "실행 중 오류가 없더라도 입력값이 조건에 어긋날 때 예외를 직접 위로 '일으켜' 예외 처리 절로 즉시 이동시킬 수 있습니다.",
-      "hint_en": "Even without a crash, you can intentionally throw a validation exception to jump directly into the error handler.",
+      "prompt_ko": "raise 예외클래스(\"메시지\") 구문은 값의 범위나 조건이 잘못되었을 때 의도적으로 예외를 발생시켜 즉시 except 블록으로 흐름을 이동시킵니다.",
+      "prompt_en": "The raise ExceptionType(\"message\") statement intentionally throws an exception when a validation condition fails, jumping straight to except.",
+      "hint_ko": "raise가 실행되는 순간 try 블록의 남은 줄(print(age))은 건너뛰고 except 절로 넘어갑니다.",
+      "hint_en": "As soon as raise executes, Python skips the rest of the try block and enters the matching except handler.",
       "targetCode": "age = -3\ntry:\n    if age < 0:\n        raise ValueError(\"Invalid\")\n    print(age)\nexcept ValueError:\n    print(\"Invalid\")",
       "testCases": [
         {
@@ -152,10 +152,10 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "함수 check_score에서 isinstance로 정수 여부와 0 이상인지를 검사해 예외를 일으키고, 정상일 때 95를 출력해보세요.",
-      "prompt_en": "Validate int type and s >= 0 with isinstance and raise inside check_score, then print 95 in else.",
-      "hint_ko": "정수가 아니거나 음수일 때 직접 값 예외를 일으키면, 정상 점수가 들어왔을 때만 반환값이 계산되어 후속 절에서 출력됩니다.",
-      "hint_en": "Throwing a value error when validation fails ensures only valid integer scores return a result to the no-error branch.",
+      "prompt_ko": "함수 내부에서 isinstance() 타입 검사와 범위 검사를 통과하지 못할 때 raise로 예외를 일으키면, 호출부의 try-except-else가 정상값과 오류를 깔끔히 분리해 처리합니다.",
+      "prompt_en": "Raising ValueError inside a function when isinstance() or range checks fail lets the caller's try-except-else cleanly separate valid results from errors.",
+      "hint_ko": "check_score(90)은 정상이므로 예외 없이 값을 반환하고, 이어서 else 블록이 실행됩니다.",
+      "hint_en": "Because check_score(90) succeeds without raising an error, its return value is printed in the else block.",
       "targetCode": "def check_score(s):\n    if not isinstance(s, int) or s < 0:\n        raise ValueError(\"Bad\")\n    return s + 5\n\ntry:\n    res = check_score(90)\nexcept ValueError:\n    print(\"Fail\")\nelse:\n    print(res)",
       "testCases": [
         {
@@ -193,10 +193,10 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "total = 10에서 시작해, while True 반복문에서 양의 정수가 입력될 때까지 Retry를 출력하고 성공하면 total에 더한 뒤 반복을 종료해보세요. (터미널 입력: abc, -2, 15 한 줄씩)",
-      "prompt_en": "Loop with while True printing Retry on invalid or non-positive inputs, then add n to total and break in else. (Terminal input: abc, -2, 15 line by line)",
-      "hint_ko": "0 이하 숫자에도 직접 값 예외를 일으키면 숫자가 아닌 입력과 범위 오류를 하나의 예외 처리 블록에서 함께 재시도할 수 있습니다.",
-      "hint_en": "Throwing the same value exception when n <= 0 lets one handler catch both non-numeric text and non-positive numbers.",
+      "prompt_ko": "while True 루프 안에서 try-except-else와 raise를 결합하면, 숫자가 아닌 입력과 0 이하의 입력을 모두 잡아내어 올바른 양수가 들어올 때까지 반복 입력받을 수 있습니다. (터미널 입력: abc, -2, 15 한 줄씩)",
+      "prompt_en": "Combining while True with try-except-else and raise catches both non-numeric text and non-positive numbers until a valid input triggers break in else. (Terminal input: abc, -2, 15 line by line)",
+      "hint_ko": "변환과 양수 검증을 모두 통과했을 때만 else 블록으로 들어가 값을 누적하고 break로 루프를 탈출합니다.",
+      "hint_en": "Only when both int() conversion and the > 0 check succeed does execution enter else to add n and break.",
       "targetCode": "total = 10\nwhile True:\n    try:\n        n = int(input())\n        if n <= 0:\n            raise ValueError(\"NonPos\")\n    except ValueError:\n        print(\"Retry\")\n    else:\n        total += n\n        break\nprint(total)",
       "testCases": [
         {

@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 두 숫자를 map(int, input().split())으로 한 번에 정수 변환해 a, b에 담고 합계를 출력해보세요. (터미널 입력: 15 27)",
-      "prompt_en": "Unpack two space-separated integers into a, b with map(int, input().split()) and print a + b. (Terminal input: 15 27)",
-      "hint_ko": "지도처럼 일대일로 '대응시키다'라는 뜻의 이 함수는 첫 인자로 준 변환 함수를 두 번째 시퀀스의 모든 원소에 일괄 적용합니다.",
-      "hint_en": "Meaning 'to associate one-to-one,' this function applies the conversion function in its first argument to every split token.",
+      "prompt_ko": "map(함수, 시퀀스)는 시퀀스의 모든 원소에 첫 번째 인자로 준 변환 함수를 일괄 적용하며, 변수 여러 개에 바로 언패킹할 수 있습니다. (터미널 입력: 15 27)",
+      "prompt_en": "map(func, seq) applies a conversion function to every item of a sequence at once, and its result can be unpacked directly into variables. (Terminal input: 15 27)",
+      "hint_ko": "map()의 첫 번째 인자에는 int()가 아니라 괄호를 뺀 함수 이름 int만 전달합니다.",
+      "hint_en": "Pass the function name int without parentheses as the first argument to map().",
       "targetCode": "a, b = map(int, input().split())\nprint(a + b)",
       "testCases": [
         {
@@ -76,10 +76,10 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "enumerate(items)로 인덱스(idx)와 값(val)을 동시에 꺼내 0번부터 차례대로 출력해보세요. (출력 예: 0 pen)",
-      "prompt_en": "Iterate with enumerate(items) to unpack idx and val together and print each pair from 0.",
-      "hint_ko": "번호를 붙여 하나씩 '열거하다'라는 뜻의 이 함수는 수동 카운터 변수 없이도 (인덱스, 원소) 쌍을 자동으로 만들어 줍니다.",
-      "hint_en": "Meaning 'to count off one by one,' this built-in yields (index, element) pairs automatically without a manual counter.",
+      "prompt_ko": "내장 함수 enumerate(시퀀스)는 각 원소에 0번부터 순서 번호를 붙여 (인덱스, 값) 튜플 쌍으로 동시에 꺼내 줍니다.",
+      "prompt_en": "The built-in enumerate(seq) pairs each element with its running index starting at 0, yielding (index, value) tuples on each loop turn.",
+      "hint_ko": "for문에서 idx, val 두 변수로 언패킹하면 별도의 인덱스 카운터 변수를 직접 늘릴 필요가 없습니다.",
+      "hint_en": "Unpacking into idx, val in the for header eliminates the need to maintain a manual counter variable.",
       "targetCode": "items = [\"pen\", \"book\", \"bag\"]\nfor idx, val in enumerate(items):\n    print(idx, val)",
       "testCases": [
         {
@@ -112,10 +112,10 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 정수 기온들을 list(map(int, ...))로 변환해 평균을 소수 첫째 자리로 출력해보세요. (출력 예: Avg:16.5) (터미널 입력: 20 22 23)",
-      "prompt_en": "Convert space-separated integer temperatures into a list and print the average rounded to 1 decimal place. (Terminal input: 20 22 23)",
-      "hint_ko": "공백으로 나눈 문자열들을 일괄 정수 변환해 리스트에 담은 뒤, 합계를 길이로 나눈 평균을 소수 첫째 자리까지 반올림합니다.",
-      "hint_en": "Batch-convert the split tokens into a list of integers, then round their sum divided by length to 1 decimal place.",
+      "prompt_ko": "map(int, input().split())을 list()로 감싸면 한 줄에 입력된 여러 숫자를 즉시 정수 리스트로 만들어 sum()과 len()에 활용할 수 있습니다. (터미널 입력: 20 22 23)",
+      "prompt_en": "Wrapping map(int, input().split()) in list() converts a line of space-separated numbers into an integer list ready for sum() and len(). (Terminal input: 20 22 23)",
+      "hint_ko": "map 객체 자체에는 len()을 쓸 수 없으므로, 길이와 합계를 모두 구할 때는 list()로 변환해 저장합니다.",
+      "hint_en": "Because a raw map object has no length, converting it with list() lets you call both sum() and len().",
       "targetCode": "temps = list(map(int, input().split()))\navg = round(sum(temps) / len(temps), 1)\nprint(f\"Avg:{avg}\")",
       "testCases": [
         {
@@ -153,10 +153,10 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "정수 리스트 codes를 map(str, codes)로 일괄 문자열 변환한 뒤 \"-\".join(...)으로 이어 출력해보세요. (출력: 10-25-30)",
-      "prompt_en": "Convert integer elements in codes to strings via map(str, codes) and join them with \"-\" to print 10-25-30.",
-      "hint_ko": "문자열 결합 메서드는 문자열 요소만 이어 붙일 수 있으므로, 숫자 리스트에 문자열 변환을 일괄 적용해 곧바로 넘깁니다.",
-      "hint_en": "String joining requires string elements, so batch-convert the integer list to strings directly inside the join call.",
+      "prompt_ko": "문자열의 .join() 메서드는 문자열 원소만 이어 붙일 수 있으므로, 숫자 리스트는 map(str, 리스트)로 일괄 문자열 변환해 전달합니다.",
+      "prompt_en": "Because str.join() requires string elements, passing map(str, codes) converts a list of numbers into strings on the fly before joining.",
+      "hint_ko": "\"-\".join() 안에 map(str, codes)를 바로 넣으면 별도의 리스트 변환 없이도 구분자로 연결된 문자열이 만들어집니다.",
+      "hint_en": "You can pass map(str, codes) directly into \"-\".join() without wrapping it in list() first.",
       "targetCode": "codes = [10, 25, 30]\ntext = \"-\".join(map(str, codes))\nprint(text)",
       "expectedVariables": {
         "text": "10-25-30"
@@ -197,10 +197,10 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "단어 목록을 1번부터 순회하며 (순서 번호 * 글자 수)를 누적해 반환하는 score_words 함수를 완성해 출력해보세요. (터미널 입력: hi code)",
-      "prompt_en": "Define score_words(words) to sum (1-based index * word length) using enumerate(words, 1) and print the result. (Terminal input: hi code)",
-      "hint_ko": "두 번째 인자에 시작 번호 1을 주어 순회하면서 각 단어의 순서 번호와 글자 수를 곱해 누적한 뒤 반환합니다.",
-      "hint_en": "Start numbering at 1 via the second argument, add (index * word length) on each step, and return the total.",
+      "prompt_ko": "enumerate(시퀀스, 시작번호)처럼 두 번째 인자를 지정하면 0번 대신 원하는 번호(예: 1번)부터 순서를 매기며 순회합니다. (터미널 입력: hi code)",
+      "prompt_en": "Passing a second argument to enumerate(seq, start) starts the index numbering from start (such as 1) instead of 0. (Terminal input: hi code)",
+      "hint_ko": "enumerate(words, 1)에서 꺼낸 1번 기준 순서 번호 idx와 단어 길이 len(w)를 곱해 누적합니다.",
+      "hint_en": "Multiply the 1-based index idx from enumerate(words, 1) by len(w) on each iteration and add it to total.",
       "targetCode": "def score_words(words):\n    total = 0\n    for idx, w in enumerate(words, 1):\n        total += idx * len(w)\n    return total\ndata = input().split()\nprint(score_words(data))",
       "testCases": [
         {

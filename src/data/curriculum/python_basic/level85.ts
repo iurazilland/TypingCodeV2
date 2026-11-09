@@ -30,10 +30,10 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "Animal을 상속받는 Dog(Animal) 클래스를 만들어 부모의 __init__과 eat을 그대로 물려받고 bark도 호출해보세요.",
-      "prompt_en": "Create Dog(Animal) inheriting __init__ and eat from Animal, then print d.eat() and d.bark().",
-      "hint_ko": "자식 클래스 이름 뒤 소괄호 안에 부모 클래스를 적으면 초기화와 기존 메서드를 다시 작성하지 않아도 그대로 물려받습니다.",
-      "hint_en": "Placing the parent class inside parentheses after the child class name inherits its initializer and methods automatically.",
+      "prompt_ko": "class 자식클래스(부모클래스): 형태로 상속을 선언하면, 부모 클래스의 __init__ 초기화와 메서드를 다시 작성하지 않고도 그대로 물려받아 사용할 수 있습니다.",
+      "prompt_en": "Declaring class Child(Parent): inherits the parent's __init__ and methods automatically, while allowing the child class to add its own methods.",
+      "hint_ko": "Dog 클래스에 __init__이나 eat을 따로 정의하지 않아도 부모인 Animal로부터 물려받아 호출할 수 있습니다.",
+      "hint_en": "Even without defining __init__ or eat in Dog, instances of Dog inherit both from Animal.",
       "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def eat(self):\n        return f\"{self.name} eats\"\n\nclass Dog(Animal):\n    def bark(self):\n        return f\"{self.name}:Woof\"\n\nd = Dog(\"Coco\")\nprint(d.eat())\nprint(d.bark())",
       "testCases": [
         {
@@ -66,10 +66,10 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "Animal을 상속받은 Cat 클래스에서 speak 메서드를 재정의(Overriding)하여 Nabi:Meow가 출력되게 해보세요.",
-      "prompt_en": "Override speak(self) in Cat(Animal) so c.speak() returns Nabi:Meow instead of \"...\".",
-      "hint_ko": "부모 클래스에 있던 메서드와 똑같은 이름으로 자식 클래스에서 다시 정의하면 자식의 메서드가 우선 호출됩니다.",
-      "hint_en": "Redefining a method with the exact same name on the child class overrides the parent's version for child instances.",
+      "prompt_ko": "부모 클래스에 있는 메서드와 똑같은 이름의 메서드를 자식 클래스에서 다시 작성하는 것을 메서드 재정의(Overriding)라고 하며, 자식 객체에서는 재정의된 메서드가 우선 실행됩니다.",
+      "prompt_en": "Redefining a parent method with the same name in a child class is called method overriding, and child instances run the overridden version.",
+      "hint_ko": "__init__은 부모의 것을 그대로 물려쓰고, 동작이 달라지는 speak 메서드만 Cat에서 새로 정의합니다.",
+      "hint_en": "Cat inherits __init__ from Animal as-is and only overrides speak(self) with its own return value.",
       "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        return \"...\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name}:Meow\"\n\nc = Cat(\"Nabi\")\nprint(c.speak())",
       "testCases": [
         {
@@ -102,10 +102,10 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "Dog와 Cat 객체를 한 리스트에 담고 for 반복문으로 pet.speak()를 호출해 각자의 울음소리를 출력해보세요.",
-      "prompt_en": "Iterate through [Dog(\"Coco\"), Cat(\"Nabi\")] and print pet.speak() to see polymorphic behavior.",
-      "hint_ko": "반복문에서 동일한 이름의 메서드를 호출해도 각 객체가 속한 실제 클래스에 맞게 재정의된 메서드가 각각 실행됩니다.",
-      "hint_en": "Calling the same method name in a loop automatically runs each object's own overridden method (polymorphism).",
+      "prompt_ko": "서로 다른 자식 클래스 객체들을 한 리스트에 담아 동일한 메서드(pet.speak())를 호출하면, 각 객체의 실제 클래스에 맞게 재정의된 메서드가 실행되는 다형성(Polymorphism)이 동작합니다.",
+      "prompt_en": "Calling the same method (pet.speak()) across a list of different subclass instances invokes each object's own overridden method (polymorphism).",
+      "hint_ko": "반복문 코드는 pet.speak() 한 줄뿐이지만 Dog 객체일 때와 Cat 객체일 때 서로 다른 결과가 반환됩니다.",
+      "hint_en": "A single pet.speak() call in the loop produces different outputs depending on whether pet is a Dog or a Cat.",
       "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def speak(self):\n        return f\"{self.name}:Woof\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name}:Meow\"\n\npets = [Dog(\"Coco\"), Cat(\"Nabi\")]\nfor pet in pets:\n    print(pet.speak())",
       "testCases": [
         {
@@ -138,10 +138,10 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "자식 클래스 객체 d에 대해 isinstance(d, Dog)와 isinstance(d, Animal)이 모두 True인지 확인해보세요.",
-      "prompt_en": "Verify that isinstance(d, Dog) and isinstance(d, Animal) both print True for Dog instance d.",
-      "hint_ko": "자식 클래스로 만든 인스턴스는 자식 클래스이면서 동시에 부모 클래스의 인스턴스로도 인정됩니다.",
-      "hint_en": "An instance of a child class is recognized by runtime type checks as an instance of both the child and parent classes.",
+      "prompt_ko": "상속 관계에서 자식 클래스의 인스턴스는 isinstance()로 검사할 때 자식 클래스뿐 아니라 부모 클래스의 인스턴스로도 함께 인정되어 둘 다 True를 반환합니다.",
+      "prompt_en": "In an inheritance hierarchy, isinstance() recognizes a subclass instance as an instance of both the child class and the parent class.",
+      "hint_ko": "강아지(Dog)는 곧 동물(Animal)이기도 하므로 isinstance(d, Animal) 역시 True가 됩니다.",
+      "hint_en": "Because Dog inherits from Animal, isinstance(d, Animal) evaluates to True just like isinstance(d, Dog).",
       "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Dog(Animal):\n    def bark(self):\n        return \"Woof\"\n\nd = Dog(\"Coco\")\nprint(isinstance(d, Dog))\nprint(isinstance(d, Animal))",
       "testCases": [
         {
@@ -174,10 +174,10 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "Unit을 상속받은 Knight에서 음수 피해량은 예외를 일으키고 피해를 5만큼 경감하되(최소 0) hit 메서드를 실행해보세요. (터미널 입력: 15)",
-      "prompt_en": "Inherit Unit in Knight, raise ValueError on negative dmg, reduce damage by 5 using max, and print k. (Terminal input: 15)",
-      "hint_ko": "부모로부터 초기화와 문자열 표현을 그대로 물려받고, 자식 클래스에서는 음수 검증과 피해 경감이 적용된 타격 메서드만 작성합니다.",
-      "hint_en": "Reuse the inherited initializer and string representation while defining only the validated damage-reduction method on the subclass.",
+      "prompt_ko": "부모 클래스의 __init__과 __str__을 상속받아 재사용하면서, 자식 클래스에는 예외 검증(raise)과 방어력 경감(max(0, dmg - 5))이 적용된 전용 메서드를 추가할 수 있습니다. (터미널 입력: 15)",
+      "prompt_en": "A subclass can reuse inherited __init__ and __str__ methods while adding its own validated method using raise and max(0, dmg - 5). (Terminal input: 15)",
+      "hint_ko": "max(0, dmg - 5)는 피해량에서 5를 뺀 값이 음수가 되지 않도록 최소 피해량을 0으로 보장합니다.",
+      "hint_en": "max(0, dmg - 5) ensures the reduced damage never drops below 0 so hp cannot accidentally increase.",
       "targetCode": "class Unit:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def __str__(self):\n        return f\"{self.name}:{self.hp}\"\n\nclass Knight(Unit):\n    def hit(self, dmg):\n        if dmg < 0:\n            raise ValueError(\"Neg\")\n        self.hp -= max(0, dmg - 5)\n\nk = Knight(\"Arthur\", 50)\ntry:\n    k.hit(int(input()))\nexcept ValueError:\n    print(\"Invalid\")\nprint(k)",
       "testCases": [
         {

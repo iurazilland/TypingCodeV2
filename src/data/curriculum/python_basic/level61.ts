@@ -28,10 +28,10 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "Hero 클래스에 self.hp += amount를 수행하는 heal(self, amount) 메서드를 만들고, Hero(80)에 h.heal(25) 호출 후 체력을 출력해보세요.",
-      "prompt_en": "Add a heal(self, amount) method to Hero that adds amount to self.hp, call h.heal(25) on Hero(80), and print h.hp.",
-      "hint_ko": "인스턴스 자신을 첫 매개변수로 받아 체력 속성에 회복량을 더하는 메서드를 정의하고, 생성한 객체에서 호출한 뒤 체력을 출력하세요.",
-      "hint_en": "Define the healing method taking the instance reference and amount to increment health, call it on the created hero, and print the updated health.",
+      "prompt_ko": "클래스 내부에 정의한 인스턴스 메서드는 첫 매개변수 self로 호출한 객체 자신을 전달받아 self.속성 값을 변경할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "An instance method defined inside a class receives the calling object as its first parameter self and can mutate self.attribute values. Trace the block code.",
+      "hint_ko": "메서드를 호출할 때는 self를 직접 넘기지 않고 h.heal(25)처럼 나머지 인자만 전달하면 됩니다.",
+      "hint_en": "When calling a method as h.heal(25), Python passes self automatically—you only supply the remaining arguments.",
       "targetCode": "class Hero:\n    def __init__(self, hp=100):\n        self.hp = hp\n    def heal(self, amount):\n        self.hp += amount\nh = Hero(80)\nh.heal(25)\nprint(h.hp)",
       "testCases": [
         {
@@ -64,10 +64,10 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "기본 체력이 90인 Hero(\"Leo\") 인스턴스 h에서 h.heal(30)으로 체력을 회복시킨 뒤, h.info() 반환값을 출력해보세요. (출력 예: Leo:120)",
-      "prompt_en": "Create h = Hero(\"Leo\") (default hp 90), call h.heal(30), and print the string returned by h.info() (output: Leo:120).",
-      "hint_ko": "상태를 바꾸는 회복 메서드를 먼저 호출해 체력을 갱신한 뒤, 상태 문자열을 돌려주는 메서드의 반환값을 출력하세요.",
-      "hint_en": "Call the state-mutating heal method on the hero instance first, then print the string returned by its status method.",
+      "prompt_ko": "하나의 클래스에 상태를 변경하는 메서드(heal)와 현재 상태를 문자열로 반환하는 메서드(info)를 함께 정의해 차례대로 호출할 수 있습니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "A class can define both state-mutating methods (heal) and value-returning methods (info) that read the updated self attributes. Trace the block code.",
+      "hint_ko": "먼저 호출한 메서드가 변경한 self.hp 값은 같은 인스턴스의 다른 메서드에서도 그대로 공유됩니다.",
+      "hint_en": "Changes made to self.hp by one method persist on the instance and are immediately visible to subsequent method calls.",
       "targetCode": "class Hero:\n    def __init__(self, name, hp=90):\n        self.name = name\n        self.hp = hp\n    def heal(self, val):\n        self.hp += val\n    def info(self):\n        return f\"{self.name}:{self.hp}\"\nh = Hero(\"Leo\")\nh.heal(30)\nprint(h.info())",
       "testCases": [
         {
@@ -100,10 +100,10 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "재고가 남았으면 1 줄이고 \"Drink\"를, 없으면 None을 반환하는 Machine.pull()을 만들고 입력 재고로 실행해보세요. (터미널 입력: 2)",
-      "prompt_en": "Implement Machine.pull() to decrement stock and return \"Drink\" if stock > 0 else None, then test with input. (Terminal input: 2)",
-      "hint_ko": "인스턴스 재고 속성이 양수일 때만 1 차감하고 음료 문자열을 반환하며, 재고가 없으면 값 없음 상수를 반환하도록 구성하세요.",
-      "hint_en": "Inside the method, check for positive stock to decrement by 1 and send back the drink text, or fall back to Python's null constant.",
+      "prompt_ko": "인스턴스 메서드 안에 if 조건문을 두면, 객체의 현재 속성값(self.stock)을 먼저 검사한 뒤 조건이 참일 때만 상태를 차감하고 결과를 return할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 2)",
+      "prompt_en": "Placing an if condition inside an instance method lets you inspect self.stock first and decrement state only when stock is available, returning None otherwise. Trace the block code. (Terminal input: 2)",
+      "hint_ko": "if 블록 안에서 return이 실행되면 그 즉시 메서드가 끝나므로 별도의 else 없이도 마지막 줄의 return None이 대체 반환문 역할을 합니다.",
+      "hint_en": "Because return inside the if block exits the method immediately, the final return None acts as the fallback without needing an else.",
       "targetCode": "class Machine:\n    def __init__(self, stock):\n        self.stock = stock\n    def pull(self):\n        if self.stock > 0:\n            self.stock -= 1\n            return \"Drink\"\n        return None\nm = Machine(int(input()))\nprint(m.pull(), m.stock)",
       "testCases": [
         {
@@ -141,10 +141,10 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "Monster(80)의 체력이 0보다 큰 동안 while 반복문에서 m.hit(30)을 호출해 공격 횟수 turns와 최종 체력을 출력해보세요.",
-      "prompt_en": "Call m.hit(30) inside a while m.hp > 0: loop on Monster(80) (capping hp at 0) and print turns and m.hp.",
-      "hint_ko": "피해 차감 후 체력이 음수면 0으로 보정하는 메서드를 정의하고, 몬스터 체력이 양수인 동안 반복 호출하며 횟수를 세세요.",
-      "hint_en": "Clamp negative health to 0 inside the hit method, then call it inside a loop while health stays positive and count the turns.",
+      "prompt_ko": "메서드 내부에서 속성값이 하한선(0) 아래로 내려가지 않도록 보정하는 로직을 캡슐화해 두면, while 반복문에서 메서드를 반복 호출할 때도 항상 유효한 상태가 유지됩니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Encapsulating lower-bound clamping (keeping self.hp >= 0) inside a method ensures the instance stays in a valid state even when called repeatedly in a while loop. Trace the block code.",
+      "hint_ko": "차감 직후 if self.hp < 0: 조건으로 음수 여부를 확인해 0으로 맞춰 주면 체력이 음수로 남지 않습니다.",
+      "hint_en": "Checking if self.hp < 0: right after subtraction clamps the attribute to 0 so health never stays negative.",
       "targetCode": "class Monster:\n    def __init__(self, hp):\n        self.hp = hp\n    def hit(self, dmg):\n        self.hp -= dmg\n        if self.hp < 0:\n            self.hp = 0\nm = Monster(80)\nturns = 0\nwhile m.hp > 0:\n    m.hit(30)\n    turns += 1\nprint(turns, m.hp)",
       "testCases": [
         {
@@ -182,10 +182,10 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "Stats.rate() 안에 ZeroDivisionError 예외 처리로 0을 반환하도록 만들고, Stats(3, 4)와 Stats(3, 0)의 승률을 출력해보세요.",
-      "prompt_en": "Handle ZeroDivisionError in Stats.rate() by returning 0, and print rate() for Stats(3, 4) and Stats(3, 0).",
-      "hint_ko": "승률 메서드 안의 나눗셈 반환문을 예외 처리 블록으로 감싸, 경기 수가 0일 때 발생하는 0 나눗셈 오류에서 0을 반환하게 하세요.",
-      "hint_en": "Guard the division inside the rate method with an attempt block and catch the division-by-zero exception to send back 0.",
+      "prompt_ko": "인스턴스 메서드 안에서도 try - except ZeroDivisionError 구문을 사용할 수 있어, 분모 속성(self.games)이 0인 객체에서도 에러 없이 안전하게 계산 결과를 반환합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Using try - except ZeroDivisionError inside an instance method safely returns a fallback value even when the denominator attribute (self.games) is 0. Trace the block code.",
+      "hint_ko": "예외 처리를 메서드 내부에 숨겨 두면 메서드를 호출하는 바깥 코드가 매번 에러를 신경 쓰지 않아도 됩니다.",
+      "hint_en": "Encapsulating exception handling inside the method keeps the calling code clean and safe.",
       "targetCode": "class Stats:\n    def __init__(self, wins, games):\n        self.wins = wins\n        self.games = games\n    def rate(self):\n        try:\n            return self.wins / self.games\n        except ZeroDivisionError:\n            return 0\na = Stats(3, 4)\nb = Stats(3, 0)\nprint(a.rate(), b.rate())",
       "testCases": [
         {

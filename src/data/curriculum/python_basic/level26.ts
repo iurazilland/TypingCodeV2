@@ -25,10 +25,10 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "total을 0으로 초기화하고 1부터 5까지 차례로 더한 최종 합계(15)를 출력해보세요.",
-      "prompt_en": "Initialize total to 0, accumulate 1 through 5, and print the final sum (15).",
-      "hint_ko": "반복문 시작 전에 합계 변수를 초기화하고, 반복 블록 안에서 값을 누적한 뒤 바깥에서 최종 합계를 출력하세요.",
-      "hint_en": "Initialize the sum variable before the loop, add each value inside the loop, and print the total outside.",
+      "prompt_ko": "반복문 시작 전에 누적 변수(total = 0)를 초기화하고 반복 블록 안에서 += 연산자로 값을 차곡차곡 더하는 방식을 '누적 합계 패턴'이라고 합니다. 블록의 코드를 따라 입력해보세요.",
+      "prompt_en": "Initializing an accumulator variable (total = 0) before a loop and adding each value with += inside the loop is called the sum accumulator pattern. Trace the block code.",
+      "hint_ko": "최종 합계 출력문은 반복이 모두 끝난 뒤 한 번만 실행되도록 for 블록 바깥 아래에 놓습니다.",
+      "hint_en": "Place the final print(total) outside below the for block so the sum is printed once after all iterations finish.",
       "targetCode": "total = 0\nfor i in range(1, 6):\n    total += i\nprint(total)",
       "testCases": [
         {
@@ -71,10 +71,10 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "prod를 1로 초기화하고 1부터 4까지 차례로 곱한 결과(24)를 출력해보세요.",
-      "prompt_en": "Initialize prod to 1, multiply by 1 through 4 in order, and print 24.",
-      "hint_ko": "반복문 밖에서 곱셈의 출발값을 먼저 정하고, 반복문 안에서 차례로 곱한 뒤 반복이 끝나면 결과를 출력하세요.",
-      "hint_en": "Initialize the product variable before the loop, multiply each value inside the body, and print it after the loop.",
+      "prompt_ko": "값을 차례대로 곱하는 '누적 곱셈 패턴'에서는 초기값을 0이 아닌 1로 시작하고 반복문 안에서 *= 연산자를 사용합니다. 블록의 코드를 따라 쳐보세요.",
+      "prompt_en": "In a product accumulator pattern, initialize the variable to 1 (not 0) and multiply each value using *= inside the loop. Trace the block code.",
+      "hint_ko": "초기값을 0으로 두면 어떤 수를 곱해도 계속 0이 되므로 곱셈 누적은 반드시 1에서 출발해야 합니다.",
+      "hint_en": "Starting at 0 would keep every product at 0, so a multiplication accumulator must start at 1.",
       "targetCode": "prod = 1\nfor i in range(1, 5):\n    prod *= i\nprint(prod)",
       "testCases": [
         {
@@ -117,10 +117,10 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "정수 n을 입력받아 3부터 n 이하의 3의 배수가 총 몇 개인지 count에 1씩 세어 출력해보세요. (터미널 입력: 10)",
-      "prompt_en": "Read integer n and count how many multiples of 3 are in 3..n by adding 1 to count. (Terminal input: 10)",
-      "hint_ko": "개수 변수를 0에서 출발시켜 3씩 건너뛰는 반복문 안에서 매번 1씩 누적하고, 반복이 끝난 뒤 개수를 출력하세요.",
-      "hint_en": "Start the counter at zero, add 1 on every turn of the step-3 loop, and print the final count outside.",
+      "prompt_ko": "반복이 일어날 때마다 변수에 1씩 더하는 count += 1 패턴을 사용하면 조건이나 구간에 해당하는 항목이 총 몇 개인지 셀 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 10)",
+      "prompt_en": "Using count += 1 inside a loop increments a counter by 1 on each iteration to tally how many items occur. Trace the block code. (Terminal input: 10)",
+      "hint_ko": "range(3, n + 1, 3)이 3의 배수마다 한 번씩 돌면서 count를 1씩 증가시킵니다.",
+      "hint_en": "range(3, n + 1, 3) steps through each multiple of 3 and increments count by 1 each time.",
       "targetCode": "n = int(input())\ncount = 0\nfor i in range(3, n + 1, 3):\n    count += 1\nprint(count)",
       "testCases": [
         {
@@ -173,10 +173,10 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "개수 n을 입력받고 이어서 n개의 정수를 int(input())으로 더한 뒤 평균(total / n)을 출력해보세요. (터미널 입력: 2, 3, 5 한 줄씩)",
-      "prompt_en": "Read integer n followed by n integers, accumulate their sum, and print total / n. (Terminal input: 2, 3, 5 line by line)",
-      "hint_ko": "반복문 안에서 정수로 변환한 입력값을 합계 변수에 차곡차곡 더하고, 반복문 밖에서 전체 합을 개수로 나누어 출력하세요.",
-      "hint_en": "Accumulate each integer input inside the loop, then divide the final sum by n outside the loop.",
+      "prompt_ko": "for 반복문 안에서 int(input())을 호출하면 여러 줄로 들어오는 입력값들을 차례대로 읽어 합산한 뒤 평균(total / n)을 구할 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 2, 3, 5 한 줄씩)",
+      "prompt_en": "Calling int(input()) inside a for loop reads multiple lines of input one by one so you can sum them and compute the average (total / n). Trace the block code. (Terminal input: 2, 3, 5 line by line)",
+      "hint_ko": "나눗셈 연산자(/)는 나누어떨어질 때에도 소수점이 포함된 실수(float) 형태로 평균을 반환합니다.",
+      "hint_en": "The division operator (/) always returns the average as a floating-point number (float).",
       "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    x = int(input())\n    total += x\nprint(total / n)",
       "testCases": [
         {
@@ -229,10 +229,10 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "n개의 정수를 입력받아 합산한 뒤, res = str(total)로 변환해 total >= 100이면 \"Goal:\" + res, 아니면 \"Short:\" + res를 출력해보세요. (터미널 입력: 3, 40, 35, 30 한 줄씩)",
-      "prompt_en": "Sum n input integers, store res = str(total), then print \"Goal:\" + res if total >= 100 or \"Short:\" + res otherwise. (Terminal input: 3, 40, 35, 30 line by line)",
-      "hint_ko": "반복문에서 합산을 마친 뒤 res 변수에 문자열 변환 결과를 저장하고, 기준값 이상인지 분기해 접두사와 이어 붙이세요.",
-      "hint_en": "Finish summing inside the loop, convert total into string variable res, then branch on the threshold outside.",
+      "prompt_ko": "반복문으로 누적 합산이 끝난 뒤 바깥에서 if - else 조건문과 str() 형변환을 이어 쓰면 최종 합계에 따른 결과 문자열을 완성할 수 있습니다. 블록의 코드를 따라 쳐보세요. (터미널 입력: 3, 40, 35, 30 한 줄씩)",
+      "prompt_en": "Following a summation loop with an outer if - else and str() conversion lets you format a threshold message from the final total. Trace the block code. (Terminal input: 3, 40, 35, 30 line by line)",
+      "hint_ko": "정수 합계 total을 문자열과 +로 이어 붙이기 위해 str(total)로 먼저 변환합니다.",
+      "hint_en": "Convert the integer sum total with str(total) before concatenating it onto a label string with +.",
       "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\nres = str(total)\nif total >= 100:\n    print(\"Goal:\" + res)\nelse:\n    print(\"Short:\" + res)",
       "testCases": [
         {
