@@ -227,23 +227,23 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: "문자열 s를 끝까지 순회하며 느낌표(\"!\") 개수를 세고, s의 불리언 판정값과 개수를 출력해보세요. (예: Go!! -> True 2)",
-      prompt_en: "Count \"!\" characters in s with a while loop, then print bool(s) and the count.",
-      hint_ko: "반복 범위에는 문자열의 전체 길이를, 조건식에는 현재 위치 번호의 글자를, 출력문에는 '불리언(boolean)' 앞 네 글자를 딴 변환식을 채우세요.",
-      hint_en: "Loop up to the string's length, inspect the character at the current index, and convert the string with the 4-letter function from 'boolean'.",
-      templateCode: "s = input()\ncnt = 0\ni = 0\nwhile i < §§§§§§:\n    if §§§§ == \"!\":\n        cnt += 1\n    i += 1\nprint(§§§§§§§, cnt)",
-      targetCode: "s = input()\ncnt = 0\ni = 0\nwhile i < len(s):\n    if s[i] == \"!\":\n        cnt += 1\n    i += 1\nprint(bool(s), cnt)",
+      prompt_ko: "문자열 s를 끝까지 순회하며 느낌표(\"!\") 개수를 세고, s의 길이와 개수를 출력해보세요. (예: Go!! -> 4 2)",
+      prompt_en: "Count \"!\" characters in s with a while loop, then print len(s) and the count.",
+      hint_ko: "반복 범위와 출력문에는 문자열의 전체 길이를, 조건식에는 현재 위치 번호의 글자를 채우세요.",
+      hint_en: "Use the string length for the loop bound and the output, and the character at the current index in the condition.",
+      templateCode: "s = input()\ncnt = 0\ni = 0\nwhile i < §§§§§§:\n    if §§§§ == \"!\":\n        cnt += 1\n    i += 1\nprint(§§§§§§, cnt)",
+      targetCode: "s = input()\ncnt = 0\ni = 0\nwhile i < len(s):\n    if s[i] == \"!\":\n        cnt += 1\n    i += 1\nprint(len(s), cnt)",
       testCases: [
         {
-          id: 1,
-          input: "Go!!",
-          expectedOutput: "True 2",
+          "id": 1,
+          "input": "Go!!",
+          "expectedOutput": "4 2"
         },
         {
-          id: 2,
-          input: "Hi",
-          expectedOutput: "True 0",
-        },
+          "id": 2,
+          "input": "Hi",
+          "expectedOutput": "2 0"
+        }
       ],
     },
     {

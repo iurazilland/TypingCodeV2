@@ -246,8 +246,8 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "prompt_en": "Catch the missing dictionary key exception while summing cart item prices.",
       "hint_ko": "가격표 딕셔너리에 없는 품목 이름을 대괄호로 조회할 때 발생하는 8글자 '키+오류' 예외 이름을 첫 글자 대문자로 적으세요.",
       "hint_en": "Write the eight-letter PascalCase exception raised when a dictionary lookup identifier does not exist.",
-      "templateCode": "prices = {\"milk\": 2000, \"egg\": 3000}\ncart = [\"milk\", \"jam\", \"egg\"]\ntotal = 0\nfor item in cart:\n    try:\n        total += prices[item]\n    except §§§§§§§§:\n        total += 0\nprint(f\"Total:{total}\")",
-      "targetCode": "prices = {\"milk\": 2000, \"egg\": 3000}\ncart = [\"milk\", \"jam\", \"egg\"]\ntotal = 0\nfor item in cart:\n    try:\n        total += prices[item]\n    except KeyError:\n        total += 0\nprint(f\"Total:{total}\")",
+      "templateCode": "prices = {\"milk\": 2000, \"egg\": 3000}\ncart = [\"milk\", \"jam\", \"egg\"]\ntotal = 0\nfor item in cart:\n    try:\n        total += prices[item]\n    except §§§§§§§§:\n        pass\nprint(f\"Total:{total}\")",
+      "targetCode": "prices = {\"milk\": 2000, \"egg\": 3000}\ncart = [\"milk\", \"jam\", \"egg\"]\ntotal = 0\nfor item in cart:\n    try:\n        total += prices[item]\n    except KeyError:\n        pass\nprint(f\"Total:{total}\")",
       "testCases": [
         {
           "id": 1,

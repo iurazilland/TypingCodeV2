@@ -163,7 +163,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "기준값 base 뒤에 여러 숫자를 가변 인자로 받아 기준값과의 최대 거리(차이 크기)를 반환하도록 두 빈칸을 채워보세요. (출력: 9)",
       "prompt_en": "Fill in both blanks so max_gap accepts base plus variadic numbers and returns the largest absolute difference.",
-      "hint_ko": "아랫줄 반복문에서 쓰는 변수 이름 앞에 별표를 붙여 가변 인자로 선언하고, 거리 계산에는 '절댓값(absolute)'의 앞 3글자 함수를 쓰세요.",
+      "hint_ko": "아랫줄 컴프리헨션에서 쓰는 변수 이름 앞에 별표를 붙여 가변 인자로 선언하고, 거리 계산에는 '절댓값(absolute)'의 앞 3글자 함수를 쓰세요.",
       "hint_en": "Prefix the sequence name used on the next line with an asterisk, and compute distances with the 3-letter function from 'absolute'.",
       "templateCode": "def max_gap(base, §§§§§):\n    gaps = [§§§(v - base) for v in vals]\n    return max(gaps)\nprint(max_gap(10, 4, 19, 12))",
       "targetCode": "def max_gap(base, *vals):\n    gaps = [abs(v - base) for v in vals]\n    return max(gaps)\nprint(max_gap(10, 4, 19, 12))",

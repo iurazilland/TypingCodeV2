@@ -213,7 +213,7 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 두 수를 정수 x, y에 담고 더 크거나 같은 값을 sep=\"=\"와 함께 출력해보세요. (출력 예: Max=25)",
+      "prompt_ko": "공백으로 입력된 두 수를 정수 x, y에 담고 둘 중 큰 값(같으면 x)을 sep=\"=\"와 함께 출력해보세요. (출력 예: Max=25)",
       "prompt_en": "Split two integers into x, y and print the larger value formatted as Max=25 using sep=\"=\".",
       "hint_ko": "두 정수의 크기를 비교해 첫째 값이 크거나 같을 때와 그렇지 않을 때 각각 더 큰 변수를 골라 구분자 옵션과 함께 출력해보세요.",
       "hint_en": "Compare the two integers and print the larger variable in each branch using the equals-sign separator option.",

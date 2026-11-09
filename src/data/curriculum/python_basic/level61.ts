@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "Hero(\"Leo\", 90) 인스턴스에서 h.heal(30)으로 체력을 회복시킨 뒤, h.info() 반환값을 출력해보세요. (출력 예: Leo:120)",
-      "prompt_en": "Call h.heal(30) on Hero(\"Leo\", 90) and print the string returned by h.info() (output: Leo:120).",
+      "prompt_ko": "기본 체력이 90인 Hero(\"Leo\") 인스턴스 h에서 h.heal(30)으로 체력을 회복시킨 뒤, h.info() 반환값을 출력해보세요. (출력 예: Leo:120)",
+      "prompt_en": "Create h = Hero(\"Leo\") (default hp 90), call h.heal(30), and print the string returned by h.info() (output: Leo:120).",
       "hint_ko": "상태를 바꾸는 회복 메서드를 먼저 호출해 체력을 갱신한 뒤, 상태 문자열을 돌려주는 메서드의 반환값을 출력하세요.",
       "hint_en": "Call the state-mutating heal method on the hero instance first, then print the string returned by its status method.",
       "targetCode": "class Hero:\n    def __init__(self, name, hp=90):\n        self.name = name\n        self.hp = hp\n    def heal(self, val):\n        self.hp += val\n    def info(self):\n        return f\"{self.name}:{self.hp}\"\nh = Hero(\"Leo\")\nh.heal(30)\nprint(h.info())",
@@ -163,8 +163,8 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       "prompt_en": "Subtract input attack damage from Boss(100) and print remaining hp along with the survival check method.",
       "hint_ko": "첫 빈칸에는 인스턴스 '자기 자신'을 뜻하는 네 글자 참조를 적고, 마지막 줄 점 뒤에는 위에서 선언한 여덟 글자 생존 판별 메서드 이름을 적으세요.",
       "hint_en": "Reference the instance itself with the four-letter parameter on line 5, and invoke the eight-letter survival-check method after the dot on line 10.",
-      "templateCode": "class Boss:\n    def __init__(self, hp):\n        self.hp = hp\n    def damage(self, atk):\n        §§§§.hp -= atk\n    def is_alive(self):\n        return bool(self.hp > 0)\nb = Boss(100)\nb.damage(int(input()))\nprint(b.hp, b.§§§§§§§§())",
-      "targetCode": "class Boss:\n    def __init__(self, hp):\n        self.hp = hp\n    def damage(self, atk):\n        self.hp -= atk\n    def is_alive(self):\n        return bool(self.hp > 0)\nb = Boss(100)\nb.damage(int(input()))\nprint(b.hp, b.is_alive())",
+      "templateCode": "class Boss:\n    def __init__(self, hp):\n        self.hp = hp\n    def damage(self, atk):\n        §§§§.hp -= atk\n    def is_alive(self):\n        return self.hp > 0\nb = Boss(100)\nb.damage(int(input()))\nprint(b.hp, b.§§§§§§§§())",
+      "targetCode": "class Boss:\n    def __init__(self, hp):\n        self.hp = hp\n    def damage(self, atk):\n        self.hp -= atk\n    def is_alive(self):\n        return self.hp > 0\nb = Boss(100)\nb.damage(int(input()))\nprint(b.hp, b.is_alive())",
       "testCases": [
         {
           "id": 1,

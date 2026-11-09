@@ -188,7 +188,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "type": "block",
       "prompt_ko": "리스트 속성에서 값을 꺼내는 Stack 클래스를 만들고, 10과 20을 넣은 뒤 빌 때까지 while로 꺼내 더해 합계와 남은 개수를 출력해보세요.",
       "prompt_en": "Push 10 and 20 into Stack, pop and sum items while len(st.tasks) > 0, then print total and len(st.tasks).",
-      "hint_ko": "리스트 속성의 끝에서 원소를 꺼내 반환하는 메서드를 만들고, 리스트 길이가 양수인 동안 반복해 꺼낸 값을 합산한 뒤 출력하세요.",
+      "hint_ko": "리스트 속성의 끝 원소를 pop()으로 꺼내 반환하는 메서드를 만들고, 리스트 길이가 양수인 동안 반복해 꺼낸 값을 합산한 뒤 출력하세요.",
       "hint_en": "Implement pop on the list attribute, loop while items remain to accumulate each popped number, and print the total alongside the remaining count.",
       "targetCode": "class Stack:\n    def __init__(self):\n        self.tasks = []\n    def push(self, t):\n        self.tasks.append(t)\n    def pop_item(self):\n        return self.tasks.pop()\nst = Stack()\nst.push(10)\nst.push(20)\ntotal = 0\nwhile len(st.tasks) > 0:\n    total += st.pop_item()\nprint(total, len(st.tasks))",
       "testCases": [

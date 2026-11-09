@@ -113,7 +113,7 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "type": "block",
       "prompt_ko": "age가 0보다 작으면 raise로 ValueError(\"Invalid\")를 직접 발생시키고 except에서 Invalid를 출력해보세요.",
       "prompt_en": "If age < 0, raise ValueError(\"Invalid\") intentionally and catch it in except to print Invalid.",
-      "hint_ko": "문법 오류가 없더라도 입력값이 조건에 어긋날 때 예외를 직접 위로 '일으켜' 예외 처리 절로 즉시 이동시킬 수 있습니다.",
+      "hint_ko": "실행 중 오류가 없더라도 입력값이 조건에 어긋날 때 예외를 직접 위로 '일으켜' 예외 처리 절로 즉시 이동시킬 수 있습니다.",
       "hint_en": "Even without a crash, you can intentionally throw a validation exception to jump directly into the error handler.",
       "targetCode": "age = -3\ntry:\n    if age < 0:\n        raise ValueError(\"Invalid\")\n    print(age)\nexcept ValueError:\n    print(\"Invalid\")",
       "testCases": [
@@ -193,7 +193,7 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "while True 반복문에서 양의 정수가 입력될 때까지 Retry를 출력하고, 성공 시 total에 더해 반복을 종료해보세요.",
+      "prompt_ko": "total = 10에서 시작해, while True 반복문에서 양의 정수가 입력될 때까지 Retry를 출력하고 성공하면 total에 더한 뒤 반복을 종료해보세요.",
       "prompt_en": "Loop with while True printing Retry on invalid or non-positive inputs, then add n to total and break in else.",
       "hint_ko": "0 이하 숫자에도 직접 값 예외를 일으키면 숫자가 아닌 입력과 범위 오류를 하나의 예외 처리 블록에서 함께 재시도할 수 있습니다.",
       "hint_en": "Throwing the same value exception when n <= 0 lets one handler catch both non-numeric text and non-positive numbers.",

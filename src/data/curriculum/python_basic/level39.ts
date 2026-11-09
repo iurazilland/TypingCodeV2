@@ -193,22 +193,22 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "정수 입력 fee가 5 이상이면 마지막 가격에, 아니면 첫 가격에 더한 뒤 앞 2개 요소에 [99]를 이어 붙여 출력해보세요.",
-      "prompt_en": "Convert input to int; add fee to last item if >= 5 else first item, then print prices[:2] + [99].",
+      "prompt_ko": "정수 입력 fee가 5 이상이면 마지막 가격에, 아니면 첫 가격에 더한 뒤 리스트 끝에 [99]를 이어 붙여 출력해보세요.",
+      "prompt_en": "Convert input to int; add fee to the last item if >= 5 else the first item, then print prices + [99].",
       "hint_ko": "'정수(integer)' 앞 세 글자 함수로 변환한 뒤, 마지막 음수 인덱스·반대 분기 키워드·리스트 연결 기호를 차례로 채우세요.",
       "hint_en": "Convert using the first three letters of 'integer', then fill in the negative last index, the fallback branch keyword, and the list concatenation operator.",
-      "templateCode": "prices = [10, 20, 30]\nfee = §§§(input())\nif fee >= 5:\n    prices[§§] += fee\n§§§§:\n    prices[0] += fee\nprint(prices[:2] § [99])",
-      "targetCode": "prices = [10, 20, 30]\nfee = int(input())\nif fee >= 5:\n    prices[-1] += fee\nelse:\n    prices[0] += fee\nprint(prices[:2] + [99])",
+      "templateCode": "prices = [10, 20, 30]\nfee = §§§(input())\nif fee >= 5:\n    prices[§§] += fee\n§§§§:\n    prices[0] += fee\nprint(prices § [99])",
+      "targetCode": "prices = [10, 20, 30]\nfee = int(input())\nif fee >= 5:\n    prices[-1] += fee\nelse:\n    prices[0] += fee\nprint(prices + [99])",
       "testCases": [
         {
           "id": 1,
           "input": "2",
-          "expectedOutput": "[12, 20, 99]"
+          "expectedOutput": "[12, 20, 30, 99]"
         },
         {
           "id": 2,
           "input": "5",
-          "expectedOutput": "[10, 20, 99]"
+          "expectedOutput": "[10, 20, 35, 99]"
         }
       ]
     },

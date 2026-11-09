@@ -132,7 +132,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: "소문자 단어 s를 순회하며 모음(\"aeiou\")의 개수를 세어 출력하도록 빈칸을 채워보세요. (예: apple -> Vowels: 2)",
       prompt_en: "Count how many characters in lowercase word s are vowels (\"aeiou\") and print the result.",
-      hint_ko: "현재 글자가 모음 모음집 문자열 안에 들어 있는지 포함 연산자로 검사하고, 참일 때 개수 변수에 1을 누적해 더하세요.",
+      hint_ko: "현재 글자가 모음 문자열(\"aeiou\") 안에 들어 있는지 포함 연산자로 검사하고, 참일 때 개수 변수에 1을 누적해 더하세요.",
       hint_en: "Test whether the current character belongs to the vowel string, and use the compound addition operator to add 1 to the count.",
       templateCode: "s = input()\ncnt = 0\nfor ch in s:\n    if ch §§ \"aeiou\":\n        cnt §§ 1\nprint(f\"Vowels: {cnt}\")",
       targetCode: "s = input()\ncnt = 0\nfor ch in s:\n    if ch in \"aeiou\":\n        cnt += 1\nprint(f\"Vowels: {cnt}\")",

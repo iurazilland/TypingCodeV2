@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "0 이하일 때 값 없음 상수를 반환하고, 아래에서 반환값이 없는지 비교 연산자로 확인하도록 두 빈칸을 채워보세요.",
+      "prompt_ko": "0 이하일 때 값 없음 상수를 반환하고, 아래에서 반환값이 없는지 동일성 연산자로 확인하도록 두 빈칸을 채워보세요.",
       "prompt_en": "Return the null value constant when n <= 0 and check identity with it on the last line.",
       "hint_ko": "첫 빈칸에는 첫 글자가 대문자인 '아무것도 없음' 네 글자 상수를, 둘째 빈칸에는 객체 동일성을 묻는 두 글자 영어 동사를 적으세요.",
       "hint_en": "Put Python's capitalized four-letter null constant in the first blank, and the two-letter identity operator in the second.",

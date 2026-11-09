@@ -189,7 +189,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "Wallet의 deposit에서 0 이하 입금을 차단하고, __str__에서 천 단위 쉼표(:, ) 서식으로 잔액을 출력해보세요.",
+      "prompt_ko": "Wallet의 deposit에서 0 이하 입금을 차단하고, __str__에서 천 단위 쉼표(:,) 서식으로 잔액을 출력해보세요.",
       "prompt_en": "Reject <= 0 deposits in Wallet.deposit and format cash with thousands commas (:,) in __str__.",
       "hint_ko": "0 이하 입금액은 예외로 막고, 문자열 표현 메서드의 f-string 변수 뒤에 콜론과 쉼표 서식 지정자를 붙이면 세 자리마다 쉼표가 표시됩니다.",
       "hint_en": "Block non-positive amounts with an error, and use the colon-comma format specifier inside the f-string for thousands separators.",

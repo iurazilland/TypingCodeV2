@@ -45,7 +45,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: "하이픈을 제거한 문자열의 앞 두 글자(tag)와 뒤 숫자(num)를 슬라이싱해 등급별 결과를 출력해보세요. (예: VP-80 -> Gold:80)",
+      prompt_ko: "하이픈을 제거한 문자열의 앞 두 글자(tag)와 뒤 숫자(num)를 슬라이싱해 등급별 결과를 출력해보세요. (tag가 VP면 Gold, 아니고 num이 100 이상이면 Silver, 그 외 Basic) (예: VP-80 -> Gold:80)",
       prompt_en: "Remove hyphens, slice the 2-char tag and numeric suffix num, and print the tier label.",
       hint_ko: "하이픈을 빈 문자열로 치환해 없앤 뒤, 경계 위치를 기준으로 앞 두 글자 부분과 나머지 숫자 뒷부분을 각각 슬라이싱해 분리해보세요.",
       hint_en: "Substitute hyphens with an empty string first, then slice the two-letter prefix and the remaining numeric suffix around the boundary position.",

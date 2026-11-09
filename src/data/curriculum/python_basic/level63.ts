@@ -35,7 +35,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "생성자와 피해 차감 메서드, 생존 논리값을 포함한 상태 메서드의 빈칸을 채워 결과를 출력해보세요. (예: 20 -> Aria:30:True)",
       "prompt_en": "Fill in the initializer, damage deduction, and boolean survival conversion to print Aria's status.",
-      "hint_ko": "객체 생성 시 자동 실행되는 특수 메서드 이름, 현재 인스턴스의 체력 속성 접근 표현, 그리고 정수 체력을 참·거짓 자료형으로 바꾸는 내장 함수를 차례로 채워보세요.",
+      "hint_ko": "객체 생성 시 자동 실행되는 특수 메서드 이름, 현재 인스턴스의 체력 속성 접근 표현, 그리고 정수 체력을 참·거짓 자료형으로 바꾸는 내장 함수(0이면 False, 0이 아니면 True)를 차례로 채워보세요.",
       "hint_en": "Fill in the special constructor method name, the current instance's health attribute reference, and the built-in truth-value converter.",
       "templateCode": "class Player:\n    def §§§§§§§§(self, name, hp=100):\n        self.name = name\n        self.hp = hp\n    def hit(self, dmg):\n        §§§§§§§ -= dmg\n        if self.hp < 0:\n            self.hp = 0\n    def info(self):\n        ok = §§§§(self.hp)\n        return f\"{self.name}:{self.hp}:{ok}\"\np = Player(\"Aria\", 50)\np.hit(int(input()))\nprint(p.info())",
       "targetCode": "class Player:\n    def __init__(self, name, hp=100):\n        self.name = name\n        self.hp = hp\n    def hit(self, dmg):\n        self.hp -= dmg\n        if self.hp < 0:\n            self.hp = 0\n    def info(self):\n        ok = bool(self.hp)\n        return f\"{self.name}:{self.hp}:{ok}\"\np = Player(\"Aria\", 50)\np.hit(int(input()))\nprint(p.info())",

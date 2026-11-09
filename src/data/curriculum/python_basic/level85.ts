@@ -174,7 +174,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "Unit을 상속받은 Knight에서 음수 피해량은 예외를 일으키고 피해를 5만큼 경감하는 hit 메서드를 실행해보세요.",
+      "prompt_ko": "Unit을 상속받은 Knight에서 음수 피해량은 예외를 일으키고 피해를 5만큼 경감하되(최소 0) hit 메서드를 실행해보세요.",
       "prompt_en": "Inherit Unit in Knight, raise ValueError on negative dmg, reduce damage by 5 using max, and print k.",
       "hint_ko": "부모로부터 초기화와 문자열 표현을 그대로 물려받고, 자식 클래스에서는 음수 검증과 피해 경감이 적용된 타격 메서드만 작성합니다.",
       "hint_en": "Reuse the inherited initializer and string representation while defining only the validated damage-reduction method on the subclass.",
@@ -189,6 +189,11 @@ export const PYTHON_LEVEL_85: PracticeRound = {
           "id": 2,
           "input": "-3",
           "expectedOutput": "Invalid\nArthur:50"
+        },
+        {
+          "id": 3,
+          "input": "3",
+          "expectedOutput": "Arthur:50"
         }
       ]
     },

@@ -98,16 +98,16 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "hp = 100을 가진 Dog 클래스의 인스턴스 d를 만들고, 복합 대입으로 d.hp를 20만큼 증가시킨 뒤 출력해 120을 확인해보세요.",
-      "prompt_en": "Create an instance d of Dog (hp = 100), increase d.hp by 20 with +=, and print d.hp to get 120.",
-      "hint_ko": "인스턴스를 생성한 뒤 점(.)으로 체력 속성에 접근해 복합 덧셈 연산자로 20을 더하고 갱신된 속성값을 출력하세요.",
-      "hint_en": "Create the instance, increment its health attribute in place using compound addition, and print the updated attribute.",
-      "targetCode": "class Dog:\n    hp = 100\nd = Dog()\nd.hp += 20\nprint(d.hp)",
+      "prompt_ko": "name = \"Bo\" 속성을 가진 Dog 클래스의 인스턴스 d를 만들고, 복합 대입으로 d.name 뒤에 \"bi\"를 이어 붙인 뒤 출력해보세요. (출력: Bobi)",
+      "prompt_en": "Create instance d of Dog (name = \"Bo\"), append \"bi\" to d.name with +=, and print d.name (output: Bobi).",
+      "hint_ko": "인스턴스를 만든 뒤 점(.)으로 문자열 속성에 접근해 복합 덧셈 연산자로 글자를 이어 붙이고, 바뀐 속성값을 출력하세요.",
+      "hint_en": "After creating the instance, access the string attribute with a dot, append text using +=, and print the updated attribute.",
+      "targetCode": "class Dog:\n    name = \"Bo\"\nd = Dog()\nd.name += \"bi\"\nprint(d.name)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "120"
+          "expectedOutput": "Bobi"
         }
       ]
     },

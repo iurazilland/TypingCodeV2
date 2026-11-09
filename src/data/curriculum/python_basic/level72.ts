@@ -207,12 +207,12 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "키 목록을 while문으로 돌며 값을 꺼내 삭제해 더하되, 없는 키 예외를 잡아 0을 더하도록 두 빈칸을 채워보세요.",
+      "prompt_ko": "키 목록을 while문으로 돌며 값을 꺼내 삭제해 더하되, 없는 키 예외를 잡아 건너뛰도록 두 빈칸을 채워보세요.",
       "prompt_en": "Fill in the pop method and missing-key exception type inside safe_take.",
       "hint_ko": "값을 '톡 꺼내 지우는' 3글자 메서드를 호출했을 때 해당 키(Key)가 없으면, '키'와 '오류(Error)'를 파스칼 표기법으로 합친 예외가 발생합니다.",
       "hint_en": "Call the 3-letter extract-and-remove method, and catch the PascalCase exception combining 'Key' and 'Error'.",
-      "templateCode": "def safe_take(bag, keys):\n    total = 0\n    i = 0\n    while i < len(keys):\n        try:\n            total += bag.§§§(keys[i])\n        except §§§§§§§§:\n            total += 0\n        i += 1\n    return total\n\nb = dict([(\"coin\", 10), (\"gem\", 25)])\nprint(safe_take(b, [\"coin\", \"ring\", \"gem\"]))",
-      "targetCode": "def safe_take(bag, keys):\n    total = 0\n    i = 0\n    while i < len(keys):\n        try:\n            total += bag.pop(keys[i])\n        except KeyError:\n            total += 0\n        i += 1\n    return total\n\nb = dict([(\"coin\", 10), (\"gem\", 25)])\nprint(safe_take(b, [\"coin\", \"ring\", \"gem\"]))",
+      "templateCode": "def safe_take(bag, keys):\n    total = 0\n    i = 0\n    while i < len(keys):\n        try:\n            total += bag.§§§(keys[i])\n        except §§§§§§§§:\n            pass\n        i += 1\n    return total\n\nb = dict([(\"coin\", 10), (\"gem\", 25)])\nprint(safe_take(b, [\"coin\", \"ring\", \"gem\"]))",
+      "targetCode": "def safe_take(bag, keys):\n    total = 0\n    i = 0\n    while i < len(keys):\n        try:\n            total += bag.pop(keys[i])\n        except KeyError:\n            pass\n        i += 1\n    return total\n\nb = dict([(\"coin\", 10), (\"gem\", 25)])\nprint(safe_take(b, [\"coin\", \"ring\", \"gem\"]))",
       "testCases": [
         {
           "id": 1,

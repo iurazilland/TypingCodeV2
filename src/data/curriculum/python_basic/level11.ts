@@ -14,7 +14,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 11,
-  title_ko: '11레벨: 복합 대입 연산자 (+=, -=, *=, /=)',
+  title_ko: '11레벨: 복합 대입 연산자 (+=, -=, *=, /=, //=)',
   title_en: 'Level 11: Compound Assignment Operators',
   totalQuestions: 13,
   unlockedBlocks: ['print', 'variable'],

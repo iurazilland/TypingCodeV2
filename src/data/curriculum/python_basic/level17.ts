@@ -287,7 +287,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       "prompt_en": "Select the exact output that will be printed when the following Python code runs.",
       "hint_ko": "정수 0과 숫자 0을 글자로 바꾼 문자열 \"0\"이 비어 있는지 여부를 비교해 각각의 참·거짓 판정 결과를 생각해보세요.",
       "hint_en": "Compare how boolean conversion treats the integer 0 versus a one-character string containing the digit \"0\".",
-      "targetCode": "a = 0\nb = str(a)\na += 0\nprint(bool(a))\nprint(bool(b))",
+      "targetCode": "a = 0\nb = str(a)\nprint(bool(a))\nprint(bool(b))",
       "choices": [
         "False\nFalse",
         "True\nTrue",

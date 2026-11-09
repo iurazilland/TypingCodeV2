@@ -212,23 +212,23 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: "두 정수 base와 bonus를 입력받아 base에 bonus를 누적합산한 뒤 비율 형식으로 출력해보세요. (출력 예: Rate: 4%)",
-      prompt_en: "Read integers base and bonus, add bonus into base with +=, and print the formatted rate.",
+      prompt_ko: "두 정수 base와 bonus를 입력받아 base에 bonus를 누적합산한 뒤 점수 형식으로 출력해보세요. (출력 예: Score: 4)",
+      prompt_en: "Read integers base and bonus, add bonus into base with +=, and print it as Score: {base}.",
       hint_ko: "둘째 줄과 같은 정수 변환 함수로 입력을 받고, 기존 값에 누적해 더하는 복합 대입 연산자와 중괄호 변수를 차례로 채우세요.",
       hint_en: "Convert the first input to an integer, add the bonus in place with a compound operator, and put the updated variable in braces.",
-      templateCode: "base = §§§(input())\nbonus = int(input())\nbase §§ bonus\nprint(f\"Rate: §§§§§§%\")",
-      targetCode: "base = int(input())\nbonus = int(input())\nbase += bonus\nprint(f\"Rate: {base}%\")",
+      templateCode: "base = §§§(input())\nbonus = int(input())\nbase §§ bonus\nprint(f\"Score: §§§§§§\")",
+      targetCode: "base = int(input())\nbonus = int(input())\nbase += bonus\nprint(f\"Score: {base}\")",
       testCases: [
         {
-          id: 1,
-          input: "2\n2",
-          expectedOutput: "Rate: 4%",
+          "id": 1,
+          "input": "2\n2",
+          "expectedOutput": "Score: 4"
         },
         {
-          id: 2,
-          input: "5\n3",
-          expectedOutput: "Rate: 8%",
-        },
+          "id": 2,
+          "input": "5\n3",
+          "expectedOutput": "Score: 8"
+        }
       ],
     },
     {

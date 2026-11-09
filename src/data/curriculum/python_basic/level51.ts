@@ -169,8 +169,8 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "prompt_en": "Check whether the key exists in the dictionary parameter and print its value (4500).",
       "hint_ko": "첫 빈칸에는 '~ 안에'를 뜻하는 두 글자 포함 연산자를, 대괄호 안에는 조회할 두 번째 매개변수 이름을 적으세요.",
       "hint_en": "Use the two-letter membership preposition for the check, and place the second parameter name inside the lookup brackets.",
-      "templateCode": "def show_price(menu, key):\n    if key §§ menu:\n        print(menu[§§§])\n    else:\n        print(\"None\")\nitems = {\"tea\": 3000, \"pie\": 4500}\nshow_price(items, \"pie\")",
-      "targetCode": "def show_price(menu, key):\n    if key in menu:\n        print(menu[key])\n    else:\n        print(\"None\")\nitems = {\"tea\": 3000, \"pie\": 4500}\nshow_price(items, \"pie\")",
+      "templateCode": "def show_price(menu, key):\n    if key §§ menu:\n        print(menu[§§§])\n    else:\n        print(\"NoItem\")\nitems = {\"tea\": 3000, \"pie\": 4500}\nshow_price(items, \"pie\")",
+      "targetCode": "def show_price(menu, key):\n    if key in menu:\n        print(menu[key])\n    else:\n        print(\"NoItem\")\nitems = {\"tea\": 3000, \"pie\": 4500}\nshow_price(items, \"pie\")",
       "testCases": [
         {
           "id": 1,

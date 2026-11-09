@@ -124,7 +124,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 알맞은 끝맺음 옵션 이름을 채워 두 줄의 출력문이 줄바꿈 대신 공백 하나로 이어지도록 해보세요.',
+      prompt_ko: '빈칸에 알맞은 끝맺음 옵션 이름을 채워 두 줄의 출력문이 줄바꿈 대신 공백 하나로 이어지도록 해보세요. (결과: Hello Python)',
       prompt_en: 'Fill in the blank with the ending option name so the two print statements join on one line with a single space.',
       hint_ko: '출력의 "끝(마무리)"을 뜻하는 영어 3글자 단어를 옵션 이름으로 사용합니다.',
       hint_en: 'Use the 3-letter English word meaning the "finish" of a line as the option name.',

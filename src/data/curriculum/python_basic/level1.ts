@@ -208,7 +208,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '우선 계산되는 괄호와 2+3을 사용한 계산식을 추가하여 계산 결과(20)를 출력해보세요.',
+      prompt_ko: '빈칸에 괄호를 채워 2+3을 먼저 계산한 뒤 4를 곱한 결과(20)를 출력해보세요.',
       prompt_en: 'Add prioritized parentheses around 2+3 to print the result (20).',
       hint_ko: '2+3 앞뒤의 빈칸에 각각 여는 괄호 ( 와 닫는 괄호 ) 를 입력하세요.',
       hint_en: 'Type the opening parenthesis ( and closing parenthesis ) into the blanks around 2+3.',

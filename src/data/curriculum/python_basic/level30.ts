@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "누적 덧셈 연산자와 문자열 변환 함수를 채워 합계를 res에 문자열로 저장한 뒤 \"Sum:\" + res를 출력해보세요.",
+      "prompt_ko": "누적 덧셈 연산자와 문자열 변환 함수를 채워 1~a행 × 1~b열의 모든 r * c 곱을 합산하고, 합계를 res에 문자열로 저장한 뒤 \"Sum:\" + res를 출력해보세요.",
       "prompt_en": "Fill in the compound addition operator and string conversion function to store res = str(total) and print \"Sum:\" + res.",
       "hint_ko": "덧셈 기호와 등호를 나란히 붙인 복합 연산자로 곱을 누적하고, 문자열(string)의 앞 세 글자를 딴 함수로 합계를 변환해 res에 저장하세요.",
       "hint_en": "Accumulate each product with the plus-equals operator, then convert the total using the first 3 letters of \"string\".",

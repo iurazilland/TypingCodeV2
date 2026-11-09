@@ -188,6 +188,11 @@ export const PYTHON_LEVEL_87: PracticeRound = {
           "id": 2,
           "input": "95 95 55",
           "expectedOutput": "FAIL"
+        },
+        {
+          "id": 3,
+          "input": "70 70 70",
+          "expectedOutput": "FAIL"
         }
       ]
     },

@@ -203,7 +203,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "prompt_en": "Loop over [\"10\", \"x\", \"25\", \"y\"], add int(s) to total inside try, add 0 in except, and print total.",
       "hint_ko": "반복문 안에 예외 처리 블록을 넣으면 문자 원소를 만나도 중단되지 않고 다음 원소로 넘어가 끝까지 합계를 구할 수 있습니다.",
       "hint_en": "Nest the error-handling structure inside the loop body so non-numeric strings are safely absorbed without stopping the summation.",
-      "targetCode": "items = [\"10\", \"x\", \"25\", \"y\"]\ntotal = 0\nfor s in items:\n    try:\n        total += int(s)\n    except:\n        total += 0\nprint(total)",
+      "targetCode": "items = [\"10\", \"x\", \"25\", \"y\"]\ntotal = 0\nfor s in items:\n    try:\n        total += int(s)\n    except:\n        pass\nprint(total)",
       "testCases": [
         {
           "id": 1,

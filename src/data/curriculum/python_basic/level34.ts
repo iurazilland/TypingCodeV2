@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: "문자열 s의 앞 두 글자가 \"PY\"이면 나머지 뒷부분을 출력하고, 아니면 \"Other\"를 출력해보세요. (예: PY30 -> Code:30)",
+      prompt_ko: "문자열 s의 앞 두 글자가 \"PY\"이면 나머지 뒷부분을 \"Code:\" 뒤에 붙여 출력하고, 아니면 \"Other\"를 출력해보세요. (예: PY30 -> Code:30)",
       prompt_en: "If s starts with \"PY\" via slicing, print \"Code:<rest>\", otherwise print \"Other\".",
       hint_ko: "조건문에서는 시작을 생략한 슬라이싱으로 앞 두 글자를 확인하고, 출력문 중괄호 안에서는 끝을 생략한 슬라이싱으로 나머지 뒷부분을 넣으세요.",
       hint_en: "Slice the first two characters by omitting the start index in the condition, and slice from that boundary onward inside braces.",

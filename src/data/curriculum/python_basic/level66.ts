@@ -150,7 +150,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "입력이 숫자만으로 된 양수면 \"POS 값\", 음수 등 부호 있는 정수면 try-except로 \"SIGNED 값\", 아니면 \"NAN\"을 출력해보세요.",
+      "prompt_ko": "입력이 부호 없이 숫자로만 되어 있으면 \"POS 값\", 음수 등 부호 있는 정수면 try-except로 \"SIGNED 값\", 아니면 \"NAN\"을 출력해보세요.",
       "prompt_en": "Print \"POS n\" if s.isdigit(), else try printing \"SIGNED n\" via int(s), or \"NAN\" on ValueError.",
       "hint_ko": "음수 기호(-)가 붙은 문자열은 숫자 구성 판별 메서드에서 거짓이 되지만, else 분기 안의 예외 처리 블록에서 정수 변환 함수를 쓰면 부호 있는 정수로 읽어낼 수 있습니다.",
       "hint_en": "A minus sign makes the numeric-character check false, so handle signed numbers in the else branch by wrapping integer conversion in an exception block.",

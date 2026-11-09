@@ -128,17 +128,17 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       "step": 5,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "오름차순 정렬 후 가장 낮은 점수 하나만 빼려다 반대로 최고 점수가 제거되는 버그를 수정해보세요. (출력 예: Best:90)",
+      "prompt_ko": "오름차순 정렬 후 가장 낮은 점수 하나만 빼려다 반대로 최고 점수가 제거되는 버그를 수정해보세요. (출력 예: Low:60,Sum:300)",
       "prompt_en": "Fix the bug where popping after ascending sort removes the highest score instead of the lowest.",
       "hint_ko": "오름차순으로 정돈된 리스트에서는 가장 작은 값이 맨 앞에, 가장 큰 값이 맨 뒤에 위치합니다. 인자 없이 꺼내면 어느 쪽이 제거되는지 생각해보세요.",
       "hint_en": "In an ascending-ordered list, the smallest score sits at the very front while the largest sits at the back; specify the front position when removing.",
-      "templateCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop()\nprint(f\"Best:{max(scores)}\")",
-      "targetCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(0)\nprint(f\"Best:{max(scores)}\")",
+      "templateCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop()\nprint(f\"Low:{scores[0]},Sum:{sum(scores)}\")",
+      "targetCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(0)\nprint(f\"Low:{scores[0]},Sum:{sum(scores)}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Best:90"
+          "expectedOutput": "Low:60,Sum:300"
         }
       ]
     },

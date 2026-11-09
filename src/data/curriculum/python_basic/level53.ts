@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "w * h + border를 반환하는 make_box(w, h=10, border=1)을 만들고 make_box(5)와 make_box(5, border=3)을 출력해보세요.",
+      "prompt_ko": "w * h + border를 반환하는 make_box(w, h=10, border=1)을 만들고, make_box(5)와 키워드 인자로 border만 지정한 make_box(5, border=3)을 출력해보세요.",
       "prompt_en": "Define make_box(w, h=10, border=1) returning w * h + border, then print make_box(5) and make_box(5, border=3).",
       "hint_ko": "뒤쪽 두 매개변수에 기본값을 두고, 두 번째 호출에서는 세 번째 매개변수 이름을 등호로 지정해 중간 기본값을 유지하세요.",
       "hint_en": "Define defaults for the last two parameters, and pass the third parameter by name on the second call to keep the middle default.",

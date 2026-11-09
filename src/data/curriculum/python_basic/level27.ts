@@ -156,7 +156,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 논리 연산자를 채워 이어지는 4개의 정수 중 low 이상이고 high 이하인 값의 개수를 출력해보세요.",
+      "prompt_ko": "첫 줄에 low high를 공백으로 입력받고, 빈칸에 논리 연산자를 채워 이어지는 4개의 정수 중 low 이상이고 high 이하인 값의 개수를 출력해보세요.",
       "prompt_en": "Fill in the logical operator to count how many of 4 integers fall between low and high inclusive.",
       "hint_ko": "하한 이상과 상한 이하 두 조건을 동시에 만족해야 하므로 영어로 '그리고'를 뜻하는 세 글자 논리 연산자를 사용합니다.",
       "hint_en": "Both boundary comparisons must hold together, so connect them with the 3-letter simultaneous-truth keyword.",

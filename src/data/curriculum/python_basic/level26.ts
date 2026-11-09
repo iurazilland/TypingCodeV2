@@ -91,8 +91,8 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "곱셈 누적 변수의 초기값과 복합 대입 연산자를 채워 1부터 n까지 모두 곱한 값을 출력해보세요.",
       "prompt_en": "Fill in the initial product value and compound operator to compute 1 * 2 * ... * n.",
-      "hint_ko": "곱해도 값이 0이 되지 않는 곱셈 항등원 숫자로 시작하고, 별표와 등호를 나란히 붙인 복합 대입 연산자로 곱해보세요.",
-      "hint_en": "Start at the multiplicative identity digit so the product stays non-zero, using the asterisk-plus-equals operator.",
+      "hint_ko": "곱해도 값이 변하지 않는 한 자리 숫자로 시작하고, 별표와 등호를 나란히 붙인 복합 대입 연산자로 곱해보세요.",
+      "hint_en": "Start with the single digit that leaves any number unchanged when multiplied, then use the asterisk-equals operator.",
       "templateCode": "n = int(input())\nprod = §\nfor i in range(1, n + 1):\n    prod §§ i\nprint(prod)",
       "targetCode": "n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    prod *= i\nprint(prod)",
       "testCases": [

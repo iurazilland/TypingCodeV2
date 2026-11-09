@@ -77,8 +77,8 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       "prompt_en": "Compute self.tag shifted from \"A\" by tier and format w.bal with commas and 2 decimals (e.g., [B] 1,250.50).",
       "hint_ko": "기준 문자의 정수 코드 번호를 구해 단계 수를 더한 뒤 다시 문자로 되돌리는 두 내장 함수와, 천 단위 구분 및 소수 둘째 자리 반올림을 함께 지정하는 네 글자 서식을 채워보세요.",
       "hint_en": "Supply the inner character-to-code function, the outer code-to-character function, and the 4-character format specifier for thousands grouping with two decimal places.",
-      "targetCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = chr(ord(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            self.bal += 0\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:,.2f}\")",
-      "templateCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = §§§(§§§(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            self.bal += 0\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:§§§§}\")",
+      "targetCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = chr(ord(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            pass\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:,.2f}\")",
+      "templateCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = §§§(§§§(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            pass\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:§§§§}\")",
       "testCases": [
         {
           "id": 1,
@@ -121,7 +121,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       "step": 5,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "대문자 입력에서 글자만 골라 다음 알파벳으로 1칸씩 밀어 이어 붙이려다 두 코드 변환 함수가 뒤바뀐 버그를 고쳐보세요. (예: py! -> QZ)",
+      "prompt_ko": "입력을 대문자로 바꾼 뒤 글자만 골라 다음 알파벳으로 1칸씩 밀어 이어 붙이려다 두 코드 변환 함수가 뒤바뀐 버그를 고쳐보세요. (예: py! -> QZ)",
       "prompt_en": "Fix the TypeError caused by swapping ord() and chr() when shifting letters by +1 (e.g., py! -> QZ).",
       "hint_ko": "문자를 먼저 정수 코드로 바꿔야 덧셈을 할 수 있는데, 안쪽과 바깥쪽 코드 변환 함수의 호출 순서가 서로 뒤바뀌어 자료형 오류가 발생하고 있습니다.",
       "hint_en": "A character must first be turned into its integer code before adding 1, then converted back to a character afterward; here the inner and outer conversion calls are reversed.",
