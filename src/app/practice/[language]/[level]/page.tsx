@@ -2802,6 +2802,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       const analyzePythonIntent = (src: string) => {
         const assignedVars = new Set<string>();
         const readVars = new Set<string>();
+        const rhsVars = new Set<string>();
+        const selfUpdatedVars = new Set<string>();
+        const rhsDeps: Array<{ lhs: string; rhs: string }> = [];
         const tokens = new Set<string>();
         let hasCompoundOp = false;
         let hasArithOp = false;
@@ -2883,8 +2886,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             if (ch === '#') break;
             line += ch;
           }
+          const lineFVars = fInterpolations ? (fInterpolations.match(/\b[a-zA-Z_]\w*\b/g) || []) : [];
           if (fInterpolations) {
-            for (const w of fInterpolations.match(/\b[a-zA-Z_]\w*\b/g) || []) {
+            for (const w of lineFVars) {
               readVars.add(w);
               tokens.add(w);
             }
@@ -2913,20 +2917,34 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
 
           const compMatch = trimmed.match(/^([a-zA-Z_]\w*)\s*(?:\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*([\s\S]+)$/);
           if (compMatch) {
-            assignedVars.add(compMatch[1]);
-            for (const w of compMatch[2].match(/\b[a-zA-Z_]\w*\b/g) || []) {
+            const lhs = compMatch[1];
+            assignedVars.add(lhs);
+            rhsVars.add(lhs);
+            selfUpdatedVars.add(lhs);
+            rhsDeps.push({ lhs, rhs: lhs });
+            for (const w of [...(compMatch[2].match(/\b[a-zA-Z_]\w*\b/g) || []), ...lineFVars]) {
               readVars.add(w);
+              rhsVars.add(w);
+              rhsDeps.push({ lhs, rhs: w });
             }
             continue;
           }
 
           const plainMatch = trimmed.match(/^([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s*=(?!=)\s*([\s\S]+)$/);
           if (plainMatch) {
-            for (const lhs of plainMatch[1].split(',').map((s) => s.trim())) {
-              if (lhs) assignedVars.add(lhs);
+            const lhsList = plainMatch[1].split(',').map((s) => s.trim()).filter(Boolean);
+            for (const lhs of lhsList) {
+              assignedVars.add(lhs);
             }
-            for (const w of plainMatch[2].match(/\b[a-zA-Z_]\w*\b/g) || []) {
+            for (const w of [...(plainMatch[2].match(/\b[a-zA-Z_]\w*\b/g) || []), ...lineFVars]) {
               readVars.add(w);
+              rhsVars.add(w);
+              for (const lhs of lhsList) {
+                rhsDeps.push({ lhs, rhs: w });
+                if (lhsList.length === 1 && lhs === w) {
+                  selfUpdatedVars.add(lhs);
+                }
+              }
             }
             continue;
           }
@@ -2939,6 +2957,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         return {
           assignedVars,
           readVars,
+          rhsVars,
+          selfUpdatedVars,
+          rhsDeps,
           tokens,
           hasCompoundOp,
           hasArithOp,
@@ -2959,6 +2980,14 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         if (user.assignedVars.size === 0) return false;
         for (const v of Array.from(user.assignedVars)) {
           if (v !== '_' && !user.readVars.has(v)) return false;
+        }
+        for (const v of Array.from(target.selfUpdatedVars)) {
+          if (user.assignedVars.has(v) && !user.selfUpdatedVars.has(v)) return false;
+        }
+        for (const { lhs, rhs } of target.rhsDeps) {
+          if (target.assignedVars.has(rhs) && user.assignedVars.has(lhs) && user.assignedVars.has(rhs) && !user.rhsVars.has(rhs)) {
+            return false;
+          }
         }
       }
 

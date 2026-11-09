@@ -171,8 +171,8 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸을 채워 변수 star에 담긴 별표를 5번 반복한 문자열을 line에 저장하고 *****를 출력해보세요.',
-      prompt_en: 'Fill in the blank to repeat variable star 5 times into variable line and print *****.',
+      prompt_ko: '빈칸을 채워 star 변수에 곱셈 연산을 사용해 별표를 5번 반복한 문자열을 line에 저장하고 *****를 출력해보세요.',
+      prompt_en: 'Fill in the blank using multiplication on the star variable to repeat the asterisk 5 times into line and print *****.',
       hint_ko: '문자열이 담긴 변수에 별표 기호로 반복할 횟수를 곱하면 해당 글자가 지정한 횟수만큼 이어집니다.',
       hint_en: 'Multiplying a string variable by a repeat count with the asterisk operator duplicates the text that many times.',
       templateCode: 'star = "*"\nline = §§§§§§§§\nprint(line)',
@@ -230,20 +230,20 @@ export const PYTHON_LEVEL_10: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - 잘못된 저장 대상 변수명 수정
+    // 11단계: 버그 수정 (fix_bug) - 선언되지 않은 출력 변수명 수정
     // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '계산 결과를 total이 아닌 bonus에 잘못 저장해 발생한 오류(NameError)를 수정하고 150을 출력해보세요.',
-      prompt_en: 'Fix the bug where the sum was stored back in bonus instead of total (causing a NameError) and print 150.',
-      hint_ko: '마지막 줄에서 출력하려는 변수 이름과 둘째 줄에서 덧셈 결과를 저장하는 왼쪽 변수 이름이 서로 일치하지 않아 선언되지 않은 변수 오류가 발생합니다.',
-      hint_en: 'A NameError occurs because line 3 tries to print a variable name that was never assigned on the left side of line 2.',
+      prompt_ko: '세 번째 줄에서 선언되지 않은 total 대신 계산된 bonus 변수를 출력하도록 오류(NameError)를 수정하여 150을 출력해보세요.',
+      prompt_en: 'Fix the NameError on the third line so that it prints the updated bonus variable instead of the undeclared total, outputting 150.',
+      hint_ko: '위쪽 두 줄에서 값을 저장하고 갱신한 변수 이름과 세 번째 줄의 출력 함수 괄호 안에 적힌 변수 이름이 서로 일치하도록 맞춰보세요.',
+      hint_en: 'Make sure the variable name inside the print parentheses on the third line matches the variable name assigned and updated in the first two lines.',
       templateCode: 'bonus = 50\nbonus = bonus + 100\nprint(total)',
-      targetCode: 'bonus = 50\ntotal = bonus + 100\nprint(total)',
-      expectedVariables: { bonus: 50, total: 150 },
+      targetCode: 'bonus = 50\nbonus = bonus + 100\nprint(bonus)',
+      expectedVariables: { bonus: 150 },
       testCases: [
         {
           id: 1,
