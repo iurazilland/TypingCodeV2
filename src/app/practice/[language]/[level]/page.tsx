@@ -1623,7 +1623,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const autoOpenedTourKeyRef = useRef<string | null>(null);
 
   const rawLang = params.language || 'python_basic';
-  const langKey = rawLang.startsWith('python') ? 'python' : rawLang;
+  const langKey = (rawLang.startsWith('python') || rawLang.startsWith('py-') || rawLang.startsWith('py_')) ? 'python' : rawLang;
   const levelNum = parseInt(params.level || '1', 10);
 
   const round = getPracticeRound(rawLang, levelNum);
@@ -2803,6 +2803,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         const assignedVars = new Set<string>();
         const readVars = new Set<string>();
         const rhsVars = new Set<string>();
+        const stmtReadVars = new Set<string>();
         const selfUpdatedVars = new Set<string>();
         const rhsDeps: Array<{ lhs: string; rhs: string }> = [];
         const tokens = new Set<string>();
@@ -2949,8 +2950,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             continue;
           }
 
-          for (const w of trimmed.match(/\b[a-zA-Z_]\w*\b/g) || []) {
+          for (const w of [...(trimmed.match(/\b[a-zA-Z_]\w*\b/g) || []), ...lineFVars]) {
             readVars.add(w);
+            stmtReadVars.add(w);
           }
         }
 
@@ -2958,6 +2960,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           assignedVars,
           readVars,
           rhsVars,
+          stmtReadVars,
           selfUpdatedVars,
           rhsDeps,
           tokens,
@@ -2983,6 +2986,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         }
         for (const v of Array.from(target.selfUpdatedVars)) {
           if (user.assignedVars.has(v) && !user.selfUpdatedVars.has(v)) return false;
+        }
+        for (const v of Array.from(target.stmtReadVars)) {
+          if (target.assignedVars.has(v) && user.assignedVars.has(v) && !user.stmtReadVars.has(v)) return false;
         }
         for (const { lhs, rhs } of target.rhsDeps) {
           if (target.assignedVars.has(rhs) && user.assignedVars.has(lhs) && user.assignedVars.has(rhs) && !user.rhsVars.has(rhs)) {
@@ -3059,7 +3065,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       }
     }
 
-    if (question.kind === 'fix_bug' || question.kind === 'one_line') {
+    {
       const userLinesClean = trimmedUser.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
       const targetLinesClean = (question.targetCode || '').trim().split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
       const expectedLinesClean = targetExpected.split('\n').map((l) => l.trim());
@@ -3075,32 +3081,27 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       }
     }
 
-    // 6. Code modification ratio check for fill_blank questions
-    // If more than 30% of the fixed skeleton code is corrupted/modified, reject as incorrect
+    // 6. Fixed line & skeleton check for fill_blank questions
     if (question.kind === 'fill_blank' && question.templateCode && question.templateCode.includes('§')) {
-      const firstSection = question.templateCode.indexOf('§');
-      const lastSection = question.templateCode.lastIndexOf('§');
-      const prefix = question.templateCode.slice(0, firstSection).trim();
-      const suffix = question.templateCode.slice(lastSection + 1).trim();
-      const fixedSkeleton = prefix + suffix;
-
-      if (fixedSkeleton.length > 0) {
-        let mismatches = 0;
-        if (prefix && !trimmedUser.startsWith(prefix)) {
-          for (let i = 0; i < prefix.length; i++) {
-            if (trimmedUser[i] !== prefix[i]) mismatches++;
+      const normSkel = (s: string) => s.replace(/\s+/g, '').replace(/'/g, '"');
+      const tplLines = question.templateCode.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
+      const usrLines = trimmedUser.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
+      if (usrLines.length !== tplLines.length) {
+        return false;
+      }
+      for (let idx = 0; idx < tplLines.length; idx++) {
+        if (!tplLines[idx].includes('§')) {
+          if (normSkel(usrLines[idx]) !== normSkel(tplLines[idx])) {
+            return false;
           }
-        }
-        if (suffix && !trimmedUser.endsWith(suffix)) {
-          for (let i = 0; i < suffix.length; i++) {
-            const userChar = trimmedUser[trimmedUser.length - suffix.length + i];
-            if (userChar !== suffix[i]) mismatches++;
+        } else {
+          const fixedParts = tplLines[idx]
+            .split(/§+/)
+            .map((p) => normSkel(p).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+          const linePattern = new RegExp(`^${fixedParts.join('.+')}$`);
+          if (!linePattern.test(normSkel(usrLines[idx]))) {
+            return false;
           }
-        }
-        // If more than 30% of the fixed skeleton code was altered, disqualify
-        const corruptionRate = mismatches / fixedSkeleton.length;
-        if (corruptionRate > 0.3) {
-          return false;
         }
       }
     }
