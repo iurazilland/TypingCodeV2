@@ -254,25 +254,25 @@ export const PYTHON_LEVEL_11: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 12단계: 예제 아래 한 줄 추가 작성 (one_line)
+    // 12단계: 복합 대입 연산자 빈칸 채우기 실습
     // ------------------------------------------------------------------------
     {
       id: 12,
       step: 12,
       type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '복합 대입 코드 아래에 한 줄을 추가하여 최종 score 값 250을 출력해보세요.',
-      prompt_en: 'Type the compound assignment lines and add a line below to print the final score (250).',
-      hint_ko: '위 세 줄을 거치며 갱신된 점수 변수의 최종 값을 확인하려면 마지막 줄에서 출력 함수에 해당 변수를 전달해보세요.',
-      hint_en: 'On the final line, pass the updated score variable into the print function to display its result.',
-      templateCode: 'score = 100\nscore += 25\nscore *= 2\n§§§§§§§§§§§§',
-      targetCode: 'score = 100\nscore += 25\nscore *= 2\nprint(score)',
-      expectedVariables: { score: 250 },
+      kind: 'fill_blank',
+      prompt_ko: '세 번째 줄의 빈칸을 채워 점수를 2배로 만들고 최종 score 값 40을 출력해보세요.',
+      prompt_en: 'Fill in the blank on the third line to double the score and print the final value 40.',
+      hint_ko: '현재 점수에 2를 곱한 결과를 다시 자기 자신에게 저장하는 곱셈 복합 대입 연산자를 빈칸에 넣어보세요.',
+      hint_en: 'Fill in the blank with the compound multiplication assignment operator to multiply score by 2 in place.',
+      templateCode: 'score = 10\nscore += 10\nscore §§ 2\nprint(score)',
+      targetCode: 'score = 10\nscore += 10\nscore *= 2\nprint(score)',
+      expectedVariables: { score: 40 },
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '250',
+          expectedOutput: '40',
         },
       ],
     },
@@ -287,16 +287,16 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       kind: 'predict_output',
       prompt_ko: '다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
       prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
-      hint_ko: '초기값에서 시작해 위에서 아래로 한 줄씩 변수의 값을 갱신하되, 마지막 줄의 슬래시 두 개 나눗셈이 소수점 아래를 어떻게 처리하는지 주의해보세요.',
-      hint_en: 'Trace the variable step by step from top to bottom, paying attention to how floor division handles any remainder on the fourth line.',
-      targetCode: 'energy = 10\nenergy += 5\nenergy *= 2\nenergy //= 4\nprint(energy)',
-      choices: ['7', '7.5', '5', '20'],
+      hint_ko: '초기값 10에 15를 더한 뒤, 세 번째 줄의 몫 복합 대입 연산자가 소수점 아래를 어떻게 처리하는지 계산해보세요.',
+      hint_en: 'Add 15 to the initial value 10, then calculate how the floor-division compound assignment on line 3 handles the remainder.',
+      targetCode: 'energy = 10\nenergy += 15\nenergy //= 4\nprint(energy)',
+      choices: ['6', '6.25', '1', '25'],
       correctChoiceIndex: 0,
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '7',
+          expectedOutput: '6',
         },
       ],
     },
