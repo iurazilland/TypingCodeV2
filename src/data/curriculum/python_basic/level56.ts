@@ -53,22 +53,22 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "문자열을 실수로 변환할 수 없을 때 발생하는 값 변환 에러 타입을 빈칸에 채워 BadFloat가 출력되도록 해보세요.",
-      "prompt_en": "Fill in the exception type raised when float(s) receives invalid text.",
+      "prompt_ko": "문자열을 정수로 변환할 수 없을 때 발생하는 값 변환 에러 타입을 빈칸에 채워 BadInt가 출력되도록 해보세요.",
+      "prompt_en": "Fill in the exception type raised when int(s) receives invalid text.",
       "hint_ko": "'값'을 뜻하는 다섯 글자 영단어와 '오류'를 뜻하는 다섯 글자 영단어를 단어마다 첫 글자만 대문자로 이어 붙인 예외 이름을 적으세요.",
       "hint_en": "Combine the capitalized five-letter word for \"data content\" and the capitalized five-letter word for \"mistake\" with no space.",
-      "templateCode": "s = input()\ntry:\n    w = float(s)\n    print(w + 1.5)\nexcept §§§§§§§§§§:\n    print(\"BadFloat\")",
-      "targetCode": "s = input()\ntry:\n    w = float(s)\n    print(w + 1.5)\nexcept ValueError:\n    print(\"BadFloat\")",
+      "templateCode": "s = input()\ntry:\n    w = int(s)\n    print(w + 15)\nexcept §§§§§§§§§§:\n    print(\"BadInt\")",
+      "targetCode": "s = input()\ntry:\n    w = int(s)\n    print(w + 15)\nexcept ValueError:\n    print(\"BadInt\")",
       "testCases": [
         {
           "id": 1,
-          "input": "2.5",
-          "expectedOutput": "4.0"
+          "input": "25",
+          "expectedOutput": "40"
         },
         {
           "id": 2,
           "input": "kg",
-          "expectedOutput": "BadFloat"
+          "expectedOutput": "BadInt"
         }
       ]
     },

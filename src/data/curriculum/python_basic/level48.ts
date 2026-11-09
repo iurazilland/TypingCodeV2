@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       "prompt_en": "Convert input tokens to ints with while, deduplicate and sort into uniq, and print uniq and float mean.",
       "hint_ko": "모은 정수들의 중복을 없애고 오름차순 정렬한 리스트를 만든 뒤, 그 고유 리스트의 합계를 개수로 나누어 실수 평균을 구하세요.",
       "hint_en": "Build a deduplicated, sorted list from the collected integers, then divide its total by its length for the float mean.",
-      "targetCode": "raw = input().split()\nnums = []\ni = 0\nwhile i < len(raw):\n    nums.append(int(raw[i]))\n    i += 1\nuniq = list(set(nums))\nuniq.sort()\navg = float(sum(uniq)) / len(uniq)\nprint(uniq, avg)",
+      "targetCode": "raw = input().split()\nnums = []\ni = 0\nwhile i < len(raw):\n    nums.append(int(raw[i]))\n    i += 1\nuniq = list(set(nums))\nuniq.sort()\navg = sum(uniq) / len(uniq)\nprint(uniq, avg)",
       "testCases": [
         {
           "id": 1,

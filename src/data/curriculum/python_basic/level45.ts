@@ -200,17 +200,17 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "문자열 배율을 실수로 변환해 10을 곱하고, 태그가 비어 있으면 \"OK\"로 수정해 출력해보세요. (출력 예: OK:15.0)",
-      "prompt_en": "Convert the rate string to a float times 10, set tag to \"OK\" if None, and print (e.g., OK:15.0).",
-      "hint_ko": "'부동소수점(floating-point)' 앞 다섯 글자 함수로 문자열을 실수로 바꾸고, 태그 항목이 '아무것도 없음' 상태인지 정체성 비교로 검사하세요.",
-      "hint_en": "Convert the rate string using the first five letters of 'floating-point', and check whether the tag holds the empty constant via identity.",
-      "templateCode": "cfg = {\"rate\": \"1.5\", \"tag\": None}\nval = §§§§§(cfg[\"rate\"]) * 10\nif cfg[\"tag\"] §§ §§§§:\n    cfg[\"tag\"] = \"OK\"\ntag = cfg[\"tag\"]\nprint(f\"{tag}:{val}\")",
-      "targetCode": "cfg = {\"rate\": \"1.5\", \"tag\": None}\nval = float(cfg[\"rate\"]) * 10\nif cfg[\"tag\"] is None:\n    cfg[\"tag\"] = \"OK\"\ntag = cfg[\"tag\"]\nprint(f\"{tag}:{val}\")",
+      "prompt_ko": "문자열 배율을 정수로 변환해 10을 곱하고, 태그가 비어 있으면 \"OK\"로 수정해 출력해보세요. (출력 예: OK:150)",
+      "prompt_en": "Convert the rate string to an integer times 10, set tag to \"OK\" if None, and print (e.g., OK:150).",
+      "hint_ko": "'정수(integer)' 앞 세 글자 함수로 문자열을 정수로 바꾸고, 태그 항목이 '아무것도 없음' 상태인지 정체성 비교로 검사하세요.",
+      "hint_en": "Convert the rate string using the first three letters of 'integer', and check whether the tag holds the empty constant via identity.",
+      "templateCode": "cfg = {\"rate\": \"15\", \"tag\": None}\nval = §§§(cfg[\"rate\"]) * 10\nif cfg[\"tag\"] §§ §§§§:\n    cfg[\"tag\"] = \"OK\"\ntag = cfg[\"tag\"]\nprint(f\"{tag}:{val}\")",
+      "targetCode": "cfg = {\"rate\": \"15\", \"tag\": None}\nval = int(cfg[\"rate\"]) * 10\nif cfg[\"tag\"] is None:\n    cfg[\"tag\"] = \"OK\"\ntag = cfg[\"tag\"]\nprint(f\"{tag}:{val}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "OK:15.0"
+          "expectedOutput": "OK:150"
         }
       ]
     },

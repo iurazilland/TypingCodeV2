@@ -55,22 +55,22 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "실수 입력에 성공하면 즉시 반복을 종료하고, 변환 에러 시 Again을 출력해 재시도하도록 두 빈칸을 채워보세요. (출력 예: W:4.5)",
-      "prompt_en": "Exit the retry loop upon valid float conversion and catch invalid text to print Again.",
+      "prompt_ko": "정수 입력에 성공하면 즉시 반복을 종료하고, 변환 에러 시 Again을 출력해 재시도하도록 두 빈칸을 채워보세요. (출력 예: W:45)",
+      "prompt_en": "Exit the retry loop upon valid integer conversion and catch invalid text to print Again.",
       "hint_ko": "첫 빈칸에는 반복을 즉시 '깨고 탈출하다'를 뜻하는 다섯 글자 키워드를, 둘째 빈칸에는 부적절한 '값+오류' 예외 이름을 적으세요.",
       "hint_en": "First use the five-letter keyword meaning \"shatter / exit loop\", then catch the ten-letter PascalCase invalid-value exception.",
-      "templateCode": "while True:\n    try:\n        w = float(input())\n        §§§§§\n    except §§§§§§§§§§:\n        print(\"Again\")\nprint(f\"W:{w}\")",
-      "targetCode": "while True:\n    try:\n        w = float(input())\n        break\n    except ValueError:\n        print(\"Again\")\nprint(f\"W:{w}\")",
+      "templateCode": "while True:\n    try:\n        w = int(input())\n        §§§§§\n    except §§§§§§§§§§:\n        print(\"Again\")\nprint(f\"W:{w}\")",
+      "targetCode": "while True:\n    try:\n        w = int(input())\n        break\n    except ValueError:\n        print(\"Again\")\nprint(f\"W:{w}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "ten\n4.5",
-          "expectedOutput": "Again\nW:4.5"
+          "input": "ten\n45",
+          "expectedOutput": "Again\nW:45"
         },
         {
           "id": 2,
-          "input": "2.0",
-          "expectedOutput": "W:2.0"
+          "input": "20",
+          "expectedOutput": "W:20"
         }
       ]
     },

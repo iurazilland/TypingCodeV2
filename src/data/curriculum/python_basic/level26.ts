@@ -173,25 +173,25 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "개수 n을 입력받고 이어서 n개의 실수를 float(input())으로 더한 뒤 평균(total / n)을 출력해보세요.",
-      "prompt_en": "Read integer n followed by n floats, accumulate their sum, and print total / n.",
-      "hint_ko": "반복문 안에서 실수로 변환한 입력값을 합계 변수에 차곡차곡 더하고, 반복문 밖에서 전체 합을 개수로 나누어 출력하세요.",
-      "hint_en": "Accumulate each floating-point input inside the loop, then divide the final sum by n outside the loop.",
-      "targetCode": "n = int(input())\ntotal = 0.0\nfor i in range(n):\n    x = float(input())\n    total += x\nprint(total / n)",
+      "prompt_ko": "개수 n을 입력받고 이어서 n개의 정수를 int(input())으로 더한 뒤 평균(total / n)을 출력해보세요.",
+      "prompt_en": "Read integer n followed by n integers, accumulate their sum, and print total / n.",
+      "hint_ko": "반복문 안에서 정수로 변환한 입력값을 합계 변수에 차곡차곡 더하고, 반복문 밖에서 전체 합을 개수로 나누어 출력하세요.",
+      "hint_en": "Accumulate each integer input inside the loop, then divide the final sum by n outside the loop.",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    x = int(input())\n    total += x\nprint(total / n)",
       "testCases": [
         {
           "id": 1,
-          "input": "2\n3.0\n5.0",
+          "input": "2\n3\n5",
           "expectedOutput": "4.0"
         },
         {
           "id": 2,
-          "input": "4\n1.5\n2.5\n3.0\n5.0",
+          "input": "4\n1\n2\n3\n6",
           "expectedOutput": "3.0"
         },
         {
           "id": 3,
-          "input": "2\n2.5\n4.5",
+          "input": "2\n2\n5",
           "expectedOutput": "3.5"
         }
       ]
@@ -201,26 +201,26 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "실수 변환 함수와 나눗셈 연산자를 채워 입력된 n개 실수의 평균값을 계산해 출력해보세요.",
-      "prompt_en": "Fill in the float conversion function and division operator to compute the average of n floats.",
-      "hint_ko": "부동소수점(floating-point)의 앞 다섯 글자를 딴 실수 변환 함수와, 소수점 결과를 내는 슬래시 나눗셈 기호를 채워보세요.",
-      "hint_en": "Use the conversion function from the first 5 letters of \"floating-point\" and the single-slash division symbol.",
-      "templateCode": "n = int(input())\ntotal = 0.0\nfor i in range(n):\n    total += §§§§§(input())\nprint(total § n)",
-      "targetCode": "n = int(input())\ntotal = 0.0\nfor i in range(n):\n    total += float(input())\nprint(total / n)",
+      "prompt_ko": "정수 변환 함수와 나눗셈 연산자를 채워 입력된 n개 정수의 평균값을 계산해 출력해보세요.",
+      "prompt_en": "Fill in the integer conversion function and division operator to compute the average of n integers.",
+      "hint_ko": "정수(integer)의 앞 세 글자를 딴 변환 함수와, 소수점 결과를 내는 슬래시 나눗셈 기호를 채워보세요.",
+      "hint_en": "Use the conversion function from the first 3 letters of \"integer\" and the single-slash division symbol.",
+      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += §§§(input())\nprint(total § n)",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\nprint(total / n)",
       "testCases": [
         {
           "id": 1,
-          "input": "2\n10.0\n20.0",
+          "input": "2\n10\n20",
           "expectedOutput": "15.0"
         },
         {
           "id": 2,
-          "input": "4\n2.0\n4.0\n6.0\n8.0",
+          "input": "4\n2\n4\n6\n8",
           "expectedOutput": "5.0"
         },
         {
           "id": 3,
-          "input": "2\n1.5\n3.5",
+          "input": "2\n1\n4",
           "expectedOutput": "2.5"
         }
       ]
@@ -229,11 +229,11 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "n개의 정수를 입력받아 합산한 뒤 total >= 100이면 \"Goal:\" + str(total), 아니면 \"Short:\" + str(total)을 출력해보세요.",
-      "prompt_en": "Sum n input integers, then print \"Goal:\" + str(total) if total >= 100 or \"Short:\" + str(total) otherwise.",
-      "hint_ko": "반복문에서 합산을 모두 마친 뒤 바깥에서 기준값 이상인지 분기하고, 정수 합계를 문자열로 변환해 접두사와 이어 붙이세요.",
-      "hint_en": "Finish summing inside the loop first, then branch on the threshold outside and join the text-converted sum.",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\nif total >= 100:\n    print(\"Goal:\" + str(total))\nelse:\n    print(\"Short:\" + str(total))",
+      "prompt_ko": "n개의 정수를 입력받아 합산한 뒤, res = str(total)로 변환해 total >= 100이면 \"Goal:\" + res, 아니면 \"Short:\" + res를 출력해보세요.",
+      "prompt_en": "Sum n input integers, store res = str(total), then print \"Goal:\" + res if total >= 100 or \"Short:\" + res otherwise.",
+      "hint_ko": "반복문에서 합산을 마친 뒤 res 변수에 문자열 변환 결과를 저장하고, 기준값 이상인지 분기해 접두사와 이어 붙이세요.",
+      "hint_en": "Finish summing inside the loop, convert total into string variable res, then branch on the threshold outside.",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\nres = str(total)\nif total >= 100:\n    print(\"Goal:\" + res)\nelse:\n    print(\"Short:\" + res)",
       "testCases": [
         {
           "id": 1,

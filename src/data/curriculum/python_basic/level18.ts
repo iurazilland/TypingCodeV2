@@ -190,21 +190,21 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 실수 변환 함수와 동시 만족 논리 키워드를 채워 체온이 36.0 이상 37.5 이하인지 출력해보세요.",
-      "prompt_en": "Fill in the float-casting function and logical keyword to check 36.0 <= temp <= 37.5.",
-      "hint_ko": "첫째 줄에는 부동소수점(floating-point)의 앞 다섯 글자 변환 함수를, 둘째 줄에는 두 범위를 동시에 만족시키는 그리고 키워드를 적어보세요.",
-      "hint_en": "Convert the decimal input using the first five letters of \"floating-point\" on line 1, and join both bounds on line 2 with the three-letter conjunction keyword.",
-      "templateCode": "temp = §§§§§(input())\nprint(temp >= 36.0 §§§ temp <= 37.5)",
-      "targetCode": "temp = float(input())\nprint(temp >= 36.0 and temp <= 37.5)",
+      "prompt_ko": "빈칸에 정수 변환 함수와 동시 만족 논리 키워드를 채워 체온(temp)이 36 이상 37 이하인지 출력해보세요.",
+      "prompt_en": "Fill in the int-casting function and logical keyword to check 36 <= temp <= 37.",
+      "hint_ko": "첫째 줄에는 정수(integer)의 앞 세 글자 변환 함수를, 둘째 줄에는 두 범위를 동시에 만족시키는 그리고 키워드를 적어보세요.",
+      "hint_en": "Convert the input using the first three letters of \"integer\" on line 1, and join both bounds on line 2 with the three-letter conjunction keyword.",
+      "templateCode": "temp = §§§(input())\nprint(temp >= 36 §§§ temp <= 37)",
+      "targetCode": "temp = int(input())\nprint(temp >= 36 and temp <= 37)",
       "testCases": [
         {
           "id": 1,
-          "input": "36.5",
+          "input": "36",
           "expectedOutput": "True"
         },
         {
           "id": 2,
-          "input": "38.2",
+          "input": "38",
           "expectedOutput": "False"
         }
       ]
@@ -267,11 +267,11 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "입력값으로 0 2.5가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "When 0 2.5 is given as input, select the exact output of the following Python code.",
+      "prompt_ko": "입력값으로 0 2가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "When 0 2 is given as input, select the exact output of the following Python code.",
       "hint_ko": "정수 0을 불리언으로 바꾼 값이 참인지 거짓인지 먼저 판단한 뒤, 넷째 줄의 동시 만족 연산과 다섯째 줄의 반전 및 선택 연산을 차례로 추적해보세요.",
       "hint_en": "First determine the boolean value of integer 0, then evaluate the conjunction on line 4 and the negated disjunction on line 5.",
-      "targetCode": "a, b = input().split()\nx = int(a)\ny = float(b)\nprint(bool(x) and y > 1.0)\nprint(not bool(x) or x % 2 == 0)",
+      "targetCode": "a, b = input().split()\nx = int(a)\ny = int(b)\nprint(bool(x) and y > 1)\nprint(not bool(x) or x % 2 == 0)",
       "choices": [
         "True\nTrue",
         "False\nFalse",
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       "testCases": [
         {
           "id": 1,
-          "input": "0 2.5",
+          "input": "0 2",
           "expectedOutput": "False\nTrue"
         }
       ]

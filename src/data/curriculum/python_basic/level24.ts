@@ -237,12 +237,12 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 i가 0일 때는 \"Start\", 그 외에는 \"Lv.\" 뒤에 번호를 붙인 문자열을 출력해보세요. (예: 3 -> Start / Lv.1 / Lv.2)",
-      "prompt_en": "Fill in both blanks to print \"Start\" when i is 0 and \"Lv.\" + i otherwise.",
+      "prompt_ko": "두 빈칸을 채워 i가 0일 때는 \"Start\", 그 외에는 i를 문자열 변수 s로 변환해 \"Lv.\" + s를 출력해보세요. (예: 3 -> Start / Lv.1 / Lv.2)",
+      "prompt_en": "Fill in both blanks to print \"Start\" when i is 0, and convert i into string s to print \"Lv.\" + s otherwise.",
       "hint_ko": "'그밖에'를 뜻하는 네 글자 분기 키워드와, 문자열(string)의 앞 세 글자를 딴 변환 함수를 각각 채워보세요.",
       "hint_en": "Enter the 4-letter fallback keyword meaning \"otherwise\" and the conversion function from the first 3 letters of \"string\".",
-      "templateCode": "n = int(input())\nfor i in range(n):\n    if i == 0:\n        print(\"Start\")\n    §§§§:\n        print(\"Lv.\" + §§§(i))",
-      "targetCode": "n = int(input())\nfor i in range(n):\n    if i == 0:\n        print(\"Start\")\n    else:\n        print(\"Lv.\" + str(i))",
+      "templateCode": "n = int(input())\nfor i in range(n):\n    if i == 0:\n        print(\"Start\")\n    §§§§:\n        s = §§§(i)\n        print(\"Lv.\" + s)",
+      "targetCode": "n = int(input())\nfor i in range(n):\n    if i == 0:\n        print(\"Start\")\n    else:\n        s = str(i)\n        print(\"Lv.\" + s)",
       "testCases": [
         {
           "id": 1,

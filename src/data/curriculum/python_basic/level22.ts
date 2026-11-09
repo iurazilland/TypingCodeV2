@@ -261,27 +261,27 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 출금액(amt)이 0.0 이하면 아무 처리 없이 넘어가고, 잔액 이하면 차감한 잔액을 출력해보세요.",
+      "prompt_ko": "두 빈칸을 채워 출금액(amt)이 0 이하면 아무 처리 없이 넘어가고, 잔액 이하면 차감한 잔액을 출력해보세요.",
       "prompt_en": "Fill in the blanks so non-positive amounts do nothing and valid amounts subtract from bal.",
       "hint_ko": "아무 처리 없이 넘어가는 넷째 줄에는 통과하다를 뜻하는 네 글자 키워드를, 추가 조건을 검사하는 다섯째 줄에는 else if의 네 글자 축약어를 적어보세요.",
       "hint_en": "Use the four-letter word meaning \"skip past\" for the no-op branch on line 4, and the four-letter contraction of \"else if\" on line 5.",
-      "templateCode": "bal = 100.0\namt = float(input())\nif amt <= 0.0:\n    §§§§\n§§§§ amt <= bal:\n    bal -= amt\nprint(bal)",
-      "targetCode": "bal = 100.0\namt = float(input())\nif amt <= 0.0:\n    pass\nelif amt <= bal:\n    bal -= amt\nprint(bal)",
+      "templateCode": "bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§\n§§§§ amt <= bal:\n    bal -= amt\nprint(bal)",
+      "targetCode": "bal = 100\namt = int(input())\nif amt <= 0:\n    pass\nelif amt <= bal:\n    bal -= amt\nprint(bal)",
       "testCases": [
         {
           "id": 1,
-          "input": "-10.0",
-          "expectedOutput": "100.0"
+          "input": "-10",
+          "expectedOutput": "100"
         },
         {
           "id": 2,
-          "input": "35.5",
-          "expectedOutput": "64.5"
+          "input": "35",
+          "expectedOutput": "65"
         },
         {
           "id": 3,
-          "input": "150.0",
-          "expectedOutput": "100.0"
+          "input": "150",
+          "expectedOutput": "100"
         }
       ]
     },

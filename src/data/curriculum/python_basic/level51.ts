@@ -101,20 +101,20 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "실수 온도 t를 받아 30.0 이상이면 Hot, 아니면 Cool을 출력하는 check_temp(t)를 만들고 실수 입력값을 전달해보세요.",
-      "prompt_en": "Define check_temp(t) printing Hot if t >= 30.0 else Cool, then pass float(input()) to it.",
-      "hint_ko": "매개변수를 기준 온도와 비교해 분기 출력하는 함수를 만든 뒤, 실수로 변환한 입력값을 함수에 넘겨 호출하세요.",
-      "hint_en": "Build the conditional print inside the parameterized function, then read a float input outside and pass it into the call.",
-      "targetCode": "def check_temp(t):\n    if t >= 30.0:\n        print(\"Hot\")\n    else:\n        print(\"Cool\")\nval = float(input())\ncheck_temp(val)",
+      "prompt_ko": "정수 온도 t를 받아 30 이상이면 Hot, 아니면 Cool을 출력하는 check_temp(t)를 만들고 정수 입력값을 전달해보세요.",
+      "prompt_en": "Define check_temp(t) printing Hot if t >= 30 else Cool, then pass int(input()) to it.",
+      "hint_ko": "매개변수를 기준 온도와 비교해 분기 출력하는 함수를 만든 뒤, 정수로 변환한 입력값을 함수에 넘겨 호출하세요.",
+      "hint_en": "Build the conditional print inside the parameterized function, then read an integer input outside and pass it into the call.",
+      "targetCode": "def check_temp(t):\n    if t >= 30:\n        print(\"Hot\")\n    else:\n        print(\"Cool\")\nval = int(input())\ncheck_temp(val)",
       "testCases": [
         {
           "id": 1,
-          "input": "31.5",
+          "input": "31",
           "expectedOutput": "Hot"
         },
         {
           "id": 2,
-          "input": "24.0",
+          "input": "24",
           "expectedOutput": "Cool"
         }
       ]

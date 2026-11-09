@@ -1,8 +1,8 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
-// 파이썬 기초 13레벨: int()로 숫자 입력받아 계산하기 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (input / int 블록 사전 배치)
+// 파이썬 기초 13레벨: int()와 str()로 숫자와 문자열 변환하기 (13단계 표준 구성)
+// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (input / int / str 블록 사전 배치)
 // - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
 // - [11단계] 버그 수정 (fix_bug)
 // - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
@@ -14,21 +14,21 @@ export const PYTHON_LEVEL_13: PracticeRound = {
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 13,
-  title_ko: '13레벨: int()로 숫자 입력받아 계산하기',
-  title_en: 'Level 13: Converting Input to Numbers with int()',
+  title_ko: '13레벨: int()와 str()로 숫자와 문자열 변환하기',
+  title_en: 'Level 13: Converting Numbers & Strings with int() and str()',
   totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'comment', 'input', 'int'],
+  unlockedBlocks: ['print', 'variable', 'comment', 'input', 'int', 'str'],
   questions: [
     // ------------------------------------------------------------------------
-    // Pair 1 (1~2단계): int()로 입력받은 문자열을 정수로 바꾸어 계산하기
+    // Pair 1 (1~2단계): int()로 입력받은 문자열을 정수로 바꾸어 변수에 저장하고 계산하기
     // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: 'input()으로 받은 문자열 raw를 둘째 블록의 int( ) 안에 넣어 정수 num으로 바꾼 뒤, num + 10을 출력해보세요. (예: 25 입력 시 35)',
+      prompt_ko: 'input()으로 받은 문자열 raw를 둘째 블록의 int( ) 안에 넣어 정수 num으로 저장한 뒤, num + 10을 출력해보세요. (예: 25 입력 시 35)',
       prompt_en: 'Read raw via input(), convert raw to integer num using int( ), and print num + 10 (e.g., 25 -> 35).',
-      hint_ko: '입력 함수로 읽어온 숫자 모양 문자열을 정수 변환 블록에 넣으면 실제 숫자 계산이 가능한 정수로 바뀝니다.',
+      hint_ko: '입력 함수로 읽어온 숫자 모양 문자열을 정수 변환 블록에 넣으면 실제 덧셈 계산이 가능한 정수로 바뀝니다.',
       hint_en: 'Passing the input string variable into the integer conversion block turns it into a whole number that can be added.',
       targetCode: 'raw = input()\nnum = int(raw)\nprint(num + 10)',
       testCases: [
@@ -70,7 +70,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // Pair 2 (3~4단계): int(input())으로 한 줄에서 바로 정수 입력받기
+    // Pair 2 (3~4단계): int(input())으로 정수 입력받아 사칙연산·복합대입하기
     // ------------------------------------------------------------------------
     {
       id: 3,
@@ -120,13 +120,13 @@ export const PYTHON_LEVEL_13: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // Pair 3 (5~6단계): 두 줄 연속 int(input())으로 두 정수 입력받아 연산하기 (10레벨 복습)
+    // Pair 3 (5~6단계): 두 줄 int(input())과 몫(//)·나머지(%)·복합대입 결합 (2·11레벨 복습)
     // ------------------------------------------------------------------------
     {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: '두 줄에 걸쳐 입력되는 두 정수를 각각 변수 a와 b에 저장하고, 두 수의 합 a + b를 출력해보세요. (예: 15, 27 입력 시 42)',
+      prompt_ko: '두 줄로 입력되는 두 정수를 각각 a와 b에 저장하고, 두 수의 합 a + b를 출력해보세요. (예: 15, 27 입력 시 42)',
       prompt_en: 'Read two integers on separate lines into a and b, and print their sum a + b (e.g., 15 and 27 -> 42).',
       hint_ko: '두 변수에 각각 정수로 변환된 입력값을 저장한 뒤, 출력 블록에서 두 변수를 더한 값을 출력해보세요.',
       hint_en: 'Store the two converted integers in separate variables and print their sum.',
@@ -149,108 +149,8 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 정수 변환 함수 이름을 채워 두 줄로 입력되는 가로(w)와 세로(h)의 곱을 출력해보세요. (예: 6, 9 입력 시 54)',
-      prompt_en: 'Fill in both blanks with the integer conversion function to print w * h for two input lines (e.g., 6 and 9 -> 54).',
-      hint_ko: '두 줄에서 읽어온 문자열을 모두 숫자 곱셈이 가능한 정수로 바꿀 수 있도록 integer의 앞 세 글자 변환 함수를 각각 적어보세요.',
-      hint_en: 'Convert both input strings into whole numbers before multiplying by using the three-letter function derived from "integer".',
-      templateCode: 'w = §§§(input())\nh = §§§(input())\nprint(w * h)',
-      targetCode: 'w = int(input())\nh = int(input())\nprint(w * h)',
-      testCases: [
-        {
-          id: 1,
-          input: '6\n9',
-          expectedOutput: '54',
-        },
-        {
-          id: 2,
-          input: '10\n4',
-          expectedOutput: '40',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 4 (7~8단계): int(input())과 몫(//)·나머지(%)·거듭제곱(**) 결합 (2·4레벨 복습)
-    // ------------------------------------------------------------------------
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      prompt_ko: '사탕 개수를 int(input())으로 변수 candy에 입력받고, 10명에게 똑같이 나눈 몫(candy // 10)과 나머지(candy % 10)를 나란히 출력해보세요. (예: 47 -> 4 7)',
-      prompt_en: 'Read candy via int(input()) and print the quotient (candy // 10) and remainder (candy % 10) separated by a space (e.g., 47 -> 4 7).',
-      hint_ko: '정수로 변환해 저장한 변수에 슬래시 두 개(몫) 연산자와 퍼센트(나머지) 연산자를 각각 적용해 쉼표로 나란히 출력해보세요.',
-      hint_en: 'Use floor division (//) and modulo (%) on the integer variable candy and list both results in print().',
-      targetCode: 'candy = int(input())\nprint(candy // 10, candy % 10)',
-      testCases: [
-        {
-          id: 1,
-          input: '47',
-          expectedOutput: '4 7',
-        },
-        {
-          id: 2,
-          input: '83',
-          expectedOutput: '8 3',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '빈칸에 정수 변환 함수를 채워 입력받은 정수의 세제곱(n ** 3)을 출력해보세요. (예: 4 입력 시 64)',
-      prompt_en: 'Fill in the integer conversion function to print the cube (n ** 3) of the input integer (e.g., 4 -> 64).',
-      hint_ko: '거듭제곱 연산자(**)를 사용하려면 입력값을 먼저 정수로 바꾸어야 합니다. integer의 앞 세 글자 함수를 채워보세요.',
-      hint_en: 'Convert the input string to a whole number first so the exponentiation operator (**) can cube it.',
-      templateCode: 'n = §§§(input())\nprint(n ** 3)',
-      targetCode: 'n = int(input())\nprint(n ** 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '4',
-          expectedOutput: '64',
-        },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '27',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // Pair 5 (9~10단계): int(input())과 복합 대입 연산자(+=, -=) 결합 (11레벨 복습)
-    // ------------------------------------------------------------------------
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      prompt_ko: 'hp에 100을 저장하고 피해량 dmg를 int(input())으로 입력받은 뒤, hp -= dmg로 체력을 차감해 남은 hp를 출력해보세요. (예: 35 -> 65)',
-      prompt_en: 'Set hp to 100, read damage dmg via int(input()), subtract dmg with hp -= dmg, and print hp (e.g., 35 -> 65).',
-      hint_ko: '입력받은 피해량을 정수로 저장한 뒤, 뺄셈 복합 대입 연산자로 초기 체력에서 피해량만큼 차감해보세요.',
-      hint_en: 'Store the converted integer damage in dmg, then use the subtraction compound operator (-=) to reduce hp.',
-      targetCode: 'hp = 100\ndmg = int(input())\nhp -= dmg\nprint(hp)',
-      testCases: [
-        {
-          id: 1,
-          input: '35',
-          expectedOutput: '65',
-        },
-        {
-          id: 2,
-          input: '20',
-          expectedOutput: '80',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '두 빈칸을 채워 기본 점수 50점에 입력받은 보너스 점수를 복합 대입으로 더한 결과를 출력해보세요. (예: 30 입력 시 80)',
-      prompt_en: 'Fill in the two blanks to add the integer input bonus to score (50) using compound assignment and print 80.',
+      prompt_ko: '두 빈칸을 채워 기본 점수 50점에 입력받은 정수를 복합 대입으로 더한 결과를 출력해보세요. (예: 30 입력 시 80)',
+      prompt_en: 'Fill in the blanks to add the integer input bonus to score (50) using compound assignment and print 80.',
       hint_ko: '둘째 줄에서는 입력값을 정수로 변환하는 세 글자 함수를, 셋째 줄에서는 기존 점수에 값을 더하는 복합 대입 연산자를 적어보세요.',
       hint_en: 'Convert the input with the three-letter integer function on line 2, then use the addition compound operator on line 3.',
       templateCode: 'score = 50\nbonus = §§§(input())\nscore §§ bonus\nprint(score)',
@@ -270,29 +170,129 @@ export const PYTHON_LEVEL_13: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - input() 미형변환 덧셈 TypeError 교정
+    // Pair 4 (7~8단계): 숫자를 계산한 뒤 str()로 변수에 다시 저장해 문자와 +로 출력하기
+    // ------------------------------------------------------------------------
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      prompt_ko: '정수 lv를 입력받아 1을 더한 뒤, str(lv)로 문자열로 변환한 값을 다시 lv에 저장하고 "Lv." + lv를 출력해보세요. (예: 9 입력 시 Lv.10)',
+      prompt_en: 'Read integer lv, add 1, store str(lv) back into lv, and print "Lv." + lv (e.g., 9 -> Lv.10).',
+      hint_ko: '숫자 계산이 끝난 변수를 문자열 변환 블록(str)으로 감싸 다시 저장하면, 앞선 글자와 더하기 기호로 빈틈없이 이어붙일 수 있습니다.',
+      hint_en: 'After adding 1 to the number, convert lv into a string with str(lv) and store it back so you can join it with "Lv." using +.',
+      targetCode: 'lv = int(input())\nlv += 1\nlv = str(lv)\nprint("Lv." + lv)',
+      testCases: [
+        {
+          id: 1,
+          input: '9',
+          expectedOutput: 'Lv.10',
+        },
+        {
+          id: 2,
+          input: '14',
+          expectedOutput: 'Lv.15',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '빈칸에 숫자를 문자열로 바꾸는 함수 이름을 채워, 50을 더한 점수를 다시 score에 문자열로 저장하고 Score:150 형태로 출력해보세요.',
+      prompt_en: 'Fill in the string-conversion function name to store the updated score back as a string and print Score:150.',
+      hint_ko: '계산이 끝난 숫자를 글자와 더하기(+)로 이어붙이려면, 영어로 문자열(string)의 앞 세 글자를 딴 함수로 변환해 변수에 다시 저장합니다.',
+      hint_en: 'To join the calculated number with text using +, convert it with the function named after the first three letters of "string".',
+      templateCode: 'score = int(input())\nscore += 50\nscore = §§§(score)\nprint("Score:" + score)',
+      targetCode: 'score = int(input())\nscore += 50\nscore = str(score)\nprint("Score:" + score)',
+      testCases: [
+        {
+          id: 1,
+          input: '100',
+          expectedOutput: 'Score:150',
+        },
+        {
+          id: 2,
+          input: '200',
+          expectedOutput: 'Score:250',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // Pair 5 (9~10단계): int()로 계산 후 str()로 변환해 앞뒤 단위 문자열과 결합하기
+    // ------------------------------------------------------------------------
+    {
+      id: 9,
+      step: 9,
+      type: 'block',
+      prompt_ko: '두 정수를 입력받아 더한 total을 구한 뒤, res에 str(total)을 저장하고 "합계:" + res를 출력해보세요. (예: 30, 70 -> 합계:100)',
+      prompt_en: 'Read two integers, sum them into total, store str(total) in res, and print "합계:" + res (e.g., 30 and 70 -> 합계:100).',
+      hint_ko: '입력받을 때는 정수 변환으로 덧셈을 수행하고, 출력하기 전에는 결과 변수를 문자열 변환 블록에 넣어 글자로 바꾼 뒤 이어붙입니다.',
+      hint_en: 'Use int() to add the two inputs as numbers, then store str(total) in res before concatenating with the label.',
+      targetCode: 'a = int(input())\nb = int(input())\ntotal = a + b\nres = str(total)\nprint("합계:" + res)',
+      testCases: [
+        {
+          id: 1,
+          input: '30\n70',
+          expectedOutput: '합계:100',
+        },
+        {
+          id: 2,
+          input: '15\n25',
+          expectedOutput: '합계:40',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '두 빈칸에 변환 함수를 각각 채워 입력받은 가격에서 500을 뺀 뒤, 다시 문자열로 저장해 뒤에 "원"을 붙여 출력해보세요. (예: 2000 -> 1500원)',
+      prompt_en: 'Fill in the two conversion functions to subtract 500 from the input price, store it back as a string, and append "원".',
+      hint_ko: '첫째 줄에는 뺄셈을 위해 정수(integer)의 앞 세 글자 함수를, 셋째 줄에는 글자 결합을 위해 문자열(string)의 앞 세 글자 함수를 채워보세요.',
+      hint_en: 'Use the three-letter integer function on line 1 for subtraction, and the three-letter string function on line 3 for concatenation.',
+      templateCode: 'price = §§§(input())\nprice -= 500\nprice = §§§(price)\nprint(price + "원")',
+      targetCode: 'price = int(input())\nprice -= 500\nprice = str(price)\nprint(price + "원")',
+      testCases: [
+        {
+          id: 1,
+          input: '2000',
+          expectedOutput: '1500원',
+        },
+        {
+          id: 2,
+          input: '5000',
+          expectedOutput: '4500원',
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------------
+    // 11단계: 버그 수정 (fix_bug) - 계산 후 str() 미변환 TypeError 교정
     // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '입력값을 정수로 변환하지 않고 500을 더해 발생한 오류(TypeError)를 수정해보세요. (예: 1500 입력 시 2000 출력)',
-      prompt_en: 'Fix the TypeError caused by adding 500 to raw input() without integer conversion (e.g., 1500 -> 2000).',
-      hint_ko: '입력 함수가 반환한 값은 아직 문자열 상태여서 숫자 500과 바로 더할 수 없습니다. 입력값을 정수형으로 변환해 저장하도록 고쳐보세요.',
-      hint_en: 'Raw user input is a string and cannot be added to 500 directly—convert the input into an integer when storing or calculating.',
-      templateCode: 'price = input()\nprint(price + 500)',
-      targetCode: 'price = int(input())\nprint(price + 500)',
+      prompt_ko: '계산된 숫자 n을 문자열로 바꾸지 않고 text에 그대로 저장해 발생한 오류(TypeError)를 세 번째 줄에서 수정해보세요. (예: 9 -> No.10)',
+      prompt_en: 'Fix the TypeError on line 3 by converting the updated number n to a string when storing it in text (e.g., 9 -> No.10).',
+      hint_ko: '네 번째 줄에서 문자열 "No."와 더하기(+)로 이어붙이려면, 세 번째 줄에서 변수 n을 문자열 변환 함수로 감싸 저장해야 합니다.',
+      hint_en: 'To concatenate text with "No." on line 4, wrap n in the string conversion function on line 3.',
+      templateCode: 'n = int(input())\nn += 1\ntext = n\nprint("No." + text)',
+      targetCode: 'n = int(input())\nn += 1\ntext = str(n)\nprint("No." + text)',
       testCases: [
         {
           id: 1,
-          input: '1500',
-          expectedOutput: '2000',
+          input: '9',
+          expectedOutput: 'No.10',
         },
         {
           id: 2,
-          input: '3000',
-          expectedOutput: '3500',
+          input: '19',
+          expectedOutput: 'No.20',
         },
       ],
     },
@@ -305,22 +305,22 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       step: 12,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '정수 n을 입력받는 코드 아래에 한 줄을 추가하여 n과 n을 곱한 제곱값을 출력해보세요. (예: 9 입력 시 81 출력)',
-      prompt_en: 'Type line 1 and add a line below to print n multiplied by n (e.g., 9 -> 81).',
-      hint_ko: '위에서 정수로 변환해 저장한 변수를 자기 자신과 곱하는 식을 출력 함수 안에 작성해보세요.',
-      hint_en: 'Inside the print function on the next line, multiply the integer variable stored above by itself.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§',
-      targetCode: 'n = int(input())\nprint(n * n)',
+      prompt_ko: '정수 n을 2배로 계산해 문자열로 다시 저장한 코드 아래에 한 줄을 추가하여 "Result:" + n을 출력해보세요. (예: 15 -> Result:30)',
+      prompt_en: 'Add a line below to print "Result:" + n after doubling n and converting it to a string (e.g., 15 -> Result:30).',
+      hint_ko: '세 번째 줄에서 이미 문자열로 변환되어 저장된 변수 n을 "Result:" 뒤에 더하기 기호로 이어붙여 출력해보세요.',
+      hint_en: 'Since line 3 already converted n to a string, concatenate "Result:" and n with + inside print().',
+      templateCode: 'n = int(input())\nn *= 2\nn = str(n)\n§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'n = int(input())\nn *= 2\nn = str(n)\nprint("Result:" + n)',
       testCases: [
         {
           id: 1,
-          input: '9',
-          expectedOutput: '81',
+          input: '15',
+          expectedOutput: 'Result:30',
         },
         {
           id: 2,
-          input: '5',
-          expectedOutput: '25',
+          input: '40',
+          expectedOutput: 'Result:80',
         },
       ],
     },
@@ -333,18 +333,18 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       step: 13,
       type: 'quiz',
       kind: 'predict_output',
-      prompt_ko: '첫째 줄에 10, 둘째 줄에 20이 입력될 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.',
-      prompt_en: 'When 10 and 20 are given on lines 1 and 2, select the exact output of the following Python code.',
-      hint_ko: '셋째 줄은 문자열 상태의 두 변수를 그대로 이어붙이고, 넷째 줄은 각각 정수로 변환한 뒤 실제 숫자 덧셈을 수행합니다.',
-      hint_en: 'Line 3 concatenates the two raw strings, whereas line 4 converts both to integers before adding them.',
-      targetCode: 'a = input()\nb = input()\nprint(a + b)\nprint(int(a) + int(b))',
-      choices: ['1020\n30', '30\n30', '1020\n1020', '10 20\n30'],
+      prompt_ko: '입력값으로 12가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: 'When 12 is given as input, select the exact output of the following Python code.',
+      hint_ko: '정수로 변환되어 3이 더해진 뒤, 다시 문자열로 바뀌어 2를 곱했을 때 숫자 곱셈과 문자열 반복 중 무엇이 일어나는지 생각해보세요.',
+      hint_en: 'After adding 3 to the integer 12, n is converted back into a string—trace what multiplying a string by 2 produces.',
+      targetCode: 'n = int(input())\nn += 3\nn = str(n)\nprint(n * 2)',
+      choices: ['1515', '30', '1212', 'TypeError'],
       correctChoiceIndex: 0,
       testCases: [
         {
           id: 1,
-          input: '10\n20',
-          expectedOutput: '1020\n30',
+          input: '12',
+          expectedOutput: '1515',
         },
       ],
     },

@@ -165,21 +165,21 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 실수 변환 함수와 불리언 변환 함수를 차례로 채워 입력된 실수의 참·거짓을 출력해보세요.",
-      "prompt_en": "Fill in the float and boolean casting functions to print the truthiness of the input float.",
-      "hint_ko": "첫째 줄에는 부동소수점(floating-point)의 앞 다섯 글자 함수를, 둘째 줄에는 불리언(boolean)의 앞 네 글자 함수를 차례로 적어보세요.",
-      "hint_en": "Use the five-letter function from \"floating-point\" on line 1, and the four-letter function from \"boolean\" on line 2.",
-      "templateCode": "f = §§§§§(input())\nprint(§§§§(f))",
-      "targetCode": "f = float(input())\nprint(bool(f))",
+      "prompt_ko": "빈칸에 정수 변환 함수와 불리언 변환 함수를 차례로 채워 입력된 정수의 참·거짓을 출력해보세요.",
+      "prompt_en": "Fill in the integer and boolean casting functions to print the truthiness of the input integer.",
+      "hint_ko": "첫째 줄에는 정수(integer)의 앞 세 글자 함수를, 둘째 줄에는 불리언(boolean)의 앞 네 글자 함수를 차례로 적어보세요.",
+      "hint_en": "Use the three-letter function from \"integer\" on line 1, and the four-letter function from \"boolean\" on line 2.",
+      "templateCode": "n = §§§(input())\nprint(§§§§(n))",
+      "targetCode": "n = int(input())\nprint(bool(n))",
       "testCases": [
         {
           "id": 1,
-          "input": "0.0",
+          "input": "0",
           "expectedOutput": "False"
         },
         {
           "id": 2,
-          "input": "1.5",
+          "input": "5",
           "expectedOutput": "True"
         }
       ]
@@ -211,22 +211,22 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 문자열 변환 함수와 자료형 확인 함수를 채워 n과 s의 불리언 결과 및 자료형을 출력해보세요.",
-      "prompt_en": "Fill in the string-casting and type-checking functions to print bool results and type.",
-      "hint_ko": "둘째 줄에는 문자열(string)의 앞 세 글자 변환 함수를, 셋째 줄 마지막에는 자료형(유형)을 뜻하는 네 글자 함수를 채워보세요.",
-      "hint_en": "Use the three-letter function from \"string\" on line 2, and the four-letter function that inspects data categories on line 3.",
-      "templateCode": "n = int(input())\ns = §§§(n)\nprint(bool(n), bool(s), §§§§(bool(n)))",
-      "targetCode": "n = int(input())\ns = str(n)\nprint(bool(n), bool(s), type(bool(n)))",
+      "prompt_ko": "빈칸에 문자열 변환 함수와 불리언 변환 함수를 채워 정수 n과 문자열 s의 참·거짓 결과를 비교해보세요.",
+      "prompt_en": "Fill in the string and boolean casting functions to compare the truthiness of integer n and string s.",
+      "hint_ko": "둘째 줄에는 문자열(string)의 앞 세 글자 변환 함수를, 셋째 줄에는 불리언(boolean)의 앞 네 글자 함수를 채워보세요.",
+      "hint_en": "Use the three-letter function from \"string\" on line 2, and the four-letter function from \"boolean\" on line 3.",
+      "templateCode": "n = int(input())\ns = §§§(n)\nprint(bool(n), §§§§(s))",
+      "targetCode": "n = int(input())\ns = str(n)\nprint(bool(n), bool(s))",
       "testCases": [
         {
           "id": 1,
           "input": "0",
-          "expectedOutput": "False True <class 'bool'>"
+          "expectedOutput": "False True"
         },
         {
           "id": 2,
           "input": "9",
-          "expectedOutput": "True True <class 'bool'>"
+          "expectedOutput": "True True"
         }
       ]
     },

@@ -62,16 +62,16 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "hp = 100 속성을 가진 Dog 클래스의 인스턴스 d를 만들고, d.hp와 type(d)를 차례로 출력해 객체 자료형을 확인해보세요.",
-      "prompt_en": "Create instance d of class Dog with hp = 100, then print d.hp and type(d) on separate lines.",
-      "hint_ko": "인스턴스를 생성해 숫자 속성값을 먼저 출력하고, 자료형 확인 내장 함수에 인스턴스를 넣어 어떤 클래스 소속 객체인지 출력하세요.",
-      "hint_en": "Instantiate the class, print its numeric attribute on line 1, and print the built-in type check of the instance on line 2.",
-      "targetCode": "class Dog:\n    hp = 100\nd = Dog()\nprint(d.hp)\nprint(type(d))",
+      "prompt_ko": "hp = 100 속성을 가진 Dog 클래스의 인스턴스 d를 만들고, d.hp에 20을 더한 뒤 d.hp를 출력해보세요.",
+      "prompt_en": "Create instance d of class Dog with hp = 100, add 20 to d.hp, and print d.hp.",
+      "hint_ko": "인스턴스를 생성한 뒤 점(.) 연산자로 숫자 속성에 접근해 값을 갱신하고 출력해보세요.",
+      "hint_en": "Instantiate the class, update its numeric attribute via dot notation, and print it.",
+      "targetCode": "class Dog:\n    hp = 100\nd = Dog()\nd.hp += 20\nprint(d.hp)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "100\n<class '__main__.Dog'>"
+          "expectedOutput": "120"
         }
       ]
     },
@@ -193,22 +193,22 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "실수 입력값을 두 번째 동전 무게에 더한 뒤, 리스트 속 동전들의 무게 총합과 논리값을 출력해보세요. (예: 1.5 -> 6.5 True)",
-      "prompt_en": "Add float input to the second coin mass, sum all coin masses in the list, and print total and bool(total).",
-      "hint_ko": "첫 빈칸에는 부동소수점 실수를 뜻하는 다섯 글자 변환 함수를, 둘째 빈칸에는 반복문이 매 회차 꺼내는 네 글자 원소 변수 이름을 적으세요.",
-      "hint_en": "Convert the input with the five-letter floating-point type function on line 5, and access the four-letter loop variable before .mass on line 9.",
-      "templateCode": "class Coin:\n    mass = 2.5\na = Coin()\nb = Coin()\nb.mass += §§§§§(input())\nbag = [a, b]\ntotal = 0.0\nfor item in bag:\n    total += §§§§.mass\nprint(total, bool(total))",
-      "targetCode": "class Coin:\n    mass = 2.5\na = Coin()\nb = Coin()\nb.mass += float(input())\nbag = [a, b]\ntotal = 0.0\nfor item in bag:\n    total += item.mass\nprint(total, bool(total))",
+      "prompt_ko": "정수 입력값을 두 번째 동전 무게에 더한 뒤, 리스트 속 동전들의 무게 총합과 논리값을 출력해보세요. (예: 2 -> 7.0 True)",
+      "prompt_en": "Add integer input to the second coin mass, sum all coin masses in the list, and print total and bool(total).",
+      "hint_ko": "첫 빈칸에는 정수(integer)를 뜻하는 세 글자 변환 함수를, 둘째 빈칸에는 반복문이 매 회차 꺼내는 네 글자 원소 변수 이름을 적으세요.",
+      "hint_en": "Convert the input with the three-letter integer type function on line 5, and access the four-letter loop variable before .mass on line 9.",
+      "templateCode": "class Coin:\n    mass = 2.5\na = Coin()\nb = Coin()\nb.mass += §§§(input())\nbag = [a, b]\ntotal = 0.0\nfor item in bag:\n    total += §§§§.mass\nprint(total, bool(total))",
+      "targetCode": "class Coin:\n    mass = 2.5\na = Coin()\nb = Coin()\nb.mass += int(input())\nbag = [a, b]\ntotal = 0.0\nfor item in bag:\n    total += item.mass\nprint(total, bool(total))",
       "testCases": [
         {
           "id": 1,
-          "input": "1.5",
-          "expectedOutput": "6.5 True"
+          "input": "2",
+          "expectedOutput": "7.0 True"
         },
         {
           "id": 2,
-          "input": "0.5",
-          "expectedOutput": "5.5 True"
+          "input": "1",
+          "expectedOutput": "6.0 True"
         }
       ]
     },
@@ -257,21 +257,21 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "두 개의 독립된 Box 인스턴스를 생성하고 각각 속성을 변경했을 때 출력 결과를 선택해보세요.",
       "prompt_en": "Select the exact output when two independent Box instances are created and mutated separately.",
-      "hint_ko": "두 인스턴스의 속성이 서로 영향을 주지 않고 독립적으로 계산된다는 점과, 사용자 정의 클래스 인스턴스의 자료형 표기 형식을 함께 확인하세요.",
-      "hint_en": "Remember each instance mutates its own attribute copy independently, and check the exact module-qualified format printed by type() on a custom class.",
-      "targetCode": "class Box:\n    val = 10\nx = Box()\ny = Box()\nx.val *= 3\ny.val -= 4\nprint(f\"{x.val}:{y.val}\")\nprint(type(x))",
+      "hint_ko": "두 인스턴스의 속성이 서로 영향을 주지 않고 각각 독립적으로 계산된다는 점을 추적해보세요.",
+      "hint_en": "Remember each instance mutates its own attribute copy independently.",
+      "targetCode": "class Box:\n    val = 10\nx = Box()\ny = Box()\nx.val *= 3\ny.val -= 4\nprint(f\"{x.val}:{y.val}\")",
       "choices": [
-        "30:6\n<class '__main__.Box'>",
-        "26:26\n<class '__main__.Box'>",
-        "30:10\n<class 'Box'>",
-        "10:6\n<class '__main__.Box'>"
+        "30:6",
+        "26:26",
+        "30:10",
+        "10:6"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "30:6\n<class '__main__.Box'>"
+          "expectedOutput": "30:6"
         }
       ]
     }

@@ -163,12 +163,12 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "공백으로 입력된 두 실수를 센서 리스트에 추가하고 평균값을 계산해 출력해보세요. (예: 10 15 -> 12.5)",
-      "prompt_en": "Append two space-separated float inputs to Sensor and print their computed average (e.g., 10 15 -> 12.5).",
+      "prompt_ko": "공백으로 입력된 두 정수를 센서 리스트에 추가하고 평균값을 계산해 출력해보세요. (예: 10 15 -> 12.5)",
+      "prompt_en": "Append two space-separated integer inputs to Sensor and print their computed average (e.g., 10 15 -> 12.5).",
       "hint_ko": "첫 빈칸에는 리스트 끝에 '덧붙이다'를 뜻하는 여섯 글자 메서드를 적고, 나눗셈 분모에는 인스턴스의 데이터 리스트 길이를 구하는 식을 적으세요.",
       "hint_en": "Call the six-letter method that attaches an element to the end of a list, and divide the sum by the length of the instance's data list.",
-      "templateCode": "class Sensor:\n    def __init__(self):\n        self.data = []\n    def push(self, val):\n        self.data.§§§§§§(val)\n    def avg(self):\n        if len(self.data) == 0:\n            return 0\n        return sum(self.data) / §§§§§§§§§§§§§§\ns = Sensor()\na, b = input().split()\ns.push(float(a))\ns.push(float(b))\nprint(s.avg())",
-      "targetCode": "class Sensor:\n    def __init__(self):\n        self.data = []\n    def push(self, val):\n        self.data.append(val)\n    def avg(self):\n        if len(self.data) == 0:\n            return 0\n        return sum(self.data) / len(self.data)\ns = Sensor()\na, b = input().split()\ns.push(float(a))\ns.push(float(b))\nprint(s.avg())",
+      "templateCode": "class Sensor:\n    def __init__(self):\n        self.data = []\n    def push(self, val):\n        self.data.§§§§§§(val)\n    def avg(self):\n        if len(self.data) == 0:\n            return 0\n        return sum(self.data) / §§§§§§§§§§§§§§\ns = Sensor()\na, b = input().split()\ns.push(int(a))\ns.push(int(b))\nprint(s.avg())",
+      "targetCode": "class Sensor:\n    def __init__(self):\n        self.data = []\n    def push(self, val):\n        self.data.append(val)\n    def avg(self):\n        if len(self.data) == 0:\n            return 0\n        return sum(self.data) / len(self.data)\ns = Sensor()\na, b = input().split()\ns.push(int(a))\ns.push(int(b))\nprint(s.avg())",
       "testCases": [
         {
           "id": 1,
@@ -177,8 +177,8 @@ export const PYTHON_LEVEL_62: PracticeRound = {
         },
         {
           "id": 2,
-          "input": "2.5 5.0",
-          "expectedOutput": "3.75"
+          "input": "2 5",
+          "expectedOutput": "3.5"
         }
       ]
     },

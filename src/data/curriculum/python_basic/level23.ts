@@ -78,26 +78,26 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       "step": 3,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 실수 온도가 0.0~100.0이면 아무 출력 없이 넘어가고 초과면 Gas, 미만이면 Ice와 Checked를 출력해보세요.",
-      "prompt_en": "Fill in the float-casting function and placeholder keyword to classify temperature.",
-      "hint_ko": "첫째 줄에는 소수점 입력을 실수 자료형으로 바꾸는 다섯 글자 변환 함수를, 넷째 줄의 빈 실행 블록에는 아무 동작 없이 그냥 지나가는 네 글자 자리 채움 키워드를 적어보세요.",
-      "hint_en": "On line 1, convert the decimal input using the five-letter real-number casting function; on line 4, fill the empty branch with the four-letter no-op keyword meaning \"skip past\".",
-      "templateCode": "temp = §§§§§(input())\nif temp >= 0.0:\n    if temp <= 100.0:\n        §§§§\n    else:\n        print(\"Gas\")\nelse:\n    print(\"Ice\")\nprint(\"Checked\")",
-      "targetCode": "temp = float(input())\nif temp >= 0.0:\n    if temp <= 100.0:\n        pass\n    else:\n        print(\"Gas\")\nelse:\n    print(\"Ice\")\nprint(\"Checked\")",
+      "prompt_ko": "두 빈칸을 채워 정수 온도가 0~100이면 아무 출력 없이 넘어가고 초과면 Gas, 미만이면 Ice와 Checked를 출력해보세요.",
+      "prompt_en": "Fill in the int-casting function and placeholder keyword to classify temperature.",
+      "hint_ko": "첫째 줄에는 입력을 정수 자료형으로 바꾸는 세 글자 변환 함수를, 넷째 줄의 빈 실행 블록에는 아무 동작 없이 그냥 지나가는 네 글자 자리 채움 키워드를 적어보세요.",
+      "hint_en": "On line 1, convert the input using the three-letter integer casting function; on line 4, fill the empty branch with the four-letter no-op keyword meaning \"skip past\".",
+      "templateCode": "temp = §§§(input())\nif temp >= 0:\n    if temp <= 100:\n        §§§§\n    else:\n        print(\"Gas\")\nelse:\n    print(\"Ice\")\nprint(\"Checked\")",
+      "targetCode": "temp = int(input())\nif temp >= 0:\n    if temp <= 100:\n        pass\n    else:\n        print(\"Gas\")\nelse:\n    print(\"Ice\")\nprint(\"Checked\")",
       "testCases": [
         {
           "id": 1,
-          "input": "25.5",
+          "input": "25",
           "expectedOutput": "Checked"
         },
         {
           "id": 2,
-          "input": "120.0",
+          "input": "120",
           "expectedOutput": "Gas\nChecked"
         },
         {
           "id": 3,
-          "input": "-4.0",
+          "input": "-4",
           "expectedOutput": "Ice\nChecked"
         }
       ]

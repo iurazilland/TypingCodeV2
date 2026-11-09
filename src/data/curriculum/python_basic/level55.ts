@@ -125,22 +125,22 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "입력 문자열을 실수로 변환 시도하고 실패하면 0.0으로 대체해 출력하도록 세 빈칸을 채워보세요. (출력 예: Rate:3.5)",
-      "prompt_en": "Try converting s to a float, fall back to 0.0 on error, and print Rate:{rate}.",
-      "hint_ko": "세 글자 시도 키워드 안에서 부동소수점 실수를 뜻하는 다섯 글자 자료형 함수로 변환하고, 여섯 글자 예외 키워드에서 기본값을 대입하세요.",
-      "hint_en": "Inside the three-letter attempt block, convert using the five-letter floating-point type function, then catch failures with the six-letter error keyword.",
-      "templateCode": "s = input()\n§§§:\n    rate = §§§§§(s)\n§§§§§§:\n    rate = 0.0\nprint(f\"Rate:{rate}\")",
-      "targetCode": "s = input()\ntry:\n    rate = float(s)\nexcept:\n    rate = 0.0\nprint(f\"Rate:{rate}\")",
+      "prompt_ko": "입력 문자열을 정수로 변환 시도하고 실패하면 0으로 대체해 출력하도록 세 빈칸을 채워보세요. (출력 예: Rate:35)",
+      "prompt_en": "Try converting s to an int, fall back to 0 on error, and print Rate:{rate}.",
+      "hint_ko": "세 글자 시도 키워드 안에서 정수(integer)를 뜻하는 세 글자 자료형 함수로 변환하고, 여섯 글자 예외 키워드에서 기본값을 대입하세요.",
+      "hint_en": "Inside the three-letter attempt block, convert using the three-letter integer type function, then catch failures with the six-letter error keyword.",
+      "templateCode": "s = input()\n§§§:\n    rate = §§§(s)\n§§§§§§:\n    rate = 0\nprint(f\"Rate:{rate}\")",
+      "targetCode": "s = input()\ntry:\n    rate = int(s)\nexcept:\n    rate = 0\nprint(f\"Rate:{rate}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "3.5",
-          "expectedOutput": "Rate:3.5"
+          "input": "35",
+          "expectedOutput": "Rate:35"
         },
         {
           "id": 2,
           "input": "bad",
-          "expectedOutput": "Rate:0.0"
+          "expectedOutput": "Rate:0"
         }
       ]
     },

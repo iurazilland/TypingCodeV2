@@ -258,25 +258,25 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "체온 temp를 실수(float)로 입력받아 37.5 이상은 \"Fever\", 36.0 이상은 \"Normal\", 미만은 \"Low\"를 출력해보세요.",
-      "prompt_en": "Read float temp and print \"Fever\" (>=37.5), \"Normal\" (>=36.0), or \"Low\".",
-      "hint_ko": "소수점이 있는 체온을 실수형으로 변환해 입력받은 뒤, 높은 온도 기준부터 낮은 온도 기준 순서로 분기를 배치해보세요.",
-      "hint_en": "Convert the input into a floating-point number first, then test the higher temperature threshold before the normal threshold.",
-      "targetCode": "temp = float(input())\nif temp >= 37.5:\n    print(\"Fever\")\nelif temp >= 36.0:\n    print(\"Normal\")\nelse:\n    print(\"Low\")",
+      "prompt_ko": "체온 temp를 정수(int)로 입력받아 38 이상은 \"Fever\", 36 이상은 \"Normal\", 미만은 \"Low\"를 출력해보세요.",
+      "prompt_en": "Read integer temp and print \"Fever\" (>=38), \"Normal\" (>=36), or \"Low\".",
+      "hint_ko": "체온을 정수형으로 변환해 입력받은 뒤, 높은 온도 기준부터 낮은 온도 기준 순서로 분기를 배치해보세요.",
+      "hint_en": "Convert the input into an integer first, then test the higher temperature threshold before the normal threshold.",
+      "targetCode": "temp = int(input())\nif temp >= 38:\n    print(\"Fever\")\nelif temp >= 36:\n    print(\"Normal\")\nelse:\n    print(\"Low\")",
       "testCases": [
         {
           "id": 1,
-          "input": "38.1",
+          "input": "39",
           "expectedOutput": "Fever"
         },
         {
           "id": 2,
-          "input": "36.5",
+          "input": "37",
           "expectedOutput": "Normal"
         },
         {
           "id": 3,
-          "input": "35.4",
+          "input": "35",
           "expectedOutput": "Low"
         }
       ]
@@ -319,22 +319,22 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "prompt_en": "Fix the SyntaxError caused by writing the multi-way branch keyword as two words.",
       "hint_ko": "파이썬은 추가 조건 분기를 띄어쓰기가 있는 두 단어로 쓰지 않고, 앞부분을 따서 네 글자로 합친 단일 키워드를 사용합니다.",
       "hint_en": "Python does not write its additional-condition branch as two separate words—contract them into the single four-letter keyword.",
-      "templateCode": "w = float(input())\nif w >= 10.0:\n    print(\"Heavy\")\nelse if w >= 5.0:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
-      "targetCode": "w = float(input())\nif w >= 10.0:\n    print(\"Heavy\")\nelif w >= 5.0:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
+      "templateCode": "w = int(input())\nif w >= 10:\n    print(\"Heavy\")\nelse if w >= 5:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
+      "targetCode": "w = int(input())\nif w >= 10:\n    print(\"Heavy\")\nelif w >= 5:\n    print(\"Mid\")\nelse:\n    print(\"Light\")",
       "testCases": [
         {
           "id": 1,
-          "input": "7.5",
+          "input": "7",
           "expectedOutput": "Mid"
         },
         {
           "id": 2,
-          "input": "12.0",
+          "input": "12",
           "expectedOutput": "Heavy"
         },
         {
           "id": 3,
-          "input": "2.5",
+          "input": "2",
           "expectedOutput": "Light"
         }
       ]
@@ -344,26 +344,26 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "실수 점수 구간에 따라 포인트를 누적하는 코드 아래에 한 줄을 추가하여 최종 pts를 출력해보세요.",
+      "prompt_ko": "정수 점수 구간에 따라 포인트를 누적하는 코드 아래에 한 줄을 추가하여 최종 pts를 출력해보세요.",
       "prompt_en": "Add one line at the end to print the final accumulated pts.",
       "hint_ko": "조건에 관계없이 최종 누적 포인트를 한 번 출력해야 하므로, 들여쓰기 없이 바깥쪽 줄에서 포인트 변수를 출력해보세요.",
       "hint_en": "Without indentation at the bottom, call the print function on the accumulated points variable so it always outputs once.",
-      "templateCode": "s = float(input())\npts = 10\nif s >= 9.0:\n    pts += 5\nelif s >= 7.0:\n    pts += 2\n§§§§§§§§§§",
-      "targetCode": "s = float(input())\npts = 10\nif s >= 9.0:\n    pts += 5\nelif s >= 7.0:\n    pts += 2\nprint(pts)",
+      "templateCode": "s = int(input())\npts = 10\nif s >= 90:\n    pts += 5\nelif s >= 70:\n    pts += 2\n§§§§§§§§§§",
+      "targetCode": "s = int(input())\npts = 10\nif s >= 90:\n    pts += 5\nelif s >= 70:\n    pts += 2\nprint(pts)",
       "testCases": [
         {
           "id": 1,
-          "input": "9.5",
+          "input": "95",
           "expectedOutput": "15"
         },
         {
           "id": 2,
-          "input": "7.5",
+          "input": "75",
           "expectedOutput": "12"
         },
         {
           "id": 3,
-          "input": "5.0",
+          "input": "50",
           "expectedOutput": "10"
         }
       ]
@@ -373,11 +373,11 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "step": 13,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "입력값으로 3.5가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "When 3.5 is given as input, select the exact output of the following Python code.",
+      "prompt_ko": "입력값으로 4가 주어질 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "When 4 is given as input, select the exact output of the following Python code.",
       "hint_ko": "위쪽 묶음에서는 첫 조건이 참일 때 이어진 추가 분기를 건너뛰지만, 그 아래에 새로 시작하는 독립 조건문은 별도로 다시 검사된다는 점에 주목해보세요.",
       "hint_en": "Notice that the first multi-way chain stops after its first matching branch, whereas the separate conditional statement below it is evaluated independently.",
-      "targetCode": "t = float(input())\nfee = 1000\nif t >= 2.0:\n    fee += 1500\nelif t >= 1.0:\n    fee += 500\nif t >= 3.0:\n    fee -= 300\nprint(fee)",
+      "targetCode": "t = int(input())\nfee = 1000\nif t >= 2:\n    fee += 1500\nelif t >= 1:\n    fee += 500\nif t >= 3:\n    fee -= 300\nprint(fee)",
       "choices": [
         "2500",
         "2700",
@@ -388,7 +388,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       "testCases": [
         {
           "id": 1,
-          "input": "3.5",
+          "input": "4",
           "expectedOutput": "2200"
         }
       ]

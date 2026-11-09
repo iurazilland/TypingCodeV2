@@ -15,19 +15,19 @@ export const PYTHON_LEVEL_16: PracticeRound = {
     "print",
     "variable",
     "input",
-    "method",
-    "type"
+    "int",
+    "method"
   ],
   "questions": [
     {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "변수 is_ready에 참을 뜻하는 True를 저장하고, 값과 자료형을 차례로 출력해보세요.",
-      "prompt_en": "Store True in is_ready, then print its value and its data type on separate lines.",
+      "prompt_ko": "변수 is_ready에 참을 뜻하는 불리언 값 True를 저장하고 출력해보세요.",
+      "prompt_en": "Store True in variable is_ready and print its value.",
       "hint_ko": "파이썬의 참·거짓 불리언 상수는 따옴표를 쓰지 않고 반드시 첫 글자만 대문자로 표기합니다.",
       "hint_en": "Python boolean constants are written without quotes and always start with a capital letter.",
-      "targetCode": "is_ready = True\nprint(is_ready)\nprint(type(is_ready))",
+      "targetCode": "is_ready = True\nprint(is_ready)",
       "expectedVariables": {
         "is_ready": true
       },
@@ -35,7 +35,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True\n<class 'bool'>"
+          "expectedOutput": "True"
         }
       ]
     },
@@ -44,12 +44,12 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 거짓을 뜻하는 불리언 상수와 자료형 확인 함수를 채워 값과 자료형을 한 줄에 출력해보세요.",
-      "prompt_en": "Fill in the boolean literal for false and the type-checking function to print both.",
-      "hint_ko": "첫째 줄에는 영어로 거짓을 뜻하는 단어를 첫 글자만 대문자로 적고, 둘째 줄에는 값의 유형을 뜻하는 네 글자 내장 함수를 적어보세요.",
-      "hint_en": "Capitalize the first letter of the English word for untruth on line 1, and call the four-letter function meaning data category on line 2.",
-      "templateCode": "is_open = §§§§§\nprint(is_open, §§§§(is_open))",
-      "targetCode": "is_open = False\nprint(is_open, type(is_open))",
+      "prompt_ko": "빈칸에 거짓을 뜻하는 불리언 상수를 채워 변수에 저장하고 출력해보세요.",
+      "prompt_en": "Fill in the boolean literal for false to store and print it.",
+      "hint_ko": "영어로 거짓을 뜻하는 다섯 글자 단어를 따옴표 없이 첫 글자만 대문자로 적어보세요.",
+      "hint_en": "Write the five-letter English word for untruth without quotes, capitalizing only its first letter.",
+      "templateCode": "is_open = §§§§§\nprint(is_open)",
+      "targetCode": "is_open = False\nprint(is_open)",
       "expectedVariables": {
         "is_open": false
       },
@@ -57,7 +57,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "False <class 'bool'>"
+          "expectedOutput": "False"
         }
       ]
     },
@@ -220,12 +220,12 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "불리언 값의 대소문자 표기 실수로 발생한 오류를 수정해 값과 자료형이 정상 출력되도록 해보세요.",
-      "prompt_en": "Fix the capitalization typo on the boolean literal so its value and type print cleanly.",
+      "prompt_ko": "불리언 값의 대소문자 표기 실수로 발생한 오류를 수정해 True가 정상 출력되도록 해보세요.",
+      "prompt_en": "Fix the capitalization typo on the boolean literal so True prints cleanly.",
       "hint_ko": "파이썬은 대소문자를 엄격히 구분하며, 불리언 상수는 모두 소문자로 적으면 변수 이름으로 오인해 오류가 발생합니다.",
       "hint_en": "Python is case-sensitive: writing a boolean constant in all lowercase makes Python look for an undefined variable instead of a boolean value.",
-      "templateCode": "done = true\nprint(done, type(done))",
-      "targetCode": "done = True\nprint(done, type(done))",
+      "templateCode": "done = true\nprint(done)",
+      "targetCode": "done = True\nprint(done)",
       "expectedVariables": {
         "done": true
       },
@@ -233,7 +233,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True <class 'bool'>"
+          "expectedOutput": "True"
         }
       ]
     },

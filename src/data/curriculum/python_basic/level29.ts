@@ -205,26 +205,26 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "실수 변환 함수와 종료 키워드를 채워 음수가 입력되기 전까지 들어온 실수 점수들의 평균을 출력해보세요.",
-      "prompt_en": "Fill in the float conversion function and exit keyword to print the average of non-negative float inputs.",
-      "hint_ko": "부동소수점(floating-point)의 앞 다섯 글자를 딴 변환 함수로 입력을 읽고, 음수일 때는 다섯 글자 종료 키워드로 탈출하세요.",
-      "hint_en": "Parse each score with the 5-letter function from \"floating-point\", and exit on a negative input with the 5-letter stop keyword.",
-      "templateCode": "total = 0.0\ncnt = 0\nwhile True:\n    s = §§§§§(input())\n    if s < 0:\n        §§§§§\n    total += s\n    cnt += 1\nprint(total / cnt)",
-      "targetCode": "total = 0.0\ncnt = 0\nwhile True:\n    s = float(input())\n    if s < 0:\n        break\n    total += s\n    cnt += 1\nprint(total / cnt)",
+      "prompt_ko": "정수 변환 함수와 종료 키워드를 채워 음수가 입력되기 전까지 들어온 점수들의 평균(total / cnt)을 출력해보세요.",
+      "prompt_en": "Fill in the integer conversion function and exit keyword to print the average of non-negative inputs.",
+      "hint_ko": "정수(integer)의 앞 세 글자를 딴 변환 함수로 입력을 읽고, 음수일 때는 다섯 글자 종료 키워드로 탈출하세요.",
+      "hint_en": "Parse each score with the 3-letter function from \"integer\", and exit on a negative input with the 5-letter stop keyword.",
+      "templateCode": "total = 0\ncnt = 0\nwhile True:\n    s = §§§(input())\n    if s < 0:\n        §§§§§\n    total += s\n    cnt += 1\nprint(total / cnt)",
+      "targetCode": "total = 0\ncnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        break\n    total += s\n    cnt += 1\nprint(total / cnt)",
       "testCases": [
         {
           "id": 1,
-          "input": "80.0\n90.0\n-1.0",
+          "input": "80\n90\n-1",
           "expectedOutput": "85.0"
         },
         {
           "id": 2,
-          "input": "10.0\n20.0\n30.0\n-5.0",
+          "input": "10\n20\n30\n-5",
           "expectedOutput": "20.0"
         },
         {
           "id": 3,
-          "input": "7.5\n2.5\n-0.1",
+          "input": "7\n3\n-1",
           "expectedOutput": "5.0"
         }
       ]
@@ -233,26 +233,26 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "1부터 차례로 더하다가 total >= limit가 되는 순간 break로 멈추고 str(i) + \":\" + str(total)을 출력해보세요. (예: 10 -> 4:10)",
-      "prompt_en": "Add 1, 2, 3... in a while True loop, break when total >= limit, and print str(i) + \":\" + str(total).",
-      "hint_ko": "현재 숫자 i를 먼저 더한 직후 기준값 도달 여부를 검사해 탈출해야 멈춘 시점의 정확한 i를 유지할 수 있습니다.",
-      "hint_en": "Add i to total first, then test whether total has reached limit to exit before incrementing i for the next turn.",
-      "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile True:\n    total += i\n    if total >= limit:\n        break\n    i += 1\nprint(str(i) + \":\" + str(total))",
+      "prompt_ko": "1부터 차례로 더하다가 total >= limit가 되는 순간 break로 멈추고, res = str(total)을 사용해 \"Sum:\" + res를 출력해보세요.",
+      "prompt_en": "Add 1, 2, 3... in a while True loop, break when total >= limit, store res = str(total), and print \"Sum:\" + res.",
+      "hint_ko": "현재 숫자 i를 먼저 더한 직후 기준값 도달 여부를 검사해 탈출하고, 반복문 밖에서 res = str(total)로 변환해 출력하세요.",
+      "hint_en": "Add i to total first, break when total >= limit, then store str(total) in res and print outside.",
+      "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile True:\n    total += i\n    if total >= limit:\n        break\n    i += 1\nres = str(total)\nprint(\"Sum:\" + res)",
       "testCases": [
         {
           "id": 1,
           "input": "10",
-          "expectedOutput": "4:10"
+          "expectedOutput": "Sum:10"
         },
         {
           "id": 2,
           "input": "12",
-          "expectedOutput": "5:15"
+          "expectedOutput": "Sum:15"
         },
         {
           "id": 3,
           "input": "6",
-          "expectedOutput": "3:6"
+          "expectedOutput": "Sum:6"
         }
       ]
     },

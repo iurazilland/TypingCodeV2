@@ -118,21 +118,21 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 두 실수의 거리(절댓값 차이)를 소수 둘째 자리까지 반올림해 출력해보세요. (예: 1.2 4.75 -> 3.55)",
-      "prompt_en": "Read two space-separated floats and print their absolute difference rounded to 2 decimal places.",
-      "hint_ko": "실수로 변환한 두 값의 차이를 안쪽에서 절댓값으로 만들고, 바깥에서 소수 둘째 자리까지 반올림하면 부동소수점 오차도 깔끔히 정리됩니다.",
-      "hint_en": "Convert both strings to floats, take the positive magnitude of their difference inside, and smooth to 2 decimals outside.",
-      "targetCode": "a, b = input().split()\ngap = round(abs(float(a) - float(b)), 2)\nprint(gap)",
+      "prompt_ko": "공백으로 입력된 두 정수의 거리(절댓값 차이)를 3으로 나눈 뒤 소수 둘째 자리까지 반올림해 출력해보세요. (예: 1 12 -> 3.67)",
+      "prompt_en": "Read two space-separated integers and print their absolute difference divided by 3, rounded to 2 decimal places.",
+      "hint_ko": "정수로 변환한 두 값의 차이를 절댓값으로 만들어 3으로 나누고, 바깥에서 소수 둘째 자리까지 반올림해보세요.",
+      "hint_en": "Convert both strings to integers, divide their absolute difference by 3, and round to 2 decimals outside.",
+      "targetCode": "a, b = input().split()\ngap = round(abs(int(a) - int(b)) / 3, 2)\nprint(gap)",
       "testCases": [
         {
           "id": 1,
-          "input": "3.5 1.25",
-          "expectedOutput": "2.25"
+          "input": "10 2",
+          "expectedOutput": "2.67"
         },
         {
           "id": 2,
-          "input": "1.2 4.75",
-          "expectedOutput": "3.55"
+          "input": "1 12",
+          "expectedOutput": "3.67"
         }
       ]
     },
@@ -195,16 +195,16 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "입력값을 float로 변환해 절댓값의 소수 첫째 자리 반올림을 출력하고, 변환 실패 시 Invalid를 출력해보세요.",
-      "prompt_en": "Convert input to float and print its absolute value rounded to 1 decimal place, or print Invalid on ValueError.",
-      "hint_ko": "시도 블록 안에서 실수 변환 뒤 절댓값과 반올림을 차례로 적용하고, 숫자가 아닌 입력은 값 오류 예외 블록에서 처리합니다.",
-      "hint_en": "Convert to float and apply magnitude and rounding inside try, catching non-numeric inputs in the value-error handler.",
-      "targetCode": "try:\n    val = float(input())\n    print(round(abs(val), 1))\nexcept ValueError:\n    print(\"Invalid\")",
+      "prompt_ko": "입력값을 정수로 변환해 3으로 나눈 절댓값의 소수 첫째 자리 반올림을 출력하고, 변환 실패 시 Invalid를 출력해보세요.",
+      "prompt_en": "Convert input to int, divide by 3, and print its absolute value rounded to 1 decimal place, or print Invalid on ValueError.",
+      "hint_ko": "시도 블록 안에서 정수 변환 후 3으로 나눈 뒤 절댓값과 반올림을 차례로 적용하고, 숫자가 아닌 입력은 값 오류 예외 블록에서 처리합니다.",
+      "hint_en": "Convert to int, divide by 3, and apply magnitude and rounding inside try, catching non-numeric inputs in the value-error handler.",
+      "targetCode": "try:\n    val = int(input()) / 3\n    print(round(abs(val), 1))\nexcept ValueError:\n    print(\"Invalid\")",
       "testCases": [
         {
           "id": 1,
-          "input": "-7.86",
-          "expectedOutput": "7.9"
+          "input": "-23",
+          "expectedOutput": "7.7"
         },
         {
           "id": 2,
@@ -238,21 +238,21 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "type": "typing",
       "kind": "fix_bug",
       "prompt_ko": "반올림 함수에 전달한 인자 순서가 뒤바뀌어 타입 오류가 발생하는 코드를 고쳐 소수 둘째 자리까지 출력해보세요.",
-      "prompt_en": "Fix the swapped argument order in the rounding call so the absolute float is rounded to 2 decimal places.",
+      "prompt_en": "Fix the swapped argument order in the rounding call so the absolute value is rounded to 2 decimal places.",
       "hint_ko": "반올림 함수는 (반올림할 대상 숫자, 남길 소수점 자릿수) 순서로 인자를 받습니다. 뒤바뀐 두 인자의 순서를 바로잡아 보세요.",
       "hint_en": "The rounding built-in expects (target_number, decimal_places) in order; swap the two arguments.",
-      "templateCode": "val = float(input())\nprint(round(2, abs(val)))",
-      "targetCode": "val = float(input())\nprint(round(abs(val), 2))",
+      "templateCode": "val = int(input()) / 3\nprint(round(2, abs(val)))",
+      "targetCode": "val = int(input()) / 3\nprint(round(abs(val), 2))",
       "testCases": [
         {
           "id": 1,
-          "input": "-3.456",
-          "expectedOutput": "3.46"
+          "input": "-10",
+          "expectedOutput": "3.33"
         },
         {
           "id": 2,
-          "input": "8.129",
-          "expectedOutput": "8.13"
+          "input": "25",
+          "expectedOutput": "8.33"
         }
       ]
     },

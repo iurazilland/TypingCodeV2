@@ -163,12 +163,12 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "입력을 실수 요금으로 변환하되 실패 시 25.0을 기본값으로 써서 세금 포함 티켓 가격을 출력해보세요. (예: 15 -> 16.5)",
-      "prompt_en": "Convert input to float (fallback 25.0 on ValueError), create a Ticket, and print its final price.",
-      "hint_ko": "첫 빈칸에는 부동소수점 실수를 뜻하는 다섯 글자 변환 함수를, 둘째 빈칸에는 위에서 선언한 여섯 글자 클래스 이름을 적어 인스턴스를 생성하세요.",
-      "hint_en": "Parse the input with the five-letter floating-point type function on line 6, and instantiate the declared six-letter class on line 9.",
-      "templateCode": "class Ticket:\n    def __init__(self, base, tax=0.1):\n        self.final = base + base * tax\nraw = input()\ntry:\n    price = §§§§§(raw)\nexcept ValueError:\n    price = 25.0\nt = §§§§§§(price)\nprint(t.final)",
-      "targetCode": "class Ticket:\n    def __init__(self, base, tax=0.1):\n        self.final = base + base * tax\nraw = input()\ntry:\n    price = float(raw)\nexcept ValueError:\n    price = 25.0\nt = Ticket(price)\nprint(t.final)",
+      "prompt_ko": "입력을 정수 요금으로 변환하되 실패 시 25를 기본값으로 써서 세금 포함 티켓 가격을 출력해보세요. (예: 15 -> 16.5)",
+      "prompt_en": "Convert input to int (fallback 25 on ValueError), create a Ticket, and print its final price.",
+      "hint_ko": "첫 빈칸에는 정수(integer)를 뜻하는 세 글자 변환 함수를, 둘째 빈칸에는 위에서 선언한 여섯 글자 클래스 이름을 적어 인스턴스를 생성하세요.",
+      "hint_en": "Parse the input with the three-letter integer type function on line 6, and instantiate the declared six-letter class on line 9.",
+      "templateCode": "class Ticket:\n    def __init__(self, base, tax=0.1):\n        self.final = base + base * tax\nraw = input()\ntry:\n    price = §§§(raw)\nexcept ValueError:\n    price = 25\nt = §§§§§§(price)\nprint(t.final)",
+      "targetCode": "class Ticket:\n    def __init__(self, base, tax=0.1):\n        self.final = base + base * tax\nraw = input()\ntry:\n    price = int(raw)\nexcept ValueError:\n    price = 25\nt = Ticket(price)\nprint(t.final)",
       "testCases": [
         {
           "id": 1,

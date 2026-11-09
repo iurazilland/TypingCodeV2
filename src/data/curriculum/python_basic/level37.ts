@@ -203,8 +203,8 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: "Add one line below the avg calculation to print f\"{name}:{avg}\".",
       hint_ko: "분리해 둔 이름 변수와 계산된 실수 평균 변수를 콜론 기호 양옆에 배치하여 한 줄로 포맷팅해 출력해보세요.",
       hint_en: "Display the extracted name variable and computed average variable separated by a colon using string formatting.",
-      templateCode: "line = input().strip()\nname, a, b = line.split(\",\")\navg = (float(a) + float(b)) / 2\n§§§§§§§§§§§§§§§§§§§§§§",
-      targetCode: "line = input().strip()\nname, a, b = line.split(\",\")\navg = (float(a) + float(b)) / 2\nprint(f\"{name}:{avg}\")",
+      templateCode: "line = input().strip()\nname, a, b = line.split(\",\")\navg = (int(a) + int(b)) / 2\n§§§§§§§§§§§§§§§§§§§§§§",
+      targetCode: "line = input().strip()\nname, a, b = line.split(\",\")\navg = (int(a) + int(b)) / 2\nprint(f\"{name}:{avg}\")",
       testCases: [
         {
           id: 1,

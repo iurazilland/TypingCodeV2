@@ -73,17 +73,17 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       "step": 3,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "문자 \"A\"에서 tier칸 뒤 알파벳을 등급 태그로 만들고 잔액을 천 단위 쉼표와 소수점 둘째 자리로 출력하도록 완성해보세요. (예: [B] 1,250.75)",
-      "prompt_en": "Compute self.tag shifted from \"A\" by tier and format w.bal with commas and 2 decimals (e.g., [B] 1,250.75).",
+      "prompt_ko": "문자 \"A\"에서 tier칸 뒤 알파벳을 등급 태그로 만들고 잔액을 천 단위 쉼표와 소수점 둘째 자리로 출력하도록 완성해보세요. (예: [B] 1,250.50)",
+      "prompt_en": "Compute self.tag shifted from \"A\" by tier and format w.bal with commas and 2 decimals (e.g., [B] 1,250.50).",
       "hint_ko": "기준 문자의 정수 코드 번호를 구해 단계 수를 더한 뒤 다시 문자로 되돌리는 두 내장 함수와, 천 단위 구분 및 소수 둘째 자리 반올림을 함께 지정하는 네 글자 서식을 채워보세요.",
       "hint_en": "Supply the inner character-to-code function, the outer code-to-character function, and the 4-character format specifier for thousands grouping with two decimal places.",
-      "targetCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = chr(ord(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += float(raw)\n        except ValueError:\n            self.bal += 0\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:,.2f}\")",
-      "templateCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = §§§(§§§(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += float(raw)\n        except ValueError:\n            self.bal += 0\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:§§§§}\")",
+      "targetCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = chr(ord(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            self.bal += 0\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:,.2f}\")",
+      "templateCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = §§§(§§§(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            self.bal += 0\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:§§§§}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "250.25",
-          "expectedOutput": "[B] 1,250.75"
+          "input": "250",
+          "expectedOutput": "[B] 1,250.50"
         },
         {
           "id": 2,
@@ -249,21 +249,21 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "다음 파이썬 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "Select the exact output of the following Python code.",
-      "hint_ko": "첫 글자의 문자 코드에 문자열 전체의 영(0) 등장 횟수만큼 더한 알파벳을 구하고, 하이픈 뒷부분 실수에 10을 곱한 값을 천 단위와 소수 둘째 자리 서식으로 맞춘 결과를 확인해보세요.",
-      "hint_en": "Count all zero characters in the input to see how many steps the first letter shifts forward, then multiply the float after the hyphen by 10 and apply the grouping and two-decimal format.",
-      "targetCode": "def decode(tag):\n    p = tag.find(\"-\")\n    ch = chr(ord(tag[0]) + tag.count(\"0\"))\n    num = float(tag[p + 1:]) * 10\n    return f\"{ch}:{num:,.2f}\"\n\nprint(decode(\"B-100.05\"))",
+      "hint_ko": "첫 글자의 문자 코드에 문자열 전체의 영(0) 등장 횟수만큼 더한 알파벳을 구하고, 하이픈 뒷부분 정수를 2로 나눈 값을 천 단위와 소수 둘째 자리 서식으로 맞춘 결과를 확인해보세요.",
+      "hint_en": "Count all zero characters in the input to see how many steps the first letter shifts forward, then divide the integer after the hyphen by 2 and apply the grouping and two-decimal format.",
+      "targetCode": "def decode(tag):\n    p = tag.find(\"-\")\n    ch = chr(ord(tag[0]) + tag.count(\"0\"))\n    num = int(tag[p + 1:]) / 2\n    return f\"{ch}:{num:,.2f}\"\n\nprint(decode(\"B-2001\"))",
       "choices": [
-        "E:1,000.50",
         "D:1,000.50",
-        "E:1000.50",
-        "D:100.05"
+        "E:1,000.50",
+        "D:1000.50",
+        "C:1,000.50"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "E:1,000.50"
+          "expectedOutput": "D:1,000.50"
         }
       ]
     }

@@ -45,22 +45,22 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "입력받은 실수에 천 단위 쉼표와 소수점 둘째 자리 서식을 함께 적용해 달러 금액을 출력해보세요. (예: 1520.5 -> $1,520.50)",
-      "prompt_en": "Format float input val with thousands commas and 2 decimal places prefixed by \"$\" (e.g., 1520.5 -> $1,520.50).",
+      "prompt_ko": "입력받은 정수를 2로 나눈 금액에 천 단위 쉼표와 소수점 둘째 자리 서식을 함께 적용해 달러 금액을 출력해보세요. (예: 3041 -> $1,520.50)",
+      "prompt_en": "Format val (int(input()) / 2) with thousands commas and 2 decimal places prefixed by \"$\" (e.g., 3041 -> $1,520.50).",
       "hint_ko": "콜론 뒤에 세 자리 구분 쉼표 기호를 먼저 적고, 이어서 소수점 기호·자리수 숫자 2·고정 소수점(fixed-point)의 첫 글자를 나란히 붙여 네 글자 서식을 완성하세요.",
       "hint_en": "After the colon, combine the thousands-separator comma symbol followed by a dot, the digit 2, and the first letter of 'fixed-point'.",
-      "targetCode": "val = float(input())\nprint(f\"${val:,.2f}\")",
-      "templateCode": "val = float(input())\nprint(f\"${val:§§§§}\")",
+      "targetCode": "val = int(input()) / 2\nprint(f\"${val:,.2f}\")",
+      "templateCode": "val = int(input()) / 2\nprint(f\"${val:§§§§}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "1520.5",
+          "input": "3041",
           "expectedOutput": "$1,520.50"
         },
         {
           "id": 2,
-          "input": "98765.436",
-          "expectedOutput": "$98,765.44"
+          "input": "197531",
+          "expectedOutput": "$98,765.50"
         }
       ]
     },
@@ -257,17 +257,17 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "두 실수의 평균 avg를 구한 코드 아래에 한 줄을 추가하여 avg를 소수점 둘째 자리까지 서식화해 출력해보세요. (예: 1 2 -> 1.50)",
+      "prompt_ko": "두 정수의 평균 avg를 구한 코드 아래에 한 줄을 추가하여 avg를 소수점 둘째 자리까지 서식화해 출력해보세요. (예: 1 2 -> 1.50)",
       "prompt_en": "Add one line below to print avg formatted to 2 decimal places (e.g., 1 2 -> 1.50).",
       "hint_ko": "f-string 중괄호 안에 평균 변수와 콜론을 적고, 소수점 기호·자리수 2·고정 소수점(fixed-point)의 첫 글자를 붙여 출력 함수로 감싸 보세요.",
       "hint_en": "Wrap avg inside an f-string with a colon, dot, digit 2, and the first letter of 'fixed-point', and pass it to the output function.",
-      "targetCode": "a, b = input().split()\navg = (float(a) + float(b)) / 2\nprint(f\"{avg:.2f}\")",
-      "templateCode": "a, b = input().split()\navg = (float(a) + float(b)) / 2\n§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "a, b = input().split()\navg = (int(a) + int(b)) / 2\nprint(f\"{avg:.2f}\")",
+      "templateCode": "a, b = input().split()\navg = (int(a) + int(b)) / 2\n§§§§§§§§§§§§§§§§§§§",
       "testCases": [
         {
           "id": 1,
-          "input": "10 15.5",
-          "expectedOutput": "12.75"
+          "input": "10 15",
+          "expectedOutput": "12.50"
         },
         {
           "id": 2,

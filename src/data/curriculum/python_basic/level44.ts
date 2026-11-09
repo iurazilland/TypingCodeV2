@@ -82,17 +82,17 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "아무 값도 없음을 뜻하는 파이썬 상수를 빈칸에 채워 불리언 판별값과 자료형을 출력해보세요.",
-      "prompt_en": "Fill in the Python constant representing an empty/absent value to print its boolean value and type.",
+      "prompt_ko": "아무 값도 없음을 뜻하는 파이썬 상수를 빈칸에 채워 값과 불리언 판별 결과를 출력해보세요.",
+      "prompt_en": "Fill in the Python constant representing an empty/absent value to print its value and boolean result.",
       "hint_ko": "영어로 '아무것도 없음'을 뜻하며 첫 글자만 대문자로 적는 네 글자 파이썬 예약어 상수를 빈칸에 넣어보세요.",
       "hint_en": "Fill in the 4-letter capitalized Python constant whose English meaning is 'nothing / not any'.",
-      "templateCode": "target = §§§§\nprint(bool(target))\nprint(type(target))",
-      "targetCode": "target = None\nprint(bool(target))\nprint(type(target))",
+      "templateCode": "target = §§§§\nprint(target, bool(target))",
+      "targetCode": "target = None\nprint(target, bool(target))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "False\n<class 'NoneType'>"
+          "expectedOutput": "None False"
         }
       ]
     },

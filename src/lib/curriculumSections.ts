@@ -105,9 +105,9 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
       },
       { 
         levelNumber: 13, 
-        title_ko: 'int()로 숫자 입력받아 계산하기', 
-        title_en: 'Converting Input to Numbers with int()',
-        syntaxTags: ['int()', 'int(input())'],
+        title_ko: 'int()와 str()로 숫자와 문자열 변환하기', 
+        title_en: 'Converting Numbers & Strings with int() and str()',
+        syntaxTags: ['int(input())', 's = str(n)'],
       },
       { 
         levelNumber: 14, 

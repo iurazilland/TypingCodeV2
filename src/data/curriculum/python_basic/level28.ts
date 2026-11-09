@@ -240,25 +240,25 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "실수 무게 w를 입력받아 w >= 1.0인 동안 절반(w = w / 2)으로 줄이며 몇 번 나누었는지 cnt를 출력해보세요.",
-      "prompt_en": "Read float w, halve it (w = w / 2) while w >= 1.0, and print the step count cnt.",
-      "hint_ko": "실수로 입력받은 무게가 1.0 이상인 동안 절반으로 나누고 횟수를 1씩 늘린 뒤, 반복문 밖에서 횟수를 출력하세요.",
-      "hint_en": "Halve the float weight and increment the counter as long as weight stays at least 1.0, then print the count outside.",
-      "targetCode": "w = float(input())\ncnt = 0\nwhile w >= 1.0:\n    w = w / 2\n    cnt += 1\nprint(cnt)",
+      "prompt_ko": "정수 무게 w를 입력받아 w >= 1.0인 동안 절반(w = w / 2)으로 줄이며 몇 번 나누었는지 cnt를 출력해보세요.",
+      "prompt_en": "Read integer w, halve it (w = w / 2) while w >= 1.0, and print the step count cnt.",
+      "hint_ko": "정수로 입력받은 무게가 1.0 이상인 동안 절반으로 나누고 횟수를 1씩 늘린 뒤, 반복문 밖에서 횟수를 출력하세요.",
+      "hint_en": "Halve the weight and increment the counter as long as weight stays at least 1.0, then print the count outside.",
+      "targetCode": "w = int(input())\ncnt = 0\nwhile w >= 1.0:\n    w = w / 2\n    cnt += 1\nprint(cnt)",
       "testCases": [
         {
           "id": 1,
-          "input": "8.0",
+          "input": "8",
           "expectedOutput": "4"
         },
         {
           "id": 2,
-          "input": "3.0",
+          "input": "3",
           "expectedOutput": "2"
         },
         {
           "id": 3,
-          "input": "1.0",
+          "input": "1",
           "expectedOutput": "1"
         }
       ]

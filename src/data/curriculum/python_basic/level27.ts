@@ -212,26 +212,26 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 조건 분기 키워드를 채워 n개의 실수 중 양수 개수(pos), 음수 개수(neg)를 세고 0이면 \"Zero\"를 출력해보세요.",
-      "prompt_en": "Fill in the two branching keywords to count positive and negative floats and print \"Zero\" for 0.",
+      "prompt_ko": "두 조건 분기 키워드를 채워 n개의 정수 중 양수 개수(pos), 음수 개수(neg)를 세고 0이면 \"Zero\"를 출력해보세요.",
+      "prompt_en": "Fill in the two branching keywords to count positive and negative integers and print \"Zero\" for 0.",
       "hint_ko": "두 번째 조건식이 붙는 자리에는 '그밖에 만약' 두 영단어의 앞 두 글자씩 합친 네 글자 키워드를, 마지막 기본 분기에는 '그밖에'를 뜻하는 네 글자 키워드를 채워보세요.",
       "hint_en": "Use the 4-letter chained condition keyword for the second test, followed by the 4-letter fallback keyword before the final colon.",
-      "templateCode": "n = int(input())\npos = 0\nneg = 0\nfor i in range(n):\n    x = float(input())\n    if x > 0:\n        pos += 1\n    §§§§ x < 0:\n        neg += 1\n    §§§§:\n        print(\"Zero\")\nprint(pos, neg)",
-      "targetCode": "n = int(input())\npos = 0\nneg = 0\nfor i in range(n):\n    x = float(input())\n    if x > 0:\n        pos += 1\n    elif x < 0:\n        neg += 1\n    else:\n        print(\"Zero\")\nprint(pos, neg)",
+      "templateCode": "n = int(input())\npos = 0\nneg = 0\nfor i in range(n):\n    x = int(input())\n    if x > 0:\n        pos += 1\n    §§§§ x < 0:\n        neg += 1\n    §§§§:\n        print(\"Zero\")\nprint(pos, neg)",
+      "targetCode": "n = int(input())\npos = 0\nneg = 0\nfor i in range(n):\n    x = int(input())\n    if x > 0:\n        pos += 1\n    elif x < 0:\n        neg += 1\n    else:\n        print(\"Zero\")\nprint(pos, neg)",
       "testCases": [
         {
           "id": 1,
-          "input": "4\n2.5\n-1.0\n0.0\n3.2",
+          "input": "4\n2\n-1\n0\n3",
           "expectedOutput": "Zero\n2 1"
         },
         {
           "id": 2,
-          "input": "3\n-2.0\n-0.5\n1.5",
+          "input": "3\n-2\n-1\n1",
           "expectedOutput": "1 2"
         },
         {
           "id": 3,
-          "input": "2\n0.0\n4.0",
+          "input": "2\n0\n4",
           "expectedOutput": "Zero\n1 0"
         }
       ]
@@ -240,11 +240,11 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "초기 체력 hp = 50에서 n번 정수를 입력받아 양수면 hp += d, 0 이하면 hp -= 10을 적용한 뒤 \"HP:\" + str(hp)를 출력해보세요.",
-      "prompt_en": "Starting at hp = 50, read n integers: if d > 0 add d to hp, else subtract 10, then print \"HP:\" + str(hp).",
-      "hint_ko": "반복문 안에서 입력값의 부호에 따라 체력을 더하거나 빼고, 모든 반복이 끝난 뒤 문자열로 변환해 접두사와 이어 출력하세요.",
-      "hint_en": "Branch on each input's sign inside the loop to adjust hp, then convert hp to text for the final output outside.",
-      "targetCode": "hp = 50\nn = int(input())\nfor i in range(n):\n    d = int(input())\n    if d > 0:\n        hp += d\n    else:\n        hp -= 10\nprint(\"HP:\" + str(hp))",
+      "prompt_ko": "초기 체력 hp = 50에서 n번 정수를 입력받아 양수면 hp += d, 0 이하면 hp -= 10을 적용한 뒤 res = str(hp)를 사용해 \"HP:\" + res를 출력해보세요.",
+      "prompt_en": "Starting at hp = 50, read n integers: if d > 0 add d to hp, else subtract 10, then store res = str(hp) and print \"HP:\" + res.",
+      "hint_ko": "반복문 안에서 입력값의 부호에 따라 체력을 더하거나 빼고, 모든 반복이 끝난 뒤 res 변수에 문자열 변환 값을 저장해 접두사와 이어 출력하세요.",
+      "hint_en": "Branch on each input's sign inside the loop to adjust hp, then store str(hp) in res for the final output outside.",
+      "targetCode": "hp = 50\nn = int(input())\nfor i in range(n):\n    d = int(input())\n    if d > 0:\n        hp += d\n    else:\n        hp -= 10\nres = str(hp)\nprint(\"HP:\" + res)",
       "testCases": [
         {
           "id": 1,

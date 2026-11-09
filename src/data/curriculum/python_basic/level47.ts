@@ -46,17 +46,17 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈 딕셔너리가 아닌 빈 집합을 생성하도록 빈칸을 채워 길이(0)와 자료형을 출력해보세요.",
-      "prompt_en": "Fill in the blank to create an empty set (not an empty dict) and print its length and type.",
+      "prompt_ko": "빈 집합을 생성하도록 빈칸을 채워 원소 10을 추가한 뒤 길이(1)를 출력해보세요.",
+      "prompt_en": "Fill in the blank to create an empty set, add 10 to it, and print its length (1).",
       "hint_ko": "빈 중괄호는 빈 사전으로 인식되므로, 빈 '집합'을 만들 때는 세 글자 자료형 이름 뒤에 빈 소괄호를 붙여 호출해야 합니다.",
       "hint_en": "Empty curly braces create a dictionary, so call the 3-letter set constructor with empty parentheses to make an empty set.",
-      "templateCode": "empty = §§§§§\nprint(len(empty), type(empty))",
-      "targetCode": "empty = set()\nprint(len(empty), type(empty))",
+      "templateCode": "empty = §§§§§\nempty.add(10)\nprint(len(empty))",
+      "targetCode": "empty = set()\nempty.add(10)\nprint(len(empty))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "0 <class 'set'>"
+          "expectedOutput": "1"
         }
       ]
     },
