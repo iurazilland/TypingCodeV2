@@ -76,8 +76,8 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
   {
     id: 'py-sec-2',
     sectionNumber: 2,
-    title_ko: '변수, 자료형과 사용자 입력',
-    title_en: 'Variables, Data Types & User Input',
+    title_ko: '변수와 사용자 입력',
+    title_en: 'Variables & User Input',
     levels: [
       { 
         levelNumber: 9, 
@@ -99,15 +99,15 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
       },
       { 
         levelNumber: 12, 
-        title_ko: '자료형 확인(type)과 형변환 기초', 
-        title_en: 'Data Types, type(), & Type Casting',
-        syntaxTags: ['type()', 'int(), float(), str()'],
+        title_ko: 'input()으로 사용자 입력 받기', 
+        title_en: 'Reading User Input with input()',
+        syntaxTags: ['input()', '문자열 입력'],
       },
       { 
         levelNumber: 13, 
-        title_ko: 'input() 사용자 입력과 숫자 형변환', 
-        title_en: 'input() User Input & Type Conversion',
-        syntaxTags: ['input()', 'int(input())'],
+        title_ko: 'int()로 숫자 입력받아 계산하기', 
+        title_en: 'Converting Input to Numbers with int()',
+        syntaxTags: ['int()', 'int(input())'],
       },
       { 
         levelNumber: 14, 
@@ -117,7 +117,7 @@ const PYTHON_BASIC_SECTIONS: LevelSection[] = [
       },
       { 
         levelNumber: 15, 
-        title_ko: '변수·자료형·입력 종합 문제풀이', 
+        title_ko: '변수·입력·연산 종합 문제풀이', 
         title_en: 'Section 2 Comprehensive Review',
         syntaxTags: ['변수·입력 종합', '타이핑 마스터'],
       },

@@ -1,8 +1,8 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 // ============================================================================
-// 파이썬 기초 12레벨: 자료형과 type(), 형변환 기초 (13단계 표준 구성)
-// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (type/int/float/str 블록 사전 배치 활용)
+// 파이썬 기초 12레벨: input()으로 사용자 입력 받기 (13단계 표준 구성)
+// - [1,3,5,7,9단계] 블록 코딩 개념 도입 (input 블록 사전 배치 활용)
 // - [2,4,6,8,10단계] 빈칸 채우기 타이핑 실습 (fill_blank)
 // - [11단계] 버그 수정 (fix_bug)
 // - [12단계] 예제 아래 한 줄 코드 추가 작성 (one_line)
@@ -14,28 +14,33 @@ export const PYTHON_LEVEL_12: PracticeRound = {
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 12,
-  title_ko: '12레벨: 자료형 확인(type)과 형변환 기초',
-  title_en: 'Level 12: Data Types, type(), & Type Casting',
+  title_ko: '12레벨: input()으로 사용자 입력 받기',
+  title_en: 'Level 12: Reading User Input with input()',
   totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'type'],
+  unlockedBlocks: ['print', 'variable', 'comment', 'input'],
   questions: [
     // ------------------------------------------------------------------------
-    // Pair 1 (1~2단계): 정수(int)와 문자열(str)의 type() 비교
+    // Pair 1 (1~2단계): input()으로 한 줄 문자열 입력받아 출력하기 (쉼표 출력 복습)
     // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
       type: 'block',
-      prompt_ko: 'a에 숫자 10, b에 문자열 "10"을 저장한 뒤, 두 print(type( )) 블록에 각각 a와 b를 넣어 자료형이 어떻게 다른지 확인해보세요.',
-      prompt_en: 'Store 10 in a and "10" in b, then pass a and b into the two print(type( )) blocks to compare their data types.',
-      hint_ko: '따옴표 없는 숫자는 정수형이고 따옴표로 감싼 숫자는 문자열입니다. 각 변수를 자료형 확인 블록 안에 넣어 차이를 비교해보세요.',
-      hint_en: 'A number without quotes is an integer, while a quoted one is a string. Pass each variable into the type-checking blocks to compare them.',
-      targetCode: 'a = 10\nb = "10"\nprint(type(a))\nprint(type(b))',
+      prompt_ko: 'input()으로 전달되는 이름을 변수 name에 저장하고, "Hello,"와 name을 나란히 출력해보세요. (예: Alice 입력 시 Hello, Alice 출력)',
+      prompt_en: 'Store the input name in variable name using input(), and print "Hello," and name (e.g., Alice -> Hello, Alice).',
+      hint_ko: '입력 블록의 괄호 안은 비워둔 채 왼쪽 변수에 입력값을 받아 저장하고, 출력 블록에서 인사말 문자열과 변수를 쉼표로 나란히 출력해보세요.',
+      hint_en: 'Leave the input block\'s parentheses empty to store user input in the left variable, then list the greeting text and variable in print().',
+      targetCode: 'name = input()\nprint("Hello,", name)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: "<class 'int'>\n<class 'str'>",
+          input: 'Alice',
+          expectedOutput: 'Hello, Alice',
+        },
+        {
+          id: 2,
+          input: 'Minsu',
+          expectedOutput: 'Hello, Minsu',
         },
       ],
     },
@@ -44,38 +49,48 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 값의 자료형(타입)을 알려주는 함수 이름을 채워 정수와 문자열의 자료형 정보를 각각 출력해보세요.',
-      prompt_en: 'Fill in the two blanks with the function name that inspects data types to print the types of x and y.',
-      hint_ko: '값의 자료형(종류·유형)을 확인할 때는 영어로 유형을 뜻하는 네 글자 내장 함수를 사용합니다.',
-      hint_en: 'To inspect what kind of data a variable holds, use the four-letter built-in function that means "kind" or "category" in English.',
-      templateCode: 'x = 25\ny = "25"\nprint(§§§§(x))\nprint(§§§§(y))',
-      targetCode: 'x = 25\ny = "25"\nprint(type(x))\nprint(type(y))',
+      prompt_ko: '빈칸에 사용자 입력을 받는 함수 이름을 채워 입력된 도시명 앞에 City: 를 붙여 출력해보세요. (예: Seoul 입력 시 City: Seoul)',
+      prompt_en: 'Fill in the blank with the user-input function name to print City: followed by the input city (e.g., Seoul -> City: Seoul).',
+      hint_ko: '사용자가 키보드로 입력한 한 줄을 읽어올 때는 영어로 입력을 뜻하는 다섯 글자 내장 함수를 사용합니다.',
+      hint_en: 'To read a line typed by the user, call the five-letter built-in function that means data coming "in" to the program.',
+      templateCode: 'city = §§§§§()\nprint("City:", city)',
+      targetCode: 'city = input()\nprint("City:", city)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: "<class 'int'>\n<class 'str'>",
+          input: 'Seoul',
+          expectedOutput: 'City: Seoul',
+        },
+        {
+          id: 2,
+          input: 'Busan',
+          expectedOutput: 'City: Busan',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // Pair 2 (3~4단계): 실수(float)의 자료형 확인
+    // Pair 2 (3~4단계): 입력받은 문자열에 + 연결 및 sep 옵션 활용하기 (5·7레벨 복습)
     // ------------------------------------------------------------------------
     {
       id: 3,
       step: 3,
       type: 'block',
-      prompt_ko: '변수 pi에 소수점이 있는 실수 3.14를 저장하고, print(type( )) 블록에 pi를 넣어 <class \'float\'>가 출력되는지 확인해보세요.',
-      prompt_en: 'Store 3.14 in variable pi and pass pi into print(type( )) to verify <class \'float\'>.',
-      hint_ko: '소수점이 포함된 숫자는 부동소수점 실수형으로 분류됩니다. 변수에 실수를 저장한 뒤 자료형 확인 블록에 전달해보세요.',
-      hint_en: 'Numbers with a decimal point are stored as floating-point values. Assign the decimal to the variable and pass it to the type block.',
-      targetCode: 'pi = 3.14\nprint(type(pi))',
+      prompt_ko: 'input()으로 입력받은 아이디를 user에 저장한 뒤, msg에 "ID:" + user를 저장하고 출력해보세요. (예: hero 입력 시 ID:hero)',
+      prompt_en: 'Read user via input(), store "ID:" + user in msg, and print msg (e.g., hero -> ID:hero).',
+      hint_ko: '입력 함수로 읽어온 값은 문자열이므로 앞선 문자열과 더하기 기호로 빈틈없이 이어붙여 새 변수에 저장할 수 있습니다.',
+      hint_en: 'Since user input is a string, you can concatenate it with the prefix string using + and store the result in msg.',
+      targetCode: 'user = input()\nmsg = "ID:" + user\nprint(msg)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: "<class 'float'>",
+          input: 'hero',
+          expectedOutput: 'ID:hero',
+        },
+        {
+          id: 2,
+          input: 'coder',
+          expectedOutput: 'ID:coder',
         },
       ],
     },
@@ -84,39 +99,48 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 자료형을 확인하는 함수 이름을 채워 나눗셈 결과값(2.5)과 그 자료형(<class \'float\'>)을 나란히 출력해보세요.',
-      prompt_en: 'Fill in the blank with the type-checking function name to print 2.5 alongside <class \'float\'>.',
-      hint_ko: '일반 나눗셈의 결과값 옆에 그 값의 자료형을 함께 출력할 수 있도록 유형을 뜻하는 네 글자 함수 이름을 적어보세요.',
-      hint_en: 'Fill in the four-letter built-in function that checks the data category of the division result.',
-      templateCode: 'rate = 10 / 4\nprint(rate, §§§§(rate))',
-      targetCode: 'rate = 10 / 4\nprint(rate, type(rate))',
+      prompt_ko: '빈칸에 입력 함수 이름을 채워 입력된 등급 양옆에 대괄호를 빈틈없이 붙여 출력해보세요. (예: VIP 입력 시 [VIP])',
+      prompt_en: 'Fill in the input function name to print the input tag wrapped in square brackets without spaces (e.g., VIP -> [VIP]).',
+      hint_ko: '첫째 줄에서 다섯 글자 입력 함수로 단어를 읽어오면, 둘째 줄의 구분자(sep="") 옵션이 공백 없이 대괄호와 단어를 붙여 출력해 줍니다.',
+      hint_en: 'Read the word on line 1 with the five-letter input function; sep="" on line 2 prints the brackets and variable without spaces.',
+      templateCode: 'tag = §§§§§()\nprint("[", tag, "]", sep="")',
+      targetCode: 'tag = input()\nprint("[", tag, "]", sep="")',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: "2.5 <class 'float'>",
+          input: 'VIP',
+          expectedOutput: '[VIP]',
+        },
+        {
+          id: 2,
+          input: 'GOLD',
+          expectedOutput: '[GOLD]',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // Pair 3 (5~6단계): int()로 숫자 모양 문자열을 정수로 바꾸어 덧셈하기
+    // Pair 3 (5~6단계): 두 줄 연속 input()으로 두 문자열 입력받아 조합하기 (10레벨 복습)
     // ------------------------------------------------------------------------
     {
       id: 5,
       step: 5,
       type: 'block',
-      prompt_ko: 'text에 문자열 "25"를 저장한 뒤, 둘째 블록의 int( ) 안에 text를 넣어 정수 num을 만들고 num + 5를 출력해 30을 확인해보세요.',
-      prompt_en: 'Store "25" in text, convert text with int( ) into num, and print num + 5 to output 30.',
-      hint_ko: '문자열 상태의 숫자는 바로 산술 덧셈을 할 수 없으므로, 정수 변환 블록을 거쳐 숫자형 변수로 바꾼 뒤 계산합니다.',
-      hint_en: 'Numeric text cannot be added to a number directly—convert the string variable into an integer first, then perform the addition.',
-      targetCode: 'text = "25"\nnum = int(text)\nprint(num + 5)',
-      expectedVariables: { text: '25', num: 25 },
+      prompt_ko: '두 줄에 걸쳐 입력되는 두 단어를 first와 second에 차례로 저장하고, first + second를 출력해보세요. (예: Py, thon -> Python)',
+      prompt_en: 'Read two lines into first and second using input(), then print first + second (e.g., Py and thon -> Python).',
+      hint_ko: '입력 블록은 실행될 때마다 한 줄씩 순서대로 읽어옵니다. 두 변수에 각각 입력을 받은 뒤 더하기 기호로 이어붙여 출력해보세요.',
+      hint_en: 'Each input() call reads the next line in order. Store the two lines in separate variables and concatenate them with +.',
+      targetCode: 'first = input()\nsecond = input()\nprint(first + second)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: '30',
+          input: 'Py\nthon',
+          expectedOutput: 'Python',
+        },
+        {
+          id: 2,
+          input: 'Code\nRun',
+          expectedOutput: 'CodeRun',
         },
       ],
     },
@@ -125,40 +149,48 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 문자열을 정수로 변환하는 함수 이름을 채워 문자열 "1500"과 숫자 500을 더한 합계 2000을 출력해보세요.',
-      prompt_en: 'Fill in the blank with the integer-casting function name to add "1500" and 500 and print 2000.',
-      hint_ko: '숫자 모양의 문자열을 정수로 바꿀 때는 영어로 정수(integer)의 앞 세 글자를 딴 변환 함수를 사용합니다.',
-      hint_en: 'To convert a numeric string into a whole number, use the casting function named after the first three letters of "integer".',
-      templateCode: 'price = "1500"\ntotal = §§§(price) + 500\nprint(total)',
-      targetCode: 'price = "1500"\ntotal = int(price) + 500\nprint(total)',
-      expectedVariables: { total: 2000 },
+      prompt_ko: '두 빈칸에 입력 함수 이름을 채워 두 줄로 입력된 두 단어의 순서를 반대로 뒤집어 출력해보세요. (예: World, Hello -> Hello World)',
+      prompt_en: 'Fill in both blanks with the input function name to print the two input lines in reverse order.',
+      hint_ko: '첫째 줄과 둘째 줄 모두 다섯 글자 입력 함수를 호출해 각각의 변수에 저장하면, 마지막 줄에서 순서를 바꾸어 출력합니다.',
+      hint_en: 'Call the five-letter input function on both lines to store each line of text before printing b followed by a.',
+      templateCode: 'a = §§§§§()\nb = §§§§§()\nprint(b, a)',
+      targetCode: 'a = input()\nb = input()\nprint(b, a)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: '2000',
+          input: 'World\nHello',
+          expectedOutput: 'Hello World',
+        },
+        {
+          id: 2,
+          input: 'Korea\nSeoul',
+          expectedOutput: 'Seoul Korea',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // Pair 4 (7~8단계): str()로 숫자를 문자열로 바꾸어 + 결합하기
+    // Pair 4 (7~8단계): 입력받은 문자열 반복(*)과 복합 대입(+=) 활용하기 (5·11레벨 복습)
     // ------------------------------------------------------------------------
     {
       id: 7,
       step: 7,
       type: 'block',
-      prompt_ko: 'lv에 숫자 12를 저장한 뒤, 둘째 블록의 str( )로 문자열 label을 만들고 "Lv." + label을 출력해 Lv.12를 완성해보세요.',
-      prompt_en: 'Store 12 in lv, convert lv with str( ) into label, and print "Lv." + label to output Lv.12.',
-      hint_ko: '문자열과 숫자는 더하기 기호로 바로 이어붙일 수 없으므로, 숫자 변수를 문자열 변환 블록으로 감싸 글자로 바꾼 뒤 결합합니다.',
-      hint_en: 'Strings and numbers cannot be joined with + directly, so convert the number variable into text first before concatenating.',
-      targetCode: 'lv = 12\nlabel = str(lv)\nprint("Lv." + label)',
-      expectedVariables: { lv: 12, label: '12' },
+      prompt_ko: 'input()으로 기호를 변수 ch에 입력받고, line에 ch * 5를 저장해 5번 반복된 문자열을 출력해보세요. (예: * 입력 시 *****)',
+      prompt_en: 'Read a symbol into ch with input(), store ch * 5 in line, and print line (e.g., * -> *****).',
+      hint_ko: '입력받은 문자열 변수에 곱셈 기호로 숫자를 곱하면 해당 글자가 지정한 횟수만큼 반복된 문자열이 만들어집니다.',
+      hint_en: 'Multiplying the input string variable by 5 repeats the text five times.',
+      targetCode: 'ch = input()\nline = ch * 5\nprint(line)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: 'Lv.12',
+          input: '*',
+          expectedOutput: '*****',
+        },
+        {
+          id: 2,
+          input: '#',
+          expectedOutput: '#####',
         },
       ],
     },
@@ -167,39 +199,48 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '빈칸에 숫자를 문자열로 바꾸는 함수 이름을 채워 "ID-"와 숫자 변수 age(20)를 +로 이어붙인 ID-20을 출력해보세요.',
-      prompt_en: 'Fill in the blank with the string-casting function name to concatenate "ID-" and age (20) as ID-20.',
-      hint_ko: '숫자를 글자로 바꾸어 이어붙일 때는 영어로 문자열(string)의 앞 세 글자를 딴 변환 함수를 사용합니다.',
-      hint_en: 'To turn a number into text for concatenation, use the casting function formed from the first three letters of "string".',
-      templateCode: 'age = 20\nprint("ID-" + §§§(age))',
-      targetCode: 'age = 20\nprint("ID-" + str(age))',
+      prompt_ko: '빈칸에 복합 대입 연산자를 채워 입력받은 단어 뒤에 느낌표("!")를 이어붙여 출력해보세요. (예: Go 입력 시 Go!)',
+      prompt_en: 'Fill in the compound assignment operator to append "!" to the input word and print it (e.g., Go -> Go!).',
+      hint_ko: '문자열 변수에도 덧셈 복합 대입 연산자를 사용하면 기존 글자 뒤에 새로운 글자를 이어붙여 자기 자신에게 다시 저장할 수 있습니다.',
+      hint_en: 'Use the addition compound assignment operator to concatenate "!" onto the existing string variable in place.',
+      templateCode: 'word = input()\nword §§ "!"\nprint(word)',
+      targetCode: 'word = input()\nword += "!"\nprint(word)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: 'ID-20',
+          input: 'Go',
+          expectedOutput: 'Go!',
+        },
+        {
+          id: 2,
+          input: 'Win',
+          expectedOutput: 'Win!',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // Pair 5 (9~10단계): float() 실수 변환과 int(실수) 소수점 버림
+    // Pair 5 (9~10단계): input()에 숫자를 입력해도 문자열로 동작함 확인하기
     // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
       type: 'block',
-      prompt_ko: '첫째 블록의 float( ) 안에 문자열 "3.5"를 넣어 실수 변수 w에 저장하고, 아래에서 w + 1.5를 출력해 5.0을 확인해보세요.',
-      prompt_en: 'Convert "3.5" with float( ) into variable w, then print w + 1.5 to verify 5.0.',
-      hint_ko: '소수점이 들어 있는 문자열을 계산 가능한 실수로 바꿀 때는 부동소수점(floating-point) 변환 블록에 해당 문자열을 넣어줍니다.',
-      hint_en: 'Pass the decimal string into the floating-point conversion block so you can add another decimal number to it.',
-      targetCode: 'w = float("3.5")\nprint(w + 1.5)',
-      expectedVariables: { w: 3.5 },
+      prompt_ko: '숫자 7이 입력될 때 input()의 결과를 n에 저장하고, n * 3을 출력해 21이 아닌 777이 출력되는 것을 확인해보세요.',
+      prompt_en: 'When 7 is input, store input() in n and print n * 3 to see that it outputs 777 (string repetition) rather than 21.',
+      hint_ko: '입력 함수로 읽어온 값은 숫자 모양이더라도 항상 문자열로 저장되므로, 곱셈을 하면 숫자 계산 대신 글자가 반복됩니다.',
+      hint_en: 'Values read by input() are always strings even if digits are typed, so * 3 repeats the character three times.',
+      targetCode: 'n = input()\nprint(n * 3)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: '5.0',
+          input: '7',
+          expectedOutput: '777',
+        },
+        {
+          id: 2,
+          input: '5',
+          expectedOutput: '555',
         },
       ],
     },
@@ -208,40 +249,50 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '두 빈칸에 형변환 함수 이름을 각각 채워 실수 3.9의 소수점을 버린 정수(3)와 문자열 "2.5"를 실수로 바꾼 값(2.5)을 출력해보세요.',
-      prompt_en: 'Fill in the two casting function names to truncate 3.9 to integer 3 and convert "2.5" to float 2.5.',
-      hint_ko: '소수점 아래를 버리고 정수로 만들 때는 integer의 앞 세 글자 함수를, 소수점 문자열을 실수로 바꿀 때는 부동소수점(floating-point)의 앞 다섯 글자 함수를 씁니다.',
-      hint_en: 'Use the first three letters of "integer" to drop the decimal part, and the first five letters of "floating-point" to parse a decimal string.',
-      templateCode: 'ratio = 3.9\nprint(§§§(ratio), §§§§§("2.5"))',
-      targetCode: 'ratio = 3.9\nprint(int(ratio), float("2.5"))',
+      prompt_ko: '두 빈칸에 입력 함수를 채워 10과 20이 입력될 때 a + b가 문자열처럼 이어붙어 1020으로 출력되는지 확인해보세요.',
+      prompt_en: 'Fill in both blanks with the input function to see that a + b concatenates "10" and "20" into 1020.',
+      hint_ko: '두 줄의 입력값을 각각 다섯 글자 입력 함수로 받아 더하면, 두 값이 모두 문자열이기 때문에 글자가 나란히 이어붙습니다.',
+      hint_en: 'Read each line with the five-letter input function; because both results are strings, + joins them into "1020".',
+      templateCode: 'a = §§§§§()\nb = §§§§§()\nprint(a + b)',
+      targetCode: 'a = input()\nb = input()\nprint(a + b)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: '3 2.5',
+          input: '10\n20',
+          expectedOutput: '1020',
+        },
+        {
+          id: 2,
+          input: '3\n4',
+          expectedOutput: '34',
         },
       ],
     },
 
     // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - 문자열 + 정수 TypeError 교정
+    // 11단계: 버그 수정 (fix_bug) - input 함수 이름 오타 교정
     // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '문자열과 정수를 바로 +로 연결해 발생한 자료형 오류(TypeError)를 형변환으로 수정하여 Ch.5를 출력해보세요.',
-      prompt_en: 'Fix the TypeError caused by concatenating a string and an integer with + so Ch.5 prints cleanly.',
-      hint_ko: '더하기 연산자 왼쪽은 문자열인데 오른쪽 변수는 정수형이라 서로 자료형이 맞지 않습니다. 오른쪽 변수를 문자열로 형변환해 이어붙여보세요.',
-      hint_en: 'A TypeError happens because + cannot combine text with an integer directly—convert the integer variable into a string first.',
-      templateCode: 'stage = 5\nprint("Ch." + stage)',
-      targetCode: 'stage = 5\nprint("Ch." + str(stage))',
+      prompt_ko: '입력 함수 이름의 철자 오타로 인해 발생한 오류(NameError)를 수정하여 Hi, Leo가 출력되도록 해보세요.',
+      prompt_en: 'Fix the typo in the input function name so that Hi, Leo is printed.',
+      hint_ko: '첫 번째 줄에서 사용자 입력을 읽어오는 다섯 글자 내장 함수의 철자가 올바르게 적혀 있는지 확인해보세요.',
+      hint_en: 'Check the spelling of the five-letter built-in function used to read user input on the first line.',
+      templateCode: 'name = inpt()\nprint("Hi,", name)',
+      targetCode: 'name = input()\nprint("Hi,", name)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: 'Ch.5',
+          input: 'Leo',
+          expectedOutput: 'Hi, Leo',
+        },
+        {
+          id: 2,
+          input: 'Ara',
+          expectedOutput: 'Hi, Ara',
         },
       ],
     },
@@ -254,17 +305,22 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 12,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '변수 lv를 선언한 코드 아래에 한 줄을 추가하여 문자열 "Lv."과 문자열로 변환한 lv를 +로 이어붙인 Lv.9를 출력해보세요.',
-      prompt_en: 'Type line 1 and add a line below concatenating "Lv." and lv converted to a string with + to print Lv.9.',
-      hint_ko: '앞선 문자열 뒤에 정수 변수를 더하기 기호로 빈틈없이 이어붙이려면, 숫자 변수를 문자열 변환 함수로 감싼 뒤 출력해야 합니다.',
-      hint_en: 'To join the prefix text and the integer variable with + inside print(), convert the integer variable to a string first.',
-      templateCode: 'lv = 9\n§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'lv = 9\nprint("Lv." + str(lv))',
+      prompt_ko: '단어를 입력받는 코드 아래에 한 줄을 추가하여 입력받은 word를 2번 반복한 문자열을 출력해보세요. (예: Go -> GoGo)',
+      prompt_en: 'Type line 1 and add a line below to print the input word repeated 2 times (e.g., Go -> GoGo).',
+      hint_ko: '위에서 입력받은 문자열 변수에 곱셈 기호로 2를 곱한 식을 출력 함수 괄호 안에 넣어보세요.',
+      hint_en: 'Pass an expression multiplying the word variable by 2 inside the print function on the second line.',
+      templateCode: 'word = input()\n§§§§§§§§§§§§§§§',
+      targetCode: 'word = input()\nprint(word * 2)',
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: 'Lv.9',
+          input: 'Go',
+          expectedOutput: 'GoGo',
+        },
+        {
+          id: 2,
+          input: 'Hi',
+          expectedOutput: 'HiHi',
         },
       ],
     },
@@ -277,21 +333,20 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       step: 13,
       type: 'quiz',
       kind: 'predict_output',
-      prompt_ko: '다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.',
-      prompt_en: 'Select the exact output that will be printed when the following Python code runs.',
-      hint_ko: '문자열에 정수를 곱할 때와 정수로 형변환한 값에 정수를 곱할 때 곱셈 기호가 각각 어떻게 다르게 동작하는지 비교해보세요.',
-      hint_en: 'Compare what the asterisk operator does when multiplying a string by an integer versus multiplying two integers after type conversion.',
-      targetCode: 'a = "12"\nb = 3\nprint(a * b)\nprint(int(a) * b)',
-      choices: ['121212\n36', '36\n36', '121212\n121212', 'TypeError'],
+      prompt_ko: '첫째 줄에 15, 둘째 줄에 20이 입력될 때, 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: 'When 15 and 20 are given on lines 1 and 2, select the exact output of the following Python code.',
+      hint_ko: '입력 함수가 반환한 두 값은 모두 문자열 상태이므로 더하기 기호가 산술 덧셈이 아닌 문자열 이어붙이기로 동작한다는 점을 떠올려보세요.',
+      hint_en: 'Remember that values returned by input() are strings, so the + operator concatenates them rather than adding numbers.',
+      targetCode: 'a = input()\nb = input()\nprint(a + b)',
+      choices: ['1520', '35', '15 20', 'TypeError'],
       correctChoiceIndex: 0,
       testCases: [
         {
           id: 1,
-          input: '',
-          expectedOutput: '121212\n36',
+          input: '15\n20',
+          expectedOutput: '1520',
         },
       ],
     },
   ],
 };
-
