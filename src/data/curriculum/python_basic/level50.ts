@@ -20,6 +20,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
     "method",
     "if",
     "for_range",
+    "range",
     "for_in",
     "while",
     "def"

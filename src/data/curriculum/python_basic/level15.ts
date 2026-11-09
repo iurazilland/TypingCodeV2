@@ -17,7 +17,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
   title_ko: '15레벨: 변수·입력·형변환 종합 문제풀이',
   title_en: 'Level 15: Section 2 Comprehensive Review',
   totalQuestions: 10,
-  unlockedBlocks: ['print', 'variable', 'comment', 'input', 'int', 'str', 'method'],
+  unlockedBlocks: ['print', 'variable', 'comment', 'input', 'type', 'method'],
   questions: [
     // ------------------------------------------------------------------------
     // 1~3단계: 빈칸 채우기 (fill_blank)

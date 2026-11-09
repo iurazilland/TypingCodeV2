@@ -17,7 +17,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
   title_ko: '14레벨: 다중 변수 할당과 input().split()',
   title_en: 'Level 14: Multiple Assignment & input().split()',
   totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'input', 'int', 'method'],
+  unlockedBlocks: ['print', 'variable', 'input', 'type', 'method'],
   questions: [
     // ------------------------------------------------------------------------
     // Pair 1 (1~2단계): 한 줄 다중 변수 할당 (a, b, c = 10, 20, 30)

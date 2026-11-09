@@ -17,7 +17,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
   title_ko: '13레벨: int()와 str()로 숫자와 문자열 변환하기',
   title_en: 'Level 13: Converting Numbers & Strings with int() and str()',
   totalQuestions: 13,
-  unlockedBlocks: ['print', 'variable', 'comment', 'input', 'int', 'str'],
+  unlockedBlocks: ['print', 'variable', 'comment', 'input', 'type'],
   questions: [
     // ------------------------------------------------------------------------
     // Pair 1 (1~2단계): int()로 입력받은 문자열을 정수로 바꾸어 변수에 저장하고 계산하기
@@ -309,7 +309,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: 'Add a line below to print "Result:" + n after doubling n and converting it to a string (e.g., 15 -> Result:30).',
       hint_ko: '세 번째 줄에서 이미 문자열로 변환되어 저장된 변수 n을 "Result:" 뒤에 더하기 기호로 이어붙여 출력해보세요.',
       hint_en: 'Since line 3 already converted n to a string, concatenate "Result:" and n with + inside print().',
-      templateCode: 'n = int(input())\nn *= 2\nn = str(n)\n§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'n = int(input())\nn *= 2\nn = str(n)\n§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'n = int(input())\nn *= 2\nn = str(n)\nprint("Result:" + n)',
       testCases: [
         {

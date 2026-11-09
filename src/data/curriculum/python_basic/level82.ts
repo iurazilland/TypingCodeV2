@@ -34,22 +34,22 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 1,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 줄에 입력된 실수 목록을 나란히 짝지어 각 오차 크기를 소수 둘째 자리로 반올림한 뒤 최댓값을 출력해보세요.",
-      "prompt_en": "Fill in both blanks to pair two float lists, round each absolute difference to 2 decimals, and print the max.",
-      "hint_ko": "두 실수의 부호 없는 차이 크기를 구하는 수치 내장 함수와, 두 리스트의 같은 위치 원소를 나란히 묶어 꺼내는 병렬 순회 함수를 각각 채우세요.",
+      "prompt_ko": "두 줄에 입력된 정수 목록을 나란히 짝지어 각 차이의 크기(절댓값)를 구한 뒤 최댓값을 출력해보세요.",
+      "prompt_en": "Fill in both blanks to pair two integer lists, take each absolute difference, and print the max.",
+      "hint_ko": "두 정수의 부호 없는 차이 크기를 구하는 수치 내장 함수와, 두 리스트의 같은 위치 원소를 나란히 묶어 꺼내는 병렬 순회 함수를 각각 채우세요.",
       "hint_en": "Fill in the numeric built-in for non-negative magnitude and the parallel-pairing built-in that steps through both lists together.",
-      "templateCode": "a = list(map(float, input().split()))\nb = list(map(float, input().split()))\nerrs = [round(§§§(x - y), 2) for x, y in §§§(a, b)]\nprint(max(errs))",
-      "targetCode": "a = list(map(float, input().split()))\nb = list(map(float, input().split()))\nerrs = [round(abs(x - y), 2) for x, y in zip(a, b)]\nprint(max(errs))",
+      "templateCode": "a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nerrs = [§§§(x - y) for x, y in §§§(a, b)]\nprint(max(errs))",
+      "targetCode": "a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nerrs = [abs(x - y) for x, y in zip(a, b)]\nprint(max(errs))",
       "testCases": [
         {
           "id": 1,
-          "input": "1.5 3.2 5.0\n1.2 3.8 4.9",
-          "expectedOutput": "0.6"
+          "input": "15 32 50\n12 38 49",
+          "expectedOutput": "6"
         },
         {
           "id": 2,
-          "input": "10.0 2.25\n8.5 2.5",
-          "expectedOutput": "1.5"
+          "input": "10 2\n8 5",
+          "expectedOutput": "3"
         }
       ]
     },
@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "혼합 리스트 raw 아래에 한 줄을 추가하여 실수(float) 타입 원소가 하나라도 있는지 검사한 결과를 출력해보세요.",
-      "prompt_en": "Add one line below raw to print whether at least one float element exists in raw using any() and isinstance().",
-      "hint_ko": "각 원소가 실수 자료형인지 타입 확인 함수로 검사하는 리스트 컴프리헨션을 만들고, 하나라도 참인지 판별하는 함수로 감싸 출력하세요.",
-      "hint_en": "Build a comprehension testing each element against the real-number type, wrap that list with the existential quantifier built-in, and display the result.",
-      "templateCode": "raw = [15, \"skip\", -20, 3.5, None]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "raw = [15, \"skip\", -20, 3.5, None]\nprint(any([isinstance(x, float) for x in raw]))",
+      "prompt_ko": "혼합 리스트 raw 아래에 한 줄을 추가하여 문자열(str) 타입 원소가 하나라도 있는지 검사한 결과를 출력해보세요.",
+      "prompt_en": "Add one line below raw to print whether at least one str element exists in raw using any() and isinstance().",
+      "hint_ko": "각 원소가 문자열 자료형인지 타입 확인 함수로 검사하는 리스트 컴프리헨션을 만들고, 하나라도 참인지 판별하는 함수로 감싸 출력하세요.",
+      "hint_en": "Build a comprehension testing each element against the string type, wrap that list with the existential quantifier built-in, and display the result.",
+      "templateCode": "raw = [15, \"skip\", -20, 3, None]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "raw = [15, \"skip\", -20, 3, None]\nprint(any([isinstance(x, str) for x in raw]))",
       "testCases": [
         {
           "id": 1,

@@ -112,21 +112,21 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "공백으로 입력된 실수 기온들을 list(map(float, ...))로 변환해 평균을 소수 첫째 자리로 출력해보세요. (출력 예: Avg:21.2)",
-      "prompt_en": "Convert space-separated float temperatures into a list and print the average rounded to 1 decimal place.",
-      "hint_ko": "공백으로 나눈 문자열들을 일괄 실수 변환해 리스트에 담은 뒤, 합계를 길이로 나눈 평균을 소수 첫째 자리까지 반올림합니다.",
-      "hint_en": "Batch-convert the split tokens into a list of floats, then round their sum divided by length to 1 decimal place.",
-      "targetCode": "temps = list(map(float, input().split()))\navg = round(sum(temps) / len(temps), 1)\nprint(f\"Avg:{avg}\")",
+      "prompt_ko": "공백으로 입력된 정수 기온들을 list(map(int, ...))로 변환해 평균을 소수 첫째 자리로 출력해보세요. (출력 예: Avg:16.5)",
+      "prompt_en": "Convert space-separated integer temperatures into a list and print the average rounded to 1 decimal place.",
+      "hint_ko": "공백으로 나눈 문자열들을 일괄 정수 변환해 리스트에 담은 뒤, 합계를 길이로 나눈 평균을 소수 첫째 자리까지 반올림합니다.",
+      "hint_en": "Batch-convert the split tokens into a list of integers, then round their sum divided by length to 1 decimal place.",
+      "targetCode": "temps = list(map(int, input().split()))\navg = round(sum(temps) / len(temps), 1)\nprint(f\"Avg:{avg}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "20.5 22.1 21.0",
-          "expectedOutput": "Avg:21.2"
+          "input": "20 22 23",
+          "expectedOutput": "Avg:21.7"
         },
         {
           "id": 2,
-          "input": "15.2 18.4",
-          "expectedOutput": "Avg:16.8"
+          "input": "15 18",
+          "expectedOutput": "Avg:16.5"
         }
       ]
     },

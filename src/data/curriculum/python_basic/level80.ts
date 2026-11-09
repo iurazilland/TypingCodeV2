@@ -75,16 +75,16 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "isinstance(값, 타입)으로 a가 int인지, b와 c가 (int, float) 숫자 타입 중 하나인지 차례대로 출력해보세요.",
-      "prompt_en": "Use isinstance() to check whether a is int and whether b and c are (int, float), printing each result.",
+      "prompt_ko": "isinstance(값, 타입)으로 a가 int인지, b와 c가 (int, str) 타입 중 하나인지 차례대로 출력해보세요.",
+      "prompt_en": "Use isinstance() to check whether a is int and whether b and c are (int, str), printing each result.",
       "hint_ko": "타입 확인 함수의 두 번째 인자에 여러 타입을 소괄호 튜플로 묶어 전달하면 그중 어느 하나에 해당하는지 한 번에 검사합니다.",
       "hint_en": "Passing a tuple of types as the second argument checks whether the value belongs to any of those types at once.",
-      "targetCode": "a = 42\nb = 3.5\nc = \"42\"\nprint(isinstance(a, int))\nprint(isinstance(b, (int, float)))\nprint(isinstance(c, (int, float)))",
+      "targetCode": "a = 42\nb = [4, 2]\nc = \"42\"\nprint(isinstance(a, int))\nprint(isinstance(b, (int, str)))\nprint(isinstance(c, (int, str)))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True\nTrue\nFalse"
+          "expectedOutput": "True\nFalse\nTrue"
         }
       ]
     },
@@ -221,17 +221,17 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 리스트 안의 정수 또는 실수만 안전하게 더한 뒤 소수 첫째 자리로 반올림해 출력해보세요. (출력: 16.7)",
-      "prompt_en": "Fill in both blanks so sum_nums adds only int or float values in items and rounds to 1 decimal place.",
-      "hint_ko": "'is' + 'instance'를 붙인 10글자 타입 검사 함수를 쓰고, 타입 튜플에는 '부동소수점(floating-point)'의 앞 다섯 글자를 딴 실수 타입을 넣으세요.",
-      "hint_en": "Call the 10-letter 'is' + 'instance' function, pairing int with the 5-letter real-number type abbreviated from 'floating-point'.",
-      "templateCode": "def sum_nums(items):\n    total = 0\n    for v in items:\n        if §§§§§§§§§§(v, (int, §§§§§)):\n            total += v\n    return round(total, 1)\nbox = [10, 2.5, \"skip\", 4.2]\nprint(sum_nums(box))",
-      "targetCode": "def sum_nums(items):\n    total = 0\n    for v in items:\n        if isinstance(v, (int, float)):\n            total += v\n    return round(total, 1)\nbox = [10, 2.5, \"skip\", 4.2]\nprint(sum_nums(box))",
+      "prompt_ko": "두 빈칸을 채워 리스트 안의 정수만 안전하게 골라 더한 합계를 출력해보세요. (출력: 17)",
+      "prompt_en": "Fill in both blanks so sum_nums adds only int values in items and returns the total (output: 17).",
+      "hint_ko": "'is' + 'instance'를 붙인 10글자 타입 검사 함수를 쓰고, 두 번째 인자에는 '정수(integer)'의 앞 세 글자를 딴 정수 타입을 넣으세요.",
+      "hint_en": "Call the 10-letter 'is' + 'instance' function and pass the 3-letter integer type abbreviated from 'integer'.",
+      "templateCode": "def sum_nums(items):\n    total = 0\n    for v in items:\n        if §§§§§§§§§§(v, §§§):\n            total += v\n    return total\nbox = [10, 3, \"skip\", 4]\nprint(sum_nums(box))",
+      "targetCode": "def sum_nums(items):\n    total = 0\n    for v in items:\n        if isinstance(v, int):\n            total += v\n    return total\nbox = [10, 3, \"skip\", 4]\nprint(sum_nums(box))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "16.7"
+          "expectedOutput": "17"
         }
       ]
     },
@@ -240,17 +240,17 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "여러 타입을 동시에 검사하려다 인자 개수 오류(TypeError)가 난 줄을 고쳐 숫자 원소들의 합계 15.5를 출력해보세요.",
-      "prompt_en": "Fix the TypeError when checking multiple types at once so numeric items sum to 15.5.",
+      "prompt_ko": "여러 타입을 동시에 검사하려다 인자 개수 오류(TypeError)가 난 줄을 고쳐 정수 또는 문자열 원소의 개수 3을 출력해보세요.",
+      "prompt_en": "Fix the TypeError when checking multiple types at once so the count of int or str items prints 3.",
       "hint_ko": "타입 확인 함수는 (값, 타입정보) 딱 2개의 인자만 받습니다. 두 개 이상의 타입을 검사할 때는 소괄호로 감싸 하나의 튜플로 묶어 전달하세요.",
       "hint_en": "This type-checking function takes only 2 arguments; wrap multiple candidate types in parentheses as a single tuple.",
-      "templateCode": "raw = [10, 3.5, \"7\", 2]\ntotal = 0\nfor x in raw:\n    if isinstance(x, int, float):\n        total += x\nprint(total)",
-      "targetCode": "raw = [10, 3.5, \"7\", 2]\ntotal = 0\nfor x in raw:\n    if isinstance(x, (int, float)):\n        total += x\nprint(total)",
+      "templateCode": "raw = [10, [3], \"7\", 2]\ncnt = 0\nfor x in raw:\n    if isinstance(x, int, str):\n        cnt += 1\nprint(cnt)",
+      "targetCode": "raw = [10, [3], \"7\", 2]\ncnt = 0\nfor x in raw:\n    if isinstance(x, (int, str)):\n        cnt += 1\nprint(cnt)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "15.5"
+          "expectedOutput": "3"
         }
       ]
     },

@@ -15,7 +15,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
     "print",
     "variable",
     "input",
-    "int",
+    "type",
     "method"
   ],
   "questions": [
