@@ -230,25 +230,25 @@ export const PYTHON_LEVEL_10: PracticeRound = {
     },
 
     // ------------------------------------------------------------------------
-    // 11단계: 버그 수정 (fix_bug) - 선언되지 않은 출력 변수명 수정
+    // 11단계: 버그 수정 (fix_bug) - 연속 변수 연산에서 상수 사용 버그 수정
     // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '세 번째 줄에서 선언되지 않은 total 대신 계산된 bonus 변수를 출력하도록 오류(NameError)를 수정하여 150을 출력해보세요.',
-      prompt_en: 'Fix the NameError on the third line so that it prints the updated bonus variable instead of the undeclared total, outputting 150.',
-      hint_ko: '위쪽 두 줄에서 값을 저장하고 갱신한 변수 이름과 세 번째 줄의 출력 함수 괄호 안에 적힌 변수 이름이 서로 일치하도록 맞춰보세요.',
-      hint_en: 'Make sure the variable name inside the print parentheses on the third line matches the variable name assigned and updated in the first two lines.',
-      templateCode: 'bonus = 50\nbonus = bonus + 100\nprint(total)',
-      targetCode: 'bonus = 50\nbonus = bonus + 100\nprint(bonus)',
-      expectedVariables: { bonus: 150 },
+      prompt_ko: '체력(hp)이 20씩 두 번 깎여 60이 출력되도록 세 번째 줄의 잘못된 연산식을 수정해보세요.',
+      prompt_en: 'Fix the expression on the third line so hp decreases by 20 twice and prints 60.',
+      hint_ko: '세 번째 줄에서도 고정된 숫자 대신 직전 줄까지 계산된 체력 변수를 사용해 20을 빼야 감소량이 이어서 반영됩니다.',
+      hint_en: 'Use the hp variable instead of a fixed number on the third line so the second subtraction continues from the updated value.',
+      templateCode: 'hp = 100\nhp = hp - 20\nhp = 50 - 20\nprint(hp)',
+      targetCode: 'hp = 100\nhp = hp - 20\nhp = hp - 20\nprint(hp)',
+      expectedVariables: { hp: 60 },
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '150',
+          expectedOutput: '60',
         },
       ],
     },
