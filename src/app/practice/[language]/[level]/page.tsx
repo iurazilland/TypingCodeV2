@@ -1736,16 +1736,57 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const [highlightedMemoryKeys, setHighlightedMemoryKeys] = useState<Set<string>>(new Set());
   const debugAbortRef = useRef<boolean>(false);
 
+  // Interactive Terminal input() States
+  const [isWaitingForTerminalInput, setIsWaitingForTerminalInput] = useState<boolean>(false);
+  const [terminalInputValue, setTerminalInputValue] = useState<string>('');
+  const [terminalInputLineIdx, setTerminalInputLineIdx] = useState<number>(0);
+  const terminalInputResolverRef = useRef<((val: string | null) => void) | null>(null);
+  const terminalInputElRef = useRef<HTMLInputElement | null>(null);
+
+  const cancelPendingTerminalInput = useCallback(() => {
+    if (terminalInputResolverRef.current) {
+      const resolve = terminalInputResolverRef.current;
+      terminalInputResolverRef.current = null;
+      resolve(null);
+    }
+    setIsWaitingForTerminalInput(false);
+    setTerminalInputValue('');
+    setTerminalInputLineIdx(0);
+  }, []);
+
+  const waitForUserTerminalInput = (lineIdx: number): Promise<string | null> => {
+    setTerminalInputLineIdx(lineIdx);
+    setTerminalInputValue('');
+    setIsWaitingForTerminalInput(true);
+    setTimeout(() => {
+      terminalInputElRef.current?.focus();
+      terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 30);
+    return new Promise<string | null>((resolve) => {
+      terminalInputResolverRef.current = resolve;
+    });
+  };
+
+  const submitTerminalInputLine = () => {
+    if (!terminalInputResolverRef.current) return;
+    const val = terminalInputValue;
+    const resolve = terminalInputResolverRef.current;
+    terminalInputResolverRef.current = null;
+    setIsWaitingForTerminalInput(false);
+    setTerminalInputValue('');
+    resolve(val);
+  };
+
   // Dynamic RAM Storage Row Count (Minimum 5 rows, auto expands to fill tall screens)
   const [ramRows, setRamRows] = useState<number>(5);
   const ramBodyRef = useRef<HTMLDivElement>(null);
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (terminalOutput || isDebugging) {
+    if (terminalOutput || isDebugging || isWaitingForTerminalInput) {
       terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [terminalOutput, isDebugging]);
+  }, [terminalOutput, isDebugging, isWaitingForTerminalInput]);
 
   // Custom Variables in Toolbox (starts with default x, y)
   const [customVariables, setCustomVariables] = useState<CustomVariableTemplate[]>([
@@ -1877,6 +1918,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   // Reset/sync on step change: Always start with the Start Block on canvas
   useEffect(() => {
     debugAbortRef.current = true;
+    cancelPendingTerminalInput();
     setIsDebugging(false);
     setIsExecuting(false);
     lastExecutedCodeRef.current = '';
@@ -2347,12 +2389,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     return lines.join('\n');
   };
 
-  // Check if current running code is an input statement waiting for user input
-  const isWaitingForInput = useMemo(() => {
-    if (!isExecuting && !isDebugging) return false;
-    const currentCode = getAssembledCode();
-    return /(?:^|\b)input\s*\(/.test(currentCode);
-  }, [isExecuting, isDebugging, mode, userCode, canvasBlocks]);
+  // Check if current running code is paused at an input() statement waiting for user terminal input
+  const isWaitingForInput = isWaitingForTerminalInput;
 
   // Build Dynamic Real-time Memory Boxes based purely on variables stored in RAM
   const getMemoryBoxes = (): MemoryBoxItem[] => {
@@ -3149,6 +3187,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const handleExecuteManual = async () => {
     if (isExecuting || isDebugging) {
       debugAbortRef.current = true;
+      cancelPendingTerminalInput();
       setIsDebugging(false);
       setIsExecuting(false);
       setExecutingBlockId(null);
@@ -3243,61 +3282,109 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       return null;
     };
 
-    // 1. NORMAL EXECUTION MODE (Instant 0ms Local Evaluation)
+    // 1. NORMAL EXECUTION MODE (with Interactive Terminal input())
     if (execMode === 'normal') {
       setIsExecuting(true);
       try {
         let actualOut = '';
+        let displayOut = '';
         let isErr = false;
         let evalScope: Record<string, any> | undefined = undefined;
         let cachedOrderedBlocks: CanvasBlock[] | undefined = undefined;
+        const providedLines: string[] = [];
 
         if (mode !== 'typing') {
           cachedOrderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
-          const evalRes = evaluateBlocksLocally(cachedOrderedBlocks, primaryStdin);
-          if (evalRes.scope) {
-            setRuntimeMemory(evalRes.scope);
-            evalScope = evalRes.scope;
-          }
-          if (evalRes.success) {
-            actualOut = (evalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-          } else if (evalRes.stderr) {
-            isErr = true;
-            actualOut = evalRes.stderr.trim();
+          while (!debugAbortRef.current) {
+            const evalRes = evaluateBlocksLocally(cachedOrderedBlocks, '', {
+              pauseOnMissingInput: true,
+              providedLines,
+            });
+            if (evalRes.scope) {
+              setRuntimeMemory(evalRes.scope);
+              evalScope = evalRes.scope;
+            }
+            if (evalRes.waitingForInput) {
+              setTerminalOutput((evalRes.displayStdout ?? evalRes.stdout ?? '').replace(/^\r?\n+/, ''));
+              if (evalRes.waitingBlockId) setExecutingBlockId(evalRes.waitingBlockId);
+              const userLine = await waitForUserTerminalInput(evalRes.inputLineIndex ?? providedLines.length);
+              if (userLine === null || debugAbortRef.current) {
+                return;
+              }
+              providedLines.push(userLine);
+              continue;
+            }
+            setExecutingBlockId(null);
+            if (evalRes.success) {
+              actualOut = (evalRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              displayOut = (evalRes.displayStdout ?? evalRes.stdout ?? '').replace(/^\r?\n+|\r?\n+$/g, '');
+            } else if (evalRes.stderr) {
+              isErr = true;
+              const preOut = (evalRes.displayStdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              actualOut = evalRes.stderr.trim();
+              displayOut = preOut ? `${preOut}\n${actualOut}` : actualOut;
+            }
+            break;
           }
         } else if (langKey === 'python') {
-          const localRes = evaluatePythonLocally(codeToRun, primaryStdin);
-          if (localRes.requiresRemote) {
-            const res = await executeCode((langKey as any), codeToRun);
-            actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-            if (res.stderr) {
-              isErr = true;
-              actualOut = res.stderr.trim();
+          while (!debugAbortRef.current) {
+            const localRes = evaluatePythonLocally(codeToRun, '', {
+              pauseOnMissingInput: true,
+              providedLines,
+            });
+            if (localRes.requiresRemote) {
+              const res = await executeCode((langKey as any), codeToRun);
+              actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              displayOut = actualOut;
+              if (res.stderr) {
+                isErr = true;
+                actualOut = res.stderr.trim();
+                displayOut = actualOut;
+              }
+              break;
             }
-          } else {
             if (localRes.scope) {
               setRuntimeMemory(localRes.scope);
               evalScope = localRes.scope;
             }
+            if (localRes.waitingForInput) {
+              setTerminalOutput((localRes.displayStdout ?? localRes.stdout ?? '').replace(/^\r?\n+/, ''));
+              if (localRes.waitingLineIndex !== undefined) setExecutingLineIndex(localRes.waitingLineIndex);
+              const userLine = await waitForUserTerminalInput(localRes.inputLineIndex ?? providedLines.length);
+              if (userLine === null || debugAbortRef.current) {
+                return;
+              }
+              providedLines.push(userLine);
+              continue;
+            }
+            setExecutingLineIndex(null);
             if (localRes.success) {
               actualOut = (localRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              displayOut = (localRes.displayStdout ?? localRes.stdout ?? '').replace(/^\r?\n+|\r?\n+$/g, '');
             } else if (localRes.stderr) {
               isErr = true;
+              const preOut = (localRes.displayStdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
               actualOut = localRes.stderr.trim();
+              displayOut = preOut ? `${preOut}\n${actualOut}` : actualOut;
             }
+            break;
           }
         } else {
           const res = await executeCode((langKey as any), codeToRun);
           actualOut = (res.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+          displayOut = actualOut;
           if (res.stderr) {
             isErr = true;
             actualOut = res.stderr.trim();
+            displayOut = actualOut;
           }
         }
 
+        if (debugAbortRef.current) return;
+
         lastExecutedCodeRef.current = codeToRun;
         const expectedOut = (currentQuestion.testCases?.[0]?.expectedOutput || currentQuestion.expectedOutput || '').trim();
-        setTerminalOutput(actualOut);
+        setTerminalOutput(displayOut);
 
         let passed = checkSubmissionPass(
           codeToRun,
@@ -3309,17 +3396,31 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           evalScope || runtimeMemory
         );
 
+        const normPrimaryIn = primaryStdin.replace(/\r\n/g, '\n').trim();
+        const normUserIn = providedLines.join('\n').trim();
+        const usedDifferentInput = Boolean(normPrimaryIn && providedLines.length > 0 && normUserIn !== normPrimaryIn);
+
         if (passed) {
           const extraErr = verifyExtraTestCases(cachedOrderedBlocks);
           if (extraErr) {
             passed = false;
-            setTerminalOutput((actualOut || '') + extraErr);
+            setTerminalOutput((displayOut || '') + extraErr);
           }
+        } else if (!isErr && usedDifferentInput) {
+          const guidedIn = primaryStdin.replace(/\n/g, ' ↵ ');
+          const typedIn = providedLines.join(' ↵ ') || (isEn ? '(empty)' : '(빈 값)');
+          const inputGuideMsg = isEn
+            ? `\n\n💡 Please enter the guided input (${guidedIn}) in the terminal to pass this step. (You entered: ${typedIn})`
+            : `\n\n💡 문제를 통과하려면 프롬프트에 안내된 입력값(${guidedIn})을 터미널에 입력해주세요. (현재 입력한 값: ${typedIn})`;
+          setTerminalOutput((displayOut || '') + inputGuideMsg);
+          setIsSuccess(false);
+          setIsErrorShown(false);
+          return;
         } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
           const structMsg = isEn
             ? '\n\n⚠️ Output matches, but required variables, operators, or syntax from the prompt were not used.'
             : '\n\n⚠️ 출력 결과는 같지만 문제에서 요구한 변수·연산자·문법을 사용하지 않았습니다. 지시문을 확인해주세요.';
-          setTerminalOutput((actualOut || '') + structMsg);
+          setTerminalOutput((displayOut || '') + structMsg);
         }
 
         if (passed) {
@@ -3336,10 +3437,13 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         setIsErrorShown(true);
         penalizeHeartOnError();
       } finally {
+        cancelPendingTerminalInput();
         setIsExecuting(false);
+        setExecutingBlockId(null);
+        setExecutingLineIndex(null);
       }
     } else {
-      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (0.6s base step delay, live speed adjustable)
+      // 2. DEBUGGING MODE: Step-by-Step Progressive Execution (with Interactive Terminal input())
       setIsDebugging(true);
       setExecutingBlockId(null);
       setExecutingLineIndex(-1);
@@ -3347,9 +3451,13 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
 
       try {
         let actualOut = '';
+        let displayOut = '';
         let isErr = false;
         let finalDebugScope: Record<string, any> | undefined = undefined;
         let cachedOrderedBlocks: CanvasBlock[] | undefined = undefined;
+        const providedLines: string[] = [];
+        let playedStepCount = 0;
+        let prevScope: Record<string, any> = {};
 
         // Step 1: Initial pause on execution start so the user sees the start of debug
         await sleepInterruptible(600);
@@ -3357,16 +3465,16 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         if (mode !== 'typing') {
           cachedOrderedBlocks = getOrderedCanvasBlocks(canvasBlocks);
           const activeBlocks = cachedOrderedBlocks.filter((b) => b.type !== 'start');
-          const trace = evaluateBlocksWithTrace(activeBlocks, primaryStdin);
-          finalDebugScope = trace.scope;
-          const steps = trace.steps;
 
-          if (steps.length === 0) {
-            actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-            setTerminalOutput(actualOut);
-          } else {
-            let prevScope: Record<string, any> = {};
-            for (let i = 0; i < steps.length; i++) {
+          while (!debugAbortRef.current) {
+            const trace = evaluateBlocksWithTrace(activeBlocks, '', {
+              pauseOnMissingInput: true,
+              providedLines,
+            });
+            finalDebugScope = trace.scope;
+            const steps = trace.steps;
+
+            for (let i = playedStepCount; i < steps.length; i++) {
               if (debugAbortRef.current) break;
               const step = steps[i];
               if (step.blockId) setExecutingBlockId(step.blockId);
@@ -3376,31 +3484,54 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               prevScope = { ...step.scope };
 
               setRuntimeMemory({ ...step.scope });
-              setTerminalOutput(step.stdout);
+              setTerminalOutput(step.displayStdout ?? step.stdout);
               if (step.stderr) {
                 isErr = true;
                 actualOut = step.stderr.trim();
-                setTerminalOutput(actualOut);
+                displayOut = step.stderr.trim();
+                setTerminalOutput(displayOut);
                 break;
               }
               await sleepInterruptible(600);
             }
-            if (!isErr) {
-              actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-              setTerminalOutput(actualOut);
+            playedStepCount = steps.length;
+
+            if (debugAbortRef.current || isErr) break;
+
+            if (trace.waitingForInput) {
+              if (trace.waitingBlockId) setExecutingBlockId(trace.waitingBlockId);
+              setTerminalOutput((trace.displayStdout ?? trace.stdout ?? '').replace(/^\r?\n+/, ''));
+              const userLine = await waitForUserTerminalInput(trace.inputLineIndex ?? providedLines.length);
+              if (userLine === null || debugAbortRef.current) {
+                return;
+              }
+              providedLines.push(userLine);
+              continue;
             }
+
+            if (!trace.success && trace.stderr) {
+              isErr = true;
+              const preOut = (trace.displayStdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              actualOut = trace.stderr.trim();
+              displayOut = preOut ? `${preOut}\n${actualOut}` : actualOut;
+              setTerminalOutput(displayOut);
+            } else {
+              actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              displayOut = (trace.displayStdout ?? trace.stdout ?? '').replace(/^\r?\n+|\r?\n+$/g, '');
+              setTerminalOutput(displayOut);
+            }
+            break;
           }
         } else {
-          const trace = evaluatePythonWithTrace(codeToRun, primaryStdin);
-          finalDebugScope = trace.scope;
-          const steps = trace.steps;
+          while (!debugAbortRef.current) {
+            const trace = evaluatePythonWithTrace(codeToRun, '', {
+              pauseOnMissingInput: true,
+              providedLines,
+            });
+            finalDebugScope = trace.scope;
+            const steps = trace.steps;
 
-          if (steps.length === 0) {
-            actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-            setTerminalOutput(actualOut);
-          } else {
-            let prevScope: Record<string, any> = {};
-            for (let i = 0; i < steps.length; i++) {
+            for (let i = playedStepCount; i < steps.length; i++) {
               if (debugAbortRef.current) break;
               const step = steps[i];
               if (step.lineIndex !== undefined) setExecutingLineIndex(step.lineIndex);
@@ -3410,19 +3541,43 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               prevScope = { ...step.scope };
 
               setRuntimeMemory({ ...step.scope });
-              setTerminalOutput(step.stdout);
+              setTerminalOutput(step.displayStdout ?? step.stdout);
               if (step.stderr) {
                 isErr = true;
                 actualOut = step.stderr.trim();
-                setTerminalOutput(actualOut);
+                displayOut = step.stderr.trim();
+                setTerminalOutput(displayOut);
                 break;
               }
               await sleepInterruptible(600);
             }
-            if (!isErr) {
-              actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
-              setTerminalOutput(actualOut);
+            playedStepCount = steps.length;
+
+            if (debugAbortRef.current || isErr) break;
+
+            if (trace.waitingForInput) {
+              if (trace.waitingLineIndex !== undefined) setExecutingLineIndex(trace.waitingLineIndex);
+              setTerminalOutput((trace.displayStdout ?? trace.stdout ?? '').replace(/^\r?\n+/, ''));
+              const userLine = await waitForUserTerminalInput(trace.inputLineIndex ?? providedLines.length);
+              if (userLine === null || debugAbortRef.current) {
+                return;
+              }
+              providedLines.push(userLine);
+              continue;
             }
+
+            if (!trace.success && trace.stderr) {
+              isErr = true;
+              const preOut = (trace.displayStdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              actualOut = trace.stderr.trim();
+              displayOut = preOut ? `${preOut}\n${actualOut}` : actualOut;
+              setTerminalOutput(displayOut);
+            } else {
+              actualOut = (trace.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '');
+              displayOut = (trace.displayStdout ?? trace.stdout ?? '').replace(/^\r?\n+|\r?\n+$/g, '');
+              setTerminalOutput(displayOut);
+            }
+            break;
           }
         }
 
@@ -3449,17 +3604,31 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               finalDebugScope || runtimeMemory
             );
 
+            const normPrimaryIn = primaryStdin.replace(/\r\n/g, '\n').trim();
+            const normUserIn = providedLines.join('\n').trim();
+            const usedDifferentInput = Boolean(normPrimaryIn && providedLines.length > 0 && normUserIn !== normPrimaryIn);
+
             if (passed) {
               const extraErr = verifyExtraTestCases(cachedOrderedBlocks);
               if (extraErr) {
                 passed = false;
-                setTerminalOutput((actualOut || '') + extraErr);
+                setTerminalOutput((displayOut || '') + extraErr);
               }
+            } else if (!isErr && usedDifferentInput) {
+              const guidedIn = primaryStdin.replace(/\n/g, ' ↵ ');
+              const typedIn = providedLines.join(' ↵ ') || (isEn ? '(empty)' : '(빈 값)');
+              const inputGuideMsg = isEn
+                ? `\n\n💡 Please enter the guided input (${guidedIn}) in the terminal to pass this step. (You entered: ${typedIn})`
+                : `\n\n💡 문제를 통과하려면 프롬프트에 안내된 입력값(${guidedIn})을 터미널에 입력해주세요. (현재 입력한 값: ${typedIn})`;
+              setTerminalOutput((displayOut || '') + inputGuideMsg);
+              setIsSuccess(false);
+              setIsErrorShown(false);
+              return;
             } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
               const structMsg = isEn
                 ? '\n\n⚠️ Output matches, but required variables, operators, or syntax from the prompt were not used.'
                 : '\n\n⚠️ 출력 결과는 같지만 문제에서 요구한 변수·연산자·문법을 사용하지 않았습니다. 지시문을 확인해주세요.';
-              setTerminalOutput((actualOut || '') + structMsg);
+              setTerminalOutput((displayOut || '') + structMsg);
             }
 
             if (passed) {
@@ -3480,6 +3649,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           penalizeHeartOnError();
         }
       } finally {
+        cancelPendingTerminalInput();
         setIsDebugging(false);
         setExecutingBlockId(null);
         setExecutingLineIndex(null);
@@ -6466,9 +6636,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                       fontFamily: 'var(--font-mono)',
                       fontWeight: 700,
                     }}
-                    title={isEn ? 'Example input fed to input()' : 'input() 실행 시 자동으로 전달되는 예시 입력값입니다'}
+                    title={isEn ? 'Value to type into the terminal when input() runs' : '실행 후 터미널에 직접 입력해야 하는 값입니다'}
                   >
-                    <span>{isEn ? 'stdin:' : '입력값:'}</span>
+                    <span>{isEn ? 'Input:' : '입력할 값:'}</span>
                     <span style={{ color: '#e0f2fe' }}>
                       {currentQuestion.testCases![0].input!.replace(/\n/g, ' ↵ ')}
                     </span>
@@ -6687,8 +6857,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 )}
               </div>
 
-              {terminalOutput ? (
-                <div style={{ margin: '8px 0 0 0', display: 'inline' }}>
+              {terminalOutput && (
+                <div style={{ margin: '8px 0 0 0' }}>
                   <pre style={{
                     margin: 0,
                     padding: 0,
@@ -6698,46 +6868,117 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                     whiteSpace: 'pre-wrap',
                     wordBreak: 'break-word',
                     lineHeight: 1.6,
-                    display: 'inline',
                   }}>
                     {terminalOutput}
                   </pre>
-                  {/* 터미널 깜박이는 블록 커서: 입력문 실행 시 대기 상태일 때만 생성 */}
-                  {isWaitingForInput && (
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        width: '8px',
-                        height: '1.15em',
-                        background: '#38bdf8',
-                        boxShadow: '0 0 8px rgba(56, 189, 248, 0.8)',
-                        marginLeft: '3px',
-                        verticalAlign: 'text-bottom',
-                        animation: 'terminalCursorBlink 1s step-end infinite',
-                      }}
-                      title="입력 대기 중..."
-                    />
-                  )}
                 </div>
-              ) : (
-                isWaitingForInput && (
-                  <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center' }}>
-                    {/* 입력문 실행 시 대기 블록 커서 */}
+              )}
+
+              {isWaitingForInput && (() => {
+                const expectedLines = (currentQuestion?.testCases?.[0]?.input || '')
+                  .replace(/\r\n/g, '\n')
+                  .split('\n');
+                const guidedLine = expectedLines[terminalInputLineIdx] ?? '';
+                return (
+                  <div
+                    style={{
+                      marginTop: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '5px 10px',
+                      borderRadius: '7px',
+                      background: 'rgba(56, 189, 248, 0.1)',
+                      border: '1px solid rgba(56, 189, 248, 0.45)',
+                      boxShadow: '0 0 12px rgba(56, 189, 248, 0.15)',
+                    }}
+                    onClick={() => terminalInputElRef.current?.focus()}
+                  >
                     <span
                       style={{
                         display: 'inline-block',
-                        width: '8px',
-                        height: '1.15em',
+                        width: '7px',
+                        height: '1.1em',
                         background: '#38bdf8',
                         boxShadow: '0 0 8px rgba(56, 189, 248, 0.8)',
-                        verticalAlign: 'text-bottom',
                         animation: 'terminalCursorBlink 1s step-end infinite',
+                        flexShrink: 0,
                       }}
                       title="입력 대기 중..."
                     />
+                    <input
+                      ref={terminalInputElRef}
+                      type="text"
+                      value={terminalInputValue}
+                      onChange={(e) => setTerminalInputValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          submitTerminalInputLine();
+                        }
+                      }}
+                      placeholder={
+                        guidedLine
+                          ? isEn
+                            ? `Type ${guidedLine} and press Enter ↵`
+                            : `${guidedLine} 입력 후 Enter ↵`
+                          : isEn
+                          ? 'Type input and press Enter ↵'
+                          : '값을 입력하고 Enter ↵'
+                      }
+                      style={{
+                        flex: '1 1 auto',
+                        background: 'transparent',
+                        border: 'none',
+                        outline: 'none',
+                        color: '#f8fafc',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.88rem',
+                        fontWeight: 700,
+                        minWidth: 0,
+                      }}
+                      autoFocus
+                    />
+                    {guidedLine && (
+                      <span
+                        style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          color: '#7dd3fc',
+                          background: 'rgba(56, 189, 248, 0.16)',
+                          padding: '2px 7px',
+                          borderRadius: '4px',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isEn ? `Guide: ${guidedLine}` : `입력값: ${guidedLine}`}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        submitTerminalInputLine();
+                      }}
+                      style={{
+                        padding: '3px 9px',
+                        borderRadius: '5px',
+                        border: '1px solid rgba(56, 189, 248, 0.45)',
+                        background: 'rgba(56, 189, 248, 0.22)',
+                        color: '#e0f2fe',
+                        fontSize: '0.73rem',
+                        fontWeight: 800,
+                        fontFamily: 'var(--font-mono)',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Enter ↵
+                    </button>
                   </div>
-                )
-              )}
+                );
+              })()}
               <div ref={terminalEndRef} />
             </div>
           </div>

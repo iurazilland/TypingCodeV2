@@ -2,12 +2,23 @@
 // Safe 0ms Local AST Evaluator for Practice Blocks & Python
 // ============================================================================
 
+export interface EvaluatorOptions {
+  pauseOnMissingInput?: boolean;
+  providedLines?: string[];
+}
+
 export interface EvaluationResult {
   success: boolean;
   stdout: string;
+  displayStdout?: string;
   stderr: string;
   scope?: Record<string, any>;
   requiresRemote?: boolean;
+  waitingForInput?: boolean;
+  inputPrompt?: string;
+  inputLineIndex?: number;
+  waitingBlockId?: string;
+  waitingLineIndex?: number;
 }
 
 export interface ExecutionStep {
@@ -15,15 +26,22 @@ export interface ExecutionStep {
   lineIndex?: number;
   scope: Record<string, any>;
   stdout: string;
+  displayStdout?: string;
   stderr?: string;
 }
 
 export interface TraceEvaluationResult {
   success: boolean;
   stdout: string;
+  displayStdout?: string;
   stderr: string;
   scope: Record<string, any>;
   steps: ExecutionStep[];
+  waitingForInput?: boolean;
+  inputPrompt?: string;
+  inputLineIndex?: number;
+  waitingBlockId?: string;
+  waitingLineIndex?: number;
 }
 
 export function makeTuple(arr: any[]): any[] {
@@ -409,7 +427,11 @@ type ReturnSignal = { __isReturn: true; value: any };
 type LoopOrReturnSignal = 'break' | 'continue' | ReturnSignal | void;
 
 // 0ms Safe Local Block AST Evaluator with trace generation, stdin, and loop cycling support
-export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): TraceEvaluationResult {
+export function evaluateBlocksWithTrace(
+  blocks: any[],
+  stdin: string = '',
+  options?: EvaluatorOptions
+): TraceEvaluationResult {
   try {
     const scope: Record<string, any> = {};
     let currentScope: Record<string, any> = scope;
@@ -427,10 +449,20 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
     > = {};
     const BUILTIN_TYPE_NAMES = new Set(['int', 'float', 'str', 'bool', 'list', 'tuple', 'dict', 'set']);
     let activeCaughtException: Error | null = null;
+    let currentActiveBlock: any = null;
     let stdoutBuffer = '';
+    let displayStdoutBuffer = '';
+    const appendStdout = (txt: string) => {
+      stdoutBuffer += txt;
+      displayStdoutBuffer += txt;
+    };
     let maxSteps = 500;
     const steps: ExecutionStep[] = [];
-    const stdinLines = stdin.length > 0 ? stdin.replace(/\r\n/g, '\n').split('\n') : [];
+    const stdinLines = options?.providedLines
+      ? [...options.providedLines]
+      : stdin.length > 0
+      ? stdin.replace(/\r\n/g, '\n').split('\n')
+      : [];
     let stdinIdx = 0;
 
     const isInstanceObj = (val: any): boolean =>
@@ -519,12 +551,54 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
     const getVar = (name: string): any =>
       Object.prototype.hasOwnProperty.call(currentScope, name) ? currentScope[name] : scope[name];
 
+    const cloneScope = (s: Record<string, any>) => {
+      const res: Record<string, any> = {};
+      for (const k of Object.keys(s)) {
+        const val = s[k];
+        if (isTuple(val)) res[k] = makeTuple(val);
+        else if (Array.isArray(val)) res[k] = [...val];
+        else if (val instanceof Set) res[k] = new Set(val);
+        else if (isInstanceObj(val)) {
+          res[k] = {
+            __isInstance: true,
+            __className: val.__className,
+            __attrs: { ...(val.__attrs || {}) },
+          };
+        } else if (val !== null && typeof val === 'object') res[k] = { ...val };
+        else res[k] = val;
+      }
+      return res;
+    };
+
     const readInputLine = (promptArg?: any): string => {
-      if (promptArg !== undefined && promptArg !== null && promptArg !== '') {
-        stdoutBuffer += String(promptArg);
+      const promptStr =
+        promptArg !== undefined && promptArg !== null && promptArg !== ''
+          ? String(promptArg)
+          : '';
+      if (promptStr) {
+        appendStdout(promptStr);
       }
       if (stdinIdx < stdinLines.length) {
-        return stdinLines[stdinIdx++];
+        const lineVal = stdinLines[stdinIdx++];
+        displayStdoutBuffer += `${lineVal}\n`;
+        return lineVal;
+      }
+      if (options?.pauseOnMissingInput && stdinIdx < 20) {
+        const merged =
+          currentScope === scope
+            ? cloneScope(scope)
+            : { ...cloneScope(scope), ...cloneScope(currentScope) };
+        throw {
+          __isInputPause: true,
+          inputPrompt: promptStr,
+          inputLineIndex: stdinIdx,
+          blockId: currentActiveBlock?.id,
+          lineIndex: currentActiveBlock?.lineIndex,
+          scope: merged,
+          stdout: stdoutBuffer.replace(/\r?\n$/, ''),
+          displayStdout: displayStdoutBuffer.replace(/\r?\n$/, ''),
+          steps: [...steps],
+        };
       }
       return '';
     };
@@ -741,25 +815,6 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
       throw new Error('TypeError: float() argument must be a string or a real number');
     };
 
-    const cloneScope = (s: Record<string, any>) => {
-      const res: Record<string, any> = {};
-      for (const k of Object.keys(s)) {
-        const val = s[k];
-        if (isTuple(val)) res[k] = makeTuple(val);
-        else if (Array.isArray(val)) res[k] = [...val];
-        else if (val instanceof Set) res[k] = new Set(val);
-        else if (isInstanceObj(val)) {
-          res[k] = {
-            __isInstance: true,
-            __className: val.__className,
-            __attrs: { ...(val.__attrs || {}) },
-          };
-        } else if (val !== null && typeof val === 'object') res[k] = { ...val };
-        else res[k] = val;
-      }
-      return res;
-    };
-
     const recordStep = (b: any) => {
       const merged = currentScope === scope
         ? cloneScope(scope)
@@ -769,6 +824,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
         lineIndex: b.lineIndex,
         scope: merged,
         stdout: stdoutBuffer.replace(/\r?\n$/, ''),
+        displayStdout: displayStdoutBuffer.replace(/\r?\n$/, ''),
       });
     };
 
@@ -2710,8 +2766,9 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
     const runBlockList = (list: any[]): LoopOrReturnSignal => {
       for (const blk of list) {
         if (!blk || blk.type === 'start' || blk.attachedToBlockId) continue;
+        currentActiveBlock = blk;
         if (--maxSteps <= 0) {
-          stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
+          appendStdout('\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n');
           return;
         }
 
@@ -3124,11 +3181,11 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
 
           if (blk.argBlock) {
             const val = evalBlockAsExpr(blk.argBlock);
-            stdoutBuffer += formatPythonValue(val, undefined, blk.argBlock.type === 'float') + end;
+            appendStdout(formatPythonValue(val, undefined, blk.argBlock.type === 'float') + end);
           } else {
             const raw = (blk.content || '').trim();
             if (!raw) {
-              stdoutBuffer += end;
+              appendStdout(end);
             } else {
               const args = splitTopLevelArgs(raw);
               const posArgs: string[] = [];
@@ -3159,7 +3216,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
                 const val = evalNonEmpty(arg);
                 return formatPythonValue(val, arg);
               });
-              stdoutBuffer += printed.join(sep) + end;
+              appendStdout(printed.join(sep) + end);
             }
           }
           recordStep(blk);
@@ -3218,7 +3275,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
           let loopGuard = 200;
           while (isPythonTruthy(evalNonEmpty(condRaw)) && loopGuard-- > 0) {
             if (--maxSteps <= 0) {
-              stdoutBuffer += '\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n';
+              appendStdout('\n⚠️ 무한 루프 감지: 500회 이상 실행되어 안전을 위해 자동 중단되었습니다.\n');
               break;
             }
             recordStep(blk);
@@ -3288,6 +3345,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
               trySucceededNormal = true;
             }
           } catch (tryErr: any) {
+            if (tryErr?.__isInputPause) throw tryErr;
             const errMsg = String(tryErr?.message || '');
             const colonPos = errMsg.indexOf(':');
             const thrownType = colonPos !== -1 ? errMsg.slice(0, colonPos).trim() : errMsg.trim();
@@ -3344,6 +3402,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
                     pendingSignal = runBlockList(exBr.innerBlocks);
                   }
                 } catch (handlerErr: any) {
+                  if (handlerErr?.__isInputPause) throw handlerErr;
                   unhandledError = handlerErr;
                 } finally {
                   activeCaughtException = prevCaught;
@@ -3364,6 +3423,7 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
                 pendingSignal = runBlockList(elseBranch.innerBlocks);
               }
             } catch (elseErr: any) {
+              if (elseErr?.__isInputPause) throw elseErr;
               unhandledError = elseErr;
             }
           }
@@ -3394,11 +3454,27 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
     return {
       success: true,
       stdout: stdoutBuffer.replace(/\r?\n$/, ''),
+      displayStdout: displayStdoutBuffer.replace(/\r?\n$/, ''),
       stderr: '',
       scope,
       steps,
     };
   } catch (err: any) {
+    if (err?.__isInputPause) {
+      return {
+        success: true,
+        waitingForInput: true,
+        inputPrompt: err.inputPrompt,
+        inputLineIndex: err.inputLineIndex,
+        waitingBlockId: err.blockId,
+        waitingLineIndex: err.lineIndex,
+        stdout: err.stdout || '',
+        displayStdout: err.displayStdout || '',
+        stderr: '',
+        scope: err.scope || {},
+        steps: err.steps || [],
+      };
+    }
     return {
       success: false,
       stdout: '',
@@ -3410,13 +3486,23 @@ export function evaluateBlocksWithTrace(blocks: any[], stdin: string = ''): Trac
 }
 
 // Synchronous 0ms wrapper for standard evaluation
-export function evaluateBlocksLocally(blocks: any[], stdin: string = ''): EvaluationResult {
-  const res = evaluateBlocksWithTrace(blocks, stdin);
+export function evaluateBlocksLocally(
+  blocks: any[],
+  stdin: string = '',
+  options?: EvaluatorOptions
+): EvaluationResult {
+  const res = evaluateBlocksWithTrace(blocks, stdin, options);
   return {
     success: res.success,
     stdout: res.stdout,
+    displayStdout: res.displayStdout,
     stderr: res.stderr,
     scope: res.scope,
+    waitingForInput: res.waitingForInput,
+    inputPrompt: res.inputPrompt,
+    inputLineIndex: res.inputLineIndex,
+    waitingBlockId: res.waitingBlockId,
+    waitingLineIndex: res.waitingLineIndex,
   };
 }
 
@@ -3879,10 +3965,14 @@ export function parsePythonCodeToBlocks(code: string): any[] {
 }
 
 // Local python evaluator for simple, conditional, loop & function typing mode lines
-export function evaluatePythonLocally(code: string, stdin: string = ''): EvaluationResult {
+export function evaluatePythonLocally(
+  code: string,
+  stdin: string = '',
+  options?: EvaluatorOptions
+): EvaluationResult {
   try {
     const blocks = parsePythonCodeToBlocks(code);
-    return evaluateBlocksLocally(blocks, stdin);
+    return evaluateBlocksLocally(blocks, stdin, options);
   } catch (err: any) {
     return {
       success: false,
@@ -3894,10 +3984,14 @@ export function evaluatePythonLocally(code: string, stdin: string = ''): Evaluat
 }
 
 // Local python trace evaluator with step-by-step loop & branch cycling
-export function evaluatePythonWithTrace(code: string, stdin: string = ''): TraceEvaluationResult {
+export function evaluatePythonWithTrace(
+  code: string,
+  stdin: string = '',
+  options?: EvaluatorOptions
+): TraceEvaluationResult {
   try {
     const blocks = parsePythonCodeToBlocks(code);
-    return evaluateBlocksWithTrace(blocks, stdin);
+    return evaluateBlocksWithTrace(blocks, stdin, options);
   } catch (err: any) {
     return {
       success: false,
