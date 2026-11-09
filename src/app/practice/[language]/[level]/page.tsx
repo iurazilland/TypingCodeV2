@@ -1739,7 +1739,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   // Interactive Terminal input() States
   const [isWaitingForTerminalInput, setIsWaitingForTerminalInput] = useState<boolean>(false);
   const [terminalInputValue, setTerminalInputValue] = useState<string>('');
-  const [terminalInputLineIdx, setTerminalInputLineIdx] = useState<number>(0);
   const terminalInputResolverRef = useRef<((val: string | null) => void) | null>(null);
   const terminalInputElRef = useRef<HTMLInputElement | null>(null);
 
@@ -1751,11 +1750,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     }
     setIsWaitingForTerminalInput(false);
     setTerminalInputValue('');
-    setTerminalInputLineIdx(0);
   }, []);
 
-  const waitForUserTerminalInput = (lineIdx: number): Promise<string | null> => {
-    setTerminalInputLineIdx(lineIdx);
+  const waitForUserTerminalInput = (_lineIdx?: number): Promise<string | null> => {
     setTerminalInputValue('');
     setIsWaitingForTerminalInput(true);
     setTimeout(() => {
@@ -6620,30 +6617,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
                   {isEn ? 'Terminal' : '터미널'}
                 </span>
-                {Boolean(currentQuestion?.testCases?.[0]?.input) && (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      marginLeft: '6px',
-                      padding: '2px 8px',
-                      borderRadius: '5px',
-                      background: 'rgba(56, 189, 248, 0.14)',
-                      border: '1px solid rgba(56, 189, 248, 0.32)',
-                      color: '#7dd3fc',
-                      fontSize: '0.71rem',
-                      fontFamily: 'var(--font-mono)',
-                      fontWeight: 700,
-                    }}
-                    title={isEn ? 'Value to type into the terminal when input() runs' : '실행 후 터미널에 직접 입력해야 하는 값입니다'}
-                  >
-                    <span>{isEn ? 'Input:' : '입력할 값:'}</span>
-                    <span style={{ color: '#e0f2fe' }}>
-                      {currentQuestion.testCases![0].input!.replace(/\n/g, ' ↵ ')}
-                    </span>
-                  </span>
-                )}
               </div>
 
               {/* Execution Controls: [0.5x | 1x | 2x | 3x] (when debug) + [🐞 디버깅 | ⚡ 일반] + [▶ 실행 / ■ 정지] */}
@@ -6874,111 +6847,47 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 </div>
               )}
 
-              {isWaitingForInput && (() => {
-                const expectedLines = (currentQuestion?.testCases?.[0]?.input || '')
-                  .replace(/\r\n/g, '\n')
-                  .split('\n');
-                const guidedLine = expectedLines[terminalInputLineIdx] ?? '';
-                return (
-                  <div
-                    style={{
-                      marginTop: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '5px 10px',
-                      borderRadius: '7px',
-                      background: 'rgba(56, 189, 248, 0.1)',
-                      border: '1px solid rgba(56, 189, 248, 0.45)',
-                      boxShadow: '0 0 12px rgba(56, 189, 248, 0.15)',
-                    }}
-                    onClick={() => terminalInputElRef.current?.focus()}
-                  >
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        width: '7px',
-                        height: '1.1em',
-                        background: '#38bdf8',
-                        boxShadow: '0 0 8px rgba(56, 189, 248, 0.8)',
-                        animation: 'terminalCursorBlink 1s step-end infinite',
-                        flexShrink: 0,
-                      }}
-                      title="입력 대기 중..."
-                    />
-                    <input
-                      ref={terminalInputElRef}
-                      type="text"
-                      value={terminalInputValue}
-                      onChange={(e) => setTerminalInputValue(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          submitTerminalInputLine();
-                        }
-                      }}
-                      placeholder={
-                        guidedLine
-                          ? isEn
-                            ? `Type ${guidedLine} and press Enter ↵`
-                            : `${guidedLine} 입력 후 Enter ↵`
-                          : isEn
-                          ? 'Type input and press Enter ↵'
-                          : '값을 입력하고 Enter ↵'
-                      }
-                      style={{
-                        flex: '1 1 auto',
-                        background: 'transparent',
-                        border: 'none',
-                        outline: 'none',
-                        color: '#f8fafc',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.88rem',
-                        fontWeight: 700,
-                        minWidth: 0,
-                      }}
-                      autoFocus
-                    />
-                    {guidedLine && (
-                      <span
-                        style={{
-                          fontSize: '0.72rem',
-                          fontWeight: 700,
-                          color: '#7dd3fc',
-                          background: 'rgba(56, 189, 248, 0.16)',
-                          padding: '2px 7px',
-                          borderRadius: '4px',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {isEn ? `Guide: ${guidedLine}` : `입력값: ${guidedLine}`}
-                      </span>
-                    )}
-                    <button
-                      type="button"
-                      onClick={(e) => {
+              {isWaitingForInput && (
+                <div
+                  style={{
+                    marginTop: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '4px 8px',
+                    borderRadius: '5px',
+                    background: 'rgba(56, 189, 248, 0.14)',
+                  }}
+                  onClick={() => terminalInputElRef.current?.focus()}
+                >
+                  <input
+                    ref={terminalInputElRef}
+                    type="text"
+                    value={terminalInputValue}
+                    onChange={(e) => setTerminalInputValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                        e.preventDefault();
                         e.stopPropagation();
                         submitTerminalInputLine();
-                      }}
-                      style={{
-                        padding: '3px 9px',
-                        borderRadius: '5px',
-                        border: '1px solid rgba(56, 189, 248, 0.45)',
-                        background: 'rgba(56, 189, 248, 0.22)',
-                        color: '#e0f2fe',
-                        fontSize: '0.73rem',
-                        fontWeight: 800,
-                        fontFamily: 'var(--font-mono)',
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                      }}
-                    >
-                      Enter ↵
-                    </button>
-                  </div>
-                );
-              })()}
+                      }
+                    }}
+                    style={{
+                      flex: '1 1 auto',
+                      background: 'transparent',
+                      border: 'none',
+                      outline: 'none',
+                      color: '#f8fafc',
+                      caretColor: '#38bdf8',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.88rem',
+                      fontWeight: 700,
+                      minWidth: 0,
+                      padding: 0,
+                    }}
+                    autoFocus
+                  />
+                </div>
+              )}
               <div ref={terminalEndRef} />
             </div>
           </div>
