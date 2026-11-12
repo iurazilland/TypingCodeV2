@@ -3,16 +3,16 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { 
+  ArrowLeft, 
   CheckCircle2, 
   Play, 
   Lock, 
   ChevronRight,
-  ChevronDown,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { CURRICULUM_TRACKS, findCurriculumModuleBySlug } from '@/lib/curriculum';
+import { findCurriculumModuleBySlug } from '@/lib/curriculum';
 import LanguageIcon from '@/components/LanguageIcon';
-import { getCategoryName, getTrackName } from '@/lib/curriculumTranslations';
+import { getCategoryName } from '@/lib/curriculumTranslations';
 import { getCourseSections, LevelSection } from '@/lib/curriculumSections';
 import { getClearedLevelsLocal, PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
 
@@ -29,25 +29,6 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
   // Hover state tracker for level cards
   const [hoveredLevelNum, setHoveredLevelNum] = useState<number | null>(null);
-  const [isCourseMenuOpen, setIsCourseMenuOpen] = useState(false);
-  const courseMenuRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (courseMenuRef.current && !courseMenuRef.current.contains(e.target as Node)) {
-        setIsCourseMenuOpen(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsCourseMenuOpen(false);
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
 
   // Find matching track and module from CURRICULUM_TRACKS
   const { matchedTrack, matchedModule } = useMemo(() => {
@@ -210,43 +191,31 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
     );
   }
 
-  const switcherCourses = useMemo(() => {
-    const openCourses: Array<{ trackId: string; trackLabel: string; modId: string; title: string; totalLevels: number; href: string; isCurrent: boolean }> = [];
-    const upcomingCourses: Array<{ trackId: string; trackLabel: string; modId: string; title: string; totalLevels: number }> = [];
-
-    for (const tr of CURRICULUM_TRACKS) {
-      const trackLabel = getTrackName(tr, isEn);
-      for (const mod of tr.modules) {
-        const title = isEn ? mod.title_en : mod.title_ko;
-        if (!mod.isLocked) {
-          openCourses.push({
-            trackId: tr.id,
-            trackLabel,
-            modId: mod.id,
-            title,
-            totalLevels: mod.totalLevels,
-            href: mod.practiceUrl || '/practice/python_basic',
-            isCurrent: mod.id === matchedModule.id,
-          });
-        } else if (
-          ['py-advanced', 'c-basic', 'js-basic', 'java-basic', 'cpp-basic', 'sql-basic'].includes(mod.id)
-        ) {
-          upcomingCourses.push({
-            trackId: tr.id,
-            trackLabel,
-            modId: mod.id,
-            title,
-            totalLevels: mod.totalLevels,
-          });
-        }
-      }
-    }
-    return { openCourses, upcomingCourses };
-  }, [isEn, matchedModule.id]);
-
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>
-      {/* Course Overview Bento Pod with Inline Course Switcher & Learning Progress */}
+      {/* Top Header Bar: Back Link */}
+      <div style={{ marginBottom: '24px' }}>
+        <Link
+          href="/languages"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#475569',
+            fontSize: '0.92rem',
+            fontWeight: 700,
+            transition: 'color 0.15s ease',
+            textDecoration: 'none',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#0284c7')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}
+        >
+          <ArrowLeft size={16} />
+          <span>{isEn ? 'Back to All Curriculum' : '전체 언어 학습과정으로 돌아가기'}</span>
+        </Link>
+      </div>
+
+      {/* Course Overview Bento Pod with Learning Progress */}
       <div
         style={{
           padding: '28px 32px',
@@ -262,7 +231,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
           gap: '24px',
         }}
       >
-        {/* Left: Language Icon + Title + Course Switcher Dropdown + Description */}
+        {/* Left: Language Icon + Title + Description */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, minWidth: '300px' }}>
           <div
             style={{
@@ -315,180 +284,6 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
               >
                 {matchedModule.difficulty}
               </span>
-
-              {/* Course Switcher Dropdown Trigger & Popover */}
-              <div ref={courseMenuRef} style={{ position: 'relative', display: 'inline-block' }}>
-                <button
-                  type="button"
-                  onClick={() => setIsCourseMenuOpen((prev) => !prev)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '5px 12px',
-                    borderRadius: '10px',
-                    background: isCourseMenuOpen ? '#0f172a' : '#ffffff',
-                    color: isCourseMenuOpen ? '#ffffff' : '#0284c7',
-                    border: isCourseMenuOpen ? '1.5px solid #0f172a' : '1.5px solid #7dd3fc',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 6px rgba(2, 132, 199, 0.1)',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  <span>{isEn ? 'Change Course' : '과정 변경'}</span>
-                  <ChevronDown
-                    size={15}
-                    style={{
-                      transform: isCourseMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.15s ease',
-                    }}
-                  />
-                </button>
-
-                {isCourseMenuOpen && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 'calc(100% + 8px)',
-                      left: 0,
-                      zIndex: 80,
-                      width: '320px',
-                      background: '#ffffff',
-                      borderRadius: '16px',
-                      border: '1.5px solid #cbd5e1',
-                      boxShadow: '0 16px 36px -6px rgba(15, 23, 42, 0.18), 0 4px 12px rgba(15, 23, 42, 0.08)',
-                      padding: '12px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: '0.72rem',
-                        fontWeight: 800,
-                        color: '#0284c7',
-                        letterSpacing: '0.04em',
-                        padding: '4px 8px 6px',
-                      }}
-                    >
-                      {isEn ? 'AVAILABLE COURSE' : '현재 학습 가능 과정'}
-                    </div>
-                    {switcherCourses.openCourses.map((c) => (
-                      <Link
-                        key={c.modId}
-                        href={c.href}
-                        onClick={() => setIsCourseMenuOpen(false)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '10px',
-                          padding: '10px 12px',
-                          borderRadius: '12px',
-                          background: c.isCurrent ? '#f0f9ff' : '#ffffff',
-                          border: c.isCurrent ? '1.5px solid #38bdf8' : '1px solid transparent',
-                          textDecoration: 'none',
-                          marginBottom: '4px',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                          <LanguageIcon language={c.trackId} size={22} />
-                          <div>
-                            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a' }}>
-                              {c.title}
-                            </div>
-                            <div style={{ fontSize: '0.74rem', fontWeight: 600, color: '#64748b' }}>
-                              {isEn ? `${c.totalLevels} Levels · Beginner` : `총 ${c.totalLevels}레벨 · 입문 추천`}
-                            </div>
-                          </div>
-                        </div>
-                        <span
-                          style={{
-                            padding: '3px 8px',
-                            borderRadius: '8px',
-                            background: '#0284c7',
-                            color: '#ffffff',
-                            fontSize: '0.7rem',
-                            fontWeight: 800,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {c.isCurrent ? (isEn ? 'Active' : '선택됨') : (isEn ? 'Start' : '선택')}
-                        </span>
-                      </Link>
-                    ))}
-
-                    <div
-                      style={{
-                        fontSize: '0.72rem',
-                        fontWeight: 800,
-                        color: '#64748b',
-                        letterSpacing: '0.04em',
-                        padding: '10px 8px 6px',
-                        borderTop: '1px solid #e2e8f0',
-                        marginTop: '6px',
-                      }}
-                    >
-                      {isEn ? 'UPCOMING LANGUAGES' : '순차 오픈 예정 과정'}
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-                      {switcherCourses.upcomingCourses.map((c) => (
-                        <div
-                          key={c.modId}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '6px',
-                            padding: '7px 9px',
-                            borderRadius: '10px',
-                            background: '#f8fafc',
-                            border: '1px solid #e2e8f0',
-                            opacity: 0.75,
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
-                            <LanguageIcon language={c.trackId} size={16} />
-                            <span
-                              style={{
-                                fontSize: '0.76rem',
-                                fontWeight: 700,
-                                color: '#475569',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}
-                            >
-                              {c.title}
-                            </span>
-                          </div>
-                          <Lock size={12} color="#94a3b8" style={{ flexShrink: 0 }} />
-                        </div>
-                      ))}
-                    </div>
-
-                    <Link
-                      href="/languages"
-                      onClick={() => setIsCourseMenuOpen(false)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginTop: '10px',
-                        padding: '8px 10px 4px',
-                        borderTop: '1px solid #e2e8f0',
-                        color: '#475569',
-                        fontSize: '0.78rem',
-                        fontWeight: 700,
-                        textDecoration: 'none',
-                      }}
-                    >
-                      <span>{isEn ? 'View All Language Roadmaps' : '전체 언어 로드맵 보기'}</span>
-                      <ChevronRight size={14} />
-                    </Link>
-                  </div>
-                )}
-              </div>
             </div>
             <p style={{
               color: '#475569',

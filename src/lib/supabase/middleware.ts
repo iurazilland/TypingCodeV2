@@ -79,7 +79,7 @@ export async function updateSession(request: NextRequest) {
     const safeNext =
       rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//')
         ? rawNext
-        : '/practice/python_basic';
+        : '/languages';
     const targetUrl = new URL(safeNext, request.url);
     return copySupabaseCookies(supabaseResponse, NextResponse.redirect(targetUrl));
   }

@@ -73,7 +73,7 @@ export default function Navbar() {
   const navItems = [
     {
       label: t.nav.learn,
-      href: '/practice/python_basic',
+      href: '/languages',
       icon: BookOpen,
       isActive:
         pathname.startsWith('/languages') ||
