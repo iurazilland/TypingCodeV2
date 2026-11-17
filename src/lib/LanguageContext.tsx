@@ -430,6 +430,27 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Globally disable spellcheck, autocorrect, and autocapitalize on all inputs/textareas site-wide
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const disableSpellCheck = (el: Element | null) => {
+      if (
+        el instanceof HTMLInputElement ||
+        el instanceof HTMLTextAreaElement ||
+        (el instanceof HTMLElement && el.isContentEditable)
+      ) {
+        el.spellcheck = false;
+        el.setAttribute('spellcheck', 'false');
+        el.setAttribute('autocorrect', 'off');
+        el.setAttribute('autocapitalize', 'off');
+      }
+    };
+    document.querySelectorAll('input, textarea, [contenteditable]').forEach(disableSpellCheck);
+    const handleFocusIn = (e: FocusEvent) => disableSpellCheck(e.target as Element | null);
+    document.addEventListener('focusin', handleFocusIn, true);
+    return () => document.removeEventListener('focusin', handleFocusIn, true);
+  }, []);
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     if (typeof window !== 'undefined') {

@@ -10,6 +10,7 @@ import {
   Camera,
   CheckCircle2,
   Flame,
+  Lock,
   RotateCcw,
   Save,
   Trophy,
@@ -59,6 +60,10 @@ export default function ProfilePage() {
 
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [statusBanner, setStatusBanner] = useState<{
     type: 'success' | 'error';
     text: string;
@@ -267,6 +272,97 @@ export default function ProfilePage() {
       });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const isOAuthOnlyUser = Boolean(
+    user?.app_metadata?.provider &&
+      user.app_metadata.provider !== 'email' &&
+      !(user.app_metadata.providers || []).includes('email')
+  );
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user?.email) return;
+    setStatusBanner(null);
+
+    if (!isOAuthOnlyUser && !currentPassword) {
+      setStatusBanner({
+        type: 'error',
+        text: isKo ? '현재 비밀번호를 입력해 주세요.' : 'Please enter your current password.',
+      });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setStatusBanner({
+        type: 'error',
+        text: isKo ? '새 비밀번호는 6자 이상으로 입력해 주세요.' : 'New password must be at least 6 characters.',
+      });
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setStatusBanner({
+        type: 'error',
+        text: isKo ? '새 비밀번호와 비밀번호 확인이 일치하지 않습니다.' : 'New passwords do not match.',
+      });
+      return;
+    }
+
+    if (!isOAuthOnlyUser && currentPassword === newPassword) {
+      setStatusBanner({
+        type: 'error',
+        text: isKo ? '기존 비밀번호와 다른 새 비밀번호를 입력해 주세요.' : 'Please choose a password different from your current one.',
+      });
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      const supabase = createClient();
+
+      if (!isOAuthOnlyUser) {
+        const { error: verifyErr } = await supabase.auth.signInWithPassword({
+          email: user.email,
+          password: currentPassword,
+        });
+        if (verifyErr) {
+          setStatusBanner({
+            type: 'error',
+            text: isKo ? '현재 비밀번호가 일치하지 않습니다.' : 'Current password is incorrect.',
+          });
+          return;
+        }
+      }
+
+      const { error: updateErr } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateErr) {
+        throw new Error(updateErr.message);
+      }
+
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setStatusBanner({
+        type: 'success',
+        text: isKo ? '비밀번호가 안전하게 변경되었습니다!' : 'Your password has been updated!',
+      });
+    } catch (err) {
+      setStatusBanner({
+        type: 'error',
+        text:
+          err instanceof Error
+            ? err.message
+            : isKo
+            ? '비밀번호 변경 중 오류가 발생했습니다.'
+            : 'Failed to update password.',
+      });
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
@@ -777,6 +873,159 @@ export default function ProfilePage() {
                 : isKo
                 ? '저장'
                 : 'Save'}
+            </span>
+          </button>
+        </div>
+      </form>
+
+      {/* Password Change Section */}
+      <form
+        onSubmit={handleChangePassword}
+        style={{
+          background: '#ffffff',
+          border: '1.5px solid #cbd5e1',
+          borderRadius: '22px',
+          padding: '24px',
+          marginBottom: '28px',
+          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Lock size={18} style={{ color: '#0891b2' }} />
+            <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+              {isKo ? '비밀번호 변경' : 'Change Password'}
+            </h2>
+          </div>
+          {isOAuthOnlyUser && (
+            <span style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 600 }}>
+              {isKo
+                ? '소셜 로그인 계정에 비밀번호를 새로 설정할 수 있습니다.'
+                : 'You can set a password for your social-login account.'}
+            </span>
+          )}
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '14px',
+            alignItems: 'end',
+          }}
+        >
+          {!isOAuthOnlyUser && (
+            <div>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                {isKo ? '현재 비밀번호' : 'Current Password'}
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
+                <input
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  placeholder={isKo ? '현재 비밀번호' : 'Current password'}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '11px 14px 11px 38px',
+                    borderRadius: '12px',
+                    background: '#f8fafc',
+                    border: '1.5px solid #cbd5e1',
+                    color: '#0f172a',
+                    fontSize: '0.88rem',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+              {isKo ? '새 비밀번호' : 'New Password'}
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
+              <input
+                type="password"
+                required
+                minLength={6}
+                autoComplete="new-password"
+                placeholder={isKo ? '6자 이상 입력' : '6+ characters'}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '11px 14px 11px 38px',
+                  borderRadius: '12px',
+                  background: '#f8fafc',
+                  border: '1.5px solid #cbd5e1',
+                  color: '#0f172a',
+                  fontSize: '0.88rem',
+                  outline: 'none',
+                }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+              {isKo ? '새 비밀번호 확인' : 'Confirm New Password'}
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
+              <input
+                type="password"
+                required
+                minLength={6}
+                autoComplete="new-password"
+                placeholder={isKo ? '새 비밀번호 다시 입력' : 'Re-enter new password'}
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '11px 14px 11px 38px',
+                  borderRadius: '12px',
+                  background: '#f8fafc',
+                  border: '1.5px solid #cbd5e1',
+                  color: '#0f172a',
+                  fontSize: '0.88rem',
+                  outline: 'none',
+                }}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isChangingPassword}
+            className="tactile-btn tactile-btn-primary"
+            style={{
+              height: '42px',
+              padding: '0 20px',
+              fontSize: '0.88rem',
+              fontWeight: 800,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '7px',
+              cursor: isChangingPassword ? 'not-allowed' : 'pointer',
+              opacity: isChangingPassword ? 0.7 : 1,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Lock size={15} />
+            <span>
+              {isChangingPassword
+                ? isKo
+                  ? '변경 중...'
+                  : 'Updating...'
+                : isKo
+                ? '비밀번호 변경'
+                : 'Update Password'}
             </span>
           </button>
         </div>

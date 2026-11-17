@@ -59,8 +59,12 @@ function LoginPageContent() {
       : null;
   const oauthError = searchParams.get('error');
 
-  // Sign-up is ONLY reachable by toggling inside /login
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const urlMode = searchParams.get('mode');
+
+  // Sign-up or password reset mode inside /login
+  const [mode, setMode] = useState<'login' | 'signup' | 'reset'>(() =>
+    urlMode === 'reset' ? 'reset' : 'login'
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
@@ -68,6 +72,10 @@ function LoginPageContent() {
   // Login fields
   const [identifier, setIdentifier] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+
+  // Reset password fields
+  const [resetPassword, setResetPassword] = useState('');
+  const [resetConfirmPassword, setResetConfirmPassword] = useState('');
 
   // Sign-up fields
   const [loginId, setLoginId] = useState('');
@@ -93,14 +101,37 @@ function LoginPageContent() {
   }, [oauthError, isKo]);
 
   useEffect(() => {
-    if (user) {
+    if (urlMode === 'reset') {
+      setMode('reset');
+    }
+  }, [urlMode]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    const supabase = createClient();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setMode('reset');
+        setErrorMessage(null);
+        setInfoMessage(null);
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user && mode !== 'reset' && urlMode !== 'reset') {
       router.replace(safeNext || '/languages');
     }
-  }, [user, safeNext, router]);
+  }, [user, mode, urlMode, safeNext, router]);
 
-  const buildCallbackUrl = () => {
+  const buildCallbackUrl = (customTarget?: string) => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const target = safeNext || '/languages';
+    const target = customTarget || safeNext || '/languages';
     return `${origin}/auth/callback?next=${encodeURIComponent(target)}`;
   };
 
@@ -361,20 +392,77 @@ function LoginPageContent() {
     try {
       const supabase = createClient();
       const { error } = await supabase.auth.resetPasswordForEmail(candidate, {
-        redirectTo: buildCallbackUrl(),
+        redirectTo: buildCallbackUrl('/login?mode=reset'),
       });
       if (error) {
         setErrorMessage(error.message);
       } else {
         setInfoMessage(
           isKo
-            ? '비밀번호 재설정 링크를 이메일로 보냈습니다. 메일함을 확인해 주세요.'
-            : 'Password reset link has been sent to your email.'
+            ? '비밀번호 재설정 링크를 이메일로 보냈습니다. 메일의 링크를 누르면 이 사이트에서 새 비밀번호를 설정할 수 있습니다.'
+            : 'Password reset link has been sent to your email. Click the link to set your new password here.'
         );
       }
     } catch {
       setErrorMessage(
         isKo ? '이메일 발송 중 오류가 발생했습니다.' : 'Failed to send reset email.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    if (resetPassword.length < 6) {
+      setErrorMessage(
+        isKo
+          ? '새 비밀번호는 6자 이상으로 입력해 주세요.'
+          : 'New password must be at least 6 characters.'
+      );
+      return;
+    }
+
+    if (resetPassword !== resetConfirmPassword) {
+      setErrorMessage(
+        isKo
+          ? '새 비밀번호와 비밀번호 확인이 일치하지 않습니다.'
+          : 'New passwords do not match.'
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.updateUser({
+        password: resetPassword,
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+
+      setResetPassword('');
+      setResetConfirmPassword('');
+      await refreshSessionAndProfile();
+      setInfoMessage(
+        isKo
+          ? '비밀번호가 성공적으로 변경되었습니다. 학습 페이지로 이동합니다.'
+          : 'Your password has been updated. Redirecting...'
+      );
+      setTimeout(() => {
+        router.replace(safeNext || '/languages');
+      }, 900);
+    } catch {
+      setErrorMessage(
+        isKo
+          ? '비밀번호 변경 중 오류가 발생했습니다. 재설정 링크를 다시 요청해 주세요.'
+          : 'Failed to update password. Please request a new reset link.'
       );
     } finally {
       setIsSubmitting(false);
@@ -449,6 +537,10 @@ function LoginPageContent() {
             ? isKo
               ? '로그인'
               : 'Sign In'
+            : mode === 'reset'
+            ? isKo
+              ? '새 비밀번호 설정'
+              : 'Reset Password'
             : isKo
             ? '회원가입'
             : 'Sign Up'}
@@ -525,7 +617,106 @@ function LoginPageContent() {
           </div>
         )}
 
-        {mode === 'login' ? (
+        {mode === 'reset' ? (
+          <form
+            onSubmit={handleResetPasswordSubmit}
+            style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
+          >
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  color: '#334155',
+                  marginBottom: '6px',
+                }}
+              >
+                {isKo ? '새 비밀번호' : 'New Password'}
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Lock
+                  size={16}
+                  style={{ position: 'absolute', left: '14px', top: '14px', color: '#64748b' }}
+                />
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete="new-password"
+                  placeholder={isKo ? '새 비밀번호 (6자 이상)' : 'New password (6+ chars)'}
+                  value={resetPassword}
+                  onChange={(e) => setResetPassword(e.target.value)}
+                  style={inputStyle}
+                  onFocus={(e) => (e.target.style.borderColor = '#0891b2')}
+                  onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  color: '#334155',
+                  marginBottom: '6px',
+                }}
+              >
+                {isKo ? '새 비밀번호 확인' : 'Confirm New Password'}
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Lock
+                  size={16}
+                  style={{ position: 'absolute', left: '14px', top: '14px', color: '#64748b' }}
+                />
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete="new-password"
+                  placeholder={isKo ? '새 비밀번호 다시 입력' : 'Re-enter new password'}
+                  value={resetConfirmPassword}
+                  onChange={(e) => setResetConfirmPassword(e.target.value)}
+                  style={inputStyle}
+                  onFocus={(e) => (e.target.style.borderColor = '#0891b2')}
+                  onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="tactile-btn tactile-btn-primary"
+              style={{
+                width: '100%',
+                padding: '13px 20px',
+                fontSize: '0.95rem',
+                fontWeight: 800,
+                marginTop: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                opacity: isSubmitting ? 0.7 : 1,
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <span>
+                {isSubmitting
+                  ? isKo
+                    ? '변경 중...'
+                    : 'Updating...'
+                  : isKo
+                  ? '비밀번호 변경 완료'
+                  : 'Update Password'}
+              </span>
+              <ArrowRight size={16} />
+            </button>
+          </form>
+        ) : mode === 'login' ? (
           <form
             onSubmit={handleLoginSubmit}
             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
@@ -963,6 +1154,7 @@ function LoginPageContent() {
         )}
 
         {/* Social OAuth Section */}
+        {mode !== 'reset' && (
         <div style={{ marginTop: '20px' }}>
           <div
             style={{
@@ -1039,6 +1231,7 @@ function LoginPageContent() {
             </button>
           </div>
         </div>
+        )}
 
         {/* Mode Switcher Footer */}
         <div

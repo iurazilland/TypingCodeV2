@@ -669,7 +669,7 @@ export default function TypingStage({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        background: '#090e1a',
+        background: '#1b263b',
         overflow: 'hidden',
         cursor: 'text',
         position: 'relative',
@@ -717,15 +717,15 @@ export default function TypingStage({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          background: '#090e1a',
+          background: '#1b263b',
         }}
       >
         {/* Editor File Tab Header */}
         <div
           style={{
             height: '34px',
-            background: '#0d1527',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#22304a',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -739,7 +739,7 @@ export default function TypingStage({
               alignItems: 'center',
               gap: '6px',
               padding: '5px 14px',
-              background: '#090e1a',
+              background: '#1b263b',
               borderRadius: '6px 6px 0 0',
               borderTop: isSuccess ? '2px solid #10b981' : '2px solid #38bdf8',
               fontSize: '0.78rem',
@@ -820,15 +820,15 @@ export default function TypingStage({
                   background: isThisLineExecuting
                     ? 'linear-gradient(90deg, rgba(56, 189, 248, 0.32) 0%, rgba(14, 165, 233, 0.18) 55%, rgba(56, 189, 248, 0.04) 100%)'
                     : isThisLineDimmed
-                    ? 'transparent'
-                    : isCursorOnThisLine
-                    ? 'rgba(255, 255, 255, 0.025)'
-                    : 'transparent',
+                      ? 'transparent'
+                      : isCursorOnThisLine
+                        ? 'rgba(255, 255, 255, 0.025)'
+                        : 'transparent',
                   borderLeft: isThisLineExecuting
                     ? '4px solid #38bdf8'
                     : isCursorOnThisLine
-                    ? '3px solid rgba(56, 189, 248, 0.4)'
-                    : '3px solid transparent',
+                      ? '3px solid rgba(56, 189, 248, 0.4)'
+                      : '3px solid transparent',
                   boxShadow: isThisLineExecuting
                     ? 'inset 0 1px 0 rgba(56, 189, 248, 0.38), inset 0 -1px 0 rgba(56, 189, 248, 0.38), 0 0 18px rgba(56, 189, 248, 0.18)'
                     : 'none',
@@ -1027,7 +1027,7 @@ export default function TypingStage({
                                 style={{
                                   display: 'inline-block',
                                   color: isCharError ? VSCODE_DARK_PLUS.error : syntaxColor,
-                                  background: isAnyLineExecuting ? 'transparent' : '#090e1a',
+                                  background: isAnyLineExecuting ? 'transparent' : '#1b263b',
                                   filter: isThisLineExecuting ? 'brightness(1.35) saturate(1.25)' : 'none',
                                   textShadow: isThisLineExecuting
                                     ? '0 0 10px rgba(56, 189, 248, 0.7), 0 0 2px rgba(255, 255, 255, 0.4)'
@@ -1035,8 +1035,8 @@ export default function TypingStage({
                                   fontWeight: isThisLineExecuting
                                     ? 700
                                     : token && (token.type === 'keyword' || token.type === 'builtin')
-                                    ? 700
-                                    : 500,
+                                      ? 700
+                                      : 500,
                                   borderRadius: '2px',
                                   boxShadow: 'none',
                                   cursor: 'text',
@@ -1101,8 +1101,8 @@ export default function TypingStage({
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          background: '#070b14',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          background: '#1b263b',
+          borderTop: '1px solid rgba(255, 255, 255, 0.12)',
         }}
       >
         <div style={{ width: '100%', maxWidth: 'clamp(720px, 68vw, 980px)' }}>

@@ -74,7 +74,7 @@ export async function updateSession(request: NextRequest) {
     return copySupabaseCookies(supabaseResponse, NextResponse.redirect(redirectUrl));
   }
 
-  if (claims && pathname === '/login') {
+  if (claims && pathname === '/login' && request.nextUrl.searchParams.get('mode') !== 'reset') {
     const rawNext = request.nextUrl.searchParams.get('next');
     const safeNext =
       rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//')

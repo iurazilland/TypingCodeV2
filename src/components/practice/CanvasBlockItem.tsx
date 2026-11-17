@@ -24,6 +24,7 @@ export interface CanvasBlockItemProps {
   block: CanvasBlock;
   isNested?: boolean;
   isSlotArg?: boolean;
+  isToolbox?: boolean;
   cIdx?: number;
   parentBlockId?: string;
   branchId?: string;
@@ -106,6 +107,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     block,
     isNested = false,
     isSlotArg = false,
+    isToolbox = false,
     cIdx = 0,
     parentBlockId,
     branchId,
@@ -145,7 +147,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     handleInputClickSelect,
   } = props;
 
-  const theme = BLOCK_THEMES[block.type] || BLOCK_THEMES.print;
+  const theme =
+    block.type === 'call' && /^[A-Z]/.test((block.varName || block.targetVarName || '').trim())
+      ? BLOCK_THEMES.class
+      : (BLOCK_THEMES[block.type] || BLOCK_THEMES.print);
   const isCBlock =
     block.type === 'for_range' ||
     block.type === 'for_in' ||
@@ -155,6 +160,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
   const isIfBlock = block.type === 'if' || block.type === 'try';
   const isChainDragged = draggedChainIds ? draggedChainIds.has(block.id) : false;
   const isArgSlotTarget = activeSnapTarget?.type === 'arg_slot' && activeSnapTarget.targetBlockId === block.id;
+  const notchBgColor = isToolbox ? '#22304a' : '#1b263b';
 
   // Visual debugging mode styling:
   // Non-executing blocks are dimmed (opacity 0.35, brightness 0.65)
@@ -349,7 +355,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           value={block.content || ''}
           targetValue={block.targetContent}
           onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
-          fontSize="0.76rem"
+          fontSize="0.88rem"
           background={isArgSlotTarget ? '#fef9c3' : '#ffffff'}
           border={isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)'}
           boxShadow={isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none'}
@@ -392,11 +398,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           userSelect: 'none',
           cursor: 'grab',
           fontFamily: 'var(--font-mono)',
-          position: isNested ? 'relative' : 'absolute',
-          ...(isNested ? { marginTop: cIdx === 0 ? '0px' : '-1px' } : { left: `${block.x}px`, top: `${block.y}px` }),
+          position: (isNested || isToolbox) ? 'relative' : 'absolute',
+          ...(isNested ? { marginTop: cIdx === 0 ? '0px' : '-1px' } : isToolbox ? {} : { left: `${block.x}px`, top: `${block.y}px` }),
           filter: isNested ? 'none' : 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
           zIndex: effectiveZIndex,
-          touchAction: isNested ? undefined : 'none',
+          touchAction: (isNested || isToolbox) ? undefined : 'none',
           ...debugStyle,
         }}
       >
@@ -417,20 +423,20 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             ...(isNested ? { borderLeft: 'none' } : {}),
             color: '#ffffff',
             fontWeight: 800,
-            fontSize: '0.80rem',
+            fontSize: '0.90rem',
             position: 'relative',
             cursor: 'grab',
             boxSizing: 'border-box',
           }}
         >
           {/* Top Notch: 연결 상태일 때는 null을 리턴하여 테두리 덮어쓰기 원천 방지 */}
-          <PuzzleNotch left={tabLeft} borderColor={theme.border} isConnected={isTopConnected} />
+          <PuzzleNotch left={tabLeft} borderColor={theme.border} bgColor={notchBgColor} isConnected={isTopConnected} />
 
           {/* Spine junction line */}
           <div
             style={{
               position: 'absolute',
-              left: `${spineW}px`,
+              left: `${isNested ? spineW - 1 : spineW - 2}px`,
               right: '5px',
               bottom: 0,
               height: '1px',
@@ -626,6 +632,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           hasInnerBlocks={innerBlocks.length > 0 || isMouthSnapTarget}
           tabLeft={tabLeft}
           isNested={isNested}
+          notchBgColor={notchBgColor}
         />
       </div>
     );
@@ -677,15 +684,15 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           flexDirection: 'column',
           alignSelf: 'flex-start',
           width: 'fit-content',
-          minWidth: '100px',
+          minWidth: '120px',
           userSelect: 'none',
           cursor: 'grab',
           fontFamily: 'var(--font-mono)',
-          position: isNested ? 'relative' : 'absolute',
-          ...(isNested ? { marginTop: cIdx === 0 ? '0px' : '-1px' } : { left: `${block.x}px`, top: `${block.y}px` }),
+          position: (isNested || isToolbox) ? 'relative' : 'absolute',
+          ...(isNested ? { marginTop: cIdx === 0 ? '0px' : '-1px' } : isToolbox ? {} : { left: `${block.x}px`, top: `${block.y}px` }),
           filter: isNested ? 'none' : 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25))',
           zIndex: effectiveZIndex,
-          touchAction: isNested ? undefined : 'none',
+          touchAction: (isNested || isToolbox) ? undefined : 'none',
           ...debugStyle,
         }}
       >
@@ -729,17 +736,17 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                     ...(isNested ? { borderLeft: 'none' } : {}),
                     color: '#ffffff',
                     fontWeight: 800,
-                    fontSize: '0.80rem',
+                    fontSize: '0.90rem',
                     position: 'relative',
                     cursor: 'grab',
                     boxSizing: 'border-box',
                   }}
                 >
-                  <PuzzleNotch left={tabLeft} borderColor={branchTheme.border} isConnected={isTopConnected} />
+                  <PuzzleNotch left={tabLeft} borderColor={branchTheme.border} bgColor={notchBgColor} isConnected={isTopConnected} />
                   <div
                     style={{
                       position: 'absolute',
-                      left: `${spineW}px`,
+                      left: `${isNested ? spineW - 1 : spineW - 2}px`,
                       right: '5px',
                       bottom: 0,
                       height: '1px',
@@ -769,7 +776,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                     alignItems: 'center',
                     whiteSpace: 'nowrap',
                     gap: '4px',
-                    padding: '5px 10px',
+                    minHeight: `${BLOCK_GEOMETRY.ARM_HEIGHT}px`,
+                    height: `${BLOCK_GEOMETRY.ARM_HEIGHT}px`,
+                    marginTop: '-1px',
+                    padding: '0 10px',
                     borderRadius: '0 6px 6px 0',
                     background: branchTheme.bg,
                     borderTop: `1px solid ${branchTheme.border}`,
@@ -778,17 +788,30 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                     ...(isNested ? {} : { borderLeft: `1px solid ${branchTheme.border}` }),
                     color: '#ffffff',
                     fontWeight: 800,
-                    fontSize: '0.80rem',
+                    fontSize: '0.90rem',
                     position: 'relative',
                     cursor: 'grab',
-                    minHeight: '28px',
                     boxSizing: 'border-box',
                   }}
                 >
+                  {/* Spine junction mask: erases the top border across the left vertical spine */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '-1px',
+                      left: 0,
+                      width: `${isNested ? spineW - 1 : spineW - 2}px`,
+                      height: '2px',
+                      background: branchTheme.bg,
+                      zIndex: 3,
+                      pointerEvents: 'none',
+                    }}
+                  />
                   {/* Intermediate arm notch matching floor of previous mouth */}
                   <PuzzleNotch
                     left={spineW + BLOCK_GEOMETRY.TAB_LEFT_INNER}
                     borderColor={branchTheme.border}
+                    bgColor={notchBgColor}
                     isConnected={
                       (branches[brIdx - 1]?.innerBlocks || []).length > 0 ||
                       (activeSnapTarget?.type === 'mouth' &&
@@ -799,7 +822,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   <div
                     style={{
                       position: 'absolute',
-                      left: `${spineW}px`,
+                      left: `${isNested ? spineW - 1 : spineW - 2}px`,
                       right: '5px',
                       bottom: 0,
                       height: '1px',
@@ -990,6 +1013,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           }
           tabLeft={tabLeft}
           isNested={isNested}
+          notchBgColor={notchBgColor}
         />
       </div>
     );
@@ -1087,17 +1111,20 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         onDragOver={onDragOver}
         onDrop={onDrop}
         style={{
-          position: (isNested || isSlotArg) ? 'relative' : 'absolute',
+          position: (isNested || isSlotArg || isToolbox) ? 'relative' : 'absolute',
           ...(isSlotArg
             ? { margin: '0 1px' }
             : isNested
             ? { margin: '0 0 0 -1px' }
+            : isToolbox
+            ? {}
             : { left: `${block.x}px`, top: `${block.y}px` }),
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '4px',
-          height: isSlotArg ? '24px' : `${BLOCK_GEOMETRY.ARM_HEIGHT}px`,
-          padding: '0 8px 0 10px',
+          gap: '5px',
+          minHeight: isSlotArg ? '28px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
+          height: isSlotArg ? '28px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
+          padding: '0 12px',
           boxSizing: 'border-box',
           background: theme.bg,
           boxShadow: (isNested || isSlotArg) ? 'none' : `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
@@ -1105,17 +1132,17 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           borderRadius: (isSlotArg || isNested || block.attachedToBlockId) ? '0 6px 6px 0' : '6px',
           color: '#ffffff',
           fontWeight: 800,
-          fontSize: isSlotArg ? '0.74rem' : '0.80rem',
+          fontSize: isSlotArg ? '0.84rem' : '0.90rem',
           fontFamily: 'var(--font-mono)',
           cursor: 'grab',
           zIndex: effectiveZIndex,
           userSelect: 'none',
-          touchAction: (isNested || isSlotArg) ? undefined : 'none',
+          touchAction: (isNested || isSlotArg || isToolbox) ? undefined : 'none',
           ...debugStyle,
         }}
       >
         <HorizontalPuzzleTab borderColor={theme.border} bg={theme.bg} />
-        <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
+        <HorizontalPuzzleNotch borderColor={theme.border} bgColor={notchBgColor} isConnected={!!block.attachedMethodId} />
 
         <span style={{ fontSize: '0.95rem', fontWeight: 900, marginRight: '-1px' }}>.</span>
 
@@ -1127,14 +1154,14 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '3px',
-            height: isSlotArg ? '18px' : '20px',
-            padding: isSlotArg ? '0 5px' : '0 6px',
-            borderRadius: '4px',
+            height: isSlotArg ? '22px' : '24px',
+            padding: isSlotArg ? '0 6px' : '0 7px',
+            borderRadius: '5px',
             background: '#ffffff',
             color: '#0f172a',
             fontWeight: 800,
             fontFamily: 'var(--font-mono)',
-            fontSize: isSlotArg ? '0.72rem' : '0.78rem',
+            fontSize: isSlotArg ? '0.82rem' : '0.88rem',
             cursor: 'pointer',
             boxSizing: 'border-box',
             userSelect: 'none',
@@ -1182,7 +1209,6 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           value={block.content || ''}
           targetValue={block.targetContent}
           onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
-          borderRadius="5px"
         />
         <span>)</span>
       </div>
@@ -1208,21 +1234,21 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '4px',
-        minHeight: isSlotArg ? '24px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
-        height: isSlotArg ? '24px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
-        padding: isSlotArg ? '0 6px' : '0 8px',
+        gap: '5px',
+        minHeight: isSlotArg ? '28px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
+        height: isSlotArg ? '28px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
+        padding: isSlotArg ? '0 8px' : '0 12px',
         boxSizing: 'border-box',
         borderRadius: isSlotArg ? '6px' : isNested ? '0 6px 0 0' : '6px',
         background: theme.bg,
         border: `1px solid ${theme.border}`,
         ...(isNested && !isSlotArg ? { borderLeft: 'none' } : {}),
-        boxShadow: (isNested || isSlotArg) ? 'none' : `0 1.5px 0 ${theme.shadow}`,
+        boxShadow: (isNested || isSlotArg) ? 'none' : `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
         color: '#ffffff',
         fontWeight: 800,
-        fontSize: isSlotArg ? '0.74rem' : '0.78rem',
+        fontSize: isSlotArg ? '0.84rem' : '0.90rem',
         fontFamily: 'var(--font-mono)',
-        position: (isNested || isSlotArg) ? 'relative' : 'absolute',
+        position: (isNested || isSlotArg || isToolbox) ? 'relative' : 'absolute',
         width: 'fit-content',
         userSelect: 'none',
         cursor: 'grab',
@@ -1230,15 +1256,17 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           ? { margin: '0 2px' }
           : isNested
           ? { marginTop: cIdx === 0 ? '0px' : '-1px' }
+          : isToolbox
+          ? {}
           : { left: `${block.x}px`, top: `${block.y}px` }),
         zIndex: effectiveZIndex,
-        touchAction: (isNested || isSlotArg) ? undefined : 'none',
+        touchAction: (isNested || isSlotArg || isToolbox) ? undefined : 'none',
         ...debugStyle,
       }}
     >
       {/* Top Notch: null if connected or inside slot */}
       {!isSlotArg && (
-        <PuzzleNotch left={tabLeft} borderColor={theme.border} isConnected={isTopConnected} />
+        <PuzzleNotch left={tabLeft} borderColor={theme.border} bgColor={notchBgColor} isConnected={isTopConnected} />
       )}
 
       {/* Bottom Puzzle Tab: slots cleanly into next block (hidden inside slot) */}
@@ -1249,7 +1277,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       {/* Horizontal notch for method chaining on functions, variables, collections */}
       {(['input', 'str', 'open', 'list', 'dict', 'set', 'tuple', 'sorted', 'call'].includes(block.type) ||
         block.type === 'variable') && (
-        <HorizontalPuzzleNotch borderColor={theme.border} isConnected={!!block.attachedMethodId} />
+        <HorizontalPuzzleNotch borderColor={theme.border} bgColor={notchBgColor} isConnected={!!block.attachedMethodId} />
       )}
 
       {/* Block Body Content */}
@@ -1264,7 +1292,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 value={block.sepVal ?? ''}
                 targetValue={block.targetSepVal}
                 onChange={(val) => onPrintOptionChange?.(block.id, 'sep', val)}
-                fontSize="0.76rem"
+                fontSize="0.88rem"
               />
             </span>
           )}
@@ -1275,7 +1303,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 value={block.endVal ?? ''}
                 targetValue={block.targetEndVal}
                 onChange={(val) => onPrintOptionChange?.(block.id, 'end', val)}
-                fontSize="0.76rem"
+                fontSize="0.88rem"
               />
             </span>
           )}
@@ -1302,14 +1330,14 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '3px',
-              height: isSlotArg ? '18px' : '20px',
-              padding: isSlotArg ? '0 5px' : '0 6px',
-              borderRadius: '4px',
+              height: isSlotArg ? '22px' : '24px',
+              padding: isSlotArg ? '0 6px' : '0 7px',
+              borderRadius: '5px',
               background: '#ffffff',
               color: '#0f172a',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              fontSize: isSlotArg ? '0.72rem' : '0.78rem',
+              fontSize: isSlotArg ? '0.82rem' : '0.88rem',
               cursor: 'pointer',
               boxSizing: 'border-box',
               userSelect: 'none',
@@ -1357,14 +1385,14 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '3px',
-              height: isSlotArg ? '18px' : '20px',
-              padding: isSlotArg ? '0 5px' : '0 6px',
-              borderRadius: '4px',
+              height: isSlotArg ? '22px' : '24px',
+              padding: isSlotArg ? '0 6px' : '0 7px',
+              borderRadius: '5px',
               background: '#ffffff',
               color: '#0f172a',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              fontSize: isSlotArg ? '0.72rem' : '0.78rem',
+              fontSize: isSlotArg ? '0.82rem' : '0.88rem',
               cursor: 'pointer',
               boxSizing: 'border-box',
               userSelect: 'none',
@@ -1411,14 +1439,14 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '3px',
-              height: isSlotArg ? '18px' : '20px',
-              padding: isSlotArg ? '0 5px' : '0 6px',
-              borderRadius: '4px',
+              height: isSlotArg ? '22px' : '24px',
+              padding: isSlotArg ? '0 6px' : '0 7px',
+              borderRadius: '5px',
               background: '#ffffff',
               color: '#0f172a',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              fontSize: isSlotArg ? '0.72rem' : '0.78rem',
+              fontSize: isSlotArg ? '0.82rem' : '0.88rem',
               cursor: 'pointer',
               boxSizing: 'border-box',
               userSelect: 'none',
@@ -1460,7 +1488,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             value={block.varName ?? (block.targetVarName !== undefined ? '' : 'my_func')}
             targetValue={block.targetVarName}
             onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-            fontSize="0.76rem"
+            fontSize="0.88rem"
           />
           <span>(</span>
           {renderArgSlot('call')}
@@ -1472,7 +1500,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             value={block.varName ?? (block.targetVarName !== undefined ? '' : 'x')}
             targetValue={block.targetVarName}
             onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-            fontSize="0.76rem"
+            fontSize="0.88rem"
           />
           {!(
             isSlotArg ||
@@ -1491,15 +1519,15 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: '20px',
-                  padding: '0 6px',
+                  height: '24px',
+                  padding: '0 7px',
                   borderRadius: '5px',
                   background: 'rgba(0, 0, 0, 0.26)',
                   border: '1px solid rgba(255, 255, 255, 0.34)',
                   color: '#ffffff',
                   fontWeight: 800,
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.76rem',
+                  fontSize: '0.86rem',
                   cursor: 'pointer',
                   boxSizing: 'border-box',
                   userSelect: 'none',
@@ -1544,7 +1572,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             value={block.content || ''}
             targetValue={block.targetContent}
             onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
-            fontSize="0.76rem"
+            fontSize="0.88rem"
           />
         </>
       ) : block.type === 'comment' ? (
@@ -1562,7 +1590,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             border="1px solid rgba(74, 222, 128, 0.35)"
             fontWeight={600}
             fontStyle="italic"
-            fontSize="0.76rem"
+            fontSize="0.88rem"
             padding="1px 6px"
             onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
           />
@@ -1577,7 +1605,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 value={block.varName}
                 targetValue={block.targetVarName}
                 onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-                fontSize="0.76rem"
+                fontSize="0.88rem"
               />
               <span>=</span>
             </>
@@ -1663,7 +1691,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                     value={block.content || ''}
                     targetValue={block.targetContent}
                     onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
-                    fontSize="0.76rem"
+                    fontSize="0.88rem"
                   />
                   <span>&#125;</span>
                 </>
@@ -1740,7 +1768,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                 value={block.content || ''}
                 targetValue={block.targetContent}
                 onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
-                fontSize="0.76rem"
+                fontSize="0.88rem"
               />
               <span>{block.type === 'list' ? ']' : block.type === 'tuple' ? ')' : block.type === 'set' ? '}' : ''}</span>
             </>

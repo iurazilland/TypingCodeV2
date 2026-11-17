@@ -117,9 +117,9 @@ export const BLOCK_GEOMETRY = {
   SPINE_WIDTH: 18,          // Width of C-block left vertical column
 
   // Standard block heights
-  STATEMENT_HEIGHT: 32,
-  ARM_HEIGHT: 30,
-  CLOSING_ARM_HEIGHT: 24,
+  STATEMENT_HEIGHT: 38,
+  ARM_HEIGHT: 36,
+  CLOSING_ARM_HEIGHT: 28,
 
   // Snap thresholds in px
   SNAP_HORIZONTAL_TOLERANCE: 45,
@@ -183,7 +183,7 @@ export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: 
 };
 
 export const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {
-  const BASE_WIDTH = 26;
+  const BASE_WIDTH = 32;
   const str = val ?? '';
   if (str.length === 0) {
     return BASE_WIDTH;
@@ -198,7 +198,7 @@ export const getBlockInputWidth = (val: string | undefined | null, minChars: num
     }
   }
   const effectiveLen = Math.max(minChars, units);
-  return Math.max(BASE_WIDTH, Math.round(effectiveLen * 7.8 + 14));
+  return Math.max(BASE_WIDTH, Math.round(effectiveLen * 8.8 + 16));
 };
 
 export interface SnapTarget {

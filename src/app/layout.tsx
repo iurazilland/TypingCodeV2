@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
-      <body>
+    <html lang="ko" spellCheck={false}>
+      <body spellCheck={false}>
         <LanguageProvider>
           <AuthProvider>
             <Navbar />

@@ -10,7 +10,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
   "title_en": "Level 66: Prefix/Suffix & Character Classification Methods",
   "description_ko": ".startswith(), .endswith(), .isdigit(), .isalpha()로 문자열 형식과 문자 구성을 안전하게 검증합니다.",
   "description_en": "Validate prefixes, suffixes, digits, and alphabetic strings using .startswith(), .endswith(), .isdigit(), and .isalpha().",
-  "totalQuestions": 13,
+  "totalQuestions": 15,
   "unlockedBlocks": [
     "print",
     "variable",
@@ -27,8 +27,9 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "문자열의 .startswith(접두사)와 .endswith(접미사) 메서드는 문자열이 각각 지정한 글자로 시작하는지, 끝나는지를 검사하여 불리언(True/False)으로 반환합니다. 블록의 코드를 따라 입력해보세요.",
-      "prompt_en": "The string .startswith(prefix) and .endswith(suffix) methods check whether a string begins or ends with the specified substring and return a boolean (True/False). Trace the block code.",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] .startswith()와 .endswith()로 파일명의 접두사와 확장자를 검사해보세요.",
+      "prompt_en": "[Block] Check whether the filename begins with \"report\" and ends with \".pdf\".",
       "hint_ko": "파일 이름의 머리말이나 확장자(.pdf)가 맞는지 확인할 때 슬라이싱 없이도 직관적으로 검사할 수 있습니다.",
       "hint_en": "These methods let you check file prefixes and extensions like .pdf cleanly without manual slicing.",
       "targetCode": "name = \"report_v1.pdf\"\nprint(name.startswith(\"report\"))\nprint(name.endswith(\".pdf\"))",
@@ -45,10 +46,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "공백을 지운 주소가 \"https://\"로 시작하고 \".kr\"로 끝나면 True를 출력하도록 두 메서드를 채워보세요. (터미널 입력: https://a.kr)",
-      "prompt_en": "Fill in the two methods so True is printed when url begins with \"https://\" and ends with \".kr\". (Terminal input: https://a.kr)",
-      "hint_ko": "'시작하다(start)'와 '끝나다(end)'에 3인칭 s를 붙이고 '~로(with)'를 띄어쓰기 없이 결합한 접두·접미 판별 메서드를 각각 채워보세요.",
-      "hint_en": "Attach third-person 's' to 'start' and 'end', then append 'with' with no space to form the 10-letter prefix and 8-letter suffix methods.",
+      "prompt_ko": "[빈칸 채우기] 주소가 \"https://\"로 시작하고 \".kr\"로 끝나면 True를 출력하도록 두 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the two methods so True is printed when url begins with \"https://\" and ends with \".kr\".",
+      "hint_ko": "시작 여부를 검사하는 startswith와 끝 여부를 검사하는 endswith를 차례로 채워보세요.",
+      "hint_en": "Enter startswith for the prefix check and endswith for the suffix check.",
       "targetCode": "url = input().strip()\na = url.startswith(\"https://\")\nb = url.endswith(\".kr\")\nprint(a and b)",
       "templateCode": "url = input().strip()\na = url.§§§§§§§§§§(\"https://\")\nb = url.§§§§§§§§(\".kr\")\nprint(a and b)",
       "testCases": [
@@ -68,8 +69,9 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": ".isdigit()는 문자열이 숫자로만 이루어졌는지, .isalpha()는 공백이나 기호 없이 글자(알파벳·한글 등)로만 이루어졌는지를 판별하여 불리언을 반환합니다. 블록의 코드를 따라 입력해보세요.",
-      "prompt_en": ".isdigit() returns True if all characters in a string are digits, while .isalpha() returns True if all characters are letters with no spaces or symbols. Trace the block code.",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] .isdigit()와 .isalpha()로 숫자 문자열과 글자 문자열 여부를 각각 판별해보세요.",
+      "prompt_en": "[Block] Use .isdigit() and .isalpha() to test whether strings contain only digits or only letters.",
       "hint_ko": "빈 문자열(\"\")이거나 공백·특수기호가 한 글자라도 섞여 있으면 두 메서드 모두 False를 반환합니다.",
       "hint_en": "Both methods return False if the string is empty or contains any whitespace or punctuation.",
       "targetCode": "pin = \"2026\"\ntag = \"Python\"\nprint(pin.isdigit(), tag.isalpha())",
@@ -86,10 +88,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "입력 문자열이 숫자만으로 구성되었는지와 글자만으로 구성되었는지를 순서대로 출력해보세요. (터미널 입력: 404)",
-      "prompt_en": "Print whether s consists purely of digits and purely of letters, separated by a space (Terminal input: 404).",
-      "hint_ko": "접두사 is 뒤에 '숫자 자릿수'를 뜻하는 다섯 글자 단어(d로 시작)를 붙인 메서드와 '알파벳(alphabet)'의 앞 다섯 글자를 붙인 메서드를 차례로 적어보세요.",
-      "hint_en": "Form two 7-letter methods starting with 'is': first add the 5-letter word for a numeric figure (starting with 'd'), then add the first 5 letters of 'alphabet'.",
+      "prompt_ko": "[빈칸 채우기] 입력 문자열이 숫자로만 구성되었는지와 글자로만 구성되었는지를 순서대로 출력해보세요.",
+      "prompt_en": "[Fill Blank] Print whether s consists purely of digits and purely of letters.",
+      "hint_ko": "숫자 여부를 판별하는 isdigit와 알파벳·글자 여부를 판별하는 isalpha를 차례로 적어보세요.",
+      "hint_en": "Write isdigit first and isalpha second.",
       "targetCode": "s = input()\nprint(s.isdigit(), s.isalpha())",
       "templateCode": "s = input()\nprint(s.§§§§§§§(), s.§§§§§§§())",
       "testCases": [
@@ -109,8 +111,9 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "조건식에서 f.lower().endswith(\".png\")처럼 소문자 변환과 접미사 검사를 연결하면, 대소문자 확장자(.PNG, .png)를 모두 걸러내어 리스트에 모을 수 있습니다. 블록의 코드를 따라 입력해보세요.",
-      "prompt_en": "Chaining f.lower().endswith(\".png\") in a condition matches both uppercase and lowercase file extensions while preserving the original filenames. Trace the block code.",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] for문과 f.lower().endswith(\".png\")로 대소문자 구분 없이 이미지 파일만 골라내보세요.",
+      "prompt_en": "[Block] Chain f.lower().endswith(\".png\") in a for loop to collect PNG files regardless of case.",
       "hint_ko": "조건 검사에만 f.lower()를 쓰고 imgs.append(f)에는 원본 변수 f를 넣으면 원래 대소문자가 그대로 유지됩니다.",
       "hint_en": "Using f.lower() only in the if test while appending f keeps the original casing intact in the result list.",
       "targetCode": "files = [\"a.PNG\", \"doc.txt\", \"b.png\"]\nimgs = []\nfor f in files:\n    if f.lower().endswith(\".png\"):\n        imgs.append(f)\nprint(\",\".join(imgs))",
@@ -127,22 +130,22 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "공백을 제거한 입력이 숫자 문자열이면 정수로 변환해 2배를 출력하고, 아니면 \"ERR\"를 출력해보세요. (터미널 입력: 35)",
-      "prompt_en": "If stripped input contains only digits, convert to integer and print double; otherwise print \"ERR\" (Terminal input: 35).",
-      "hint_ko": "접두사 is와 숫자(d로 시작하는 다섯 글자)를 합친 일곱 글자 메서드로 안전성을 먼저 확인한 뒤, 정수(integer)의 앞 세 글자 변환 함수로 감싸 2를 곱하세요.",
-      "hint_en": "First validate numeric characters with 'is' + the 5-letter word for a single number character, then convert using the first 3 letters of 'integer'.",
-      "targetCode": "raw = input().strip()\nif raw.isdigit():\n    print(int(raw) * 2)\nelse:\n    print(\"ERR\")",
-      "templateCode": "raw = input().strip()\nif raw.§§§§§§§():\n    print(§§§(raw) * 2)\nelse:\n    print(\"ERR\")",
+      "prompt_ko": "[빈칸 채우기] 공백으로 나눈 토큰 중 숫자로만 이루어진 항목만 정수로 바꿔 합산해보세요.",
+      "prompt_en": "[Fill Blank] Sum only the purely numeric tokens from the space-separated input.",
+      "hint_ko": "숫자 문자열 판별 메서드 isdigit로 확인한 뒤, 정수 변환 함수 int로 감싸 누적하세요.",
+      "hint_en": "Validate numeric tokens with isdigit and convert them using int.",
+      "targetCode": "tokens = input().split()\ntotal = 0\nfor t in tokens:\n    if t.isdigit():\n        total += int(t)\nprint(total)",
+      "templateCode": "tokens = input().split()\ntotal = 0\nfor t in tokens:\n    if t.§§§§§§§():\n        total += §§§(t)\nprint(total)",
       "testCases": [
         {
           "id": 1,
-          "input": "35",
-          "expectedOutput": "70"
+          "input": "10 py 25 ai",
+          "expectedOutput": "35"
         },
         {
           "id": 2,
-          "input": "12a",
-          "expectedOutput": "ERR"
+          "input": "7 8 no",
+          "expectedOutput": "15"
         }
       ]
     },
@@ -150,8 +153,9 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": ".isdigit()는 순수 아라비아 숫자만 True로 판정하므로 음수 기호(-)가 붙은 문자열은 걸러내며, 음수를 포함한 부호 있는 정수 변환은 try - except ValueError와 int()로 처리합니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: 25)",
-      "prompt_en": "Because .isdigit() returns False when a minus sign (-) is present, you can check unsigned digits with .isdigit() first and handle signed integers in else using try - except ValueError with int(). Trace the block code. (Terminal input: 25)",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] .isdigit()로 양의 정수를 먼저 확인하고 부호 있는 정수는 try - except로 처리해보세요.",
+      "prompt_en": "[Block] Check unsigned digits with .isdigit() first and handle signed integers in else with try - except ValueError.",
       "hint_ko": "\"-10\"처럼 부호가 붙은 숫자 문자열은 s.isdigit()가 False이지만 int(s)는 정상적으로 -10을 반환합니다.",
       "hint_en": "A signed string like \"-10\" evaluates to False for s.isdigit(), but int(s) parses it cleanly as -10.",
       "targetCode": "s = input().strip()\nif s.isdigit():\n    print(\"POS\", int(s))\nelse:\n    try:\n        print(\"SIGNED\", int(s))\n    except ValueError:\n        print(\"NAN\")",
@@ -178,22 +182,27 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "공백으로 나눈 토큰 중 글자로만 된 개수와 숫자로만 된 개수를 딕셔너리 stats에 누적해 출력해보세요. (예: py 10 ! -> 1 1) (터미널 입력: py 100 ai 20 !)",
-      "prompt_en": "Count purely alphabetic and purely numeric tokens in stats and print both counts (e.g., py 10 ! -> 1 1). (Terminal input: py 100 ai 20 !)",
-      "hint_ko": "첫 빈칸에는 is 뒤에 '알파벳(alphabet)' 앞 다섯 글자를 붙인 글자 판별 메서드를, 둘째 빈칸에는 is 뒤에 숫자 다섯 글자 단어를 붙인 숫자 판별 메서드를 넣으세요.",
-      "hint_en": "First check pure letters with 'is' + the first 5 letters of 'alphabet', then check pure numbers with 'is' + the 5-letter word for a numeric character.",
-      "targetCode": "stats = {\"word\": 0, \"num\": 0}\nfor t in input().split():\n    if t.isalpha():\n        stats[\"word\"] += 1\n    elif t.isdigit():\n        stats[\"num\"] += 1\nprint(stats[\"word\"], stats[\"num\"])",
-      "templateCode": "stats = {\"word\": 0, \"num\": 0}\nfor t in input().split():\n    if t.§§§§§§§():\n        stats[\"word\"] += 1\n    elif t.§§§§§§§():\n        stats[\"num\"] += 1\nprint(stats[\"word\"], stats[\"num\"])",
+      "prompt_ko": "[빈칸 채우기] 입력이 글자면 대문자로 출력하고 아니면 정수 2배 또는 ERR를 출력하도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Print WORD if raw is alphabetic, otherwise try doubling as int or print ERR on ValueError.",
+      "hint_ko": "첫 빈칸에는 글자 판별 메서드 isalpha를 적고, 둘째 빈칸에는 정수 변환 예외 ValueError를 적으세요.",
+      "hint_en": "Use isalpha in the if condition and catch ValueError in the except clause.",
+      "targetCode": "raw = input().strip()\nif raw.isalpha():\n    print(\"WORD\", raw.upper())\nelse:\n    try:\n        print(\"NUM\", int(raw) * 2)\n    except ValueError:\n        print(\"ERR\")",
+      "templateCode": "raw = input().strip()\nif raw.§§§§§§§():\n    print(\"WORD\", raw.upper())\nelse:\n    try:\n        print(\"NUM\", int(raw) * 2)\n    except §§§§§§§§§§:\n        print(\"ERR\")",
       "testCases": [
         {
           "id": 1,
-          "input": "py 100 ai 20 !",
-          "expectedOutput": "2 2"
+          "input": "py",
+          "expectedOutput": "WORD PY"
         },
         {
           "id": 2,
-          "input": "hello world 7",
-          "expectedOutput": "2 1"
+          "input": "-15",
+          "expectedOutput": "NUM -30"
+        },
+        {
+          "id": 3,
+          "input": "12a",
+          "expectedOutput": "ERR"
         }
       ]
     },
@@ -201,8 +210,9 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": ".startswith(\"ID-\")로 앞부분 접두사 형식을 확인하고 슬라이싱한 뒷부분에 s[3:].isdigit()를 결합하면, 규격에 맞는 코드만 안전하게 정수로 파싱하는 함수를 만들 수 있습니다. 블록의 코드를 따라 입력해보세요. (터미널 입력: ID-109)",
-      "prompt_en": "Combining .startswith(\"ID-\") with s[3:].isdigit() on the remaining slice validates structured ID strings before converting the numeric part with int(). Trace the block code. (Terminal input: ID-109)",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] .startswith(\"ID-\")와 s[3:].isdigit()를 결합해 ID 번호를 파싱하는 함수를 조립해보세요.",
+      "prompt_en": "[Block] Combine .startswith(\"ID-\") and s[3:].isdigit() inside parse_id to validate and parse ID strings.",
       "hint_ko": "\"ID-\"가 3글자이므로 인덱스 3부터 끝까지 잘라낸 s[3:]이 숫자 부분에 해당합니다.",
       "hint_en": "Since \"ID-\" is 3 characters long, the slice s[3:] extracts everything after the prefix.",
       "targetCode": "def parse_id(s):\n    if s.startswith(\"ID-\") and s[3:].isdigit():\n        return int(s[3:])\n    return None\n\nres = parse_id(input())\nif res is None:\n    print(\"INVALID\")\nelse:\n    print(res + 1)",
@@ -224,12 +234,12 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "길이가 5이면서 앞 2글자는 글자, 뒤 3글자는 숫자인지 판별해 불리언을 돌려주는 함수 valid_code를 완성해보세요. (터미널 입력: KR105)",
-      "prompt_en": "Complete valid_code to return True when s has length 5, first 2 chars letters, and last 3 chars digits. (Terminal input: KR105)",
-      "hint_ko": "함수 결과를 돌려주는 여섯 글자 키워드 뒤에, 앞 두 글자의 알파벳 판별 메서드(is + alphabet 앞 5글자)와 뒤 세 글자의 숫자 판별 메서드를 논리곱으로 연결하세요.",
-      "hint_en": "Start with the 6-letter function-output keyword, then combine the 'is' + alphabet-prefix check on s[:2] and the 'is' + numeric-char check on s[2:].",
-      "targetCode": "def valid_code(s):\n    if len(s) != 5:\n        return False\n    return s[:2].isalpha() and s[2:].isdigit()\n\nprint(valid_code(input()))",
-      "templateCode": "def valid_code(s):\n    if len(s) != 5:\n        return False\n    §§§§§§ s[:2].§§§§§§§() and s[2:].§§§§§§§()\n\nprint(valid_code(input()))",
+      "prompt_ko": "[빈칸 채우기] 길이가 5일 때 앞 2글자는 글자, 뒤 3글자는 숫자인지 판별하는 함수 valid_code를 완성해보세요.",
+      "prompt_en": "[Fill Blank] Complete valid_code to return True when s has length 5, first 2 chars letters, and last 3 chars digits.",
+      "hint_ko": "앞 두 글자 s[:2]에는 isalpha를, 뒤 세 글자 s[2:]에는 isdigit를 호출하세요.",
+      "hint_en": "Call isalpha on s[:2] and isdigit on s[2:].",
+      "targetCode": "def valid_code(s):\n    if len(s) == 5:\n        return s[:2].isalpha() and s[2:].isdigit()\n    else:\n        return False\n\nprint(valid_code(input()))",
+      "templateCode": "def valid_code(s):\n    if len(s) == 5:\n        return s[:2].§§§§§§§() and s[2:].§§§§§§§()\n    else:\n        return False\n\nprint(valid_code(input()))",
       "testCases": [
         {
           "id": 1,
@@ -248,10 +258,10 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "파일명이 \"test_\"로 시작하고 \".py\"로 끝날 때 \"RUN\", 아니면 \"SKIP\"을 출력하도록 접두·접미 인자 버그를 고쳐보세요. (터미널 입력: test_login.py)",
-      "prompt_en": "Fix the swapped prefix/suffix arguments so files starting with \"test_\" and ending with \".py\" print \"RUN\". (Terminal input: test_login.py)",
-      "hint_ko": "시작 부분 검사 메서드에 확장자가 들어가고 끝 부분 검사 메서드에 머리말이 들어가 인자가 서로 뒤바뀌어 있습니다. 두 괄호 안의 문자열을 알맞은 자리로 맞바꾸세요.",
-      "hint_en": "The file extension was passed to the prefix checker and the prefix string was passed to the suffix checker; swap the two string arguments.",
+      "prompt_ko": "[틀린 곳 수정] 파일명이 \"test_\"로 시작하고 \".py\"로 끝날 때 RUN을 출력하도록 뒤바뀐 인자를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the swapped prefix/suffix arguments so files starting with \"test_\" and ending with \".py\" print RUN.",
+      "hint_ko": "startswith에는 접두사 \"test_\"를, endswith에는 확장자 \".py\"를 넣도록 두 문자열 인자를 맞바꾸세요.",
+      "hint_en": "Swap the two string arguments so startswith checks \"test_\" and endswith checks \".py\".",
       "templateCode": "f = input().strip()\nif f.startswith(\".py\") and f.endswith(\"test_\"):\n    print(\"RUN\")\nelse:\n    print(\"SKIP\")",
       "targetCode": "f = input().strip()\nif f.startswith(\"test_\") and f.endswith(\".py\"):\n    print(\"RUN\")\nelse:\n    print(\"SKIP\")",
       "testCases": [
@@ -271,13 +281,37 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 숫자 문자열일 때만 정수로 변환해 100을 더해야 하는데 글자 판별 메서드를 쓴 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the character classification method so numeric pin strings are converted to int.",
+      "hint_ko": "int(pin) 변환 전에 숫자로만 이루어졌는지 확인해야 하므로 .isalpha()를 .isdigit()로 수정하세요.",
+      "hint_en": "Replace .isalpha() with .isdigit() before calling int(pin).",
+      "templateCode": "pin = input().strip()\nif pin.isalpha():\n    print(int(pin) + 100)\nelse:\n    print(\"INVALID\")",
+      "targetCode": "pin = input().strip()\nif pin.isdigit():\n    print(int(pin) + 100)\nelse:\n    print(\"INVALID\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "250",
+          "expectedOutput": "350"
+        },
+        {
+          "id": 2,
+          "input": "abc",
+          "expectedOutput": "INVALID"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "공백을 제거한 문자열 s 아래에 한 줄을 추가하여 s가 \"A\"로 시작하고 나머지 뒷부분이 모두 숫자인지 불리언을 출력해보세요. (터미널 입력: A204)",
-      "prompt_en": "Add one line below to print whether s starts with \"A\" and the remaining substring s[1:] is all digits. (Terminal input: A204)",
-      "hint_ko": "문자열이 \"A\"로 시작하는지 확인하는 식과 1번 인덱스부터 끝까지 잘라낸 부분이 모두 숫자인지 확인하는 식을 and로 묶어 출력 함수 안에 작성해보세요.",
-      "hint_en": "Combine a prefix check for \"A\" and a numeric-character check on the slice from index 1 onward using logical 'and' inside the output function.",
-      "targetCode": "s = input().strip()\nprint(s.startswith(\"A\") and s[1:].isdigit())",
-      "templateCode": "s = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "prompt_ko": "[한 줄 완성] s가 \"A\"로 시작하고 뒷부분 s[1:]이 모두 숫자인지 판별해 ok에 저장하는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Check whether s starts with \"A\" and s[1:] is all digits, assigning the boolean to ok.",
+      "hint_ko": "ok = s.startswith(\"A\") and s[1:].isdigit() 형태로 두 조건을 and로 연결해 ok에 대입하세요.",
+      "hint_en": "Write ok = s.startswith(\"A\") and s[1:].isdigit().",
+      "targetCode": "s = input().strip()\nok = s.startswith(\"A\") and s[1:].isdigit()\nprint(ok)",
+      "templateCode": "s = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
       "testCases": [
         {
           "id": 1,
@@ -292,14 +326,38 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       ]
     },
     {
-      "id": 13,
-      "step": 13,
+      "id": 14,
+      "step": 14,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 파일명 name이 \".py\"로 끝나는지 판별한 불리언을 변수 is_py에 저장하는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Check whether name ends with \".py\" and assign the boolean result to is_py.",
+      "hint_ko": "is_py = name.endswith(\".py\") 형태로 접미사 검사 결과를 변수 is_py에 저장하세요.",
+      "hint_en": "Write is_py = name.endswith(\".py\").",
+      "targetCode": "name = input().strip()\nis_py = name.endswith(\".py\")\nprint(is_py)",
+      "templateCode": "name = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(is_py)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "app.py",
+          "expectedOutput": "True"
+        },
+        {
+          "id": 2,
+          "input": "app.js",
+          "expectedOutput": "False"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "Select the exact output of the following Python code.",
-      "hint_ko": "음수 부호(-)나 숫자와 알파벳이 섞인 문자열은 두 판별 메서드에서 모두 거짓이 된다는 점을 기억하고, 순수 숫자 문자열 개수와 순수 글자 문자열 개수를 각각 세어보세요.",
-      "hint_en": "Remember that minus signs and mixed alphanumeric tokens fail both checks; count how many items are purely numeric versus purely alphabetic.",
+      "prompt_ko": "[출력 결과 예측] 다음 .isdigit()와 .isalpha() 판별 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
+      "hint_ko": "음수 부호(-)나 숫자와 알파벳이 섞인 문자열은 두 판별 메서드에서 모두 거짓이 된다는 점을 기억하세요.",
+      "hint_en": "Remember that minus signs and mixed alphanumeric tokens fail both checks.",
       "targetCode": "items = [\"120\", \"-5\", \"py3\", \"AI\", \"07\"]\na, b = 0, 0\nfor x in items:\n    if x.isdigit():\n        a += 1\n    elif x.isalpha():\n        b += 1\nprint(a, b)",
       "choices": [
         "2 1",

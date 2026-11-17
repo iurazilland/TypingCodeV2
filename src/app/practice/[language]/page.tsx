@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { 
-  ArrowLeft, 
   CheckCircle2, 
   Play, 
   Lock, 
@@ -15,6 +14,7 @@ import LanguageIcon from '@/components/LanguageIcon';
 import { getCategoryName } from '@/lib/curriculumTranslations';
 import { getCourseSections, LevelSection } from '@/lib/curriculumSections';
 import { getClearedLevelsLocal, PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
+import { useIsLocalServer } from '@/lib/localServer';
 
 interface StageSelectPageProps {
   params: {
@@ -26,6 +26,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
   const { language } = useLanguage();
   const isEn = language === 'en';
   const rawLang = params.language.toLowerCase();
+  const isLocalServer = useIsLocalServer();
 
   // Hover state tracker for level cards
   const [hoveredLevelNum, setHoveredLevelNum] = useState<number | null>(null);
@@ -193,28 +194,6 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
 
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '36px 24px 100px' }}>
-      {/* Top Header Bar: Back Link */}
-      <div style={{ marginBottom: '24px' }}>
-        <Link
-          href="/languages"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#475569',
-            fontSize: '0.92rem',
-            fontWeight: 700,
-            transition: 'color 0.15s ease',
-            textDecoration: 'none',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = '#0284c7')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}
-        >
-          <ArrowLeft size={16} />
-          <span>{isEn ? 'Back to All Curriculum' : '전체 언어 학습과정으로 돌아가기'}</span>
-        </Link>
-      </div>
-
       {/* Course Overview Bento Pod with Learning Progress */}
       <div
         style={{
@@ -420,7 +399,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                 {section.levels.map((level, lIdx) => {
                   const isCleared = userProgress.clearedLevels.has(level.levelNumber);
                   const isCurrent = !isCleared && (level.levelNumber === currentActiveLevel);
-                  const isLocked = !isCleared && !isCurrent;
+                  const isLocked = !isLocalServer && !isCleared && !isCurrent;
                   const isLast = lIdx === section.levels.length - 1;
                   const isHovered = hoveredLevelNum === level.levelNumber;
 
@@ -467,8 +446,10 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             <CheckCircle2 size={20} color="#0284c7" />
                           ) : isCurrent ? (
                             <Play size={18} color="#0284c7" fill="#0284c7" />
-                          ) : (
+                          ) : isLocked ? (
                             <Lock size={16} color="#94a3b8" />
+                          ) : (
+                            <Play size={16} color="#64748b" />
                           )}
                         </div>
 
@@ -481,7 +462,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             padding: '3px 8px',
                             borderRadius: '6px',
                             background: isCurrent ? '#0284c7' : isCleared ? '#e0f2fe' : '#f1f5f9',
-                            color: isCurrent ? '#ffffff' : isCleared ? '#0369a1' : '#94a3b8',
+                            color: isCurrent ? '#ffffff' : isCleared ? '#0369a1' : isLocked ? '#94a3b8' : '#334155',
                             flexShrink: 0,
                           }}
                         >
@@ -564,7 +545,7 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                             <CheckCircle2 size={13} />
                             <span>{isEn ? 'Cleared' : '완료'}</span>
                           </span>
-                        ) : (
+                        ) : isLocked ? (
                           <span
                             style={{
                               padding: '5px 10px',
@@ -580,6 +561,24 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                           >
                             <Lock size={12} />
                             <span>{isEn ? 'Locked' : '잠김'}</span>
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              padding: '5px 12px',
+                              borderRadius: '10px',
+                              background: '#f8fafc',
+                              color: '#0284c7',
+                              border: '1px solid #bae6fd',
+                              fontSize: '0.76rem',
+                              fontWeight: 700,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                            }}
+                          >
+                            <Play size={11} />
+                            <span>{isEn ? 'Open' : '이동하기'}</span>
                           </span>
                         )}
 

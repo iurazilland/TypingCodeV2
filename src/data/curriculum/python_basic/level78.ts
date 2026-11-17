@@ -10,7 +10,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
   "title_en": "Level 78: Batch Mapping map() & Indexed Iteration enumerate()",
   "description_ko": "반복 변환을 한 줄로 줄여주는 map()과 번호·원소를 동시에 꺼내는 enumerate()를 실습합니다.",
   "description_en": "Practice batch type conversion with map() and indexed loop unpacking with enumerate().",
-  "totalQuestions": 13,
+  "totalQuestions": 15,
   "unlockedBlocks": [
     "print",
     "variable",
@@ -30,8 +30,9 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 1,
       "step": 1,
       "type": "block",
-      "prompt_ko": "map(함수, 시퀀스)는 시퀀스의 모든 원소에 첫 번째 인자로 준 변환 함수를 일괄 적용하며, 변수 여러 개에 바로 언패킹할 수 있습니다. (터미널 입력: 15 27)",
-      "prompt_en": "map(func, seq) applies a conversion function to every item of a sequence at once, and its result can be unpacked directly into variables. (Terminal input: 15 27)",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] map(int, input().split())으로 두 입력값을 정수 변환해 a, b에 언패킹하고 합을 출력하세요.",
+      "prompt_en": "[Block] Unpack map(int, input().split()) into a, b and print a + b.",
       "hint_ko": "map()의 첫 번째 인자에는 int()가 아니라 괄호를 뺀 함수 이름 int만 전달합니다.",
       "hint_en": "Pass the function name int without parentheses as the first argument to map().",
       "targetCode": "a, b = map(int, input().split())\nprint(a + b)",
@@ -53,10 +54,10 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 공백으로 입력된 여러 숫자를 일괄 정수 변환한 리스트로 만들고 총합을 출력해보세요. (터미널 입력: 10 20 30)",
-      "prompt_en": "Fill in both blanks to convert a line of integers into a list at once and print their sum. (Terminal input: 10 20 30)",
-      "hint_ko": "안쪽에는 함수를 일괄 '대응시키는'(지도와 같은 철자) 3글자 함수를 쓰고, 바깥을 '목록' 자료형 변환 함수(4글자)로 감싸세요.",
-      "hint_en": "Inside, call the 3-letter batch-association function (spelled like a geographic chart); outside, wrap it in the 4-letter sequence constructor.",
+      "prompt_ko": "[빈칸 채우기] 공백 입력 숫자들을 일괄 정수 변환한 리스트로 만들어 총합을 출력하세요.",
+      "prompt_en": "[Fill Blank] Fill in both blanks to convert a line of integers into a list and print their sum.",
+      "hint_ko": "안쪽에는 함수를 일괄 대응시키는 3글자 함수를 쓰고, 바깥을 리스트 생성 함수(4글자)로 감싸세요.",
+      "hint_en": "Inside, call the 3-letter batch-mapping function; outside, wrap it in the 4-letter list constructor.",
       "templateCode": "nums = §§§§(§§§(int, input().split()))\nprint(sum(nums))",
       "targetCode": "nums = list(map(int, input().split()))\nprint(sum(nums))",
       "testCases": [
@@ -76,8 +77,9 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 3,
       "step": 3,
       "type": "block",
-      "prompt_ko": "내장 함수 enumerate(시퀀스)는 각 원소에 0번부터 순서 번호를 붙여 (인덱스, 값) 튜플 쌍으로 동시에 꺼내 줍니다.",
-      "prompt_en": "The built-in enumerate(seq) pairs each element with its running index starting at 0, yielding (index, value) tuples on each loop turn.",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] enumerate(items)로 0번부터 시작하는 인덱스와 값을 동시에 꺼내 출력해보세요.",
+      "prompt_en": "[Block] Use enumerate(items) to unpack and print the 0-based index and value on each turn.",
       "hint_ko": "for문에서 idx, val 두 변수로 언패킹하면 별도의 인덱스 카운터 변수를 직접 늘릴 필요가 없습니다.",
       "hint_en": "Unpacking into idx, val in the for header eliminates the need to maintain a manual counter variable.",
       "targetCode": "items = [\"pen\", \"book\", \"bag\"]\nfor idx, val in enumerate(items):\n    print(idx, val)",
@@ -94,8 +96,8 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸에 인덱스 순회 함수를 채워 1번부터 시작하는 메뉴 번호표를 출력해보세요. (출력 예: 1. tea)",
-      "prompt_en": "Fill in the indexed iteration built-in so menu items are numbered starting from 1 (e.g., 1. tea).",
+      "prompt_ko": "[빈칸 채우기] 빈칸에 인덱스 순회 함수를 채워 1번부터 시작하는 메뉴 번호표를 출력해보세요. (출력 예: 1. tea)",
+      "prompt_en": "[Fill Blank] Fill in the indexed iteration built-in so menu items are numbered starting from 1.",
       "hint_ko": "번호를 매기며 하나씩 '열거하다'(enumerate)라는 뜻의 9글자 내장 함수를 사용하세요.",
       "hint_en": "Combine 'e-' + 'numer' (number) + '-ate' for the 9-letter built-in function that pairs each item with its running number.",
       "templateCode": "menus = [\"tea\", \"cake\"]\nfor no, name in §§§§§§§§§(menus, 1):\n    print(f\"{no}. {name}\")",
@@ -112,8 +114,9 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 5,
       "step": 5,
       "type": "block",
-      "prompt_ko": "map(int, input().split())을 list()로 감싸면 한 줄에 입력된 여러 숫자를 즉시 정수 리스트로 만들어 sum()과 len()에 활용할 수 있습니다. (터미널 입력: 20 22 23)",
-      "prompt_en": "Wrapping map(int, input().split()) in list() converts a line of space-separated numbers into an integer list ready for sum() and len(). (Terminal input: 20 22 23)",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] list(map(int, input().split()))로 정수 리스트를 만들고 평균을 소수 첫째 자리까지 출력하세요.",
+      "prompt_en": "[Block] Convert input numbers with list(map(int, input().split())) and print their rounded average.",
       "hint_ko": "map 객체 자체에는 len()을 쓸 수 없으므로, 길이와 합계를 모두 구할 때는 list()로 변환해 저장합니다.",
       "hint_en": "Because a raw map object has no length, converting it with list() lets you call both sum() and len().",
       "targetCode": "temps = list(map(int, input().split()))\navg = round(sum(temps) / len(temps), 1)\nprint(f\"Avg:{avg}\")",
@@ -135,17 +138,22 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "빈칸을 채워 선수 목록을 1등부터 순회하며 이름별 순위 딕셔너리를 완성하고 Lee의 순위를 출력해보세요. (출력: 2)",
-      "prompt_en": "Fill in the blank to iterate players with 1-based ranks into a dict and print the rank of Lee.",
-      "hint_ko": "1번부터 순위 번호와 이름을 동시에 꺼내도록 '번호를 매겨 열거하다'(enumerate) 뜻의 9글자 함수를 채우세요.",
-      "hint_en": "Use the 9-letter numbering function ('e-' + 'numer' + '-ate') so each player unpacks alongside a 1-based rank.",
-      "templateCode": "players = [\"Kim\", \"Lee\", \"Park\"]\nranks = {}\nfor rank, name in §§§§§§§§§(players, 1):\n    ranks[name] = rank\nprint(ranks[\"Lee\"])",
-      "targetCode": "players = [\"Kim\", \"Lee\", \"Park\"]\nranks = {}\nfor rank, name in enumerate(players, 1):\n    ranks[name] = rank\nprint(ranks[\"Lee\"])",
+      "prompt_ko": "[빈칸 채우기] 문자열 리스트 raw를 정수 리스트로 일괄 변환해 최댓값과 최솟값의 차이를 출력하세요.",
+      "prompt_en": "[Fill Blank] Fill in list and map to convert raw into integers and print max(nums) - min(nums).",
+      "hint_ko": "바깥에는 4글자 리스트 변환 함수를, 안쪽에는 3글자 일괄 매핑 함수를 채우세요.",
+      "hint_en": "Use the 4-letter list constructor outside and the 3-letter mapping built-in inside.",
+      "templateCode": "raw = input().split()\nnums = §§§§(§§§(int, raw))\nprint(max(nums) - min(nums))",
+      "targetCode": "raw = input().split()\nnums = list(map(int, raw))\nprint(max(nums) - min(nums))",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "2"
+          "input": "12 5 20 8",
+          "expectedOutput": "15"
+        },
+        {
+          "id": 2,
+          "input": "30 10 25",
+          "expectedOutput": "20"
         }
       ]
     },
@@ -153,8 +161,9 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 7,
       "step": 7,
       "type": "block",
-      "prompt_ko": "문자열의 .join() 메서드는 문자열 원소만 이어 붙일 수 있으므로, 숫자 리스트는 map(str, 리스트)로 일괄 문자열 변환해 전달합니다.",
-      "prompt_en": "Because str.join() requires string elements, passing map(str, codes) converts a list of numbers into strings on the fly before joining.",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 숫자 리스트 codes를 map(str, codes)로 문자열 변환해 \"-\"로 이어 붙인 결과를 출력해보세요.",
+      "prompt_en": "[Block] Convert codes to strings with map(str, codes) and join them with \"-\".",
       "hint_ko": "\"-\".join() 안에 map(str, codes)를 바로 넣으면 별도의 리스트 변환 없이도 구분자로 연결된 문자열이 만들어집니다.",
       "hint_en": "You can pass map(str, codes) directly into \"-\".join() without wrapping it in list() first.",
       "targetCode": "codes = [10, 25, 30]\ntext = \"-\".join(map(str, codes))\nprint(text)",
@@ -174,22 +183,17 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "두 빈칸을 채워 입력된 점수들 중 80점 이상인 원소의 0번 기준 위치(인덱스)만 리스트로 모아 출력해보세요. (터미널 입력: 75 85 90 60)",
-      "prompt_en": "Fill in both blanks to collect the 0-based indices of input scores that are 80 or higher. (Terminal input: 75 85 90 60)",
-      "hint_ko": "첫 줄은 함수를 일괄 '대응시키는'(지도와 같은 철자) 3글자 함수를, 반복문은 번호와 값을 함께 '열거하는'(enumerate) 9글자 함수를 쓰세요.",
-      "hint_en": "First call the 3-letter batch-association function (spelled like a chart), then unpack index and score with the 9-letter 'e-' + 'numer' + '-ate' function.",
-      "templateCode": "scores = list(§§§(int, input().split()))\npassed = []\nfor idx, sc in §§§§§§§§§(scores):\n    if sc >= 80:\n        passed.append(idx)\nprint(passed)",
-      "targetCode": "scores = list(map(int, input().split()))\npassed = []\nfor idx, sc in enumerate(scores):\n    if sc >= 80:\n        passed.append(idx)\nprint(passed)",
+      "prompt_ko": "[빈칸 채우기] 정수 리스트 nums를 문자열로 일괄 변환해 슬래시(/)로 이어 출력하도록 두 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in join and map to convert nums to strings and join them with \"/\".",
+      "hint_ko": "문자열들을 하나로 이어 붙이는 4글자 메서드와 함수를 일괄 적용하는 3글자 내장 함수를 채우세요.",
+      "hint_en": "Call the 4-letter string joining method and the 3-letter batch-mapping function.",
+      "templateCode": "nums = [1, 2, 3]\ntext = \"/\".§§§§(§§§(str, nums))\nprint(text)",
+      "targetCode": "nums = [1, 2, 3]\ntext = \"/\".join(map(str, nums))\nprint(text)",
       "testCases": [
         {
           "id": 1,
-          "input": "75 85 90 60",
-          "expectedOutput": "[1, 2]"
-        },
-        {
-          "id": 2,
-          "input": "80 50 95",
-          "expectedOutput": "[0, 2]"
+          "input": "",
+          "expectedOutput": "1/2/3"
         }
       ]
     },
@@ -197,8 +201,9 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 9,
       "step": 9,
       "type": "block",
-      "prompt_ko": "enumerate(시퀀스, 시작번호)처럼 두 번째 인자를 지정하면 0번 대신 원하는 번호(예: 1번)부터 순서를 매기며 순회합니다. (터미널 입력: hi code)",
-      "prompt_en": "Passing a second argument to enumerate(seq, start) starts the index numbering from start (such as 1) instead of 0. (Terminal input: hi code)",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] enumerate(words, 1)로 1번부터 번호를 매겨 (순서 번호 * 단어 길이)의 합을 반환하는 함수를 완성하세요.",
+      "prompt_en": "[Block] Use enumerate(words, 1) inside score_words to sum idx * len(w).",
       "hint_ko": "enumerate(words, 1)에서 꺼낸 1번 기준 순서 번호 idx와 단어 길이 len(w)를 곱해 누적합니다.",
       "hint_en": "Multiply the 1-based index idx from enumerate(words, 1) by len(w) on each iteration and add it to total.",
       "targetCode": "def score_words(words):\n    total = 0\n    for idx, w in enumerate(words, 1):\n        total += idx * len(w)\n    return total\ndata = input().split()\nprint(score_words(data))",
@@ -220,22 +225,22 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "쉼표로 구분된 세 정수를 일괄 변환해 담고, 1번부터 번호를 붙여 2배 값을 출력해보세요. (출력 예: #1:6) (터미널 입력: 3,5,7)",
-      "prompt_en": "Fill in both blanks to parse three comma-separated integers and print 2x each value numbered from 1. (Terminal input: 3,5,7)",
-      "hint_ko": "첫 줄은 일괄 변환을 '대응시키는'(지도와 같은 철자) 3글자 함수를, 셋째 줄은 번호와 함께 '열거하는'(enumerate) 9글자 함수를 쓰세요.",
-      "hint_en": "Use the 3-letter chart/mapping function on line 1, and the 9-letter 'e-' + 'numer' + '-ate' numbering function on line 3.",
-      "templateCode": "a, b, c = §§§(int, input().split(\",\"))\nnums = [a, b, c]\nfor idx, n in §§§§§§§§§(nums, 1):\n    print(f\"#{idx}:{n * 2}\")",
-      "targetCode": "a, b, c = map(int, input().split(\",\"))\nnums = [a, b, c]\nfor idx, n in enumerate(nums, 1):\n    print(f\"#{idx}:{n * 2}\")",
+      "prompt_ko": "[빈칸 채우기] 1번부터 순서 번호와 원소를 곱해 더하는 함수와 입력 변환을 완성하도록 두 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in enumerate and map to compute the 1-based weighted sum of input integers.",
+      "hint_ko": "반복문에는 번호와 값을 함께 꺼내는 9글자 열거 함수를, 아래 입력 줄에는 3글자 일괄 변환 함수를 쓰세요.",
+      "hint_en": "Use the 9-letter numbering function in the loop and the 3-letter mapping function for input parsing.",
+      "templateCode": "def sum_ranked(nums):\n    total = 0\n    for idx, n in §§§§§§§§§(nums, 1):\n        total += idx * n\n    return total\narr = list(§§§(int, input().split()))\nprint(sum_ranked(arr))",
+      "targetCode": "def sum_ranked(nums):\n    total = 0\n    for idx, n in enumerate(nums, 1):\n        total += idx * n\n    return total\narr = list(map(int, input().split()))\nprint(sum_ranked(arr))",
       "testCases": [
         {
           "id": 1,
-          "input": "3,5,7",
-          "expectedOutput": "#1:6\n#2:10\n#3:14"
+          "input": "3 5 7",
+          "expectedOutput": "34"
         },
         {
           "id": 2,
-          "input": "10,20,30",
-          "expectedOutput": "#1:20\n#2:40\n#3:60"
+          "input": "10 20",
+          "expectedOutput": "50"
         }
       ]
     },
@@ -244,11 +249,11 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "1번부터 순위 번호가 붙어야 하는데 0번부터 출력되는 버그를 고쳐 지정된 형식으로 출력해보세요. (출력 예: #1:95) (터미널 입력: 95 80)",
-      "prompt_en": "Fix the numbering bug so rankings start at 1 instead of 0 (e.g., #1:95). (Terminal input: 95 80)",
-      "hint_ko": "열거 순회 함수는 두 번째 인자를 생략하면 기본값 0부터 번호를 매깁니다. 시작 번호가 1이 되도록 두 번째 인자를 추가해보세요.",
-      "hint_en": "Indexed enumeration starts at 0 when given a single argument; pass the starting number 1 as its second argument.",
-      "templateCode": "scores = list(map(int, input().split()))\nfor rank, sc in enumerate(scores):\n    print(f\"#{rank}:{sc}\")",
+      "prompt_ko": "[틀린 곳 수정] 1번부터 순위 번호가 붙어야 하는데 0번부터 출력되는 시작 번호 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the start argument in enumerate() so rankings start at 1 instead of 0.",
+      "hint_ko": "enumerate(시퀀스, 시작번호)의 두 번째 인자가 0으로 되어 있어 0번부터 시작합니다. 1부터 시작하도록 수정하세요.",
+      "hint_en": "Change the second argument of enumerate(scores, 0) from 0 to 1 so numbering begins at 1.",
+      "templateCode": "scores = list(map(int, input().split()))\nfor rank, sc in enumerate(scores, 0):\n    print(f\"#{rank}:{sc}\")",
       "targetCode": "scores = list(map(int, input().split()))\nfor rank, sc in enumerate(scores, 1):\n    print(f\"#{rank}:{sc}\")",
       "testCases": [
         {
@@ -267,13 +272,32 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 정수 리스트를 하이픈(-)으로 연결하려다 변환 함수가 잘못 지정되어 오류가 나는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the conversion function inside map() so \"-\".join(...) receives strings instead of ints.",
+      "hint_ko": "문자열의 .join() 메서드는 문자열 원소만 이어 붙일 수 있으므로 map의 첫 인자를 str로 바꿔야 합니다.",
+      "hint_en": "Because .join() requires string elements, change map(int, codes) to map(str, codes).",
+      "templateCode": "codes = [10, 20, 30]\ntext = \"-\".join(map(int, codes))\nprint(text)",
+      "targetCode": "codes = [10, 20, 30]\ntext = \"-\".join(map(str, codes))\nprint(text)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10-20-30"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "문자열 raw 아래에 한 줄을 추가하여 공백 분리된 숫자들을 map으로 정수 변환한 총합을 출력해보세요. (터미널 입력: 4 9 16)",
-      "prompt_en": "Add one line below raw to convert space-separated integers via map and print their sum. (Terminal input: 4 9 16)",
-      "hint_ko": "문자열을 공백으로 쪼갠 시퀀스에 정수 일괄 변환을 적용하고, 그 변환 객체를 곧바로 합계 내장 함수에 넣어 출력해보세요.",
-      "hint_en": "Break the string on whitespace, batch-convert its tokens to integers, pass that result directly into the summation built-in, and display it.",
-      "templateCode": "raw = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
-      "targetCode": "raw = input()\nprint(sum(map(int, raw.split())))",
+      "prompt_ko": "[한 줄 완성] 문자열 raw를 공백 분리해 map으로 정수 변환한 합계를 total에 저장하세요.",
+      "prompt_en": "[Complete Line] Assign sum(map(int, raw.split())) to total.",
+      "hint_ko": "total = sum(map(int, raw.split())) 형태로 변환 결과를 곧바로 합산해 저장하세요.",
+      "hint_en": "Write total = sum(map(int, raw.split())) to sum the mapped integers.",
+      "templateCode": "raw = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)",
+      "targetCode": "raw = input()\ntotal = sum(map(int, raw.split()))\nprint(total)",
       "testCases": [
         {
           "id": 1,
@@ -288,12 +312,31 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       ]
     },
     {
-      "id": 13,
-      "step": 13,
+      "id": 14,
+      "step": 14,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] enumerate(words, 1)로 1번부터 번호를 붙인 f\"{i}:{w}\" 리스트 컴프리헨션을 tags에 저장하세요.",
+      "prompt_en": "[Complete Line] Assign [f\"{i}:{w}\" for i, w in enumerate(words, 1)] to tags.",
+      "hint_ko": "tags = [f\"{i}:{w}\" for i, w in enumerate(words, 1)] 형태로 작성해보세요.",
+      "hint_en": "Write tags = [f\"{i}:{w}\" for i, w in enumerate(words, 1)].",
+      "templateCode": "words = [\"a\", \"b\", \"c\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(tags)",
+      "targetCode": "words = [\"a\", \"b\", \"c\"]\ntags = [f\"{i}:{w}\" for i, w in enumerate(words, 1)]\nprint(tags)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "['1:a', '2:b', '3:c']"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "Select the exact output of the following Python code.",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
       "hint_ko": "열거 함수의 두 번째 인자가 1이므로 번호가 0이 아닌 1부터 시작한다는 점에 유의해, 각 원소와 번호의 곱을 차례로 누적해보세요.",
       "hint_en": "Notice that the second argument sets the starting index to 1 (not 0); multiply each number by its 1-based position and sum them up.",
       "targetCode": "nums = list(map(int, \"2 4 6\".split()))\nres = 0\nfor i, v in enumerate(nums, 1):\n    res += i * v\nprint(res)",

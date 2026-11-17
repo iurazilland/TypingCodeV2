@@ -34,7 +34,7 @@ import { getPracticeRound } from '@/lib/practiceData';
 import { PracticeQuestion } from '@/lib/practiceTypes';
 import { executeCode } from '@/lib/runner';
 import { CanvasBlockItem } from '@/components/practice/CanvasBlockItem';
-import { AssignOperator } from '@/lib/blockGeometry';
+import { AssignOperator, BLOCK_GEOMETRY, getBlockInputWidth } from '@/lib/blockGeometry';
 import { evaluateBlocksLocally, evaluatePythonLocally, evaluateBlocksWithTrace, evaluatePythonWithTrace, getOrderedCanvasBlocks } from '@/lib/blockEvaluator';
 import TypingStage, { tokenizePythonLine, VSCODE_DARK_PLUS } from '@/components/practice/TypingStage';
 import {
@@ -43,6 +43,7 @@ import {
   PROGRESS_SYNCED_EVENT,
   recordLevelCleared,
 } from '@/lib/progressSync';
+import { useIsLocalServer } from '@/lib/localServer';
 import SectionFeedbackModal, {
   CompletedSectionInfo,
   findCompletedSectionForLevel,
@@ -196,6 +197,12 @@ interface CustomVariableTemplate {
   id: string;
   name: string;
   kind: 'variable' | 'list' | 'tuple' | 'set' | 'dict';
+}
+
+interface CustomCallTemplate {
+  id: string;
+  name: string;
+  kind: 'function' | 'class';
 }
 
 const BLOCK_THEMES: Record<BlockType, { bg: string; shadow: string; border: string }> = {
@@ -1713,6 +1720,7 @@ export default function PracticePage(props: PracticePageProps) {
 function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const { language } = useLanguage();
   const isEn = language === 'en';
+  const isLocalServer = useIsLocalServer();
   const { user, isLoading: isAuthLoading } = useAuth();
   const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
   const tourStorageKey = user?.id
@@ -1728,7 +1736,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
 
   // Unlocked blocks for this round/level
   const unlockedBlocks = useMemo<string[]>(() => {
-    if (round.unlockedBlocks && round.unlockedBlocks.length > 0) {
+    // An explicit [] (typing-only finale levels) means no blocks, not "all blocks"
+    if (round.unlockedBlocks) {
       return round.unlockedBlocks;
     }
     // Default smart fallback based on level number if not explicitly defined:
@@ -1743,7 +1752,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   }, [round.unlockedBlocks, levelNum]);
 
   const isBlockUnlocked = (key: string) => unlockedBlocks.includes(key);
-  const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def', 'class'].some(k => isBlockUnlocked(k));
+  const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open'].some(k => isBlockUnlocked(k));
+  const hasClassFuncBlocks = isBlockUnlocked('def') || isBlockUnlocked('class');
   const hasControlBlocks = ['if', 'for_range', 'for_in', 'while', 'break', 'continue', 'try', 'raise'].some(k => isBlockUnlocked(k));
   const hasVariableBlocks = isBlockUnlocked('variable');
   const hasCommentBlocks = isBlockUnlocked('comment');
@@ -1895,6 +1905,13 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const [selectedVarKind, setSelectedVarKind] = useState<'variable' | 'list' | 'tuple' | 'set' | 'dict'>('variable');
   const [varInputName, setVarInputName] = useState<string>('');
 
+  // Custom Function / Class Call Blocks in Toolbox (created on demand via modal)
+  const [customCallBlocks, setCustomCallBlocks] = useState<CustomCallTemplate[]>([]);
+  const [isCallModalOpen, setIsCallModalOpen] = useState<boolean>(false);
+  const [callModalStep, setCallModalStep] = useState<1 | 2>(1);
+  const [selectedCallKind, setSelectedCallKind] = useState<'function' | 'class'>('function');
+  const [callInputName, setCallInputName] = useState<string>('');
+
   // Scratch-grade Live Insertion Marker & Snapping Target
   interface SnapTarget {
     type: 'below' | 'above' | 'mouth' | 'method_right' | 'arg_slot';
@@ -1990,6 +2007,21 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
 
   const totalQuestions = round.questions.length;
   const currentQuestion: PracticeQuestion = round.questions[currentStepIndex] || round.questions[0];
+  const hasInputExample = Boolean(currentQuestion.testCases?.[0]?.input);
+  const [showVerdictBadge, setShowVerdictBadge] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isSuccess && !isErrorShown) {
+      setShowVerdictBadge(false);
+      return;
+    }
+    setShowVerdictBadge(true);
+    if (!hasInputExample) return;
+    const timer = setTimeout(() => {
+      setShowVerdictBadge(false);
+    }, 1800);
+    return () => clearTimeout(timer);
+  }, [isSuccess, isErrorShown, hasInputExample]);
   const isQuiz = currentQuestion.type === 'quiz' || currentQuestion.kind === 'predict_output';
   const mode: 'block' | 'typing' = currentQuestion.type === 'typing' || isQuiz ? 'typing' : 'block';
   const progressPercent = Math.round(((currentStepIndex + 1) / totalQuestions) * 100);
@@ -3147,7 +3179,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       }
 
       // 2. Pinpoint core lesson syntax check
-      if (usesInput && !user.tokens.has('input')) return false;
+      if (usesInput !== user.tokens.has('input')) return false;
       if (target.tokens.has('type') && !user.tokens.has('type')) return false;
       if (target.tokens.has('if') && !user.tokens.has('if')) return false;
       if (target.tokens.has('for') && !user.tokens.has('for')) return false;
@@ -3192,6 +3224,48 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       const bugTokens = ['pritn', 'pirnt', 'prnt'];
       if (bugTokens.some((b) => (question.templateCode?.includes(b) || trimmedUser.includes(b)) && trimmedUser.includes(b))) {
         return false;
+      }
+    }
+
+    const normCodeLine = (l: string) => l.replace(/\s+/g, '').replace(/'/g, '"');
+
+    // 4b. fix_bug: template lines that are NOT part of the bug (shared with targetCode) must stay, in order
+    //     (blocks "keep the code, rewrite the last line as print('answer')")
+    if (question.kind === 'fix_bug' && question.templateCode) {
+      const tpl = question.templateCode.split('\n').filter((l) => l.trim());
+      const tgt = (question.targetCode || '').split('\n').filter((l) => l.trim());
+      // LCS of template vs target = the untouched (non-bug) lines
+      const lcs: number[][] = Array.from({ length: tpl.length + 1 }, () => Array(tgt.length + 1).fill(0));
+      for (let i = tpl.length - 1; i >= 0; i--) {
+        for (let j = tgt.length - 1; j >= 0; j--) {
+          lcs[i][j] = tpl[i] === tgt[j] ? lcs[i + 1][j + 1] + 1 : Math.max(lcs[i + 1][j], lcs[i][j + 1]);
+        }
+      }
+      const keep: string[] = [];
+      for (let i = 0, j = 0; i < tpl.length && j < tgt.length; ) {
+        if (tpl[i] === tgt[j]) { keep.push(tpl[i]); i++; j++; }
+        else if (lcs[i + 1][j] >= lcs[i][j + 1]) i++;
+        else j++;
+      }
+      // same indentation (Python semantics) + same tokens; inner spacing is free
+      const sig = (l: string) => `${(l.match(/^[ \t]*/) || [''])[0].length}|${normCodeLine(l)}`;
+      const usr = trimmedUser.split('\n').filter((l) => l.trim());
+      let k = 0;
+      for (const l of usr) {
+        if (k < keep.length && sig(l) === sig(keep[k])) k++;
+      }
+      if (k < keep.length) return false;
+    }
+
+    // 4c. A print() of pure literals (no variables/expressions) must exist verbatim in targetCode
+    //     (blocks print("an" + "swer") hardcoding in blanks, bug lines, or added lines)
+    {
+      const targetNorm = new Set((question.targetCode || '').split('\n').map(normCodeLine));
+      for (const l of trimmedUser.split('\n')) {
+        const m = l.trim().match(/^print\s*\(([\s\S]*)\)$/);
+        if (!m || /\b[fF]["']/.test(m[1])) continue;
+        const withoutStrings = m[1].replace(/(["'])(?:\\.|(?!\1).)*\1/g, '');
+        if (!/[A-Za-z_]/.test(withoutStrings) && !targetNorm.has(normCodeLine(l))) return false;
       }
     }
 
@@ -3338,6 +3412,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       setRuntimeMemory({});
       setHighlightedMemoryKeys(new Set());
       setIsSuccess(false);
+      setIsErrorShown(true);
       return;
     }
 
@@ -3505,11 +3580,11 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           const guidedIn = primaryStdin.replace(/\n/g, ' ↵ ');
           const typedIn = providedLines.join(' ↵ ') || (isEn ? '(empty)' : '(빈 값)');
           const inputGuideMsg = isEn
-            ? `\n\n💡 Please enter the guided input (${guidedIn}) in the terminal to pass this step. (You entered: ${typedIn})`
-            : `\n\n💡 문제를 통과하려면 프롬프트에 안내된 입력값(${guidedIn})을 터미널에 입력해주세요. (현재 입력한 값: ${typedIn})`;
+            ? `\n\n💡 Please enter the input example (${guidedIn}) in the terminal to pass this step. (You entered: ${typedIn})`
+            : `\n\n💡 문제를 통과하려면 터미널의 입력 예제(${guidedIn})와 동일하게 입력해주세요. (현재 입력한 값: ${typedIn})`;
           setTerminalOutput((displayOut || '') + inputGuideMsg);
           setIsSuccess(false);
-          setIsErrorShown(false);
+          setIsErrorShown(true);
           return;
         } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
           const structMsg = isEn
@@ -3713,11 +3788,11 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               const guidedIn = primaryStdin.replace(/\n/g, ' ↵ ');
               const typedIn = providedLines.join(' ↵ ') || (isEn ? '(empty)' : '(빈 값)');
               const inputGuideMsg = isEn
-                ? `\n\n💡 Please enter the guided input (${guidedIn}) in the terminal to pass this step. (You entered: ${typedIn})`
-                : `\n\n💡 문제를 통과하려면 프롬프트에 안내된 입력값(${guidedIn})을 터미널에 입력해주세요. (현재 입력한 값: ${typedIn})`;
+                ? `\n\n💡 Please enter the input example (${guidedIn}) in the terminal to pass this step. (You entered: ${typedIn})`
+                : `\n\n💡 문제를 통과하려면 터미널의 입력 예제(${guidedIn})와 동일하게 입력해주세요. (현재 입력한 값: ${typedIn})`;
               setTerminalOutput((displayOut || '') + inputGuideMsg);
               setIsSuccess(false);
-              setIsErrorShown(false);
+              setIsErrorShown(true);
               return;
             } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
               const structMsg = isEn
@@ -3768,10 +3843,12 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   });
 
   // Step navigation rule:
+  // - Local server: all problems freely navigable
   // - Cleared level (while hearts > 0 and not in forced-review run): all steps navigable
   // - Active/uncleared level (while hearts > 0): navigable up to sessionMaxStep (completed steps in current run)
   // - All 5 hearts depleted: locked & forced back to Step 1
   const isStepUnlocked = (stepIdx: number): boolean => {
+    if (isLocalServer) return stepIdx >= 0 && stepIdx < totalQuestions;
     if (stepIdx <= 0) return true;
     if (hearts <= 0 || isGameOver) return false;
     if (isLevelAlreadyCleared && !isForcedReviewRun) return true;
@@ -3789,7 +3866,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   };
 
   const handlePrevStep = () => {
-    if (hearts <= 0 || isGameOver) return;
+    if (!isLocalServer && (hearts <= 0 || isGameOver)) return;
     if (currentStepIndex > 0) {
       setIsSuccess(false);
       setIsErrorShown(false);
@@ -3889,6 +3966,25 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     setIsDraggingBlock(true);
   };
 
+  const renderToolboxItem = (
+    block: CanvasBlock,
+    dragType: BlockType,
+    title: string,
+    extra?: { varName?: string; withElse?: boolean }
+  ) => (
+    <div
+      key={block.id}
+      draggable
+      onDragStart={(e) => handleDragStartFromToolbox(e, dragType, extra)}
+      style={{ width: 'fit-content', cursor: 'grab', userSelect: 'none' }}
+      title={title}
+    >
+      <div style={{ pointerEvents: 'none' }}>
+        <CanvasBlockItem block={block} isToolbox={true} onContentChange={() => {}} />
+      </div>
+    </div>
+  );
+
   // Bring entire connected stack on canvas to front layer with ordered zIndex (root > downstream)
   const bringStackToFront = (blockId: string, blocks: CanvasBlock[]): CanvasBlock[] => {
     let curr: CanvasBlock | undefined = findBlockInTree(blocks, blockId) || undefined;
@@ -3952,7 +4048,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       if (el) {
         const mouthEl = el.querySelector(`[id^="mouth-"]`) as HTMLElement | null;
         const headerArmEl = el.firstElementChild as HTMLElement | null;
-        const headerWidth = headerArmEl && headerArmEl.offsetHeight <= 40 ? headerArmEl.offsetWidth : el.offsetWidth;
+        const headerWidth = headerArmEl && headerArmEl.offsetHeight <= 46 ? headerArmEl.offsetWidth : el.offsetWidth;
         const mouthHeight = mouthEl ? Math.max(28, mouthEl.offsetHeight) : Math.max(28, el.offsetHeight - 50);
 
         return {
@@ -4121,7 +4217,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     ];
     const canBeArg =
       (!!draggedType && ALL_FUNC_TYPES.includes(draggedType)) ||
-      draggedType === 'variable';
+      draggedType === 'variable' ||
+      draggedType === 'call';
 
     if (canBeArg) {
       const slotCandidates: CanvasBlock[] = [];
@@ -4129,7 +4226,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         for (const b of list) {
           if (excludedIds.has(b.id)) continue;
           if (
-            (ALL_FUNC_TYPES.includes(b.type) || b.type === 'variable' || b.type === 'for_range' || b.type === 'for_in') &&
+            (ALL_FUNC_TYPES.includes(b.type) || b.type === 'variable' || b.type === 'call' || b.type === 'for_range' || b.type === 'for_in') &&
             !b.argBlock
           ) {
             slotCandidates.push(b);
@@ -4522,8 +4619,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       const defaultContent = blockInfo.content || (
         bType === 'for_range' ? '5' :
           bType === 'for_in' ? 'items' :
-            bType === 'range' ? '5' :
-              bType === 'while' ? 'False' : ''
+            bType === 'while' ? 'False' : ''
       );
       const isIfElse = isIf && !!blockInfo.withElse;
       baseBlock = {
@@ -6072,6 +6168,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   };
 
   const handleBlockInputChange = (blockId: string, val: string) => {
+    setIsErrorShown(false);
     setCanvasBlocks((prev) =>
       updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, content: val }))
     );
@@ -6438,6 +6535,28 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     showToast(`✨ '${name}' (${getKindLabel(selectedVarKind)}) 블록이 생성되었습니다.`);
   };
 
+  const handleCreateCallBlock = () => {
+    const name = callInputName.trim();
+    if (!name) {
+      showToast(`⚠️ ${selectedCallKind === 'class' ? '클래스' : '함수'} 이름을 입력해주세요.`);
+      return;
+    }
+    if (!/^[a-zA-Z_]\w*$/.test(name)) {
+      showToast(`⚠️ 유효한 파이썬 ${selectedCallKind === 'class' ? '클래스' : '함수'}명을 입력해주세요. (영문/언더스코어로 시작)`);
+      return;
+    }
+
+    const newCall: CustomCallTemplate = {
+      id: `custom-call-${Date.now()}`,
+      name,
+      kind: selectedCallKind,
+    };
+
+    setCustomCallBlocks((prev) => [...prev, newCall]);
+    setIsCallModalOpen(false);
+    showToast(`✨ '${name}()' (${selectedCallKind === 'class' ? '클래스 생성' : '함수 호출'}) 블록이 생성되었습니다.`);
+  };
+
   const currentDraggedType =
     draggedBlockType ||
     draggingInfoRef.current?.blockType ||
@@ -6466,7 +6585,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         width: '100vw',
         height: '100vh',
         overflow: 'hidden',
-        background: '#0b1329',
+        background: '#172236',
         color: '#f8fafc',
         display: 'flex',
         flexDirection: 'column',
@@ -6480,8 +6599,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           ==================================================================== */}
       <header style={{
         height: '52px',
-        background: '#0f172a',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        background: '#1e293b',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -6582,7 +6701,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             {/* Prev Step Button */}
             <button
               onClick={handlePrevStep}
-              disabled={currentStepIndex <= 0 || hearts <= 0 || isGameOver}
+              disabled={currentStepIndex <= 0 || (!isLocalServer && (hearts <= 0 || isGameOver))}
               title={
                 currentStepIndex > 0
                   ? (isEn ? 'Previous Problem' : '이전 문제')
@@ -6678,8 +6797,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         flex: '1 1 auto',
         height: 'calc(100vh - 52px)',
         display: 'grid',
-        gridTemplateColumns: 'minmax(380px, 34%) 248px 1fr',
-        background: '#090e1a',
+        gridTemplateColumns: 'minmax(380px, 34%) 268px 1fr',
+        background: '#1b263b',
         overflow: 'hidden',
       }}>
         {/* ==================================================================
@@ -6690,8 +6809,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            background: '#0d1527',
-            borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#162033',
+            borderRight: '1px solid rgba(255, 255, 255, 0.14)',
             height: '100%',
             overflow: 'hidden',
           }}
@@ -6703,16 +6822,16 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               flex: '1 1 52%',
               display: 'flex',
               flexDirection: 'column',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-              background: '#0b1120',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
+              background: '#131c2e',
               minHeight: 0,
               overflow: 'hidden',
             }}>
             <div style={{
               height: '46px',
               padding: '0 12px',
-              background: '#0f172a',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              background: '#1e293b',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -6885,13 +7004,13 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               color: '#f8fafc',
               overflowY: 'auto',
               minHeight: 0,
-              background: '#020617',
+              background: '#131c2e',
               lineHeight: 1.6,
             }}>
               <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span>$</span>
                 <span style={{ color: '#e2e8f0' }}>{execMode === 'debug' ? 'python -m pdb main.py' : 'python main.py'}</span>
-                {isSuccess && (
+                {isSuccess && (!hasInputExample || showVerdictBadge) && (
                   <span
                     style={{
                       marginLeft: 'auto',
@@ -6913,7 +7032,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                     <span>정답 (Passed)</span>
                   </span>
                 )}
-                {isErrorShown && (
+                {isErrorShown && (!hasInputExample || showVerdictBadge) && (
                   <span
                     style={{
                       marginLeft: 'auto',
@@ -6933,6 +7052,29 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   >
                     <AlertCircle size={13} color="#ef4444" />
                     <span>오답 (Failed)</span>
+                  </span>
+                )}
+                {hasInputExample && !showVerdictBadge && (
+                  <span
+                    style={{
+                      marginLeft: 'auto',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      color: '#38bdf8',
+                      background: 'rgba(56, 189, 248, 0.16)',
+                      padding: '2px 9px',
+                      borderRadius: '5px',
+                      border: '1px solid rgba(56, 189, 248, 0.4)',
+                      boxShadow: '0 0 10px rgba(56, 189, 248, 0.2)',
+                    }}
+                  >
+                    <span>{isEn ? 'Input Example:' : '입력 예제:'}</span>
+                    <span style={{ color: '#f8fafc' }}>
+                      {(currentQuestion.testCases?.[0]?.input || '').replace(/\r?\n/g, ' ↵ ')}
+                    </span>
                   </span>
                 )}
               </div>
@@ -7006,15 +7148,15 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               flex: '1 1 48%',
               display: 'flex',
               flexDirection: 'column',
-              background: '#0a0f1d',
+              background: '#182338',
               minHeight: 0,
               overflow: 'hidden',
             }}>
             <div style={{
               height: '46px',
               padding: '0 16px',
-              background: '#0f172a',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              background: '#1e293b',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
@@ -7054,8 +7196,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   // 1. Highlighted during debug (newly created or modified): vibrant purple!
                   // 2. Normal Active: crisp white border!
                   // 3. Inactive: subtle dashed gray
-                  let boxBorder = '1px dashed rgba(255, 255, 255, 0.08)';
-                  let boxBg = 'rgba(255, 255, 255, 0.02)';
+                  let boxBorder = '1px dashed rgba(255, 255, 255, 0.16)';
+                  let boxBg = 'rgba(255, 255, 255, 0.04)';
                   let boxGlow = 'none';
                   let typeColor = '#94a3b8';
 
@@ -7128,7 +7270,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                           style={{
                             fontSize: '0.74rem',
                             fontWeight: 800,
-                            color: box.active ? '#ffffff' : '#475569',
+                            color: box.active ? '#ffffff' : '#64748b',
                             fontFamily: 'var(--font-mono)',
                             textAlign: 'center',
                             overflow: 'hidden',
@@ -7149,7 +7291,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                         style={{
                           fontSize: '0.56rem',
                           fontWeight: 700,
-                          color: isHighlighted ? '#c084fc' : box.active ? '#e2e8f0' : '#475569',
+                          color: isHighlighted ? '#c084fc' : box.active ? '#e2e8f0' : '#64748b',
                           textAlign: 'center',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
@@ -7222,10 +7364,10 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            background: '#0d1527',
+            background: '#22304a',
             borderRight: isToolboxHovered && isDraggingBlock
               ? '2px dashed #ef4444'
-              : '1px solid rgba(255, 255, 255, 0.08)',
+              : '1px solid rgba(255, 255, 255, 0.14)',
             boxShadow: isToolboxHovered && isDraggingBlock
               ? 'inset 0 0 24px rgba(239, 68, 68, 0.25)'
               : 'none',
@@ -7234,7 +7376,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             position: 'relative',
             zIndex: 10,
             transition: 'all 0.2s ease',
-            filter: mode === 'typing' ? 'grayscale(0.7) opacity(0.65)' : 'none',
             pointerEvents: 'auto',
             userSelect: mode === 'typing' ? 'none' : 'auto',
           }}
@@ -7273,6 +7414,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             display: 'flex',
             flexDirection: 'column',
             gap: '20px',
+            filter: mode === 'typing' ? 'grayscale(0.7) opacity(0.55)' : 'none',
+            transition: 'filter 0.2s ease',
           }}>
             {/* 1. 함수 카테고리 (파랑 계열) */}
             {hasFunctionBlocks && (
@@ -7282,531 +7425,150 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   <span>{isEn ? 'Functions' : '함수'}</span>
                 </div>
 
-                {/* print() 블록 */}
-                {isBlockUnlocked('print') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'print')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.print.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.print.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.print.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="print() 출력 함수 블록 (캔버스로 드래그하여 배치)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.print.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.print.border} bg={BLOCK_THEMES.print.bg} />
-                    <span>print(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
+                {isBlockUnlocked('print') &&
+                  renderToolboxItem(
+                    { id: 'tb-print', type: 'print', content: '', x: 0, y: 0 },
+                    'print',
+                    'print() 출력 함수 블록 (캔버스로 드래그하여 배치)'
+                  )}
+
+                {isBlockUnlocked('input') &&
+                  renderToolboxItem(
+                    { id: 'tb-input', type: 'input', content: '', x: 0, y: 0 },
+                    'input',
+                    'input() 입력 함수 블록 (우측 홈에 문자열 메서드 결합 가능)'
+                  )}
+
+                {isBlockUnlocked('range') &&
+                  renderToolboxItem(
+                    { id: 'tb-range', type: 'range', content: '', x: 0, y: 0 },
+                    'range',
+                    'range() 수열 생성 함수 블록 (range(5), range(1, 10))'
+                  )}
+
+                {isBlockUnlocked('map') &&
+                  renderToolboxItem(
+                    { id: 'tb-map', type: 'map', content: '', x: 0, y: 0 },
+                    'map',
+                    'map() 함수 블록 (map(int, input().split()) 등)'
+                  )}
+
+                {isBlockUnlocked('sorted') &&
+                  renderToolboxItem(
+                    { id: 'tb-sorted', type: 'sorted', content: '', x: 0, y: 0 },
+                    'sorted',
+                    'sorted() 정렬 함수 블록 (정렬된 리스트 반환, 리스트 메서드 결합 가능)'
+                  )}
+
+                {isBlockUnlocked('type') &&
+                  renderToolboxItem(
+                    { id: 'tb-int', type: 'int', content: '', x: 0, y: 0 },
+                    'int',
+                    '형변환 함수 블록 (기본값: int, 드롭다운에서 int, str, bool 등 선택 가능)'
+                  )}
+
+                {isBlockUnlocked('math') &&
+                  renderToolboxItem(
+                    { id: 'tb-math', type: 'math', content: '', x: 0, y: 0 },
+                    'math',
+                    '수학/집계 함수 블록 (기본값: math, 드롭다운에서 len, round, abs, sum, min, max 선택 가능)'
+                  )}
+
+                {isBlockUnlocked('iter') &&
+                  renderToolboxItem(
+                    { id: 'tb-iter', type: 'iter', content: '', x: 0, y: 0 },
+                    'iter',
+                    '반복/순회 유틸리티 블록 (기본값: iter, 드롭다운에서 iter, enumerate, zip, all, any, reversed 선택 가능)'
+                  )}
+
+                {isBlockUnlocked('method') &&
+                  renderToolboxItem(
+                    { id: 'tb-method', type: 'method', methodName: 'method', content: '', x: 0, y: 0 },
+                    'method',
+                    '.method() 메서드 결합 블록 (좌측 돌출부를 함수/변수 블록 우측 홈에 결합)'
+                  )}
+
+                {isBlockUnlocked('open') &&
+                  renderToolboxItem(
+                    { id: 'tb-open', type: 'open', content: '', x: 0, y: 0 },
+                    'open',
+                    'open() 파일 열기 함수 블록 (우측 홈에 파일 메서드 결합 가능)'
+                  )}
+              </div>
+            )}
+
+            {/* 1.5. 클래스 / 함수 정의 카테고리 (별도 분리) */}
+            {hasClassFuncBlocks && (
+              <div id="cat-sec-class-func" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#38bdf8', fontSize: '0.76rem', fontWeight: 800 }}>
+                  <Zap size={14} color="#06b6d4" />
+                  <span>{isEn ? 'Classes & Functions' : '클래스 / 함수'}</span>
+                </div>
+
+                {/* Prominent "+ 함수 / 클래스 생성" Button (Top of Section) */}
+                <button
+                  onClick={() => {
+                    setIsCallModalOpen(true);
+                    setCallModalStep(1);
+                    setSelectedCallKind('function');
+                    setCallInputName('');
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    width: '100%',
+                    padding: '6px 10px',
+                    borderRadius: '6px',
+                    background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(37, 99, 235, 0.18) 100%)',
+                    border: '1px solid rgba(56, 189, 248, 0.45)',
+                    color: '#38bdf8',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 2px 8px rgba(6, 182, 212, 0.15)',
+                  }}
+                >
+                  <Plus size={14} color="#38bdf8" />
+                  <span>{isEn ? 'Create Function / Class' : '함수 / 클래스 생성'}</span>
+                </button>
+
+                {/* List of Created Function / Class Call Blocks in Toolbox */}
+                {customCallBlocks.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '2px' }}>
+                    {customCallBlocks.map((cb) =>
+                      renderToolboxItem(
+                        { id: `tb-call-${cb.id}`, type: 'call', varName: cb.name, content: '', x: 0, y: 0 },
+                        'call',
+                        `${cb.name}() (${cb.kind === 'class' ? '클래스 생성' : '함수 호출'}) 블록 (드래그하여 배치)`,
+                        { varName: cb.name }
+                      )
+                    )}
                   </div>
                 )}
 
-                {/* input() 블록 (문자열 반환 -> 메서드 결합 가능) */}
-                {isBlockUnlocked('input') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'input')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.input.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.input.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.input.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="input() 입력 함수 블록 (우측 홈에 문자열 메서드 결합 가능)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.input.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.input.border} bg={BLOCK_THEMES.input.bg} />
-                    <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.input.border} bgColor="#0d1527" />
-                    <span>input(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
+                {isBlockUnlocked('class') &&
+                  renderToolboxItem(
+                    { id: 'tb-class', type: 'class', varName: 'MyClass', innerBlocks: [], x: 0, y: 0 },
+                    'class',
+                    'class 클래스 정의 ㄷ자 블록 (내부에 def 메서드 블록 삽입 가능)'
+                  )}
 
-                {/* range() 개별 함수 블록 */}
-                {isBlockUnlocked('range') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'range')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.range.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.range.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.range.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="range() 수열 생성 함수 블록 (range(5), range(1, 10))"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.range.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.range.border} bg={BLOCK_THEMES.range.bg} />
-                    <span>range(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
+                {(isBlockUnlocked('def') || isBlockUnlocked('class')) &&
+                  renderToolboxItem(
+                    { id: 'tb-def', type: 'def', varName: 'my_func', content: '', innerBlocks: [], x: 0, y: 0 },
+                    'def',
+                    'def 함수 정의 ㄷ자 블록'
+                  )}
 
-                {/* map() 고차 함수 블록 */}
-                {isBlockUnlocked('map') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'map')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.map.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.map.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.map.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="map() 함수 블록 (map(int, input().split()) 등)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.map.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.map.border} bg={BLOCK_THEMES.map.bg} />
-                    <span>map(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* sorted() 정렬 함수 블록 (정렬 리스트 반환 -> 리스트 메서드 결합 가능) */}
-                {isBlockUnlocked('sorted') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'sorted')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.sorted.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.sorted.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.sorted.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="sorted() 정렬 함수 블록 (정렬된 리스트 반환, 리스트 메서드 결합 가능)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.sorted.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.sorted.border} bg={BLOCK_THEMES.sorted.bg} />
-                    <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.sorted.border} bgColor="#0d1527" />
-                    <span>sorted(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* [type ▾] () 자료형/형변환 통합 블록 (기본값: type) */}
-                {isBlockUnlocked('type') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'int')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.type.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.type.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.type.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="형변환 함수 블록 (기본값: int, 드롭다운에서 int, str, bool 등 선택 가능)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.type.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.type.border} bg={BLOCK_THEMES.type.bg} />
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>int ▼</span>
-                    <span>(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* [math ▾] () 수학·집계 통합 블록 (기본값: math) */}
-                {isBlockUnlocked('math') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'math')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.math.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.math.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.math.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="수학/집계 함수 블록 (기본값: math, 드롭다운에서 len, round, abs, sum, min, max 선택 가능)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.math.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.math.border} bg={BLOCK_THEMES.math.bg} />
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>math ▼</span>
-                    <span>(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* [iter ▾] () 반복자/순회 통합 블록 (기본값: iter) */}
-                {isBlockUnlocked('iter') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'iter')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.iter.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.iter.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.iter.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="반복/순회 유틸리티 블록 (기본값: iter, 드롭다운에서 iter, enumerate, zip, all, any, reversed 선택 가능)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.iter.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.iter.border} bg={BLOCK_THEMES.iter.bg} />
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>iter ▼</span>
-                    <span>(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* .method() 메서드 결합 블록 */}
-                {isBlockUnlocked('method') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'method')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.method.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.method.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.method.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title=".method() 메서드 결합 블록 (좌측 돌출부를 함수/변수 블록 우측 홈에 결합)"
-                  >
-                    <HorizontalPuzzleTab borderColor={BLOCK_THEMES.method.border} bg={BLOCK_THEMES.method.bg} />
-                    <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.method.border} bgColor="#0d1527" />
-                    <span style={{ fontSize: '0.92rem', fontWeight: 900 }}>.</span>
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>method ▼</span>
-                    <span>(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* open() 파일 열기 함수 블록 */}
-                {isBlockUnlocked('open') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'open')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.open.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.open.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.open.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="open() 파일 열기 함수 블록 (우측 홈에 파일 메서드 결합 가능)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.open.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.open.border} bg={BLOCK_THEMES.open.bg} />
-                    <HorizontalPuzzleNotch borderColor={BLOCK_THEMES.open.border} bgColor="#0d1527" />
-                    <span>open(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* class 클래스 정의 ㄷ자 블록 */}
-                {isBlockUnlocked('class') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'class')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="class 클래스 정의 ㄷ자 블록 (내부에 def 메서드 블록 삽입 가능)"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        padding: '5px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.class.bg,
-                        border: `1px solid ${BLOCK_THEMES.class.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.class.border} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '18px',
-                          right: '5px',
-                          bottom: 0,
-                          height: '1px',
-                          background: BLOCK_THEMES.class.border,
-                          pointerEvents: 'none',
-                        }}
-                      />
-                      <span style={{ color: '#ffffff' }}>class</span>
-                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>MyClass</span>
-                      <span>:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.class.bg, borderLeft: `1px solid ${BLOCK_THEMES.class.border}`, borderRight: `1px solid ${BLOCK_THEMES.class.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
-                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.class.border} bg={BLOCK_THEMES.class.bg} />
-                      </div>
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.class} />
-                  </div>
-                )}
-
-                {/* def 함수정의 ㄷ자 블록 */}
-                {(isBlockUnlocked('def') || isBlockUnlocked('class')) && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'def')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="def 함수 정의 ㄷ자 블록"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        padding: '5px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.def.bg,
-                        border: `1px solid ${BLOCK_THEMES.def.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.def.border} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '18px',
-                          right: '5px',
-                          bottom: 0,
-                          height: '1px',
-                          background: BLOCK_THEMES.def.border,
-                          pointerEvents: 'none',
-                        }}
-                      />
-                      <span style={{ color: '#ffffff' }}>def</span>
-                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>my_func</span>
-                      <span>(</span>
-                      <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                      <span>):</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.def.bg, borderLeft: `1px solid ${BLOCK_THEMES.def.border}`, borderRight: `1px solid ${BLOCK_THEMES.def.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
-                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.def.border} bg={BLOCK_THEMES.def.bg} />
-                      </div>
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.def} />
-                  </div>
-                )}
-
-                {/* 함수 호출 call 블록 */}
-                {(isBlockUnlocked('def') || isBlockUnlocked('class')) && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'call')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.call.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.call.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.call.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="정의한 함수를 이름으로 호출하는 블록 (예: my_func(10))"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.call.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.call.border} bg={BLOCK_THEMES.call.bg} />
-                    <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>my_func</span>
-                    <span>(</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                    <span>)</span>
-                  </div>
-                )}
-
-                {/* return 반환 블록 */}
-                {(isBlockUnlocked('def') || isBlockUnlocked('class')) && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'return')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.return.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.return.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.return.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="return 결과값 반환 블록 (함수 내부에서 사용)"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.return.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.return.border} bg={BLOCK_THEMES.return.bg} />
-                    <span>return</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  </div>
-                )}
+                {(isBlockUnlocked('def') || isBlockUnlocked('class')) &&
+                  renderToolboxItem(
+                    { id: 'tb-return', type: 'return', content: '', x: 0, y: 0 },
+                    'return',
+                    'return 결과값 반환 블록 (함수 내부에서 사용)'
+                  )}
               </div>
             )}
 
@@ -7818,449 +7580,101 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   <span>{isEn ? 'Control' : '제어'}</span>
                 </div>
 
-                {/* if [조건]: ㄷ자 블록 */}
-                {isBlockUnlocked('if') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'if')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="if 조건문 (ㄷ자 형태 블록: +elif, +else로 E자 확장 가능)"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        gap: '4px',
-                        padding: '5px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.if.bg,
-                        border: `1px solid ${BLOCK_THEMES.if.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.if.border} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '18px',
-                          right: '5px',
-                          bottom: 0,
-                          height: '1px',
-                          background: BLOCK_THEMES.if.border,
-                          pointerEvents: 'none',
-                        }}
-                      />
-                      <span style={{ color: '#ffffff' }}>if</span>
-                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>False</span>
-                      <span>:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.if.bg, borderLeft: `1px solid ${BLOCK_THEMES.if.border}`, borderRight: `1px solid ${BLOCK_THEMES.if.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
-                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.if.border} bg={BLOCK_THEMES.if.bg} />
-                      </div>
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.if} />
-                  </div>
-                )}
+                {isBlockUnlocked('if') &&
+                  renderToolboxItem(
+                    {
+                      id: 'tb-if',
+                      type: 'if',
+                      content: 'False',
+                      branches: [{ id: 'tb-br-if', kind: 'if', condition: 'False', innerBlocks: [] }],
+                      x: 0,
+                      y: 0,
+                    },
+                    'if',
+                    'if 조건문 (ㄷ자 형태 블록: +elif, +else로 E자 확장 가능)'
+                  )}
 
-                {/* for i in range() ㄷ자 블록 */}
-                {isBlockUnlocked('for_range') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'for_range')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="for i in range() 횟수 반복 ㄷ자 블록"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        gap: '4px',
-                        padding: '4px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.for_range.bg,
-                        border: `1px solid ${BLOCK_THEMES.for_range.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.for_range.border} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '18px',
-                          right: '5px',
-                          bottom: 0,
-                          height: '1px',
-                          background: BLOCK_THEMES.for_range.border,
-                          pointerEvents: 'none',
-                        }}
-                      />
-                      <span style={{ color: '#ffffff' }}>for</span>
-                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>i</span>
-                      <span style={{ color: '#ffffff' }}>in</span>
-                      <div
-                        className="arg-slot-filled"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          margin: '0 2px',
-                          padding: '1px 2px',
-                          borderRadius: '7px',
-                          background: 'rgba(0, 0, 0, 0.22)',
-                          boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.35)',
-                        }}
-                      >
-                        <div
-                          className="slot-arg-block"
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            height: '24px',
-                            padding: '0 8px',
-                            borderRadius: '6px',
-                            background: '#2563eb',
-                            border: '1px solid #3b82f6',
-                            boxShadow: '0 1.5px 3px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                            color: '#ffffff',
-                            fontWeight: 800,
-                            fontSize: '0.76rem',
-                            fontFamily: 'var(--font-mono)',
-                            boxSizing: 'border-box',
-                          }}
-                        >
-                          <span>range(</span>
-                          <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.76rem', boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.12)' }}>5</span>
-                          <span>)</span>
-                        </div>
-                      </div>
-                      <span>:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.for_range.bg, borderLeft: `1px solid ${BLOCK_THEMES.for_range.border}`, borderRight: `1px solid ${BLOCK_THEMES.for_range.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
-                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.for_range.border} bg={BLOCK_THEMES.for_range.bg} />
-                      </div>
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.for_range} />
-                  </div>
-                )}
+                {isBlockUnlocked('for_range') &&
+                  renderToolboxItem(
+                    {
+                      id: 'tb-for-range',
+                      type: 'for_range',
+                      varName: 'i',
+                      content: '5',
+                      argBlock: { id: 'tb-for-range-arg', type: 'range', content: '5', x: 0, y: 0 },
+                      innerBlocks: [],
+                      x: 0,
+                      y: 0,
+                    },
+                    'for_range',
+                    'for i in range() 횟수 반복 ㄷ자 블록'
+                  )}
 
-                {/* for item in items: ㄷ자 블록 */}
-                {isBlockUnlocked('for_in') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'for_in')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="for item in items 순회 반복 ㄷ자 블록"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        gap: '4px',
-                        padding: '5px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.for_in.bg,
-                        border: `1px solid ${BLOCK_THEMES.for_in.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.for_in.border} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '18px',
-                          right: '5px',
-                          bottom: 0,
-                          height: '1px',
-                          background: BLOCK_THEMES.for_in.border,
-                          pointerEvents: 'none',
-                        }}
-                      />
-                      <span style={{ color: '#ffffff' }}>for</span>
-                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>item</span>
-                      <span style={{ color: '#ffffff' }}>in</span>
-                      <span style={{ padding: '1px 6px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>items</span>
-                      <span>:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.for_in.bg, borderLeft: `1px solid ${BLOCK_THEMES.for_in.border}`, borderRight: `1px solid ${BLOCK_THEMES.for_in.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
-                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.for_in.border} bg={BLOCK_THEMES.for_in.bg} />
-                      </div>
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.for_in} />
-                  </div>
-                )}
+                {isBlockUnlocked('for_in') &&
+                  renderToolboxItem(
+                    {
+                      id: 'tb-for-in',
+                      type: 'for_in',
+                      varName: 'item',
+                      content: 'items',
+                      innerBlocks: [],
+                      x: 0,
+                      y: 0,
+                    },
+                    'for_in',
+                    'for item in items 순회 반복 ㄷ자 블록'
+                  )}
 
-                {/* while 조건: ㄷ자 블록 */}
-                {isBlockUnlocked('while') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'while')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="while 조건 반복 ㄷ자 블록"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        gap: '4px',
-                        padding: '5px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.while.bg,
-                        border: `1px solid ${BLOCK_THEMES.while.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.while.border} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '18px',
-                          right: '5px',
-                          bottom: 0,
-                          height: '1px',
-                          background: BLOCK_THEMES.while.border,
-                          pointerEvents: 'none',
-                        }}
-                      />
-                      <span style={{ color: '#ffffff' }}>while</span>
-                      <span style={{ padding: '1px 8px', borderRadius: '4px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>False</span>
-                      <span>:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '22px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.while.bg, borderLeft: `1px solid ${BLOCK_THEMES.while.border}`, borderRight: `1px solid ${BLOCK_THEMES.while.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px', background: 'transparent', borderTop: 'none', position: 'relative' }}>
-                        <PuzzleTab isCeiling left="12px" borderColor={BLOCK_THEMES.while.border} bg={BLOCK_THEMES.while.bg} />
-                      </div>
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.while} />
-                  </div>
-                )}
+                {isBlockUnlocked('while') &&
+                  renderToolboxItem(
+                    {
+                      id: 'tb-while',
+                      type: 'while',
+                      content: 'False',
+                      innerBlocks: [],
+                      x: 0,
+                      y: 0,
+                    },
+                    'while',
+                    'while 조건 반복 ㄷ자 블록'
+                  )}
 
-                {/* break 블록 */}
-                {isBlockUnlocked('break') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'break')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      whiteSpace: 'nowrap',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.break.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.break.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.break.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="break 반복문 탈출 블록"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.break.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.break.border} bg={BLOCK_THEMES.break.bg} />
-                    <span>break</span>
-                  </div>
-                )}
+                {isBlockUnlocked('break') &&
+                  renderToolboxItem(
+                    { id: 'tb-break', type: 'break', x: 0, y: 0 },
+                    'break',
+                    'break 반복문 탈출 블록'
+                  )}
 
-                {/* continue 블록 */}
-                {isBlockUnlocked('continue') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'continue')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      whiteSpace: 'nowrap',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.continue.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.continue.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.continue.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="continue 다음 반복 진행 블록"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.continue.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.continue.border} bg={BLOCK_THEMES.continue.bg} />
-                    <span>continue</span>
-                  </div>
-                )}
+                {isBlockUnlocked('continue') &&
+                  renderToolboxItem(
+                    { id: 'tb-continue', type: 'continue', x: 0, y: 0 },
+                    'continue',
+                    'continue 다음 반복 진행 블록'
+                  )}
 
-                {/* try - except 예외 처리 E자 블록 */}
-                {isBlockUnlocked('try') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'try')}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: 'fit-content',
-                      minWidth: '120px',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      fontFamily: 'var(--font-mono)',
-                      filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-                    }}
-                    title="try - except 예외 처리 블록 (우클릭으로 에러 타입 지정, else/finally 확장 가능)"
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        gap: '4px',
-                        padding: '5px 10px',
-                        borderRadius: '6px 6px 6px 0',
-                        background: BLOCK_THEMES.try.bg,
-                        border: `1px solid ${BLOCK_THEMES.try.border}`,
-                        borderBottom: 'none',
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.80rem',
-                        position: 'relative',
-                      }}
-                    >
-                      <PuzzleNotch borderColor={BLOCK_THEMES.try.border} />
-                      <span>try:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '16px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.try.bg, borderLeft: `1px solid ${BLOCK_THEMES.try.border}`, borderRight: `1px solid ${BLOCK_THEMES.try.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px' }} />
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        gap: '4px',
-                        padding: '4px 10px',
-                        borderRadius: '0 6px 6px 0',
-                        background: BLOCK_THEMES.try.bg,
-                        borderTop: `1px solid ${BLOCK_THEMES.try.border}`,
-                        borderRight: `1px solid ${BLOCK_THEMES.try.border}`,
-                        borderLeft: `1px solid ${BLOCK_THEMES.try.border}`,
-                        color: '#ffffff',
-                        fontWeight: 800,
-                        fontSize: '0.78rem',
-                      }}
-                    >
-                      <span>except:</span>
-                    </div>
-                    <div style={{ display: 'flex', minHeight: '16px', marginTop: '-1px' }}>
-                      <div style={{ width: '18px', background: BLOCK_THEMES.try.bg, borderLeft: `1px solid ${BLOCK_THEMES.try.border}`, borderRight: `1px solid ${BLOCK_THEMES.try.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: '70px' }} />
-                    </div>
-                    <SvgBottomClosingArm theme={BLOCK_THEMES.try} />
-                  </div>
-                )}
+                {isBlockUnlocked('try') &&
+                  renderToolboxItem(
+                    {
+                      id: 'tb-try',
+                      type: 'try',
+                      branches: [
+                        { id: 'tb-br-try', kind: 'try', innerBlocks: [] },
+                        { id: 'tb-br-exc', kind: 'except', innerBlocks: [] },
+                      ],
+                      x: 0,
+                      y: 0,
+                    },
+                    'try',
+                    'try - except 예외 처리 블록 (우클릭으로 에러 타입 지정, else/finally 확장 가능)'
+                  )}
 
-                {/* raise 예외 발생 블록 */}
-                {isBlockUnlocked('raise') && (
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStartFromToolbox(e, 'raise')}
-                    style={{
-                      display: 'inline-flex',
-                      width: 'fit-content',
-                      alignItems: 'center',
-                      whiteSpace: 'nowrap',
-                      gap: '4px',
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES.raise.bg,
-                      boxShadow: `0 2px 0 ${BLOCK_THEMES.raise.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                      border: `1px solid ${BLOCK_THEMES.raise.border}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.80rem',
-                      fontFamily: 'var(--font-mono)',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      position: 'relative',
-                    }}
-                    title="raise 의도적 예외 발생 블록"
-                  >
-                    <PuzzleNotch borderColor={BLOCK_THEMES.raise.border} />
-                    <PuzzleTab borderColor={BLOCK_THEMES.raise.border} bg={BLOCK_THEMES.raise.bg} />
-                    <span>raise</span>
-                    <span style={{ width: '26px', height: '20px', borderRadius: '4px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                  </div>
-                )}
+                {isBlockUnlocked('raise') &&
+                  renderToolboxItem(
+                    { id: 'tb-raise', type: 'raise', content: '', x: 0, y: 0 },
+                    'raise',
+                    'raise 의도적 예외 발생 블록'
+                  )}
               </div>
             )}
 
@@ -8306,64 +7720,23 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
 
                 {/* List of Created Custom Variables in Toolbox */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '2px' }}>
-                  {customVariables.map((cv) => {
-                    const theme = BLOCK_THEMES[cv.kind];
-                    return (
-                      <div
-                        key={cv.id}
-                        draggable
-                        onDragStart={(e) => handleDragStartFromToolbox(e, cv.kind, { varName: cv.name })}
-                        style={{
-                          display: 'inline-flex',
-                          width: 'fit-content',
-                          alignItems: 'center',
-                          gap: '4px',
-                          padding: '5px 10px',
-                          borderRadius: '6px',
-                          background: theme.bg,
-                          boxShadow: `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                          border: `1px solid ${theme.border}`,
-                          color: '#ffffff',
-                          fontWeight: 800,
-                          fontSize: '0.80rem',
-                          fontFamily: 'var(--font-mono)',
-                          cursor: 'grab',
-                          userSelect: 'none',
-                          position: 'relative',
-                        }}
-                        title={`${cv.name} (${getKindLabel(cv.kind)}) 블록 (드래그하거나 클릭하여 추가)`}
-                      >
-                        {/* Top Notch & Bottom Tab */}
-                        <PuzzleNotch borderColor={theme.border} />
-                        <PuzzleTab borderColor={theme.border} bg={theme.bg} />
-                        <HorizontalPuzzleNotch borderColor={theme.border} bgColor="#0d1527" />
-
-                        <span style={{ padding: '1px 6px', borderRadius: '3px', background: '#ffffff', color: '#0f172a', fontWeight: 800, fontSize: '0.78rem' }}>
-                          {cv.name}
-                        </span>
-                        {cv.kind === 'variable' ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '20px', padding: '0 6px', borderRadius: '5px', background: 'rgba(0, 0, 0, 0.26)', border: '1px solid rgba(255, 255, 255, 0.34)', fontSize: '0.76rem', lineHeight: 1 }}>=</span>
-                        ) : (
-                          <span>=</span>
-                        )}
-                        {cv.kind === 'variable' && (
-                          <span style={{ width: '26px', height: '20px', borderRadius: '3px', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.3)', display: 'inline-block' }} />
-                        )}
-                        {cv.kind === 'list' && (
-                          <span>[ <span style={{ width: '20px', height: '18px', borderRadius: '3px', background: '#ffffff', display: 'inline-block' }} /> ]</span>
-                        )}
-                        {cv.kind === 'tuple' && (
-                          <span>( <span style={{ width: '24px', height: '20px', borderRadius: '4px', background: '#ffffff', display: 'inline-block' }} /> )</span>
-                        )}
-                        {cv.kind === 'set' && (
-                          <span>&#123; <span style={{ width: '24px', height: '20px', borderRadius: '4px', background: '#ffffff', display: 'inline-block' }} /> &#125;</span>
-                        )}
-                        {cv.kind === 'dict' && (
-                          <span>&#123; <span style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#ffffff', display: 'inline-block' }} />:<span style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#ffffff', display: 'inline-block' }} /> &#125;</span>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {customVariables.map((cv) =>
+                    renderToolboxItem(
+                      {
+                        id: `tb-cv-${cv.id}`,
+                        type: cv.kind,
+                        varName: cv.name,
+                        content: '',
+                        items: cv.kind === 'list' || cv.kind === 'tuple' || cv.kind === 'set' ? [''] : undefined,
+                        dictPairs: cv.kind === 'dict' ? [{ key: '', value: '' }] : undefined,
+                        x: 0,
+                        y: 0,
+                      },
+                      cv.kind,
+                      `${cv.name} (${getKindLabel(cv.kind)}) 블록 (드래그하거나 클릭하여 추가)`,
+                      { varName: cv.name }
+                    )
+                  )}
                 </div>
               </div>
             )}
@@ -8376,42 +7749,23 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   <span>{isEn ? 'Comments' : '주석 / 메모'}</span>
                 </div>
 
-                {/* # 주석 블록 */}
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStartFromToolbox(e, 'comment')}
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    background: BLOCK_THEMES.comment.bg,
-                    boxShadow: `0 2px 0 ${BLOCK_THEMES.comment.shadow}, 0 4px 10px rgba(0, 0, 0, 0.35)`,
-                    border: `1px solid ${BLOCK_THEMES.comment.border}`,
-                    color: '#86efac',
-                    fontWeight: 700,
-                    fontSize: '0.80rem',
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    position: 'relative',
-                  }}
-                  title={isEn ? 'Comment block (# memo / explanation)' : '주석 블록 (# 코드 설명이나 메모)'}
-                >
-                  <PuzzleNotch borderColor={BLOCK_THEMES.comment.border} />
-                  <PuzzleTab borderColor={BLOCK_THEMES.comment.border} bg={BLOCK_THEMES.comment.bg} />
-                  <span style={{ color: '#4ade80', fontWeight: 900, fontStyle: 'italic' }}>#</span>
-                  <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.75rem' }}>
-                    {isEn ? 'comment...' : '주석 내용...'}
-                  </span>
-                </div>
+                {renderToolboxItem(
+                  {
+                    id: 'tb-comment',
+                    type: 'comment',
+                    content: '',
+                    targetContent: isEn ? 'comment...' : '주석 내용...',
+                    x: 0,
+                    y: 0,
+                  },
+                  'comment',
+                  isEn ? 'Comment block (# memo / explanation)' : '주석 블록 (# 코드 설명이나 메모)'
+                )}
               </div>
             )}
 
             {/* Empty state when no blocks are unlocked for this level */}
-            {!hasFunctionBlocks && !hasControlBlocks && !hasVariableBlocks && !hasCommentBlocks && (
+            {!hasFunctionBlocks && !hasClassFuncBlocks && !hasControlBlocks && !hasVariableBlocks && !hasCommentBlocks && (
               <div style={{ padding: '32px 16px', textAlign: 'center', color: '#64748b', fontSize: '0.8rem', lineHeight: '1.6' }}>
                 사용 가능한 블록이 없습니다.<br />커리큘럼 진행에 따라 해금됩니다.
               </div>
@@ -8430,10 +7784,10 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             flexDirection: 'column',
             overflow: isDraggingBlock ? 'visible' : 'hidden',
             zIndex: isDraggingBlock ? 45 : 1,
-            background: '#090e1a',
+            backgroundColor: '#1b263b',
             cursor: 'default',
-            backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.14) 1.3px, transparent 1.3px)',
-            backgroundSize: '24px 24px',
+            backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.14) 1.25px, transparent 1.25px)',
+            backgroundSize: '34px 34px',
             backgroundPosition: '0 0',
           }}
         >
@@ -8444,8 +7798,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             id="tour-col-mission"
             style={{
               padding: '12px 20px',
-              background: '#0d1527',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              background: '#22304a',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
               display: 'flex',
               flexDirection: 'column',
               gap: '10px',
@@ -8943,7 +8297,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   display: 'flex',
                   flexDirection: 'column',
                   height: '100%',
-                  background: '#090e1a',
+                  background: '#1b263b',
                   overflowY: 'auto',
                 }}
               >
@@ -8951,8 +8305,8 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 <div
                   style={{
                     height: '34px',
-                    background: '#0d1527',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: '#22304a',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -8966,7 +8320,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                       alignItems: 'center',
                       gap: '6px',
                       padding: '5px 14px',
-                      background: '#090e1a',
+                      background: '#1b263b',
                       borderRadius: '6px 6px 0 0',
                       borderTop: isSuccess ? '2px solid #10b981' : '2px solid #a855f7',
                       fontSize: '0.78rem',
@@ -9006,21 +8360,21 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                   {/* Read-only Syntax Highlighted Code Card */}
                   <div
                     style={{
-                      background: '#0d1527',
-                      border: '1px solid rgba(56, 189, 248, 0.22)',
+                      background: '#162033',
+                      border: '1px solid rgba(56, 189, 248, 0.28)',
                       borderRadius: '12px',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
                     }}
                   >
                     <div
                       style={{
                         padding: '8px 16px',
-                        background: 'rgba(15, 23, 42, 0.85)',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                        background: '#22304a',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
                         fontSize: '0.75rem',
                         fontWeight: 700,
-                        color: '#94a3b8',
+                        color: '#cbd5e1',
                       }}
                     >
                       {isEn ? 'Python Code to Trace' : '실행할 파이썬 코드'}
@@ -9077,11 +8431,11 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                                 minWidth: '50px',
                                 textAlign: 'right',
                                 paddingRight: '14px',
-                                color: '#475569',
+                                color: '#64748b',
                                 fontSize: '0.84rem',
                                 fontWeight: 700,
                                 userSelect: 'none',
-                                borderRight: '1px solid rgba(255, 255, 255, 0.06)',
+                                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
                               }}
                             >
                               {String(lIdx + 1).padStart(2, '0')}
@@ -9127,263 +8481,291 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                               textAlign: 'left',
                               cursor: isSuccess ? 'default' : 'pointer',
                               background: isCorrectDone
-                                ? 'rgba(16, 185, 129, 0.16)'
-                                : isSelected
-                                  ? 'rgba(56, 189, 248, 0.16)'
-                                  : 'rgba(15, 23, 42, 0.85)',
+                                  ? 'rgba(16, 185, 129, 0.18)'
+                                  : isSelected
+                                    ? 'rgba(56, 189, 248, 0.2)'
+                                    : '#22304a',
                               border: isCorrectDone
                                 ? '2px solid #10b981'
                                 : isSelected
                                   ? '2px solid #38bdf8'
-                                  : '1.5px solid rgba(255, 255, 255, 0.1)',
-                              boxShadow: isSelected ? '0 0 16px rgba(56, 189, 248, 0.2)' : 'none',
+                                  : '1.5px solid rgba(255, 255, 255, 0.16)',
+                              boxShadow: isSelected ? '0 0 16px rgba(56, 189, 248, 0.22)' : '0 4px 12px rgba(15, 23, 42, 0.25)',
                               transition: 'all 0.15s ease',
                             }}
                           >
-                            <span
-                              style={{
-                                width: '24px',
-                                height: '24px',
-                                minWidth: '24px',
-                                borderRadius: '6px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '0.8rem',
-                                fontWeight: 900,
-                                fontFamily: 'var(--font-mono)',
-                                background: isCorrectDone
-                                  ? '#10b981'
-                                  : isSelected
-                                    ? '#38bdf8'
-                                    : 'rgba(255, 255, 255, 0.08)',
-                                color: isCorrectDone || isSelected ? '#090e1a' : '#94a3b8',
+                      <span
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                          minWidth: '24px',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '0.8rem',
+                          fontWeight: 900,
+                          fontFamily: 'var(--font-mono)',
+                          background: isCorrectDone
+                            ? '#10b981'
+                            : isSelected
+                              ? '#38bdf8'
+                              : 'rgba(255, 255, 255, 0.12)',
+                          color: isCorrectDone || isSelected ? '#0f172a' : '#cbd5e1',
                               }}
                             >
-                              {cIdx + 1}
-                            </span>
-                            <pre
-                              style={{
-                                margin: 0,
-                                fontFamily: 'var(--font-mono), monospace',
-                                fontSize: '1.02rem',
-                                lineHeight: 1.55,
-                                color: '#f8fafc',
-                                whiteSpace: 'pre-wrap',
-                                wordBreak: 'break-word',
-                              }}
-                            >
-                              {choiceText}
-                            </pre>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Check Answer Button */}
-                  <div>
-                    <button
-                      type="button"
-                      disabled={selectedChoiceIndex === null || isSuccess}
-                      onClick={handleExecuteManual}
+                      {cIdx + 1}
+                    </span>
+                    <pre
                       style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        padding: '11px 24px',
-                        borderRadius: '9px',
-                        border: 'none',
-                        fontWeight: 800,
-                        fontSize: '0.92rem',
-                        cursor: selectedChoiceIndex === null || isSuccess ? 'not-allowed' : 'pointer',
-                        background:
-                          selectedChoiceIndex === null
-                            ? 'rgba(255, 255, 255, 0.08)'
-                            : isSuccess
-                              ? '#10b981'
-                              : 'linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)',
-                        color: selectedChoiceIndex === null ? '#64748b' : '#ffffff',
-                        boxShadow:
-                          selectedChoiceIndex !== null && !isSuccess
-                            ? '0 4px 16px rgba(56, 189, 248, 0.35)'
-                            : 'none',
-                        transition: 'all 0.15s ease',
+                        margin: 0,
+                        fontFamily: 'var(--font-mono), monospace',
+                        fontSize: '1.02rem',
+                        lineHeight: 1.55,
+                        color: '#f8fafc',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
                       }}
                     >
-                      <CheckCircle2 size={17} />
-                      <span>
-                        {isSuccess
-                          ? isEn
-                            ? 'Correct!'
-                            : '정답입니다!'
-                          : isEn
-                            ? 'Check Answer'
-                            : '정답 확인'}
-                      </span>
-                    </button>
-                  </div>
+                      {choiceText}
+                    </pre>
+                  </button>
+                  );
+                      })}
                 </div>
               </div>
-            ) : (
-              /* ============================================================
-                 TYPING MODE: Interactive Fill-in-the-Blank Code & Virtual Keyboard
-                 ============================================================ */
-              <TypingStage
-                question={currentQuestion}
-                onCodeChange={handleUserCodeChange}
-                onSubmit={handleExecuteManual}
-                isSuccess={isSuccess}
-                isExecuting={isExecuting || isDebugging}
-                isDebugging={isDebugging}
-                executingLineIndex={executingLineIndex}
-                language={language}
-              />
-            )}
-          </div>
-        </section>
-      </main>
 
-      {/* ====================================================================
+                  {/* Check Answer Button */}
+            <div>
+              <button
+                type="button"
+                disabled={selectedChoiceIndex === null || isSuccess}
+                onClick={handleExecuteManual}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '11px 24px',
+                  borderRadius: '9px',
+                  border: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.92rem',
+                  cursor: selectedChoiceIndex === null || isSuccess ? 'not-allowed' : 'pointer',
+                  background:
+                    selectedChoiceIndex === null
+                      ? 'rgba(255, 255, 255, 0.08)'
+                      : isSuccess
+                        ? '#10b981'
+                        : 'linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)',
+                  color: selectedChoiceIndex === null ? '#64748b' : '#ffffff',
+                  boxShadow:
+                    selectedChoiceIndex !== null && !isSuccess
+                      ? '0 4px 16px rgba(56, 189, 248, 0.35)'
+                      : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <CheckCircle2 size={17} />
+                <span>
+                  {isSuccess
+                    ? isEn
+                      ? 'Correct!'
+                      : '정답입니다!'
+                    : isEn
+                      ? 'Check Answer'
+                      : '정답 확인'}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        ) : (
+        /* ============================================================
+           TYPING MODE: Interactive Fill-in-the-Blank Code & Virtual Keyboard
+           ============================================================ */
+        <TypingStage
+          question={currentQuestion}
+          onCodeChange={handleUserCodeChange}
+          onSubmit={handleExecuteManual}
+          isSuccess={isSuccess}
+          isExecuting={isExecuting || isDebugging}
+          isDebugging={isDebugging}
+          executingLineIndex={executingLineIndex}
+          language={language}
+        />
+            )}
+    </div>
+        </section >
+      </main >
+
+  {/* ====================================================================
           6. RIGHT-CLICK CONTEXT MENU (우클릭 컨텍스트 메뉴: 블록 및 캔버스)
           ==================================================================== */}
-      {contextMenu.visible && contextMenu.blockId && (
-        <div
-          style={{
-            position: 'fixed',
-            top: contextMenu.y,
-            left: contextMenu.x,
-            zIndex: 9999,
-            background: 'rgba(15, 23, 42, 0.96)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.14)',
-            borderRadius: '12px',
-            padding: '6px',
-            minWidth: '180px',
-            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.75)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2px',
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {contextMenu.targetType === 'block' && contextMenu.blockId && (
-            (() => {
-              const target = findBlockInTree(canvasBlocks, contextMenu.blockId);
-              if (target?.type === 'start') {
-                return (
-                  <div style={{ padding: '8px 12px', fontSize: '0.78rem', color: '#94a3b8' }}>
-                    <div style={{ fontWeight: 800, color: '#34d399', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Play size={12} fill="#34d399" />
-                      <span>시작 블록</span>
-                    </div>
-                    <span>이 블록 아래에 연결된 블록만 실시간으로 실행됩니다.</span>
-                  </div>
-                );
-              }
-
-              const isPrintBlock = target?.type === 'print';
-              const isIfBlock = target?.type === 'if';
-              const isTryBlock = target?.type === 'try';
-              const isDefBlock = target?.type === 'def';
-              const isClassBlock = target?.type === 'class';
-              const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
-              const hasFinallyBranch = target?.branches?.some((br) => br.kind === 'finally') ?? false;
-
+  {
+    contextMenu.visible && contextMenu.blockId && (
+      <div
+        style={{
+          position: 'fixed',
+          top: contextMenu.y,
+          left: contextMenu.x,
+          zIndex: 9999,
+          background: 'rgba(15, 23, 42, 0.96)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255, 255, 255, 0.14)',
+          borderRadius: '12px',
+          padding: '6px',
+          minWidth: '180px',
+          boxShadow: '0 12px 32px rgba(0, 0, 0, 0.75)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2px',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {contextMenu.targetType === 'block' && contextMenu.blockId && (
+          (() => {
+            const target = findBlockInTree(canvasBlocks, contextMenu.blockId);
+            if (target?.type === 'start') {
               return (
-                <>
-                  {/* Print Block Special Actions: Independent sep & end Option Add/Remove */}
-                  {isPrintBlock && target && (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleTogglePrintOption(target.id, 'sep', !target.hasSep);
-                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '8px 12px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: 'transparent',
-                          color: target.hasSep ? '#fca5a5' : '#93c5fd',
-                          fontSize: '0.82rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                          transition: 'background 0.15s ease',
-                        }}
-                        onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = target.hasSep
-                          ? 'rgba(239, 68, 68, 0.18)'
-                          : 'rgba(59, 130, 246, 0.22)')
-                        }
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        {target.hasSep ? (
-                          <>
-                            <Trash2 size={14} color="#f87171" />
-                            <span>{isEn ? 'Remove sep option' : 'sep 옵션 제거'}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus size={14} color="#60a5fa" />
-                            <span>{isEn ? 'Add sep option (sep=" ")' : 'sep 옵션 추가 (구분자)'}</span>
-                          </>
-                        )}
-                      </button>
-                      <button
-                        onClick={() => {
-                          handleTogglePrintOption(target.id, 'end', !target.hasEnd);
-                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '8px 12px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: 'transparent',
-                          color: target.hasEnd ? '#fca5a5' : '#93c5fd',
-                          fontSize: '0.82rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                          transition: 'background 0.15s ease',
-                        }}
-                        onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = target.hasEnd
-                          ? 'rgba(239, 68, 68, 0.18)'
-                          : 'rgba(59, 130, 246, 0.22)')
-                        }
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        {target.hasEnd ? (
-                          <>
-                            <Trash2 size={14} color="#f87171" />
-                            <span>{isEn ? 'Remove end option' : 'end 옵션 제거'}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus size={14} color="#60a5fa" />
-                            <span>{isEn ? 'Add end option (end="\\n")' : 'end 옵션 추가 (끝맺음)'}</span>
-                          </>
-                        )}
-                      </button>
-                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                    </>
-                  )}
+                <div style={{ padding: '8px 12px', fontSize: '0.78rem', color: '#94a3b8' }}>
+                  <div style={{ fontWeight: 800, color: '#34d399', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Play size={12} fill="#34d399" />
+                    <span>시작 블록</span>
+                  </div>
+                  <span>이 블록 아래에 연결된 블록만 실시간으로 실행됩니다.</span>
+                </div>
+              );
+            }
 
-                  {/* If Block Special Actions: +elif, +else */}
-                  {isIfBlock && target && (
-                    <>
+            const isPrintBlock = target?.type === 'print';
+            const isIfBlock = target?.type === 'if';
+            const isTryBlock = target?.type === 'try';
+            const isDefBlock = target?.type === 'def';
+            const isClassBlock = target?.type === 'class';
+            const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
+            const hasFinallyBranch = target?.branches?.some((br) => br.kind === 'finally') ?? false;
+
+            return (
+              <>
+                {/* Print Block Special Actions: Independent sep & end Option Add/Remove */}
+                {isPrintBlock && target && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleTogglePrintOption(target.id, 'sep', !target.hasSep);
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: target.hasSep ? '#fca5a5' : '#93c5fd',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = target.hasSep
+                        ? 'rgba(239, 68, 68, 0.18)'
+                        : 'rgba(59, 130, 246, 0.22)')
+                      }
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      {target.hasSep ? (
+                        <>
+                          <Trash2 size={14} color="#f87171" />
+                          <span>{isEn ? 'Remove sep option' : 'sep 옵션 제거'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={14} color="#60a5fa" />
+                          <span>{isEn ? 'Add sep option (sep=" ")' : 'sep 옵션 추가 (구분자)'}</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleTogglePrintOption(target.id, 'end', !target.hasEnd);
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: target.hasEnd ? '#fca5a5' : '#93c5fd',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = target.hasEnd
+                        ? 'rgba(239, 68, 68, 0.18)'
+                        : 'rgba(59, 130, 246, 0.22)')
+                      }
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      {target.hasEnd ? (
+                        <>
+                          <Trash2 size={14} color="#f87171" />
+                          <span>{isEn ? 'Remove end option' : 'end 옵션 제거'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={14} color="#60a5fa" />
+                          <span>{isEn ? 'Add end option (end="\\n")' : 'end 옵션 추가 (끝맺음)'}</span>
+                        </>
+                      )}
+                    </button>
+                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                  </>
+                )}
+
+                {/* If Block Special Actions: +elif, +else */}
+                {isIfBlock && target && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleAddElifBranch(target.id);
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#fed7aa',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(249, 115, 22, 0.2)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <Plus size={14} color="#f97316" />
+                      <span>elif 조건문 가지 추가</span>
+                    </button>
+                    {!hasElseBranch && (
                       <button
                         onClick={() => {
-                          handleAddElifBranch(target.id);
+                          handleAddElseBranch(target.id);
                           setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
                         }}
                         style={{
@@ -9405,46 +8787,66 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >
                         <Plus size={14} color="#f97316" />
-                        <span>elif 조건문 가지 추가</span>
+                        <span>else 조건문 가지 추가</span>
                       </button>
-                      {!hasElseBranch && (
-                        <button
-                          onClick={() => {
-                            handleAddElseBranch(target.id);
-                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '8px 12px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: 'transparent',
-                            color: '#fed7aa',
-                            fontSize: '0.82rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            textAlign: 'left',
-                            transition: 'background 0.15s ease',
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(249, 115, 22, 0.2)')}
-                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >
-                          <Plus size={14} color="#f97316" />
-                          <span>else 조건문 가지 추가</span>
-                        </button>
-                      )}
-                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                    </>
-                  )}
+                    )}
+                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                  </>
+                )}
 
-                  {/* Try Block Special Actions: +except, +except ErrorType, +else, +finally */}
-                  {isTryBlock && target && (
-                    <>
+                {/* Try Block Special Actions: +except, +except ErrorType, +else, +finally */}
+                {isTryBlock && target && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleAddTryBranch(target.id, 'except');
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#fecdd3',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <Plus size={14} color="#fb7185" />
+                      <span>except 기본 가지 추가</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleAddTryBranch(target.id, 'except_typed');
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#fecdd3',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <Plus size={14} color="#fb7185" />
+                      <span>except 에러타입 가지 추가</span>
+                    </button>
+                    {!hasElseBranch && (
                       <button
                         onClick={() => {
-                          handleAddTryBranch(target.id, 'except');
+                          handleAddTryBranch(target.id, 'else');
                           setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
                         }}
                         style={{
@@ -9463,11 +8865,13 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                         }}
                       >
                         <Plus size={14} color="#fb7185" />
-                        <span>except 기본 가지 추가</span>
+                        <span>else 예외 없음 가지 추가</span>
                       </button>
+                    )}
+                    {!hasFinallyBranch && (
                       <button
                         onClick={() => {
-                          handleAddTryBranch(target.id, 'except_typed');
+                          handleAddTryBranch(target.id, 'finally');
                           setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
                         }}
                         style={{
@@ -9486,852 +8890,1079 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                         }}
                       >
                         <Plus size={14} color="#fb7185" />
-                        <span>except 에러타입 가지 추가</span>
+                        <span>finally 마무리 가지 추가</span>
                       </button>
-                      {!hasElseBranch && (
-                        <button
-                          onClick={() => {
-                            handleAddTryBranch(target.id, 'else');
-                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '8px 12px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: 'transparent',
-                            color: '#fecdd3',
-                            fontSize: '0.82rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            textAlign: 'left',
-                          }}
-                        >
-                          <Plus size={14} color="#fb7185" />
-                          <span>else 예외 없음 가지 추가</span>
-                        </button>
+                    )}
+                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                  </>
+                )}
+
+                {/* Class Block Special Actions: Parent Class Inheritance Toggle */}
+                {isClassBlock && target && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleToggleClassParent(target.id, target.content === undefined);
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#a5f3fc',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {target.content !== undefined ? (
+                        <>
+                          <Trash2 size={14} color="#22d3ee" />
+                          <span>상속 부모 클래스 제거</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={14} color="#22d3ee" />
+                          <span>상속 부모 클래스 (Parent) 추가</span>
+                        </>
                       )}
-                      {!hasFinallyBranch && (
-                        <button
-                          onClick={() => {
-                            handleAddTryBranch(target.id, 'finally');
-                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '8px 12px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: 'transparent',
-                            color: '#fecdd3',
-                            fontSize: '0.82rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            textAlign: 'left',
-                          }}
-                        >
-                          <Plus size={14} color="#fb7185" />
-                          <span>finally 마무리 가지 추가</span>
-                        </button>
+                    </button>
+                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                  </>
+                )}
+
+                {/* Def Block Special Actions: Return Toggle */}
+                {isDefBlock && target && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleToggleDefReturn(target.id, !target.hasReturn);
+                        setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#e9d5ff',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(168, 85, 247, 0.2)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      {target.hasReturn ? (
+                        <>
+                          <Trash2 size={14} color="#c084fc" />
+                          <span>return 반환문 제거</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={14} color="#c084fc" />
+                          <span>return 반환문 추가</span>
+                        </>
                       )}
-                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                    </>
-                  )}
+                    </button>
+                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
+                  </>
+                )}
 
-                  {/* Class Block Special Actions: Parent Class Inheritance Toggle */}
-                  {isClassBlock && target && (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleToggleClassParent(target.id, target.content === undefined);
-                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '8px 12px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: 'transparent',
-                          color: '#a5f3fc',
-                          fontSize: '0.82rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                        }}
-                      >
-                        {target.content !== undefined ? (
-                          <>
-                            <Trash2 size={14} color="#22d3ee" />
-                            <span>상속 부모 클래스 제거</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus size={14} color="#22d3ee" />
-                            <span>상속 부모 클래스 (Parent) 추가</span>
-                          </>
-                        )}
-                      </button>
-                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                    </>
-                  )}
+                {/* Duplicate Block */}
+                <button
+                  onClick={() => {
+                    handleDuplicateBlock(contextMenu.blockId!);
+                    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    color: '#e2e8f0',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'background 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <Copy size={14} color="#38bdf8" />
+                  <span>블록 복사 (Duplicate)</span>
+                </button>
 
-                  {/* Def Block Special Actions: Return Toggle */}
-                  {isDefBlock && target && (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleToggleDefReturn(target.id, !target.hasReturn);
-                          setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '8px 12px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: 'transparent',
-                          color: '#e9d5ff',
-                          fontSize: '0.82rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                          transition: 'background 0.15s ease',
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(168, 85, 247, 0.2)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        {target.hasReturn ? (
-                          <>
-                            <Trash2 size={14} color="#c084fc" />
-                            <span>return 반환문 제거</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus size={14} color="#c084fc" />
-                            <span>return 반환문 추가</span>
-                          </>
-                        )}
-                      </button>
-                      <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                    </>
-                  )}
+                {/* Clear Input */}
+                <button
+                  onClick={() => {
+                    handleClearBlockContent(contextMenu.blockId!);
+                    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    color: '#e2e8f0',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'background 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <Edit3 size={14} color="#94a3b8" />
+                  <span>내용 비우기 (Clear)</span>
+                </button>
 
-                  {/* Duplicate Block */}
-                  <button
-                    onClick={() => {
-                      handleDuplicateBlock(contextMenu.blockId!);
-                      setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 12px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: 'transparent',
-                      color: '#e2e8f0',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'background 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    <Copy size={14} color="#38bdf8" />
-                    <span>블록 복사 (Duplicate)</span>
-                  </button>
+                <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
 
-                  {/* Clear Input */}
-                  <button
-                    onClick={() => {
-                      handleClearBlockContent(contextMenu.blockId!);
-                      setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 12px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: 'transparent',
-                      color: '#e2e8f0',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'background 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    <Edit3 size={14} color="#94a3b8" />
-                    <span>내용 비우기 (Clear)</span>
-                  </button>
+                {/* Delete Block */}
+                <button
+                  onClick={() => {
+                    handleDeleteBlock(contextMenu.blockId!);
+                    setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    color: '#f87171',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'background 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <Trash2 size={14} color="#ef4444" />
+                  <span>블록 삭제 (제거)</span>
+                </button>
+              </>
+            );
+          })()
+        )}
+      </div>
+    )
+  }
 
-                  <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-
-                  {/* Delete Block */}
-                  <button
-                    onClick={() => {
-                      handleDeleteBlock(contextMenu.blockId!);
-                      setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 12px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: 'transparent',
-                      color: '#f87171',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'background 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    <Trash2 size={14} color="#ef4444" />
-                    <span>블록 삭제 (제거)</span>
-                  </button>
-                </>
-              );
-            })()
-          )}
-        </div>
-      )}
-
-      {/* ====================================================================
+  {/* ====================================================================
           1. SUCCESS BOTTOM DOCK (진행 중 단계: 화면/터미널을 가리지 않는 하단 슬림 바)
           ==================================================================== */}
-      {isSuccess && currentStepIndex < totalQuestions - 1 && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 9000,
-            width: 'min(760px, calc(100% - 32px))',
-            padding: '14px 22px',
-            background: 'rgba(13, 21, 39, 0.95)',
-            backdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(16, 185, 129, 0.5)',
-            borderRadius: '18px',
-            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '16px',
-            animation: 'bottomDockSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-          }}
-        >
-          {/* Left: Glowing Green Check Badge + Text */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
-            <div
-              style={{
-                width: '42px',
-                height: '42px',
-                minWidth: '42px',
-                borderRadius: '12px',
-                background: 'rgba(16, 185, 129, 0.15)',
-                border: '1px solid rgba(16, 185, 129, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 16px rgba(16, 185, 129, 0.35)',
-              }}
-            >
-              <CheckCircle2 size={24} color="#10b981" />
-            </div>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '1.02rem', fontWeight: 900, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span>{isEn ? '🎉 Correct!' : '🎉 정답입니다!'}</span>
-              </div>
-              <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {isEn ? (
-                  <>Passed <strong style={{ color: '#e2e8f0' }}>Step {currentStepIndex + 1}</strong>. Check terminal output and proceed to the next step.</>
-                ) : (
-                  <><strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 통과했습니다. 터미널 출력을 확인하고 다음 단계로 진행하세요.</>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Next Step Action Button */}
-          <button
-            onClick={handleNextStep}
-            autoFocus
-            className="tactile-btn tactile-btn-green"
+  {
+    isSuccess && currentStepIndex < totalQuestions - 1 && (
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 9000,
+          width: 'min(760px, calc(100% - 32px))',
+          padding: '14px 22px',
+          background: 'rgba(13, 21, 39, 0.95)',
+          backdropFilter: 'blur(16px)',
+          border: '1.5px solid rgba(16, 185, 129, 0.5)',
+          borderRadius: '18px',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.25)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          animation: 'bottomDockSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        }}
+      >
+        {/* Left: Glowing Green Check Badge + Text */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <div
             style={{
-              padding: '10px 20px',
-              fontSize: '0.94rem',
-              fontWeight: 800,
+              width: '42px',
+              height: '42px',
+              minWidth: '42px',
               borderRadius: '12px',
+              background: 'rgba(16, 185, 129, 0.15)',
+              border: '1px solid rgba(16, 185, 129, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.45)',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
+              boxShadow: '0 0 16px rgba(16, 185, 129, 0.35)',
             }}
           >
-            <span>{isEn ? 'Next Step' : '다음 단계'}</span>
-            <span
-              style={{
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                padding: '2px 7px',
-                borderRadius: '6px',
-                background: 'rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-              }}
-            >
-              Enter ↵
-            </span>
-            <ChevronRight size={16} />
-          </button>
-        </div>
-      )}
-
-      {/* ====================================================================
-          2. ROUND COMPLETE CELEBRATION MODAL (마지막 문제까지 모두 완료 시)
-          ==================================================================== */}
-      {isSuccess && currentStepIndex >= totalQuestions - 1 && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            background: 'rgba(2, 6, 23, 0.85)',
-            backdropFilter: 'blur(8px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-          }}
-        >
-          <div
-            style={{
-              maxWidth: '460px',
-              width: '100%',
-              background: '#0d1527',
-              border: '1.5px solid rgba(16, 185, 129, 0.45)',
-              borderRadius: '24px',
-              padding: '36px 28px',
-              textAlign: 'center',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.22)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Glowing Success Badge */}
-            <div
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '20px',
-                background: 'rgba(16, 185, 129, 0.15)',
-                border: '1.5px solid rgba(16, 185, 129, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-                boxShadow: '0 0 24px rgba(16, 185, 129, 0.35)',
-              }}
-            >
-              <CheckCircle2 size={34} color="#10b981" />
+            <CheckCircle2 size={24} color="#10b981" />
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: '1.02rem', fontWeight: 900, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>{isEn ? '🎉 Correct!' : '🎉 정답입니다!'}</span>
             </div>
-
-            <h3
-              style={{
-                fontSize: '1.45rem',
-                fontWeight: 900,
-                color: '#f8fafc',
-                letterSpacing: '-0.02em',
-                marginBottom: '8px',
-              }}
-            >
-              {isEn ? '🏆 All Missions Completed!' : '🏆 모든 미션 완료!'}
-            </h3>
-
-            <p
-              style={{
-                fontSize: '0.90rem',
-                color: '#94a3b8',
-                lineHeight: 1.6,
-                marginBottom: '28px',
-              }}
-            >
+            <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {isEn ? (
-                <>Congratulations! You have completed all missions in this round.<br />Challenge yourself with the next level or another language!</>
+                <>Passed <strong style={{ color: '#e2e8f0' }}>Step {currentStepIndex + 1}</strong>. Check terminal output and proceed to the next step.</>
               ) : (
-                <>축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />다음 레벨이나 새로운 언어 학습에 도전해보세요!</>
+                <><strong style={{ color: '#e2e8f0' }}>{currentStepIndex + 1}단계</strong> 미션을 통과했습니다. 터미널 출력을 확인하고 다음 단계로 진행하세요.</>
               )}
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-              <Link
-                href={`/practice/${rawLang}/${levelNum + 1}`}
-                className="tactile-btn tactile-btn-green"
-                style={{
-                  width: '100%',
-                  padding: '13px',
-                  borderRadius: '11px',
-                  fontSize: '0.92rem',
-                  fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                  textDecoration: 'none',
-                }}
-              >
-                <span>{isEn ? 'Next Level' : '다음 레벨 도전하기'}</span>
-                <ChevronRight size={16} />
-              </Link>
-              <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-                <button
-                  onClick={() => handleResetRound(false)}
-                  style={{
-                    flex: 1,
-                    padding: '11px',
-                    borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#e2e8f0',
-                    fontSize: '0.85rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                  }}
-                >
-                  {isEn ? 'Retry Round' : '다시 풀기'}
-                </button>
-                <Link
-                  href={`/practice/${rawLang}`}
-                  style={{
-                    flex: 1,
-                    padding: '11px',
-                    borderRadius: '10px',
-                    background: 'rgba(56, 189, 248, 0.14)',
-                    border: '1px solid rgba(56, 189, 248, 0.35)',
-                    color: '#38bdf8',
-                    fontSize: '0.85rem',
-                    fontWeight: 800,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textDecoration: 'none',
-                  }}
-                >
-                  {isEn ? 'Back to Levels' : '단계 목록으로'}
-                </Link>
-              </div>
             </div>
           </div>
         </div>
-      )}
 
-      {/* Section-End Micro-Survey Modal (opens automatically when final level of a section is cleared) */}
-      {pendingSectionSurvey && (
-        <SectionFeedbackModal
-          isOpen={Boolean(pendingSectionSurvey)}
-          isEn={isEn}
-          rawLang={rawLang}
-          sectionInfo={pendingSectionSurvey}
-          onClose={() => setPendingSectionSurvey(null)}
-        />
-      )}
+        {/* Right: Next Step Action Button */}
+        <button
+          onClick={handleNextStep}
+          autoFocus
+          className="tactile-btn tactile-btn-green"
+          style={{
+            padding: '10px 20px',
+            fontSize: '0.94rem',
+            fontWeight: 800,
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            boxShadow: '0 0 20px rgba(16, 185, 129, 0.45)',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+          }}
+        >
+          <span>{isEn ? 'Next Step' : '다음 단계'}</span>
+          <span
+            style={{
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              padding: '2px 7px',
+              borderRadius: '6px',
+              background: 'rgba(0, 0, 0, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+            }}
+          >
+            Enter ↵
+          </span>
+          <ChevronRight size={16} />
+        </button>
+      </div>
+    )
+  }
 
-      {/* ====================================================================
-          7. GAME OVER MODAL (Hearts depleted -> Forced Review from Step 1)
+  {/* ====================================================================
+          2. ROUND COMPLETE CELEBRATION MODAL (마지막 문제까지 모두 완료 시)
           ==================================================================== */}
-      {isGameOver && (
-        <div style={{
+  {
+    isSuccess && currentStepIndex >= totalQuestions - 1 && (
+      <div
+        style={{
           position: 'fixed',
           inset: 0,
           zIndex: 9999,
-          background: 'rgba(0, 0, 0, 0.85)',
+          background: 'rgba(2, 6, 23, 0.85)',
           backdropFilter: 'blur(8px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           padding: '20px',
-        }}>
-          <div style={{
-            maxWidth: '440px',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '460px',
             width: '100%',
-            background: '#131e33',
-            border: '1.5px solid rgba(239, 68, 68, 0.5)',
+            background: '#22304a',
+            border: '1.5px solid rgba(16, 185, 129, 0.45)',
             borderRadius: '24px',
-            padding: '36px 30px',
+            padding: '36px 28px',
             textAlign: 'center',
-            boxShadow: '0 20px 50px rgba(239, 68, 68, 0.25)',
-          }}>
-            <div style={{
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.22)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Glowing Success Badge */}
+          <div
+            style={{
               width: '64px',
               height: '64px',
               borderRadius: '20px',
-              background: 'rgba(239, 68, 68, 0.15)',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
+              background: 'rgba(16, 185, 129, 0.15)',
+              border: '1.5px solid rgba(16, 185, 129, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 20px',
-            }}>
-              <Heart size={32} color="#ef4444" fill="#ef4444" />
-            </div>
+              marginBottom: '20px',
+              boxShadow: '0 0 24px rgba(16, 185, 129, 0.35)',
+            }}
+          >
+            <CheckCircle2 size={34} color="#10b981" />
+          </div>
 
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginBottom: '8px' }}>
-              {isEn ? 'All 5 Hearts Depleted!' : '하트 5개를 모두 소진했습니다!'}
-            </h3>
-            <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '24px' }}>
-              {isEn ? (
-                <>All 5 hearts have been depleted.<br />Step skipping is locked—review carefully from Step 1!</>
-              ) : (
-                <>하트를 모두 소진하여 1번 문제부터 강제 복습이 시작됩니다.<br />이전 문제 건너뛰기가 잠기며, 처음부터 차근차근 완성해보세요!</>
-              )}
-            </p>
+          <h3
+            style={{
+              fontSize: '1.45rem',
+              fontWeight: 900,
+              color: '#f8fafc',
+              letterSpacing: '-0.02em',
+              marginBottom: '8px',
+            }}
+          >
+            {isEn ? '🏆 All Missions Completed!' : '🏆 모든 미션 완료!'}
+          </h3>
 
-            <button
-              onClick={() => handleResetRound(true)}
-              className="tactile-btn tactile-btn-primary"
+          <p
+            style={{
+              fontSize: '0.90rem',
+              color: '#94a3b8',
+              lineHeight: 1.6,
+              marginBottom: '28px',
+            }}
+          >
+            {isEn ? (
+              <>Congratulations! You have completed all missions in this round.<br />Challenge yourself with the next level or another language!</>
+            ) : (
+              <>축하합니다! 이번 라운드의 모든 미션을 완벽히 통과했습니다.<br />다음 레벨이나 새로운 언어 학습에 도전해보세요!</>
+            )}
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+            <Link
+              href={`/practice/${rawLang}/${levelNum + 1}`}
+              className="tactile-btn tactile-btn-green"
               style={{
                 width: '100%',
-                padding: '12px 20px',
-                fontSize: '0.95rem',
+                padding: '13px',
+                borderRadius: '11px',
+                fontSize: '0.92rem',
+                fontWeight: 800,
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
+                gap: '6px',
+                textDecoration: 'none',
               }}
             >
-              <RotateCcw size={16} />
-              <span>{isEn ? 'Start Forced Review from Step 1' : '1번 문제부터 다시 복습하기'}</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ====================================================================
-          7. CREATE VARIABLE MODAL (2-STEP MODAL: 1. 자료형 선택 -> 2. 이름 입력)
-          ==================================================================== */}
-      {isVarModalOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(2, 6, 23, 0.78)',
-            backdropFilter: 'blur(8px)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-          }}
-          onClick={() => setIsVarModalOpen(false)}
-        >
-          <div
-            style={{
-              width: '100%',
-              maxWidth: '520px',
-              background: '#0d1527',
-              border: '1px solid rgba(255, 255, 255, 0.14)',
-              borderRadius: '16px',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div style={{
-              padding: '16px 20px',
-              background: '#0f172a',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Box size={18} color="#fb923c" />
-                <span style={{ fontSize: '0.96rem', fontWeight: 800, color: '#f8fafc' }}>
-                  {varModalStep === 1 ? '새 변수 / 자료형 생성' : '변수 이름 입력'}
-                </span>
-                <span style={{
-                  fontSize: '0.68rem',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  background: 'rgba(249, 115, 22, 0.2)',
-                  color: '#fb923c',
-                  fontWeight: 800,
-                }}>
-                  {varModalStep === 1 ? '1단계: 자료형 선택' : '2단계: 이름 입력'}
-                </span>
-              </div>
+              <span>{isEn ? 'Next Level' : '다음 레벨 도전하기'}</span>
+              <ChevronRight size={16} />
+            </Link>
+            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
               <button
-                onClick={() => setIsVarModalOpen(false)}
+                onClick={() => handleResetRound(false)}
                 style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#94a3b8',
+                  flex: 1,
+                  padding: '11px',
+                  borderRadius: '10px',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: '#e2e8f0',
+                  fontSize: '0.85rem',
+                  fontWeight: 800,
                   cursor: 'pointer',
-                  padding: '4px',
+                }}
+              >
+                {isEn ? 'Retry Round' : '다시 풀기'}
+              </button>
+              <Link
+                href={`/practice/${rawLang}`}
+                style={{
+                  flex: 1,
+                  padding: '11px',
+                  borderRadius: '10px',
+                  background: 'rgba(56, 189, 248, 0.14)',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                  color: '#38bdf8',
+                  fontSize: '0.85rem',
+                  fontWeight: 800,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderRadius: '6px',
+                  textDecoration: 'none',
                 }}
               >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div style={{ padding: '20px' }}>
-              {varModalStep === 1 ? (
-                /* Step 1: Select Data Structure */
-                <div>
-                  <p style={{ fontSize: '0.84rem', color: '#94a3b8', marginBottom: '14px' }}>
-                    생성하려는 파이썬 자료형 구조를 선택하세요:
-                  </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {[
-                      {
-                        kind: 'variable' as const,
-                        name: '변수 (단일 값)',
-                        syntax: 'name = 값',
-                        desc: '정수, 실수, 문자열 등의 단일 값 저장',
-                        color: '#ea580c',
-                        bg: 'rgba(234, 88, 12, 0.1)',
-                        border: 'rgba(234, 88, 12, 0.3)',
-                      },
-                      {
-                        kind: 'list' as const,
-                        name: '리스트 (List)',
-                        syntax: 'name = [값, ...]',
-                        desc: '순서가 있고 언제든 값을 추가할 수 있는 가변 목록',
-                        color: '#0d9488',
-                        bg: 'rgba(13, 148, 136, 0.1)',
-                        border: 'rgba(13, 148, 136, 0.3)',
-                      },
-                      {
-                        kind: 'tuple' as const,
-                        name: '튜플 (Tuple)',
-                        syntax: 'name = (값, ...)',
-                        desc: '순서가 있지만 한 번 정하면 바꿀 수 없는 불변 목록',
-                        color: '#6366f1',
-                        bg: 'rgba(99, 102, 241, 0.1)',
-                        border: 'rgba(99, 102, 241, 0.3)',
-                      },
-                      {
-                        kind: 'set' as const,
-                        name: '세트 (Set)',
-                        syntax: 'name = {값, ...}',
-                        desc: '중복 값을 허용하지 않는 고유 집합',
-                        color: '#9333ea',
-                        bg: 'rgba(147, 51, 234, 0.1)',
-                        border: 'rgba(147, 51, 234, 0.3)',
-                      },
-                      {
-                        kind: 'dict' as const,
-                        name: '딕셔너리 (Dictionary)',
-                        syntax: 'name = {키: 값, ...}',
-                        desc: '키(Key)와 값(Value) 쌍으로 매핑된 사전 구조',
-                        color: '#d97706',
-                        bg: 'rgba(217, 119, 6, 0.1)',
-                        border: 'rgba(217, 119, 6, 0.3)',
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.kind}
-                        onClick={() => {
-                          setSelectedVarKind(item.kind);
-                          setVarModalStep(2);
-                          setVarInputName(
-                            item.kind === 'list' ? 'my_list' :
-                              item.kind === 'tuple' ? 'my_tuple' :
-                                item.kind === 'set' ? 'my_set' :
-                                  item.kind === 'dict' ? 'my_dict' : 'x'
-                          );
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '12px 14px',
-                          borderRadius: '10px',
-                          background: item.bg,
-                          border: `1px solid ${item.border}`,
-                          cursor: 'pointer',
-                          transition: 'all 0.15s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-1px)';
-                          e.currentTarget.style.borderColor = item.color;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'none';
-                          e.currentTarget.style.borderColor = item.border;
-                        }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                          <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc' }}>
-                            {item.name}
-                          </span>
-                          <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
-                            {item.desc}
-                          </span>
-                        </div>
-                        <span style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.74rem',
-                          padding: '3px 8px',
-                          borderRadius: '6px',
-                          background: 'rgba(0, 0, 0, 0.4)',
-                          color: item.color,
-                          fontWeight: 700,
-                        }}>
-                          {item.syntax}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                /* Step 2: Input Name */
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                    <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>선택된 자료형:</span>
-                    <span style={{
-                      fontSize: '0.76rem',
-                      fontWeight: 800,
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                      background: BLOCK_THEMES[selectedVarKind].bg,
-                      color: '#ffffff',
-                    }}>
-                      {getKindLabel(selectedVarKind)}
-                    </span>
-                  </div>
-
-                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0', marginBottom: '8px' }}>
-                    변수 이름 (영문 및 언더스코어):
-                  </label>
-
-                  <input
-                    type="text"
-                    autoFocus
-                    value={varInputName}
-                    onChange={(e) => setVarInputName(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleCreateVariable();
-                      if (e.key === 'Escape') setVarModalStep(1);
-                    }}
-                    placeholder="예: fruits, scores, user_info"
-                    style={{
-                      width: '100%',
-                      padding: '12px 14px',
-                      borderRadius: '10px',
-                      background: '#090e1a',
-                      border: '1.5px solid #38bdf8',
-                      color: '#ffffff',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '1rem',
-                      fontWeight: 800,
-                      outline: 'none',
-                      marginBottom: '14px',
-                    }}
-                  />
-
-                  {/* Recommendation Chips */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '20px' }}>
-                    <span style={{ fontSize: '0.74rem', color: '#64748b' }}>추천 이름:</span>
-                    {(
-                      selectedVarKind === 'list' ? ['numbers', 'fruits', 'scores', 'items'] :
-                        selectedVarKind === 'tuple' ? ['point', 'dimensions', 'rgb_color'] :
-                          selectedVarKind === 'set' ? ['unique_ids', 'tags', 'vowels'] :
-                            selectedVarKind === 'dict' ? ['user_info', 'student', 'config', 'inventory'] :
-                              ['total', 'count', 'age', 'result', 'x', 'y']
-                    ).map((rec) => (
-                      <button
-                        key={rec}
-                        onClick={() => setVarInputName(rec)}
-                        style={{
-                          padding: '3px 8px',
-                          borderRadius: '6px',
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          color: '#cbd5e1',
-                          fontSize: '0.72rem',
-                          fontFamily: 'var(--font-mono)',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {rec}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
-                    <button
-                      onClick={() => setVarModalStep(1)}
-                      style={{
-                        padding: '9px 16px',
-                        borderRadius: '8px',
-                        background: 'rgba(255, 255, 255, 0.06)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        color: '#cbd5e1',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      &lt; 이전으로
-                    </button>
-                    <button
-                      onClick={handleCreateVariable}
-                      className="tactile-btn tactile-btn-primary"
-                      style={{
-                        padding: '9px 18px',
-                        fontSize: '0.86rem',
-                        fontWeight: 800,
-                      }}
-                    >
-                      <span>생성하기</span>
-                    </button>
-                  </div>
-                </div>
-              )}
+                {isEn ? 'Back to Levels' : '단계 목록으로'}
+              </Link>
             </div>
           </div>
         </div>
-      )}
+      </div>
+    )
+  }
 
-      {/* Interactive Screen Layout Spotlight Tour */}
-      <SpotlightTour
-        isOpen={isTourOpen}
-        onClose={() => setIsTourOpen(false)}
-        language={language}
-        storageKey={tourStorageKey}
+  {/* Section-End Micro-Survey Modal (opens automatically when final level of a section is cleared) */ }
+  {
+    pendingSectionSurvey && (
+      <SectionFeedbackModal
+        isOpen={Boolean(pendingSectionSurvey)}
+        isEn={isEn}
+        rawLang={rawLang}
+        sectionInfo={pendingSectionSurvey}
+        onClose={() => setPendingSectionSurvey(null)}
       />
-    </div>
+    )
+  }
+
+  {/* ====================================================================
+          7. GAME OVER MODAL (Hearts depleted -> Forced Review from Step 1)
+          ==================================================================== */}
+  {
+    isGameOver && (
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        background: 'rgba(0, 0, 0, 0.85)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+      }}>
+        <div style={{
+          maxWidth: '440px',
+          width: '100%',
+          background: '#131e33',
+          border: '1.5px solid rgba(239, 68, 68, 0.5)',
+          borderRadius: '24px',
+          padding: '36px 30px',
+          textAlign: 'center',
+          boxShadow: '0 20px 50px rgba(239, 68, 68, 0.25)',
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '20px',
+            background: 'rgba(239, 68, 68, 0.15)',
+            border: '1px solid rgba(239, 68, 68, 0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 20px',
+          }}>
+            <Heart size={32} color="#ef4444" fill="#ef4444" />
+          </div>
+
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginBottom: '8px' }}>
+            {isEn ? 'All 5 Hearts Depleted!' : '하트 5개를 모두 소진했습니다!'}
+          </h3>
+          <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '24px' }}>
+            {isEn ? (
+              <>All 5 hearts have been depleted.<br />Step skipping is locked—review carefully from Step 1!</>
+            ) : (
+              <>하트를 모두 소진하여 1번 문제부터 강제 복습이 시작됩니다.<br />이전 문제 건너뛰기가 잠기며, 처음부터 차근차근 완성해보세요!</>
+            )}
+          </p>
+
+          <button
+            onClick={() => handleResetRound(true)}
+            className="tactile-btn tactile-btn-primary"
+            style={{
+              width: '100%',
+              padding: '12px 20px',
+              fontSize: '0.95rem',
+              justifyContent: 'center',
+            }}
+          >
+            <RotateCcw size={16} />
+            <span>{isEn ? 'Start Forced Review from Step 1' : '1번 문제부터 다시 복습하기'}</span>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  {/* ====================================================================
+          7. CREATE VARIABLE MODAL (2-STEP MODAL: 1. 자료형 선택 -> 2. 이름 입력)
+          ==================================================================== */}
+  {
+    isVarModalOpen && (
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(2, 6, 23, 0.78)',
+          backdropFilter: 'blur(8px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+        }}
+        onClick={() => setIsVarModalOpen(false)}
+      >
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '520px',
+            background: '#22304a',
+            border: '1px solid rgba(255, 255, 255, 0.16)',
+            borderRadius: '16px',
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85)',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Header */}
+          <div style={{
+            padding: '16px 20px',
+            background: '#1e293b',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Box size={18} color="#fb923c" />
+              <span style={{ fontSize: '0.96rem', fontWeight: 800, color: '#f8fafc' }}>
+                {varModalStep === 1 ? '새 변수 / 자료형 생성' : '변수 이름 입력'}
+              </span>
+              <span style={{
+                fontSize: '0.68rem',
+                padding: '2px 8px',
+                borderRadius: '999px',
+                background: 'rgba(249, 115, 22, 0.2)',
+                color: '#fb923c',
+                fontWeight: 800,
+              }}>
+                {varModalStep === 1 ? '1단계: 자료형 선택' : '2단계: 이름 입력'}
+              </span>
+            </div>
+            <button
+              onClick={() => setIsVarModalOpen(false)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '6px',
+              }}
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Modal Body */}
+          <div style={{ padding: '20px' }}>
+            {varModalStep === 1 ? (
+              /* Step 1: Select Data Structure */
+              <div>
+                <p style={{ fontSize: '0.84rem', color: '#94a3b8', marginBottom: '14px' }}>
+                  생성하려는 파이썬 자료형 구조를 선택하세요:
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    {
+                      kind: 'variable' as const,
+                      name: '변수 (단일 값)',
+                      syntax: 'name = 값',
+                      desc: '정수, 실수, 문자열 등의 단일 값 저장',
+                      color: '#ea580c',
+                      bg: 'rgba(234, 88, 12, 0.1)',
+                      border: 'rgba(234, 88, 12, 0.3)',
+                    },
+                    {
+                      kind: 'list' as const,
+                      name: '리스트 (List)',
+                      syntax: 'name = [값, ...]',
+                      desc: '순서가 있고 언제든 값을 추가할 수 있는 가변 목록',
+                      color: '#0d9488',
+                      bg: 'rgba(13, 148, 136, 0.1)',
+                      border: 'rgba(13, 148, 136, 0.3)',
+                    },
+                    {
+                      kind: 'tuple' as const,
+                      name: '튜플 (Tuple)',
+                      syntax: 'name = (값, ...)',
+                      desc: '순서가 있지만 한 번 정하면 바꿀 수 없는 불변 목록',
+                      color: '#6366f1',
+                      bg: 'rgba(99, 102, 241, 0.1)',
+                      border: 'rgba(99, 102, 241, 0.3)',
+                    },
+                    {
+                      kind: 'set' as const,
+                      name: '세트 (Set)',
+                      syntax: 'name = {값, ...}',
+                      desc: '중복 값을 허용하지 않는 고유 집합',
+                      color: '#9333ea',
+                      bg: 'rgba(147, 51, 234, 0.1)',
+                      border: 'rgba(147, 51, 234, 0.3)',
+                    },
+                    {
+                      kind: 'dict' as const,
+                      name: '딕셔너리 (Dictionary)',
+                      syntax: 'name = {키: 값, ...}',
+                      desc: '키(Key)와 값(Value) 쌍으로 매핑된 사전 구조',
+                      color: '#d97706',
+                      bg: 'rgba(217, 119, 6, 0.1)',
+                      border: 'rgba(217, 119, 6, 0.3)',
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.kind}
+                      onClick={() => {
+                        setSelectedVarKind(item.kind);
+                        setVarModalStep(2);
+                        setVarInputName(
+                          item.kind === 'list' ? 'my_list' :
+                            item.kind === 'tuple' ? 'my_tuple' :
+                              item.kind === 'set' ? 'my_set' :
+                                item.kind === 'dict' ? 'my_dict' : 'x'
+                        );
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '12px 14px',
+                        borderRadius: '10px',
+                        background: item.bg,
+                        border: `1px solid ${item.border}`,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.borderColor = item.color;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.borderColor = item.border;
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc' }}>
+                          {item.name}
+                        </span>
+                        <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                          {item.desc}
+                        </span>
+                      </div>
+                      <span style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.74rem',
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        background: 'rgba(0, 0, 0, 0.4)',
+                        color: item.color,
+                        fontWeight: 700,
+                      }}>
+                        {item.syntax}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* Step 2: Input Name */
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                  <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>선택된 자료형:</span>
+                  <span style={{
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    background: BLOCK_THEMES[selectedVarKind].bg,
+                    color: '#ffffff',
+                  }}>
+                    {getKindLabel(selectedVarKind)}
+                  </span>
+                </div>
+
+                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0', marginBottom: '8px' }}>
+                  변수 이름 (영문 및 언더스코어):
+                </label>
+
+                <input
+                  type="text"
+                  autoFocus
+                  value={varInputName}
+                  onChange={(e) => setVarInputName(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleCreateVariable();
+                    if (e.key === 'Escape') setVarModalStep(1);
+                  }}
+                  placeholder="예: fruits, scores, user_info"
+                  style={{
+                    width: '100%',
+                    padding: '12px 14px',
+                    borderRadius: '10px',
+                    background: '#162033',
+                    border: '1.5px solid #38bdf8',
+                    color: '#ffffff',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '1rem',
+                    fontWeight: 800,
+                    outline: 'none',
+                    marginBottom: '14px',
+                  }}
+                />
+
+                {/* Recommendation Chips */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                  <span style={{ fontSize: '0.74rem', color: '#64748b' }}>추천 이름:</span>
+                  {(
+                    selectedVarKind === 'list' ? ['numbers', 'fruits', 'scores', 'items'] :
+                      selectedVarKind === 'tuple' ? ['point', 'dimensions', 'rgb_color'] :
+                        selectedVarKind === 'set' ? ['unique_ids', 'tags', 'vowels'] :
+                          selectedVarKind === 'dict' ? ['user_info', 'student', 'config', 'inventory'] :
+                            ['total', 'count', 'age', 'result', 'x', 'y']
+                  ).map((rec) => (
+                    <button
+                      key={rec}
+                      onClick={() => setVarInputName(rec)}
+                      style={{
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: '#cbd5e1',
+                        fontSize: '0.72rem',
+                        fontFamily: 'var(--font-mono)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {rec}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    onClick={() => setVarModalStep(1)}
+                    style={{
+                      padding: '9px 16px',
+                      borderRadius: '8px',
+                      background: 'rgba(255, 255, 255, 0.06)',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      color: '#cbd5e1',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    &lt; 이전으로
+                  </button>
+                  <button
+                    onClick={handleCreateVariable}
+                    className="tactile-btn tactile-btn-primary"
+                    style={{
+                      padding: '9px 18px',
+                      fontSize: '0.86rem',
+                      fontWeight: 800,
+                    }}
+                  >
+                    <span>생성하기</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {/* ====================================================================
+          8. CREATE FUNCTION / CLASS CALL MODAL (2-STEP MODAL: 1. 함수/클래스 선택 -> 2. 이름 입력)
+          ==================================================================== */}
+  {
+    isCallModalOpen && (
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(2, 6, 23, 0.78)',
+          backdropFilter: 'blur(8px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+        }}
+        onClick={() => setIsCallModalOpen(false)}
+      >
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '520px',
+            background: '#22304a',
+            border: '1px solid rgba(255, 255, 255, 0.16)',
+            borderRadius: '16px',
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85)',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Header */}
+          <div style={{
+            padding: '16px 20px',
+            background: '#1e293b',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Zap size={18} color="#38bdf8" />
+              <span style={{ fontSize: '0.96rem', fontWeight: 800, color: '#f8fafc' }}>
+                {callModalStep === 1 ? '새 함수 / 클래스 블록 생성' : `${selectedCallKind === 'class' ? '클래스' : '함수'} 이름 입력`}
+              </span>
+              <span style={{
+                fontSize: '0.68rem',
+                padding: '2px 8px',
+                borderRadius: '999px',
+                background: 'rgba(56, 189, 248, 0.2)',
+                color: '#38bdf8',
+                fontWeight: 800,
+              }}>
+                {callModalStep === 1 ? '1단계: 종류 선택' : '2단계: 이름 입력'}
+              </span>
+            </div>
+            <button
+              onClick={() => setIsCallModalOpen(false)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '6px',
+              }}
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Modal Body */}
+          <div style={{ padding: '20px' }}>
+            {callModalStep === 1 ? (
+              /* Step 1: Select Function or Class */
+              <div>
+                <p style={{ fontSize: '0.84rem', color: '#94a3b8', marginBottom: '14px' }}>
+                  생성하려는 호출 블록의 종류(함수 또는 클래스)를 선택하세요:
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    {
+                      kind: 'function' as const,
+                      name: '함수 (Function 호출)',
+                      syntax: 'func_name(인자)',
+                      desc: 'def로 정의한 함수를 이름으로 호출하는 블록',
+                      color: '#3b82f6',
+                      bg: 'rgba(37, 99, 235, 0.12)',
+                      border: 'rgba(59, 130, 246, 0.35)',
+                    },
+                    {
+                      kind: 'class' as const,
+                      name: '클래스 (Class 인스턴스 생성)',
+                      syntax: 'ClassName(인자)',
+                      desc: 'class로 정의한 클래스의 객체(인스턴스)를 생성하는 블록',
+                      color: '#06b6d4',
+                      bg: 'rgba(8, 145, 178, 0.12)',
+                      border: 'rgba(6, 182, 212, 0.35)',
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.kind}
+                      onClick={() => {
+                        setSelectedCallKind(item.kind);
+                        setCallModalStep(2);
+                        setCallInputName(item.kind === 'class' ? 'MyClass' : 'my_func');
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        background: item.bg,
+                        border: `1px solid ${item.border}`,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.borderColor = item.color;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.borderColor = item.border;
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        <span style={{ fontSize: '0.90rem', fontWeight: 800, color: '#f8fafc' }}>
+                          {item.name}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                          {item.desc}
+                        </span>
+                      </div>
+                      <span style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.76rem',
+                        padding: '4px 9px',
+                        borderRadius: '6px',
+                        background: 'rgba(0, 0, 0, 0.4)',
+                        color: item.color,
+                        fontWeight: 700,
+                      }}>
+                        {item.syntax}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* Step 2: Input Name */
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                  <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>선택된 종류:</span>
+                  <span style={{
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    background: selectedCallKind === 'class' ? BLOCK_THEMES.class.bg : BLOCK_THEMES.call.bg,
+                    color: '#ffffff',
+                  }}>
+                    {selectedCallKind === 'class' ? '클래스 (Class)' : '함수 (Function)'}
+                  </span>
+                </div>
+
+                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0', marginBottom: '8px' }}>
+                  {selectedCallKind === 'class' ? '클래스 이름 (영문 및 언더스코어):' : '함수 이름 (영문 및 언더스코어):'}
+                </label>
+
+                <input
+                  type="text"
+                  autoFocus
+                  value={callInputName}
+                  onChange={(e) => setCallInputName(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleCreateCallBlock();
+                    if (e.key === 'Escape') setCallModalStep(1);
+                  }}
+                  placeholder={selectedCallKind === 'class' ? '예: MyClass, Dog, Person' : '예: my_func, add, greet'}
+                  style={{
+                    width: '100%',
+                    padding: '12px 14px',
+                    borderRadius: '10px',
+                    background: '#162033',
+                    border: '1.5px solid #38bdf8',
+                    color: '#ffffff',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '1rem',
+                    fontWeight: 800,
+                    outline: 'none',
+                    marginBottom: '14px',
+                  }}
+                />
+
+                {/* Recommendation Chips */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                  <span style={{ fontSize: '0.74rem', color: '#64748b' }}>추천 이름:</span>
+                  {(
+                    selectedCallKind === 'class'
+                      ? ['MyClass', 'Person', 'Dog', 'Player', 'Counter', 'Car']
+                      : ['my_func', 'add', 'calc', 'greet', 'check', 'get_total']
+                  ).map((rec) => (
+                    <button
+                      key={rec}
+                      onClick={() => setCallInputName(rec)}
+                      style={{
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: '#cbd5e1',
+                        fontSize: '0.72rem',
+                        fontFamily: 'var(--font-mono)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {rec}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    onClick={() => setCallModalStep(1)}
+                    style={{
+                      padding: '9px 16px',
+                      borderRadius: '8px',
+                      background: 'rgba(255, 255, 255, 0.06)',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      color: '#cbd5e1',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    &lt; 이전으로
+                  </button>
+                  <button
+                    onClick={handleCreateCallBlock}
+                    className="tactile-btn tactile-btn-primary"
+                    style={{
+                      padding: '9px 18px',
+                      fontSize: '0.86rem',
+                      fontWeight: 800,
+                    }}
+                  >
+                    <span>생성하기</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {/* Interactive Screen Layout Spotlight Tour */ }
+  <SpotlightTour
+    isOpen={isTourOpen}
+    onClose={() => setIsTourOpen(false)}
+    language={language}
+    storageKey={tourStorageKey}
+  />
+    </div >
   );
 }

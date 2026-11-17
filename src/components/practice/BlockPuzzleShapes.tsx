@@ -35,10 +35,10 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
   onChange,
   minChars = 1,
   minWidthPx = 0,
-  height = '20px',
-  padding = '1px 5px',
+  height = '24px',
+  padding = '2px 7px',
   borderRadius = '6px',
-  fontSize = '0.76rem',
+  fontSize = '0.88rem',
   fontWeight = 800,
   fontStyle = 'normal',
   background = '#ffffff',
@@ -52,21 +52,35 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
 }) => {
   const valStr = value ?? '';
   const targetStr = targetValue ?? '';
-  const computedWidth = Math.max(
-    minWidthPx,
-    getBlockInputWidth(valStr, minChars),
-    getBlockInputWidth(targetStr, minChars)
-  );
+  const effectiveMinWidth = Math.max(minWidthPx, 32);
   const isMismatch =
     targetValue !== undefined && !allowAnyText && valStr.length > 0 && !targetStr.startsWith(valStr);
+
+  // Calculate visual monospace columns occupied by valStr (CJK/Hangul = 2 cols, ASCII = 1 col).
+  // Slicing targetStr itself for the hidden prefix guarantees the visible ghost text
+  // never shifts left or right by even a single pixel when typing Korean!
+  let visualCols = 0;
+  for (let i = 0; i < valStr.length; i++) {
+    const code = valStr.charCodeAt(i);
+    if (
+      (code >= 0x1100 && code <= 0x11ff) ||
+      (code >= 0x3130 && code <= 0x318f) ||
+      (code >= 0xac00 && code <= 0xd7af)
+    ) {
+      visualCols += 2;
+    } else {
+      visualCols += 1;
+    }
+  }
+  const hiddenTargetCols = Math.min(targetStr.length, visualCols);
 
   return (
     <div
       style={{
         position: 'relative',
-        display: 'inline-flex',
+        display: 'inline-grid',
         alignItems: 'center',
-        width: `${computedWidth}px`,
+        minWidth: `${effectiveMinWidth}px`,
         height,
         borderRadius,
         background,
@@ -77,13 +91,33 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
         transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
       }}
     >
+      {/* Native DOM auto-sizer for current value (prevents any text clipping or horizontal input scroll) */}
+      <span
+        aria-hidden="true"
+        style={{
+          gridArea: '1 / 1',
+          visibility: 'hidden',
+          whiteSpace: 'pre',
+          padding,
+          paddingRight: '10px',
+          fontFamily: 'var(--font-mono)',
+          fontSize,
+          fontWeight,
+          fontStyle,
+          pointerEvents: 'none',
+          userSelect: 'none',
+          boxSizing: 'border-box',
+        }}
+      >
+        {valStr}
+      </span>
       {targetStr.length > 0 && (
         <div
           aria-hidden="true"
           style={{
-            position: 'absolute',
-            inset: 0,
+            gridArea: '1 / 1',
             padding,
+            paddingRight: '10px',
             display: 'flex',
             alignItems: 'center',
             fontFamily: 'var(--font-mono)',
@@ -96,8 +130,8 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
             boxSizing: 'border-box',
           }}
         >
-          <span style={{ visibility: 'hidden' }}>{valStr}</span>
-          <span style={{ color: ghostColor }}>{targetStr.slice(valStr.length)}</span>
+          <span style={{ visibility: 'hidden' }}>{targetStr.slice(0, hiddenTargetCols)}</span>
+          <span style={{ color: ghostColor }}>{targetStr.slice(hiddenTargetCols)}</span>
         </div>
       )}
       <input
@@ -118,7 +152,8 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
         onClick={targetValue !== undefined ? undefined : onClick}
         onChange={(e) => onChange(e.target.value)}
         style={{
-          position: 'relative',
+          position: 'absolute',
+          inset: 0,
           zIndex: 1,
           width: '100%',
           height: '100%',
@@ -151,7 +186,7 @@ export const PuzzleNotch: React.FC<{
 }> = ({
   left = `${BLOCK_GEOMETRY.TAB_LEFT_ROOT}px`,
   borderColor,
-  bgColor = '#090e1a',
+  bgColor = '#1b263b',
   isConnected = false,
 }) => {
   const leftStyle = typeof left === 'number' ? `${left}px` : left;
@@ -177,7 +212,20 @@ export const PuzzleNotch: React.FC<{
         zIndex: 5,
         pointerEvents: 'none',
       }}
-    />
+    >
+      {/* Subpixel anti-aliasing guard: masks the parent's 1px top border across the notch opening */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-1px',
+          left: 0,
+          right: 0,
+          height: '2px',
+          background: bgColor,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
   );
 };
 
@@ -226,7 +274,7 @@ export const HorizontalPuzzleNotch: React.FC<{
   isConnected?: boolean;
 }> = ({
   borderColor,
-  bgColor = '#090e1a',
+  bgColor = '#1b263b',
   isConnected = false,
 }) => {
   if (isConnected) return null;
@@ -248,7 +296,19 @@ export const HorizontalPuzzleNotch: React.FC<{
         zIndex: 4,
         pointerEvents: 'none',
       }}
-    />
+    >
+      <div
+        style={{
+          position: 'absolute',
+          right: '-1px',
+          top: 0,
+          bottom: 0,
+          width: '2px',
+          background: bgColor,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
   );
 };
 
@@ -288,6 +348,7 @@ export const SvgBottomClosingArm: React.FC<{
   hasInnerBlocks?: boolean;
   tabLeft?: number;
   isNested?: boolean;
+  notchBgColor?: string;
 }> = ({
   theme,
   isDef = false,
@@ -300,6 +361,7 @@ export const SvgBottomClosingArm: React.FC<{
   hasInnerBlocks = false,
   tabLeft,
   isNested = false,
+  notchBgColor = '#1b263b',
 }) => {
   const H = BLOCK_GEOMETRY.CLOSING_ARM_HEIGHT;
   const spineW = BLOCK_GEOMETRY.SPINE_WIDTH;
@@ -336,7 +398,7 @@ export const SvgBottomClosingArm: React.FC<{
           position: 'absolute',
           top: '-1px',
           left: 0,
-          width: `${spineW}px`,
+          width: `${isNested ? spineW - 1 : spineW - 2}px`,
           height: '2px',
           background: theme.bg,
           zIndex: 3,
@@ -345,7 +407,7 @@ export const SvgBottomClosingArm: React.FC<{
       />
 
       {/* 2. 입구 바닥 결합 홈: 내부 자식 블록이 없을 때만 빈 홈 표시 */}
-      <PuzzleNotch left={notchLeft} borderColor={theme.border} isConnected={hasInnerBlocks} />
+      <PuzzleNotch left={notchLeft} borderColor={theme.border} bgColor={notchBgColor} isConnected={hasInnerBlocks} />
 
       {/* 3. 하단 돌출 퍼즐 탭: 다음 블록과 정확한 위치에서 스냅되는 표준 퍼즐 탭 */}
       <PuzzleTab left={effectiveTabLeft} borderColor={theme.border} bg={theme.bg} zIndex={25} />
@@ -354,15 +416,15 @@ export const SvgBottomClosingArm: React.FC<{
       {extraButtons}
       {isDef && hasReturn && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', position: 'relative', zIndex: 6, paddingLeft: '8px' }}>
-          <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.78rem' }}>return</span>
+          <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem' }}>return</span>
           <BlockTraceInput
             value={returnVal}
             targetValue={targetReturnVal}
             onChange={(val) => onDefReturnValChange?.(val)}
-            minWidthPx={46}
-            height="18px"
-            borderRadius="4px"
-            fontSize="0.76rem"
+            minWidthPx={52}
+            height="22px"
+            borderRadius="5px"
+            fontSize="0.86rem"
           />
         </div>
       )}
@@ -415,7 +477,7 @@ export const GhostSnapBlock: React.FC<{
       }}
     >
       {/* Top Notch (상단 홈) */}
-      <PuzzleNotch left={tabLeft} borderColor="#94a3b8" bgColor="#090e1a" isConnected={false} />
+      <PuzzleNotch left={tabLeft} borderColor="#94a3b8" bgColor="#1b263b" isConnected={false} />
 
       {/* Bottom Puzzle Tab (하단 탭) */}
       <PuzzleTab left={tabLeft} borderColor="#94a3b8" bg="rgba(148, 163, 184, 0.45)" zIndex={65} />
@@ -458,7 +520,7 @@ export const GhostMethodBlock: React.FC<{
       }}
     >
       <HorizontalPuzzleTab borderColor="#94a3b8" bg="rgba(148, 163, 184, 0.45)" />
-      <HorizontalPuzzleNotch borderColor="#94a3b8" bgColor="#090e1a" />
+      <HorizontalPuzzleNotch borderColor="#94a3b8" bgColor="#1b263b" />
     </div>
   );
 };
@@ -521,7 +583,7 @@ export const GhostCShapeBlock: React.FC<{
         }}
       >
         {/* Top Notch */}
-        <PuzzleNotch left={tabLeft} borderColor="#94a3b8" bgColor="#090e1a" isConnected={false} />
+        <PuzzleNotch left={tabLeft} borderColor="#94a3b8" bgColor="#1b263b" isConnected={false} />
 
         {/* Junction line between top arm and mouth */}
         <div
