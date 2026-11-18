@@ -8,12 +8,7 @@ import type { UserProfile } from '@/lib/supabase/types';
 export const DEFAULT_ADMIN_IDS: readonly string[] = [
   'iurazilland@gmail.com',
   'iurazilland',
-  'easypower@nate.com',
-  'easypower',
   'admin',
-  'easyp',
-  'typingcode',
-  'master',
 ];
 
 export function getConfiguredAdminIds(): string[] {
@@ -44,10 +39,6 @@ export function isAdminUser(
 
   if (profile?.username) {
     candidates.push(profile.username.trim().toLowerCase());
-  }
-
-  if (profile?.display_name) {
-    candidates.push(profile.display_name.trim().toLowerCase());
   }
 
   if (profile?.email) {
