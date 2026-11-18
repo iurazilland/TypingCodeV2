@@ -1704,6 +1704,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const isLocalServer = useIsLocalServer();
   const { user, isLoading: isAuthLoading } = useAuth();
   const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
+  const [isTourHovering, setIsTourHovering] = useState<boolean>(false);
   const tourStorageKey = user?.id
     ? `typingcode_tour_seen_v2_${user.id}`
     : 'typingcode_tour_seen_v2_guest';
@@ -6648,20 +6649,47 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             }}>
               {rawLang.startsWith('python') || round.language === 'python' ? 'PYTHON BASIC' : round.language.toUpperCase()}
             </span>
+            <span
+              style={{
+                padding: '3px 8px',
+                borderRadius: '6px',
+                background: 'rgba(56, 189, 248, 0.16)',
+                border: '1px solid rgba(56, 189, 248, 0.45)',
+                color: '#38bdf8',
+                fontSize: '0.76rem',
+                fontWeight: 900,
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
+              Lv.{levelNum}
+            </span>
             <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc' }}>
-              {isEn ? (round.title_en || round.title_ko) : round.title_ko}
+              {(isEn ? (round.title_en || round.title_ko) : round.title_ko).replace(
+                /^(?:레벨|Level|Lv\.?)\s*\d+\s*[:·\-]\s*/i,
+                ''
+              )}
             </span>
           </div>
         </div>
 
 
-        {/* Right: Level Step Navigator & Screen Tour Button */}
+        {/* Right: Level Step Navigator & UI Guide Button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Spotlight Tour Manual Trigger Button */}
+          {/* UI Guide Hover / Click Trigger Button */}
           <button
             type="button"
-            onClick={() => setIsTourOpen(true)}
-            title={isEn ? 'Screen Guide Tour' : '화면 구성 가이드 투어'}
+            onClick={() => setIsTourOpen((prev) => !prev)}
+            onMouseEnter={(e) => {
+              setIsTourHovering(true);
+              e.currentTarget.style.background = 'rgba(56, 189, 248, 0.22)';
+              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.6)';
+            }}
+            onMouseLeave={(e) => {
+              setIsTourHovering(false);
+              e.currentTarget.style.background = 'rgba(56, 189, 248, 0.1)';
+              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+            }}
+            title={isEn ? 'Hover or click to view Screen & Shortcut Guide' : '마우스를 올리거나 클릭하여 화면·단축키 가이드를 확인합니다'}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -6669,25 +6697,19 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               padding: '0 12px',
               height: '32px',
               borderRadius: '8px',
-              background: 'rgba(56, 189, 248, 0.1)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
+              background: (isTourOpen || isTourHovering) ? 'rgba(56, 189, 248, 0.22)' : 'rgba(56, 189, 248, 0.1)',
+              border: (isTourOpen || isTourHovering) ? '1px solid rgba(56, 189, 248, 0.6)' : '1px solid rgba(56, 189, 248, 0.3)',
               color: '#38bdf8',
               fontSize: '0.80rem',
               fontWeight: 800,
               cursor: 'pointer',
               transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(56, 189, 248, 0.18)';
-              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(56, 189, 248, 0.1)';
-              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+              position: 'relative',
+              zIndex: 10010,
             }}
           >
             <Compass size={14} color="#38bdf8" />
-            <span>{isEn ? 'Tour' : '화면 둘러보기'}</span>
+            <span>{isEn ? 'UI Guide' : '화면 가이드'}</span>
           </button>
 
           <div
@@ -9999,10 +10021,14 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         )
       }
 
-      {/* Interactive Screen Layout Spotlight Tour */}
+      {/* Interactive Screen Layout Guide Overlay */}
       <SpotlightTour
-        isOpen={isTourOpen}
-        onClose={() => setIsTourOpen(false)}
+        isOpen={isTourOpen || isTourHovering}
+        isHoverMode={isTourHovering && !isTourOpen}
+        onClose={() => {
+          setIsTourOpen(false);
+          setIsTourHovering(false);
+        }}
         language={language}
         storageKey={tourStorageKey}
       />
