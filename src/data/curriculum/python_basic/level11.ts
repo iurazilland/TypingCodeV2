@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the comment symbol at the start of line 1 so only Hello is printed.',
       hint_ko: '파이썬에서 한 줄 주석을 작성할 때는 줄 맨 앞에 샵 기호를 붙입니다.',
       hint_en: 'Start a single-line comment in Python with the hash symbol.',
-      templateCode: '§ Greeting line\nprint("Hello")',
+      templateCode: '§§ Greeting line\nprint("Hello")',
       targetCode: '# Greeting line\nprint("Hello")',
       testCases: [
         {
@@ -78,7 +78,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the assignment operator to store 5 in variable level and print it.',
       hint_ko: '오른쪽 값을 왼쪽 변수에 저장할 때는 등호 기호를 사용합니다.',
       hint_en: 'Use the equals sign to assign the value on the right to the variable on the left.',
-      templateCode: 'level § 5\nprint(level)',
+      templateCode: 'level §§ 5\nprint(level)',
       targetCode: 'level = 5\nprint(level)',
       expectedVariables: { level: 5 },
       testCases: [
@@ -117,7 +117,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the double-quoted string Seoul so that City:Seoul is printed.',
       hint_ko: '변수에 문자열을 대입할 때는 양쪽을 큰따옴표로 감싸 작성합니다.',
       hint_en: 'Wrap the city name in double quotes on the right side of the assignment.',
-      templateCode: 'city = §§§§§§§\nprint("City", city, sep=":")',
+      templateCode: 'city = §§§§§§§§\nprint("City", city, sep=":")',
       targetCode: 'city = "Seoul"\nprint("City", city, sep=":")',
       expectedVariables: { city: 'Seoul' },
       testCases: [
@@ -156,7 +156,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the price variable name on the last line to print Sword: 500.',
       hint_ko: '셋째 줄에서 숫자 500을 저장한 네 글자 변수 이름을 따옴표 없이 입력합니다.',
       hint_en: 'Type the four-letter variable name declared on line 3 without quotes.',
-      templateCode: '# Item info\nitem = "Sword"\ncost = 500\nprint(item, §§§§, sep=": ")',
+      templateCode: '# Item info\nitem = "Sword"\ncost = 500\nprint(item, §§§§§, sep=": ")',
       targetCode: '# Item info\nitem = "Sword"\ncost = 500\nprint(item, cost, sep=": ")',
       expectedVariables: { item: 'Sword', cost: 500 },
       testCases: [
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to mark the comment, assign hp, and print HP:120.',
       hint_ko: '첫째 줄의 주석 기호, 둘째 줄의 대입 등호, 셋째 줄의 출력할 변수 이름을 차례로 채웁니다.',
       hint_en: 'Fill in the comment symbol on line 1, the assignment sign on line 2, and the variable name on line 3.',
-      templateCode: '§ Player status\nhp § 120\nprint("HP", §§, sep=":")',
+      templateCode: '§§ Player status\nhp §§ 120\nprint("HP", §§§, sep=":")',
       targetCode: '# Player status\nhp = 120\nprint("HP", hp, sep=":")',
       expectedVariables: { hp: 120 },
       testCases: [
@@ -236,7 +236,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to assign 300 to variable gold so line 2 prints Gold: 300.',
       hint_ko: '변수 이름, 대입 연산자, 숫자 300을 순서대로 작성해보세요.',
       hint_en: 'Write the variable name, equals sign, and 300 on line 1.',
-      templateCode: '§§§§§§§§§§\nprint("Gold:", gold)',
+      templateCode: '§§§§§§§§§§§\nprint("Gold:", gold)',
       targetCode: 'gold = 300\nprint("Gold:", gold)',
       expectedVariables: { gold: 300 },
       testCases: [
@@ -256,7 +256,7 @@ export const PYTHON_LEVEL_11: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print "Rank" and rank with sep="=" so it outputs Rank=S.',
       hint_ko: 'print() 안에서 라벨 문자열, 변수 이름, 그리고 등호 구분자 옵션을 쉼표로 나열합니다.',
       hint_en: 'Pass "Rank", rank, and sep="=" separated by commas inside print().',
-      templateCode: 'rank = "S"\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'rank = "S"\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'rank = "S"\nprint("Rank", rank, sep="=")',
       expectedVariables: { rank: 'S' },
       testCases: [

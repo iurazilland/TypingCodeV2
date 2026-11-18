@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the initializer, attribute update, and boolean survival check in the Character class.",
       "hint_ko": "생성자 특수 메서드 이름과 체력 차감 복합 대입 연산자, 그리고 값을 호출부로 돌려주는 키워드를 확인하세요.",
       "hint_en": "Check the double-underscore initializer name, the subtraction compound operator, and the return keyword.",
-      "templateCode": "class Character:\n    def §§§§§§§§(self, name, hp=100):\n        self.name = name\n        self.hp = hp\n    def hit(self, dmg):\n        self.hp §§ dmg\n        if self.hp < 0:\n            self.hp = 0\n    def status(self):\n        §§§§§§ f\"{self.name}:{self.hp}:{bool(self.hp)}\"\nc = Character(\"Aria\", 50)\nc.hit(int(input()))\nprint(c.status())",
+      "templateCode": "class Character:\n    def §§§§§§§§§(self, name, hp=100):\n        self.name = name\n        self.hp = hp\n    def hit(self, dmg):\n        self.hp §§§ dmg\n        if self.hp < 0:\n            self.hp = 0\n    def status(self):\n        §§§§§§§ f\"{self.name}:{self.hp}:{bool(self.hp)}\"\nc = Character(\"Aria\", 50)\nc.hit(int(input()))\nprint(c.status())",
       "targetCode": "class Character:\n    def __init__(self, name, hp=100):\n        self.name = name\n        self.hp = hp\n    def hit(self, dmg):\n        self.hp -= dmg\n        if self.hp < 0:\n            self.hp = 0\n    def status(self):\n        return f\"{self.name}:{self.hp}:{bool(self.hp)}\"\nc = Character(\"Aria\", 50)\nc.hit(int(input()))\nprint(c.status())",
       "testCases": [
         {
@@ -46,7 +46,7 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the Attendance class to track all check-ins in a list and unique names in a set.",
       "hint_ko": "빈 리스트 초기화 기호와 리스트 끝에 원소를 추가하는 메서드, 그리고 집합에 원소를 추가하는 메서드를 확인하세요.",
       "hint_en": "Use empty brackets for the list, the list append method, and the set add method.",
-      "templateCode": "class Attendance:\n    def __init__(self):\n        self.logs = §§\n        self.members = set()\n    def check_in(self, name):\n        self.logs.§§§§§§(name)\n        self.members.§§§(name)\na = Attendance()\nfor u in [\"Kim\", \"Lee\", \"Kim\", \"Park\"]:\n    a.check_in(u)\nprint(len(a.logs), len(a.members))",
+      "templateCode": "class Attendance:\n    def __init__(self):\n        self.logs = §§§\n        self.members = set()\n    def check_in(self, name):\n        self.logs.§§§§§§§(name)\n        self.members.§§§§(name)\na = Attendance()\nfor u in [\"Kim\", \"Lee\", \"Kim\", \"Park\"]:\n    a.check_in(u)\nprint(len(a.logs), len(a.members))",
       "targetCode": "class Attendance:\n    def __init__(self):\n        self.logs = []\n        self.members = set()\n    def check_in(self, name):\n        self.logs.append(name)\n        self.members.add(name)\na = Attendance()\nfor u in [\"Kim\", \"Lee\", \"Kim\", \"Park\"]:\n    a.check_in(u)\nprint(len(a.logs), len(a.members))",
       "testCases": [
         {
@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the GradeCard class so summary() returns a tuple of the total and maximum score.",
       "hint_ko": "빈 딕셔너리 초기화 기호와 점수 리스트의 합계·최댓값 내장 함수를 조합해 튜플로 반환하세요.",
       "hint_en": "Initialize an empty dict {}, then use sum() and max() on the collected score list.",
-      "templateCode": "class GradeCard:\n    def __init__(self):\n        self.scores = §§\n    def add(self, sub, pt):\n        self.scores[sub] = pt\n    def summary(self):\n        vals = []\n        for k in self.scores:\n            vals.append(self.scores[k])\n        return §§§(vals), §§§(vals)\ng = GradeCard()\ng.add(\"Kor\", 80)\ng.add(\"Math\", 95)\ng.add(\"Eng\", 90)\ntot, top = g.summary()\nprint(f\"{tot}/{top}\")",
+      "templateCode": "class GradeCard:\n    def __init__(self):\n        self.scores = §§§\n    def add(self, sub, pt):\n        self.scores[sub] = pt\n    def summary(self):\n        vals = []\n        for k in self.scores:\n            vals.append(self.scores[k])\n        return §§§§(vals), §§§§(vals)\ng = GradeCard()\ng.add(\"Kor\", 80)\ng.add(\"Math\", 95)\ng.add(\"Eng\", 90)\ntot, top = g.summary()\nprint(f\"{tot}/{top}\")",
       "targetCode": "class GradeCard:\n    def __init__(self):\n        self.scores = {}\n    def add(self, sub, pt):\n        self.scores[sub] = pt\n    def summary(self):\n        vals = []\n        for k in self.scores:\n            vals.append(self.scores[k])\n        return sum(vals), max(vals)\ng = GradeCard()\ng.add(\"Kor\", 80)\ng.add(\"Math\", 95)\ng.add(\"Eng\", 90)\ntot, top = g.summary()\nprint(f\"{tot}/{top}\")",
       "testCases": [
         {
@@ -141,7 +141,7 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "prompt_en": "[Complete Line] Call sc.report() and store its return value in variable res.",
       "hint_ko": "변수 res에 인스턴스 sc의 report 메서드 호출 결과를 대입하세요.",
       "hint_en": "Assign the result of calling sc.report() to variable res.",
-      "templateCode": "class ScoreCard:\n    def __init__(self, name):\n        self.name = name\n        self.pts = []\n    def add(self, p):\n        self.pts.append(p)\n    def report(self):\n        return f\"{self.name}:{sum(self.pts)}\"\nsc = ScoreCard(\"Mia\")\nsc.add(40)\nsc.add(55)\n§§§§§§§§§§§§§§§§§\nprint(res)",
+      "templateCode": "class ScoreCard:\n    def __init__(self, name):\n        self.name = name\n        self.pts = []\n    def add(self, p):\n        self.pts.append(p)\n    def report(self):\n        return f\"{self.name}:{sum(self.pts)}\"\nsc = ScoreCard(\"Mia\")\nsc.add(40)\nsc.add(55)\n§§§§§§§§§§§§§§§§§§\nprint(res)",
       "targetCode": "class ScoreCard:\n    def __init__(self, name):\n        self.name = name\n        self.pts = []\n    def add(self, p):\n        self.pts.append(p)\n    def report(self):\n        return f\"{self.name}:{sum(self.pts)}\"\nsc = ScoreCard(\"Mia\")\nsc.add(40)\nsc.add(55)\nres = sc.report()\nprint(res)",
       "testCases": [
         {
@@ -160,7 +160,7 @@ export const PYTHON_LEVEL_77: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside count(self) that returns the length of self.items.",
       "hint_ko": "반환 키워드와 길이를 구하는 내장 함수를 조합해 self.items의 개수를 돌려주세요.",
       "hint_en": "Return len(self.items) inside the count method.",
-      "templateCode": "class Box:\n    def __init__(self):\n        self.items = []\n    def add(self, x):\n        self.items.append(x)\n    def count(self):\n        §§§§§§§§§§§§§§§§§§§§§§\nb = Box()\nfor w in input().split():\n    b.add(w)\nprint(b.count())",
+      "templateCode": "class Box:\n    def __init__(self):\n        self.items = []\n    def add(self, x):\n        self.items.append(x)\n    def count(self):\n        §§§§§§§§§§§§§§§§§§§§§§§\nb = Box()\nfor w in input().split():\n    b.add(w)\nprint(b.count())",
       "targetCode": "class Box:\n    def __init__(self):\n        self.items = []\n    def add(self, x):\n        self.items.append(x)\n    def count(self):\n        return len(self.items)\nb = Box()\nfor w in input().split():\n    b.add(w)\nprint(b.count())",
       "testCases": [
         {

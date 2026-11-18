@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the parameter name in the function header so 36 is printed.',
       hint_ko: '둘째 줄 print문 안에서 제곱하고 있는 세 글자 변수 이름을 그대로 적으세요.',
       hint_en: 'Use the exact three-letter variable name referenced on line 2.',
-      templateCode: 'def square(§§§):\n    print(num ** 2)\nsquare(6)',
+      templateCode: 'def square(§§§§):\n    print(num ** 2)\nsquare(6)',
       targetCode: 'def square(num):\n    print(num ** 2)\nsquare(6)',
       testCases: [
         {
@@ -97,7 +97,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Fill Blank] Declare the two parameters in div_info so 17 and 5 print 3 2.',
       hint_ko: '함수 본문에서 나눗셈에 쓰이는 두 한 글자 변수를 쉼표와 공백으로 구분해 적으세요.',
       hint_en: 'Write the two single-letter parameter names used in the body separated by a comma and space.',
-      templateCode: 'def div_info(§§§§):\n    print(a // b, a % b)\ndiv_info(17, 5)',
+      templateCode: 'def div_info(§§§§§):\n    print(a // b, a % b)\ndiv_info(17, 5)',
       targetCode: 'def div_info(a, b):\n    print(a // b, a % b)\ndiv_info(17, 5)',
       testCases: [
         {
@@ -134,7 +134,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Fill Blank] Pass input variable s and cutoff 70 into check_cut.',
       hint_ko: '첫 번째 인자로 점수 변수 s를, 두 번째 인자로 기준 점수 70을 쉼표로 구분해 넣으세요.',
       hint_en: 'Write s and 70 separated by a comma and space inside the call parentheses.',
-      templateCode: 'def check_cut(score, cut):\n    if score >= cut:\n        print("Pass")\n    else:\n        print("Fail")\ns = int(input())\ncheck_cut(§§§§§)',
+      templateCode: 'def check_cut(score, cut):\n    if score >= cut:\n        print("Pass")\n    else:\n        print("Fail")\ns = int(input())\ncheck_cut(§§§§§§)',
       targetCode: 'def check_cut(score, cut):\n    if score >= cut:\n        print("Pass")\n    else:\n        print("Fail")\ns = int(input())\ncheck_cut(s, 70)',
       testCases: [
         {
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Fill Blank] Look up parameter key inside dictionary parameter menu in the f-string.',
       hint_ko: '첫 번째 매개변수 이름 뒤 대괄호 안에 두 번째 매개변수 이름을 넣어 조회하세요.',
       hint_en: 'Index dictionary parameter menu with parameter key using square brackets.',
-      templateCode: 'def show_price(menu, key):\n    print(f"{key}:{§§§§§§§§§}")\nitems = {"tea": 3000, "pie": 4500}\nshow_price(items, "pie")',
+      templateCode: 'def show_price(menu, key):\n    print(f"{key}:{§§§§§§§§§§}")\nitems = {"tea": 3000, "pie": 4500}\nshow_price(items, "pie")',
       targetCode: 'def show_price(menu, key):\n    print(f"{key}:{menu[key]}")\nitems = {"tea": 3000, "pie": 4500}\nshow_price(items, "pie")',
       testCases: [
         {
@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Fill Blank] Declare the two parameters and call repeat_tag with "Go" and 3 to print GoGoGo.',
       hint_ko: '본문에서 곱하고 있는 두 매개변수 이름과, 호출부에 전달할 문자열 "Go" 및 숫자 3을 채우세요.',
       hint_en: 'Fill in the two parameter names used on line 2 and pass "Go", 3 in the function call.',
-      templateCode: 'def repeat_tag(§§§, §§§):\n    print(tag * cnt)\nrepeat_tag(§§§§§§§)',
+      templateCode: 'def repeat_tag(§§§§, §§§§):\n    print(tag * cnt)\nrepeat_tag(§§§§§§§§)',
       targetCode: 'def repeat_tag(tag, cnt):\n    print(tag * cnt)\nrepeat_tag("Go", 3)',
       testCases: [
         {
@@ -252,7 +252,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Complete Line] Write the function header for show_sum taking parameters a and b.',
       hint_ko: 'def 키워드 뒤에 함수 이름과 소괄호로 감싼 두 매개변수, 콜론(:)을 적어 완성하세요.',
       hint_en: 'Write def show_sum(a, b): on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§\n    print(a + b)\nshow_sum(15, 25)',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§\n    print(a + b)\nshow_sum(15, 25)',
       targetCode: 'def show_sum(a, b):\n    print(a + b)\nshow_sum(15, 25)',
       testCases: [
         {
@@ -271,7 +271,7 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       prompt_en: '[Complete Line] Call show_stock with arguments inv and "pen" on the last line.',
       hint_ko: '함수 이름 뒤 소괄호 안에 딕셔너리 변수와 문자열 키를 쉼표로 구분해 전달하세요.',
       hint_en: 'Invoke show_stock(inv, "pen") on the final line.',
-      templateCode: 'def show_stock(store, key):\n    print(f"{key}:{store[key]}")\ninv = {"pen": 12, "note": 5}\n§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'def show_stock(store, key):\n    print(f"{key}:{store[key]}")\ninv = {"pen": 12, "note": 5}\n§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'def show_stock(store, key):\n    print(f"{key}:{store[key]}")\ninv = {"pen": 12, "note": 5}\nshow_stock(inv, "pen")',
       testCases: [
         {

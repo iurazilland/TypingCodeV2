@@ -224,6 +224,224 @@ export function tokenizePythonLine(line: string): PythonToken[] {
   return tokens;
 }
 
+interface LineSegment {
+  type: 'fixed' | 'blank';
+  templateText: string;
+  targetText: string;
+  widthCh: number;
+}
+
+interface MappedLineSegment extends LineSegment {
+  userStart: number;
+  userEnd: number;
+  userText: string;
+}
+
+function buildLineSegments(targetLineText: string, answerLineText: string): LineSegment[] {
+  const matches = Array.from(targetLineText.matchAll(/§+/g));
+  if (matches.length === 0) {
+    return [
+      {
+        type: 'fixed',
+        templateText: targetLineText,
+        targetText: targetLineText,
+        widthCh: targetLineText.length,
+      },
+    ];
+  }
+  const fixedParts = targetLineText.split(/§+/);
+  const segments: LineSegment[] = [];
+  let tPos = 0;
+
+  for (let i = 0; i < matches.length; i++) {
+    const fixed = fixedParts[i];
+    if (fixed.length > 0) {
+      segments.push({
+        type: 'fixed',
+        templateText: fixed,
+        targetText: fixed,
+        widthCh: fixed.length,
+      });
+      tPos += fixed.length;
+    }
+
+    const blankStr = matches[i][0];
+    const blankLen = blankStr.length;
+    const expectedAnsLen = Math.max(1, blankLen - 1);
+    const nextFixed = fixedParts[i + 1];
+    let endIdx: number;
+    if (i === matches.length - 1) {
+      endIdx = Math.max(tPos, answerLineText.length - nextFixed.length);
+    } else {
+      if (
+        answerLineText.slice(tPos + expectedAnsLen, tPos + expectedAnsLen + nextFixed.length) ===
+        nextFixed
+      ) {
+        endIdx = tPos + expectedAnsLen;
+      } else {
+        const foundIdx = answerLineText.indexOf(nextFixed, tPos);
+        endIdx =
+          foundIdx !== -1 ? foundIdx : Math.min(answerLineText.length, tPos + expectedAnsLen);
+      }
+    }
+    const targetBlank = answerLineText.slice(tPos, endIdx);
+    segments.push({
+      type: 'blank',
+      templateText: blankStr,
+      targetText: targetBlank,
+      widthCh: blankLen,
+    });
+    tPos = endIdx;
+  }
+
+  const lastFixed = fixedParts[matches.length];
+  if (lastFixed.length > 0) {
+    segments.push({
+      type: 'fixed',
+      templateText: lastFixed,
+      targetText: lastFixed,
+      widthCh: lastFixed.length,
+    });
+  }
+
+  return segments;
+}
+
+function isBalancedExpression(str: string): boolean {
+  let inSingle = false;
+  let inDouble = false;
+  let depth = 0;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (ch === '\\') {
+      i++;
+      continue;
+    }
+    if (ch === "'" && !inDouble) inSingle = !inSingle;
+    else if (ch === '"' && !inSingle) inDouble = !inDouble;
+    else if (!inSingle && !inDouble) {
+      if (ch === '(' || ch === '[' || ch === '{') depth++;
+      else if (ch === ')' || ch === ']' || ch === '}') {
+        depth--;
+        if (depth < 0) return false;
+      }
+    }
+  }
+  return !inSingle && !inDouble && depth === 0;
+}
+
+function mapUserLineToSegments(
+  segments: LineSegment[],
+  userLineText: string
+): MappedLineSegment[] {
+  const result: MappedLineSegment[] = [];
+  let uPos = 0;
+  const norm = (s: string) => s.replace(/\s+/g, '');
+
+  for (let sIdx = 0; sIdx < segments.length; sIdx++) {
+    const seg = segments[sIdx];
+    const isLast = sIdx === segments.length - 1;
+
+    if (seg.type === 'fixed') {
+      const uEnd = isLast
+        ? userLineText.length
+        : Math.min(userLineText.length, uPos + seg.templateText.length);
+      result.push({
+        ...seg,
+        userStart: uPos,
+        userEnd: uEnd,
+        userText: userLineText.slice(uPos, uEnd),
+      });
+      uPos = uEnd;
+    } else {
+      if (isLast) {
+        const uEnd = userLineText.length;
+        result.push({
+          ...seg,
+          userStart: uPos,
+          userEnd: uEnd,
+          userText: userLineText.slice(uPos, uEnd),
+        });
+        uPos = uEnd;
+      } else {
+        const nextFixed = segments[sIdx + 1].templateText;
+        const targetBlank = seg.targetText;
+        const targetNormLen = norm(targetBlank).length;
+        const targetBalanced = isBalancedExpression(targetBlank);
+
+        let splitIdx = userLineText.length;
+        for (let idx = uPos + 1; idx < userLineText.length; idx++) {
+          const candidate = userLineText.slice(uPos, idx);
+          if (targetBalanced && !isBalancedExpression(candidate)) {
+            continue;
+          }
+          const candNormLen = norm(candidate).length;
+          const nextChar = userLineText[idx];
+
+          if (nextChar !== nextFixed[0]) {
+            continue;
+          }
+
+          if (candNormLen >= targetNormLen || candidate.length >= targetBlank.length) {
+            splitIdx = idx;
+            break;
+          }
+
+          if (
+            (nextChar === ')' || nextChar === ']' || nextChar === '}' || nextChar === ':') &&
+            !targetBlank.includes(nextChar)
+          ) {
+            splitIdx = idx;
+            break;
+          }
+        }
+
+        result.push({
+          ...seg,
+          userStart: uPos,
+          userEnd: splitIdx,
+          userText: userLineText.slice(uPos, splitIdx),
+        });
+        uPos = splitIdx;
+      }
+    }
+  }
+
+  return result;
+}
+
+function getCursorOwner(
+  mappedSegments: MappedLineSegment[],
+  cursorCol: number
+): { segIdx: number; offsetInSeg: number } {
+  for (let i = 0; i < mappedSegments.length; i++) {
+    const seg = mappedSegments[i];
+    if (seg.type === 'blank') {
+      if (cursorCol >= seg.userStart && cursorCol <= seg.userEnd) {
+        return { segIdx: i, offsetInSeg: cursorCol - seg.userStart };
+      }
+    } else {
+      const minCol =
+        i > 0 && mappedSegments[i - 1].type === 'blank' ? seg.userStart + 1 : seg.userStart;
+      const isIncomplete = seg.userText.length < seg.templateText.length;
+      const ownsEnd =
+        isIncomplete || i === mappedSegments.length - 1 || mappedSegments[i + 1].type !== 'blank';
+      const maxCol = ownsEnd ? seg.userEnd : seg.userEnd - 1;
+      if (cursorCol >= minCol && cursorCol <= maxCol) {
+        return { segIdx: i, offsetInSeg: cursorCol - seg.userStart };
+      }
+      if (isIncomplete) {
+        return {
+          segIdx: i,
+          offsetInSeg: Math.max(0, Math.min(cursorCol - seg.userStart, seg.userText.length)),
+        };
+      }
+    }
+  }
+  const lastIdx = mappedSegments.length - 1;
+  return { segIdx: lastIdx, offsetInSeg: mappedSegments[lastIdx].userText.length };
+}
+
 export default function TypingStage({
   question,
   onCodeChange,
@@ -398,26 +616,70 @@ export default function TypingStage({
     return idx + safeCol;
   };
 
-  // Next expected character for virtual keyboard (based on templateCode first, hiding '§' blank symbol)
-  const nextChar = useMemo(() => {
-    if (question.kind === 'fix_bug') return '';
-    const keyboardGuide = templateCode || targetCode;
-    if (cursorIndex < keyboardGuide.length) {
-      const ch = keyboardGuide[cursorIndex];
-      if (ch === '§') return '';
-      if (ch === '\n') return 'Enter';
-      if (ch === ' ') return 'Space';
-      return ch;
-    }
-    return '';
-  }, [cursorIndex, templateCode, targetCode, question.kind]);
-
   // Split guideCode and typedCode into lines for 2-layer rendering (supporting free multi-line typing)
   const targetLines = useMemo(() => guideCode.split('\n'), [guideCode]);
   const targetCodeLines = useMemo(() => targetCode.split('\n'), [targetCode]);
   const userLines = useMemo(() => typedCode.split('\n'), [typedCode]);
   const maxLineCount = Math.max(targetLines.length, userLines.length);
   const lineIndices = useMemo(() => Array.from({ length: maxLineCount }, (_, i) => i), [maxLineCount]);
+
+  // Next expected character for virtual keyboard (segment-aware for § blank boxes)
+  const nextChar = useMemo(() => {
+    if (question.kind === 'fix_bug') return '';
+    const lineTpl = targetLines[cursorLine];
+    if (lineTpl === undefined) return '';
+    const lineAns = targetCodeLines[cursorLine] || '';
+    const lineUsr = userLines[cursorLine] || '';
+
+    const toKeyLabel = (ch: string) => {
+      if (!ch || ch === '§') return '';
+      if (ch === '\n') return 'Enter';
+      if (ch === ' ') return 'Space';
+      return ch;
+    };
+
+    if (!lineTpl.includes('§')) {
+      if (cursorCol < lineTpl.length) {
+        return toKeyLabel(lineTpl[cursorCol]);
+      }
+      if (cursorLine < targetLines.length - 1) {
+        return 'Enter';
+      }
+      return '';
+    }
+
+    const segs = buildLineSegments(lineTpl, lineAns);
+    const mapped = mapUserLineToSegments(segs, lineUsr);
+    const owner = getCursorOwner(mapped, cursorCol);
+    const ownerSeg = mapped[owner.segIdx];
+    if (!ownerSeg) return '';
+
+    if (ownerSeg.type === 'blank') {
+      const usrNormLen = ownerSeg.userText.replace(/\s+/g, '').length;
+      const tgtNormLen = ownerSeg.targetText.replace(/\s+/g, '').length;
+      if (
+        owner.offsetInSeg === ownerSeg.userText.length &&
+        (usrNormLen >= tgtNormLen || ownerSeg.userText.length >= ownerSeg.targetText.length) &&
+        ownerSeg.userText.length > 0
+      ) {
+        if (owner.segIdx < mapped.length - 1) {
+          return toKeyLabel(mapped[owner.segIdx + 1].templateText[0] || '');
+        }
+        if (cursorLine < targetLines.length - 1) {
+          return 'Enter';
+        }
+      }
+      return '';
+    }
+
+    if (owner.offsetInSeg < ownerSeg.templateText.length) {
+      return toKeyLabel(ownerSeg.templateText[owner.offsetInSeg]);
+    }
+    if (owner.segIdx === mapped.length - 1 && cursorLine < targetLines.length - 1) {
+      return 'Enter';
+    }
+    return '';
+  }, [cursorLine, cursorCol, targetLines, targetCodeLines, userLines, question.kind]);
 
   const activeLineRef = useRef<HTMLDivElement>(null);
 
@@ -601,7 +863,7 @@ export default function TypingStage({
   };
 
   // Helper: Renders the background guide line, transforming contiguous § into sleek [] bracket boxes
-  const renderGuideLine = (lineText: string) => {
+  const renderGuideLine = (lineText: string, hideBlankVisual = false) => {
     if (!lineText) return ' ';
 
     // Match contiguous blank markers: §§...
@@ -614,23 +876,34 @@ export default function TypingStage({
 
       while ((match = blankSectionRegex.exec(lineText)) !== null) {
         if (match.index > lastIndex) {
-          parts.push(lineText.slice(lastIndex, match.index));
+          const fixedPart = lineText.slice(lastIndex, match.index);
+          parts.push(
+            <span
+              key={`fix-${lastIndex}`}
+              style={{
+                display: 'inline-block',
+                width: `${fixedPart.length}ch`,
+              }}
+            >
+              {fixedPart}
+            </span>
+          );
         }
         const blankLen = match[0].length;
         parts.push(
           <span
-            key={match.index}
+            key={`blank-${match.index}`}
             style={{
               display: 'inline-block',
               width: `${blankLen}ch`,
               height: '1.3em',
               margin: 0,
               padding: 0,
-              border: '1.5px solid rgba(56, 189, 248, 0.75)',
-              borderLeft: '2px solid #38bdf8', // [ bracket side
-              borderRight: '2px solid #38bdf8', // ] bracket side
-              background: 'rgba(56, 189, 248, 0.1)',
-              boxShadow: 'inset 0 0 4px rgba(56, 189, 248, 0.15)',
+              border: hideBlankVisual ? 'none' : '1.5px solid rgba(56, 189, 248, 0.75)',
+              borderLeft: hideBlankVisual ? 'none' : '2px solid #38bdf8', // [ bracket side
+              borderRight: hideBlankVisual ? 'none' : '2px solid #38bdf8', // ] bracket side
+              background: hideBlankVisual ? 'transparent' : 'rgba(56, 189, 248, 0.1)',
+              boxShadow: hideBlankVisual ? 'none' : 'inset 0 0 4px rgba(56, 189, 248, 0.15)',
               borderRadius: '3px',
               verticalAlign: 'middle',
               boxSizing: 'border-box',
@@ -642,7 +915,18 @@ export default function TypingStage({
       }
 
       if (lastIndex < lineText.length) {
-        parts.push(lineText.slice(lastIndex));
+        const tailPart = lineText.slice(lastIndex);
+        parts.push(
+          <span
+            key={`fix-${lastIndex}`}
+            style={{
+              display: 'inline-block',
+              width: `${tailPart.length}ch`,
+            }}
+          >
+            {tailPart}
+          </span>
+        );
       }
 
       return <>{parts}</>;
@@ -910,7 +1194,7 @@ export default function TypingStage({
                       alignItems: 'center',
                     }}
                   >
-                    {renderGuideLine(targetLineText)}
+                    {renderGuideLine(targetLineText, userLineText !== null)}
                   </div>
 
                   {/* ==========================================================
@@ -923,10 +1207,185 @@ export default function TypingStage({
                       (t) => userLineText.length >= t.end
                     );
 
-                    const isLineAllBlank = targetLineText.length > 0 && targetLineText.split('').every((c) => c === '§' || c === ' ');
                     const blankStartIdx = targetLineText.indexOf('§');
-                    const blankLastIdx = targetLineText.lastIndexOf('§');
                     const hasBlankInLine = blankStartIdx !== -1;
+
+                    const caretElement = (
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: '2px',
+                          height: '1.25em',
+                          background: '#ffffff',
+                          boxShadow: '0 0 6px rgba(255, 255, 255, 0.9), 0 0 1px #ffffff',
+                          animation: 'ideCursorBlink 1s step-end infinite',
+                          verticalAlign: 'middle',
+                          margin: '0 -1px',
+                          position: 'relative',
+                          zIndex: 10,
+                        }}
+                      />
+                    );
+
+                    if (hasBlankInLine) {
+                      const lineSegments = buildLineSegments(
+                        targetLineText,
+                        targetCodeLines[lineIdx] || ''
+                      );
+                      const mappedSegments = mapUserLineToSegments(lineSegments, userLineText);
+                      const cursorOwner = getCursorOwner(mappedSegments, cursorCol);
+                      const lastSeg = mappedSegments[mappedSegments.length - 1];
+                      const isLineReadyForNewline = lastSeg
+                        ? lastSeg.type === 'fixed'
+                          ? lastSeg.userText.length >= lastSeg.templateText.length
+                          : lastSeg.userText.length > 0 &&
+                            (lastSeg.userText.replace(/\s+/g, '').length >=
+                              lastSeg.targetText.replace(/\s+/g, '').length ||
+                              lastSeg.userText.length >= lastSeg.targetText.length)
+                        : false;
+
+                      return (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: '20px',
+                            bottom: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            whiteSpace: 'pre',
+                            fontFamily: 'inherit',
+                            fontSize: 'inherit',
+                            lineHeight: 'inherit',
+                            letterSpacing: 'inherit',
+                            userSelect: 'none',
+                          }}
+                        >
+                          {mappedSegments.map((seg, sIdx) => {
+                            const isOwnerSeg = isCursorOnThisLine && cursorOwner.segIdx === sIdx;
+                            const isBlankSeg = seg.type === 'blank';
+
+                            return (
+                              <span
+                                key={sIdx}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: isBlankSeg ? 'center' : 'flex-start',
+                                  width:
+                                    sIdx === mappedSegments.length - 1 &&
+                                    seg.userText.length > seg.widthCh
+                                      ? `${seg.userText.length}ch`
+                                      : `${seg.widthCh}ch`,
+                                  minWidth: `${seg.widthCh}ch`,
+                                  height: isBlankSeg ? '1.3em' : undefined,
+                                  borderTop: isBlankSeg
+                                    ? '1.5px solid rgba(56, 189, 248, 0.75)'
+                                    : undefined,
+                                  borderBottom: isBlankSeg
+                                    ? '1.5px solid rgba(56, 189, 248, 0.75)'
+                                    : undefined,
+                                  borderLeft: isBlankSeg ? '2px solid #38bdf8' : undefined,
+                                  borderRight: isBlankSeg ? '2px solid #38bdf8' : undefined,
+                                  background: isBlankSeg ? 'rgba(56, 189, 248, 0.1)' : undefined,
+                                  boxShadow: isBlankSeg
+                                    ? 'inset 0 0 4px rgba(56, 189, 248, 0.15)'
+                                    : undefined,
+                                  borderRadius: isBlankSeg ? '3px' : undefined,
+                                  boxSizing: 'border-box',
+                                  position: 'relative',
+                                  zIndex: isBlankSeg ? 5 : 1,
+                                }}
+                              >
+                                {seg.userText.split('').map((userChar, localIdx) => {
+                                  const colIdx = seg.userStart + localIdx;
+                                  const isCursorHere =
+                                    isOwnerSeg && cursorOwner.offsetInSeg === localIdx;
+
+                                  const token = completedTokens.find(
+                                    (t) => colIdx >= t.start && colIdx < t.end
+                                  );
+                                  const syntaxColor = token
+                                    ? VSCODE_DARK_PLUS[token.type] || VSCODE_DARK_PLUS.default
+                                    : VSCODE_DARK_PLUS.default;
+
+                                  let isCharError = false;
+                                  if (!isBlankSeg && question.kind !== 'fix_bug') {
+                                    const expectedChar = seg.templateText[localIdx];
+                                    if (!expectedChar || userChar !== expectedChar) {
+                                      isCharError = true;
+                                    }
+                                  }
+
+                                  return (
+                                    <React.Fragment key={colIdx}>
+                                      {isCursorHere && caretElement}
+                                      <span
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setCursorIndex(getIndexFromLineAndCol(lineIdx, colIdx));
+                                          hiddenInputRef.current?.focus();
+                                        }}
+                                        style={{
+                                          display: 'inline-block',
+                                          color: isCharError
+                                            ? VSCODE_DARK_PLUS.error
+                                            : syntaxColor,
+                                          background:
+                                            isBlankSeg || isAnyLineExecuting
+                                              ? 'transparent'
+                                              : '#1b263b',
+                                          filter: isThisLineExecuting
+                                            ? 'brightness(1.35) saturate(1.25)'
+                                            : 'none',
+                                          textShadow: isThisLineExecuting
+                                            ? '0 0 10px rgba(56, 189, 248, 0.7), 0 0 2px rgba(255, 255, 255, 0.4)'
+                                            : 'none',
+                                          fontWeight: isThisLineExecuting
+                                            ? 700
+                                            : token &&
+                                                (token.type === 'keyword' ||
+                                                  token.type === 'builtin')
+                                              ? 700
+                                              : 500,
+                                          borderRadius: '2px',
+                                          boxShadow: 'none',
+                                          cursor: 'text',
+                                        }}
+                                      >
+                                        {userChar}
+                                      </span>
+                                    </React.Fragment>
+                                  );
+                                })}
+
+                                {/* 세그먼트 끝 커서 (빈칸 중앙 또는 세그먼트 우측 끝) */}
+                                {isOwnerSeg &&
+                                  cursorOwner.offsetInSeg >= seg.userText.length &&
+                                  caretElement}
+                              </span>
+                            );
+                          })}
+
+                          {/* 멀티라인 줄 끝 도달 시 줄바꿈(↵) 가이드 아이콘 */}
+                          {isCursorOnThisLine &&
+                            lineIdx < targetLines.length - 1 &&
+                            isLineReadyForNewline && (
+                              <span
+                                style={{
+                                  color: 'rgba(56, 189, 248, 0.75)',
+                                  fontSize: '0.85em',
+                                  marginLeft: '4px',
+                                  userSelect: 'none',
+                                  fontWeight: 700,
+                                }}
+                              >
+                                ↵
+                              </span>
+                            )}
+                        </div>
+                      );
+                    }
 
                     return (
                       <div
@@ -956,35 +1415,7 @@ export default function TypingStage({
                             : VSCODE_DARK_PLUS.default;
 
                           let isCharError = false;
-
-                          if (question.kind === 'fix_bug' || isLineAllBlank) {
-                            // 틀린 곳 수정(fix_bug) 문제 및 전체 빈칸 줄에서는 어느 곳에서도 오타(빨간색) 표시를 하지 않음
-                            isCharError = false;
-                          } else if (hasBlankInLine) {
-                            // 줄 내부에 빈칸 슬롯(print(§§))이 있는 경우
-                            if (colIdx >= blankStartIdx && colIdx <= blankLastIdx) {
-                              // 빈칸 내부: 사용자가 무엇을 적든 오타 처리하지 않음
-                              isCharError = false;
-                            } else {
-                              // 빈칸 외부: targetCode(정답) 또는 templateCode(가이드)와 일치하면 정상
-                              const targetChar = (targetCodeLines[lineIdx] || '')[colIdx];
-                              const templateChar = targetLineText[colIdx];
-                              if (userChar === targetChar || userChar === templateChar) {
-                                isCharError = false;
-                              } else {
-                                // 빈칸 길이가 달라 suffix 위치가 가변적인 경우 보정
-                                const suffix = targetLineText.slice(blankLastIdx + 1);
-                                const suffixStartInUser = userLineText.length - suffix.length;
-                                const suffixOffset = colIdx - suffixStartInUser;
-                                if (suffixOffset >= 0 && suffixOffset < suffix.length && userChar === suffix[suffixOffset]) {
-                                  isCharError = false;
-                                } else {
-                                  isCharError = true;
-                                }
-                              }
-                            }
-                          } else {
-                            // 일반 고정 코드: 표시된 글자와 다르면 오타 처리
+                          if (question.kind !== 'fix_bug') {
                             const targetChar = targetLineText[colIdx];
                             if (targetChar && userChar !== targetChar) {
                               isCharError = true;
@@ -993,23 +1424,7 @@ export default function TypingStage({
 
                           return (
                             <React.Fragment key={colIdx}>
-                              {/* 커서 바 (Blinking Caret): 현재 컬럼 위치에 표시 */}
-                              {isCursorHere && (
-                                <span
-                                  style={{
-                                    display: 'inline-block',
-                                    width: '2px',
-                                    height: '1.25em',
-                                    background: '#ffffff',
-                                    boxShadow: '0 0 6px rgba(255, 255, 255, 0.9), 0 0 1px #ffffff',
-                                    animation: 'ideCursorBlink 1s step-end infinite',
-                                    verticalAlign: 'middle',
-                                    margin: '0 -1px',
-                                    position: 'relative',
-                                    zIndex: 10,
-                                  }}
-                                />
-                              )}
+                              {isCursorHere && caretElement}
                               <span
                                 onClick={(e) => {
                                   e.stopPropagation();

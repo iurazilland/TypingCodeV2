@@ -62,7 +62,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the list method name inside put() to add an item to the end of self.cart.",
       "hint_ko": "리스트 속성도 일반 리스트와 동일하게 맨 뒤에 원소를 덧붙이는 여섯 글자 메서드를 사용합니다.",
       "hint_en": "Use the six-letter list method that attaches a new element to the end of a list.",
-      "templateCode": "class Cart:\n    def __init__(self):\n        self.cart = []\n    def put(self, item):\n        self.cart.§§§§§§(item)\nc = Cart()\nc.put(\"Milk\")\nc.put(\"Bread\")\nprint(len(c.cart), c.cart[0])",
+      "templateCode": "class Cart:\n    def __init__(self):\n        self.cart = []\n    def put(self, item):\n        self.cart.§§§§§§§(item)\nc = Cart()\nc.put(\"Milk\")\nc.put(\"Bread\")\nprint(len(c.cart), c.cart[0])",
       "targetCode": "class Cart:\n    def __init__(self):\n        self.cart = []\n    def put(self, item):\n        self.cart.append(item)\nc = Cart()\nc.put(\"Milk\")\nc.put(\"Bread\")\nprint(len(c.cart), c.cart[0])",
       "testCases": [
         {
@@ -99,7 +99,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the built-in function name in highest() to return the maximum value in self.temps.",
       "hint_ko": "숫자 리스트에서 가장 큰 최댓값을 구하는 세 글자 내장 함수를 호출하세요.",
       "hint_en": "Call the three-letter built-in function that returns the largest item in a list.",
-      "templateCode": "class Tracker:\n    def __init__(self):\n        self.temps = []\n    def record(self, t):\n        self.temps.append(t)\n    def highest(self):\n        return §§§(self.temps)\ntr = Tracker()\ntr.record(18)\ntr.record(27)\ntr.record(23)\nprint(tr.highest())",
+      "templateCode": "class Tracker:\n    def __init__(self):\n        self.temps = []\n    def record(self, t):\n        self.temps.append(t)\n    def highest(self):\n        return §§§§(self.temps)\ntr = Tracker()\ntr.record(18)\ntr.record(27)\ntr.record(23)\nprint(tr.highest())",
       "targetCode": "class Tracker:\n    def __init__(self):\n        self.temps = []\n    def record(self, t):\n        self.temps.append(t)\n    def highest(self):\n        return max(self.temps)\ntr = Tracker()\ntr.record(18)\ntr.record(27)\ntr.record(23)\nprint(tr.highest())",
       "testCases": [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the for loop target inside long_words() to iterate over the instance's words list.",
       "hint_ko": "메서드 안에서 현재 객체 자신의 단어 리스트 속성을 가리키도록 참조 변수와 점을 함께 적으세요.",
       "hint_en": "Iterate over the words list attribute attached to self.",
-      "templateCode": "class WordBook:\n    def __init__(self, words):\n        self.words = words\n    def long_words(self):\n        res = []\n        for w in §§§§§§§§§§:\n            if len(w) >= 4:\n                res.append(w)\n        return res\nwb = WordBook([\"py\", \"code\", \"ai\", \"data\"])\nprint(wb.long_words())",
+      "templateCode": "class WordBook:\n    def __init__(self, words):\n        self.words = words\n    def long_words(self):\n        res = []\n        for w in §§§§§§§§§§§:\n            if len(w) >= 4:\n                res.append(w)\n        return res\nwb = WordBook([\"py\", \"code\", \"ai\", \"data\"])\nprint(wb.long_words())",
       "targetCode": "class WordBook:\n    def __init__(self, words):\n        self.words = words\n    def long_words(self):\n        res = []\n        for w in self.words:\n            if len(w) >= 4:\n                res.append(w)\n        return res\nwb = WordBook([\"py\", \"code\", \"ai\", \"data\"])\nprint(wb.long_words())",
       "testCases": [
         {
@@ -173,7 +173,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Fill Blank] Initialize self.grades as an empty dictionary inside the Report __init__ method.",
       "hint_ko": "비어 있는 딕셔너리를 뜻하는 중괄호 한 쌍을 대입 연산자 오른쪽에 적으세요.",
       "hint_en": "Use a pair of empty curly braces to create an empty dictionary.",
-      "templateCode": "class Report:\n    def __init__(self):\n        self.grades = §§\n    def save(self, sub, pt):\n        self.grades[sub] = pt\nr = Report()\nr.save(\"Math\", 90)\nr.save(\"Eng\", 85)\nprint(r.grades[\"Math\"], len(r.grades))",
+      "templateCode": "class Report:\n    def __init__(self):\n        self.grades = §§§\n    def save(self, sub, pt):\n        self.grades[sub] = pt\nr = Report()\nr.save(\"Math\", 90)\nr.save(\"Eng\", 85)\nprint(r.grades[\"Math\"], len(r.grades))",
       "targetCode": "class Report:\n    def __init__(self):\n        self.grades = {}\n    def save(self, sub, pt):\n        self.grades[sub] = pt\nr = Report()\nr.save(\"Math\", 90)\nr.save(\"Eng\", 85)\nprint(r.grades[\"Math\"], len(r.grades))",
       "testCases": [
         {
@@ -192,7 +192,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Fill Blank] Initialize the empty list attribute, add positive numbers to it, and send back their total.",
       "hint_ko": "빈 리스트 기호와 리스트 끝에 추가하는 메서드, 그리고 리스트 전체 합계를 구하는 내장 함수를 차례로 확인하세요.",
       "hint_en": "Check the empty list literal, the list method for adding an element, and the built-in total function.",
-      "templateCode": "class Ledger:\n    def __init__(self):\n        self.logs = §§\n    def add_pos(self, val):\n        if val > 0:\n            self.logs.§§§§§§(val)\n    def total(self):\n        return §§§(self.logs)\nlg = Ledger()\nfor n in [20, -5, 30, 0, 15]:\n    lg.add_pos(n)\nprint(lg.total(), len(lg.logs))",
+      "templateCode": "class Ledger:\n    def __init__(self):\n        self.logs = §§§\n    def add_pos(self, val):\n        if val > 0:\n            self.logs.§§§§§§§(val)\n    def total(self):\n        return §§§§(self.logs)\nlg = Ledger()\nfor n in [20, -5, 30, 0, 15]:\n    lg.add_pos(n)\nprint(lg.total(), len(lg.logs))",
       "targetCode": "class Ledger:\n    def __init__(self):\n        self.logs = []\n    def add_pos(self, val):\n        if val > 0:\n            self.logs.append(val)\n    def total(self):\n        return sum(self.logs)\nlg = Ledger()\nfor n in [20, -5, 30, 0, 15]:\n    lg.add_pos(n)\nprint(lg.total(), len(lg.logs))",
       "testCases": [
         {
@@ -249,7 +249,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside pop_last(self) that removes and returns the last item of self.tasks.",
       "hint_ko": "반환 키워드 뒤에 인스턴스 리스트 속성의 pop() 메서드 호출식을 적으세요.",
       "hint_en": "Return the result of calling .pop() on self.tasks.",
-      "templateCode": "class QueueBox:\n    def __init__(self, tasks):\n        self.tasks = tasks\n    def pop_last(self):\n        §§§§§§§§§§§§§§§§§§§§§§§\nq = QueueBox([\"A\", \"B\", \"C\"])\nprint(q.pop_last(), len(q.tasks))",
+      "templateCode": "class QueueBox:\n    def __init__(self, tasks):\n        self.tasks = tasks\n    def pop_last(self):\n        §§§§§§§§§§§§§§§§§§§§§§§§\nq = QueueBox([\"A\", \"B\", \"C\"])\nprint(q.pop_last(), len(q.tasks))",
       "targetCode": "class QueueBox:\n    def __init__(self, tasks):\n        self.tasks = tasks\n    def pop_last(self):\n        return self.tasks.pop()\nq = QueueBox([\"A\", \"B\", \"C\"])\nprint(q.pop_last(), len(q.tasks))",
       "testCases": [
         {
@@ -268,7 +268,7 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside __init__ that initializes self.prices as an empty dictionary.",
       "hint_ko": "들여쓰기 위치에 맞춰 자기 자신의 prices 속성에 빈 중괄호를 대입하세요.",
       "hint_en": "Assign an empty dictionary {} to self.prices.",
-      "templateCode": "class Menu:\n    def __init__(self):\n        §§§§§§§§§§§§§§§§\n    def register(self, name, cost):\n        self.prices[name] = cost\nm = Menu()\nm.register(\"Tea\", 3000)\nprint(m.prices[\"Tea\"])",
+      "templateCode": "class Menu:\n    def __init__(self):\n        §§§§§§§§§§§§§§§§§\n    def register(self, name, cost):\n        self.prices[name] = cost\nm = Menu()\nm.register(\"Tea\", 3000)\nprint(m.prices[\"Tea\"])",
       "targetCode": "class Menu:\n    def __init__(self):\n        self.prices = {}\n    def register(self, name, cost):\n        self.prices[name] = cost\nm = Menu()\nm.register(\"Tea\", 3000)\nprint(m.prices[\"Tea\"])",
       "testCases": [
         {

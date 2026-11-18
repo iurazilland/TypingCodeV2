@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "구분자 문자열 뒤에서 리스트 요소들을 하나로 이어 붙이는 네 글자 메서드를 호출하세요.",
       "hint_en": "Call the 4-letter method on the separator string to combine the list elements.",
       "targetCode": "tags = [\"py\", \"web\", \"ai\"]\nprint(\"/\".join(tags))",
-      "templateCode": "tags = [\"py\", \"web\", \"ai\"]\nprint(\"/\".§§§§(tags))",
+      "templateCode": "tags = [\"py\", \"web\", \"ai\"]\nprint(\"/\".§§§§§(tags))",
       "testCases": [
         {
           "id": 1,
@@ -102,7 +102,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "사이에 아무것도 넣지 않으려면 따옴표 두 개만 있는 빈 문자열 리터럴을 구분자로 적으세요.",
       "hint_en": "Use an empty string literal of two quotes as the separator to concatenate without spaces.",
       "targetCode": "chars = [\"C\", \"O\", \"D\", \"E\"]\nprint(\"\".join(chars))",
-      "templateCode": "chars = [\"C\", \"O\", \"D\", \"E\"]\nprint(§§.join(chars))",
+      "templateCode": "chars = [\"C\", \"O\", \"D\", \"E\"]\nprint(§§§.join(chars))",
       "testCases": [
         {
           "id": 1,
@@ -144,7 +144,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "쉼표 기준 분리 후 공백 구분자 문자열 뒤에서 네 글자 결합 메서드를 호출하세요.",
       "hint_en": "After splitting by comma, call the 4-letter joining method on the single-space string.",
       "targetCode": "items = input().split(\",\")\nprint(\" \".join(items))",
-      "templateCode": "items = input().split(\",\")\nprint(\" \".§§§§(items))",
+      "templateCode": "items = input().split(\",\")\nprint(\" \".§§§§§(items))",
       "testCases": [
         {
           "id": 1,
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "정수를 문자열로 바꾸는 세 글자 내장 형변환 함수를 컴프리헨션 식에 적으세요.",
       "hint_en": "Write the 3-letter built-in function that converts an integer into a string.",
       "targetCode": "nums = [1, 2, 3, 4]\nprint(\"-\".join([str(n) for n in nums]))",
-      "templateCode": "nums = [1, 2, 3, 4]\nprint(\"-\".join([§§§(n) for n in nums]))",
+      "templateCode": "nums = [1, 2, 3, 4]\nprint(\"-\".join([§§§§(n) for n in nums]))",
       "testCases": [
         {
           "id": 1,
@@ -205,7 +205,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "공백 분리 메서드, 사본 정렬 내장 함수, 문자열 결합 메서드를 순서대로 채워보세요.",
       "hint_en": "Fill in the splitting method, the copy-sorting built-in function, and the string joining method.",
       "targetCode": "raw = input().split()\nclean = sorted([w.lower() for w in raw])\nprint(\"_\".join(clean))",
-      "templateCode": "raw = input().§§§§§()\nclean = §§§§§§([w.lower() for w in raw])\nprint(\"_\".§§§§(clean))",
+      "templateCode": "raw = input().§§§§§§()\nclean = §§§§§§§([w.lower() for w in raw])\nprint(\"_\".§§§§§(clean))",
       "testCases": [
         {
           "id": 1,
@@ -272,7 +272,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "sentence = \" \".join(words) 형태로 공백 구분자로 결합한 결과를 저장하세요.",
       "hint_en": "Write sentence = \" \".join(words) to combine the words with a single space.",
       "targetCode": "words = input().split(\",\")\nsentence = \" \".join(words)\nprint(sentence)",
-      "templateCode": "words = input().split(\",\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sentence)",
+      "templateCode": "words = input().split(\",\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sentence)",
       "testCases": [
         {
           "id": 1,
@@ -296,7 +296,7 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "hint_ko": "print(\",\".join([str(x) for x in nums])) 형태로 컴프리헨션과 결합 메서드를 한 줄로 작성하세요.",
       "hint_en": "Write print(\",\".join([str(x) for x in nums])) on the masked line.",
       "targetCode": "nums = [10, 20, 30]\nprint(\",\".join([str(x) for x in nums]))",
-      "templateCode": "nums = [10, 20, 30]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "templateCode": "nums = [10, 20, 30]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "testCases": [
         {
           "id": 1,

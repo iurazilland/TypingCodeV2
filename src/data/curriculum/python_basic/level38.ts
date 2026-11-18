@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the skip keyword so 2 is omitted from the output.',
       hint_ko: '영어로 계속하다·이어가다를 뜻하는 여덟 글자 제어 키워드를 입력합니다.',
       hint_en: 'Enter the eight-letter keyword meaning "keep going" to jump to the next iteration.',
-      templateCode: 'for i in range(1, 5):\n    if i == 2:\n        §§§§§§§§\n    print(i, end=" ")',
+      templateCode: 'for i in range(1, 5):\n    if i == 2:\n        §§§§§§§§§\n    print(i, end=" ")',
       targetCode: 'for i in range(1, 5):\n    if i == 2:\n        continue\n    print(i, end=" ")',
       testCases: [
         {
@@ -82,7 +82,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the skip keyword to exclude multiples of 3 from total.',
       hint_ko: '3의 배수일 때 아래 덧셈 줄을 건너뛰도록 여덟 글자 키워드를 넣습니다.',
       hint_en: 'Use the eight-letter continue keyword to skip adding multiples of 3.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§\n    total += i\nprint(total)',
+      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§§\n    total += i\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        continue\n    total += i\nprint(total)',
       testCases: [
         {
@@ -129,7 +129,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the skip keyword so "skip" lines do not add to total.',
       hint_ko: '"skip"일 때 아래쪽 덧셈을 실행하지 않고 다음 입력을 받으러 올라가는 여덟 글자 키워드입니다.',
       hint_en: 'Use the eight-letter keyword to jump straight to the next iteration.',
-      templateCode: 'total = 0\nwhile True:\n    cmd, val = input().split()\n    if cmd == "end":\n        break\n    if cmd == "skip":\n        §§§§§§§§\n    total += int(val)\nprint(total)',
+      templateCode: 'total = 0\nwhile True:\n    cmd, val = input().split()\n    if cmd == "end":\n        break\n    if cmd == "skip":\n        §§§§§§§§§\n    total += int(val)\nprint(total)',
       targetCode: 'total = 0\nwhile True:\n    cmd, val = input().split()\n    if cmd == "end":\n        break\n    if cmd == "skip":\n        continue\n    total += int(val)\nprint(total)',
       testCases: [
         {
@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound addition operator above the continue check so the while loop progresses.',
       hint_ko: 'continue를 만나더라도 숫자가 먼저 1 커지도록 덧셈 복합 대입 기호를 넣습니다.',
       hint_en: 'Use the plus-equals operator to increment i at the start of each turn.',
-      templateCode: 'i = 0\nwhile i < 4:\n    i §§ 1\n    if i == 2:\n        continue\n    print(i, end=" ")',
+      templateCode: 'i = 0\nwhile i < 4:\n    i §§§ 1\n    if i == 2:\n        continue\n    print(i, end=" ")',
       targetCode: 'i = 0\nwhile i < 4:\n    i += 1\n    if i == 2:\n        continue\n    print(i, end=" ")',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to skip odd numbers, add even numbers to s, and exit when s >= 12.',
       hint_ko: '이번 차례 건너뛰기 키워드, 누적 덧셈 연산자, 그리고 루프 완전 종료 키워드를 순서대로 채웁니다.',
       hint_en: 'Enter continue, plus-equals (+=), and break in order.',
-      templateCode: 's = 0\nfor i in range(1, 11):\n    if i % 2 == 1:\n        §§§§§§§§\n    s §§ i\n    if s >= 12:\n        §§§§§\nprint(s)',
+      templateCode: 's = 0\nfor i in range(1, 11):\n    if i % 2 == 1:\n        §§§§§§§§§\n    s §§§ i\n    if s >= 12:\n        §§§§§§\nprint(s)',
       targetCode: 's = 0\nfor i in range(1, 11):\n    if i % 2 == 1:\n        continue\n    s += i\n    if s >= 12:\n        break\nprint(s)',
       testCases: [
         {
@@ -252,7 +252,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Complete Line] Write the 8-space indented continue statement inside if i % 3 == 0:.',
       hint_ko: '8칸 들여쓰기 뒤에 여덟 글자 건너뛰기 키워드를 작성해보세요.',
       hint_en: 'Keep the 8-space indentation and write continue.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§\n    total += i\nprint(total)',
+      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§§\n    total += i\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        continue\n    total += i\nprint(total)',
       testCases: [
         {
@@ -276,7 +276,7 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       prompt_en: '[Complete Line] Write the 8-space indented continue statement when w == "pass".',
       hint_ko: '8칸 들여쓰기 뒤에 continue를 작성해 아래쪽 print(w)를 건너뛰어보세요.',
       hint_en: 'Keep the 8-space indentation and write continue.',
-      templateCode: 'for i in range(3):\n    w = input()\n    if w == "pass":\n        §§§§§§§§\n    print(w)',
+      templateCode: 'for i in range(3):\n    w = input()\n    if w == "pass":\n        §§§§§§§§§\n    print(w)',
       targetCode: 'for i in range(3):\n    w = input()\n    if w == "pass":\n        continue\n    print(w)',
       testCases: [
         {

@@ -66,7 +66,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "'절댓값(absolute)'의 앞 세 글자를 딴 내장 함수로 뺄셈 식을 감싸세요.",
       "hint_en": "Wrap the subtraction in the 3-letter built-in function abbreviated from 'absolute'.",
       "targetCode": "a, b = 12, 27\nprint(abs(a - b))",
-      "templateCode": "a, b = 12, 27\nprint(§§§(a - b))",
+      "templateCode": "a, b = 12, 27\nprint(§§§§(a - b))",
       "testCases": [
         {
           "id": 1,
@@ -103,7 +103,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "숫자를 반올림해 다듬는 다섯 글자 내장 함수를 호출하세요.",
       "hint_en": "Call the 5-letter built-in function that rounds a number to a given precision.",
       "targetCode": "avg = 87.678\nprint(round(avg, 1))",
-      "templateCode": "avg = 87.678\nprint(§§§§§(avg, 1))",
+      "templateCode": "avg = 87.678\nprint(§§§§§§(avg, 1))",
       "testCases": [
         {
           "id": 1,
@@ -140,7 +140,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "나눗셈(div)과 나머지(mod)를 합친 여섯 글자 내장 함수를 입력하세요.",
       "hint_en": "Type the 6-letter built-in function combining 'div' and 'mod'.",
       "targetCode": "sec = int(input())\nm, s = divmod(sec, 60)\nprint(m, s)",
-      "templateCode": "sec = int(input())\nm, s = §§§§§§(sec, 60)\nprint(m, s)",
+      "templateCode": "sec = int(input())\nm, s = §§§§§§§(sec, 60)\nprint(m, s)",
       "testCases": [
         {
           "id": 1,
@@ -182,7 +182,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "각 오차 x의 부호를 제거하는 세 글자 내장 함수를 컴프리헨션 식에 적으세요.",
       "hint_en": "Write the 3-letter built-in function that takes the magnitude of x.",
       "targetCode": "errs = [-1.5, 2.3, -0.8]\nvals = [abs(x) for x in errs]\nprint(round(sum(vals) / len(vals), 2))",
-      "templateCode": "errs = [-1.5, 2.3, -0.8]\nvals = [§§§(x) for x in errs]\nprint(round(sum(vals) / len(vals), 2))",
+      "templateCode": "errs = [-1.5, 2.3, -0.8]\nvals = [§§§§(x) for x in errs]\nprint(round(sum(vals) / len(vals), 2))",
       "testCases": [
         {
           "id": 1,
@@ -201,7 +201,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "절댓값 함수, 몫·나머지 동시 반환 함수, 반올림 함수를 차례로 채워보세요.",
       "hint_en": "Supply the absolute value function, the quotient-remainder function, and the rounding function.",
       "targetCode": "nums = [-14, 9, -12]\ntotal = sum([abs(n) for n in nums])\nq, r = divmod(total, 10)\nprint(q, r, round(total / len(nums), 1))",
-      "templateCode": "nums = [-14, 9, -12]\ntotal = sum([§§§(n) for n in nums])\nq, r = §§§§§§(total, 10)\nprint(q, r, §§§§§(total / len(nums), 1))",
+      "templateCode": "nums = [-14, 9, -12]\ntotal = sum([§§§§(n) for n in nums])\nq, r = §§§§§§§(total, 10)\nprint(q, r, §§§§§§(total / len(nums), 1))",
       "testCases": [
         {
           "id": 1,
@@ -263,7 +263,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "q, r = divmod(a, b) 형태로 몫과 나머지를 한 번에 언패킹하세요.",
       "hint_en": "Write q, r = divmod(a, b) on the masked line.",
       "targetCode": "a, b = 29, 6\nq, r = divmod(a, b)\nprint(q, r)",
-      "templateCode": "a, b = 29, 6\n§§§§§§§§§§§§§§§§§§§\nprint(q, r)",
+      "templateCode": "a, b = 29, 6\n§§§§§§§§§§§§§§§§§§§§\nprint(q, r)",
       "testCases": [
         {
           "id": 1,
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "hint_ko": "avg = round(sum(gaps) / len(gaps), 2) 형태로 작성하세요.",
       "hint_en": "Write avg = round(sum(gaps) / len(gaps), 2) on the masked line.",
       "targetCode": "nums = [-10, 5, -7]\ngaps = [abs(n) for n in nums]\navg = round(sum(gaps) / len(gaps), 2)\nprint(avg)",
-      "templateCode": "nums = [-10, 5, -7]\ngaps = [abs(n) for n in nums]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(avg)",
+      "templateCode": "nums = [-10, 5, -7]\ngaps = [abs(n) for n in nums]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(avg)",
       "testCases": [
         {
           "id": 1,

@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "예외가 발생하지 않은 정상 경우에 실행되는 네 글자 키워드를 적으세요.",
       "hint_en": "Type the 4-letter keyword that runs when no exception occurs.",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\nelse:\n    print(n + 10)",
-      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\n§§§§:\n    print(n + 10)",
+      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\n§§§§§:\n    print(n + 10)",
       "testCases": [
         {
           "id": 1,
@@ -109,7 +109,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "'마침내, 최종적으로'라는 뜻의 일곱 글자 예외 마무리 키워드를 입력하세요.",
       "hint_en": "Enter the 7-letter keyword for the unconditional cleanup block.",
       "targetCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\nexcept ValueError:\n    print(\"Err\")\nfinally:\n    print(\"Done\")",
-      "templateCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\nexcept ValueError:\n    print(\"Err\")\n§§§§§§§:\n    print(\"Done\")",
+      "templateCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\nexcept ValueError:\n    print(\"Err\")\n§§§§§§§§:\n    print(\"Done\")",
       "testCases": [
         {
           "id": 1,
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "에러 객체를 변수에 연결하는 두 글자 영단어 키워드를 입력하세요.",
       "hint_en": "Type the 2-letter keyword used to alias the exception to variable e.",
       "targetCode": "d = {\"a\": 1}\ntry:\n    print(d[\"b\"])\nexcept KeyError as e:\n    print(f\"Missing:{e}\")",
-      "templateCode": "d = {\"a\": 1}\ntry:\n    print(d[\"b\"])\nexcept KeyError §§ e:\n    print(f\"Missing:{e}\")",
+      "templateCode": "d = {\"a\": 1}\ntry:\n    print(d[\"b\"])\nexcept KeyError §§§ e:\n    print(f\"Missing:{e}\")",
       "testCases": [
         {
           "id": 1,
@@ -188,7 +188,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "except 절과 finally 절 사이에 위치하여 에러가 없을 때만 실행되는 네 글자 키워드를 적으세요.",
       "hint_en": "Write the 4-letter keyword placed between except and finally.",
       "targetCode": "arr = [10, 20]\ntry:\n    v = arr[1]\nexcept IndexError:\n    print(\"Out\")\nelse:\n    print(f\"Val:{v}\")\nfinally:\n    print(\"Check\")",
-      "templateCode": "arr = [10, 20]\ntry:\n    v = arr[1]\nexcept IndexError:\n    print(\"Out\")\n§§§§:\n    print(f\"Val:{v}\")\nfinally:\n    print(\"Check\")",
+      "templateCode": "arr = [10, 20]\ntry:\n    v = arr[1]\nexcept IndexError:\n    print(\"Out\")\n§§§§§:\n    print(f\"Val:{v}\")\nfinally:\n    print(\"Check\")",
       "testCases": [
         {
           "id": 1,
@@ -207,7 +207,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "에러 객체 연결 키워드(2글자), 정상 실행 분기(4글자), 마무리 분기(7글자)를 차례로 채우세요.",
       "hint_en": "Fill in the 2-letter alias keyword, the 4-letter no-error keyword, and the 7-letter cleanup keyword.",
       "targetCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError as e:\n    print(f\"NoKey:{e}\")\nelse:\n    print(f\"Score:{sc}\")\nfinally:\n    print(\"Closed\")",
-      "templateCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError §§ e:\n    print(f\"NoKey:{e}\")\n§§§§:\n    print(f\"Score:{sc}\")\n§§§§§§§:\n    print(\"Closed\")",
+      "templateCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError §§§ e:\n    print(f\"NoKey:{e}\")\n§§§§§:\n    print(f\"Score:{sc}\")\n§§§§§§§§:\n    print(\"Closed\")",
       "testCases": [
         {
           "id": 1,
@@ -274,7 +274,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "콜론(:)을 포함해 finally: 일곱 글자 키워드와 콜론을 작성하세요.",
       "hint_en": "Write finally: on the masked line.",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\nfinally:\n    print(f\"n={n}\")",
-      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\n§§§§§§§§\n    print(f\"n={n}\")",
+      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\n§§§§§§§§§\n    print(f\"n={n}\")",
       "testCases": [
         {
           "id": 1,
@@ -298,7 +298,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "hint_ko": "except IndexError as e: 형태로 콜론(:)까지 포함해 작성하세요.",
       "hint_en": "Write except IndexError as e: on the masked line.",
       "targetCode": "items = [1, 2]\ntry:\n    print(items[5])\nexcept IndexError as e:\n    print(\"IndexErr\")",
-      "templateCode": "items = [1, 2]\ntry:\n    print(items[5])\n§§§§§§§§§§§§§§§§§§§§§§§\n    print(\"IndexErr\")",
+      "templateCode": "items = [1, 2]\ntry:\n    print(items[5])\n§§§§§§§§§§§§§§§§§§§§§§§§\n    print(\"IndexErr\")",
       "testCases": [
         {
           "id": 1,

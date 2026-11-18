@@ -62,7 +62,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the special initializer method name so Shield starts with def_pt set to 50.",
       "hint_ko": "초기화(initialize)의 앞 네 글자 양옆에 밑줄(_)을 두 개씩 붙인 특수 메서드 이름을 작성하세요.",
       "hint_en": "Write the special method name formed by wrapping the four-letter abbreviation for initialize with double underscores.",
-      "templateCode": "class Shield:\n    def §§§§§§§§(self):\n        self.def_pt = 50\ns = Shield()\nprint(s.def_pt)",
+      "templateCode": "class Shield:\n    def §§§§§§§§§(self):\n        self.def_pt = 50\ns = Shield()\nprint(s.def_pt)",
       "targetCode": "class Shield:\n    def __init__(self):\n        self.def_pt = 50\ns = Shield()\nprint(s.def_pt)",
       "testCases": [
         {
@@ -99,7 +99,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the assignment inside __init__ so the passed city name is stored on the instance.",
       "hint_ko": "전달받은 매개변수를 객체가 계속 기억하게 하려면 자기 자신을 가리키는 참조 변수 뒤에 점과 속성명을 붙여 저장해야 합니다.",
       "hint_en": "Attach the attribute to the instance reference using dot notation on the left side of the assignment.",
-      "templateCode": "class Ticket:\n    def __init__(self, city):\n        §§§§§§§§§ = city\nt = Ticket(\"Seoul\")\nprint(t.city)",
+      "templateCode": "class Ticket:\n    def __init__(self, city):\n        §§§§§§§§§§ = city\nt = Ticket(\"Seoul\")\nprint(t.city)",
       "targetCode": "class Ticket:\n    def __init__(self, city):\n        self.city = city\nt = Ticket(\"Seoul\")\nprint(t.city)",
       "testCases": [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the default parameter in __init__ so omitting qty defaults to 1.",
       "hint_ko": "매개변수 이름 뒤에 등호(=)와 기본 숫자를 붙여 선택적 인자로 만드세요.",
       "hint_en": "Set the default value on the last parameter using an equals sign and the number 1.",
-      "templateCode": "class Order:\n    def __init__(self, item, §§§§§):\n        self.item = item\n        self.qty = qty\no1 = Order(\"Pen\")\no2 = Order(\"Book\", 3)\nprint(o1.qty, o2.qty)",
+      "templateCode": "class Order:\n    def __init__(self, item, §§§§§§):\n        self.item = item\n        self.qty = qty\no1 = Order(\"Pen\")\no2 = Order(\"Book\", 3)\nprint(o1.qty, o2.qty)",
       "targetCode": "class Order:\n    def __init__(self, item, qty=1):\n        self.item = item\n        self.qty = qty\no1 = Order(\"Pen\")\no2 = Order(\"Book\", 3)\nprint(o1.qty, o2.qty)",
       "testCases": [
         {
@@ -173,7 +173,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the show_peri method so it accesses the width attribute initialized in __init__.",
       "hint_ko": "생성자에서 self에 등록한 가로 길이 속성을 메서드 안에서 그대로 참조하세요.",
       "hint_en": "Access the width attribute attached to self during initialization.",
-      "templateCode": "class Rect:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def show_peri(self):\n        print((§§§§§§ + self.h) * 2)\nr = Rect(4, 6)\nr.show_peri()",
+      "templateCode": "class Rect:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def show_peri(self):\n        print((§§§§§§§ + self.h) * 2)\nr = Rect(4, 6)\nr.show_peri()",
       "targetCode": "class Rect:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def show_peri(self):\n        print((self.w + self.h) * 2)\nr = Rect(4, 6)\nr.show_peri()",
       "testCases": [
         {
@@ -192,7 +192,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the initializer name, default parameter, and instance attribute reference to print the item summary.",
       "hint_ko": "객체 생성 시 자동 실행되는 특수 메서드 이름과 수량 기본값 지정, 그리고 메서드 내부의 단가 속성 접근 방식을 확인하세요.",
       "hint_en": "Check the double-underscore initializer name, the default parameter syntax, and how price is accessed on self.",
-      "templateCode": "class Item:\n    def §§§§§§§§(self, name, price, §§§§§):\n        self.name = name\n        self.price = price\n        self.cnt = cnt\n    def show(self):\n        print(f\"{self.name}={§§§§§§§§§§ * self.cnt}\")\nit = Item(\"Gem\", 150)\nit.show()",
+      "templateCode": "class Item:\n    def §§§§§§§§§(self, name, price, §§§§§§):\n        self.name = name\n        self.price = price\n        self.cnt = cnt\n    def show(self):\n        print(f\"{self.name}={§§§§§§§§§§§ * self.cnt}\")\nit = Item(\"Gem\", 150)\nit.show()",
       "targetCode": "class Item:\n    def __init__(self, name, price, cnt=2):\n        self.name = name\n        self.price = price\n        self.cnt = cnt\n    def show(self):\n        print(f\"{self.name}={self.price * self.cnt}\")\nit = Item(\"Gem\", 150)\nit.show()",
       "testCases": [
         {
@@ -249,7 +249,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside __init__ that stores the speed parameter in self.speed.",
       "hint_ko": "들여쓰기 위치에 맞춰 자기 자신의 speed 속성에 전달받은 매개변수 speed를 대입하세요.",
       "hint_en": "Assign the parameter speed to the instance attribute on self.",
-      "templateCode": "class Car:\n    def __init__(self, model, speed=60):\n        self.model = model\n        §§§§§§§§§§§§§§§§§§\nc = Car(\"EV\", 90)\nprint(c.model, c.speed)",
+      "templateCode": "class Car:\n    def __init__(self, model, speed=60):\n        self.model = model\n        §§§§§§§§§§§§§§§§§§§\nc = Car(\"EV\", 90)\nprint(c.model, c.speed)",
       "targetCode": "class Car:\n    def __init__(self, model, speed=60):\n        self.model = model\n        self.speed = speed\nc = Car(\"EV\", 90)\nprint(c.model, c.speed)",
       "testCases": [
         {
@@ -268,7 +268,7 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "prompt_en": "[Complete Line] Write the __init__ method header taking self, title, and floor with a default of 1.",
       "hint_ko": "메서드 선언 키워드 뒤에 양쪽 밑줄 두 개짜리 생성자 이름과 매개변수 목록, 콜론을 정확히 적으세요.",
       "hint_en": "Write the def header for the initializer with self, title, and floor=1 followed by a colon.",
-      "templateCode": "class Room:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        self.title = title\n        self.floor = floor\nr = Room(\"Lab\")\nprint(f\"{r.title}:{r.floor}F\")",
+      "templateCode": "class Room:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        self.title = title\n        self.floor = floor\nr = Room(\"Lab\")\nprint(f\"{r.title}:{r.floor}F\")",
       "targetCode": "class Room:\n    def __init__(self, title, floor=1):\n        self.title = title\n        self.floor = floor\nr = Room(\"Lab\")\nprint(f\"{r.title}:{r.floor}F\")",
       "testCases": [
         {

@@ -54,7 +54,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the slice range to extract indices 1 and 2 ([20, 30]) from nums.',
       hint_ko: '시작 번호 1과 끝 번호(미포함) 3을 콜론으로 연결해 대괄호 안에 적으세요.',
       hint_en: 'Join start index 1 and exclusive stop index 3 with a colon inside the brackets.',
-      templateCode: 'nums = [10, 20, 30, 40]\nmid = nums[§§§]\nprint(mid)',
+      templateCode: 'nums = [10, 20, 30, 40]\nmid = nums[§§§§]\nprint(mid)',
       targetCode: 'nums = [10, 20, 30, 40]\nmid = nums[1:3]\nprint(mid)',
       testCases: [
         {
@@ -91,7 +91,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Fill Blank] Use a slice with an omitted start index to print the first 2 elements of tags.',
       hint_ko: '콜론 바로 뒤에 끝 인덱스 번호만 적어 앞 두 요소를 잘라내세요.',
       hint_en: 'Write a colon followed by the stop index inside the brackets.',
-      templateCode: 'tags = ["a", "b", "c", "d"]\nprint(tags[§§])',
+      templateCode: 'tags = ["a", "b", "c", "d"]\nprint(tags[§§§])',
       targetCode: 'tags = ["a", "b", "c", "d"]\nprint(tags[:2])',
       testCases: [
         {
@@ -128,7 +128,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Fill Blank] Concatenate left and right into a single list and print it.',
       hint_ko: '두 리스트를 순서대로 연결하는 연산자를 빈칸에 적으세요.',
       hint_en: 'Place the concatenation operator between left and right.',
-      templateCode: 'left = [1, 2]\nright = [3, 4]\nprint(left § right)',
+      templateCode: 'left = [1, 2]\nright = [3, 4]\nprint(left §§ right)',
       targetCode: 'left = [1, 2]\nright = [3, 4]\nprint(left + right)',
       testCases: [
         {
@@ -165,7 +165,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Fill Blank] Repeat [1, 2] three times, then slice and print the first 4 elements.',
       hint_ko: '리스트를 지정한 횟수만큼 반복 생성하는 연산자를 빈칸에 채우세요.',
       hint_en: 'Fill in the operator that repeats a list a given number of times.',
-      templateCode: 'seq = [1, 2] § 3\nprint(seq[:4])',
+      templateCode: 'seq = [1, 2] §§ 3\nprint(seq[:4])',
       targetCode: 'seq = [1, 2] * 3\nprint(seq[:4])',
       testCases: [
         {
@@ -184,7 +184,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Fill Blank] Slice the first 2 elements of nums and concatenate them with [0] repeated twice.',
       hint_ko: '앞 두 요소를 자르는 슬라이싱, 리스트 연결 연산자, 리스트 반복 연산자를 차례로 채우세요.',
       hint_en: 'Fill in the 2-item prefix slice, concatenation operator, and repetition operator.',
-      templateCode: 'nums = [5, 10, 15, 20]\nres = nums[§§] § [0] § 2\nprint(res)',
+      templateCode: 'nums = [5, 10, 15, 20]\nres = nums[§§§] §§ [0] §§ 2\nprint(res)',
       targetCode: 'nums = [5, 10, 15, 20]\nres = nums[:2] + [0] * 2\nprint(res)',
       testCases: [
         {
@@ -241,7 +241,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that slices the first 3 elements of nums into top3.',
       hint_ko: '시작 인덱스를 생략한 슬라이싱 결과를 top3 변수에 대입하세요.',
       hint_en: 'Assign the 3-element prefix slice of nums to top3.',
-      templateCode: 'nums = [90, 85, 80, 75, 70]\n§§§§§§§§§§§§§§§\nprint(top3)',
+      templateCode: 'nums = [90, 85, 80, 75, 70]\n§§§§§§§§§§§§§§§§\nprint(top3)',
       targetCode: 'nums = [90, 85, 80, 75, 70]\ntop3 = nums[:3]\nprint(top3)',
       testCases: [
         {
@@ -260,7 +260,7 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that concatenates the first 2 elements of a with b into res.',
       hint_ko: 'a의 앞 2개 슬라이싱과 b를 더한 결과를 res에 대입하세요.',
       hint_en: 'Join the 2-item prefix slice of a with b using + and assign to res.',
-      templateCode: 'a = [10, 20, 30]\nb = [99]\n§§§§§§§§§§§§§§§\nprint(res)',
+      templateCode: 'a = [10, 20, 30]\nb = [99]\n§§§§§§§§§§§§§§§§\nprint(res)',
       targetCode: 'a = [10, 20, 30]\nb = [99]\nres = a[:2] + b\nprint(res)',
       testCases: [
         {

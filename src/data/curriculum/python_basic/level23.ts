@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the boolean casting function to check whether -5 converts to True.',
       hint_ko: '값을 참·거짓 자료형으로 바꿀 때는 불리언(boolean)의 앞 네 글자를 딴 내장 함수를 사용합니다.',
       hint_en: 'Use the four-letter built-in function formed from the start of "boolean".',
-      templateCode: 'x = §§§§(-5)\nprint(x, bool(0.0))',
+      templateCode: 'x = §§§§§(-5)\nprint(x, bool(0.0))',
       targetCode: 'x = bool(-5)\nprint(x, bool(0.0))',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the boolean casting function to print the truthiness of string "0".',
       hint_ko: '따옴표로 감싸진 "0"은 빈 문자열이 아니므로 불리언 변환 함수에 넣으면 True가 됩니다.',
       hint_en: 'Because "0" is a non-empty string, passing it to the four-letter boolean casting function yields True.',
-      templateCode: 'txt = "0"\nprint(§§§§(txt))',
+      templateCode: 'txt = "0"\nprint(§§§§§(txt))',
       targetCode: 'txt = "0"\nprint(bool(txt))',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the modulo operator so bool(n % 3) prints True when n is not a multiple of 3.',
       hint_ko: '나눗셈의 나머지를 구하는 퍼센트 기호를 넣으면 나머지가 1이나 2일 때 True가 됩니다.',
       hint_en: 'Use the percent symbol so non-zero remainders convert to True.',
-      templateCode: 'n = int(input())\nprint(bool(n § 3))',
+      templateCode: 'n = int(input())\nprint(bool(n §§ 3))',
       targetCode: 'n = int(input())\nprint(bool(n % 3))',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string-casting function to compare the truthiness of integer 0 with its string form.',
       hint_ko: '정수 0을 문자열 "0"으로 바꾸는 세 글자 형변환 함수를 빈칸에 작성합니다.',
       hint_en: 'Use the three-letter casting function that turns a number into text.',
-      templateCode: 'n = 0\ns = §§§(n)\nprint(bool(n), bool(s))',
+      templateCode: 'n = 0\ns = §§§§(n)\nprint(bool(n), bool(s))',
       targetCode: 'n = 0\ns = str(n)\nprint(bool(n), bool(s))',
       testCases: [
         {
@@ -185,7 +185,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to subtract dmg from hp and compare its truthiness with hp > 0.',
       hint_ko: '차감 복합 대입 연산자, 불리언 변환 함수, 그리고 두 불리언 값이 같은지 확인하는 비교 연산자를 차례로 넣습니다.',
       hint_en: 'Use minus-equals first, then the four-letter boolean casting function, and finally the equality operator.',
-      templateCode: 'hp = int(input())\ndmg = int(input())\nhp §§ dmg\nprint(§§§§(hp) §§ (hp > 0))',
+      templateCode: 'hp = int(input())\ndmg = int(input())\nhp §§§ dmg\nprint(§§§§§(hp) §§§ (hp > 0))',
       targetCode: 'hp = int(input())\ndmg = int(input())\nhp -= dmg\nprint(bool(hp) == (hp > 0))',
       testCases: [
         {
@@ -252,7 +252,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that converts cnt to a boolean and stores it in has_item.',
       hint_ko: 'has_item 변수에 bool(cnt) 호출 결과를 대입해보세요.',
       hint_en: 'Assign the result of calling bool(cnt) to has_item.',
-      templateCode: 'cnt = int(input())\n§§§§§§§§§§§§§§§§§§§§\nprint(has_item)',
+      templateCode: 'cnt = int(input())\n§§§§§§§§§§§§§§§§§§§§§\nprint(has_item)',
       targetCode: 'cnt = int(input())\nhas_item = bool(cnt)\nprint(has_item)',
       testCases: [
         {
@@ -276,7 +276,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that prints bool(a - b).',
       hint_ko: '두 수가 같으면 a - b가 0이 되어 False, 다르면 0이 아니므로 True를 출력하는 print(bool(a - b))를 작성합니다.',
       hint_en: 'Write print(bool(a - b)) to output whether the difference is non-zero.',
-      templateCode: 'a = int(input())\nb = int(input())\n§§§§§§§§§§§§§§§§§§',
+      templateCode: 'a = int(input())\nb = int(input())\n§§§§§§§§§§§§§§§§§§§',
       targetCode: 'a = int(input())\nb = int(input())\nprint(bool(a - b))',
       testCases: [
         {

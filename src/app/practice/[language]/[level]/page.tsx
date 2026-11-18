@@ -1720,21 +1720,21 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const unlockedBlocks = useMemo<string[]>(() => {
     // An explicit [] (typing-only finale levels) means no blocks, not "all blocks"
     if (round.unlockedBlocks) {
-        if (round.unlockedBlocks.length > 0 && levelNum >= 11 && !round.unlockedBlocks.includes('comment')) {
-          return ['comment', ...round.unlockedBlocks];
-        }
-        return round.unlockedBlocks;
+      if (round.unlockedBlocks.length > 0 && levelNum >= 11 && !round.unlockedBlocks.includes('comment')) {
+        return ['comment', ...round.unlockedBlocks];
       }
-      // Default smart fallback based on level number if not explicitly defined:
-      if (levelNum === 1 || levelNum === 2) {
-        return ['print'];
-      }
-      // Legacy fallback: show all blocks
-      return [
-        'print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def', 'class',
-        'if', 'for_range', 'for_in', 'while', 'break', 'continue', 'try', 'raise', 'variable', 'comment'
-      ];
-    }, [round.unlockedBlocks, levelNum]);
+      return round.unlockedBlocks;
+    }
+    // Default smart fallback based on level number if not explicitly defined:
+    if (levelNum === 1 || levelNum === 2) {
+      return ['print'];
+    }
+    // Legacy fallback: show all blocks
+    return [
+      'print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open', 'def', 'class',
+      'if', 'for_range', 'for_in', 'while', 'break', 'continue', 'try', 'raise', 'variable', 'comment'
+    ];
+  }, [round.unlockedBlocks, levelNum]);
 
   const isBlockUnlocked = (key: string) => unlockedBlocks.includes(key);
   const hasFunctionBlocks = ['print', 'input', 'range', 'map', 'sorted', 'type', 'math', 'iter', 'method', 'open'].some(k => isBlockUnlocked(k));
@@ -4229,7 +4229,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       draggedType === 'variable' &&
       Boolean(
         draggingInfoRef.current?.isVarRef ||
-          (draggedId && findBlockInTree(blocksList, draggedId)?.isVarRef)
+        (draggedId && findBlockInTree(blocksList, draggedId)?.isVarRef)
       );
     const canBeArg =
       (!!draggedType && ALL_FUNC_TYPES.includes(draggedType)) ||

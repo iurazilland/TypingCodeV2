@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the double-bracket indexing to update row 1, column 0 of grid to 99.",
       "hint_ko": "변수 이름 뒤에 행 인덱스 [1]과 열 인덱스 [0]을 대괄호 두 개로 연달아 적으세요.",
       "hint_en": "Use two consecutive bracket pairs [1][0] on grid.",
-      "templateCode": "grid = [[1, 2], [3, 4]]\n§§§§§§§§§§ = 99\nprint(grid)",
+      "templateCode": "grid = [[1, 2], [3, 4]]\n§§§§§§§§§§§ = 99\nprint(grid)",
       "targetCode": "grid = [[1, 2], [3, 4]]\ngrid[1][0] = 99\nprint(grid)",
       "testCases": [
         {
@@ -101,7 +101,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the built-in function name to add the largest number from each row to total.",
       "hint_ko": "각 행 리스트 row에서 최댓값을 구하는 세 글자 내장 함수를 호출하세요.",
       "hint_en": "Call the three-letter built-in function that returns the maximum value of row.",
-      "templateCode": "scores = [[70, 90], [85, 80], [60, 95]]\ntotal = 0\nfor row in scores:\n    total += §§§(row)\nprint(total)",
+      "templateCode": "scores = [[70, 90], [85, 80], [60, 95]]\ntotal = 0\nfor row in scores:\n    total += §§§§(row)\nprint(total)",
       "targetCode": "scores = [[70, 90], [85, 80], [60, 95]]\ntotal = 0\nfor row in scores:\n    total += max(row)\nprint(total)",
       "testCases": [
         {
@@ -138,7 +138,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the inner for loop header so val iterates over each element in the current inner list.",
       "hint_ko": "바깥 반복문에서 꺼낸 현재 행 리스트 변수를 안쪽 for문의 in 뒤에 적으세요.",
       "hint_en": "Iterate over the outer loop variable inside the inner loop.",
-      "templateCode": "mat = [[3, -1], [0, 7], [-2, 5]]\ntotal = 0\nfor row in mat:\n    for val in §§§:\n        if val > 0:\n            total += val\nprint(total)",
+      "templateCode": "mat = [[3, -1], [0, 7], [-2, 5]]\ntotal = 0\nfor row in mat:\n    for val in §§§§:\n        if val > 0:\n            total += val\nprint(total)",
       "targetCode": "mat = [[3, -1], [0, 7], [-2, 5]]\ntotal = 0\nfor row in mat:\n    for val in row:\n        if val > 0:\n            total += val\nprint(total)",
       "testCases": [
         {
@@ -175,7 +175,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the 2D indexing expression inside the loop to sum column 0 across all rows.",
       "hint_ko": "i번째 행의 0번 열을 뜻하도록 grid 뒤에 대괄호 두 개로 인덱스를 지정하세요.",
       "hint_en": "Index row i and column 0 on grid using double brackets.",
-      "templateCode": "grid = [[10, 2], [20, 4], [30, 6]]\ncol_sum = 0\nfor i in range(len(grid)):\n    col_sum += §§§§§§§§§§\nprint(col_sum)",
+      "templateCode": "grid = [[10, 2], [20, 4], [30, 6]]\ncol_sum = 0\nfor i in range(len(grid)):\n    col_sum += §§§§§§§§§§§\nprint(col_sum)",
       "targetCode": "grid = [[10, 2], [20, 4], [30, 6]]\ncol_sum = 0\nfor i in range(len(grid)):\n    col_sum += grid[i][0]\nprint(col_sum)",
       "testCases": [
         {
@@ -194,7 +194,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the 2D index access, outer loop target, and row total expression inside total_grid.",
       "hint_ko": "첫 번째 행·첫 번째 열 인덱스 번호와 바깥 루프 대상, 그리고 행 합계 내장 함수를 확인하세요.",
       "hint_en": "Check the 0-based index for the top-left cell, the outer loop target, and sum(row).",
-      "templateCode": "def total_grid(grid, bonus):\n    §§§§§§§§§§ += bonus\n    ans = 0\n    for row in §§§§:\n        ans += §§§§§§§§\n    return ans\nm = [[1, 2], [3, 4]]\nprint(total_grid(m, 10))",
+      "templateCode": "def total_grid(grid, bonus):\n    §§§§§§§§§§§ += bonus\n    ans = 0\n    for row in §§§§§:\n        ans += §§§§§§§§§\n    return ans\nm = [[1, 2], [3, 4]]\nprint(total_grid(m, 10))",
       "targetCode": "def total_grid(grid, bonus):\n    grid[0][0] += bonus\n    ans = 0\n    for row in grid:\n        ans += sum(row)\n    return ans\nm = [[1, 2], [3, 4]]\nprint(total_grid(m, 10))",
       "testCases": [
         {
@@ -251,7 +251,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Complete Line] Write the indented line inside the loop that prints the sum of row.",
       "hint_ko": "들여쓰기 4칸 위치에서 print()와 sum() 함수를 조합해 row의 합계를 출력하세요.",
       "hint_en": "Write print(sum(row)) indented inside the for loop.",
-      "templateCode": "grid = [[1, 3, 5], [2, 4, 6]]\nfor row in grid:\n    §§§§§§§§§§§§§§§",
+      "templateCode": "grid = [[1, 3, 5], [2, 4, 6]]\nfor row in grid:\n    §§§§§§§§§§§§§§§§",
       "targetCode": "grid = [[1, 3, 5], [2, 4, 6]]\nfor row in grid:\n    print(sum(row))",
       "testCases": [
         {
@@ -270,7 +270,7 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that sets the last element of the last row in seats to 1.",
       "hint_ko": "음수 인덱스 [-1][-1]을 사용해 오른쪽 맨 아래 칸에 1을 대입하세요.",
       "hint_en": "Assign 1 to seats[-1][-1].",
-      "templateCode": "seats = [[0, 0], [0, 0]]\n§§§§§§§§§§§§§§§§§\nprint(seats)",
+      "templateCode": "seats = [[0, 0], [0, 0]]\n§§§§§§§§§§§§§§§§§§\nprint(seats)",
       "targetCode": "seats = [[0, 0], [0, 0]]\nseats[-1][-1] = 1\nprint(seats)",
       "testCases": [
         {

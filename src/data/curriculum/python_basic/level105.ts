@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "아랫줄에서 사용하는 매개변수 이름 nums 앞에 별표(*)를 붙여 적으세요.",
       "hint_en": "Prefix the parameter name nums with a single asterisk (*).",
       "targetCode": "def max_val(*nums):\n    return max(nums)\n\nprint(max_val(4, 19, 7))",
-      "templateCode": "def max_val(§§§§§):\n    return max(nums)\n\nprint(max_val(4, 19, 7))",
+      "templateCode": "def max_val(§§§§§§):\n    return max(nums)\n\nprint(max_val(4, 19, 7))",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "함수 본문에서 사용하는 사전 이름 data 앞에 별표 두 개(**)를 붙여 적으세요.",
       "hint_en": "Prefix the parameter name data with two asterisks (**).",
       "targetCode": "def count_keys(**data):\n    return len(data)\n\nprint(count_keys(a=1, b=2, c=3))",
-      "templateCode": "def count_keys(§§§§§§):\n    return len(data)\n\nprint(count_keys(a=1, b=2, c=3))",
+      "templateCode": "def count_keys(§§§§§§§):\n    return len(data)\n\nprint(count_keys(a=1, b=2, c=3))",
       "testCases": [
         {
           "id": 1,
@@ -141,7 +141,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "이름 없는 한 줄 함수를 정의하는 여섯 글자 파이썬 키워드를 입력하세요.",
       "hint_en": "Type the 6-letter Python keyword used to create an anonymous function.",
       "targetCode": "sq = lambda x: x ** 2\nprint(sq(6))",
-      "templateCode": "sq = §§§§§§ x: x ** 2\nprint(sq(6))",
+      "templateCode": "sq = §§§§§§§ x: x ** 2\nprint(sq(6))",
       "testCases": [
         {
           "id": 1,
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "정렬 기준 함수를 즉석에서 작성하는 여섯 글자 키워드를 입력하세요.",
       "hint_en": "Enter the 6-letter keyword for an inline anonymous function.",
       "targetCode": "items = [(\"pen\", 800), (\"bag\", 500)]\ns = sorted(items, key=lambda x: x[1])\nprint(s[0][0])",
-      "templateCode": "items = [(\"pen\", 800), (\"bag\", 500)]\ns = sorted(items, key=§§§§§§ x: x[1])\nprint(s[0][0])",
+      "templateCode": "items = [(\"pen\", 800), (\"bag\", 500)]\ns = sorted(items, key=§§§§§§§ x: x[1])\nprint(s[0][0])",
       "testCases": [
         {
           "id": 1,
@@ -197,7 +197,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "가변 인자 매개변수(*rows), 사본 정렬 함수, 익명 함수 키워드를 차례로 채워보세요.",
       "hint_en": "Supply the variadic parameter *rows, the copy-sorting function, and the anonymous function keyword.",
       "targetCode": "def top_user(*rows):\n    s = sorted(rows, key=lambda x: x[1], reverse=True)\n    return s[0][0]\n\nprint(top_user((\"Kim\", 80), (\"Lee\", 95), (\"Park\", 88)))",
-      "templateCode": "def top_user(§§§§§):\n    s = §§§§§§(rows, key=§§§§§§ x: x[1], reverse=True)\n    return s[0][0]\n\nprint(top_user((\"Kim\", 80), (\"Lee\", 95), (\"Park\", 88)))",
+      "templateCode": "def top_user(§§§§§§):\n    s = §§§§§§§(rows, key=§§§§§§§ x: x[1], reverse=True)\n    return s[0][0]\n\nprint(top_user((\"Kim\", 80), (\"Lee\", 95), (\"Park\", 88)))",
       "testCases": [
         {
           "id": 1,
@@ -254,7 +254,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "res = sorted(arr, key=lambda x: x[1]) 형태로 작성하세요.",
       "hint_en": "Write res = sorted(arr, key=lambda x: x[1]) on the masked line.",
       "targetCode": "arr = [(\"b\", 30), (\"a\", 10), (\"c\", 20)]\nres = sorted(arr, key=lambda x: x[1])\nprint(res)",
-      "templateCode": "arr = [(\"b\", 30), (\"a\", 10), (\"c\", 20)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
+      "templateCode": "arr = [(\"b\", 30), (\"a\", 10), (\"c\", 20)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
       "testCases": [
         {
           "id": 1,
@@ -273,7 +273,7 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "hint_ko": "들여쓰기 4칸 뒤에 return sum(args)를 작성해 총합을 반환하세요.",
       "hint_en": "Write return sum(args) inside sum_all(*args).",
       "targetCode": "def sum_all(*args):\n    return sum(args)\nprint(sum_all(5, 10, 15))",
-      "templateCode": "def sum_all(*args):\n    §§§§§§§§§§§§§§§§\nprint(sum_all(5, 10, 15))",
+      "templateCode": "def sum_all(*args):\n    §§§§§§§§§§§§§§§§§\nprint(sum_all(5, 10, 15))",
       "testCases": [
         {
           "id": 1,

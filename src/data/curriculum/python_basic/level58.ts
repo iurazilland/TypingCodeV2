@@ -57,7 +57,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Fill Blank] Assign the Python constant representing no value to res and print it with its type.',
       hint_ko: '첫 글자만 대문자로 적는 네 글자 빈 값 예약어를 빈칸에 입력하세요.',
       hint_en: 'Type the four-letter capitalized constant representing an empty value.',
-      templateCode: 'res = §§§§\nprint(res, type(res))',
+      templateCode: 'res = §§§§§\nprint(res, type(res))',
       targetCode: 'res = None\nprint(res, type(res))',
       testCases: [
         {
@@ -94,7 +94,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Fill Blank] Check whether nick is empty so it defaults to "Guest" and prints.',
       hint_ko: '객체 동일성을 확인하는 두 글자 키워드와 빈 값 상수를 공백으로 이어 적으세요.',
       hint_en: 'Combine the two-letter identity keyword with the four-letter null constant.',
-      templateCode: 'nick = None\nif nick §§§§§§§:\n    nick = "Guest"\nprint(nick)',
+      templateCode: 'nick = None\nif nick §§§§§§§§:\n    nick = "Guest"\nprint(nick)',
       targetCode: 'nick = None\nif nick is None:\n    nick = "Guest"\nprint(nick)',
       testCases: [
         {
@@ -131,7 +131,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the condition so coupon is subtracted from price only when it is not empty.',
       hint_ko: '빈 값이 아님을 확인하는 세 단어 정체성 부정 표현을 빈칸에 적으세요.',
       hint_en: 'Write the three-word identity negation check that tests for a non-null value.',
-      templateCode: 'coupon = 300\nprice = 2000\nif coupon §§§§§§§§§§§:\n    price -= coupon\nprint(price)',
+      templateCode: 'coupon = 300\nprice = 2000\nif coupon §§§§§§§§§§§§:\n    price -= coupon\nprint(price)',
       targetCode: 'coupon = 300\nprice = 2000\nif coupon is not None:\n    price -= coupon\nprint(price)',
       testCases: [
         {
@@ -168,7 +168,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Fill Blank] Count how many elements in logs are empty and print the count.',
       hint_ko: '꺼낸 요소 x가 빈 값 상수와 동일한지 확인하는 두 단어 조건을 적으세요.',
       hint_en: 'Write the two-word identity check testing whether x is the empty constant.',
-      templateCode: 'logs = [5, None, 15, None]\ncnt = 0\nfor x in logs:\n    if x §§§§§§§:\n        cnt += 1\nprint(cnt)',
+      templateCode: 'logs = [5, None, 15, None]\ncnt = 0\nfor x in logs:\n    if x §§§§§§§§:\n        cnt += 1\nprint(cnt)',
       targetCode: 'logs = [5, None, 15, None]\ncnt = 0\nfor x in logs:\n    if x is None:\n        cnt += 1\nprint(cnt)',
       testCases: [
         {
@@ -187,7 +187,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Fill Blank] Initialize ans to the empty constant and sum only valid numbers in items to print None 25.',
       hint_ko: '빈 값 상수, 유효한 값인지 묻는 정체성 부정 조건, 복합 덧셈 연산자를 순서대로 채우세요.',
       hint_en: 'Fill in the null constant, the three-word non-null check, and the compound addition operator.',
-      templateCode: 'items = [12, None, 8, 5]\nans = §§§§\ntotal = 0\nfor x in items:\n    if x §§§§§§§§§§§:\n        total §§ x\nprint(ans, total)',
+      templateCode: 'items = [12, None, 8, 5]\nans = §§§§§\ntotal = 0\nfor x in items:\n    if x §§§§§§§§§§§§:\n        total §§§ x\nprint(ans, total)',
       targetCode: 'items = [12, None, 8, 5]\nans = None\ntotal = 0\nfor x in items:\n    if x is not None:\n        total += x\nprint(ans, total)',
       testCases: [
         {
@@ -244,7 +244,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Complete Line] Write the if statement header that checks whether variable x is empty.',
       hint_ko: 'if 키워드 뒤에 변수 x와 정체성 비교 구문, 콜론(:)을 붙여 한 줄을 완성하세요.',
       hint_en: 'Write the if condition testing x with the null identity check, ending with a colon.',
-      templateCode: 'x = None\n§§§§§§§§§§§§§\n    x = 50\nprint(x)',
+      templateCode: 'x = None\n§§§§§§§§§§§§§§\n    x = 50\nprint(x)',
       targetCode: 'x = None\nif x is None:\n    x = 50\nprint(x)',
       testCases: [
         {
@@ -263,7 +263,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that initializes variable found to the empty constant before the loop.',
       hint_ko: '변수 found에 아직 찾은 값이 없음을 뜻하는 네 글자 상수를 대입하세요.',
       hint_en: 'Assign the four-letter null constant to variable found.',
-      templateCode: 'nums = [3, 8, 5]\n§§§§§§§§§§§§\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
+      templateCode: 'nums = [3, 8, 5]\n§§§§§§§§§§§§§\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
       targetCode: 'nums = [3, 8, 5]\nfound = None\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
       testCases: [
         {

@@ -164,11 +164,10 @@ export default function InstructorLmsLeaderboardPage() {
             .order('activity_score', { ascending: false });
 
           if (!error && Array.isArray(data)) {
-            const rows = data.map((raw) =>
-              profileToStudentRow(
-                normalizeProfileRow(raw as Record<string, unknown>)
-              )
-            );
+            const rows = data
+              .map((raw) => normalizeProfileRow(raw as Record<string, unknown>))
+              .filter((norm) => !isAdminUser(norm))
+              .map((norm) => profileToStudentRow(norm));
             setStudents(rows);
             const initMap: Record<string, number> = {};
             rows.forEach((r) => {
@@ -183,12 +182,16 @@ export default function InstructorLmsLeaderboardPage() {
           );
 
           if (!rpcErr && Array.isArray(rpcData)) {
-            const rows = (rpcData as Record<string, unknown>[]).map((raw) => {
-              const norm = normalizeProfileRow({
-                ...raw,
-                id: raw.student_id,
-              });
-              return {
+            const rows = (rpcData as Record<string, unknown>[])
+              .map((raw) => {
+                const norm = normalizeProfileRow({
+                  ...raw,
+                  id: raw.student_id,
+                });
+                return { norm, raw };
+              })
+              .filter(({ norm }) => !isAdminUser(norm))
+              .map(({ norm, raw }) => ({
                 ...profileToStudentRow(norm),
                 student_label:
                   typeof raw.student_label === 'string'
@@ -198,8 +201,7 @@ export default function InstructorLmsLeaderboardPage() {
                   typeof raw.joined_at === 'string'
                     ? raw.joined_at
                     : norm.created_at,
-              };
-            });
+              }));
             setStudents(rows);
             const initMap: Record<string, number> = {};
             rows.forEach((r) => {

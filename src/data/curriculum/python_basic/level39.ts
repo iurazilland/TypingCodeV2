@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the inner loop keyword on line 2 to complete the nested loop.',
       hint_ko: '4칸 들여쓰기된 안쪽 반복문도 바깥과 같은 세 글자 반복 키워드로 시작합니다.',
       hint_en: 'Start the 4-space indented inner loop with the three-letter counted-loop keyword.',
-      templateCode: 'for i in range(1, 3):\n    §§§ j in range(1, 3):\n        print(i, j)',
+      templateCode: 'for i in range(1, 3):\n    §§§§ j in range(1, 3):\n        print(i, j)',
       targetCode: 'for i in range(1, 3):\n    for j in range(1, 3):\n        print(i, j)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the line-end option name on line 4 to print "#" horizontally across each row.',
       hint_ko: '줄바꿈 대신 빈 문자열("")로 끝나도록 세 글자 옵션 이름을 적습니다.',
       hint_en: 'Specify the three-letter parameter name that controls the ending string of print().',
-      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", §§§="")\n    print()',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", §§§§="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", end="")\n    print()',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multiplication operator to print r * c across each row.',
       hint_ko: '행 번호 r과 열 번호 c를 곱하는 별표 기호를 넣습니다.',
       hint_en: 'Use the asterisk symbol to multiply r and c.',
-      templateCode: 'for r in range(1, 4):\n    for c in range(1, 4):\n        print(r § c, end=" ")\n    print()',
+      templateCode: 'for r in range(1, 4):\n    for c in range(1, 4):\n        print(r §§ c, end=" ")\n    print()',
       targetCode: 'for r in range(1, 4):\n    for c in range(1, 4):\n        print(r * c, end=" ")\n    print()',
       testCases: [
         {
@@ -161,7 +161,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the outer row variable inside the inner range() to print an inverted star triangle.',
       hint_ko: '바깥 루프에서 n부터 1까지 줄어드는 행 변수 이름을 그대로 안쪽 range()에 전달합니다.',
       hint_en: 'Pass the outer loop variable r into the inner range().',
-      templateCode: 'n = int(input())\nfor r in range(n, 0, -1):\n    for c in range(§):\n        print("*", end="")\n    print()',
+      templateCode: 'n = int(input())\nfor r in range(n, 0, -1):\n    for c in range(§§):\n        print("*", end="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(n, 0, -1):\n    for c in range(r):\n        print("*", end="")\n    print()',
       testCases: [
         {
@@ -185,7 +185,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print "1" on the diagonal where row and column match and "0" elsewhere.',
       hint_ko: '안쪽 반복 시작 키워드, 행과 열이 같은지 확인하는 비교 기호, 그리고 줄 끝 옵션 이름을 채웁니다.',
       hint_en: 'Enter for, the equality operator ==, and end in order.',
-      templateCode: 'n = int(input())\nfor r in range(n):\n    §§§ c in range(n):\n        if r §§ c:\n            print("1", §§§="")\n        else:\n            print("0", end="")\n    print()',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    §§§§ c in range(n):\n        if r §§§ c:\n            print("1", §§§§="")\n        else:\n            print("0", end="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
       testCases: [
         {
@@ -257,7 +257,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented inner loop header for c in range(r):.',
       hint_ko: '4칸 들여쓰기 뒤에 for c in range(r):을 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write for c in range(r):.',
-      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§\n        print(r, end="")\n    print()',
+      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§\n        print(r, end="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print(r, end="")\n    print()',
       testCases: [
         {
@@ -281,7 +281,7 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented empty print() statement on line 5 to start a new line.',
       hint_ko: '4칸 들여쓰기 뒤에 괄호 안을 비운 print()를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write print().',
-      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("*", end="")\n    §§§§§§§',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("*", end="")\n    §§§§§§§§',
       targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("*", end="")\n    print()',
       testCases: [
         {

@@ -14,6 +14,7 @@ import {
   PROGRESS_SYNCED_EVENT,
 } from '@/lib/progressSync';
 import { getRepresentativeBadge } from '@/lib/badges';
+import { isAdminUser } from '@/lib/admin';
 import UserAvatar from '@/components/UserAvatar';
 import type { SpeedCodingLanguage } from '@/data/speedCodingSnippets';
 
@@ -118,23 +119,25 @@ function RankingPageContent() {
           if (speedRes.error) throw speedRes.error;
 
           setLearningLeaders(
-            ((learningRes.data as Array<Record<string, unknown>>) || []).map(
-              (r) => normalizeProfileRow(r)
-            )
+            ((learningRes.data as Array<Record<string, unknown>>) || [])
+              .map((r) => normalizeProfileRow(r))
+              .filter((p) => !isAdminUser(p))
           );
 
           setSpeedLeaders(
-            ((speedRes.data as Array<Record<string, unknown>>) || []).map((r) => {
-              const p = normalizeProfileRow(r);
-              return {
-                ...p,
-                display_cpm: p.best_typing_cpm,
-                display_accuracy: p.best_typing_accuracy,
-                display_language: formatSpeedLangLabel(
-                  p.best_typing_language || p.primary_language
-                ),
-              };
-            })
+            ((speedRes.data as Array<Record<string, unknown>>) || [])
+              .map((r) => {
+                const p = normalizeProfileRow(r);
+                return {
+                  ...p,
+                  display_cpm: p.best_typing_cpm,
+                  display_accuracy: p.best_typing_accuracy,
+                  display_language: formatSpeedLangLabel(
+                    p.best_typing_language || p.primary_language
+                  ),
+                };
+              })
+              .filter((p) => !isAdminUser(p))
           );
         } else {
           // Per-language query via security_invoker view `speed_language_leaderboard` (with fallback if view not yet migrated)
@@ -152,25 +155,27 @@ function RankingPageContent() {
           if (learningRes.error) throw learningRes.error;
 
           setLearningLeaders(
-            ((learningRes.data as Array<Record<string, unknown>>) || []).map(
-              (r) => normalizeProfileRow(r)
-            )
+            ((learningRes.data as Array<Record<string, unknown>>) || [])
+              .map((r) => normalizeProfileRow(r))
+              .filter((p) => !isAdminUser(p))
           );
 
           if (!langSpeedRes.error && langSpeedRes.data) {
             setSpeedLeaders(
-              (langSpeedRes.data as Array<Record<string, unknown>>).map((r) => {
-                const p = normalizeProfileRow(r);
-                return {
-                  ...p,
-                  display_cpm: Number(r.best_cpm ?? p.best_typing_cpm ?? 0) || 0,
-                  display_accuracy:
-                    Number(r.best_accuracy ?? p.best_typing_accuracy ?? 0) || 0,
-                  display_language: formatSpeedLangLabel(
-                    typeof r.language === 'string' ? r.language : langFilter
-                  ),
-                };
-              })
+              (langSpeedRes.data as Array<Record<string, unknown>>)
+                .map((r) => {
+                  const p = normalizeProfileRow(r);
+                  return {
+                    ...p,
+                    display_cpm: Number(r.best_cpm ?? p.best_typing_cpm ?? 0) || 0,
+                    display_accuracy:
+                      Number(r.best_accuracy ?? p.best_typing_accuracy ?? 0) || 0,
+                    display_language: formatSpeedLangLabel(
+                      typeof r.language === 'string' ? r.language : langFilter
+                    ),
+                  };
+                })
+                .filter((p) => !isAdminUser(p))
             );
           } else {
             // Graceful fallback before V2.2 SQL migration is applied
@@ -193,7 +198,9 @@ function RankingPageContent() {
                 };
               })
               .filter(
-                (entry) => entry.display_language.toLowerCase() === targetLabel
+                (entry) =>
+                  !isAdminUser(entry) &&
+                  entry.display_language.toLowerCase() === targetLabel
               );
             setSpeedLeaders(filtered);
           }

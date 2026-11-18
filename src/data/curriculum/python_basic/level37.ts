@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the loop-termination keyword to stop right after printing the first divisor > 1.',
       hint_ko: '첫 약수를 출력한 직후 루프를 깨고 나오는 다섯 글자 제어 키워드를 입력합니다.',
       hint_en: 'Use the five-letter keyword meaning "to shatter / stop immediately".',
-      templateCode: 'n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        §§§§§',
+      templateCode: 'n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        §§§§§§',
       targetCode: 'n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        break',
       testCases: [
         {
@@ -82,7 +82,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the termination keyword to exit the loop once total >= limit.',
       hint_ko: '조건이 만족되었을 때 남은 반복을 모두 취소하고 빠져나가는 다섯 글자 키워드입니다.',
       hint_en: 'Enter the five-letter keyword that exits the enclosing loop immediately.',
-      templateCode: 'limit = int(input())\ntotal = 0\nfor i in range(1, 100):\n    total += i\n    if total >= limit:\n        §§§§§\nprint(total)',
+      templateCode: 'limit = int(input())\ntotal = 0\nfor i in range(1, 100):\n    total += i\n    if total >= limit:\n        §§§§§§\nprint(total)',
       targetCode: 'limit = int(input())\ntotal = 0\nfor i in range(1, 100):\n    total += i\n    if total >= limit:\n        break\nprint(total)',
       testCases: [
         {
@@ -129,7 +129,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the boolean constant for true to open the infinite loop.',
       hint_ko: '첫 글자가 대문자인 네 글자 참 상수를 while 뒤에 적습니다.',
       hint_en: 'Write the capitalized four-letter boolean constant after while.',
-      templateCode: 'total = 0\nwhile §§§§:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)',
+      templateCode: 'total = 0\nwhile §§§§§:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)',
       targetCode: 'total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)',
       testCases: [
         {
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the termination keyword to stop counting when a negative score is entered.',
       hint_ko: '음수가 들어오면 즉시 무한 루프를 탈출하는 다섯 글자 키워드를 입력합니다.',
       hint_en: 'Enter the five-letter keyword that exits the while True loop when s < 0.',
-      templateCode: 'cnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        §§§§§\n    cnt += 1\nprint(cnt)',
+      templateCode: 'cnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        §§§§§§\n    cnt += 1\nprint(cnt)',
       targetCode: 'cnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        break\n    cnt += 1\nprint(cnt)',
       testCases: [
         {
@@ -200,7 +200,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to sum integer inputs in an infinite loop until 0 is entered.',
       hint_ko: '무한 루프용 참 상수, 종료값 0인지 확인하는 같음 비교 기호, 그리고 탈출 키워드를 차례로 채웁니다.',
       hint_en: 'Enter True, the equality operator ==, and break in order.',
-      templateCode: 'total = 0\nwhile §§§§:\n    n = int(input())\n    if n §§ 0:\n        §§§§§\n    total += n\nprint("Sum", total, sep=":")',
+      templateCode: 'total = 0\nwhile §§§§§:\n    n = int(input())\n    if n §§§ 0:\n        §§§§§§\n    total += n\nprint("Sum", total, sep=":")',
       targetCode: 'total = 0\nwhile True:\n    n = int(input())\n    if n == 0:\n        break\n    total += n\nprint("Sum", total, sep=":")',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Complete Line] Write the 8-space indented break statement inside if word == "stop":.',
       hint_ko: '8칸 들여쓰기 뒤에 다섯 글자 종료 키워드를 작성해보세요.',
       hint_en: 'Keep the 8-space indentation and write break.',
-      templateCode: 'while True:\n    word = input()\n    if word == "stop":\n        §§§§§\n    print(word)',
+      templateCode: 'while True:\n    word = input()\n    if word == "stop":\n        §§§§§§\n    print(word)',
       targetCode: 'while True:\n    word = input()\n    if word == "stop":\n        break\n    print(word)',
       testCases: [
         {
@@ -291,7 +291,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       prompt_en: '[Complete Line] Write the infinite loop header while True: on line 2.',
       hint_ko: 'while True: 형태로 키워드와 참 상수, 콜론을 작성해보세요.',
       hint_en: 'Write while True: including the trailing colon.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§\n    if n <= 1:\n        break\n    n //= 2\nprint(n)',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§\n    if n <= 1:\n        break\n    n //= 2\nprint(n)',
       targetCode: 'n = int(input())\nwhile True:\n    if n <= 1:\n        break\n    n //= 2\nprint(n)',
       testCases: [
         {

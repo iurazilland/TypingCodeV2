@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the membership condition so "Open" prints when "key" is inside bag.',
       hint_ko: '리스트 안에 특정 요소가 포함되어 있는지 검사하는 두 글자 연산자를 채우세요.',
       hint_en: 'Fill in the 2-letter operator that tests whether an item belongs to a list.',
-      templateCode: 'bag = ["map", "key", "coin"]\nif "key" §§ bag:\n    print("Open")',
+      templateCode: 'bag = ["map", "key", "coin"]\nif "key" §§§ bag:\n    print("Open")',
       targetCode: 'bag = ["map", "key", "coin"]\nif "key" in bag:\n    print("Open")',
       testCases: [
         {
@@ -93,7 +93,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the for-loop header to iterate over tags and print each element on one line.',
       hint_ko: '반복 변수와 순회할 리스트 사이를 연결하는 키워드를 적으세요.',
       hint_en: 'Write the keyword that connects the loop variable to the list being iterated.',
-      templateCode: 'tags = ["py", "js", "go"]\nfor t §§ tags:\n    print(t, end=" ")',
+      templateCode: 'tags = ["py", "js", "go"]\nfor t §§§ tags:\n    print(t, end=" ")',
       targetCode: 'tags = ["py", "js", "go"]\nfor t in tags:\n    print(t, end=" ")',
       testCases: [
         {
@@ -130,7 +130,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Fill Blank] Iterate through prices, accumulate each value into total, and print the total.',
       hint_ko: '현재 가격 p를 기존 합계 변수 total에 누적해 더하는 복합 대입 연산자를 적으세요.',
       hint_en: 'Write the compound addition operator that adds p onto total.',
-      templateCode: 'prices = [500, 1200, 800]\ntotal = 0\nfor p in prices:\n    total §§ p\nprint("Total:", total)',
+      templateCode: 'prices = [500, 1200, 800]\ntotal = 0\nfor p in prices:\n    total §§§ p\nprint("Total:", total)',
       targetCode: 'prices = [500, 1200, 800]\ntotal = 0\nfor p in prices:\n    total += p\nprint("Total:", total)',
       testCases: [
         {
@@ -167,7 +167,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the range argument so every element of nums is increased by 5.',
       hint_ko: 'range() 괄호 안에 리스트의 요소 개수를 구하는 식을 적으세요.',
       hint_en: 'Pass the expression that returns the length of nums into range().',
-      templateCode: 'nums = [5, 10, 15]\nfor i in range(§§§§§§§§§):\n    nums[i] += 5\nprint(nums)',
+      templateCode: 'nums = [5, 10, 15]\nfor i in range(§§§§§§§§§§):\n    nums[i] += 5\nprint(nums)',
       targetCode: 'nums = [5, 10, 15]\nfor i in range(len(nums)):\n    nums[i] += 5\nprint(nums)',
       testCases: [
         {
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Fill Blank] Iterate over raw, append unseen numbers to seen, and accumulate their sum into total.',
       hint_ko: '순회 키워드, 불포함 검사 연산자, 누적 덧셈 연산자를 차례로 채워보세요.',
       hint_en: 'Fill in the iteration keyword, non-membership operator, and compound addition operator.',
-      templateCode: 'raw = [10, 20, 10, 30]\nseen = []\ntotal = 0\nfor x §§ raw:\n    if x §§§§§§ seen:\n        seen.append(x)\n        total §§ x\nprint(seen, total)',
+      templateCode: 'raw = [10, 20, 10, 30]\nseen = []\ntotal = 0\nfor x §§§ raw:\n    if x §§§§§§§ seen:\n        seen.append(x)\n        total §§§ x\nprint(seen, total)',
       targetCode: 'raw = [10, 20, 10, 30]\nseen = []\ntotal = 0\nfor x in raw:\n    if x not in seen:\n        seen.append(x)\n        total += x\nprint(seen, total)',
       testCases: [
         {
@@ -243,7 +243,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Complete Line] Complete the if header that checks whether item is not in cart.',
       hint_ko: '불포함 연산자를 사용한 if 조건문 끝에 콜론(:)을 잊지 말고 적으세요.',
       hint_en: 'Write the if statement using not in and end the line with a colon (:).',
-      templateCode: 'cart = ["milk", "egg"]\nitem = input()\n§§§§§§§§§§§§§§§§§§§§\n    cart.append(item)\nprint(cart)',
+      templateCode: 'cart = ["milk", "egg"]\nitem = input()\n§§§§§§§§§§§§§§§§§§§§§\n    cart.append(item)\nprint(cart)',
       targetCode: 'cart = ["milk", "egg"]\nitem = input()\nif item not in cart:\n    cart.append(item)\nprint(cart)',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       prompt_en: '[Complete Line] Complete the for-loop header that iterates over each element x in nums.',
       hint_ko: 'for 변수 in 리스트: 형식에 맞춰 첫째 줄 아래의 반복문 헤더를 작성하세요.',
       hint_en: 'Write the for-in loop header using variable x and list nums.',
-      templateCode: 'nums = [4, 7, 10, 13]\n§§§§§§§§§§§§§§\n    if x % 2 == 0:\n        print(x)',
+      templateCode: 'nums = [4, 7, 10, 13]\n§§§§§§§§§§§§§§§\n    if x % 2 == 0:\n        print(x)',
       targetCode: 'nums = [4, 7, 10, 13]\nfor x in nums:\n    if x % 2 == 0:\n        print(x)',
       testCases: [
         {

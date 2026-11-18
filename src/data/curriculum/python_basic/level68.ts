@@ -61,7 +61,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Fill Blank] Return the minimum and maximum of nums separated by a comma.',
       hint_ko: '최솟값 내장 함수 호출과 최댓값 내장 함수 호출을 쉼표와 공백으로 이어 적으세요.',
       hint_en: 'Write the min and max function calls on nums separated by a comma and space.',
-      templateCode: 'def min_max(nums):\n    return §§§§§§§§§§§§§§§§§§§§\nprint(min_max([4, 9, 2]))',
+      templateCode: 'def min_max(nums):\n    return §§§§§§§§§§§§§§§§§§§§§\nprint(min_max([4, 9, 2]))',
       targetCode: 'def min_max(nums):\n    return min(nums), max(nums)\nprint(min_max([4, 9, 2]))',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Fill Blank] Unpack the returned first and last characters into the two variables printed on the last line.',
       hint_ko: '마지막 줄 print() 안에 적힌 두 변수 이름을 쉼표와 공백으로 나란히 적으세요.',
       hint_en: 'Write the two variable names used in print() separated by a comma and space.',
-      templateCode: 'def ends(s):\n    return s[0], s[-1]\n§§§§§§§§§§§ = ends("python")\nprint(first, last)',
+      templateCode: 'def ends(s):\n    return s[0], s[-1]\n§§§§§§§§§§§§ = ends("python")\nprint(first, last)',
       targetCode: 'def ends(s):\n    return s[0], s[-1]\nfirst, last = ends("python")\nprint(first, last)',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Fill Blank] Return None early when n is odd so safe_half(7) yields None.',
       hint_ko: '반환 키워드와 빈 값 상수를 공백으로 연결해 조기 반환문을 작성하세요.',
       hint_en: 'Write the return statement that sends back the null constant.',
-      templateCode: 'def safe_half(n):\n    if n % 2 != 0:\n        §§§§§§§§§§§\n    return n // 2\nprint(safe_half(7), safe_half(8))',
+      templateCode: 'def safe_half(n):\n    if n % 2 != 0:\n        §§§§§§§§§§§§\n    return n // 2\nprint(safe_half(7), safe_half(8))',
       targetCode: 'def safe_half(n):\n    if n % 2 != 0:\n        return None\n    return n // 2\nprint(safe_half(7), safe_half(8))',
       testCases: [
         {
@@ -172,7 +172,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the fallback return after the loop so it returns None when no match is found.',
       hint_ko: '반복문이 끝날 때까지 반환되지 않았을 때 빈 값 상수를 돌려주는 문장을 적으세요.',
       hint_en: 'Return the four-letter null constant after the for loop.',
-      templateCode: 'def find_big(nums, cut):\n    for x in nums:\n        if x >= cut:\n            return x\n    §§§§§§§§§§§\nprint(find_big([10, 25, 30], 20))',
+      templateCode: 'def find_big(nums, cut):\n    for x in nums:\n        if x >= cut:\n            return x\n    §§§§§§§§§§§§\nprint(find_big([10, 25, 30], 20))',
       targetCode: 'def find_big(nums, cut):\n    for x in nums:\n        if x >= cut:\n            return x\n    return None\nprint(find_big([10, 25, 30], 20))',
       testCases: [
         {
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Fill Blank] Return the sum and length of nums and unpack them into s and c.',
       hint_ko: '반환 키워드, 길이를 구하는 함수, 그리고 호출부에서 언패킹할 두 변수를 차례로 채우세요.',
       hint_en: 'Fill in the return keyword, the length function name, and the two unpacked variables.',
-      templateCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    §§§§§§ sum(nums), §§§(nums)\n§§§§ = sum_len([10, 20, 30])\nprint(s, c)',
+      templateCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    §§§§§§§ sum(nums), §§§§(nums)\n§§§§§ = sum_len([10, 20, 30])\nprint(s, c)',
       targetCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    return sum(nums), len(nums)\ns, c = sum_len([10, 20, 30])\nprint(s, c)',
       testCases: [
         {
@@ -248,7 +248,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Complete Line] Write the indented line that returns both min(arr) and max(arr).',
       hint_ko: '반환 키워드 뒤에 최솟값 함수와 최댓값 함수를 쉼표로 나란히 적으세요.',
       hint_en: 'Write return min(arr), max(arr) inside the function.',
-      templateCode: 'def stats(arr):\n    §§§§§§§§§§§§§§§§§§§§§§§§§\nlow, high = stats([8, 2, 15, 4])\nprint(low, high)',
+      templateCode: 'def stats(arr):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§\nlow, high = stats([8, 2, 15, 4])\nprint(low, high)',
       targetCode: 'def stats(arr):\n    return min(arr), max(arr)\nlow, high = stats([8, 2, 15, 4])\nprint(low, high)',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       prompt_en: '[Complete Line] Unpack the result of ends([10, 20, 30]) into variables first and last.',
       hint_ko: '등호 왼쪽에 두 변수 이름을 쉼표로 적고 오른쪽에 함수 호출식을 적으세요.',
       hint_en: 'Write first, last = ends([10, 20, 30]).',
-      templateCode: 'def ends(nums):\n    return nums[0], nums[-1]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(first + last)',
+      templateCode: 'def ends(nums):\n    return nums[0], nums[-1]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(first + last)',
       targetCode: 'def ends(nums):\n    return nums[0], nums[-1]\nfirst, last = ends([10, 20, 30])\nprint(first + last)',
       testCases: [
         {

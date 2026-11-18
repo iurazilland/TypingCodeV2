@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the index insertion method, list extension method, and copy-sorting function.",
       "hint_ko": "지정 위치에 삽입하는 메서드, 리스트 원소들을 풀어 이어 붙이는 메서드, 그리고 사본 정렬 내장 함수를 확인하세요.",
       "hint_en": "Check the six-letter insert method, six-letter extend method, and six-letter sorted function.",
-      "templateCode": "q = [30, 10]\nq.§§§§§§(0, 20)\nq.§§§§§§([40, 10])\nq.remove(10)\nprint(§§§§§§(q))",
+      "templateCode": "q = [30, 10]\nq.§§§§§§§(0, 20)\nq.§§§§§§§([40, 10])\nq.remove(10)\nprint(§§§§§§§(q))",
       "targetCode": "q = [30, 10]\nq.insert(0, 20)\nq.extend([40, 10])\nq.remove(10)\nprint(sorted(q))",
       "testCases": [
         {
@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the dictionary merge method, ternary fallback keyword, and safe lookup method.",
       "hint_ko": "딕셔너리 병합 메서드, 한 줄 조건식의 거짓 분기 키워드, 그리고 기본값 안전 조회 메서드를 차례로 확인하세요.",
       "hint_en": "Check the six-letter update method, four-letter else keyword, and three-letter get method.",
-      "templateCode": "bag = {\"hp\": 40, \"mp\": 20}\nbag.§§§§§§({\"hp\": 70})\npts = sum(bag.values())\nrank = \"High\" if pts >= 80 §§§§ \"Low\"\nprint(bag.§§§(\"atk\", 0), rank)",
+      "templateCode": "bag = {\"hp\": 40, \"mp\": 20}\nbag.§§§§§§§({\"hp\": 70})\npts = sum(bag.values())\nrank = \"High\" if pts >= 80 §§§§§ \"Low\"\nprint(bag.§§§§(\"atk\", 0), rank)",
       "targetCode": "bag = {\"hp\": 40, \"mp\": 20}\nbag.update({\"hp\": 70})\npts = sum(bag.values())\nrank = \"High\" if pts >= 80 else \"Low\"\nprint(bag.get(\"atk\", 0), rank)",
       "testCases": [
         {
@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the safe set removal method, intersection operator, and comprehension loop keyword.",
       "hint_ko": "없어도 에러가 안 나는 집합 삭제 메서드, 공통 원소 교집합 연산자, 그리고 컴프리헨션 반복 키워드를 확인하세요.",
       "hint_en": "Check the seven-letter discard method, the & intersection operator, and the for keyword.",
-      "templateCode": "a = {\"py\", \"js\", \"go\", \"sql\"}\nb = {\"go\", \"py\", \"c\"}\na.§§§§§§§(\"py\")\ncommon = sorted(a § b)\nlens = [len(w) §§§ w in common]\nprint(common, lens)",
+      "templateCode": "a = {\"py\", \"js\", \"go\", \"sql\"}\nb = {\"go\", \"py\", \"c\"}\na.§§§§§§§§(\"py\")\ncommon = sorted(a §§ b)\nlens = [len(w) §§§§ w in common]\nprint(common, lens)",
       "targetCode": "a = {\"py\", \"js\", \"go\", \"sql\"}\nb = {\"go\", \"py\", \"c\"}\na.discard(\"py\")\ncommon = sorted(a & b)\nlens = [len(w) for w in common]\nprint(common, lens)",
       "testCases": [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_en": "[Complete Line] Assign to clean a list comprehension replacing negatives in nums with 0.",
       "hint_ko": "clean = [n if n > 0 else 0 for n in nums] 형태로 앞쪽 삼항 표현식을 사용해 작성하세요.",
       "hint_en": "Write clean = [n if n > 0 else 0 for n in nums].",
-      "templateCode": "nums = [int(s) for s in input().split()]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(clean), clean.count(0))",
+      "templateCode": "nums = [int(s) for s in input().split()]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(clean), clean.count(0))",
       "targetCode": "nums = [int(s) for s in input().split()]\nclean = [n if n > 0 else 0 for n in nums]\nprint(sum(clean), clean.count(0))",
       "testCases": [
         {
@@ -160,7 +160,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_en": "[Complete Line] Assign diff if len(diff) > 0 else \"none\" to variable ans.",
       "hint_ko": "ans = diff if len(diff) > 0 else \"none\" 형태로 조건 표현식을 작성하세요.",
       "hint_en": "Write ans = diff if len(diff) > 0 else \"none\".",
-      "templateCode": "s1 = set(input().split())\ns2 = set(input().split())\ndiff = sorted(s1 - s2)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
+      "templateCode": "s1 = set(input().split())\ns2 = set(input().split())\ndiff = sorted(s1 - s2)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
       "targetCode": "s1 = set(input().split())\ns2 = set(input().split())\ndiff = sorted(s1 - s2)\nans = diff if len(diff) > 0 else \"none\"\nprint(ans)",
       "testCases": [
         {

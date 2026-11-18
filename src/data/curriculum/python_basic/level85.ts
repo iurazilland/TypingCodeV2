@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the list method name to tally how many times 7 appears in nums.",
       "hint_ko": "특정 값의 등장 횟수를 세어 정수로 돌려주는 다섯 글자 리스트 메서드를 호출하세요.",
       "hint_en": "Call the five-letter list method that tallies occurrences of a value.",
-      "templateCode": "nums = [7, 2, 7, 9, 7]\nprint(nums.§§§§§(7))",
+      "templateCode": "nums = [7, 2, 7, 9, 7]\nprint(nums.§§§§§§(7))",
       "targetCode": "nums = [7, 2, 7, 9, 7]\nprint(nums.count(7))",
       "testCases": [
         {
@@ -101,7 +101,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the method name that reverses the order of log in place.",
       "hint_ko": "원본 리스트의 앞뒤 순서를 거꾸로 뒤집는 일곱 글자 메서드를 호출하세요.",
       "hint_en": "Call the seven-letter method that reverses a list in place.",
-      "templateCode": "log = [10, 50, 20]\nlog.§§§§§§§()\nprint(log[0], log)",
+      "templateCode": "log = [10, 50, 20]\nlog.§§§§§§§§()\nprint(log[0], log)",
       "targetCode": "log = [10, 50, 20]\nlog.reverse()\nprint(log[0], log)",
       "testCases": [
         {
@@ -138,7 +138,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the built-in function name that returns a new ascending-ordered duplicate of nums.",
       "hint_ko": "원본을 변경하지 않고 정렬된 사본 리스트를 만들어 돌려주는 여섯 글자 내장 함수를 적으세요.",
       "hint_en": "Use the six-letter built-in function that returns a new ordered list.",
-      "templateCode": "nums = [35, 12, 28]\nasc = §§§§§§(nums)\nprint(nums[0], asc[0])",
+      "templateCode": "nums = [35, 12, 28]\nasc = §§§§§§§(nums)\nprint(nums[0], asc[0])",
       "targetCode": "nums = [35, 12, 28]\nasc = sorted(nums)\nprint(nums[0], asc[0])",
       "testCases": [
         {
@@ -175,7 +175,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the keyword option name in sorted() to order the set elements from largest to smallest.",
       "hint_ko": "정렬 방향을 거꾸로(내림차순) 뒤집을 때 True로 설정하는 일곱 글자 키워드 인자 이름을 적으세요.",
       "hint_en": "Write the seven-letter keyword parameter name used to sort in descending order.",
-      "templateCode": "uniq = {20, 50, 10, 40}\ndesc = sorted(uniq, §§§§§§§=True)\nprint(desc)",
+      "templateCode": "uniq = {20, 50, 10, 40}\ndesc = sorted(uniq, §§§§§§§§=True)\nprint(desc)",
       "targetCode": "uniq = {20, 50, 10, 40}\ndesc = sorted(uniq, reverse=True)\nprint(desc)",
       "testCases": [
         {
@@ -194,7 +194,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the position lookup method, occurrence tallying method, and non-mutating sort function.",
       "hint_ko": "값의 위치를 찾는 메서드, 개수를 세는 메서드, 그리고 정렬된 새 리스트를 반환하는 내장 함수를 차례로 확인하세요.",
       "hint_en": "Check the five-letter position method, five-letter tally method, and six-letter sorting function.",
-      "templateCode": "pts = [80, 95, 80, 70]\npos = pts.§§§§§(95)\ncnt = pts.§§§§§(80)\nranked = §§§§§§(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
+      "templateCode": "pts = [80, 95, 80, 70]\npos = pts.§§§§§§(95)\ncnt = pts.§§§§§§(80)\nranked = §§§§§§§(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
       "targetCode": "pts = [80, 95, 80, 70]\npos = pts.index(95)\ncnt = pts.count(80)\nranked = sorted(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
       "testCases": [
         {
@@ -251,7 +251,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that assigns a descending-sorted copy of data to variable top.",
       "hint_ko": "sorted() 함수에 data와 reverse=True 옵션을 넣어 top에 대입하세요.",
       "hint_en": "Assign sorted(data, reverse=True) to variable top.",
-      "templateCode": "data = [15, 40, 25]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(data[0], top[0])",
+      "templateCode": "data = [15, 40, 25]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(data[0], top[0])",
       "targetCode": "data = [15, 40, 25]\ntop = sorted(data, reverse=True)\nprint(data[0], top[0])",
       "testCases": [
         {
@@ -270,7 +270,7 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that finds the index of \"gold\" in items and assigns it to idx.",
       "hint_ko": "리스트의 위치 탐색 메서드에 \"gold\"를 넣어 호출한 결과를 idx에 대입하세요.",
       "hint_en": "Assign items.index(\"gold\") to variable idx.",
-      "templateCode": "items = [\"wood\", \"silver\", \"gold\", \"gold\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(idx, items.count(\"gold\"))",
+      "templateCode": "items = [\"wood\", \"silver\", \"gold\", \"gold\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(idx, items.count(\"gold\"))",
       "targetCode": "items = [\"wood\", \"silver\", \"gold\", \"gold\"]\nidx = items.index(\"gold\")\nprint(idx, items.count(\"gold\"))",
       "testCases": [
         {

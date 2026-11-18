@@ -72,7 +72,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "시퀀스 각 원소에 함수를 일괄 대응시키는 세 글자 내장 함수를 적으세요.",
       "hint_en": "Type the 3-letter built-in function that applies a function to every item of an iterable.",
       "targetCode": "x, y = map(int, input().split())\nprint(x * y)",
-      "templateCode": "x, y = §§§(int, input().split())\nprint(x * y)",
+      "templateCode": "x, y = §§§§(int, input().split())\nprint(x * y)",
       "testCases": [
         {
           "id": 1,
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "반복 가능한 객체를 리스트 자료구조로 바꾸는 네 글자 내장 함수를 적으세요.",
       "hint_en": "Enter the 4-letter built-in constructor that creates a list from an iterable.",
       "targetCode": "nums = list(map(int, input().split()))\nprint(len(nums), min(nums))",
-      "templateCode": "nums = §§§§(map(int, input().split()))\nprint(len(nums), min(nums))",
+      "templateCode": "nums = §§§§§(map(int, input().split()))\nprint(len(nums), min(nums))",
       "testCases": [
         {
           "id": 1,
@@ -161,7 +161,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "각 정수를 문자열로 바꾸는 세 글자 형변환 함수 이름을 괄호 없이 적으세요.",
       "hint_en": "Write the 3-letter string conversion function name without parentheses.",
       "targetCode": "nums = [1, 2, 3]\nprint(\"/\".join(map(str, nums)))",
-      "templateCode": "nums = [1, 2, 3]\nprint(\"/\".join(map(§§§, nums)))",
+      "templateCode": "nums = [1, 2, 3]\nprint(\"/\".join(map(§§§§, nums)))",
       "testCases": [
         {
           "id": 1,
@@ -198,7 +198,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "절댓값을 구하는 세 글자 내장 함수 이름을 괄호 없이 첫 인자로 적으세요.",
       "hint_en": "Write the 3-letter absolute value function name without parentheses.",
       "targetCode": "raw = [-10, 20, -30]\nprint(list(map(abs, raw)))",
-      "templateCode": "raw = [-10, 20, -30]\nprint(list(map(§§§, raw)))",
+      "templateCode": "raw = [-10, 20, -30]\nprint(list(map(§§§§, raw)))",
       "testCases": [
         {
           "id": 1,
@@ -217,7 +217,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "일괄 매핑 내장 함수, 정수 형변환 함수, 문자열 결합 메서드를 순서대로 채워보세요.",
       "hint_en": "Supply the batch-mapping function, the integer type, and the string-joining method.",
       "targetCode": "nums = list(map(int, input().split(\",\")))\ns = sorted(nums)\nprint(\" \".join(map(str, s)))",
-      "templateCode": "nums = list(§§§(§§§, input().split(\",\")))\ns = sorted(nums)\nprint(\" \".§§§§(map(str, s)))",
+      "templateCode": "nums = list(§§§§(§§§§, input().split(\",\")))\ns = sorted(nums)\nprint(\" \".§§§§§(map(str, s)))",
       "testCases": [
         {
           "id": 1,
@@ -284,7 +284,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "a, b = map(int, input().split()) 형태로 작성하세요.",
       "hint_en": "Write a, b = map(int, input().split()) on the masked line.",
       "targetCode": "a, b = map(int, input().split())\nprint(a // b, a % b)",
-      "templateCode": "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(a // b, a % b)",
+      "templateCode": "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(a // b, a % b)",
       "testCases": [
         {
           "id": 1,
@@ -308,7 +308,7 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "hint_ko": "nums = list(map(int, input().split())) 형태로 작성하세요.",
       "hint_en": "Write nums = list(map(int, input().split())) on the masked line.",
       "targetCode": "nums = list(map(int, input().split()))\nprint(sum(nums))",
-      "templateCode": "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(nums))",
+      "templateCode": "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(nums))",
       "testCases": [
         {
           "id": 1,

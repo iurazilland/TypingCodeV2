@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the floor division compound operator to update n with 100 // 30 (3).',
       hint_ko: '정수 몫 기호 뒤에 등호를 바로 붙여 변수의 값을 몫으로 갱신합니다.',
       hint_en: 'Write the double slash floor division symbol followed immediately by an equals sign.',
-      templateCode: 'n = 100\nn §§§ 30\nprint(n)',
+      templateCode: 'n = 100\nn §§§§ 30\nprint(n)',
       targetCode: 'n = 100\nn //= 30\nprint(n)',
       expectedVariables: { n: 3 },
       testCases: [
@@ -80,7 +80,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the modulo compound operator to update num with the remainder of 29 by 6 (5).',
       hint_ko: '나머지를 구하는 퍼센트 기호 바로 뒤에 등호를 붙여 작성합니다.',
       hint_en: 'Combine the percent sign and the equals sign with no space between them.',
-      templateCode: 'num = 29\nnum §§ 6\nprint(num)',
+      templateCode: 'num = 29\nnum §§§ 6\nprint(num)',
       targetCode: 'num = 29\nnum %= 6\nprint(num)',
       expectedVariables: { num: 5 },
       testCases: [
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound concatenation operator to append "thon" to "Py".',
       hint_ko: '문자열 변수 뒤에 글자를 덧붙일 때도 숫자와 똑같이 덧셈 복합 대입 기호를 씁니다.',
       hint_en: 'Use the compound addition operator to append text to a string variable.',
-      templateCode: 'word = "Py"\nword §§ "thon"\nprint(word)',
+      templateCode: 'word = "Py"\nword §§§ "thon"\nprint(word)',
       targetCode: 'word = "Py"\nword += "thon"\nprint(word)',
       expectedVariables: { word: 'Python' },
       testCases: [
@@ -158,7 +158,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the exponentiation compound operator on line 4 to print [Go] 9.',
       hint_ko: '거듭제곱 기호인 별표 두 개 뒤에 등호를 바로 붙여 작성합니다.',
       hint_en: 'Write two asterisks followed immediately by an equals sign.',
-      templateCode: 'txt = "[Go"\ntxt += "]"\nx = 3\nx §§§ 2\nprint(txt, x)',
+      templateCode: 'txt = "[Go"\ntxt += "]"\nx = 3\nx §§§§ 2\nprint(txt, x)',
       targetCode: 'txt = "[Go"\ntxt += "]"\nx = 3\nx **= 2\nprint(txt, x)',
       expectedVariables: { txt: '[Go]', x: 9 },
       testCases: [
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks so a becomes 3, b becomes 4, and s becomes "Ans:".',
       hint_ko: '정수 몫 복합 대입, 나머지 복합 대입, 그리고 문자열 누적 덧셈 복합 대입을 차례로 채웁니다.',
       hint_en: 'Use floor division assignment, modulo assignment, and string addition assignment in order.',
-      templateCode: 'a = 25\nb = 25\ns = "Ans"\na §§§ 7\nb §§ 7\ns §§ ":"\nprint(s, a, b)',
+      templateCode: 'a = 25\nb = 25\ns = "Ans"\na §§§§ 7\nb §§§ 7\ns §§§ ":"\nprint(s, a, b)',
       targetCode: 'a = 25\nb = 25\ns = "Ans"\na //= 7\nb %= 7\ns += ":"\nprint(s, a, b)',
       expectedVariables: { a: 3, b: 4, s: 'Ans:' },
       testCases: [
@@ -238,7 +238,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 using a compound operator to update num with its floor quotient by 10.',
       hint_ko: '변수 num에 정수 몫 복합 대입 연산자와 10을 적용해 일의 자리를 버립니다.',
       hint_en: 'Use the //= operator with 10 on variable num.',
-      templateCode: 'num = 479\n§§§§§§§§§§\nprint(num)',
+      templateCode: 'num = 479\n§§§§§§§§§§§\nprint(num)',
       targetCode: 'num = 479\nnum //= 10\nprint(num)',
       expectedVariables: { num: 47 },
       testCases: [
@@ -258,7 +258,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to append "*" * 3 to title using the += operator.',
       hint_ko: '문자열 반복 수식 "*" * 3을 복합 대입 연산자로 title 변수 뒤에 덧붙입니다.',
       hint_en: 'Use title += "*" * 3 on line 2 to append three asterisks.',
-      templateCode: 'title = "Boss"\n§§§§§§§§§§§§§§§§\nprint(title)',
+      templateCode: 'title = "Boss"\n§§§§§§§§§§§§§§§§§\nprint(title)',
       targetCode: 'title = "Boss"\ntitle += "*" * 3\nprint(title)',
       expectedVariables: { title: 'Boss***' },
       testCases: [

@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "'square root'의 약자인 네 글자 함수 이름을 math. 뒤에 입력하세요.",
       "hint_en": "Type the 4-letter function name abbreviated from 'square root'.",
       "targetCode": "import math\nprint(int(math.sqrt(81)))",
-      "templateCode": "import math\nprint(int(math.§§§§(81)))",
+      "templateCode": "import math\nprint(int(math.§§§§§(81)))",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "'천장(ceiling)'의 앞 네 글자를 딴 올림 함수를 math. 뒤에 적으세요.",
       "hint_en": "Enter the 4-letter ceiling function name after math..",
       "targetCode": "import math\nn = int(input())\nprint(math.ceil(n / 10))",
-      "templateCode": "import math\nn = int(input())\nprint(math.§§§§(n / 10))",
+      "templateCode": "import math\nn = int(input())\nprint(math.§§§§§(n / 10))",
       "testCases": [
         {
           "id": 1,
@@ -146,7 +146,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "'Greatest Common Divisor'의 약자인 세 글자 함수를 math. 뒤에 적으세요.",
       "hint_en": "Type the 3-letter abbreviation for Greatest Common Divisor.",
       "targetCode": "import math\nprint(math.gcd(24, 36))",
-      "templateCode": "import math\nprint(math.§§§(24, 36))",
+      "templateCode": "import math\nprint(math.§§§§(24, 36))",
       "testCases": [
         {
           "id": 1,
@@ -183,7 +183,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "'~로부터'라는 뜻의 네 글자 파이썬 키워드를 맨 앞에 적으세요.",
       "hint_en": "Enter the 4-letter keyword meaning 'out of / from' at the start of the import line.",
       "targetCode": "from math import floor\nprint(floor(7.9))",
-      "templateCode": "§§§§ math import floor\nprint(floor(7.9))",
+      "templateCode": "§§§§§ math import floor\nprint(floor(7.9))",
       "testCases": [
         {
           "id": 1,
@@ -202,7 +202,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "모듈 불러오기 키워드, 올림 함수, 내림 함수를 순서대로 채워보세요.",
       "hint_en": "Fill in the module import keyword, the ceiling function, and the floor function.",
       "targetCode": "import math\nx = 4.3\nprint(math.ceil(x), math.floor(x), int(math.sqrt(25)))",
-      "templateCode": "§§§§§§ math\nx = 4.3\nprint(math.§§§§(x), math.§§§§§(x), int(math.sqrt(25)))",
+      "templateCode": "§§§§§§§ math\nx = 4.3\nprint(math.§§§§§(x), math.§§§§§§(x), int(math.sqrt(25)))",
       "testCases": [
         {
           "id": 1,
@@ -264,7 +264,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "import math 두 단어로 수학 모듈을 불러오세요.",
       "hint_en": "Write import math on the first line.",
       "targetCode": "import math\nprint(math.factorial(4))",
-      "templateCode": "§§§§§§§§§§§\nprint(math.factorial(4))",
+      "templateCode": "§§§§§§§§§§§§\nprint(math.factorial(4))",
       "testCases": [
         {
           "id": 1,
@@ -283,7 +283,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "hint_ko": "pages = math.ceil(n / 10) 형태로 작성하세요.",
       "hint_en": "Write pages = math.ceil(n / 10) on the masked line.",
       "targetCode": "import math\nn = int(input())\npages = math.ceil(n / 10)\nprint(pages)",
-      "templateCode": "import math\nn = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(pages)",
+      "templateCode": "import math\nn = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(pages)",
       "testCases": [
         {
           "id": 1,

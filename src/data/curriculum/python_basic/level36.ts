@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conditional loop keyword to print 1 through 4 as long as i is at most 4.',
       hint_ko: '영어로 ~하는 동안을 뜻하는 다섯 글자 소문자 키워드로 조건 반복문을 시작합니다.',
       hint_en: 'Start the conditional loop with the five-letter keyword meaning "during the time that".',
-      templateCode: 'i = 1\n§§§§§ i <= 4:\n    print(i, end=" ")\n    i += 1',
+      templateCode: 'i = 1\n§§§§§§ i <= 4:\n    print(i, end=" ")\n    i += 1',
       targetCode: 'i = 1\nwhile i <= 4:\n    print(i, end=" ")\n    i += 1',
       testCases: [
         {
@@ -82,7 +82,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound subtraction operator to decrease n by 2 each turn.',
       hint_ko: 'n에서 2를 빼서 다시 n에 저장하는 복합 대입 기호를 입력합니다.',
       hint_en: 'Use the minus-equals operator to subtract 2 from n on each iteration.',
-      templateCode: 'n = 6\nwhile n > 0:\n    print(n, end=" ")\n    n §§ 2',
+      templateCode: 'n = 6\nwhile n > 0:\n    print(n, end=" ")\n    n §§§ 2',
       targetCode: 'n = 6\nwhile n > 0:\n    print(n, end=" ")\n    n -= 2',
       testCases: [
         {
@@ -124,7 +124,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the less-than operator to keep adding i while total is below limit.',
       hint_ko: 'total이 limit 미만인 동안 반복하고, limit 이상이 되는 순간 멈추도록 왼쪽이 닫힌 부등호를 넣습니다.',
       hint_en: 'Use the strict less-than angle bracket so the loop stops once total reaches limit.',
-      templateCode: 'limit = int(input())\ntotal = 0\ni = 1\nwhile total § limit:\n    total += i\n    i += 1\nprint(total)',
+      templateCode: 'limit = int(input())\ntotal = 0\ni = 1\nwhile total §§ limit:\n    total += i\n    i += 1\nprint(total)',
       targetCode: 'limit = int(input())\ntotal = 0\ni = 1\nwhile total < limit:\n    total += i\n    i += 1\nprint(total)',
       testCases: [
         {
@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the floor-division compound operator to halve n on each iteration.',
       hint_ko: '슬래시 두 개와 등호를 나란히 붙인 정수 몫 복합 대입 연산자를 입력합니다.',
       hint_en: 'Use the double-slash-equals operator to update n with its floor quotient.',
-      templateCode: 'n = int(input())\ncnt = 0\nwhile n >= 1:\n    n §§§ 2\n    cnt += 1\nprint(cnt)',
+      templateCode: 'n = int(input())\ncnt = 0\nwhile n >= 1:\n    n §§§§ 2\n    cnt += 1\nprint(cnt)',
       targetCode: 'n = int(input())\ncnt = 0\nwhile n >= 1:\n    n //= 2\n    cnt += 1\nprint(cnt)',
       testCases: [
         {
@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to extract and sum every digit of positive integer n.',
       hint_ko: '조건 반복 키워드, 10으로 나눈 나머지를 구하는 기호, 10으로 나눈 몫으로 갱신하는 연산자를 차례로 채웁니다.',
       hint_en: 'Enter the while keyword, modulo operator %, and floor-division assignment //=.',
-      templateCode: 'n = int(input())\ns = 0\n§§§§§ n > 0:\n    s += n § 10\n    n §§§ 10\nprint(s)',
+      templateCode: 'n = int(input())\ns = 0\n§§§§§§ n > 0:\n    s += n §§ 10\n    n §§§§ 10\nprint(s)',
       targetCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s)',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Complete Line] Write the while header repeating as long as i <= n.',
       hint_ko: 'while i <= n: 형태로 조건 반복문 헤더와 콜론을 작성해보세요.',
       hint_en: 'Write while i <= n: including the trailing colon.',
-      templateCode: 'n = int(input())\ni = 1\n§§§§§§§§§§§§§\n    print(i, end=" ")\n    i += 1',
+      templateCode: 'n = int(input())\ni = 1\n§§§§§§§§§§§§§§\n    print(i, end=" ")\n    i += 1',
       targetCode: 'n = int(input())\ni = 1\nwhile i <= n:\n    print(i, end=" ")\n    i += 1',
       testCases: [
         {
@@ -291,7 +291,7 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line updating n with floor division by 10 (n //= 10).',
       hint_ko: '4칸 들여쓰기 뒤에 n //= 10을 작성해 일의 자리를 잘라내보세요.',
       hint_en: 'Keep the 4-space indentation and write n //= 10.',
-      templateCode: 'n = int(input())\ncnt = 0\nwhile n > 0:\n    cnt += 1\n    §§§§§§§§\nprint(cnt)',
+      templateCode: 'n = int(input())\ncnt = 0\nwhile n > 0:\n    cnt += 1\n    §§§§§§§§§\nprint(cnt)',
       targetCode: 'n = int(input())\ncnt = 0\nwhile n > 0:\n    cnt += 1\n    n //= 10\nprint(cnt)',
       testCases: [
         {

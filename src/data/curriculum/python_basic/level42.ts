@@ -54,7 +54,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Fill Blank] Update the last element of items to "bow" and print the list.',
       hint_ko: '뒤에서 첫 번째 위치를 가리키는 음수 인덱스를 대괄호 안에 적으세요.',
       hint_en: 'Use the negative index that refers to the last item inside the brackets.',
-      templateCode: 'items = ["sword", "shield", "staff"]\nitems[§§] = "bow"\nprint(items)',
+      templateCode: 'items = ["sword", "shield", "staff"]\nitems[§§§] = "bow"\nprint(items)',
       targetCode: 'items = ["sword", "shield", "staff"]\nitems[-1] = "bow"\nprint(items)',
       testCases: [
         {
@@ -91,7 +91,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound assignment operator to subtract 15 from the first score.',
       hint_ko: '기존 값에서 오른쪽 값을 빼서 다시 저장하는 두 글자 연산자를 입력하세요.',
       hint_en: 'Type the two-character operator that subtracts a value in place.',
-      templateCode: 'scores = [95, 80, 70]\nscores[0] §§ 15\nprint(scores)',
+      templateCode: 'scores = [95, 80, 70]\nscores[0] §§§ 15\nprint(scores)',
       targetCode: 'scores = [95, 80, 70]\nscores[0] -= 15\nprint(scores)',
       testCases: [
         {
@@ -128,7 +128,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Fill Blank] Swap the first and second elements of cards and print the list.',
       hint_ko: '우변의 첫 자리에 와야 할 두 번째 요소 인덱싱 표현식을 채우세요.',
       hint_en: 'Fill in the indexed expression for the second element on the right-hand side.',
-      templateCode: 'cards = ["A", "B", "C"]\ncards[0], cards[1] = §§§§§§§§, cards[0]\nprint(cards)',
+      templateCode: 'cards = ["A", "B", "C"]\ncards[0], cards[1] = §§§§§§§§§, cards[0]\nprint(cards)',
       targetCode: 'cards = ["A", "B", "C"]\ncards[0], cards[1] = cards[1], cards[0]\nprint(cards)',
       testCases: [
         {
@@ -165,7 +165,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Fill Blank] Use the deletion keyword to remove the first element of logs and print the list.',
       hint_ko: '지정한 인덱스의 요소를 제거하는 세 글자 파이썬 키워드를 적으세요.',
       hint_en: 'Write the 3-letter Python keyword that deletes an indexed item.',
-      templateCode: 'logs = ["err", "ok", "done"]\n§§§ logs[0]\nprint(logs)',
+      templateCode: 'logs = ["err", "ok", "done"]\n§§§§ logs[0]\nprint(logs)',
       targetCode: 'logs = ["err", "ok", "done"]\ndel logs[0]\nprint(logs)',
       testCases: [
         {
@@ -184,7 +184,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Fill Blank] Delete the first element, add 5 to the new first element, and print the list with its length.',
       hint_ko: '삭제 키워드, 누적 덧셈 연산자, 길이 함수를 순서대로 채워보세요.',
       hint_en: 'Fill in the deletion keyword, compound addition operator, and length function in order.',
-      templateCode: 'nums = [99, 10, 20, 30]\n§§§ nums[0]\nnums[0] §§ 5\nprint(nums, §§§(nums))',
+      templateCode: 'nums = [99, 10, 20, 30]\n§§§§ nums[0]\nnums[0] §§§ 5\nprint(nums, §§§§(nums))',
       targetCode: 'nums = [99, 10, 20, 30]\ndel nums[0]\nnums[0] += 5\nprint(nums, len(nums))',
       testCases: [
         {
@@ -241,7 +241,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that deletes the last element of nums using del and [-1].',
       hint_ko: '삭제 키워드 뒤에 리스트의 음수 인덱스 [-1]을 적어 마지막 칸을 지우세요.',
       hint_en: 'Follow the del keyword with the negative index for the last element.',
-      templateCode: 'nums = [10, 20, 30, 99]\n§§§§§§§§§§§§\nprint(nums)',
+      templateCode: 'nums = [10, 20, 30, 99]\n§§§§§§§§§§§§§\nprint(nums)',
       targetCode: 'nums = [10, 20, 30, 99]\ndel nums[-1]\nprint(nums)',
       testCases: [
         {
@@ -260,7 +260,7 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that adds bonus to the first element of scores.',
       hint_ko: '0번 인덱스 요소에 복합 덧셈 연산자로 입력 변수를 더하세요.',
       hint_en: 'Use += to add bonus onto index 0 of scores.',
-      templateCode: 'scores = [70, 80, 90]\nbonus = int(input())\nif bonus > 0:\n    §§§§§§§§§§§§§§§§§§\nprint(scores)',
+      templateCode: 'scores = [70, 80, 90]\nbonus = int(input())\nif bonus > 0:\n    §§§§§§§§§§§§§§§§§§§\nprint(scores)',
       targetCode: 'scores = [70, 80, 90]\nbonus = int(input())\nif bonus > 0:\n    scores[0] += bonus\nprint(scores)',
       testCases: [
         {

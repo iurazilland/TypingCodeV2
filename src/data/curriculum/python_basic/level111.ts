@@ -68,7 +68,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "예외를 직접 일으키는 다섯 글자 파이썬 키워드를 입력하세요.",
       "hint_en": "Type the 5-letter Python keyword used to trigger an exception.",
       "targetCode": "age = int(input())\ntry:\n    if age < 0:\n        raise ValueError(\"Neg\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
-      "templateCode": "age = int(input())\ntry:\n    if age < 0:\n        §§§§§ ValueError(\"Neg\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
+      "templateCode": "age = int(input())\ntry:\n    if age < 0:\n        §§§§§§ ValueError(\"Neg\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
       "testCases": [
         {
           "id": 1,
@@ -115,7 +115,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "아래 except 절에서 잡고 있는 열 글자 값 오류 예외 클래스 이름을 적으세요.",
       "hint_en": "Enter the 10-letter exception class name caught by the except clause below.",
       "targetCode": "def check(sc):\n    if sc > 100:\n        raise ValueError(\"Over100\")\n    return sc\n\ntry:\n    print(check(int(input())))\nexcept ValueError as e:\n    print(e)",
-      "templateCode": "def check(sc):\n    if sc > 100:\n        raise §§§§§§§§§§(\"Over100\")\n    return sc\n\ntry:\n    print(check(int(input())))\nexcept ValueError as e:\n    print(e)",
+      "templateCode": "def check(sc):\n    if sc > 100:\n        raise §§§§§§§§§§§(\"Over100\")\n    return sc\n\ntry:\n    print(check(int(input())))\nexcept ValueError as e:\n    print(e)",
       "testCases": [
         {
           "id": 1,
@@ -157,7 +157,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "예외를 직접 발생시키는 다섯 글자 파이썬 키워드를 적으세요.",
       "hint_en": "Write the 5-letter keyword that raises an exception.",
       "targetCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            raise ValueError(\"Full\")\n        self.items.append(x)\n\nb = Box()\nfor v in [\"A\", \"B\", \"C\"]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(len(b.items))",
-      "templateCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            §§§§§ ValueError(\"Full\")\n        self.items.append(x)\n\nb = Box()\nfor v in [\"A\", \"B\", \"C\"]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(len(b.items))",
+      "templateCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            §§§§§§ ValueError(\"Full\")\n        self.items.append(x)\n\nb = Box()\nfor v in [\"A\", \"B\", \"C\"]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(len(b.items))",
       "testCases": [
         {
           "id": 1,
@@ -194,7 +194,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "예외 객체를 변수 e에 연결하는 두 글자 키워드를 적으세요.",
       "hint_en": "Enter the 2-letter keyword that binds the exception instance to e.",
       "targetCode": "def set_lv(lv):\n    if lv < 1:\n        raise ValueError(\"MinLv1\")\n    return lv\n\ntry:\n    print(set_lv(0))\nexcept ValueError as e:\n    print(f\"Err:{e}\")",
-      "templateCode": "def set_lv(lv):\n    if lv < 1:\n        raise ValueError(\"MinLv1\")\n    return lv\n\ntry:\n    print(set_lv(0))\nexcept ValueError §§ e:\n    print(f\"Err:{e}\")",
+      "templateCode": "def set_lv(lv):\n    if lv < 1:\n        raise ValueError(\"MinLv1\")\n    return lv\n\ntry:\n    print(set_lv(0))\nexcept ValueError §§§ e:\n    print(f\"Err:{e}\")",
       "testCases": [
         {
           "id": 1,
@@ -213,7 +213,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "예외 발생 키워드(5글자), 별칭 키워드(2글자), 무조건 실행 마무리 키워드(7글자)를 차례로 채우세요.",
       "hint_en": "Supply the 5-letter exception-raising keyword, the 2-letter alias keyword, and the 7-letter cleanup keyword.",
       "targetCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            raise ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError as e:\n    print(e)\nfinally:\n    print(w)",
-      "templateCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            §§§§§ ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError §§ e:\n    print(e)\n§§§§§§§:\n    print(w)",
+      "templateCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            §§§§§§ ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError §§§ e:\n    print(e)\n§§§§§§§§:\n    print(w)",
       "testCases": [
         {
           "id": 1,
@@ -280,7 +280,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "들여쓰기 8칸 뒤에 raise ValueError(\"Neg\")를 작성하세요.",
       "hint_en": "Write raise ValueError(\"Neg\") at the indented line.",
       "targetCode": "n = int(input())\ntry:\n    if n < 0:\n        raise ValueError(\"Neg\")\n    print(n * 2)\nexcept ValueError as e:\n    print(e)",
-      "templateCode": "n = int(input())\ntry:\n    if n < 0:\n        §§§§§§§§§§§§§§§§§§§§§§§\n    print(n * 2)\nexcept ValueError as e:\n    print(e)",
+      "templateCode": "n = int(input())\ntry:\n    if n < 0:\n        §§§§§§§§§§§§§§§§§§§§§§§§\n    print(n * 2)\nexcept ValueError as e:\n    print(e)",
       "testCases": [
         {
           "id": 1,
@@ -304,7 +304,7 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "hint_ko": "들여쓰기 12칸 뒤에 raise ValueError(\"Zero\")를 작성하세요.",
       "hint_en": "Write raise ValueError(\"Zero\") inside the if block.",
       "targetCode": "class Box:\n    def set_qty(self, n):\n        if n <= 0:\n            raise ValueError(\"Zero\")\n        return n\n\nb = Box()\ntry:\n    print(b.set_qty(0))\nexcept ValueError as e:\n    print(e)",
-      "templateCode": "class Box:\n    def set_qty(self, n):\n        if n <= 0:\n            §§§§§§§§§§§§§§§§§§§§§§§§\n        return n\n\nb = Box()\ntry:\n    print(b.set_qty(0))\nexcept ValueError as e:\n    print(e)",
+      "templateCode": "class Box:\n    def set_qty(self, n):\n        if n <= 0:\n            §§§§§§§§§§§§§§§§§§§§§§§§§\n        return n\n\nb = Box()\ntry:\n    print(b.set_qty(0))\nexcept ValueError as e:\n    print(e)",
       "testCases": [
         {
           "id": 1,

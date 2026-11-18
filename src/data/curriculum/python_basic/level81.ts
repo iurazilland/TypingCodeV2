@@ -63,7 +63,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception type inside the loop so non-numeric strings are skipped.",
       "hint_ko": "int(s) 변환이 실패할 때 발생하는 열 글자 값 예외 이름을 적으세요.",
       "hint_en": "Specify the ten-letter invalid-value exception raised by int(s).",
-      "templateCode": "items = [\"5\", \"bad\", \"15\", \"err\"]\nnums = []\nfor s in items:\n    try:\n        nums.append(int(s))\n    except §§§§§§§§§§:\n        continue\nprint(nums, sum(nums))",
+      "templateCode": "items = [\"5\", \"bad\", \"15\", \"err\"]\nnums = []\nfor s in items:\n    try:\n        nums.append(int(s))\n    except §§§§§§§§§§§:\n        continue\nprint(nums, sum(nums))",
       "targetCode": "items = [\"5\", \"bad\", \"15\", \"err\"]\nnums = []\nfor s in items:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        continue\nprint(nums, sum(nums))",
       "testCases": [
         {
@@ -105,7 +105,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the keyword that immediately exits the while True loop once int(input()) succeeds.",
       "hint_ko": "반복문을 그 자리에서 즉시 끝내고 바깥으로 빠져나가는 다섯 글자 제어 키워드를 적으세요.",
       "hint_en": "Use the five-letter loop-control keyword that terminates the loop immediately.",
-      "templateCode": "while True:\n    try:\n        age = int(input())\n        §§§§§\n    except ValueError:\n        print(\"Again\")\nprint(f\"OK:{age}\")",
+      "templateCode": "while True:\n    try:\n        age = int(input())\n        §§§§§§\n    except ValueError:\n        print(\"Again\")\nprint(f\"OK:{age}\")",
       "targetCode": "while True:\n    try:\n        age = int(input())\n        break\n    except ValueError:\n        print(\"Again\")\nprint(f\"OK:{age}\")",
       "testCases": [
         {
@@ -147,7 +147,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete safe_int() so it returns default when ValueError occurs.",
       "hint_ko": "예외 블록 안에서도 함수 호출부로 기본값을 되돌려주는 여섯 글자 키워드를 적으세요.",
       "hint_en": "Use the six-letter keyword that sends default back to the caller.",
-      "templateCode": "def safe_int(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        §§§§§§ default\nprint(safe_int(\"42\"), safe_int(\"no\", -1))",
+      "templateCode": "def safe_int(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        §§§§§§§ default\nprint(safe_int(\"42\"), safe_int(\"no\", -1))",
       "targetCode": "def safe_int(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        return default\nprint(safe_int(\"42\"), safe_int(\"no\", -1))",
       "testCases": [
         {
@@ -184,7 +184,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception type inside Vault.check() so missing keys return 0.",
       "hint_ko": "딕셔너리 속성 self.data에 존재하지 않는 키를 조회했을 때 발생하는 여덟 글자 예외 이름을 적으세요.",
       "hint_en": "Specify the eight-letter exception raised when a key is absent from a dictionary.",
-      "templateCode": "class Vault:\n    def __init__(self):\n        self.data = {\"gold\": 100}\n    def check(self, k):\n        try:\n            return self.data[k]\n        except §§§§§§§§:\n            return 0\nv = Vault()\nprint(v.check(\"gold\"), v.check(\"silver\"))",
+      "templateCode": "class Vault:\n    def __init__(self):\n        self.data = {\"gold\": 100}\n    def check(self, k):\n        try:\n            return self.data[k]\n        except §§§§§§§§§:\n            return 0\nv = Vault()\nprint(v.check(\"gold\"), v.check(\"silver\"))",
       "targetCode": "class Vault:\n    def __init__(self):\n        self.data = {\"gold\": 100}\n    def check(self, k):\n        try:\n            return self.data[k]\n        except KeyError:\n            return 0\nv = Vault()\nprint(v.check(\"gold\"), v.check(\"silver\"))",
       "testCases": [
         {
@@ -203,7 +203,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the Adder.sum_valid method by filling in the attempt keyword, exception type, and result-sending keyword.",
       "hint_ko": "예외 검사를 시작하는 키워드와 잘못된 정수 변환 예외 이름, 그리고 합계를 돌려주는 키워드를 확인하세요.",
       "hint_en": "Check the three-letter attempt keyword, the invalid-value exception name, and the keyword that sends back total.",
-      "templateCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            §§§:\n                total += int(s)\n            except §§§§§§§§§§:\n                continue\n        §§§§§§ total\na = Adder()\nprint(a.sum_valid(input().split()))",
+      "templateCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            §§§§:\n                total += int(s)\n            except §§§§§§§§§§§:\n                continue\n        §§§§§§§ total\na = Adder()\nprint(a.sum_valid(input().split()))",
       "targetCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            try:\n                total += int(s)\n            except ValueError:\n                continue\n        return total\na = Adder()\nprint(a.sum_valid(input().split()))",
       "testCases": [
         {
@@ -265,7 +265,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Complete Line] Write the indented line inside except ZeroDivisionError: that returns -1.",
       "hint_ko": "들여쓰기 8칸 위치에서 반환 키워드와 -1을 작성하세요.",
       "hint_en": "Write return -1 at the 8-space indentation level.",
-      "templateCode": "def ratio(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        §§§§§§§§§\nprint(ratio(15, 3), ratio(15, 0))",
+      "templateCode": "def ratio(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        §§§§§§§§§§\nprint(ratio(15, 3), ratio(15, 0))",
       "targetCode": "def ratio(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return -1\nprint(ratio(15, 3), ratio(15, 0))",
       "testCases": [
         {
@@ -284,7 +284,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside try that breaks out of the while True loop after valid input.",
       "hint_ko": "변환 줄 바로 아래 같은 들여쓰기 위치에 반복 탈출 키워드를 적으세요.",
       "hint_en": "Write break at the 8-space indentation level inside the try block.",
-      "templateCode": "while True:\n    try:\n        val = int(input())\n        §§§§§\n    except ValueError:\n        print(\"No\")\nprint(val + 1)",
+      "templateCode": "while True:\n    try:\n        val = int(input())\n        §§§§§§\n    except ValueError:\n        print(\"No\")\nprint(val + 1)",
       "targetCode": "while True:\n    try:\n        val = int(input())\n        break\n    except ValueError:\n        print(\"No\")\nprint(val + 1)",
       "testCases": [
         {

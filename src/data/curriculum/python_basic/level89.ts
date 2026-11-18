@@ -69,7 +69,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the fallback keyword in the ternary expression so scores under 60 become \"Fail\".",
       "hint_ko": "한 줄 조건 표현식에서 조건이 거짓일 때 선택할 값 앞에 적는 네 글자 키워드를 입력하세요.",
       "hint_en": "Write the four-letter keyword placed before the fallback value in a ternary expression.",
-      "templateCode": "score = int(input())\nmsg = \"Pass\" if score >= 60 §§§§ \"Fail\"\nprint(msg)",
+      "templateCode": "score = int(input())\nmsg = \"Pass\" if score >= 60 §§§§§ \"Fail\"\nprint(msg)",
       "targetCode": "score = int(input())\nmsg = \"Pass\" if score >= 60 else \"Fail\"\nprint(msg)",
       "testCases": [
         {
@@ -111,7 +111,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the condition keyword inside clamp_zero(x) so x is returned when x >= 0.",
       "hint_ko": "참일 때의 값(x) 바로 뒤에 붙이는 두 글자 조건 키워드를 적으세요.",
       "hint_en": "Write the two-letter conditional keyword right after the true-branch value x.",
-      "templateCode": "def clamp_zero(x):\n    return x §§ x >= 0 else 0\nprint(clamp_zero(12), clamp_zero(-5))",
+      "templateCode": "def clamp_zero(x):\n    return x §§§ x >= 0 else 0\nprint(clamp_zero(12), clamp_zero(-5))",
       "targetCode": "def clamp_zero(x):\n    return x if x >= 0 else 0\nprint(clamp_zero(12), clamp_zero(-5))",
       "testCases": [
         {
@@ -153,7 +153,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the ternary expression inside print() so it outputs \"Open\" when stock > 0.",
       "hint_ko": "거짓일 때 출력할 \"SoldOut\" 앞에 오는 네 글자 분기 키워드를 적으세요.",
       "hint_en": "Use the four-letter keyword before the fallback value \"SoldOut\".",
-      "templateCode": "stock = int(input())\nprint(\"Open\" if stock > 0 §§§§ \"SoldOut\")",
+      "templateCode": "stock = int(input())\nprint(\"Open\" if stock > 0 §§§§§ \"SoldOut\")",
       "targetCode": "stock = int(input())\nprint(\"Open\" if stock > 0 else \"SoldOut\")",
       "testCases": [
         {
@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the true-branch value in the ternary expression so even numbers add n and odd numbers add -n.",
       "hint_ko": "n이 짝수(n % 2 == 0)일 때 그대로 더할 반복 변수 이름을 if 앞에 적으세요.",
       "hint_en": "Place the loop variable n before if so even numbers are added as-is.",
-      "templateCode": "nums = [10, 3, 6, 1]\ntotal = 0\nfor n in nums:\n    total += n if § % 2 == 0 else -n\nprint(total)",
+      "templateCode": "nums = [10, 3, 6, 1]\ntotal = 0\nfor n in nums:\n    total += n if §§ % 2 == 0 else -n\nprint(total)",
       "targetCode": "nums = [10, 3, 6, 1]\ntotal = 0\nfor n in nums:\n    total += n if n % 2 == 0 else -n\nprint(total)",
       "testCases": [
         {
@@ -214,7 +214,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the ternary keywords and result-sending statement in calc_pay.",
       "hint_ko": "참값 뒤의 조건 키워드, 거짓값 앞의 분기 키워드, 그리고 결과를 돌려주는 키워드를 차례로 확인하세요.",
       "hint_en": "Check the condition keyword, the fallback keyword, and the keyword that sends back the result.",
-      "templateCode": "def calc_pay(price, grade):\n    off = 500 §§ grade == \"VIP\" §§§§ 100\n    §§§§§§ price - off\nprint(calc_pay(3000, input()))",
+      "templateCode": "def calc_pay(price, grade):\n    off = 500 §§§ grade == \"VIP\" §§§§§ 100\n    §§§§§§§ price - off\nprint(calc_pay(3000, input()))",
       "targetCode": "def calc_pay(price, grade):\n    off = 500 if grade == \"VIP\" else 100\n    return price - off\nprint(calc_pay(3000, input()))",
       "testCases": [
         {
@@ -276,7 +276,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that assigns \"Pos\" if n > 0 else \"ZeroOrNeg\" to sign.",
       "hint_ko": "sign = \"Pos\" if n > 0 else \"ZeroOrNeg\" 형태로 삼항 표현식을 작성하세요.",
       "hint_en": "Write sign = \"Pos\" if n > 0 else \"ZeroOrNeg\".",
-      "templateCode": "n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sign)",
+      "templateCode": "n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sign)",
       "targetCode": "n = int(input())\nsign = \"Pos\" if n > 0 else \"ZeroOrNeg\"\nprint(sign)",
       "testCases": [
         {
@@ -300,7 +300,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Complete Line] Write the indented line that returns a if a < b else b.",
       "hint_ko": "들여쓰기 4칸 위치에서 return 뒤에 삼항 표현식을 이어 적으세요.",
       "hint_en": "Write return a if a < b else b indented inside the function.",
-      "templateCode": "def smaller(a, b):\n    §§§§§§§§§§§§§§§§§§§§§§§§\nprint(smaller(8, 3), smaller(4, 9))",
+      "templateCode": "def smaller(a, b):\n    §§§§§§§§§§§§§§§§§§§§§§§§§\nprint(smaller(8, 3), smaller(4, 9))",
       "targetCode": "def smaller(a, b):\n    return a if a < b else b\nprint(smaller(8, 3), smaller(4, 9))",
       "testCases": [
         {

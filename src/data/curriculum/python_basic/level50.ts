@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Fill Blank] Access the first character and third character of word and print them.',
       hint_ko: '첫 번째 글자를 가리키는 양수 인덱스 번호를 대괄호 안에 적으세요.',
       hint_en: 'Write the index number for the first character inside the brackets.',
-      templateCode: 'word = "Coding"\nprint(word[§], word[2])',
+      templateCode: 'word = "Coding"\nprint(word[§§], word[2])',
       targetCode: 'word = "Coding"\nprint(word[0], word[2])',
       testCases: [
         {
@@ -93,7 +93,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Fill Blank] Print the second character and the last character of code.',
       hint_ko: '맨 끝 글자를 가리키는 음수 인덱스 번호를 대괄호 안에 적으세요.',
       hint_en: 'Write the negative index for the last character inside the brackets.',
-      templateCode: 'code = input()\nprint(code[1], code[§§])',
+      templateCode: 'code = input()\nprint(code[1], code[§§§])',
       targetCode: 'code = input()\nprint(code[1], code[-1])',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Fill Blank] Print "Match" if the first and last characters of s are equal, else "Diff".',
       hint_ko: '마지막 글자를 꺼내는 음수 인덱싱 표현식을 등호 오른쪽에 적으세요.',
       hint_en: 'Write the negative indexing expression for the last character of s.',
-      templateCode: 's = input()\nif s[0] == §§§§§:\n    print("Match")\nelse:\n    print("Diff")',
+      templateCode: 's = input()\nif s[0] == §§§§§§:\n    print("Match")\nelse:\n    print("Diff")',
       targetCode: 's = input()\nif s[0] == s[-1]:\n    print("Match")\nelse:\n    print("Diff")',
       testCases: [
         {
@@ -177,7 +177,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Fill Blank] Access the first character of the second word in words using chained indexing.',
       hint_ko: 'words[1]로 꺼낸 단어 바로 뒤에 첫 글자를 가리키는 대괄호 인덱스를 이어 붙이세요.',
       hint_en: 'Follow words[1] with the bracketed index for its first character.',
-      templateCode: 'words = ["cat", "dog", "fox"]\nprint(words[1]§§§)',
+      templateCode: 'words = ["cat", "dog", "fox"]\nprint(words[1]§§§§)',
       targetCode: 'words = ["cat", "dog", "fox"]\nprint(words[1][0])',
       testCases: [
         {
@@ -196,7 +196,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Fill Blank] Concatenate the first character and last character of s into ends and print it.',
       hint_ko: '첫 글자 인덱스, 문자열 결합 연산자, 마지막 글자 음수 인덱스를 차례로 채우세요.',
       hint_en: 'Fill in the first index, concatenation operator, and negative last index.',
-      templateCode: 's = input()\nends = s[§] § s[§§]\nprint("Ends:", ends)',
+      templateCode: 's = input()\nends = s[§§] §§ s[§§§]\nprint("Ends:", ends)',
       targetCode: 's = input()\nends = s[0] + s[-1]\nprint("Ends:", ends)',
       testCases: [
         {
@@ -263,7 +263,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that assigns len(s) - 1 to the variable last.',
       hint_ko: '전체 문자열 길이에서 1을 뺀 값을 last 변수에 대입하세요.',
       hint_en: 'Subtract 1 from the length of s and assign it to last.',
-      templateCode: 's = input()\n§§§§§§§§§§§§§§§§§\nprint(last, s[last])',
+      templateCode: 's = input()\n§§§§§§§§§§§§§§§§§§\nprint(last, s[last])',
       targetCode: 's = input()\nlast = len(s) - 1\nprint(last, s[last])',
       testCases: [
         {
@@ -287,7 +287,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that computes the middle index len(s) // 2 into mid.',
       hint_ko: '문자열 길이를 2로 나눈 정수 몫(//)을 mid 변수에 대입하세요.',
       hint_en: 'Floor-divide len(s) by 2 using // and assign to mid.',
-      templateCode: 's = input()\n§§§§§§§§§§§§§§§§§\nprint(s[mid])',
+      templateCode: 's = input()\n§§§§§§§§§§§§§§§§§§\nprint(s[mid])',
       targetCode: 's = input()\nmid = len(s) // 2\nprint(s[mid])',
       testCases: [
         {

@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the boolean constant for false to store and print it.',
       hint_ko: '영어로 거짓을 뜻하는 다섯 글자 단어를 따옴표 없이 첫 글자만 대문자로 작성합니다.',
       hint_en: 'Write the five-letter English word for false without quotes, capitalizing only the first letter.',
-      templateCode: 'is_open = §§§§§\nprint(is_open)',
+      templateCode: 'is_open = §§§§§§\nprint(is_open)',
       targetCode: 'is_open = False\nprint(is_open)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the equality operator to check if pw matches "1234".',
       hint_ko: '양쪽 값이 서로 같은지 비교할 때는 등호 두 개를 빈틈없이 나란히 붙여 씁니다.',
       hint_en: 'Place two equals signs side by side with no space to test equality.',
-      templateCode: 'pw = "1234"\nprint(pw §§ "1234")',
+      templateCode: 'pw = "1234"\nprint(pw §§§ "1234")',
       targetCode: 'pw = "1234"\nprint(pw == "1234")',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the inequality operator to check if the input code differs from "ERR".',
       hint_ko: '서로 다름을 뜻할 때는 느낌표 뒤에 등호를 바로 붙여서 표기합니다.',
       hint_en: 'Write an exclamation mark followed immediately by an equals sign to test inequality.',
-      templateCode: 'code = input()\nprint(code §§ "ERR")',
+      templateCode: 'code = input()\nprint(code §§§ "ERR")',
       targetCode: 'code = input()\nprint(code != "ERR")',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the equality operator to compare integer 10 and string "10".',
       hint_ko: '모양이 같아 보여도 숫자와 문자열은 자료형이 다르므로 같음 비교에서 거짓으로 판정됩니다.',
       hint_en: 'Even with matching digits, an integer and a string have different types and compare as unequal.',
-      templateCode: 'num = 10\ntxt = "10"\nprint(num §§ txt)',
+      templateCode: 'num = 10\ntxt = "10"\nprint(num §§§ txt)',
       targetCode: 'num = 10\ntxt = "10"\nprint(num == txt)',
       testCases: [
         {
@@ -185,7 +185,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to add 5 to n, then check if it is a multiple of 3 and non-zero.',
       hint_ko: '누적 덧셈 복합 대입 연산자, 나머지가 0인지 확인하는 같음 기호, 0과 다른지 확인하는 다름 기호를 차례로 채웁니다.',
       hint_en: 'Use compound addition first, then the equality operator for remainder 0, and the inequality operator for non-zero.',
-      templateCode: 'n = int(input())\nn §§ 5\nprint(n % 3 §§ 0, n §§ 0)',
+      templateCode: 'n = int(input())\nn §§§ 5\nprint(n % 3 §§§ 0, n §§§ 0)',
       targetCode: 'n = int(input())\nn += 5\nprint(n % 3 == 0, n != 0)',
       testCases: [
         {
@@ -252,7 +252,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that stores whether n % 3 equals 0 in variable is_mul.',
       hint_ko: '변수 is_mul에 나머지 연산과 같음 비교식을 결합한 결과를 대입해보세요.',
       hint_en: 'Assign the result of checking whether n % 3 equals 0 to the variable is_mul.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§\nprint(is_mul)',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§\nprint(is_mul)',
       targetCode: 'n = int(input())\nis_mul = n % 3 == 0\nprint(is_mul)',
       testCases: [
         {
@@ -276,7 +276,7 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that prints whether str(n) is not equal (!=) to s.',
       hint_ko: 'print() 함수 안에서 str(n)과 s를 다름 비교 연산자로 비교해보세요.',
       hint_en: 'Compare str(n) and s with the inequality operator inside print().',
-      templateCode: 'n = 100\ns = input()\n§§§§§§§§§§§§§§§§§§',
+      templateCode: 'n = 100\ns = input()\n§§§§§§§§§§§§§§§§§§§',
       targetCode: 'n = 100\ns = input()\nprint(str(n) != s)',
       testCases: [
         {

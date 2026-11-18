@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multiplication symbol to print the product of 6 and 7 (42).',
       hint_ko: '두 숫자를 곱할 때는 키보드의 Shift + 8로 입력하는 별표 기호를 넣습니다.',
       hint_en: 'Enter the asterisk symbol between the two numbers to multiply them.',
-      templateCode: 'print(6 § 7)',
+      templateCode: 'print(6 §§ 7)',
       targetCode: 'print(6 * 7)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the division symbol to divide 20 by 4 and print 5.0.',
       hint_ko: '왼쪽 수를 오른쪽 수로 나눌 때는 슬래시 기호를 사이에 넣습니다.',
       hint_en: 'Place a forward slash between the two numbers to divide them.',
-      templateCode: 'print(20 § 4)',
+      templateCode: 'print(20 §§ 4)',
       targetCode: 'print(20 / 4)',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the division operator so 6 divided by 2 is subtracted from 20 to print 17.0.',
       hint_ko: '뺄셈보다 나눗셈의 우선순위가 높아 뒤쪽 나눗셈이 먼저 계산됩니다.',
       hint_en: 'Division has higher precedence than subtraction, so the right side is divided first.',
-      templateCode: 'print(20 - 6 § 2)',
+      templateCode: 'print(20 - 6 §§ 2)',
       targetCode: 'print(20 - 6 / 2)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the parenthesized subtraction of 15 and 5 so dividing by 2 prints 5.0.',
       hint_ko: '뺄셈이 나눗셈보다 먼저 실행되도록 소괄호로 감싼 뺄셈식을 작성합니다.',
       hint_en: 'Wrap the subtraction of 15 and 5 in parentheses so it evaluates before the division.',
-      templateCode: 'print(§§§§§§§§ / 2)',
+      templateCode: 'print(§§§§§§§§§ / 2)',
       targetCode: 'print((15 - 5) / 2)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks with operators so line 1 prints 30 and line 2 prints 5.0.',
       hint_ko: '첫째 줄은 괄호 안에서 10과 5를 더한 뒤 2를 곱하고, 둘째 줄은 30을 6으로 나눕니다.',
       hint_en: 'Add 10 and 5 inside parentheses then multiply by 2 on line 1, and divide 30 by 6 on line 2.',
-      templateCode: 'print((10 § 5) § 2)\nprint(30 § 6)',
+      templateCode: 'print((10 §§ 5) §§ 2)\nprint(30 §§ 6)',
       targetCode: 'print((10 + 5) * 2)\nprint(30 / 6)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to add 3 and 7 inside parentheses and multiply by 5 to print 50.',
       hint_ko: '첫째 줄의 괄호 곱셈 수식 형태를 참고해 둘째 줄의 print() 문을 완성해보세요.',
       hint_en: 'Follow the parenthesized multiplication pattern from line 1 to complete line 2.',
-      templateCode: 'print((10 + 20) * 2)\n§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print((10 + 20) * 2)\n§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print((10 + 20) * 2)\nprint((3 + 7) * 5)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to add 14 and 6 first, then divide by 4 to print 5.0.',
       hint_ko: '더할 두 숫자를 소괄호로 묶은 뒤 실수 나눗셈 연산자로 4를 나누어 출력합니다.',
       hint_en: 'Group the two numbers to add in parentheses, then divide by 4 inside print().',
-      templateCode: 'print((20 - 4) / 2)\n§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print((20 - 4) / 2)\n§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print((20 - 4) / 2)\nprint((14 + 6) / 4)',
       testCases: [
         {

@@ -61,7 +61,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Fill Blank] Assign 200 to local variable hp inside temp_buff() so 200 and 100 are printed.',
       hint_ko: '함수 안의 print문에서 출력하고 있는 두 글자 변수 이름을 등호 왼쪽에 적으세요.',
       hint_en: 'Write the two-letter variable name printed on the next line.',
-      templateCode: 'hp = 100\ndef temp_buff():\n    §§ = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
+      templateCode: 'hp = 100\ndef temp_buff():\n    §§§ = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
       targetCode: 'hp = 100\ndef temp_buff():\n    hp = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Fill Blank] Reference the outer global variable bonus inside total_score(s) to return 130.',
       hint_ko: '첫째 줄에서 선언된 다섯 글자 전역변수 이름을 덧셈 기호 뒤에 적으세요.',
       hint_en: 'Write the five-letter global variable name declared on line 1.',
-      templateCode: 'bonus = 50\ndef total_score(s):\n    return s + §§§§§\nprint(total_score(80))',
+      templateCode: 'bonus = 50\ndef total_score(s):\n    return s + §§§§§§\nprint(total_score(80))',
       targetCode: 'bonus = 50\ndef total_score(s):\n    return s + bonus\nprint(total_score(80))',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Fill Blank] Call level_up with lv and assign the returned result back to lv.',
       hint_ko: '위에서 정의한 함수 이름 뒤 소괄호에 변수 lv를 넣어 호출하세요.',
       hint_en: 'Invoke level_up passing lv as the argument.',
-      templateCode: 'def level_up(lv):\n    return lv + 1\nlv = 5\nlv = §§§§§§§§§§§§\nprint(lv)',
+      templateCode: 'def level_up(lv):\n    return lv + 1\nlv = 5\nlv = §§§§§§§§§§§§§\nprint(lv)',
       targetCode: 'def level_up(lv):\n    return lv + 1\nlv = 5\nlv = level_up(lv)\nprint(lv)',
       testCases: [
         {
@@ -172,7 +172,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the keyword that allows earn(n) to modify the outer variable gold.',
       hint_ko: '이 변수가 지역변수가 아니라 바깥의 전역변수임을 알려주는 여섯 글자 키워드를 적으세요.',
       hint_en: 'Type the six-letter keyword that binds gold to the global scope.',
-      templateCode: 'gold = 100\ndef earn(n):\n    §§§§§§ gold\n    gold += n\nearn(50)\nprint(gold)',
+      templateCode: 'gold = 100\ndef earn(n):\n    §§§§§§§ gold\n    gold += n\nearn(50)\nprint(gold)',
       targetCode: 'gold = 100\ndef earn(n):\n    global gold\n    gold += n\nearn(50)\nprint(gold)',
       testCases: [
         {
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the outer variable scope declaration, compound addition, and function call to print 25.',
       hint_ko: '전역변수 지정 키워드, 누적 덧셈 연산자, 그리고 호출할 함수 이름을 차례로 채우세요.',
       hint_en: 'Fill in the global keyword, the += operator, and the function name add_pt.',
-      templateCode: 'score = 10\ndef add_pt(pt):\n    §§§§§§ score\n    score §§ pt\n§§§§§§(15)\nprint(score)',
+      templateCode: 'score = 10\ndef add_pt(pt):\n    §§§§§§§ score\n    score §§§ pt\n§§§§§§§(15)\nprint(score)',
       targetCode: 'score = 10\ndef add_pt(pt):\n    global score\n    score += pt\nadd_pt(15)\nprint(score)',
       testCases: [
         {
@@ -248,7 +248,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Complete Line] Write the indented line that declares total as a global variable.',
       hint_ko: '전역변수 선언 키워드 뒤에 변수 이름 total을 공백으로 띄워 적으세요.',
       hint_en: 'Write global total on the first line inside the function.',
-      templateCode: 'total = 100\ndef add_fee(fee):\n    §§§§§§§§§§§§\n    total += fee\nadd_fee(20)\nprint(total)',
+      templateCode: 'total = 100\ndef add_fee(fee):\n    §§§§§§§§§§§§§\n    total += fee\nadd_fee(20)\nprint(total)',
       targetCode: 'total = 100\ndef add_fee(fee):\n    global total\n    total += fee\nadd_fee(20)\nprint(total)',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       prompt_en: '[Complete Line] Update variable val by assigning it the return value of boost(val).',
       hint_ko: '등호 왼쪽에 val을 적고 오른쪽에 boost(val) 호출식을 적으세요.',
       hint_en: 'Write val = boost(val) on line 4.',
-      templateCode: 'def boost(x):\n    return x * 2\nval = 15\n§§§§§§§§§§§§§§§§\nprint(val)',
+      templateCode: 'def boost(x):\n    return x * 2\nval = 15\n§§§§§§§§§§§§§§§§§\nprint(val)',
       targetCode: 'def boost(x):\n    return x * 2\nval = 15\nval = boost(val)\nprint(val)',
       testCases: [
         {

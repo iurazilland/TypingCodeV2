@@ -54,7 +54,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the empty list assignment for empty and print both lists.',
       hint_ko: '아무 값도 넣지 않은 대괄호 한 쌍으로 빈 리스트를 표현합니다.',
       hint_en: 'An empty pair of square brackets represents an empty list.',
-      templateCode: 'fruits = ["apple", "banana"]\nempty = §§\nprint(fruits)\nprint(empty)',
+      templateCode: 'fruits = ["apple", "banana"]\nempty = §§§\nprint(fruits)\nprint(empty)',
       targetCode: 'fruits = ["apple", "banana"]\nempty = []\nprint(fruits)\nprint(empty)',
       testCases: [
         {
@@ -91,7 +91,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the built-in function to print the number of items in colors.',
       hint_ko: '컬렉션의 길이를 구하는 세 글자 내장 함수를 호출하세요.',
       hint_en: 'Call the 3-letter built-in function that returns the length of a collection.',
-      templateCode: 'colors = ["red", "green", "blue"]\nprint("Count:", §§§(colors))',
+      templateCode: 'colors = ["red", "green", "blue"]\nprint("Count:", §§§§(colors))',
       targetCode: 'colors = ["red", "green", "blue"]\nprint("Count:", len(colors))',
       testCases: [
         {
@@ -128,7 +128,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Fill Blank] Access the first element and the third element of items and print them.',
       hint_ko: '가장 앞에 있는 첫 번째 요소의 인덱스 번호를 대괄호 안에 적으세요.',
       hint_en: 'Write the index number of the very first element inside the brackets.',
-      templateCode: 'items = ["sword", "shield", "potion"]\nprint(items[§], items[2])',
+      templateCode: 'items = ["sword", "shield", "potion"]\nprint(items[§§], items[2])',
       targetCode: 'items = ["sword", "shield", "potion"]\nprint(items[0], items[2])',
       testCases: [
         {
@@ -165,7 +165,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Fill Blank] Use a negative index to add the first and last elements of nums and print the sum.',
       hint_ko: '리스트의 맨 끝 요소를 가리키는 음수 인덱스 번호를 대괄호 안에 적으세요.',
       hint_en: 'Put the negative index for the last element inside the brackets.',
-      templateCode: 'nums = [15, 25, 35, 45]\ntotal = nums[0] + nums[§§]\nprint("Sum", total, sep="=")',
+      templateCode: 'nums = [15, 25, 35, 45]\ntotal = nums[0] + nums[§§§]\nprint("Sum", total, sep="=")',
       targetCode: 'nums = [15, 25, 35, 45]\ntotal = nums[0] + nums[-1]\nprint("Sum", total, sep="=")',
       testCases: [
         {
@@ -184,7 +184,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the condition and indexing expressions so the sum of the first and last elements prints when the list has at least 4 items.',
       hint_ko: '리스트 길이 함수를 조건식에 넣고, 양끝 위치를 가리키는 양수·음수 인덱스를 차례로 작성하세요.',
       hint_en: 'Check the list length in the condition, then index the first and last positions.',
-      templateCode: 'arr = [10, 20, 30, 40]\nif §§§(arr) >= 4:\n    print(arr[§] + arr[§§])',
+      templateCode: 'arr = [10, 20, 30, 40]\nif §§§§(arr) >= 4:\n    print(arr[§§] + arr[§§§])',
       targetCode: 'arr = [10, 20, 30, 40]\nif len(arr) >= 4:\n    print(arr[0] + arr[-1])',
       testCases: [
         {
@@ -241,7 +241,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that adds the first and last elements of nums into ends.',
       hint_ko: '맨 앞 양수 인덱스와 맨 뒤 음수 인덱스로 꺼낸 두 값을 더해 변수에 대입하세요.',
       hint_en: 'Add the first item and last item of nums and assign the result to ends.',
-      templateCode: 'nums = [12, 24, 36, 48]\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Ends:", ends)',
+      templateCode: 'nums = [12, 24, 36, 48]\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Ends:", ends)',
       targetCode: 'nums = [12, 24, 36, 48]\nends = nums[0] + nums[-1]\nprint("Ends:", ends)',
       testCases: [
         {
@@ -260,7 +260,7 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that prints the length of nums and its second element separated by ":".',
       hint_ko: 'print() 안에 길이 함수와 1번 인덱스 요소를 쉼표로 나열하고 sep=":" 옵션을 지정하세요.',
       hint_en: 'Pass the list length, the index-1 item, and sep=":" to print().',
-      templateCode: 'nums = [5, 15, 25]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'nums = [5, 15, 25]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'nums = [5, 15, 25]\nprint(len(nums), nums[1], sep=":")',
       testCases: [
         {

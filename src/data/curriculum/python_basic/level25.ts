@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the logical negation keyword to invert is_locked (False).',
       hint_ko: '참과 거짓을 반대로 바꿀 때는 영어로 부정을 뜻하는 세 글자 소문자 키워드를 앞에 붙입니다.',
       hint_en: 'Place the three-letter lowercase English negation word right before the variable.',
-      templateCode: 'is_locked = False\nprint(§§§ is_locked)',
+      templateCode: 'is_locked = False\nprint(§§§§ is_locked)',
       targetCode: 'is_locked = False\nprint(not is_locked)',
       testCases: [
         {
@@ -82,7 +82,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the logical negation keyword to check that (x == 0) is not true.',
       hint_ko: '괄호로 묶인 비교식의 결과를 반대로 뒤집는 세 글자 키워드를 넣습니다.',
       hint_en: 'Precede the parenthesized equality check with the three-letter negation keyword.',
-      templateCode: 'x = int(input())\nprint(§§§ (x == 0))',
+      templateCode: 'x = int(input())\nprint(§§§§ (x == 0))',
       targetCode: 'x = int(input())\nprint(not (x == 0))',
       testCases: [
         {
@@ -124,7 +124,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the negation keyword so an empty string msg produces True.',
       hint_ko: '빈 문자열의 bool(msg) 결과인 False를 True로 뒤집는 세 글자 키워드를 입력합니다.',
       hint_en: 'Invert the False result of bool(msg) using the three-letter negation keyword.',
-      templateCode: 'msg = ""\nprint(§§§ bool(msg))',
+      templateCode: 'msg = ""\nprint(§§§§ bool(msg))',
       targetCode: 'msg = ""\nprint(not bool(msg))',
       testCases: [
         {
@@ -161,7 +161,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conjunction keyword to check if it is not raining and temp >= 20.',
       hint_ko: 'not rain이 먼저 계산된 뒤 오른쪽 기온 조건과 동시에 만족해야 하므로 세 글자 키워드를 씁니다.',
       hint_en: 'Combine not rain with temp >= 20 using the three-letter conjunction keyword.',
-      templateCode: 'rain = False\ntemp = 24\nprint(not rain §§§ temp >= 20)',
+      templateCode: 'rain = False\ntemp = 24\nprint(not rain §§§§ temp >= 20)',
       targetCode: 'rain = False\ntemp = 24\nprint(not rain and temp >= 20)',
       testCases: [
         {
@@ -180,7 +180,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to add 4 to n, then check that it is not odd and is either at least 10 or equal to 0.',
       hint_ko: '논리 반전 키워드, 동시 만족 키워드, 선택 만족 키워드를 순서대로 채워 복합 논리식을 완성합니다.',
       hint_en: 'Fill in the negation keyword, conjunction keyword, and disjunction keyword in order.',
-      templateCode: 'n = int(input())\nn += 4\nprint(§§§ bool(n % 2) §§§ (n >= 10 §§ n == 0))',
+      templateCode: 'n = int(input())\nn += 4\nprint(§§§§ bool(n % 2) §§§§ (n >= 10 §§§ n == 0))',
       targetCode: 'n = int(input())\nn += 4\nprint(not bool(n % 2) and (n >= 10 or n == 0))',
       testCases: [
         {
@@ -242,7 +242,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Complete Line] Write the line storing (not busy and ready) in variable go.',
       hint_ko: 'go = not busy and ready 형태로 두 불리언 변수의 논리 연산 결과를 저장해보세요.',
       hint_en: 'Write go = not busy and ready to store the combined condition.',
-      templateCode: 'busy = False\nready = True\n§§§§§§§§§§§§§§§§§§§§§§§\nprint(go)',
+      templateCode: 'busy = False\nready = True\n§§§§§§§§§§§§§§§§§§§§§§§§\nprint(go)',
       targetCode: 'busy = False\nready = True\ngo = not busy and ready\nprint(go)',
       testCases: [
         {
@@ -261,7 +261,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that prints not bool(n).',
       hint_ko: 'n이 0일 때만 True가 출력되도록 print(not bool(n))을 작성해보세요.',
       hint_en: 'Write print(not bool(n)) so it outputs True only when n is 0.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§',
       targetCode: 'n = int(input())\nprint(not bool(n))',
       testCases: [
         {

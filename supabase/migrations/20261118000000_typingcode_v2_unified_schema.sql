@@ -1078,7 +1078,7 @@ create trigger sync_profile_on_speed_record
   after insert or update or delete on public.user_speed_records
   for each row execute function public.sync_profile_stats();
 
--- 6-4) 코드타자 언어별 리더보드 뷰 (security_invoker = true)
+-- 6-4) 코드타자 언어별 리더보드 뷰 (security_invoker = true, 관리자 계정 제외)
 create view public.speed_language_leaderboard
 with (security_invoker = true)
 as
@@ -1088,8 +1088,10 @@ select
   best.best_cpm,
   best.best_accuracy,
   best.updated_at,
+  p.email,
   p.username,
   p.display_name,
+  p.role,
   p.avatar_preset,
   p.avatar_url,
   p.primary_language,
@@ -1114,7 +1116,8 @@ from (
   where r.best_cpm > 0
   order by r.user_id, r.language, r.best_cpm desc, r.best_accuracy desc
 ) best
-join public.profiles p on p.id = best.user_id;
+join public.profiles p on p.id = best.user_id
+where p.role not in ('super_admin', 'org_admin');
 
 -- 6-5) 인증 및 비누적 진도/출석 RPC 함수
 create or replace function public.check_username_available(p_username text)

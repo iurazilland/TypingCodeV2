@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the attempt keyword and the two specific exception types for parsing and floor division.",
       "hint_ko": "시도 블록 키워드와 잘못된 값 변환 예외, 그리고 0 나눗셈 예외 이름을 순서대로 확인하세요.",
       "hint_en": "Check the three-letter attempt keyword, the invalid-value exception, and the division-by-zero exception.",
-      "templateCode": "s = input()\n§§§:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept §§§§§§§§§§:\n    print(\"Err:Val\")\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"Err:Zero\")",
+      "templateCode": "s = input()\n§§§§:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept §§§§§§§§§§§:\n    print(\"Err:Val\")\nexcept §§§§§§§§§§§§§§§§§§:\n    print(\"Err:Zero\")",
       "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept ValueError:\n    print(\"Err:Val\")\nexcept ZeroDivisionError:\n    print(\"Err:Zero\")",
       "testCases": [
         {
@@ -51,7 +51,7 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the retry loop with the string trimming method, loop exit keyword, and missing-key exception.",
       "hint_ko": "양끝 공백을 지우는 문자열 메서드, 루프 즉시 탈출 키워드, 그리고 딕셔너리 키 누락 예외 이름을 확인하세요.",
       "hint_en": "Use the whitespace-trimming method, the loop-exit keyword, and the missing-key exception.",
-      "templateCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().§§§§§()\n    try:\n        cost = prices[k]\n        §§§§§\n    except §§§§§§§§:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
+      "templateCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().§§§§§§()\n    try:\n        cost = prices[k]\n        §§§§§§\n    except §§§§§§§§§:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
       "targetCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().strip()\n    try:\n        cost = prices[k]\n        break\n    except KeyError:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
       "testCases": [
         {
@@ -75,7 +75,7 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete parse_num() and the Ledger class to print the sum of valid amounts and count of unique tags.",
       "hint_ko": "값 변환 예외 이름과 생성자 특수 메서드 이름, 그리고 리스트 끝에 추가하는 메서드를 차례로 확인하세요.",
       "hint_en": "Check the invalid-value exception, the double-underscore initializer name, and the list append method.",
-      "templateCode": "def parse_num(raw):\n    try:\n        return int(raw)\n    except §§§§§§§§§§:\n        return None\nclass Ledger:\n    def §§§§§§§§(self):\n        self.records = []\n        self.tags = set()\n    def add(self, tag, raw):\n        val = parse_num(raw)\n        if val is not None:\n            self.records.§§§§§§(val)\n            self.tags.add(tag)\nlg = Ledger()\nfor t, r in [(\"food\", \"120\"), (\"err\", \"x\"), (\"food\", \"80\")]:\n    lg.add(t, r)\nprint(sum(lg.records), len(lg.tags))",
+      "templateCode": "def parse_num(raw):\n    try:\n        return int(raw)\n    except §§§§§§§§§§§:\n        return None\nclass Ledger:\n    def §§§§§§§§§(self):\n        self.records = []\n        self.tags = set()\n    def add(self, tag, raw):\n        val = parse_num(raw)\n        if val is not None:\n            self.records.§§§§§§§(val)\n            self.tags.add(tag)\nlg = Ledger()\nfor t, r in [(\"food\", \"120\"), (\"err\", \"x\"), (\"food\", \"80\")]:\n    lg.add(t, r)\nprint(sum(lg.records), len(lg.tags))",
       "targetCode": "def parse_num(raw):\n    try:\n        return int(raw)\n    except ValueError:\n        return None\nclass Ledger:\n    def __init__(self):\n        self.records = []\n        self.tags = set()\n    def add(self, tag, raw):\n        val = parse_num(raw)\n        if val is not None:\n            self.records.append(val)\n            self.tags.add(tag)\nlg = Ledger()\nfor t, r in [(\"food\", \"120\"), (\"err\", \"x\"), (\"food\", \"80\")]:\n    lg.add(t, r)\nprint(sum(lg.records), len(lg.tags))",
       "testCases": [
         {
@@ -156,7 +156,7 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "prompt_en": "[Complete Line] Call sd.calc(input()) and store the returned integer in variable ans.",
       "hint_ko": "변수 ans에 인스턴스 sd의 calc(input()) 호출 결과를 대입하세요.",
       "hint_en": "Assign the result of sd.calc(input()) to ans.",
-      "templateCode": "class SafeDiv:\n    def __init__(self, base):\n        self.base = base\n    def calc(self, raw):\n        try:\n            return self.base // int(raw)\n        except ZeroDivisionError:\n            return -1\n        except ValueError:\n            return -2\nsd = SafeDiv(100)\n§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
+      "templateCode": "class SafeDiv:\n    def __init__(self, base):\n        self.base = base\n    def calc(self, raw):\n        try:\n            return self.base // int(raw)\n        except ZeroDivisionError:\n            return -1\n        except ValueError:\n            return -2\nsd = SafeDiv(100)\n§§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
       "targetCode": "class SafeDiv:\n    def __init__(self, base):\n        self.base = base\n    def calc(self, raw):\n        try:\n            return self.base // int(raw)\n        except ZeroDivisionError:\n            return -1\n        except ValueError:\n            return -2\nsd = SafeDiv(100)\nans = sd.calc(input())\nprint(ans)",
       "testCases": [
         {
@@ -185,7 +185,7 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "prompt_en": "[Complete Line] Write the indented except KeyError: line inside the while True retry loop.",
       "hint_ko": "들여쓰기 4칸 위치에 딕셔너리 키 누락 예외를 잡는 except 헤더를 작성하세요.",
       "hint_en": "Write except KeyError: indented by 4 spaces.",
-      "templateCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    §§§§§§§§§§§§§§§§\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
+      "templateCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    §§§§§§§§§§§§§§§§§\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
       "targetCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    except KeyError:\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
       "testCases": [
         {

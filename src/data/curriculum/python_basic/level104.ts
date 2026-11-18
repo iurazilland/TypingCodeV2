@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "'모두' 참인지 확인하는 세 글자 내장 함수를 입력하세요.",
       "hint_en": "Type the 3-letter built-in function that checks whether every item is True.",
       "targetCode": "nums = [10, 5, 8]\nprint(all([n > 0 for n in nums]))",
-      "templateCode": "nums = [10, 5, 8]\nprint(§§§([n > 0 for n in nums]))",
+      "templateCode": "nums = [10, 5, 8]\nprint(§§§§([n > 0 for n in nums]))",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "'어느 하나라도' 참인지 확인하는 세 글자 내장 함수를 적으세요.",
       "hint_en": "Enter the 3-letter built-in function that checks if at least one item is True.",
       "targetCode": "pw = input().strip()\nprint(any([c.isdigit() for c in pw]))",
-      "templateCode": "pw = input().strip()\nprint(§§§([c.isdigit() for c in pw]))",
+      "templateCode": "pw = input().strip()\nprint(§§§§([c.isdigit() for c in pw]))",
       "testCases": [
         {
           "id": 1,
@@ -146,7 +146,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "객체가 특정 타입의 인스턴스인지 묻는 열 글자 내장 함수를 입력하세요.",
       "hint_en": "Type the 10-letter built-in function that checks if an object is an instance of a type.",
       "targetCode": "val = 100\nprint(isinstance(val, int))",
-      "templateCode": "val = 100\nprint(§§§§§§§§§§(val, int))",
+      "templateCode": "val = 100\nprint(§§§§§§§§§§§(val, int))",
       "testCases": [
         {
           "id": 1,
@@ -183,7 +183,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "문자열 자료형을 뜻하는 세 글자 타입 이름을 적으세요.",
       "hint_en": "Write the 3-letter type name for strings.",
       "targetCode": "mixed = [\"py\", 10, \"ai\", 20]\nwords = [x for x in mixed if isinstance(x, str)]\nprint(\"-\".join(words))",
-      "templateCode": "mixed = [\"py\", 10, \"ai\", 20]\nwords = [x for x in mixed if isinstance(x, §§§)]\nprint(\"-\".join(words))",
+      "templateCode": "mixed = [\"py\", 10, \"ai\", 20]\nwords = [x for x in mixed if isinstance(x, §§§§)]\nprint(\"-\".join(words))",
       "testCases": [
         {
           "id": 1,
@@ -202,7 +202,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "타입 확인 함수, 전체 참 검사 함수, 부분 참 검사 함수를 순서대로 채워보세요.",
       "hint_en": "Supply the type-checking function, the universal quantifier, and the existential quantifier.",
       "targetCode": "data = [10, \"skip\", 60, 25]\nnums = [x for x in data if isinstance(x, int)]\nprint(all([n > 0 for n in nums]), any([n >= 50 for n in nums]))",
-      "templateCode": "data = [10, \"skip\", 60, 25]\nnums = [x for x in data if §§§§§§§§§§(x, int)]\nprint(§§§([n > 0 for n in nums]), §§§([n >= 50 for n in nums]))",
+      "templateCode": "data = [10, \"skip\", 60, 25]\nnums = [x for x in data if §§§§§§§§§§§(x, int)]\nprint(§§§§([n > 0 for n in nums]), §§§§([n >= 50 for n in nums]))",
       "testCases": [
         {
           "id": 1,
@@ -259,7 +259,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "ok = all([s >= 60 for s in scores]) 형태로 작성하세요.",
       "hint_en": "Write ok = all([s >= 60 for s in scores]) on the masked line.",
       "targetCode": "scores = [70, 85, 60]\nok = all([s >= 60 for s in scores])\nprint(ok)",
-      "templateCode": "scores = [70, 85, 60]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
+      "templateCode": "scores = [70, 85, 60]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
       "testCases": [
         {
           "id": 1,
@@ -278,7 +278,7 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "hint_ko": "nums = [x for x in data if isinstance(x, int)] 형태로 작성하세요.",
       "hint_en": "Write nums = [x for x in data if isinstance(x, int)] on the masked line.",
       "targetCode": "data = [3, \"a\", 7, \"b\"]\nnums = [x for x in data if isinstance(x, int)]\nprint(nums)",
-      "templateCode": "data = [3, \"a\", 7, \"b\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(nums)",
+      "templateCode": "data = [3, \"a\", 7, \"b\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(nums)",
       "testCases": [
         {
           "id": 1,

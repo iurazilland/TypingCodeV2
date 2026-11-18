@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Fill Blank] Trim raw, replace "-" with " ", divide into words, and print the count and last word.',
       hint_ko: '공백 제거 메서드, 공백 기준 분리 메서드, 길이 함수를 순서대로 채우세요.',
       hint_en: 'Fill in the strip method, split method, and len function in order.',
-      templateCode: 'raw = input().§§§§§().replace("-", " ")\nparts = raw.§§§§§()\nprint(f"Count:{§§§(parts)}, End:{parts[-1]}")',
+      templateCode: 'raw = input().§§§§§§().replace("-", " ")\nparts = raw.§§§§§§()\nprint(f"Count:{§§§§(parts)}, End:{parts[-1]}")',
       targetCode: 'raw = input().strip().replace("-", " ")\nparts = raw.split()\nprint(f"Count:{len(parts)}, End:{parts[-1]}")',
       testCases: [
         {
@@ -46,7 +46,7 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Fill Blank] If the first 3 characters of tag are "VIP", convert the remaining suffix to int and add 10.',
       hint_ko: '앞 3글자 슬라이싱, 3번부터 끝까지 슬라이싱, 포맷 문자열 접두사를 차례로 채우세요.',
       hint_en: 'Supply the prefix slice [:3], suffix slice [3:], and f-string prefix.',
-      templateCode: 'tag = input().strip()\nif tag[§§] == "VIP":\n    num = int(tag[§§])\n    print(§"Code:{num + 10}")\nelse:\n    print("Normal")',
+      templateCode: 'tag = input().strip()\nif tag[§§§] == "VIP":\n    num = int(tag[§§§])\n    print(§§"Code:{num + 10}")\nelse:\n    print("Normal")',
       targetCode: 'tag = input().strip()\nif tag[:3] == "VIP":\n    num = int(tag[3:])\n    print(f"Code:{num + 10}")\nelse:\n    print("Normal")',
       testCases: [
         {
@@ -70,7 +70,7 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Fill Blank] Divide comma-separated numbers, collect integers >= 50 into valid, and print the largest value and total.',
       hint_ko: '문자열 분리 메서드, 리스트 추가 메서드, 최댓값 함수를 차례로 채우세요.',
       hint_en: 'Fill in the split method, append method, and max function.',
-      templateCode: 'valid = []\nfor s in input().§§§§§(","):\n    n = int(s)\n    if n >= 50:\n        valid.§§§§§§(n)\nprint(f"Max:{§§§(valid)}, Sum:{sum(valid)}")',
+      templateCode: 'valid = []\nfor s in input().§§§§§§(","):\n    n = int(s)\n    if n >= 50:\n        valid.§§§§§§§(n)\nprint(f"Max:{§§§§(valid)}, Sum:{sum(valid)}")',
       targetCode: 'valid = []\nfor s in input().split(","):\n    n = int(s)\n    if n >= 50:\n        valid.append(n)\nprint(f"Max:{max(valid)}, Sum:{sum(valid)}")',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that strips raw and removes all commas into clean.',
       hint_ko: '공백 제거 메서드와 치환 메서드를 점(.)으로 이어 호출해 clean에 대입하세요.',
       hint_en: 'Chain raw.strip().replace(",", "") and assign it to clean.',
-      templateCode: 'raw = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(int(clean) + 50)',
+      templateCode: 'raw = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(int(clean) + 50)',
       targetCode: 'raw = input()\nclean = raw.strip().replace(",", "")\nprint(int(clean) + 50)',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that appends w to clean inside the if block.',
       hint_ko: '들여쓰기 8칸 뒤에 clean 리스트의 추가 메서드로 w를 전달하세요.',
       hint_en: 'Indent 8 spaces and call clean.append(w).',
-      templateCode: 'bans = ["spam", "ad"]\nclean = []\nfor w in input().split():\n    if w not in bans:\n        §§§§§§§§§§§§§§§\nprint(clean)',
+      templateCode: 'bans = ["spam", "ad"]\nclean = []\nfor w in input().split():\n    if w not in bans:\n        §§§§§§§§§§§§§§§§\nprint(clean)',
       targetCode: 'bans = ["spam", "ad"]\nclean = []\nfor w in input().split():\n    if w not in bans:\n        clean.append(w)\nprint(clean)',
       testCases: [
         {

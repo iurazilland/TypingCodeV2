@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the slice to print characters at indices 0 and 1 of s.',
       hint_ko: '0번부터 2번 직전까지 잘라내는 슬라이싱 범위를 대괄호 안에 적으세요.',
       hint_en: 'Write the slice range from index 0 up to index 2 inside the brackets.',
-      templateCode: 's = input()\nprint(s[§§§])',
+      templateCode: 's = input()\nprint(s[§§§§])',
       targetCode: 's = input()\nprint(s[0:2])',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Fill Blank] Slice tag from index 3 to the end and print it.',
       hint_ko: '시작 번호 3 뒤에 콜론만 적고 끝 번호를 생략한 범위를 대괄호 안에 적으세요.',
       hint_en: 'Write 3: inside the brackets to slice from index 3 to the end.',
-      templateCode: 'tag = input()\nprint(tag[§§])',
+      templateCode: 'tag = input()\nprint(tag[§§§])',
       targetCode: 'tag = input()\nprint(tag[3:])',
       testCases: [
         {
@@ -140,7 +140,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Fill Blank] Extract the last 4 digits of phone using a negative start slice.',
       hint_ko: '뒤에서 네 번째 위치부터 끝까지 잘라내는 범위를 대괄호 안에 적으세요.',
       hint_en: 'Write the slice range starting at -4 to the end inside the brackets.',
-      templateCode: 'phone = input()\nlast4 = phone[§§§]\nprint("****-" + last4)',
+      templateCode: 'phone = input()\nlast4 = phone[§§§§]\nprint("****-" + last4)',
       targetCode: 'phone = input()\nlast4 = phone[-4:]\nprint("****-" + last4)',
       testCases: [
         {
@@ -182,7 +182,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Fill Blank] Slice the digits after "Lv." from s, convert to int, and add 1.',
       hint_ko: '3번 인덱스부터 끝까지 잘라내는 슬라이싱 범위를 대괄호 안에 적으세요.',
       hint_en: 'Write the slice range from index 3 onward inside the brackets.',
-      templateCode: 's = "Lv.19"\nlv = int(s[§§])\nprint(lv + 1)',
+      templateCode: 's = "Lv.19"\nlv = int(s[§§§])\nprint(lv + 1)',
       targetCode: 's = "Lv.19"\nlv = int(s[3:])\nprint(lv + 1)',
       testCases: [
         {
@@ -201,7 +201,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Fill Blank] Slice 8-digit date d into year (first 4) and month-day (from 4 onward) and print separated by "/".',
       hint_ko: '앞 4글자 슬라이싱 범위, 4번부터 끝까지 슬라이싱 범위, 구분자 옵션 이름을 차례로 채우세요.',
       hint_en: 'Fill in the first-4 slice range, from-4 slice range, and separator option keyword.',
-      templateCode: 'd = input()\nyr = d[§§]\nmd = d[§§]\nprint(yr, md, §§§="/")',
+      templateCode: 'd = input()\nyr = d[§§§]\nmd = d[§§§]\nprint(yr, md, §§§§="/")',
       targetCode: 'd = input()\nyr = d[:4]\nmd = d[4:]\nprint(yr, md, sep="/")',
       testCases: [
         {
@@ -273,7 +273,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that reassigns "B" + s[1:] to s.',
       hint_ko: '"B" 뒤에 1번 인덱스부터 끝까지 잘라낸 슬라이싱을 +로 이어 s에 대입하세요.',
       hint_en: 'Concatenate "B" and s[1:] and assign the result back to s.',
-      templateCode: 's = "Cat"\n§§§§§§§§§§§§§§§\nprint(s)',
+      templateCode: 's = "Cat"\n§§§§§§§§§§§§§§§§\nprint(s)',
       targetCode: 's = "Cat"\ns = "B" + s[1:]\nprint(s)',
       testCases: [
         {
@@ -292,7 +292,7 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that converts raw[1:-1] to an integer and assigns it to num.',
       hint_ko: 'int() 안에 슬라이싱 식 raw[1:-1]을 넣어 num에 대입하세요.',
       hint_en: 'Assign int(raw[1:-1]) to the variable num.',
-      templateCode: 'raw = input()\n§§§§§§§§§§§§§§§§§§§§\nprint(num + 10)',
+      templateCode: 'raw = input()\n§§§§§§§§§§§§§§§§§§§§§\nprint(num + 10)',
       targetCode: 'raw = input()\nnum = int(raw[1:-1])\nprint(num + 10)',
       testCases: [
         {

@@ -23,7 +23,7 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "hint_ko": "절댓값 함수, 병렬 묶기 함수, 그리고 math 모듈의 올림 함수를 차례로 채워보세요.",
       "hint_en": "Supply the absolute value function, the parallel-pairing function, and the math ceiling function.",
       "targetCode": "import math\na = [15, 32, 50]\nb = [12, 39, 49]\nerrs = [abs(x - y) for x, y in zip(a, b)]\nprint(max(errs), math.ceil(sum(errs) / len(errs)))",
-      "templateCode": "import math\na = [15, 32, 50]\nb = [12, 39, 49]\nerrs = [§§§(x - y) for x, y in §§§(a, b)]\nprint(max(errs), math.§§§§(sum(errs) / len(errs)))",
+      "templateCode": "import math\na = [15, 32, 50]\nb = [12, 39, 49]\nerrs = [§§§§(x - y) for x, y in §§§§(a, b)]\nprint(max(errs), math.§§§§§(sum(errs) / len(errs)))",
       "testCases": [
         {
           "id": 1,
@@ -42,7 +42,7 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "hint_ko": "병렬 묶기 함수, 익명 함수 키워드, 그리고 1번부터 번호를 붙이는 열거 함수를 채우세요.",
       "hint_en": "Fill in the parallel-pairing function, the inline function keyword, and the 1-based numbering iterator.",
       "targetCode": "names = input().split()\npts = list(map(int, input().split()))\nboard = dict(zip(names, pts))\ntop = sorted(board.items(), key=lambda x: x[1], reverse=True)\nfor r, pair in enumerate(top, 1):\n    print(f\"{r}.{pair[0]}:{pair[1]}\")",
-      "templateCode": "names = input().split()\npts = list(map(int, input().split()))\nboard = dict(§§§(names, pts))\ntop = sorted(board.items(), key=§§§§§§ x: x[1], reverse=True)\nfor r, pair in §§§§§§§§§(top, 1):\n    print(f\"{r}.{pair[0]}:{pair[1]}\")",
+      "templateCode": "names = input().split()\npts = list(map(int, input().split()))\nboard = dict(§§§§(names, pts))\ntop = sorted(board.items(), key=§§§§§§§ x: x[1], reverse=True)\nfor r, pair in §§§§§§§§§§(top, 1):\n    print(f\"{r}.{pair[0]}:{pair[1]}\")",
       "testCases": [
         {
           "id": 1,
@@ -66,7 +66,7 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "hint_ko": "전체 참 검사 함수, 자료형 확인 함수, 그리고 몫·나머지 동시 반환 함수를 차례로 채워보세요.",
       "hint_en": "Supply the universal quantifier, the type-checking function, and the quotient-remainder built-in.",
       "targetCode": "def check_sum(*xs):\n    if not all([isinstance(x, int) for x in xs]):\n        return (0, 0)\n    return divmod(sum(xs), 10)\n\nprint(check_sum(12, 15, 8))\nprint(check_sum(10, \"a\"))",
-      "templateCode": "def check_sum(*xs):\n    if not §§§([§§§§§§§§§§(x, int) for x in xs]):\n        return (0, 0)\n    return §§§§§§(sum(xs), 10)\n\nprint(check_sum(12, 15, 8))\nprint(check_sum(10, \"a\"))",
+      "templateCode": "def check_sum(*xs):\n    if not §§§§([§§§§§§§§§§§(x, int) for x in xs]):\n        return (0, 0)\n    return §§§§§§§(sum(xs), 10)\n\nprint(check_sum(12, 15, 8))\nprint(check_sum(10, \"a\"))",
       "testCases": [
         {
           "id": 1,
@@ -152,7 +152,7 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "hint_ko": "들여쓰기 4칸 뒤에 return round(sum(vals) / len(vals), 2)를 작성하세요.",
       "hint_en": "Write return round(sum(vals) / len(vals), 2) inside the function.",
       "targetCode": "def avg_abs(*nums):\n    vals = [abs(n) for n in nums]\n    return round(sum(vals) / len(vals), 2)\nprint(avg_abs(-4, 5, -8))",
-      "templateCode": "def avg_abs(*nums):\n    vals = [abs(n) for n in nums]\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(avg_abs(-4, 5, -8))",
+      "templateCode": "def avg_abs(*nums):\n    vals = [abs(n) for n in nums]\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(avg_abs(-4, 5, -8))",
       "testCases": [
         {
           "id": 1,
@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "hint_ko": "res = any([isinstance(x, str) for x in raw]) 형태로 작성하세요.",
       "hint_en": "Write res = any([isinstance(x, str) for x in raw]) on the masked line.",
       "targetCode": "raw = [15, \"skip\", -20, 3, None]\nres = any([isinstance(x, str) for x in raw])\nprint(res)",
-      "templateCode": "raw = [15, \"skip\", -20, 3, None]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
+      "templateCode": "raw = [15, \"skip\", -20, 3, None]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
       "testCases": [
         {
           "id": 1,

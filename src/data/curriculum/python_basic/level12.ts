@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the variable name on line 3 to overwrite stage from 1 to 2 and print it.',
       hint_ko: '첫째 줄에서 선언한 다섯 글자 변수 이름을 등호 왼쪽에 그대로 적습니다.',
       hint_en: 'Write the same five-letter variable name from line 1 on the left side of =.',
-      templateCode: 'stage = 1\nprint(stage)\n§§§§§ = 2\nprint(stage)',
+      templateCode: 'stage = 1\nprint(stage)\n§§§§§§ = 2\nprint(stage)',
       targetCode: 'stage = 1\nprint(stage)\nstage = 2\nprint(stage)',
       expectedVariables: { stage: 2 },
       testCases: [
@@ -80,7 +80,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multiplication expression of w and h to store 40 in area and print it.',
       hint_ko: '위에서 선언한 두 변수 이름을 곱셈 연산자로 연결해 작성합니다.',
       hint_en: 'Multiply the two variable names w and h using the asterisk operator.',
-      templateCode: 'w = 8\nh = 5\narea = §§§§§\nprint(area)',
+      templateCode: 'w = 8\nh = 5\narea = §§§§§§\nprint(area)',
       targetCode: 'w = 8\nh = 5\narea = w * h\nprint(area)',
       expectedVariables: { w: 8, h: 5, area: 40 },
       testCases: [
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the floor division operator to compute the quotient 4 and remainder 2.',
       hint_ko: '변수 a를 변수 b로 나눈 정수 몫을 구하도록 슬래시 두 개를 연속 입력합니다.',
       hint_en: 'Type two forward slashes to compute the integer quotient of a divided by b.',
-      templateCode: 'a = 14\nb = 3\nq = a §§ b\nr = a % b\nprint(q, r)',
+      templateCode: 'a = 14\nb = 3\nq = a §§§ b\nr = a % b\nprint(q, r)',
       targetCode: 'a = 14\nb = 3\nq = a // b\nr = a % b\nprint(q, r)',
       expectedVariables: { a: 14, b: 3, q: 4, r: 2 },
       testCases: [
@@ -158,7 +158,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the expression subtracting 20 from hp to update and print 80.',
       hint_ko: '등호 오른쪽에서 현재 체력 변수 이름으로부터 20을 빼는 식을 작성합니다.',
       hint_en: 'Write the variable name minus 20 on the right side of the assignment.',
-      templateCode: 'hp = 100\nhp = §§§§§§§\nprint(hp)',
+      templateCode: 'hp = 100\nhp = §§§§§§§§\nprint(hp)',
       targetCode: 'hp = 100\nhp = hp - 20\nprint(hp)',
       expectedVariables: { hp: 80 },
       testCases: [
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to add 35 to sec, then print the minutes (2) and seconds (15).',
       hint_ko: '둘째 줄에는 기존 변수 이름을, 셋째 줄에는 정수 몫 연산자와 나머지 연산자를 채웁니다.',
       hint_en: 'Enter the variable name on line 2, then the floor division and modulo operators on line 3.',
-      templateCode: 'sec = 100\nsec = §§§ + 35\nprint(sec §§ 60, sec § 60)',
+      templateCode: 'sec = 100\nsec = §§§§ + 35\nprint(sec §§§ 60, sec §§ 60)',
       targetCode: 'sec = 100\nsec = sec + 35\nprint(sec // 60, sec % 60)',
       expectedVariables: { sec: 135 },
       testCases: [
@@ -238,7 +238,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to multiply x by 2 and store the result back in x (x = x * 2).',
       hint_ko: '등호 왼쪽에 x를 적고 오른쪽에 x와 2의 곱셈식을 작성해보세요.',
       hint_en: 'Assign x * 2 back to x on line 2.',
-      templateCode: 'x = 15\n§§§§§§§§§\nprint(x)',
+      templateCode: 'x = 15\n§§§§§§§§§§\nprint(x)',
       targetCode: 'x = 15\nx = x * 2\nprint(x)',
       expectedVariables: { x: 30 },
       testCases: [
@@ -258,7 +258,7 @@ export const PYTHON_LEVEL_12: PracticeRound = {
       prompt_en: '[Complete Line] Write line 3 to store the result of (a + b) // 3 in variable ans.',
       hint_ko: '소괄호로 묶은 두 변수의 덧셈을 3으로 나눈 정수 몫을 ans에 대입합니다.',
       hint_en: 'Assign the integer quotient of (a + b) divided by 3 to ans.',
-      templateCode: 'a = 10\nb = 11\n§§§§§§§§§§§§§§§§§§\nprint("Ans:", ans)',
+      templateCode: 'a = 10\nb = 11\n§§§§§§§§§§§§§§§§§§§\nprint("Ans:", ans)',
       targetCode: 'a = 10\nb = 11\nans = (a + b) // 3\nprint("Ans:", ans)',
       expectedVariables: { a: 10, b: 11, ans: 7 },
       testCases: [

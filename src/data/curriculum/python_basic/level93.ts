@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "모든 영문자를 대문자로 바꾸는 다섯 글자 문자열 메서드를 호출하세요.",
       "hint_en": "Call the 5-letter string method that converts all letters to uppercase.",
       "targetCode": "code = input()\nprint(code.upper())",
-      "templateCode": "code = input()\nprint(code.§§§§§())",
+      "templateCode": "code = input()\nprint(code.§§§§§§())",
       "testCases": [
         {
           "id": 1,
@@ -107,7 +107,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "문장의 첫 글자만 대문자로 만드는 10글자 문자열 메서드를 입력하세요.",
       "hint_en": "Enter the 10-letter string method that capitalizes only the first character of the string.",
       "targetCode": "text = \"pYTHON cODE\"\nprint(text.capitalize())",
-      "templateCode": "text = \"pYTHON cODE\"\nprint(text.§§§§§§§§§§())",
+      "templateCode": "text = \"pYTHON cODE\"\nprint(text.§§§§§§§§§§§())",
       "testCases": [
         {
           "id": 1,
@@ -149,7 +149,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "소문자 리터럴 \"yes\"와 비교하기 전에 다섯 글자 소문자 변환 메서드를 호출하세요.",
       "hint_en": "Call the 5-letter lowercase conversion method before comparing against \"yes\".",
       "targetCode": "ans = input().strip()\nprint(ans.lower() == \"yes\")",
-      "templateCode": "ans = input().strip()\nprint(ans.§§§§§() == \"yes\")",
+      "templateCode": "ans = input().strip()\nprint(ans.§§§§§§() == \"yes\")",
       "testCases": [
         {
           "id": 1,
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "단어마다 첫 글자를 대문자로 바꾸는 다섯 글자 메서드를 컴프리헨션 식에 채워보세요.",
       "hint_en": "Fill in the 5-letter method that capitalizes the first letter of each word.",
       "targetCode": "names = [\"kim min\", \"lee seo\"]\nres = [n.title() for n in names]\nprint(res)",
-      "templateCode": "names = [\"kim min\", \"lee seo\"]\nres = [n.§§§§§() for n in names]\nprint(res)",
+      "templateCode": "names = [\"kim min\", \"lee seo\"]\nres = [n.§§§§§§() for n in names]\nprint(res)",
       "testCases": [
         {
           "id": 1,
@@ -210,7 +210,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "양끝 공백 제거 메서드, 대문자 변환 메서드, 그리고 필터링 조건 키워드를 차례로 채워보세요.",
       "hint_en": "Supply the whitespace-trimming method, the uppercase method, and the filtering condition keyword.",
       "targetCode": "raw = [\" py \", \" web \", \"c\", \" data \"]\nclean = [s.strip().upper() for s in raw if len(s.strip()) >= 3]\nprint(clean)",
-      "templateCode": "raw = [\" py \", \" web \", \"c\", \" data \"]\nclean = [s.§§§§§().§§§§§() for s in raw §§ len(s.strip()) >= 3]\nprint(clean)",
+      "templateCode": "raw = [\" py \", \" web \", \"c\", \" data \"]\nclean = [s.§§§§§§().§§§§§§() for s in raw §§§ len(s.strip()) >= 3]\nprint(clean)",
       "testCases": [
         {
           "id": 1,
@@ -277,7 +277,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "변수 clean에 raw의 공백 제거 메서드와 소문자 변환 메서드를 연달아 호출한 값을 대입하세요.",
       "hint_en": "Assign raw.strip().lower() to the variable clean.",
       "targetCode": "raw = input()\nclean = raw.strip().lower()\nprint(f\"[{clean}]\")",
-      "templateCode": "raw = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(f\"[{clean}]\")",
+      "templateCode": "raw = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(f\"[{clean}]\")",
       "testCases": [
         {
           "id": 1,
@@ -301,7 +301,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "hint_ko": "up = [w.upper() for w in words] 형태로 리스트 컴프리헨션을 작성하세요.",
       "hint_en": "Write up = [w.upper() for w in words] to build the uppercase list.",
       "targetCode": "words = input().split()\nup = [w.upper() for w in words]\nprint(up)",
-      "templateCode": "words = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(up)",
+      "templateCode": "words = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(up)",
       "testCases": [
         {
           "id": 1,

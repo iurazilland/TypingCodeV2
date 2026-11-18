@@ -63,7 +63,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the list method name to append all items from extra onto cart.",
       "hint_ko": "다른 리스트의 원소들을 풀어서 현재 리스트 끝에 확장하는 여섯 글자 메서드를 호출하세요.",
       "hint_en": "Call the six-letter method that extends a list with elements from another sequence.",
-      "templateCode": "cart = [\"pen\", \"book\"]\nextra = [\"note\", \"tape\"]\ncart.§§§§§§(extra)\nprint(cart)",
+      "templateCode": "cart = [\"pen\", \"book\"]\nextra = [\"note\", \"tape\"]\ncart.§§§§§§§(extra)\nprint(cart)",
       "targetCode": "cart = [\"pen\", \"book\"]\nextra = [\"note\", \"tape\"]\ncart.extend(extra)\nprint(cart)",
       "testCases": [
         {
@@ -100,7 +100,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the method name that removes all items from temp_log.",
       "hint_ko": "리스트 내부를 깨끗이 비워 빈 리스트로 만드는 다섯 글자 메서드를 적으세요.",
       "hint_en": "Use the five-letter list method that empties all elements in place.",
-      "templateCode": "temp_log = [1, 2, 3, 4]\ntemp_log.§§§§§()\nprint(temp_log)",
+      "templateCode": "temp_log = [1, 2, 3, 4]\ntemp_log.§§§§§§()\nprint(temp_log)",
       "targetCode": "temp_log = [1, 2, 3, 4]\ntemp_log.clear()\nprint(temp_log)",
       "testCases": [
         {
@@ -137,7 +137,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the variable name assigned to alias so mutating alias[1] also mutates the first list.",
       "hint_ko": "원본 리스트 변수를 그대로 대입하면 같은 리스트 참조를 공유하게 됩니다.",
       "hint_en": "Assign the original list variable so both variables reference the same list.",
-      "templateCode": "origin = [1, 2, 3]\nalias = §§§§§§\nalias[1] = 77\nprint(origin[1], alias[1])",
+      "templateCode": "origin = [1, 2, 3]\nalias = §§§§§§§\nalias[1] = 77\nprint(origin[1], alias[1])",
       "targetCode": "origin = [1, 2, 3]\nalias = origin\nalias[1] = 77\nprint(origin[1], alias[1])",
       "testCases": [
         {
@@ -174,7 +174,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Fill Blank] Call the list method that creates an independent duplicate of scores before modifying clone.",
       "hint_ko": "원본 리스트와 똑같은 원소를 가진 새 사본 리스트를 만드는 네 글자 메서드를 호출하세요.",
       "hint_en": "Call the four-letter method that returns a shallow duplicate of the list.",
-      "templateCode": "scores = [80, 90, 100]\nclone = scores.§§§§()\nclone[0] = 0\nprint(scores[0], clone[0])",
+      "templateCode": "scores = [80, 90, 100]\nclone = scores.§§§§§()\nclone[0] = 0\nprint(scores[0], clone[0])",
       "targetCode": "scores = [80, 90, 100]\nclone = scores.copy()\nclone[0] = 0\nprint(scores[0], clone[0])",
       "testCases": [
         {
@@ -193,7 +193,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the duplicating method, list extension method, and list emptying method.",
       "hint_ko": "독립 사본을 만드는 메서드, 다른 리스트 원소를 이어 붙이는 메서드, 그리고 리스트를 비우는 메서드를 차례로 확인하세요.",
       "hint_en": "Check the four-letter duplicating method, six-letter extension method, and five-letter emptying method.",
-      "templateCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.§§§§()\nwork.§§§§§§(extra)\nextra.§§§§§()\nprint(base, work, extra)",
+      "templateCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.§§§§§()\nwork.§§§§§§§(extra)\nextra.§§§§§§()\nprint(base, work, extra)",
       "targetCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.copy()\nwork.extend(extra)\nextra.clear()\nprint(base, work, extra)",
       "testCases": [
         {
@@ -250,7 +250,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that assigns a full slice copy of list a to variable b.",
       "hint_ko": "변수 b에 a[:]를 대입하면 .copy()와 똑같이 독립된 새 리스트 사본이 만들어집니다.",
       "hint_en": "Assign a[:] to variable b.",
-      "templateCode": "a = [5, 10, 15]\n§§§§§§§§\nb[0] = 99\nprint(a[0], b[0])",
+      "templateCode": "a = [5, 10, 15]\n§§§§§§§§§\nb[0] = 99\nprint(a[0], b[0])",
       "targetCode": "a = [5, 10, 15]\nb = a[:]\nb[0] = 99\nprint(a[0], b[0])",
       "testCases": [
         {
@@ -269,7 +269,7 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that extends team1 in place with all elements of team2.",
       "hint_ko": "team1에서 리스트 확장 메서드를 호출하고 인자로 team2를 전달하세요.",
       "hint_en": "Call team1.extend(team2).",
-      "templateCode": "team1 = [\"Kim\", \"Lee\"]\nteam2 = [\"Park\", \"Choi\"]\n§§§§§§§§§§§§§§§§§§§\nprint(len(team1), team1)",
+      "templateCode": "team1 = [\"Kim\", \"Lee\"]\nteam2 = [\"Park\", \"Choi\"]\n§§§§§§§§§§§§§§§§§§§§\nprint(len(team1), team1)",
       "targetCode": "team1 = [\"Kim\", \"Lee\"]\nteam2 = [\"Park\", \"Choi\"]\nteam1.extend(team2)\nprint(len(team1), team1)",
       "testCases": [
         {

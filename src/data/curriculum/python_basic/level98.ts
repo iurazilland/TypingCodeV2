@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "시작과 끝을 생략한 콜론 두 개 뒤에 간격 2를 붙인 세 글자를 대괄호 안에 적으세요.",
       "hint_en": "Write two colons followed by the step size 2 inside the brackets.",
       "targetCode": "code = input().strip()\nprint(code[::2])",
-      "templateCode": "code = input().strip()\nprint(code[§§§])",
+      "templateCode": "code = input().strip()\nprint(code[§§§§])",
       "testCases": [
         {
           "id": 1,
@@ -107,7 +107,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "전체 범위를 역방향(-1 간격)으로 뒤집는 네 글자 슬라이싱 표현을 대괄호 안에 적으세요.",
       "hint_en": "Enter the 4-character slice notation that reverses the entire string with a step of -1.",
       "targetCode": "w = input().strip().lower()\nprint(w == w[::-1])",
-      "templateCode": "w = input().strip().lower()\nprint(w == w[§§§§])",
+      "templateCode": "w = input().strip().lower()\nprint(w == w[§§§§§])",
       "testCases": [
         {
           "id": 1,
@@ -149,7 +149,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "문자의 순서 번호(ordinal)를 정수로 돌려주는 세 글자 내장 함수를 입력하세요.",
       "hint_en": "Type the 3-letter built-in function (from 'ordinal') that returns a character's integer code.",
       "targetCode": "ch = input().strip()\nprint(ord(ch) - ord(\"A\"))",
-      "templateCode": "ch = input().strip()\nprint(§§§(ch) - ord(\"A\"))",
+      "templateCode": "ch = input().strip()\nprint(§§§§(ch) - ord(\"A\"))",
       "testCases": [
         {
           "id": 1,
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "정수 코드 번호를 다시 문자(character)로 바꾸는 세 글자 내장 함수를 적으세요.",
       "hint_en": "Enter the 3-letter built-in function that converts an integer code point back to a character.",
       "targetCode": "ch = input().strip()\nprint(chr(ord(ch) + 2))",
-      "templateCode": "ch = input().strip()\nprint(§§§(ord(ch) + 2))",
+      "templateCode": "ch = input().strip()\nprint(§§§§(ord(ch) + 2))",
       "testCases": [
         {
           "id": 1,
@@ -215,7 +215,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "번호를 문자로 바꾸는 함수, 문자를 번호로 바꾸는 함수, 그리고 역순 슬라이싱을 차례로 채우세요.",
       "hint_en": "Fill in the code-to-char function, the char-to-code function, and the reverse slice.",
       "targetCode": "word = \"ABC\"\nshifted = \"\".join([chr(ord(c) + 1) for c in word])\nprint(shifted[::-1])",
-      "templateCode": "word = \"ABC\"\nshifted = \"\".join([§§§(§§§(c) + 1) for c in word])\nprint(shifted[§§§§])",
+      "templateCode": "word = \"ABC\"\nshifted = \"\".join([§§§§(§§§§(c) + 1) for c in word])\nprint(shifted[§§§§§])",
       "testCases": [
         {
           "id": 1,
@@ -277,7 +277,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "is_pal = s == s[::-1] 형태로 원본과 역순 슬라이싱 결과를 비교해 저장하세요.",
       "hint_en": "Write is_pal = s == s[::-1] on the masked line.",
       "targetCode": "s = input().strip().lower()\nis_pal = s == s[::-1]\nprint(is_pal)",
-      "templateCode": "s = input().strip().lower()\n§§§§§§§§§§§§§§§§§§§§§\nprint(is_pal)",
+      "templateCode": "s = input().strip().lower()\n§§§§§§§§§§§§§§§§§§§§§§\nprint(is_pal)",
       "testCases": [
         {
           "id": 1,
@@ -301,7 +301,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "hint_ko": "nxt = chr(ord(ch) + 1) 형태로 코드 번호에 1을 더해 문자로 변환하세요.",
       "hint_en": "Write nxt = chr(ord(ch) + 1) on the masked line.",
       "targetCode": "ch = input().strip()\nnxt = chr(ord(ch) + 1)\nprint(nxt)",
-      "templateCode": "ch = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§\nprint(nxt)",
+      "templateCode": "ch = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§\nprint(nxt)",
       "testCases": [
         {
           "id": 1,

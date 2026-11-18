@@ -46,6 +46,10 @@ export function isAdminUser(
     candidates.push(profile.username.trim().toLowerCase());
   }
 
+  if (profile?.display_name) {
+    candidates.push(profile.display_name.trim().toLowerCase());
+  }
+
   if (profile?.email) {
     const cleanProfileEmail = profile.email.trim().toLowerCase();
     candidates.push(cleanProfileEmail);

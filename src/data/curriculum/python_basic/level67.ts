@@ -61,7 +61,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the keyword that returns w * h to the caller.',
       hint_ko: '함수 안에서 계산한 값을 호출한 자리로 되돌려주는 여섯 글자 파이썬 키워드를 적으세요.',
       hint_en: 'Type the six-letter keyword used to send a result back from a function.',
-      templateCode: 'def area(w, h):\n    §§§§§§ w * h\nans = area(5, 4)\nprint(ans)',
+      templateCode: 'def area(w, h):\n    §§§§§§§ w * h\nans = area(5, 4)\nprint(ans)',
       targetCode: 'def area(w, h):\n    return w * h\nans = area(5, 4)\nprint(ans)',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Fill Blank] Call double with 5 and add it to double(10) so 30 is printed.',
       hint_ko: '위에서 정의한 함수 이름에 인자 5를 넣어 호출하는 식을 적으세요.',
       hint_en: 'Write the function call passing 5 to double.',
-      templateCode: 'def double(n):\n    return n * 2\nans = §§§§§§§§§ + double(10)\nprint(ans)',
+      templateCode: 'def double(n):\n    return n * 2\nans = §§§§§§§§§§ + double(10)\nprint(ans)',
       targetCode: 'def double(n):\n    return n * 2\nans = double(5) + double(10)\nprint(ans)',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Fill Blank] Return n + 1 on the first line of the function so it exits immediately with 6.',
       hint_ko: '값을 돌려주며 함수를 즉시 끝내는 여섯 글자 키워드를 입력하세요.',
       hint_en: 'Type the six-letter keyword that returns a value and terminates the function.',
-      templateCode: 'def stop_at(n):\n    §§§§§§ n + 1\n    return n + 100\nprint(stop_at(5))',
+      templateCode: 'def stop_at(n):\n    §§§§§§§ n + 1\n    return n + 100\nprint(stop_at(5))',
       targetCode: 'def stop_at(n):\n    return n + 1\n    return n + 100\nprint(stop_at(5))',
       testCases: [
         {
@@ -172,7 +172,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Fill Blank] Check whether the return value r of log_num(7) is empty.',
       hint_ko: '변수 r이 빈 값 상수와 동일한지 판별하는 두 단어 표현을 적으세요.',
       hint_en: 'Write the two-word identity check testing whether r is None.',
-      templateCode: 'def log_num(n):\n    print(n)\nr = log_num(7)\nprint(r §§§§§§§)',
+      templateCode: 'def log_num(n):\n    print(n)\nr = log_num(7)\nprint(r §§§§§§§§)',
       targetCode: 'def log_num(n):\n    print(n)\nr = log_num(7)\nprint(r is None)',
       testCases: [
         {
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the function header, value return statement, and function call to print 20.',
       hint_ko: '함수 정의 키워드, 결과 반환 키워드, 그리고 호출할 함수 이름을 순서대로 채우세요.',
       hint_en: 'Fill in the def keyword, the return keyword, and the function name in the call.',
-      templateCode: '§§§ avg_sum(nums):\n    §§§§§§ sum(nums) // len(nums)\nans = §§§§§§§([10, 20, 30])\nprint(ans)',
+      templateCode: '§§§§ avg_sum(nums):\n    §§§§§§§ sum(nums) // len(nums)\nans = §§§§§§§§([10, 20, 30])\nprint(ans)',
       targetCode: 'def avg_sum(nums):\n    return sum(nums) // len(nums)\nans = avg_sum([10, 20, 30])\nprint(ans)',
       testCases: [
         {
@@ -248,7 +248,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Complete Line] Write the indented line that returns n raised to the power of 3.',
       hint_ko: '반환 키워드 뒤에 거듭제곱 연산자(**)를 사용한 수식을 적으세요.',
       hint_en: 'Write return n ** 3 inside the function.',
-      templateCode: 'def cube(n):\n    §§§§§§§§§§§§§\nprint(cube(3))',
+      templateCode: 'def cube(n):\n    §§§§§§§§§§§§§§\nprint(cube(3))',
       targetCode: 'def cube(n):\n    return n ** 3\nprint(cube(3))',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       prompt_en: '[Complete Line] Add the return values of inc(4) and inc(9) and store the sum in total.',
       hint_ko: '등호 오른쪽에 두 함수 호출을 덧셈 연산자로 연결해 작성하세요.',
       hint_en: 'Write total = inc(4) + inc(9) on line 3.',
-      templateCode: 'def inc(n):\n    return n + 1\n§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)',
+      templateCode: 'def inc(n):\n    return n + 1\n§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)',
       targetCode: 'def inc(n):\n    return n + 1\ntotal = inc(4) + inc(9)\nprint(total)',
       testCases: [
         {

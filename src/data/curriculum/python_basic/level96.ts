@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "문자열이 특정 접미사로 끝나는지 검사하는 여덟 글자 메서드를 입력하세요.",
       "hint_en": "Enter the 8-letter method that checks whether a string ends with a suffix.",
       "targetCode": "f = input().strip()\nprint(f.endswith(\".txt\"))",
-      "templateCode": "f = input().strip()\nprint(f.§§§§§§§§(\".txt\"))",
+      "templateCode": "f = input().strip()\nprint(f.§§§§§§§§§(\".txt\"))",
       "testCases": [
         {
           "id": 1,
@@ -112,7 +112,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "문자열이 숫자로만 이루어졌는지 판별하는 일곱 글자 메서드를 적으세요.",
       "hint_en": "Type the 7-letter method that checks if all characters are numeric digits.",
       "targetCode": "pin = input().strip()\nprint(pin.isdigit())",
-      "templateCode": "pin = input().strip()\nprint(pin.§§§§§§§())",
+      "templateCode": "pin = input().strip()\nprint(pin.§§§§§§§§())",
       "testCases": [
         {
           "id": 1,
@@ -154,7 +154,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "알파벳(alphabet) 등 글자로만 구성되었는지 판별하는 일곱 글자 메서드를 호출하세요.",
       "hint_en": "Call the 7-letter method that checks whether a string contains only alphabetic characters.",
       "targetCode": "tag = input().strip()\nprint(tag.isalpha())",
-      "templateCode": "tag = input().strip()\nprint(tag.§§§§§§§())",
+      "templateCode": "tag = input().strip()\nprint(tag.§§§§§§§§())",
       "testCases": [
         {
           "id": 1,
@@ -196,7 +196,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "특정 접두사로 시작하는지 검사하는 열 글자 메서드를 조건절에 채워보세요.",
       "hint_en": "Fill in the 10-letter method that tests whether a string begins with the given prefix.",
       "targetCode": "files = [\"test_a.py\", \"main.py\", \"test_b.py\"]\npicks = [f for f in files if f.startswith(\"test_\")]\nprint(picks)",
-      "templateCode": "files = [\"test_a.py\", \"main.py\", \"test_b.py\"]\npicks = [f for f in files if f.§§§§§§§§§§(\"test_\")]\nprint(picks)",
+      "templateCode": "files = [\"test_a.py\", \"main.py\", \"test_b.py\"]\npicks = [f for f in files if f.§§§§§§§§§§§(\"test_\")]\nprint(picks)",
       "testCases": [
         {
           "id": 1,
@@ -215,7 +215,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "정수 변환 함수, 접두사 검사 메서드, 숫자 문자열 판별 메서드를 차례로 채워보세요.",
       "hint_en": "Fill in the integer conversion function, the prefix check method, and the digit check method.",
       "targetCode": "codes = [\"ID-10\", \"ID-ab\", \"NO-20\", \"ID-35\"]\nvals = [int(s[3:]) for s in codes if s.startswith(\"ID-\") and s[3:].isdigit()]\nprint(sum(vals))",
-      "templateCode": "codes = [\"ID-10\", \"ID-ab\", \"NO-20\", \"ID-35\"]\nvals = [§§§(s[3:]) for s in codes if s.§§§§§§§§§§(\"ID-\") and s[3:].§§§§§§§()]\nprint(sum(vals))",
+      "templateCode": "codes = [\"ID-10\", \"ID-ab\", \"NO-20\", \"ID-35\"]\nvals = [§§§§(s[3:]) for s in codes if s.§§§§§§§§§§§(\"ID-\") and s[3:].§§§§§§§§()]\nprint(sum(vals))",
       "testCases": [
         {
           "id": 1,
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "is_py = name.endswith(\".py\") 형태로 접미사 검사 결과를 저장하세요.",
       "hint_en": "Write is_py = name.endswith(\".py\") on the masked line.",
       "targetCode": "name = input().strip()\nis_py = name.endswith(\".py\")\nprint(is_py)",
-      "templateCode": "name = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(is_py)",
+      "templateCode": "name = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(is_py)",
       "testCases": [
         {
           "id": 1,
@@ -306,7 +306,7 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "hint_ko": "nums = [int(x) for x in raw if x.isdigit()] 형태로 작성하세요.",
       "hint_en": "Write nums = [int(x) for x in raw if x.isdigit()].",
       "targetCode": "raw = input().split()\nnums = [int(x) for x in raw if x.isdigit()]\nprint(sum(nums))",
-      "templateCode": "raw = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(nums))",
+      "templateCode": "raw = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(nums))",
       "testCases": [
         {
           "id": 1,

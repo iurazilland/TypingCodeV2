@@ -58,7 +58,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Fill Blank] Loop over the keys of dictionary menu to print each item and its price.',
       hint_ko: 'in 키워드 뒤에 순회할 딕셔너리 변수 이름을 적으세요.',
       hint_en: 'Place the dictionary variable name after the in keyword.',
-      templateCode: 'menu = {"tea": 3000, "pie": 4500}\nfor k in §§§§:\n    print(f"{k}:{menu[k]}")',
+      templateCode: 'menu = {"tea": 3000, "pie": 4500}\nfor k in §§§§§:\n    print(f"{k}:{menu[k]}")',
       targetCode: 'menu = {"tea": 3000, "pie": 4500}\nfor k in menu:\n    print(f"{k}:{menu[k]}")',
       testCases: [
         {
@@ -95,7 +95,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Fill Blank] Call the dictionary method that returns key-value pairs on bag.',
       hint_ko: '점(.) 뒤에 키-값 쌍 목록을 돌려주는 메서드 이름과 빈 소괄호를 적으세요.',
       hint_en: 'Write the method name that returns key-value pairs followed by empty parentheses.',
-      templateCode: 'bag = {"gold": 100, "gem": 5}\nfor k, v in bag.§§§§§§§:\n    print(f"{k}={v}")',
+      templateCode: 'bag = {"gold": 100, "gem": 5}\nfor k, v in bag.§§§§§§§§:\n    print(f"{k}={v}")',
       targetCode: 'bag = {"gold": 100, "gem": 5}\nfor k, v in bag.items():\n    print(f"{k}={v}")',
       testCases: [
         {
@@ -132,7 +132,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Fill Blank] Unpack each key-value pair from scores.items() so the sum 120 is printed.',
       hint_ko: '반복문 본문에서 값을 v로 더하고 있으므로 키와 값 두 변수를 쉼표로 나란히 적으세요.',
       hint_en: 'Write the two single-letter loop variables for key and value separated by a comma and space.',
-      templateCode: 'scores = {"A": 30, "B": 40, "C": 50}\ntotal = 0\nfor §§§§ in scores.items():\n    total += v\nprint(total)',
+      templateCode: 'scores = {"A": 30, "B": 40, "C": 50}\ntotal = 0\nfor §§§§§ in scores.items():\n    total += v\nprint(total)',
       targetCode: 'scores = {"A": 30, "B": 40, "C": 50}\ntotal = 0\nfor k, v in scores.items():\n    total += v\nprint(total)',
       testCases: [
         {
@@ -169,7 +169,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Fill Blank] Append the item key k to sold_out whenever its stock v equals 0.',
       hint_ko: '리스트 끝에 요소를 추가하는 메서드에 키 변수 k를 인자로 넣어 호출하세요.',
       hint_en: 'Call the list method that adds an element to the end, passing key k.',
-      templateCode: 'stock = {"pen": 0, "note": 5, "eraser": 2}\nsold_out = []\nfor k, v in stock.items():\n    if v == 0:\n        sold_out.§§§§§§§§§\nprint(sold_out)',
+      templateCode: 'stock = {"pen": 0, "note": 5, "eraser": 2}\nsold_out = []\nfor k, v in stock.items():\n    if v == 0:\n        sold_out.§§§§§§§§§§\nprint(sold_out)',
       targetCode: 'stock = {"pen": 0, "note": 5, "eraser": 2}\nsold_out = []\nfor k, v in stock.items():\n    if v == 0:\n        sold_out.append(k)\nprint(sold_out)',
       testCases: [
         {
@@ -188,7 +188,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Fill Blank] Iterate over key-value pairs of menu and sum prices of at least 3000.',
       hint_ko: '쌍 순회 메서드 호출과 조건문 키워드, 복합 덧셈 연산자를 순서대로 채우세요.',
       hint_en: 'Fill in the key-value pair method call, the conditional keyword, and the compound addition operator.',
-      templateCode: 'menu = {"tea": 3000, "cake": 5500, "milk": 2500}\ntotal = 0\nfor k, v in menu.§§§§§§§:\n    §§ v >= 3000:\n        total §§ v\nprint(total)',
+      templateCode: 'menu = {"tea": 3000, "cake": 5500, "milk": 2500}\ntotal = 0\nfor k, v in menu.§§§§§§§§:\n    §§§ v >= 3000:\n        total §§§ v\nprint(total)',
       targetCode: 'menu = {"tea": 3000, "cake": 5500, "milk": 2500}\ntotal = 0\nfor k, v in menu.items():\n    if v >= 3000:\n        total += v\nprint(total)',
       testCases: [
         {
@@ -245,7 +245,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Complete Line] Write the for loop header that iterates over key-value pairs of menu as k and v.',
       hint_ko: 'for k, v in 뒤에 menu의 키-값 쌍 메서드를 호출하고 콜론(:)으로 마무리하세요.',
       hint_en: 'Write the for header unpacking k and v from menu.items(), ending with a colon.',
-      templateCode: 'menu = {"tea": 3000, "pie": 4500}\n§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(f"{k}:{v}")',
+      templateCode: 'menu = {"tea": 3000, "pie": 4500}\n§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(f"{k}:{v}")',
       targetCode: 'menu = {"tea": 3000, "pie": 4500}\nfor k, v in menu.items():\n    print(f"{k}:{v}")',
       testCases: [
         {
@@ -264,7 +264,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Complete Line] Write the indented line that adds each value v to total.',
       hint_ko: '복합 덧셈 연산자를 사용해 total에 v를 누적하세요.',
       hint_en: 'Use the compound addition operator to add v into total.',
-      templateCode: 'cart = {"pen": 500, "note": 1200}\ntotal = 0\nfor k, v in cart.items():\n    §§§§§§§§§§\nprint(total)',
+      templateCode: 'cart = {"pen": 500, "note": 1200}\ntotal = 0\nfor k, v in cart.items():\n    §§§§§§§§§§§\nprint(total)',
       targetCode: 'cart = {"pen": 500, "note": 1200}\ntotal = 0\nfor k, v in cart.items():\n    total += v\nprint(total)',
       testCases: [
         {

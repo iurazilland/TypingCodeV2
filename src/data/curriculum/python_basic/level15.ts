@@ -45,7 +45,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the input function name to store the user input in city and print it.',
       hint_ko: '키보드 입력을 읽어오는 다섯 글자 소문자 내장 함수 이름을 괄호 앞에 적습니다.',
       hint_en: 'Write the five-letter lowercase built-in function name for reading input before ().',
-      templateCode: 'city = §§§§§()\nprint(city)',
+      templateCode: 'city = §§§§§§()\nprint(city)',
       targetCode: 'city = input()\nprint(city)',
       testCases: [
         {
@@ -92,7 +92,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string concatenation operator so the input prints inside brackets like [VIP].',
       hint_ko: 'input()의 결과는 문자열이므로 더하기 기호로 다른 문자열과 공백 없이 이어붙일 수 있습니다.',
       hint_en: 'Because input() returns a string, use the plus sign to join it with bracket strings.',
-      templateCode: 'tag = input()\nprint("[" + tag § "]")',
+      templateCode: 'tag = input()\nprint("[" + tag §§ "]")',
       targetCode: 'tag = input()\nprint("[" + tag + "]")',
       testCases: [
         {
@@ -139,7 +139,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the function call on line 2 to read the second line so both inputs join with a hyphen.',
       hint_ko: '첫째 줄과 동일하게 입력 함수 이름과 빈 소괄호를 작성해 두 번째 입력을 받습니다.',
       hint_en: 'Write the input function name with empty parentheses just like on line 1.',
-      templateCode: 'a = input()\nb = §§§§§§§\nprint(a, b, sep="-")',
+      templateCode: 'a = input()\nb = §§§§§§§§\nprint(a, b, sep="-")',
       targetCode: 'a = input()\nb = input()\nprint(a, b, sep="-")',
       testCases: [
         {
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the repetition operator so the input character repeats 5 times.',
       hint_ko: '입력받은 문자열 변수를 5번 연속 반복하려면 변수와 5 사이에 별표 기호를 넣습니다.',
       hint_en: 'Place the asterisk operator between the string variable and 5.',
-      templateCode: 'ch = input()\nprint(ch § 5)',
+      templateCode: 'ch = input()\nprint(ch §§ 5)',
       targetCode: 'ch = input()\nprint(ch * 5)',
       testCases: [
         {
@@ -210,7 +210,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to read user input, append "!", and print it as ID:hero!.',
       hint_ko: '입력 함수 이름, 문자열 복합 대입 연산자, 구분자 옵션 이름을 차례로 채워 넣습니다.',
       hint_en: 'Fill in the input function name, the += operator, and the sep option name in order.',
-      templateCode: 'user = §§§§§()\nuser §§ "!"\nprint("ID", user, §§§=":")',
+      templateCode: 'user = §§§§§§()\nuser §§§ "!"\nprint("ID", user, §§§§=":")',
       targetCode: 'user = input()\nuser += "!"\nprint("ID", user, sep=":")',
       testCases: [
         {
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to read user input and store it in variable item.',
       hint_ko: '변수 item에 등호(=)와 입력 함수 호출을 연결해 한 줄로 작성합니다.',
       hint_en: 'Assign the result of calling input() to variable item on line 1.',
-      templateCode: '§§§§§§§§§§§§§§\nprint("Item:", item)',
+      templateCode: '§§§§§§§§§§§§§§§\nprint("Item:", item)',
       targetCode: 'item = input()\nprint("Item:", item)',
       testCases: [
         {
@@ -306,7 +306,7 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print the input string variable s repeated 4 times.',
       hint_ko: 'print() 안에서 문자열 변수 s에 반복 연산자와 4를 곱해 작성합니다.',
       hint_en: 'Multiply s by 4 inside print() on line 2.',
-      templateCode: 's = input()\n§§§§§§§§§§§§',
+      templateCode: 's = input()\n§§§§§§§§§§§§§',
       targetCode: 's = input()\nprint(s * 4)',
       testCases: [
         {

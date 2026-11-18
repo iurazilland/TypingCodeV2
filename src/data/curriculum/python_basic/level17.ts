@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the type-checking function name to print the data type of "10".',
       hint_ko: '값의 종류(자료형)를 뜻하는 영어 네 글자 내장 함수 이름을 적습니다.',
       hint_en: 'Write the four-letter built-in function name that checks a value\'s data type.',
-      templateCode: 'print(§§§§("10"))',
+      templateCode: 'print(§§§§§("10"))',
       targetCode: 'print(type("10"))',
       testCases: [
         {
@@ -78,7 +78,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the integer conversion function name to convert "40" and print 50.',
       hint_ko: '정수(integer)의 앞 세 글자를 딴 내장 함수 이름을 괄호 앞에 적습니다.',
       hint_en: 'Write the three-letter built-in function name derived from "integer".',
-      templateCode: 'num = §§§("40")\nprint(num + 10)',
+      templateCode: 'num = §§§§("40")\nprint(num + 10)',
       targetCode: 'num = int("40")\nprint(num + 10)',
       expectedVariables: { num: 40 },
       testCases: [
@@ -121,7 +121,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the integer conversion function to read an int and print its quotient and remainder by 5.',
       hint_ko: 'input() 바깥을 감싸 문자열을 정수로 바꾸는 세 글자 함수 이름을 적습니다.',
       hint_en: 'Write the three-letter function name that wraps input() to convert it to an integer.',
-      templateCode: 'n = §§§(input())\nprint(n // 5, n % 5)',
+      templateCode: 'n = §§§§(input())\nprint(n // 5, n % 5)',
       targetCode: 'n = int(input())\nprint(n // 5, n % 5)',
       testCases: [
         {
@@ -168,7 +168,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the decimal conversion function name to convert 10 into 10.0 and print it.',
       hint_ko: '부동소수점 실수를 뜻하는 다섯 글자 내장 함수 이름을 괄호 앞에 작성합니다.',
       hint_en: 'Write the five-letter built-in function name for floating-point numbers.',
-      templateCode: 'x = §§§§§(10)\nprint(x)',
+      templateCode: 'x = §§§§§§(10)\nprint(x)',
       targetCode: 'x = float(10)\nprint(x)',
       expectedVariables: { x: 10.0 },
       testCases: [
@@ -188,7 +188,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to read an integer, add 10 in place, and print its floor quotient by 3.',
       hint_ko: '정수 변환 함수 이름, 누적 덧셈 복합 대입 연산자, 정수 몫 연산자를 차례로 채웁니다.',
       hint_en: 'Enter the integer conversion function, compound addition operator, and floor division operator in order.',
-      templateCode: 'n = §§§(input())\nn §§ 10\nprint(n §§ 3)',
+      templateCode: 'n = §§§§(input())\nn §§§ 10\nprint(n §§§ 3)',
       targetCode: 'n = int(input())\nn += 10\nprint(n // 3)',
       testCases: [
         {
@@ -260,7 +260,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to read an integer with int(input("Score: ")) into variable score.',
       hint_ko: '변수 score에 안내 문구가 포함된 입력 호출을 정수로 감싼 식을 대입합니다.',
       hint_en: 'Assign int(input("Score: ")) to variable score on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Bonus:", score + 10)',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Bonus:", score + 10)',
       targetCode: 'score = int(input("Score: "))\nprint("Bonus:", score + 10)',
       testCases: [
         {
@@ -284,7 +284,7 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to read a float with float(input()) and store it in variable w.',
       hint_ko: 'input() 호출을 float() 함수로 감싸 변수 w에 대입합니다.',
       hint_en: 'Wrap input() inside float() and assign it to w on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§\nprint(w * 2)',
+      templateCode: '§§§§§§§§§§§§§§§§§§§\nprint(w * 2)',
       targetCode: 'w = float(input())\nprint(w * 2)',
       testCases: [
         {

@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the equality operator to print every divisor of n from 1 through n.',
       hint_ko: 'n을 i로 나눈 나머지가 0과 일치할 때 약수가 됩니다.',
       hint_en: 'Use the double-equals operator to check if the remainder is 0.',
-      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if n % i §§ 0:\n        print(i, end=" ")',
+      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if n % i §§§ 0:\n        print(i, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if n % i == 0:\n        print(i, end=" ")',
       testCases: [
         {
@@ -87,7 +87,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the increment amount to count the total number of divisors of n.',
       hint_ko: '약수를 하나 찾을 때마다 개수가 한 개씩 늘어나도록 숫자 1을 입력합니다.',
       hint_en: 'Increment count by 1 each time a divisor is found.',
-      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += §\nprint(count)',
+      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += §§\nprint(count)',
       targetCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += 1\nprint(count)',
       testCases: [
         {
@@ -134,7 +134,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to sum numbers in 1..n divisible by 3 or 5.',
       hint_ko: '둘 중 하나만 만족해도 합계에 포함되도록 두 글자 논리 키워드를 넣습니다.',
       hint_en: 'Join the two divisibility conditions with the two-letter disjunction keyword.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 §§ i % 5 == 0:\n        total += i\nprint(total)',
+      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 §§§ i % 5 == 0:\n        total += i\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 or i % 5 == 0:\n        total += i\nprint(total)',
       testCases: [
         {
@@ -181,7 +181,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the fallback branch keyword to count both evens and odds.',
       hint_ko: '짝수 조건이 거짓인 모든 경우(홀수)를 처리하는 네 글자 분기 키워드를 입력합니다.',
       hint_en: 'Use the four-letter fallback keyword aligned with the inner if.',
-      templateCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    §§§§:\n        od += 1\nprint(ev, od)',
+      templateCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    §§§§§:\n        od += 1\nprint(ev, od)',
       targetCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    else:\n        od += 1\nprint(ev, od)',
       testCases: [
         {
@@ -205,7 +205,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to count and sum all multiples of 4 from 1 through n.',
       hint_ko: '반복 시작 키워드, 나머지를 구하는 연산자, 그리고 개수를 1씩 늘리는 복합 대입 연산자를 채웁니다.',
       hint_en: 'Enter the loop keyword, modulo operator, and plus-equals operator in order.',
-      templateCode: 'n = int(input())\ncount = 0\ntotal = 0\n§§§ i in range(1, n + 1):\n    if i § 4 == 0:\n        count §§ 1\n        total += i\nprint(count, total)',
+      templateCode: 'n = int(input())\ncount = 0\ntotal = 0\n§§§§ i in range(1, n + 1):\n    if i §§ 4 == 0:\n        count §§§ 1\n        total += i\nprint(count, total)',
       targetCode: 'n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 4 == 0:\n        count += 1\n        total += i\nprint(count, total)',
       testCases: [
         {
@@ -277,7 +277,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented if header checking i % 2 == 1 and i % 3 == 0.',
       hint_ko: '4칸 들여쓰기 뒤에 if i % 2 == 1 and i % 3 == 0:을 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write if i % 2 == 1 and i % 3 == 0:.',
-      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        print(i)',
+      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        print(i)',
       targetCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 1 and i % 3 == 0:\n        print(i)',
       testCases: [
         {
@@ -301,7 +301,7 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       prompt_en: '[Complete Line] Write the 8-space indented line incrementing count by 1.',
       hint_ko: '8칸 들여쓰기 뒤에 count += 1을 작성해보세요.',
       hint_en: 'Keep the 8-space indentation and write count += 1.',
-      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        §§§§§§§§§§\nprint(count)',
+      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        §§§§§§§§§§§\nprint(count)',
       targetCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += 1\nprint(count)',
       testCases: [
         {

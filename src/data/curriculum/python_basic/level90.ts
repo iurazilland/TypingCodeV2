@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the loop keyword inside the list comprehension to multiply each number in range(1, 5) by 10.",
       "hint_ko": "리스트 컴프리헨션에서 계산식 뒤에 시퀀스 순회를 시작하는 세 글자 반복 키워드를 적으세요.",
       "hint_en": "Write the three-letter loop keyword placed between the expression and the loop variable.",
-      "templateCode": "nums = [x * 10 §§§ x in range(1, 5)]\nprint(nums)",
+      "templateCode": "nums = [x * 10 §§§§ x in range(1, 5)]\nprint(nums)",
       "targetCode": "nums = [x * 10 for x in range(1, 5)]\nprint(nums)",
       "testCases": [
         {
@@ -101,7 +101,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the type conversion function to turn every integer in ids into a string.",
       "hint_ko": "숫자를 문자열 자료형으로 변환하는 세 글자 내장 함수를 호출하세요.",
       "hint_en": "Call the three-letter built-in function that converts a value to a string.",
-      "templateCode": "ids = [101, 102, 103]\ntags = [§§§(x) for x in ids]\nprint(tags)",
+      "templateCode": "ids = [101, 102, 103]\ntags = [§§§§(x) for x in ids]\nprint(tags)",
       "targetCode": "ids = [101, 102, 103]\ntags = [str(x) for x in ids]\nprint(tags)",
       "testCases": [
         {
@@ -138,7 +138,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the string method inside the comprehension to remove leading and trailing spaces from each word.",
       "hint_ko": "문자열 양끝의 공백을 깔끔하게 지우는 다섯 글자 문자열 메서드를 호출하세요.",
       "hint_en": "Call the five-letter string method that strips surrounding whitespace.",
-      "templateCode": "raw = [\"  a \", \"b  \", \" c \"]\nclean = [s.§§§§§() for s in raw]\nprint(clean)",
+      "templateCode": "raw = [\"  a \", \"b  \", \" c \"]\nclean = [s.§§§§§§() for s in raw]\nprint(clean)",
       "targetCode": "raw = [\"  a \", \"b  \", \" c \"]\nclean = [s.strip() for s in raw]\nprint(clean)",
       "testCases": [
         {
@@ -180,7 +180,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the conversion function so comma-separated numeric strings become integers.",
       "hint_ko": "쪼개진 각 숫자 문자열 조각을 정수로 바꾸는 세 글자 내장 함수를 적으세요.",
       "hint_en": "Use the three-letter built-in function that converts a string to an integer.",
-      "templateCode": "nums = [§§§(s) for s in input().split(\",\")]\nprint(max(nums))",
+      "templateCode": "nums = [§§§§(s) for s in input().split(\",\")]\nprint(max(nums))",
       "targetCode": "nums = [int(s) for s in input().split(\",\")]\nprint(max(nums))",
       "testCases": [
         {
@@ -204,7 +204,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the integer conversion, string splitting method, and loop keyword in the two comprehensions.",
       "hint_ko": "정수 변환 함수와 공백 분리 메서드, 그리고 컴프리헨션 반복 키워드를 차례로 확인하세요.",
       "hint_en": "Check the int function, split method, and for keyword.",
-      "templateCode": "raw = [§§§(s) for s in input().§§§§§()]\nplus = [n + 5 §§§ n in raw]\nprint(sum(plus))",
+      "templateCode": "raw = [§§§§(s) for s in input().§§§§§§()]\nplus = [n + 5 §§§§ n in raw]\nprint(sum(plus))",
       "targetCode": "raw = [int(s) for s in input().split()]\nplus = [n + 5 for n in raw]\nprint(sum(plus))",
       "testCases": [
         {
@@ -266,7 +266,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Complete Line] Assign to updated a list comprehension that adds 100 to each p in prices.",
       "hint_ko": "updated = [p + 100 for p in prices] 형태로 한 줄을 작성하세요.",
       "hint_en": "Write updated = [p + 100 for p in prices].",
-      "templateCode": "prices = [1000, 2500, 3000]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(updated)",
+      "templateCode": "prices = [1000, 2500, 3000]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(updated)",
       "targetCode": "prices = [1000, 2500, 3000]\nupdated = [p + 100 for p in prices]\nprint(updated)",
       "testCases": [
         {
@@ -285,7 +285,7 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "prompt_en": "[Complete Line] Assign to initials a list comprehension extracting w[0] for each w in words.",
       "hint_ko": "initials = [w[0] for w in words] 형태로 첫 글자 인덱싱 컴프리헨션을 작성하세요.",
       "hint_en": "Write initials = [w[0] for w in words].",
-      "templateCode": "words = [\"Python\", \"Basic\", \"Code\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(initials)",
+      "templateCode": "words = [\"Python\", \"Basic\", \"Code\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(initials)",
       "targetCode": "words = [\"Python\", \"Basic\", \"Code\"]\ninitials = [w[0] for w in words]\nprint(initials)",
       "testCases": [
         {

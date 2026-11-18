@@ -57,7 +57,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Fill Blank] Use the built-in aggregation function to print the total of prices.',
       hint_ko: '리스트의 모든 숫자를 한 번에 더해주는 세 글자 내장 함수를 적으세요.',
       hint_en: 'Write the 3-letter built-in function that returns the sum of a list.',
-      templateCode: 'prices = [1200, 800, 500]\nprint("Total:", §§§(prices))',
+      templateCode: 'prices = [1200, 800, 500]\nprint("Total:", §§§§(prices))',
       targetCode: 'prices = [1200, 800, 500]\nprint("Total:", sum(prices))',
       testCases: [
         {
@@ -94,7 +94,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Fill Blank] Compute the difference between the largest and smallest values in pts.',
       hint_ko: '리스트에서 최댓값을 구하는 세 글자 내장 함수를 빈칸에 적으세요.',
       hint_en: 'Write the 3-letter built-in function that finds the maximum value.',
-      templateCode: 'pts = [12, 45, 30]\ngap = §§§(pts) - min(pts)\nprint("Gap:", gap)',
+      templateCode: 'pts = [12, 45, 30]\ngap = §§§§(pts) - min(pts)\nprint("Gap:", gap)',
       targetCode: 'pts = [12, 45, 30]\ngap = max(pts) - min(pts)\nprint("Gap:", gap)',
       testCases: [
         {
@@ -131,7 +131,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Fill Blank] Call the in-place sorting method on data and print the sorted list.',
       hint_ko: '리스트를 오름차순으로 정렬하는 네 글자 메서드를 입력하세요.',
       hint_en: 'Type the 4-letter method that sorts a list in place.',
-      templateCode: 'data = [9, 2, 7, 4]\ndata.§§§§()\nprint(data)',
+      templateCode: 'data = [9, 2, 7, 4]\ndata.§§§§§()\nprint(data)',
       targetCode: 'data = [9, 2, 7, 4]\ndata.sort()\nprint(data)',
       testCases: [
         {
@@ -168,7 +168,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the boolean option value to sort ranks in descending order.',
       hint_ko: '역순 정렬 옵션을 켜는 불리언 참 값을 첫 글자 대문자로 적으세요.',
       hint_en: 'Write the capitalized boolean literal for true.',
-      templateCode: 'ranks = [40, 90, 70]\nranks.sort(reverse=§§§§)\nprint(ranks)',
+      templateCode: 'ranks = [40, 90, 70]\nranks.sort(reverse=§§§§§)\nprint(ranks)',
       targetCode: 'ranks = [40, 90, 70]\nranks.sort(reverse=True)\nprint(ranks)',
       testCases: [
         {
@@ -187,7 +187,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Fill Blank] Order scores descending, slice the top 2, and print their total and integer average.',
       hint_ko: '정렬 메서드, 합계 함수, 길이 함수를 차례로 채워보세요.',
       hint_en: 'Fill in the sort method, sum function, and length function in order.',
-      templateCode: 'scores = [70, 95, 85, 60]\nscores.§§§§(reverse=True)\ntop2 = scores[:2]\nprint(§§§(top2), sum(top2) // §§§(top2))',
+      templateCode: 'scores = [70, 95, 85, 60]\nscores.§§§§§(reverse=True)\ntop2 = scores[:2]\nprint(§§§§(top2), sum(top2) // §§§§(top2))',
       targetCode: 'scores = [70, 95, 85, 60]\nscores.sort(reverse=True)\ntop2 = scores[:2]\nprint(sum(top2), sum(top2) // len(top2))',
       testCases: [
         {
@@ -244,7 +244,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that prints sum(s) minus max(s) and min(s).',
       hint_ko: 'print() 안에서 합계 함수 결과에 최댓값 함수와 최솟값 함수 결과를 차례로 빼세요.',
       hint_en: 'Inside print(), subtract max(s) and min(s) from sum(s).',
-      templateCode: 's = [10, 50, 20, 30, 40]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 's = [10, 50, 20, 30, 40]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 's = [10, 50, 20, 30, 40]\nprint(sum(s) - max(s) - min(s))',
       testCases: [
         {
@@ -263,7 +263,7 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that sorts nums in ascending order in place.',
       hint_ko: '리스트 변수 뒤에 점(.)을 찍고 오름차순 정렬 메서드를 호출하세요.',
       hint_en: 'Call the in-place sort method on nums.',
-      templateCode: 'nums = [40, 10, 30, 20]\n§§§§§§§§§§§\nprint(nums[0], nums[-1])',
+      templateCode: 'nums = [40, 10, 30, 20]\n§§§§§§§§§§§§\nprint(nums[0], nums[-1])',
       targetCode: 'nums = [40, 10, 30, 20]\nnums.sort()\nprint(nums[0], nums[-1])',
       testCases: [
         {

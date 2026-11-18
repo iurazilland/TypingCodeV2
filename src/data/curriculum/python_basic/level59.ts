@@ -58,7 +58,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the first dictionary entry pairing key "hp" with integer 100.',
       hint_ko: '문자열 키와 숫자 값 사이를 콜론과 공백으로 연결해 작성하세요.',
       hint_en: 'Join the quoted key and integer value with a colon and space.',
-      templateCode: 'stat = {§§§§§§§§§, "mp": 50}\nprint(len(stat))',
+      templateCode: 'stat = {§§§§§§§§§§, "mp": 50}\nprint(len(stat))',
       targetCode: 'stat = {"hp": 100, "mp": 50}\nprint(len(stat))',
       testCases: [
         {
@@ -95,7 +95,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Look up the key storing the user name so Mina is printed.',
       hint_ko: '대괄호 안에 조회할 문자열 키를 큰따옴표와 함께 적으세요.',
       hint_en: 'Write the double-quoted key name inside the square brackets.',
-      templateCode: 'user = {"name": "Mina", "lv": 5}\nprint(user[§§§§§§])',
+      templateCode: 'user = {"name": "Mina", "lv": 5}\nprint(user[§§§§§§§])',
       targetCode: 'user = {"name": "Mina", "lv": 5}\nprint(user["name"])',
       testCases: [
         {
@@ -132,7 +132,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Add the price of "note" from shop to two pens so Cost: 2200 is printed.',
       hint_ko: '딕셔너리 변수 이름 뒤 대괄호에 두 번째 품목의 문자열 키를 넣어 조회하세요.',
       hint_en: 'Access the second item from shop using square brackets and its quoted key.',
-      templateCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + §§§§§§§§§§§§\nprint(f"Cost: {cost}")',
+      templateCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + §§§§§§§§§§§§§\nprint(f"Cost: {cost}")',
       targetCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + shop["note"]\nprint(f"Cost: {cost}")',
       testCases: [
         {
@@ -174,7 +174,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Look up the price in prices using the input variable item.',
       hint_ko: '딕셔너리 이름 뒤 대괄호 안에 입력받은 변수명을 따옴표 없이 넣으세요.',
       hint_en: 'Index into prices using the unquoted variable item inside brackets.',
-      templateCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}: {§§§§§§§§§§§§}")',
+      templateCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}: {§§§§§§§§§§§§§}")',
       targetCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}: {prices[item]}")',
       testCases: [
         {
@@ -198,7 +198,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the dictionary separator, dynamic key lookup, and f-string variable.',
       hint_ko: '키와 값을 잇는 구분 기호, 입력받은 한 글자 키 변수, 조회 결과를 담은 변수명을 차례로 적으세요.',
       hint_en: 'Fill in the key-value separator, the key variable inside brackets, and the result variable in braces.',
-      templateCode: 'bag = {"gold"§ 500, "gem": 3}\nk = input()\nval = bag[§]\nprint(f"{k}={§§§}")',
+      templateCode: 'bag = {"gold"§§ 500, "gem": 3}\nk = input()\nval = bag[§§]\nprint(f"{k}={§§§§}")',
       targetCode: 'bag = {"gold": 500, "gem": 3}\nk = input()\nval = bag[k]\nprint(f"{k}={val}")',
       testCases: [
         {
@@ -260,7 +260,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that prints the value of key "city" from dictionary info.',
       hint_ko: 'print() 안에 딕셔너리 변수와 대괄호 키 조회식을 넣어 작성하세요.',
       hint_en: 'Pass the dictionary key lookup expression for "city" inside print().',
-      templateCode: 'info = {"city": "Seoul", "pop": 950}\n§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'info = {"city": "Seoul", "pop": 950}\n§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'info = {"city": "Seoul", "pop": 950}\nprint(info["city"])',
       testCases: [
         {
@@ -279,7 +279,7 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Complete Line] Multiply cart["price"] by cart["qty"] and store the result in total.',
       hint_ko: '두 키를 각각 대괄호로 조회한 뒤 곱셈 연산자로 연결해 total에 대입하세요.',
       hint_en: 'Assign the product of the two dictionary lookups to variable total.',
-      templateCode: 'cart = {"price": 1200, "qty": 4}\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)',
+      templateCode: 'cart = {"price": 1200, "qty": 4}\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)',
       targetCode: 'cart = {"price": 1200, "qty": 4}\ntotal = cart["price"] * cart["qty"]\nprint(total)',
       testCases: [
         {

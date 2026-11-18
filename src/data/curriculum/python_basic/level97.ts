@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "소수점 둘째 자리 고정 실수(fixed-point)를 뜻하는 세 글자 서식 지정자를 적으세요.",
       "hint_en": "Enter the 3-character format specifier for 2 fixed decimal places.",
       "targetCode": "rate = 3.5\nprint(f\"{rate:.2f}%\")",
-      "templateCode": "rate = 3.5\nprint(f\"{rate:§§§}%\")",
+      "templateCode": "rate = 3.5\nprint(f\"{rate:§§§§}%\")",
       "testCases": [
         {
           "id": 1,
@@ -102,7 +102,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "콜론 바로 뒤에 세 자리 구분 기호인 쉼표 한 글자를 입력하세요.",
       "hint_en": "Type the single comma character right after the colon.",
       "targetCode": "cost = int(input())\nprint(f\"${cost:,}\")",
-      "templateCode": "cost = int(input())\nprint(f\"${cost:§}\")",
+      "templateCode": "cost = int(input())\nprint(f\"${cost:§§}\")",
       "testCases": [
         {
           "id": 1,
@@ -144,7 +144,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "0으로 채움(0), 3자리 폭(3), 10진 정수(d)를 합친 세 글자 서식 지정자를 입력하세요.",
       "hint_en": "Enter the 3-character specifier combining zero-fill (0), width (3), and decimal integer (d).",
       "targetCode": "n = int(input())\nprint(f\"ID-{n:03d}\")",
-      "templateCode": "n = int(input())\nprint(f\"ID-{n:§§§}\")",
+      "templateCode": "n = int(input())\nprint(f\"ID-{n:§§§§}\")",
       "testCases": [
         {
           "id": 1,
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "콜론 뒤에 쉼표(,)와 소수 둘째 자리(.2f)를 나란히 붙인 네 글자 서식 지정자를 적으세요.",
       "hint_en": "Combine the comma separator and 2-decimal fixed-point specifier into 4 characters after the colon.",
       "targetCode": "amount = 12345.6\nprint(f\"${amount:,.2f}\")",
-      "templateCode": "amount = 12345.6\nprint(f\"${amount:§§§§}\")",
+      "templateCode": "amount = 12345.6\nprint(f\"${amount:§§§§§}\")",
       "testCases": [
         {
           "id": 1,
@@ -205,7 +205,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "3자리 0 채우기 정수 서식, 천 단위 쉼표 서식, 소수 첫째 자리 실수 서식을 차례로 채우세요.",
       "hint_en": "Supply the 3-digit zero-padded int spec, the comma spec, and the 1-decimal float spec in order.",
       "targetCode": "no = 5\ntotal = 15000\nunit = total / 4\nprint(f\"[{no:03d}] {total:,} ({unit:.1f})\")",
-      "templateCode": "no = 5\ntotal = 15000\nunit = total / 4\nprint(f\"[{no:§§§}] {total:§} ({unit:§§§})\")",
+      "templateCode": "no = 5\ntotal = 15000\nunit = total / 4\nprint(f\"[{no:§§§§}] {total:§§} ({unit:§§§§})\")",
       "testCases": [
         {
           "id": 1,
@@ -262,7 +262,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "msg = f\"{avg:.2f}\" 형태로 소수점 둘째 자리 서식 문자열을 변수 msg에 대입하세요.",
       "hint_en": "Write msg = f\"{avg:.2f}\" on the masked line.",
       "targetCode": "nums = [10, 15, 22]\navg = sum(nums) / len(nums)\nmsg = f\"{avg:.2f}\"\nprint(msg)",
-      "templateCode": "nums = [10, 15, 22]\navg = sum(nums) / len(nums)\n§§§§§§§§§§§§§§§§§§\nprint(msg)",
+      "templateCode": "nums = [10, 15, 22]\navg = sum(nums) / len(nums)\n§§§§§§§§§§§§§§§§§§§\nprint(msg)",
       "testCases": [
         {
           "id": 1,
@@ -281,7 +281,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "hint_ko": "print(f\"{total:,}\") 형태로 천 단위 콤마 서식을 적용해 출력하세요.",
       "hint_en": "Write print(f\"{total:,}\") on the masked line.",
       "targetCode": "prices = [12000, 35000, 8000]\ntotal = sum(prices)\nprint(f\"{total:,}\")",
-      "templateCode": "prices = [12000, 35000, 8000]\ntotal = sum(prices)\n§§§§§§§§§§§§§§§§§§§",
+      "templateCode": "prices = [12000, 35000, 8000]\ntotal = sum(prices)\n§§§§§§§§§§§§§§§§§§§§",
       "testCases": [
         {
           "id": 1,

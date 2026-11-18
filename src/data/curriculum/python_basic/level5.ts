@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the double-quoted word World inside print() to display it.',
       hint_ko: '단어 앞뒤를 큰따옴표로 감싸야 파이썬이 문자열 데이터로 인식합니다.',
       hint_en: 'Enclose the word in double quotes on both sides so Python treats it as a string.',
-      templateCode: 'print(§§§§§§§)',
+      templateCode: 'print(§§§§§§§§)',
       targetCode: 'print("World")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the single-quoted word Coding inside print() to display it.',
       hint_ko: '단어의 시작과 끝을 모두 작은따옴표로 감싸서 문자열을 완성합니다.',
       hint_en: 'Wrap both the beginning and end of the word with single quotes.',
-      templateCode: 'print(§§§§§§§§)',
+      templateCode: 'print(§§§§§§§§§)',
       targetCode: "print('Coding')",
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the double-quoted label Score: so that Score: 100 is printed.',
       hint_ko: '콜론(:)까지 포함된 글자 전체를 큰따옴표로 감싸 쉼표 앞에 작성합니다.',
       hint_en: 'Wrap the label text including the colon in double quotes before the comma.',
-      templateCode: 'print(§§§§§§§§, 100)',
+      templateCode: 'print(§§§§§§§§§, 100)',
       targetCode: 'print("Score:", 100)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: "[Fill Blank] Fill in the double-quoted string It's fun to display it without a quote conflict.",
       hint_ko: '문장 중간에 작은따옴표(어포스트로피)가 포함되어 있으므로 바깥 양쪽은 큰따옴표로 감쌉니다.',
       hint_en: 'Because the phrase contains an apostrophe, enclose the entire string in outer double quotes.',
-      templateCode: 'print(§§§§§§§§§§)',
+      templateCode: 'print(§§§§§§§§§§§)',
       targetCode: 'print("It\'s fun")',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the label Div: followed by the quotient (6) and remainder (2) of 20 by 3.',
       hint_ko: '큰따옴표로 감싼 라벨 문자열, 정수 몫 연산자, 나머지 연산자를 차례대로 채웁니다.',
       hint_en: 'Enter the double-quoted label string, the floor division operator, and the modulo operator in order.',
-      templateCode: 'print(§§§§§§, 20 §§ 3, 20 § 3)',
+      templateCode: 'print(§§§§§§§, 20 §§§ 3, 20 §§ 3)',
       targetCode: 'print("Div:", 20 // 3, 20 % 3)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print the string "Stage" and the number 3 separated by a comma.',
       hint_ko: '첫째 줄의 형태를 참고하여 문자열 라벨과 숫자를 쉼표로 구분해 작성합니다.',
       hint_en: 'Follow line 1 by separating the quoted string and the number with a comma inside print().',
-      templateCode: 'print("World", 1)\n§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("World", 1)\n§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("World", 1)\nprint("Stage", 3)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print "Max:" and the expression 2 ** 5 separated by a comma.',
       hint_ko: '따옴표로 감싼 라벨 뒤에 쉼표를 찍고 거듭제곱 계산식을 이어 적어보세요.',
       hint_en: 'Place a comma after the quoted label and write the exponentiation expression.',
-      templateCode: 'print("Min:", 2 ** 2)\n§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("Min:", 2 ** 2)\n§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("Min:", 2 ** 2)\nprint("Max:", 2 ** 5)',
       testCases: [
         {

@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Fill Blank] Close the triple-quoted multi-line string sign and print it.',
       hint_ko: '시작할 때 사용한 큰따옴표 세 개를 끝에도 똑같이 적어 닫아주세요.',
       hint_en: 'Close the multi-line string with three consecutive double quotes.',
-      templateCode: 'sign = """Open!\nClose!§§§\nprint(sign)',
+      templateCode: 'sign = """Open!\nClose!§§§§\nprint(sign)',
       targetCode: 'sign = """Open!\nClose!"""\nprint(sign)',
       testCases: [
         {
@@ -93,7 +93,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Fill Blank] Use the length function to print the total character count of msg.',
       hint_ko: '리스트의 요소 개수를 구할 때와 똑같은 세 글자 내장 함수를 사용합니다.',
       hint_en: 'Use the same 3-letter built-in function used for list length.',
-      templateCode: 'msg = input()\nprint("Length:", §§§(msg))',
+      templateCode: 'msg = input()\nprint("Length:", §§§§(msg))',
       targetCode: 'msg = input()\nprint("Length:", len(msg))',
       testCases: [
         {
@@ -140,7 +140,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Fill Blank] Compute and print the sum of the lengths of strings a and b.',
       hint_ko: '변수 b의 글자 수를 구하는 함수 호출식을 빈칸에 적으세요.',
       hint_en: 'Write the function call that returns the length of string b.',
-      templateCode: 'a = "Py"\nb = "Code"\nprint(len(a) + §§§§§§)',
+      templateCode: 'a = "Py"\nb = "Code"\nprint(len(a) + §§§§§§§)',
       targetCode: 'a = "Py"\nb = "Code"\nprint(len(a) + len(b))',
       testCases: [
         {
@@ -177,7 +177,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Fill Blank] Print the length of tags and the character length of its last word.',
       hint_ko: '두 번째 len() 괄호 안에 리스트의 마지막 요소를 가리키는 음수 인덱싱 식을 넣으세요.',
       hint_en: 'Pass the negative indexing expression for the last item of tags into len().',
-      templateCode: 'tags = ["go", "rust", "python"]\nprint(len(tags), len(§§§§§§§§))',
+      templateCode: 'tags = ["go", "rust", "python"]\nprint(len(tags), len(§§§§§§§§§))',
       targetCode: 'tags = ["go", "rust", "python"]\nprint(len(tags), len(tags[-1]))',
       testCases: [
         {
@@ -196,7 +196,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Fill Blank] If the first word in words has at least 5 characters, print that word and its character count.',
       hint_ko: '길이 함수, 첫 번째 요소 인덱스, 이상 비교 연산자를 차례로 채워보세요.',
       hint_en: 'Fill in the length function, first-element index, and >= operator.',
-      templateCode: 'words = ["apple", "pie"]\nif §§§(words[§]) §§ 5:\n    print(words[0], len(words[0]))',
+      templateCode: 'words = ["apple", "pie"]\nif §§§§(words[§§]) §§§ 5:\n    print(words[0], len(words[0]))',
       targetCode: 'words = ["apple", "pie"]\nif len(words[0]) >= 5:\n    print(words[0], len(words[0]))',
       testCases: [
         {
@@ -253,7 +253,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that prints the length of s repeated 3 times (s * 3).',
       hint_ko: 'print()와 길이 함수 안에 문자열 반복 수식 s * 3을 넣어 작성하세요.',
       hint_en: 'Wrap s * 3 inside len() and pass it to print().',
-      templateCode: 's = "Ab"\n§§§§§§§§§§§§§§§§§',
+      templateCode: 's = "Ab"\n§§§§§§§§§§§§§§§§§§',
       targetCode: 's = "Ab"\nprint(len(s * 3))',
       testCases: [
         {
@@ -272,7 +272,7 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that appends the length of w to lens.',
       hint_ko: '리스트 추가 메서드 괄호 안에 단어 w의 길이를 구하는 식을 넣으세요.',
       hint_en: 'Call lens.append() with the length of w.',
-      templateCode: 'words = ["a", "py", "code"]\nlens = []\nfor w in words:\n    §§§§§§§§§§§§§§§§§§§\nprint(lens)',
+      templateCode: 'words = ["a", "py", "code"]\nlens = []\nfor w in words:\n    §§§§§§§§§§§§§§§§§§§§\nprint(lens)',
       targetCode: 'words = ["a", "py", "code"]\nlens = []\nfor w in words:\n    lens.append(len(w))\nprint(lens)',
       testCases: [
         {

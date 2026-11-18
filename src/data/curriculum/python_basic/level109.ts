@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "맨 위에 정의된 일곱 글자 부모 클래스 이름을 그대로 적으세요.",
       "hint_en": "Enter the 7-letter parent class name defined at the top.",
       "targetCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(Vehicle):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move(), b.ring())",
-      "templateCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(§§§§§§§):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move(), b.ring())",
+      "templateCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(§§§§§§§§):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move(), b.ring())",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "부모 클래스에 정의된 세 글자 메서드 이름과 똑같이 적어야 오버라이딩됩니다.",
       "hint_en": "Use the exact same 3-letter method name defined in the parent class.",
       "targetCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(Delivery):\n    def fee(self):\n        return 6000\n\nd = Express()\nprint(d.fee())",
-      "templateCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(Delivery):\n    def §§§(self):\n        return 6000\n\nd = Express()\nprint(d.fee())",
+      "templateCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(Delivery):\n    def §§§§(self):\n        return 6000\n\nd = Express()\nprint(d.fee())",
       "testCases": [
         {
           "id": 1,
@@ -141,7 +141,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "부모(super) 클래스를 돌려주는 다섯 글자 이름 뒤에 빈 괄호 ()를 붙인 일곱 글자를 적으세요.",
       "hint_en": "Write the 5-letter built-in name followed by empty parentheses (7 characters total).",
       "targetCode": "class Member:\n    def __init__(self, name):\n        self.name = name\n\nclass VIP(Member):\n    def __init__(self, name, bonus):\n        super().__init__(name)\n        self.bonus = bonus\n\nv = VIP(\"Ara\", 500)\nprint(v.name, v.bonus)",
-      "templateCode": "class Member:\n    def __init__(self, name):\n        self.name = name\n\nclass VIP(Member):\n    def __init__(self, name, bonus):\n        §§§§§§§.__init__(name)\n        self.bonus = bonus\n\nv = VIP(\"Ara\", 500)\nprint(v.name, v.bonus)",
+      "templateCode": "class Member:\n    def __init__(self, name):\n        self.name = name\n\nclass VIP(Member):\n    def __init__(self, name, bonus):\n        §§§§§§§§.__init__(name)\n        self.bonus = bonus\n\nv = VIP(\"Ara\", 500)\nprint(v.name, v.bonus)",
       "testCases": [
         {
           "id": 1,
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "객체가 해당 클래스(또는 부모 클래스)의 인스턴스인지 확인하는 열 글자 내장 함수를 적으세요.",
       "hint_en": "Enter the 10-letter built-in function that checks class membership.",
       "targetCode": "class Animal:\n    pass\n\nclass Cat(Animal):\n    pass\n\nc = Cat()\nprint(isinstance(c, Animal))",
-      "templateCode": "class Animal:\n    pass\n\nclass Cat(Animal):\n    pass\n\nc = Cat()\nprint(§§§§§§§§§§(c, Animal))",
+      "templateCode": "class Animal:\n    pass\n\nclass Cat(Animal):\n    pass\n\nc = Cat()\nprint(§§§§§§§§§§§(c, Animal))",
       "testCases": [
         {
           "id": 1,
@@ -197,7 +197,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "부모 클래스 이름, 부모 참조 호출(괄호 포함), 문자열 표현 매직 메서드를 차례로 채워보세요.",
       "hint_en": "Supply the parent class name, the parent proxy call with parentheses, and the string dunder method.",
       "targetCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nclass SaleItem(Item):\n    def __init__(self, name, price, disc):\n        super().__init__(name, price)\n        self.disc = disc\n\n    def __str__(self):\n        return f\"{self.name}:{self.price - self.disc}\"\n\nprint(SaleItem(\"Book\", 10000, 1500))",
-      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nclass SaleItem(§§§§):\n    def __init__(self, name, price, disc):\n        §§§§§§§.__init__(name, price)\n        self.disc = disc\n\n    def §§§§§§§(self):\n        return f\"{self.name}:{self.price - self.disc}\"\n\nprint(SaleItem(\"Book\", 10000, 1500))",
+      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nclass SaleItem(§§§§§):\n    def __init__(self, name, price, disc):\n        §§§§§§§§.__init__(name, price)\n        self.disc = disc\n\n    def §§§§§§§§(self):\n        return f\"{self.name}:{self.price - self.disc}\"\n\nprint(SaleItem(\"Book\", 10000, 1500))",
       "testCases": [
         {
           "id": 1,
@@ -254,7 +254,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "class Square(Shape): 형태로 괄호 안에 부모 클래스를 지정하세요.",
       "hint_en": "Write class Square(Shape): on the masked line.",
       "targetCode": "class Shape:\n    def area(self):\n        return 0\n\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):\n        return self.side ** 2\n\ns = Square(4)\nprint(isinstance(s, Shape), s.area())",
-      "templateCode": "class Shape:\n    def area(self):\n        return 0\n\n§§§§§§§§§§§§§§§§§§§§\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):\n        return self.side ** 2\n\ns = Square(4)\nprint(isinstance(s, Shape), s.area())",
+      "templateCode": "class Shape:\n    def area(self):\n        return 0\n\n§§§§§§§§§§§§§§§§§§§§§\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):\n        return self.side ** 2\n\ns = Square(4)\nprint(isinstance(s, Shape), s.area())",
       "testCases": [
         {
           "id": 1,
@@ -273,7 +273,7 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "hint_ko": "들여쓰기 8칸 뒤에 super().__init__(name)을 작성하세요.",
       "hint_en": "Write super().__init__(name) at the indented line.",
       "targetCode": "class Person:\n    def __init__(self, name):\n        self.name = name\n\nclass Player(Person):\n    def __init__(self, name, score):\n        super().__init__(name)\n        self.score = score\n\np = Player(\"Kim\", 95)\nprint(p.name, p.score)",
-      "templateCode": "class Person:\n    def __init__(self, name):\n        self.name = name\n\nclass Player(Person):\n    def __init__(self, name, score):\n        §§§§§§§§§§§§§§§§§§§§§§\n        self.score = score\n\np = Player(\"Kim\", 95)\nprint(p.name, p.score)",
+      "templateCode": "class Person:\n    def __init__(self, name):\n        self.name = name\n\nclass Player(Person):\n    def __init__(self, name, score):\n        §§§§§§§§§§§§§§§§§§§§§§§\n        self.score = score\n\np = Player(\"Kim\", 95)\nprint(p.name, p.score)",
       "testCases": [
         {
           "id": 1,

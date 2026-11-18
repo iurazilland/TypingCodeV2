@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string conversion function name to print 100pt using +.',
       hint_ko: '문자열(string)의 앞 세 글자를 딴 내장 함수 이름을 괄호 앞에 적습니다.',
       hint_en: 'Write the three-letter built-in function name derived from "string".',
-      templateCode: 'score = 100\nprint(§§§(score) + "pt")',
+      templateCode: 'score = 100\nprint(§§§§(score) + "pt")',
       targetCode: 'score = 100\nprint(str(score) + "pt")',
       expectedVariables: { score: 100 },
       testCases: [
@@ -80,7 +80,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the call converting d to a string so repeating it 4 times prints 5555.',
       hint_ko: '문자열 변환 함수의 소괄호 안에 변수 d를 넣어 작성합니다.',
       hint_en: 'Pass variable d inside the string conversion function.',
-      templateCode: 'd = 5\nprint(§§§§§§ * 4)',
+      templateCode: 'd = 5\nprint(§§§§§§§ * 4)',
       targetCode: 'd = 5\nprint(str(d) * 4)',
       expectedVariables: { d: 5 },
       testCases: [
@@ -123,7 +123,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string conversion function on line 3 to print the updated age with "살".',
       hint_ko: '숫자가 된 변수 age를 문자열과 +로 합치기 위해 문자열 변환 함수를 사용합니다.',
       hint_en: 'Use the three-letter string conversion function before (age).',
-      templateCode: 'age = int(input())\nage += 1\nprint(§§§(age) + "살")',
+      templateCode: 'age = int(input())\nage += 1\nprint(§§§§(age) + "살")',
       targetCode: 'age = int(input())\nage += 1\nprint(str(age) + "살")',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string conversion function on line 2 to print Speed: 3.5km.',
       hint_ko: '실수(float) 값도 정수와 똑같이 문자열 변환 함수로 감싸 문자열로 바꿀 수 있습니다.',
       hint_en: 'Floats can also be converted into strings using the same three-letter function.',
-      templateCode: 'v = float("3.5")\nprint("Speed: " + §§§(v) + "km")',
+      templateCode: 'v = float("3.5")\nprint("Speed: " + §§§§(v) + "km")',
       targetCode: 'v = float("3.5")\nprint("Speed: " + str(v) + "km")',
       expectedVariables: { v: 3.5 },
       testCases: [
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to read an integer, double it in place, and print "[Score: 60]".',
       hint_ko: '정수 변환 함수, 곱셈 복합 대입 연산자, 문자열 변환 함수를 차례로 채워 넣습니다.',
       hint_en: 'Fill in the integer conversion function, *= operator, and string conversion function in order.',
-      templateCode: 'pt = §§§(input())\npt §§ 2\nprint("[Score: " + §§§(pt) + "]")',
+      templateCode: 'pt = §§§§(input())\npt §§§ 2\nprint("[Score: " + §§§§(pt) + "]")',
       targetCode: 'pt = int(input())\npt *= 2\nprint("[Score: " + str(pt) + "]")',
       testCases: [
         {
@@ -250,7 +250,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to convert km with str() and concatenate "km" with + to print 42km.',
       hint_ko: 'print() 안에서 str(km)와 "km"를 덧셈 기호로 연결해 작성합니다.',
       hint_en: 'Write print(str(km) + "km") on line 2.',
-      templateCode: 'km = 42\n§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'km = 42\n§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'km = 42\nprint(str(km) + "km")',
       expectedVariables: { km: 42 },
       testCases: [
@@ -270,7 +270,7 @@ export const PYTHON_LEVEL_18: PracticeRound = {
       prompt_en: '[Complete Line] Write line 3 to print "Floor " concatenated with str(f) using +.',
       hint_ko: '문자열 "Floor " 뒤에 + 연산자로 str(f)를 연결해 print() 안에 작성합니다.',
       hint_en: 'Concatenate "Floor " and str(f) with + inside print() on line 3.',
-      templateCode: 'f = int(input())\nf += 1\n§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'f = int(input())\nf += 1\n§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'f = int(input())\nf += 1\nprint("Floor " + str(f))',
       testCases: [
         {

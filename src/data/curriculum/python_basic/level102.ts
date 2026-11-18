@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "요소를 하나씩 번호 매겨 열거하는 아홉 글자 내장 함수를 입력하세요.",
       "hint_en": "Enter the 9-letter built-in function that yields (index, value) pairs.",
       "targetCode": "colors = [\"red\", \"blue\"]\nfor i, c in enumerate(colors):\n    print(f\"{i}:{c}\")",
-      "templateCode": "colors = [\"red\", \"blue\"]\nfor i, c in §§§§§§§§§(colors):\n    print(f\"{i}:{c}\")",
+      "templateCode": "colors = [\"red\", \"blue\"]\nfor i, c in §§§§§§§§§§(colors):\n    print(f\"{i}:{c}\")",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "시작 번호로 숫자 1을 두 번째 인자 자리에 입력하세요.",
       "hint_en": "Type the integer 1 as the second argument to start numbering from 1.",
       "targetCode": "menus = [\"tea\", \"cake\"]\nfor no, m in enumerate(menus, 1):\n    print(f\"{no}. {m}\")",
-      "templateCode": "menus = [\"tea\", \"cake\"]\nfor no, m in enumerate(menus, §):\n    print(f\"{no}. {m}\")",
+      "templateCode": "menus = [\"tea\", \"cake\"]\nfor no, m in enumerate(menus, §§):\n    print(f\"{no}. {m}\")",
       "testCases": [
         {
           "id": 1,
@@ -141,7 +141,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "인덱스 i와 단어 w를 함께 꺼내주는 아홉 글자 내장 함수를 적으세요.",
       "hint_en": "Write the 9-letter built-in function that unpacks both index i and word w.",
       "targetCode": "words = input().split()\npicks = [w for i, w in enumerate(words) if i % 2 == 0]\nprint(\" \".join(picks))",
-      "templateCode": "words = input().split()\npicks = [w for i, w in §§§§§§§§§(words) if i % 2 == 0]\nprint(\" \".join(picks))",
+      "templateCode": "words = input().split()\npicks = [w for i, w in §§§§§§§§§§(words) if i % 2 == 0]\nprint(\" \".join(picks))",
       "testCases": [
         {
           "id": 1,
@@ -183,7 +183,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "1번부터 순서 번호와 단어를 짝지어 꺼내는 아홉 글자 내장 함수를 입력하세요.",
       "hint_en": "Type the 9-letter built-in function that pairs each item with its 1-based number.",
       "targetCode": "items = [\"gold\", \"silver\"]\nranks = {i: v for i, v in enumerate(items, 1)}\nprint(ranks)",
-      "templateCode": "items = [\"gold\", \"silver\"]\nranks = {i: v for i, v in §§§§§§§§§(items, 1)}\nprint(ranks)",
+      "templateCode": "items = [\"gold\", \"silver\"]\nranks = {i: v for i, v in §§§§§§§§§§(items, 1)}\nprint(ranks)",
       "testCases": [
         {
           "id": 1,
@@ -202,7 +202,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "일괄 매핑 함수, 인덱스·값 열거 함수, 그리고 시작 번호 1을 차례로 채워보세요.",
       "hint_en": "Fill in the batch-mapping function, the numbering iterator, and the starting index 1.",
       "targetCode": "nums = list(map(int, input().split()))\ntotal = 0\nfor idx, n in enumerate(nums, 1):\n    total += idx * n\nprint(total)",
-      "templateCode": "nums = list(§§§(int, input().split()))\ntotal = 0\nfor idx, n in §§§§§§§§§(nums, §):\n    total += idx * n\nprint(total)",
+      "templateCode": "nums = list(§§§§(int, input().split()))\ntotal = 0\nfor idx, n in §§§§§§§§§§(nums, §§):\n    total += idx * n\nprint(total)",
       "testCases": [
         {
           "id": 1,
@@ -264,7 +264,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "for i, v in enumerate(items, 1): 형태로 콜론(:)까지 포함해 작성하세요.",
       "hint_en": "Write for i, v in enumerate(items, 1): on the masked line.",
       "targetCode": "items = [\"py\", \"ai\"]\nfor i, v in enumerate(items, 1):\n    print(i, v)",
-      "templateCode": "items = [\"py\", \"ai\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, v)",
+      "templateCode": "items = [\"py\", \"ai\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, v)",
       "testCases": [
         {
           "id": 1,
@@ -283,7 +283,7 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "hint_ko": "tags = [f\"{i}:{w}\" for i, w in enumerate(words, 1)] 형태로 작성하세요.",
       "hint_en": "Write tags = [f\"{i}:{w}\" for i, w in enumerate(words, 1)].",
       "targetCode": "words = [\"a\", \"b\", \"c\"]\ntags = [f\"{i}:{w}\" for i, w in enumerate(words, 1)]\nprint(tags)",
-      "templateCode": "words = [\"a\", \"b\", \"c\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(tags)",
+      "templateCode": "words = [\"a\", \"b\", \"c\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(tags)",
       "testCases": [
         {
           "id": 1,

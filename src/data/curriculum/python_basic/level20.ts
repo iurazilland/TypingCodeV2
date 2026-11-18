@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to read an integer, add 5 in place, and print "[Lv.15]".',
       hint_ko: '정수 변환 함수, 누적 덧셈 복합 대입 연산자, 문자열 변환 함수를 차례로 채웁니다.',
       hint_en: 'Fill in the integer conversion function, += operator, and string conversion function in order.',
-      templateCode: 'lv = §§§(input("Lv: "))\nlv §§ 5\nprint("[Lv." + §§§(lv) + "]")',
+      templateCode: 'lv = §§§§(input("Lv: "))\nlv §§§ 5\nprint("[Lv." + §§§§(lv) + "]")',
       targetCode: 'lv = int(input("Lv: "))\nlv += 5\nprint("[Lv." + str(lv) + "]")',
       testCases: [
         {
@@ -46,7 +46,7 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to unpack two inputs, convert them to integers, and print their quotient and remainder joined by ":".',
       hint_ko: '공백 분리 메서드 이름, 정수 몫 연산자, 구분자 옵션 이름을 순서대로 채워 넣습니다.',
       hint_en: 'Enter the split method name, floor division operator, and sep option name in order.',
-      templateCode: 'a, b = input().§§§§§()\nx, y = int(a), int(b)\nprint(x §§ y, x % y, §§§=":")',
+      templateCode: 'a, b = input().§§§§§§()\nx, y = int(a), int(b)\nprint(x §§§ y, x % y, §§§§=":")',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x // y, x % y, sep=":")',
       testCases: [
         {
@@ -70,7 +70,7 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to mark the comment, swap the two variables, and square a in place.',
       hint_ko: '주석 기호, 값을 맞바꾸는 반대 순서의 변수 나열, 거듭제곱 복합 대입 연산자를 차례로 채웁니다.',
       hint_en: 'Enter the comment symbol, the reversed variables b, a, and the **= operator in order.',
-      templateCode: '§ Swap and square\na, b = 2, 5\na, b = §§§§\na §§§ 2\nprint(a, b)',
+      templateCode: '§§ Swap and square\na, b = 2, 5\na, b = §§§§§\na §§§§ 2\nprint(a, b)',
       targetCode: '# Swap and square\na, b = 2, 5\na, b = b, a\na **= 2\nprint(a, b)',
       expectedVariables: { a: 25, b: 2 },
       testCases: [
@@ -158,7 +158,7 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to unpack two space-separated inputs into x and y using input().split().',
       hint_ko: '다중 할당 변수 x, y에 input().split()의 결과를 대입하는 한 줄을 작성합니다.',
       hint_en: 'Write x, y = input().split() on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§\nx, y = y, x\nprint(x, y, sep=" -> ")',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§\nx, y = y, x\nprint(x, y, sep=" -> ")',
       targetCode: 'x, y = input().split()\nx, y = y, x\nprint(x, y, sep=" -> ")',
       testCases: [
         {
@@ -182,7 +182,7 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       prompt_en: '[Complete Line] Write line 3 to print "Ans: " concatenated with str(n) using +.',
       hint_ko: 'print() 안에서 "Ans: " 뒤에 + 연산자로 str(n)을 연결해 작성합니다.',
       hint_en: 'Write print("Ans: " + str(n)) on line 3.',
-      templateCode: 'n = int(input())\nn %= 7\n§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'n = int(input())\nn %= 7\n§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'n = int(input())\nn %= 7\nprint("Ans: " + str(n))',
       testCases: [
         {

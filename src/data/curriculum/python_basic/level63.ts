@@ -59,7 +59,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Fill Blank] Convert range(1, 4) into a list so [1, 2, 3] is printed.',
       hint_ko: 'range 객체를 대괄호 리스트로 만들어 주는 네 글자 형변환 함수를 적으세요.',
       hint_en: 'Write the four-letter type conversion function that builds a list.',
-      templateCode: 'nums = §§§§(range(1, 4))\nprint(nums)',
+      templateCode: 'nums = §§§§§(range(1, 4))\nprint(nums)',
       targetCode: 'nums = list(range(1, 4))\nprint(nums)',
       testCases: [
         {
@@ -96,7 +96,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Fill Blank] After converting the tuple to a list and appending 4, cast it back to a tuple.',
       hint_ko: '수정이 끝난 리스트 arr를 다시 소괄호 튜플로 잠그는 다섯 글자 형변환 함수를 적으세요.',
       hint_en: 'Use the five-letter constructor function that converts a sequence into a tuple.',
-      templateCode: 'tup = (1, 2, 3)\narr = list(tup)\narr.append(4)\ntup = §§§§§(arr)\nprint(tup)',
+      templateCode: 'tup = (1, 2, 3)\narr = list(tup)\narr.append(4)\ntup = §§§§§§(arr)\nprint(tup)',
       targetCode: 'tup = (1, 2, 3)\narr = list(tup)\narr.append(4)\ntup = tuple(arr)\nprint(tup)',
       testCases: [
         {
@@ -133,7 +133,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Fill Blank] Remove duplicates from raw using a set and convert it back to a list in arr.',
       hint_ko: 'raw를 집합으로 바꾼 식을 다시 리스트 변환 함수로 감싸 작성하세요.',
       hint_en: 'Wrap raw in the set constructor and pass that inside the list constructor.',
-      templateCode: 'raw = [20, 10, 20, 30]\narr = §§§§§§§§§§§§§§\narr.sort()\nprint(arr)',
+      templateCode: 'raw = [20, 10, 20, 30]\narr = §§§§§§§§§§§§§§§\narr.sort()\nprint(arr)',
       targetCode: 'raw = [20, 10, 20, 30]\narr = list(set(raw))\narr.sort()\nprint(arr)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Fill Blank] Convert the keys of dictionary menu into a list in names.',
       hint_ko: '딕셔너리 변수 menu를 리스트 형변환 함수로 감싸 적으세요.',
       hint_en: 'Pass dictionary variable menu into the list constructor.',
-      templateCode: 'menu = {"tea": 3000, "pie": 4500}\nnames = §§§§§§§§§§\nprint(names[0], len(names))',
+      templateCode: 'menu = {"tea": 3000, "pie": 4500}\nnames = §§§§§§§§§§§\nprint(names[0], len(names))',
       targetCode: 'menu = {"tea": 3000, "pie": 4500}\nnames = list(menu)\nprint(names[0], len(names))',
       testCases: [
         {
@@ -189,7 +189,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Fill Blank] Deduplicate nums into a list and sort it in ascending order to print [1, 2, 4].',
       hint_ko: '바깥쪽 리스트 변환 함수, 안쪽 집합 변환 함수, 리스트 정렬 메서드를 차례로 채우세요.',
       hint_en: 'Fill in the outer list cast, inner set cast, and the in-place sorting method.',
-      templateCode: 'nums = [4, 2, 4, 1, 2]\nuniq = §§§§(§§§(nums))\nuniq.§§§§()\nprint(uniq)',
+      templateCode: 'nums = [4, 2, 4, 1, 2]\nuniq = §§§§§(§§§§(nums))\nuniq.§§§§§()\nprint(uniq)',
       targetCode: 'nums = [4, 2, 4, 1, 2]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that deduplicates arr with set() and converts it back to a list in uniq.',
       hint_ko: 'arr를 집합으로 바꾼 뒤 리스트 변환 함수로 한 번 더 감싸 uniq에 대입하세요.',
       hint_en: 'Assign list(set(arr)) to variable uniq.',
-      templateCode: 'arr = [5, 2, 5, 8]\n§§§§§§§§§§§§§§§§§§§§§\nuniq.sort()\nprint(uniq)',
+      templateCode: 'arr = [5, 2, 5, 8]\n§§§§§§§§§§§§§§§§§§§§§§\nuniq.sort()\nprint(uniq)',
       targetCode: 'arr = [5, 2, 5, 8]\nuniq = list(set(arr))\nuniq.sort()\nprint(uniq)',
       testCases: [
         {
@@ -265,7 +265,7 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       prompt_en: '[Complete Line] Convert range(2, 9, 2) into a tuple and assign it to variable evens.',
       hint_ko: '등호 오른쪽에 튜플 변환 함수로 range(2, 9, 2)를 감싸 작성하세요.',
       hint_en: 'Wrap range(2, 9, 2) inside tuple() and assign it to evens.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(evens)',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(evens)',
       targetCode: 'evens = tuple(range(2, 9, 2))\nprint(evens)',
       testCases: [
         {

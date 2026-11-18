@@ -62,7 +62,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the keyword that sends the computed total price back to the caller.",
       "hint_ko": "함수나 메서드에서 계산한 결과값을 호출한 자리로 되돌려주는 여섯 글자 키워드를 적으세요.",
       "hint_en": "Use the six-letter keyword that sends a result value back from a function or method.",
-      "templateCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        §§§§§§ self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
+      "templateCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        §§§§§§§ self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
       "targetCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        return self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
       "testCases": [
         {
@@ -99,7 +99,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the comparison in is_adult() so it returns whether the member's age is at least 19.",
       "hint_ko": "메서드 안에서 현재 객체 자신의 나이 속성을 꺼내 19 이상인지 비교하세요.",
       "hint_en": "Access the age attribute on self to compare it with 19.",
-      "templateCode": "class Member:\n    def __init__(self, age):\n        self.age = age\n    def is_adult(self):\n        return §§§§§§§§ >= 19\nm = Member(22)\nprint(m.is_adult())",
+      "templateCode": "class Member:\n    def __init__(self, age):\n        self.age = age\n    def is_adult(self):\n        return §§§§§§§§§ >= 19\nm = Member(22)\nprint(m.is_adult())",
       "targetCode": "class Member:\n    def __init__(self, age):\n        self.age = age\n    def is_adult(self):\n        return self.age >= 19\nm = Member(22)\nprint(m.is_adult())",
       "testCases": [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Fill Blank] Instantiate the second Counter with initial value 50 and assign it to c2.",
       "hint_ko": "클래스 이름 뒤에 괄호를 붙이고 초기 숫자 50을 인자로 넘겨 새 인스턴스를 생성하세요.",
       "hint_en": "Call the Counter class with 50 inside parentheses to create a separate instance.",
-      "templateCode": "class Counter:\n    def __init__(self, v=0):\n        self.v = v\n    def inc(self):\n        self.v += 10\nc1 = Counter(10)\nc2 = §§§§§§§§§§§\nc1.inc()\nprint(c1.v, c2.v)",
+      "templateCode": "class Counter:\n    def __init__(self, v=0):\n        self.v = v\n    def inc(self):\n        self.v += 10\nc1 = Counter(10)\nc2 = §§§§§§§§§§§§\nc1.inc()\nprint(c1.v, c2.v)",
       "targetCode": "class Counter:\n    def __init__(self, v=0):\n        self.v = v\n    def inc(self):\n        self.v += 10\nc1 = Counter(10)\nc2 = Counter(50)\nc1.inc()\nprint(c1.v, c2.v)",
       "testCases": [
         {
@@ -173,7 +173,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Fill Blank] Call the score-returning method on team b so the difference between team a and team b is printed.",
       "hint_ko": "앞쪽에서 첫 번째 팀의 총점을 구할 때 호출한 것과 같은 메서드를 두 번째 팀 인스턴스에서도 호출하세요.",
       "hint_en": "Invoke the total() method on instance b just as it is called on instance a.",
-      "templateCode": "class Team:\n    def __init__(self, win, draw):\n        self.win = win\n        self.draw = draw\n    def total(self):\n        return self.win * 3 + self.draw\na = Team(4, 2)\nb = Team(3, 1)\nprint(a.total() - §§§§§§§§§)",
+      "templateCode": "class Team:\n    def __init__(self, win, draw):\n        self.win = win\n        self.draw = draw\n    def total(self):\n        return self.win * 3 + self.draw\na = Team(4, 2)\nb = Team(3, 1)\nprint(a.total() - §§§§§§§§§§)",
       "targetCode": "class Team:\n    def __init__(self, win, draw):\n        self.win = win\n        self.draw = draw\n    def total(self):\n        return self.win * 3 + self.draw\na = Team(4, 2)\nb = Team(3, 1)\nprint(a.total() - b.total())",
       "testCases": [
         {
@@ -192,7 +192,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the discounted price method and add the net prices of both products.",
       "hint_ko": "계산 결과를 돌려주는 키워드와 인스턴스 자신의 할인액 속성 참조, 그리고 두 번째 객체의 메서드 호출식을 확인하세요.",
       "hint_en": "Check the result-sending keyword, the discount attribute on self, and the method call on p2.",
-      "templateCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        §§§§§§ self.price - §§§§§§§§§\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.§§§§§§§§§§§ + p2.net_price()\nprint(ans)",
+      "templateCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        §§§§§§§ self.price - §§§§§§§§§§\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.§§§§§§§§§§§§ + p2.net_price()\nprint(ans)",
       "targetCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        return self.price - self.disc\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.net_price() + p2.net_price()\nprint(ans)",
       "testCases": [
         {
@@ -249,7 +249,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside size(self) that returns the tuple (self.w, self.h).",
       "hint_ko": "반환 키워드 뒤에 두 속성을 괄호와 쉼표로 묶어 작성하세요.",
       "hint_en": "Use return followed by (self.w, self.h) at the method body indentation.",
-      "templateCode": "class Frame:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def size(self):\n        §§§§§§§§§§§§§§§§§§§§§§§\nf = Frame(1920, 1080)\nx, y = f.size()\nprint(f\"{x}x{y}\")",
+      "templateCode": "class Frame:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def size(self):\n        §§§§§§§§§§§§§§§§§§§§§§§§\nf = Frame(1920, 1080)\nx, y = f.size()\nprint(f\"{x}x{y}\")",
       "targetCode": "class Frame:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def size(self):\n        return (self.w, self.h)\nf = Frame(1920, 1080)\nx, y = f.size()\nprint(f\"{x}x{y}\")",
       "testCases": [
         {
@@ -268,7 +268,7 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "prompt_en": "[Complete Line] Write the final line that prints whether a.score() is greater than b.score().",
       "hint_ko": "print() 괄호 안에서 두 인스턴스의 score() 메서드 호출 결과를 부등호(>)로 비교하세요.",
       "hint_en": "Inside print(), compare a.score() > b.score().",
-      "templateCode": "class Player:\n    def __init__(self, base, mult):\n        self.base = base\n        self.mult = mult\n    def score(self):\n        return self.base * self.mult\na = Player(15, 3)\nb = Player(20, 2)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "templateCode": "class Player:\n    def __init__(self, base, mult):\n        self.base = base\n        self.mult = mult\n    def score(self):\n        return self.base * self.mult\na = Player(15, 3)\nb = Player(20, 2)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "class Player:\n    def __init__(self, base, mult):\n        self.base = base\n        self.mult = mult\n    def score(self):\n        return self.base * self.mult\na = Player(15, 3)\nb = Player(20, 2)\nprint(a.score() > b.score())",
       "testCases": [
         {

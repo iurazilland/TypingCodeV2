@@ -55,7 +55,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Fill Blank] Call the list method that adds "potion" to the end of items.',
       hint_ko: '리스트 맨 끝에 새 요소를 덧붙이는 여섯 글자 메서드를 입력하세요.',
       hint_en: 'Type the 6-letter list method that appends an element to the end.',
-      templateCode: 'items = ["sword", "shield"]\nitems.§§§§§§("potion")\nprint(items)',
+      templateCode: 'items = ["sword", "shield"]\nitems.§§§§§§§("potion")\nprint(items)',
       targetCode: 'items = ["sword", "shield"]\nitems.append("potion")\nprint(items)',
       testCases: [
         {
@@ -97,7 +97,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Fill Blank] Append the input integer n to scores and print the list with its length.',
       hint_ko: '리스트 끝에 요소를 추가하는 메서드를 호출하세요.',
       hint_en: 'Call the method that adds n to the end of scores.',
-      templateCode: 'scores = [80, 90]\nn = int(input())\nscores.§§§§§§(n)\nprint(scores, len(scores))',
+      templateCode: 'scores = [80, 90]\nn = int(input())\nscores.§§§§§§§(n)\nprint(scores, len(scores))',
       targetCode: 'scores = [80, 90]\nn = int(input())\nscores.append(n)\nprint(scores, len(scores))',
       testCases: [
         {
@@ -139,7 +139,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Fill Blank] Remove and return the last element of cards into picked, then print both.',
       hint_ko: '리스트의 끝 요소를 꺼내어 반환하는 세 글자 메서드를 호출하세요.',
       hint_en: 'Call the 3-letter method that removes and returns the last element.',
-      templateCode: 'cards = ["A", "K", "Q"]\npicked = cards.§§§()\nprint(picked, cards)',
+      templateCode: 'cards = ["A", "K", "Q"]\npicked = cards.§§§§()\nprint(picked, cards)',
       targetCode: 'cards = ["A", "K", "Q"]\npicked = cards.pop()\nprint(picked, cards)',
       testCases: [
         {
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Fill Blank] Pop the front element at index 0 from queue into head and print both.',
       hint_ko: '0번 인덱스 요소를 꺼내는 메서드 호출식을 완성하세요.',
       hint_en: 'Complete the method call that removes and returns index 0.',
-      templateCode: 'queue = ["P1", "P2", "P3"]\nhead = queue.§§§§§§\nprint(head, queue)',
+      templateCode: 'queue = ["P1", "P2", "P3"]\nhead = queue.§§§§§§§\nprint(head, queue)',
       targetCode: 'queue = ["P1", "P2", "P3"]\nhead = queue.pop(0)\nprint(head, queue)',
       testCases: [
         {
@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Fill Blank] Append 40 to nums, pop the first element, and print its sum with the last element.',
       hint_ko: '끝에 추가하는 메서드, 맨 앞 요소를 꺼내는 메서드 호출, 마지막 음수 인덱스를 차례로 채우세요.',
       hint_en: 'Fill in the append method, front pop call, and negative index for the last item.',
-      templateCode: 'nums = [10, 20, 30]\nnums.§§§§§§(40)\nfirst = nums.§§§§§§\nprint(first + nums[§§])',
+      templateCode: 'nums = [10, 20, 30]\nnums.§§§§§§§(40)\nfirst = nums.§§§§§§§\nprint(first + nums[§§§])',
       targetCode: 'nums = [10, 20, 30]\nnums.append(40)\nfirst = nums.pop(0)\nprint(first + nums[-1])',
       testCases: [
         {
@@ -252,7 +252,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that pops the last element of stack into top.',
       hint_ko: '리스트에서 끝 요소를 꺼내는 메서드를 호출해 top에 대입하세요.',
       hint_en: 'Assign the result of calling the pop method on stack to top.',
-      templateCode: 'stack = [10, 20]\nstack.append(30)\n§§§§§§§§§§§§§§§§§\nprint(top, len(stack), sep=":")',
+      templateCode: 'stack = [10, 20]\nstack.append(30)\n§§§§§§§§§§§§§§§§§§\nprint(top, len(stack), sep=":")',
       targetCode: 'stack = [10, 20]\nstack.append(30)\ntop = stack.pop()\nprint(top, len(stack), sep=":")',
       testCases: [
         {
@@ -271,7 +271,7 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that appends i * 10 to arr inside the loop.',
       hint_ko: '들여쓰기 4칸 뒤에 리스트 추가 메서드로 i * 10을 전달하세요.',
       hint_en: 'Indent 4 spaces and call the append method on arr with i * 10.',
-      templateCode: 'arr = []\nfor i in range(1, 4):\n    §§§§§§§§§§§§§§§§§§\nprint(arr)',
+      templateCode: 'arr = []\nfor i in range(1, 4):\n    §§§§§§§§§§§§§§§§§§§\nprint(arr)',
       targetCode: 'arr = []\nfor i in range(1, 4):\n    arr.append(i * 10)\nprint(arr)',
       testCases: [
         {

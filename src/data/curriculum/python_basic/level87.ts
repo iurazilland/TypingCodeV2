@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the dictionary method name that looks up item safely and defaults to -1.",
       "hint_ko": "키가 없을 때 기본값을 반환하는 세 글자 딕셔너리 안전 조회 메서드를 호출하세요.",
       "hint_en": "Call the three-letter dictionary method for safe key lookup.",
-      "templateCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.§§§(item, -1))",
+      "templateCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.§§§§(item, -1))",
       "targetCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.get(item, -1))",
       "testCases": [
         {
@@ -106,7 +106,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the dictionary method inside max() to find the highest score among all stored scores.",
       "hint_ko": "딕셔너리의 모든 '값(value)'들을 모아 돌려주는 여섯 글자 메서드를 호출하세요.",
       "hint_en": "Call the six-letter method that returns a view of the dictionary's stored numbers.",
-      "templateCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.§§§§§§()))",
+      "templateCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.§§§§§§§()))",
       "targetCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.values()))",
       "testCases": [
         {
@@ -143,7 +143,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the dictionary method that removes \"Lee\" and returns its value.",
       "hint_ko": "지정한 키의 값을 뽑아내어 돌려주면서 딕셔너리에서 지우는 세 글자 메서드를 적으세요.",
       "hint_en": "Use the three-letter method that pops a key-value pair from a dictionary.",
-      "templateCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.§§§(\"Lee\")\nprint(num, list(wait.keys()))",
+      "templateCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.§§§§(\"Lee\")\nprint(num, list(wait.keys()))",
       "targetCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.pop(\"Lee\")\nprint(num, list(wait.keys()))",
       "testCases": [
         {
@@ -180,7 +180,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the dictionary method that merges patch into cfg in place.",
       "hint_ko": "다른 딕셔너리의 키-값 쌍들을 현재 딕셔너리에 덮어쓰거나 추가해 갱신하는 여섯 글자 메서드를 호출하세요.",
       "hint_en": "Call the six-letter method that updates a dictionary with another dictionary's entries.",
-      "templateCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.§§§§§§(patch)\nprint(cfg[\"fps\"], len(cfg))",
+      "templateCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.§§§§§§§(patch)\nprint(cfg[\"fps\"], len(cfg))",
       "targetCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.update(patch)\nprint(cfg[\"fps\"], len(cfg))",
       "testCases": [
         {
@@ -199,7 +199,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the safe lookup method, dictionary merge method, and stored-counts view method.",
       "hint_ko": "기본값을 지정해 안전 조회하는 메서드, 다른 딕셔너리를 병합하는 메서드, 그리고 값 목록을 꺼내는 메서드를 확인하세요.",
       "hint_en": "Check the three-letter lookup method, six-letter merge method, and six-letter view method.",
-      "templateCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.§§§(w, 0) + 1\nfreq.§§§§§§({\"c\": 5})\nprint(freq[\"a\"], sum(freq.§§§§§§()))",
+      "templateCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.§§§§(w, 0) + 1\nfreq.§§§§§§§({\"c\": 5})\nprint(freq[\"a\"], sum(freq.§§§§§§§()))",
       "targetCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.get(w, 0) + 1\nfreq.update({\"c\": 5})\nprint(freq[\"a\"], sum(freq.values()))",
       "testCases": [
         {
@@ -256,7 +256,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Complete Line] Write the indented line that increments d[k] using d.get(k, 0) + 1.",
       "hint_ko": "d[k] = d.get(k, 0) + 1 형태로 안전 조회와 + 1을 결합하세요.",
       "hint_en": "Write d[k] = d.get(k, 0) + 1 inside the loop.",
-      "templateCode": "d = {}\nfor k in input().split():\n    §§§§§§§§§§§§§§§§§§§§§§\nprint(d.get(\"py\", 0))",
+      "templateCode": "d = {}\nfor k in input().split():\n    §§§§§§§§§§§§§§§§§§§§§§§\nprint(d.get(\"py\", 0))",
       "targetCode": "d = {}\nfor k in input().split():\n    d[k] = d.get(k, 0) + 1\nprint(d.get(\"py\", 0))",
       "testCases": [
         {
@@ -280,7 +280,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that prints the sum of all values in cart.",
       "hint_ko": "print(sum(cart.values())) 형태로 값 목록의 합계를 출력하세요.",
       "hint_en": "Write print(sum(cart.values())).",
-      "templateCode": "cart = {\"apple\": 1200, \"milk\": 2500, \"bread\": 1800}\n§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "templateCode": "cart = {\"apple\": 1200, \"milk\": 2500, \"bread\": 1800}\n§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "cart = {\"apple\": 1200, \"milk\": 2500, \"bread\": 1800}\nprint(sum(cart.values()))",
       "testCases": [
         {

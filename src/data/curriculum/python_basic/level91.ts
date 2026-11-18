@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the trailing filter keyword to keep only words with length at least 4.",
       "hint_ko": "for 절 뒤에서 조건에 맞는 원소만 걸러내는 두 글자 조건 키워드를 적으세요.",
       "hint_en": "Write the two-letter conditional keyword at the end of the comprehension.",
-      "templateCode": "words = [\"py\", \"code\", \"ai\", \"data\"]\nlong_w = [w for w in words §§ len(w) >= 4]\nprint(long_w)",
+      "templateCode": "words = [\"py\", \"code\", \"ai\", \"data\"]\nlong_w = [w for w in words §§§ len(w) >= 4]\nprint(long_w)",
       "targetCode": "words = [\"py\", \"code\", \"ai\", \"data\"]\nlong_w = [w for w in words if len(w) >= 4]\nprint(long_w)",
       "testCases": [
         {
@@ -101,7 +101,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the leading expression so each score s that passes the filter gets 5 added to it.",
       "hint_ko": "필터를 통과한 점수 변수 s에 5를 더하는 덧셈 수식을 for 앞에 적으세요.",
       "hint_en": "Write the addition expression s + 5 before the for keyword.",
-      "templateCode": "scores = [70, 85, 90, 60]\nboost = [§§§§§ for s in scores if s >= 80]\nprint(boost)",
+      "templateCode": "scores = [70, 85, 90, 60]\nboost = [§§§§§§ for s in scores if s >= 80]\nprint(boost)",
       "targetCode": "scores = [70, 85, 90, 60]\nboost = [s + 5 for s in scores if s >= 80]\nprint(boost)",
       "testCases": [
         {
@@ -138,7 +138,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the ternary expression before the for clause so scores under 60 map to \"F\".",
       "hint_ko": "for 절 앞의 삼항 조건 표현식에서 거짓값 \"F\" 앞에 오는 네 글자 키워드를 적으세요.",
       "hint_en": "Write the four-letter fallback keyword before \"F\" in the leading ternary expression.",
-      "templateCode": "scores = [80, 45, 60]\nmarks = [\"P\" if s >= 60 §§§§ \"F\" for s in scores]\nprint(marks)",
+      "templateCode": "scores = [80, 45, 60]\nmarks = [\"P\" if s >= 60 §§§§§ \"F\" for s in scores]\nprint(marks)",
       "targetCode": "scores = [80, 45, 60]\nmarks = [\"P\" if s >= 60 else \"F\" for s in scores]\nprint(marks)",
       "testCases": [
         {
@@ -175,7 +175,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the key: value pair expression at the start of the dictionary comprehension.",
       "hint_ko": "키 자리에는 n을, 콜론 뒤 값 자리에는 n * n을 적어 키-값 쌍을 완성하세요.",
       "hint_en": "Write n: n * n before the for clause inside the curly braces.",
-      "templateCode": "sq_map = {§§§§§§§§ for n in range(1, 4)}\nprint(sq_map[3], sum(sq_map.values()))",
+      "templateCode": "sq_map = {§§§§§§§§§ for n in range(1, 4)}\nprint(sq_map[3], sum(sq_map.values()))",
       "targetCode": "sq_map = {n: n * n for n in range(1, 4)}\nprint(sq_map[3], sum(sq_map.values()))",
       "testCases": [
         {
@@ -194,7 +194,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the trailing filter keyword and the dictionary comprehension key-value separator and loop keyword.",
       "hint_ko": "뒤쪽 필터 조건 키워드와 딕셔너리 컴프리헨션의 키:값 쌍, 그리고 반복 키워드를 확인하세요.",
       "hint_en": "Check the trailing if keyword, the key: value expression, and the for keyword.",
-      "templateCode": "nums = [-2, 3, -1, 5]\npos = [x for x in nums §§ x > 0]\ntable = {§§§§§§§§ §§§ x in pos}\nprint(pos, table[5])",
+      "templateCode": "nums = [-2, 3, -1, 5]\npos = [x for x in nums §§§ x > 0]\ntable = {§§§§§§§§§ §§§§ x in pos}\nprint(pos, table[5])",
       "targetCode": "nums = [-2, 3, -1, 5]\npos = [x for x in nums if x > 0]\ntable = {x: x * 2 for x in pos}\nprint(pos, table[5])",
       "testCases": [
         {
@@ -251,7 +251,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Complete Line] Assign to big a list comprehension that squares numbers x in nums where x >= 10.",
       "hint_ko": "big = [x ** 2 for x in nums if x >= 10] 형태로 작성하세요.",
       "hint_en": "Write big = [x ** 2 for x in nums if x >= 10].",
-      "templateCode": "nums = [4, 10, 7, 12]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(big)",
+      "templateCode": "nums = [4, 10, 7, 12]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(big)",
       "targetCode": "nums = [4, 10, 7, 12]\nbig = [x ** 2 for x in nums if x >= 10]\nprint(big)",
       "testCases": [
         {
@@ -270,7 +270,7 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "prompt_en": "[Complete Line] Assign to d a dictionary comprehension mapping each w in items to len(w).",
       "hint_ko": "d = {w: len(w) for w in items} 형태로 딕셔너리 컴프리헨션을 작성하세요.",
       "hint_en": "Write d = {w: len(w) for w in items}.",
-      "templateCode": "items = [\"apple\", \"pie\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(d[\"apple\"], d[\"pie\"])",
+      "templateCode": "items = [\"apple\", \"pie\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(d[\"apple\"], d[\"pie\"])",
       "targetCode": "items = [\"apple\", \"pie\"]\nd = {w: len(w) for w in items}\nprint(d[\"apple\"], d[\"pie\"])",
       "testCases": [
         {

@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the two comma-separated variables on the left to assign 5 and 8 and print 40.',
       hint_ko: '등호 왼쪽에 두 변수 이름 x와 y를 쉼표와 공백으로 나란히 적습니다.',
       hint_en: 'Write x, y separated by a comma on the left side of the assignment.',
-      templateCode: '§§§§ = 5, 8\nprint(x * y)',
+      templateCode: '§§§§§ = 5, 8\nprint(x * y)',
       targetCode: 'x, y = 5, 8\nprint(x * y)',
       expectedVariables: { x: 5, y: 8 },
       testCases: [
@@ -80,7 +80,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the reversed variables on line 2 to swap x and y and print B A.',
       hint_ko: '등호 오른쪽에 y와 x를 쉼표로 구분해 반대 순서로 작성합니다.',
       hint_en: 'Write y, x in reverse order on the right side of the equals sign.',
-      templateCode: 'x, y = "A", "B"\nx, y = §§§§\nprint(x, y)',
+      templateCode: 'x, y = "A", "B"\nx, y = §§§§§\nprint(x, y)',
       targetCode: 'x, y = "A", "B"\nx, y = y, x\nprint(x, y)',
       expectedVariables: { x: 'B', y: 'A' },
       testCases: [
@@ -123,7 +123,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the method name that splits the input string by whitespace.',
       hint_ko: '쪼개다(나누다)를 뜻하는 다섯 글자 영어 메서드 이름을 마침표(.) 뒤에 적습니다.',
       hint_en: 'Write the five-letter method name for splitting strings after the dot.',
-      templateCode: 'city, country = input().§§§§§()\nprint(city, country, sep=", ")',
+      templateCode: 'city, country = input().§§§§§§()\nprint(city, country, sep=", ")',
       targetCode: 'city, country = input().split()\nprint(city, country, sep=", ")',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the integer conversion function on line 2 to print the product of the two inputs.',
       hint_ko: '변수 a와 마찬가지로 변수 b도 정수로 바꾸도록 세 글자 변환 함수를 적습니다.',
       hint_en: 'Convert variable b to an integer using the three-letter conversion function.',
-      templateCode: 'a, b = input().split()\nx, y = int(a), §§§(b)\nprint(x * y)',
+      templateCode: 'a, b = input().split()\nx, y = int(a), §§§§(b)\nprint(x * y)',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x * y)',
       testCases: [
         {
@@ -194,7 +194,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to split two inputs, convert them to ints, and print their quotient and remainder.',
       hint_ko: '공백 분리 메서드 이름, 정수 변환 함수 이름, 정수 몫 연산자를 순서대로 채웁니다.',
       hint_en: 'Enter the split method name, the int function name, and the floor division operator in order.',
-      templateCode: 'a, b = input().§§§§§()\nx, y = §§§(a), int(b)\nprint(x §§ y, x % y)',
+      templateCode: 'a, b = input().§§§§§§()\nx, y = §§§§(a), int(b)\nprint(x §§§ y, x % y)',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x // y, x % y)',
       testCases: [
         {
@@ -262,7 +262,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to swap the values of a and b using multiple assignment.',
       hint_ko: '등호 왼쪽에 a, b를 적고 오른쪽에 b, a를 적어 값을 교환합니다.',
       hint_en: 'Write a, b = b, a on line 2 to swap the two variables.',
-      templateCode: 'a, b = 3, 9\n§§§§§§§§§§§\nprint(a, b)',
+      templateCode: 'a, b = 3, 9\n§§§§§§§§§§§§\nprint(a, b)',
       targetCode: 'a, b = 3, 9\na, b = b, a\nprint(a, b)',
       expectedVariables: { a: 9, b: 3 },
       testCases: [
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_19: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to read two space-separated inputs into w and h using input().split().',
       hint_ko: '좌변에 w, h를 두고 우변에 input().split()을 호출해 대입합니다.',
       hint_en: 'Assign input().split() to w, h on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§\nprint(int(w) * int(h))',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§\nprint(int(w) * int(h))',
       targetCode: 'w, h = input().split()\nprint(int(w) * int(h))',
       testCases: [
         {

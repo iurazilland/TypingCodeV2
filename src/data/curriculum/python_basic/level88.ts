@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the set operator that computes the intersection of s1 and s2.",
       "hint_ko": "양쪽 집합에 모두 포함된 공통 원소를 구하는 앰퍼샌드 기호 하나를 적으세요.",
       "hint_en": "Type the single ampersand symbol for set intersection.",
-      "templateCode": "s1 = {10, 20, 30}\ns2 = {20, 30, 40}\ncommon = s1 § s2\nprint(sorted(common))",
+      "templateCode": "s1 = {10, 20, 30}\ns2 = {20, 30, 40}\ncommon = s1 §§ s2\nprint(sorted(common))",
       "targetCode": "s1 = {10, 20, 30}\ns2 = {20, 30, 40}\ncommon = s1 & s2\nprint(sorted(common))",
       "testCases": [
         {
@@ -101,7 +101,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the set union operator to merge all unique tags from a and b.",
       "hint_ko": "두 집합의 원소를 중복 없이 합치는 세로 막대 기호 하나를 적으세요.",
       "hint_en": "Type the pipe symbol used for set union.",
-      "templateCode": "a = {\"new\", \"hot\"}\nb = {\"hot\", \"sale\"}\ntotal = a § b\nprint(sorted(total))",
+      "templateCode": "a = {\"new\", \"hot\"}\nb = {\"hot\", \"sale\"}\ntotal = a §§ b\nprint(sorted(total))",
       "targetCode": "a = {\"new\", \"hot\"}\nb = {\"hot\", \"sale\"}\ntotal = a | b\nprint(sorted(total))",
       "testCases": [
         {
@@ -138,7 +138,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the set difference operator to remove banned numbers from nums.",
       "hint_ko": "왼쪽 집합에서 오른쪽 집합의 원소를 빼내는 차집합 기호를 적으세요.",
       "hint_en": "Use the minus sign for set difference.",
-      "templateCode": "nums = {1, 2, 3, 4}\nbanned = {2, 4}\nvalid = nums § banned\nprint(sorted(valid))",
+      "templateCode": "nums = {1, 2, 3, 4}\nbanned = {2, 4}\nvalid = nums §§ banned\nprint(sorted(valid))",
       "targetCode": "nums = {1, 2, 3, 4}\nbanned = {2, 4}\nvalid = nums - banned\nprint(sorted(valid))",
       "testCases": [
         {
@@ -175,7 +175,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the set method name that removes drop safely even if it is not present.",
       "hint_ko": "없는 원소를 지워도 오류가 발생하지 않는 일곱 글자 집합 안전 삭제 메서드를 호출하세요.",
       "hint_en": "Call the seven-letter set method for error-free removal.",
-      "templateCode": "active = {\"a\", \"b\", \"c\"}\ndrop = input()\nactive.§§§§§§§(drop)\nprint(sorted(active))",
+      "templateCode": "active = {\"a\", \"b\", \"c\"}\ndrop = input()\nactive.§§§§§§§§(drop)\nprint(sorted(active))",
       "targetCode": "active = {\"a\", \"b\", \"c\"}\ndrop = input()\nactive.discard(drop)\nprint(sorted(active))",
       "testCases": [
         {
@@ -199,7 +199,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the union operator, safe removal method, and intersection operator.",
       "hint_ko": "두 집합을 합치는 연산자, 없어도 에러가 안 나는 삭제 메서드, 그리고 공통 원소를 구하는 연산자를 확인하세요.",
       "hint_en": "Check the union pipe operator, the seven-letter discard method, and the intersection ampersand operator.",
-      "templateCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a § b\nm.§§§§§§§(5)\nprint(sorted(m § {2, 3, 5}))",
+      "templateCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a §§ b\nm.§§§§§§§§(5)\nprint(sorted(m §§ {2, 3, 5}))",
       "targetCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a | b\nm.discard(5)\nprint(sorted(m & {2, 3, 5}))",
       "testCases": [
         {
@@ -256,7 +256,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that prints the sorted intersection of set(a) and set(b).",
       "hint_ko": "print(sorted(set(a) & set(b))) 형태로 형변환과 교집합, 정렬을 한 줄에 작성하세요.",
       "hint_en": "Write print(sorted(set(a) & set(b))).",
-      "templateCode": "a = [3, 1, 2, 3]\nb = [2, 4, 3]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "templateCode": "a = [3, 1, 2, 3]\nb = [2, 4, 3]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
       "targetCode": "a = [3, 1, 2, 3]\nb = [2, 4, 3]\nprint(sorted(set(a) & set(b)))",
       "testCases": [
         {
@@ -275,7 +275,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that safely removes \"temp\" from the set keys.",
       "hint_ko": "keys 변수에서 집합 안전 삭제 메서드를 호출하고 \"temp\"를 인자로 넣으세요.",
       "hint_en": "Call keys.discard(\"temp\").",
-      "templateCode": "keys = {\"id\", \"name\"}\n§§§§§§§§§§§§§§§§§§§§\nprint(sorted(keys))",
+      "templateCode": "keys = {\"id\", \"name\"}\n§§§§§§§§§§§§§§§§§§§§§\nprint(sorted(keys))",
       "targetCode": "keys = {\"id\", \"name\"}\nkeys.discard(\"temp\")\nprint(sorted(keys))",
       "testCases": [
         {

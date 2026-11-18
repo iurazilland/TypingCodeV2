@@ -68,7 +68,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception type raised when indexing past the end of a string.",
       "hint_ko": "시퀀스의 '인덱스(Index)' 범위를 벗어났을 때 나는 오류 이름을 파스칼 표기법으로 적으세요.",
       "hint_en": "Write the PascalCase exception name for an out-of-bounds index.",
-      "templateCode": "word = \"Python\"\ni = int(input())\ntry:\n    print(word[i])\nexcept §§§§§§§§§§:\n    print(\"None\")",
+      "templateCode": "word = \"Python\"\ni = int(input())\ntry:\n    print(word[i])\nexcept §§§§§§§§§§§:\n    print(\"None\")",
       "targetCode": "word = \"Python\"\ni = int(input())\ntry:\n    print(word[i])\nexcept IndexError:\n    print(\"None\")",
       "testCases": [
         {
@@ -115,7 +115,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception type raised when a dictionary key is not found.",
       "hint_ko": "딕셔너리의 '키(Key)'가 없을 때 발생하는 여덟 글자 예외 이름을 적으세요.",
       "hint_en": "Write the eight-letter PascalCase exception name for a missing dictionary key.",
-      "templateCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept §§§§§§§§:\n    print(0)",
+      "templateCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept §§§§§§§§§:\n    print(0)",
       "targetCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept KeyError:\n    print(0)",
       "testCases": [
         {
@@ -157,7 +157,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception type raised when trying to add an integer directly to a list.",
       "hint_ko": "'자료형(Type)'이 맞지 않아 연산할 수 없을 때 발생하는 아홉 글자 예외 이름을 적으세요.",
       "hint_en": "Write the nine-letter PascalCase exception name for incompatible data types.",
-      "templateCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept §§§§§§§§§:\n    print(\"BadType\")",
+      "templateCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept §§§§§§§§§§:\n    print(\"BadType\")",
       "targetCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept TypeError:\n    print(\"BadType\")",
       "testCases": [
         {
@@ -204,7 +204,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the first exception type to catch out-of-bounds list access before checking the dictionary.",
       "hint_ko": "순번(인덱스)이 리스트 길이를 벗어났을 때 발생하는 예외 이름을 첫 번째 except 뒤에 적으세요.",
       "hint_en": "Specify the sequence index exception on the first except clause.",
-      "templateCode": "codes = [\"A\", \"B\"]\ntable = {\"A\": 10}\ni = int(input())\ntry:\n    k = codes[i]\n    print(table[k])\nexcept §§§§§§§§§§:\n    print(-1)\nexcept KeyError:\n    print(-2)",
+      "templateCode": "codes = [\"A\", \"B\"]\ntable = {\"A\": 10}\ni = int(input())\ntry:\n    k = codes[i]\n    print(table[k])\nexcept §§§§§§§§§§§:\n    print(-1)\nexcept KeyError:\n    print(-2)",
       "targetCode": "codes = [\"A\", \"B\"]\ntable = {\"A\": 10}\ni = int(input())\ntry:\n    k = codes[i]\n    print(table[k])\nexcept IndexError:\n    print(-1)\nexcept KeyError:\n    print(-2)",
       "testCases": [
         {
@@ -233,7 +233,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the three exception types for out-of-range index, missing key, and incompatible type operations.",
       "hint_ko": "리스트 순번 초과, 딕셔너리 키 부재, 자료형 불일치에 해당하는 각 예외 이름을 차례로 확인하세요.",
       "hint_en": "Check the exact exception names for index out of range, missing dictionary key, and wrong operand types.",
-      "templateCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept §§§§§§§§§§:\n    print(\"Idx\")\nexcept §§§§§§§§:\n    print(\"Key\")\nexcept §§§§§§§§§:\n    print(\"Type\")",
+      "templateCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept §§§§§§§§§§§:\n    print(\"Idx\")\nexcept §§§§§§§§§:\n    print(\"Key\")\nexcept §§§§§§§§§§:\n    print(\"Type\")",
       "targetCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept IndexError:\n    print(\"Idx\")\nexcept KeyError:\n    print(\"Key\")\nexcept TypeError:\n    print(\"Type\")",
       "testCases": [
         {
@@ -300,7 +300,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Complete Line] Write the except header line that catches IndexError.",
       "hint_ko": "예외 처리 키워드 뒤에 인덱스 예외 이름과 콜론을 적으세요.",
       "hint_en": "Write except IndexError: with a colon at the end.",
-      "templateCode": "items = [\"X\", \"Y\"]\nidx = int(input())\ntry:\n    print(items[idx])\n§§§§§§§§§§§§§§§§§§\n    print(\"Empty\")",
+      "templateCode": "items = [\"X\", \"Y\"]\nidx = int(input())\ntry:\n    print(items[idx])\n§§§§§§§§§§§§§§§§§§§\n    print(\"Empty\")",
       "targetCode": "items = [\"X\", \"Y\"]\nidx = int(input())\ntry:\n    print(items[idx])\nexcept IndexError:\n    print(\"Empty\")",
       "testCases": [
         {
@@ -324,7 +324,7 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Complete Line] Write the except header line that catches KeyError.",
       "hint_ko": "예외 처리 키워드 뒤에 딕셔너리 키 예외 이름과 콜론을 적으세요.",
       "hint_en": "Write except KeyError: followed by a colon.",
-      "templateCode": "ranks = {\"Ace\": 1}\nname = input()\ntry:\n    print(ranks[name])\n§§§§§§§§§§§§§§§§\n    print(\"Unranked\")",
+      "templateCode": "ranks = {\"Ace\": 1}\nname = input()\ntry:\n    print(ranks[name])\n§§§§§§§§§§§§§§§§§\n    print(\"Unranked\")",
       "targetCode": "ranks = {\"Ace\": 1}\nname = input()\ntry:\n    print(ranks[name])\nexcept KeyError:\n    print(\"Unranked\")",
       "testCases": [
         {

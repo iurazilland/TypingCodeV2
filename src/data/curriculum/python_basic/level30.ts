@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 2 blanks to print the boolean conversion of x and its negation.',
       hint_ko: '정수를 참·거짓 자료형으로 바꾸는 네 글자 내장 함수와, 결과를 뒤집는 세 글자 부정 키워드를 채웁니다.',
       hint_en: 'Call the four-letter boolean casting function first, and place the three-letter negation keyword in the second blank.',
-      templateCode: 'a, b = input().split()\nx = int(a)\nprint(§§§§(x), §§§ bool(x))\nprint(b == "py")',
+      templateCode: 'a, b = input().split()\nx = int(a)\nprint(§§§§§(x), §§§§ bool(x))\nprint(b == "py")',
       targetCode: 'a, b = input().split()\nx = int(a)\nprint(bool(x), not bool(x))\nprint(b == "py")',
       testCases: [
         {
@@ -46,7 +46,7 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to compute the final price across VIP, standard discount, and shipping tiers.',
       hint_ko: '동시 만족 키워드, 다중 조건 분기 키워드, 그리고 누적 덧셈 복합 대입 연산자를 차례로 채웁니다.',
       hint_en: 'Use the conjunction keyword on line 3, the else-if keyword on line 5, and plus-equals on line 8.',
-      templateCode: 'price = int(input())\nvip = int(input())\nif price >= 20000 §§§ bool(vip):\n    price -= 5000\n§§§§ price >= 20000:\n    price -= 2000\nelse:\n    price §§ 3000\nprint(price)',
+      templateCode: 'price = int(input())\nvip = int(input())\nif price >= 20000 §§§§ bool(vip):\n    price -= 5000\n§§§§§ price >= 20000:\n    price -= 2000\nelse:\n    price §§§ 3000\nprint(price)',
       targetCode: 'price = int(input())\nvip = int(input())\nif price >= 20000 and bool(vip):\n    price -= 5000\nelif price >= 20000:\n    price -= 2000\nelse:\n    price += 3000\nprint(price)',
       testCases: [
         {
@@ -75,7 +75,7 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 2 blanks to convert input to an integer and do nothing when 0 <= temp <= 100.',
       hint_ko: '첫째 줄에는 세 글자 정수 변환 함수를, 넷째 줄 빈 블록에는 네 글자 통과 키워드를 채웁니다.',
       hint_en: 'Use the three-letter integer casting function on line 1 and the four-letter no-op keyword on line 4.',
-      templateCode: 'temp = §§§(input())\nif temp >= 0:\n    if temp <= 100:\n        §§§§\n    else:\n        print("Gas")\nelse:\n    print("Ice")\nprint("Checked")',
+      templateCode: 'temp = §§§§(input())\nif temp >= 0:\n    if temp <= 100:\n        §§§§§\n    else:\n        print("Gas")\nelse:\n    print("Ice")\nprint("Checked")',
       targetCode: 'temp = int(input())\nif temp >= 0:\n    if temp <= 100:\n        pass\n    else:\n        print("Gas")\nelse:\n    print("Ice")\nprint("Checked")',
       testCases: [
         {
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line under else: assigning "Empty" to ans.',
       hint_ko: '4칸 들여쓰기 뒤에 ans = "Empty"를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation under else: and write ans = "Empty".',
-      templateCode: 'msg = input()\nif msg != "none":\n    ans = "Msg:" + msg\nelse:\n    §§§§§§§§§§§§§\nprint(ans)',
+      templateCode: 'msg = input()\nif msg != "none":\n    ans = "Msg:" + msg\nelse:\n    §§§§§§§§§§§§§§\nprint(ans)',
       targetCode: 'msg = input()\nif msg != "none":\n    ans = "Msg:" + msg\nelse:\n    ans = "Empty"\nprint(ans)',
       testCases: [
         {
@@ -210,7 +210,7 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       prompt_en: '[Complete Line] Write the if header checking whether both x > 0 and y > 0 hold True.',
       hint_ko: 'if x > 0 and y > 0: 형태로 두 양수 비교를 and로 묶어 작성해보세요.',
       hint_en: 'Write if x > 0 and y > 0: including the trailing colon.',
-      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\n§§§§§§§§§§§§§§§§§§§\n    print(x + y)',
+      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\n§§§§§§§§§§§§§§§§§§§§\n    print(x + y)',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nif x > 0 and y > 0:\n    print(x + y)',
       testCases: [
         {

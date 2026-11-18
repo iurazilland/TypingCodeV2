@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "문자열(str) 양옆에 밑줄 두 개씩을 붙인 일곱 글자 매직 메서드 이름을 적으세요.",
       "hint_en": "Write the 7-character dunder method name formed by surrounding str with double underscores.",
       "targetCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def __str__(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
-      "templateCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def §§§§§§§(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
+      "templateCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def §§§§§§§§(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "리스트의 길이를 구하는 세 글자 내장 함수를 중괄호 안에 적으세요.",
       "hint_en": "Enter the 3-letter built-in function that returns the length of a list.",
       "targetCode": "class Cart:\n    def __init__(self):\n        self.items = [\"pen\", \"book\"]\n\n    def __str__(self):\n        return f\"Cart({len(self.items)})\"\n\nc = Cart()\nprint(c)",
-      "templateCode": "class Cart:\n    def __init__(self):\n        self.items = [\"pen\", \"book\"]\n\n    def __str__(self):\n        return f\"Cart({§§§(self.items)})\"\n\nc = Cart()\nprint(c)",
+      "templateCode": "class Cart:\n    def __init__(self):\n        self.items = [\"pen\", \"book\"]\n\n    def __str__(self):\n        return f\"Cart({§§§§(self.items)})\"\n\nc = Cart()\nprint(c)",
       "testCases": [
         {
           "id": 1,
@@ -141,7 +141,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "객체의 __str__을 호출해 문자열로 바꾸는 세 글자 형변환 함수를 적으세요.",
       "hint_en": "Write the 3-letter built-in function that converts an object into a string.",
       "targetCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = str(p)\nprint(f\"Pos:{text}\")",
-      "templateCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = §§§(p)\nprint(f\"Pos:{text}\")",
+      "templateCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = §§§§(p)\nprint(f\"Pos:{text}\")",
       "testCases": [
         {
           "id": 1,
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "구분자 문자열 뒤에서 리스트 요소들을 이어 붙이는 네 글자 메서드를 입력하세요.",
       "hint_en": "Enter the 4-letter string method that concatenates a list of strings.",
       "targetCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\" / \".join([str(u) for u in us]))",
-      "templateCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\" / \".§§§§([str(u) for u in us]))",
+      "templateCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\" / \".§§§§§([str(u) for u in us]))",
       "testCases": [
         {
           "id": 1,
@@ -197,7 +197,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "생성자 매직 메서드, 문자열 표현 매직 메서드, 그리고 값 반환 키워드를 차례로 채워보세요.",
       "hint_en": "Supply the initializer dunder name, the string representation dunder name, and the return keyword.",
       "targetCode": "class Coin:\n    def __init__(self, sym, val):\n        self.sym = sym\n        self.val = val\n\n    def __str__(self):\n        return f\"{self.sym}:{self.val}\"\n\ncs = [Coin(\"BTC\", 90), Coin(\"ETH\", 30)]\nprint(\",\".join([str(c) for c in cs]))",
-      "templateCode": "class Coin:\n    def §§§§§§§§(self, sym, val):\n        self.sym = sym\n        self.val = val\n\n    def §§§§§§§(self):\n        §§§§§§ f\"{self.sym}:{self.val}\"\n\ncs = [Coin(\"BTC\", 90), Coin(\"ETH\", 30)]\nprint(\",\".join([str(c) for c in cs]))",
+      "templateCode": "class Coin:\n    def §§§§§§§§§(self, sym, val):\n        self.sym = sym\n        self.val = val\n\n    def §§§§§§§§(self):\n        §§§§§§§ f\"{self.sym}:{self.val}\"\n\ncs = [Coin(\"BTC\", 90), Coin(\"ETH\", 30)]\nprint(\",\".join([str(c) for c in cs]))",
       "testCases": [
         {
           "id": 1,
@@ -254,7 +254,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "들여쓰기 4칸 뒤에 def __str__(self):를 콜론까지 정확히 작성하세요.",
       "hint_en": "Write def __str__(self): at the 4-space indented line.",
       "targetCode": "class Note:\n    def __init__(self, msg):\n        self.msg = msg\n\n    def __str__(self):\n        return f\"[{self.msg}]\"\n\nprint(Note(\"Todo\"))",
-      "templateCode": "class Note:\n    def __init__(self, msg):\n        self.msg = msg\n\n    §§§§§§§§§§§§§§§§§§\n        return f\"[{self.msg}]\"\n\nprint(Note(\"Todo\"))",
+      "templateCode": "class Note:\n    def __init__(self, msg):\n        self.msg = msg\n\n    §§§§§§§§§§§§§§§§§§§\n        return f\"[{self.msg}]\"\n\nprint(Note(\"Todo\"))",
       "testCases": [
         {
           "id": 1,
@@ -273,7 +273,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "hint_ko": "들여쓰기 8칸 뒤에 return f\"{self.title}({self.pages}p)\"를 작성하세요.",
       "hint_en": "Write return f\"{self.title}({self.pages}p)\" inside __str__.",
       "targetCode": "class Book:\n    def __init__(self, title, pages):\n        self.title = title\n        self.pages = pages\n\n    def __str__(self):\n        return f\"{self.title}({self.pages}p)\"\n\nb = Book(\"Python\", 320)\nprint(b)",
-      "templateCode": "class Book:\n    def __init__(self, title, pages):\n        self.title = title\n        self.pages = pages\n\n    def __str__(self):\n        §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n\nb = Book(\"Python\", 320)\nprint(b)",
+      "templateCode": "class Book:\n    def __init__(self, title, pages):\n        self.title = title\n        self.pages = pages\n\n    def __str__(self):\n        §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n\nb = Book(\"Python\", 320)\nprint(b)",
       "testCases": [
         {
           "id": 1,

@@ -61,7 +61,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Fill Blank] Set the default value of parameter cnt to 3 in the function header.',
       hint_ko: '매개변수 이름 뒤에 공백 없이 등호와 기본 숫자 3을 붙여 적으세요.',
       hint_en: 'Write the parameter name cnt followed by =3.',
-      templateCode: 'def repeat(ch, §§§§§):\n    return ch * cnt\nprint(repeat("*"), repeat("*", 5))',
+      templateCode: 'def repeat(ch, §§§§§§):\n    return ch * cnt\nprint(repeat("*"), repeat("*", 5))',
       targetCode: 'def repeat(ch, cnt=3):\n    return ch * cnt\nprint(repeat("*"), repeat("*", 5))',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Fill Blank] Set the default value of parameter role to the string "User".',
       hint_ko: '매개변수 이름 role 뒤에 등호와 큰따옴표 문자열 "User"를 이어 적으세요.',
       hint_en: 'Write role="User" as the second parameter in the header.',
-      templateCode: 'def tag(name, §§§§§§§§§§§):\n    return f"[{role}]{name}"\nprint(tag("Kim"), tag("Lee", "VIP"))',
+      templateCode: 'def tag(name, §§§§§§§§§§§§):\n    return f"[{role}]{name}"\nprint(tag("Kim"), tag("Lee", "VIP"))',
       targetCode: 'def tag(name, role="User"):\n    return f"[{role}]{name}"\nprint(tag("Kim"), tag("Lee", "VIP"))',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Fill Blank] Pass b=3 first and a=10 second using keyword arguments so sub returns 7.',
       hint_ko: '매개변수 이름과 값을 등호로 묶어 b가 앞, a가 뒤가 되도록 쉼표로 나열하세요.',
       hint_en: 'Write the two keyword arguments for b and a separated by a comma and space.',
-      templateCode: 'def sub(a, b):\n    return a - b\nprint(sub(§§§§§§§§§))',
+      templateCode: 'def sub(a, b):\n    return a - b\nprint(sub(§§§§§§§§§§))',
       targetCode: 'def sub(a, b):\n    return a - b\nprint(sub(b=3, a=10))',
       testCases: [
         {
@@ -172,7 +172,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Fill Blank] Pass ":" to parameter sep as a keyword argument in the call.',
       hint_ko: 'print()의 sep 옵션처럼 매개변수 이름 뒤에 등호와 문자열 ":"을 붙여 전달하세요.',
       hint_en: 'Specify the keyword argument assigning ":" to sep.',
-      templateCode: 'def join_pair(words, sep="-"):\n    return f"{words[0]}{sep}{words[1]}"\nprint(join_pair(["A", "B"], §§§§§§§))',
+      templateCode: 'def join_pair(words, sep="-"):\n    return f"{words[0]}{sep}{words[1]}"\nprint(join_pair(["A", "B"], §§§§§§§§))',
       targetCode: 'def join_pair(words, sep="-"):\n    return f"{words[0]}{sep}{words[1]}"\nprint(join_pair(["A", "B"], sep=":"))',
       testCases: [
         {
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Fill Blank] Set default values for qty and disc, and pass 200 to disc by keyword in the second call.',
       hint_ko: '수량 기본값 1, 할인 기본값 0 선언과, 두 번째 호출에서 할인 매개변수에 200을 지정하는 식을 채우세요.',
       hint_en: 'Complete the two default parameters in the header and the keyword argument for disc in the second call.',
-      templateCode: 'def pay(price, §§§§§, §§§§§§):\n    return price * qty - disc\nprint(pay(1000), pay(1000, §§§§§§§§))',
+      templateCode: 'def pay(price, §§§§§§, §§§§§§§):\n    return price * qty - disc\nprint(pay(1000), pay(1000, §§§§§§§§§))',
       targetCode: 'def pay(price, qty=1, disc=0):\n    return price * qty - disc\nprint(pay(1000), pay(1000, disc=200))',
       testCases: [
         {
@@ -248,7 +248,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Complete Line] Write the header for function move taking x and default parameter step=1.',
       hint_ko: 'def move(x, step=1): 형태로 일반 매개변수 뒤에 기본값 매개변수를 적어 완성하세요.',
       hint_en: 'Write def move(x, step=1): on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§\n    return x + step\nprint(move(10), move(10, 5))',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§\n    return x + step\nprint(move(10), move(10, 5))',
       targetCode: 'def move(x, step=1):\n    return x + step\nprint(move(10), move(10, 5))',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Complete Line] Call show_info using keyword arguments lv=9, name="Ace" on the last line.',
       hint_ko: '함수 이름 뒤 괄호 안에 lv=9, name="Ace"를 정확히 적어 호출하세요.',
       hint_en: 'Write show_info(lv=9, name="Ace") on line 3.',
-      templateCode: 'def show_info(name, lv):\n    print(f"{name}:{lv}")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'def show_info(name, lv):\n    print(f"{name}:{lv}")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'def show_info(name, lv):\n    print(f"{name}:{lv}")\nshow_info(lv=9, name="Ace")',
       testCases: [
         {

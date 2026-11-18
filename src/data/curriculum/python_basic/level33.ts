@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the negative step to count down from n to 1 on one line.',
       hint_ko: '큰 수에서 1씩 줄어들도록 마이너스 부호가 붙은 단위 숫자를 입력합니다.',
       hint_en: 'Enter -1 as the third argument to step downward by 1.',
-      templateCode: 'n = int(input())\nfor i in range(n, 0, §§):\n    print(i, end=" ")',
+      templateCode: 'n = int(input())\nfor i in range(n, 0, §§§):\n    print(i, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(n, 0, -1):\n    print(i, end=" ")',
       testCases: [
         {
@@ -82,7 +82,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the stop bound so the countdown from n includes 0.',
       hint_ko: '0까지 포함하고 멈추려면 끝 경계 자리에 0보다 1 작은 음수를 적어야 합니다.',
       hint_en: 'Write -1 as the stop bound so the loop includes 0 before stopping.',
-      templateCode: 'n = int(input())\nfor i in range(n, §§, -1):\n    print(i, end=" ")',
+      templateCode: 'n = int(input())\nfor i in range(n, §§§, -1):\n    print(i, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(n, -1, -1):\n    print(i, end=" ")',
       testCases: [
         {
@@ -124,7 +124,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the negative step to print 9, 6, 3.',
       hint_ko: '3씩 감소하도록 마이너스 부호와 숫자 3을 붙여 작성합니다.',
       hint_en: 'Pass -3 as the step argument to decrease by 3 each turn.',
-      templateCode: 'for i in range(9, 0, §§):\n    print(i, end=" ")',
+      templateCode: 'for i in range(9, 0, §§§):\n    print(i, end=" ")',
       targetCode: 'for i in range(9, 0, -3):\n    print(i, end=" ")',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string repetition operator to print stars decreasing from n down to 1.',
       hint_ko: 'i가 n부터 1까지 줄어들 때 "*"를 i번 반복하는 곱셈 기호를 넣습니다.',
       hint_en: 'Use the asterisk operator to repeat "*" i times on each line.',
-      templateCode: 'n = int(input())\nfor i in range(n, 0, -1):\n    print("*" § i)',
+      templateCode: 'n = int(input())\nfor i in range(n, 0, -1):\n    print("*" §§ i)',
       targetCode: 'n = int(input())\nfor i in range(n, 0, -1):\n    print("*" * i)',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to iterate from n down to 0 inclusive and print i and its truthiness.',
       hint_ko: '0을 포함하기 위한 끝 경계 -1, 감소 간격 -1, 그리고 불리언 변환 함수를 차례로 채웁니다.',
       hint_en: 'Enter stop bound -1, step -1, and the four-letter boolean casting function.',
-      templateCode: 'n = int(input())\nfor i in range(n, §§, §§):\n    print(i, §§§§(i))',
+      templateCode: 'n = int(input())\nfor i in range(n, §§§, §§§):\n    print(i, §§§§§(i))',
       targetCode: 'n = int(input())\nfor i in range(n, -1, -1):\n    print(i, bool(i))',
       testCases: [
         {
@@ -257,7 +257,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Complete Line] Write the for header counting down from n to 1 with step -1.',
       hint_ko: 'for i in range(n, 0, -1): 형태로 역순 반복문 헤더를 작성해보세요.',
       hint_en: 'Write for i in range(n, 0, -1): on line 2.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, end=" ")',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(n, 0, -1):\n    print(i, end=" ")',
       testCases: [
         {
@@ -281,7 +281,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_en: '[Complete Line] Write the for header counting down from n to 1 with step -2.',
       hint_ko: '끝값을 0으로 두고 세 번째 간격 인자를 -2로 지정한 for 헤더를 작성해보세요.',
       hint_en: 'Write for i in range(n, 0, -2): on line 2.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, end=" ")',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(n, 0, -2):\n    print(i, end=" ")',
       testCases: [
         {

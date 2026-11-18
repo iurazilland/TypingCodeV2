@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound addition operator to add 20 to point and print 100.',
       hint_ko: '더하기 기호 바로 뒤에 등호를 빈틈없이 붙여 작성합니다.',
       hint_en: 'Write the plus sign immediately followed by the equals sign.',
-      templateCode: 'point = 80\npoint §§ 20\nprint(point)',
+      templateCode: 'point = 80\npoint §§§ 20\nprint(point)',
       targetCode: 'point = 80\npoint += 20\nprint(point)',
       expectedVariables: { point: 100 },
       testCases: [
@@ -80,7 +80,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound subtraction operator to subtract 25 from fuel and print 55.',
       hint_ko: '빼기 기호 바로 뒤에 등호를 붙여 변수의 값을 줄입니다.',
       hint_en: 'Combine the minus sign and equals sign with no space between them.',
-      templateCode: 'fuel = 80\nfuel §§ 25\nprint(fuel)',
+      templateCode: 'fuel = 80\nfuel §§§ 25\nprint(fuel)',
       targetCode: 'fuel = 80\nfuel -= 25\nprint(fuel)',
       expectedVariables: { fuel: 55 },
       testCases: [
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound multiplication operator to multiply power by 4 and print 48.',
       hint_ko: '별표 곱셈 기호 바로 뒤에 등호를 붙여 작성합니다.',
       hint_en: 'Write the asterisk immediately followed by the equals sign.',
-      templateCode: 'power = 12\npower §§ 4\nprint(power)',
+      templateCode: 'power = 12\npower §§§ 4\nprint(power)',
       targetCode: 'power = 12\npower *= 4\nprint(power)',
       expectedVariables: { power: 48 },
       testCases: [
@@ -158,7 +158,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound subtraction operator on line 4 so Total -> 25 is printed.',
       hint_ko: '10을 3배로 만든 30에서 5를 차감하도록 빼기 복합 대입 기호를 넣습니다.',
       hint_en: 'Use the compound subtraction operator to subtract 5 from 30.',
-      templateCode: '# Score calc\ns = 10\ns *= 3\ns §§ 5\nprint("Total", s, sep=" -> ")',
+      templateCode: '# Score calc\ns = 10\ns *= 3\ns §§§ 5\nprint("Total", s, sep=" -> ")',
       targetCode: '# Score calc\ns = 10\ns *= 3\ns -= 5\nprint("Total", s, sep=" -> ")',
       expectedVariables: { s: 25 },
       testCases: [
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 compound operators to add 10, multiply by 2, and subtract 15 to print 45.',
       hint_ko: '누적 덧셈, 누적 곱셈, 누적 뺄셈 복합 대입 연산자를 위에서부터 순서대로 입력합니다.',
       hint_en: 'Enter compound addition, compound multiplication, and compound subtraction in order.',
-      templateCode: 'val = 20\nval §§ 10\nval §§ 2\nval §§ 15\nprint(val)',
+      templateCode: 'val = 20\nval §§§ 10\nval §§§ 2\nval §§§ 15\nprint(val)',
       targetCode: 'val = 20\nval += 10\nval *= 2\nval -= 15\nprint(val)',
       expectedVariables: { val: 45 },
       testCases: [
@@ -238,7 +238,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 using a compound operator to multiply atk by 3 in place.',
       hint_ko: '변수 atk 뒤에 곱셈 복합 대입 연산자와 숫자 3을 이어 작성합니다.',
       hint_en: 'Use the *= operator on variable atk with the number 3.',
-      templateCode: 'atk = 15\n§§§§§§§§\nprint(atk)',
+      templateCode: 'atk = 15\n§§§§§§§§§\nprint(atk)',
       targetCode: 'atk = 15\natk *= 3\nprint(atk)',
       expectedVariables: { atk: 45 },
       testCases: [
@@ -258,7 +258,7 @@ export const PYTHON_LEVEL_13: PracticeRound = {
       prompt_en: '[Complete Line] Write line 3 using a compound operator to add bonus to total.',
       hint_ko: '변수 total에 누적 덧셈 복합 대입 연산자로 변수 bonus를 더합니다.',
       hint_en: 'Apply the += operator to add variable bonus into total.',
-      templateCode: 'total = 100\nbonus = 25\n§§§§§§§§§§§§§§\nprint("Sum:", total)',
+      templateCode: 'total = 100\nbonus = 25\n§§§§§§§§§§§§§§§\nprint("Sum:", total)',
       targetCode: 'total = 100\nbonus = 25\ntotal += bonus\nprint("Sum:", total)',
       expectedVariables: { total: 125, bonus: 25 },
       testCases: [

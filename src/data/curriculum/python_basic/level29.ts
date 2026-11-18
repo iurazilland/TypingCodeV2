@@ -45,7 +45,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conditional keyword on line 3 to complete the nested even check.',
       hint_ko: '4칸 들여쓰기된 안쪽 조건문도 바깥과 똑같이 두 글자 조건 키워드로 시작합니다.',
       hint_en: 'Start the 4-space indented inner check with the same two-letter conditional keyword.',
-      templateCode: 'n = int(input())\nif n > 0:\n    §§ n % 2 == 0:\n        print("PosEven")',
+      templateCode: 'n = int(input())\nif n > 0:\n    §§§ n % 2 == 0:\n        print("PosEven")',
       targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print("PosEven")',
       testCases: [
         {
@@ -92,7 +92,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the fallback keyword for the inner password check on line 6.',
       hint_ko: '안쪽 if pw_in == "1234":와 같은 4칸 들여쓰기 줄에 나머지 분기 키워드를 적습니다.',
       hint_en: 'Write the four-letter fallback keyword aligned with the inner if at 4 spaces.',
-      templateCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    §§§§:\n        print("Wrong PW")\nelse:\n    print("No User")',
+      templateCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    §§§§§:\n        print("Wrong PW")\nelse:\n    print("No User")',
       targetCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    else:\n        print("Wrong PW")\nelse:\n    print("No User")',
       testCases: [
         {
@@ -144,7 +144,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the no-op placeholder keyword so "mute" mode does nothing.',
       hint_ko: '영어로 지나가다·통과하다를 뜻하는 네 글자 소문자 키워드로 빈 블록을 채웁니다.',
       hint_en: 'Use the four-letter lowercase English keyword meaning "to move past / skip".',
-      templateCode: 'mode = input()\nif mode == "mute":\n    §§§§\nelse:\n    print("Beep")\nprint("OK")',
+      templateCode: 'mode = input()\nif mode == "mute":\n    §§§§§\nelse:\n    print("Beep")\nprint("OK")',
       targetCode: 'mode = input()\nif mode == "mute":\n    pass\nelse:\n    print("Beep")\nprint("OK")',
       testCases: [
         {
@@ -191,7 +191,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the floor-division compound operator to halve n when positive and even.',
       hint_ko: '슬래시 두 개와 등호를 붙인 몫 복합 대입 연산자를 8칸 들여쓰기 뒤에 작성합니다.',
       hint_en: 'Use the double-slash-equals operator to update n with its integer quotient.',
-      templateCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        n §§§ 2\n    else:\n        pass\nprint(n)',
+      templateCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        n §§§§ 2\n    else:\n        pass\nprint(n)',
       targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        n //= 2\n    else:\n        pass\nprint(n)',
       testCases: [
         {
@@ -215,7 +215,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks so non-positive amounts do nothing, valid amounts subtract from bal, and excess amounts do nothing.',
       hint_ko: '빈 블록 통과 키워드, 다중 조건 분기 키워드, 그리고 차감 복합 대입 연산자를 차례로 채웁니다.',
       hint_en: 'Enter the no-op keyword, the else-if keyword, and the compound subtraction operator in order.',
-      templateCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§\n§§§§ amt <= bal:\n    bal §§ amt\nelse:\n    pass\nprint(bal)',
+      templateCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§§\n§§§§§ amt <= bal:\n    bal §§§ amt\nelse:\n    pass\nprint(bal)',
       targetCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    pass\nelif amt <= bal:\n    bal -= amt\nelse:\n    pass\nprint(bal)',
       testCases: [
         {
@@ -292,7 +292,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented nested header if n >= 100: inside if n > 0:.',
       hint_ko: '4칸 들여쓰기를 유지하며 if n >= 100:을 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write if n >= 100:.',
-      templateCode: 'n = int(input())\nif n > 0:\n    §§§§§§§§§§§§\n        print("Big")',
+      templateCode: 'n = int(input())\nif n > 0:\n    §§§§§§§§§§§§§\n        print("Big")',
       targetCode: 'n = int(input())\nif n > 0:\n    if n >= 100:\n        print("Big")',
       testCases: [
         {
@@ -316,7 +316,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented pass statement inside if n < 0:.',
       hint_ko: '4칸 들여쓰기 뒤에 네 글자 통과 키워드를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write pass.',
-      templateCode: 'n = int(input())\nif n < 0:\n    §§§§\nelse:\n    print(n)\nprint("Done")',
+      templateCode: 'n = int(input())\nif n < 0:\n    §§§§§\nelse:\n    print(n)\nprint("Done")',
       targetCode: 'n = int(input())\nif n < 0:\n    pass\nelse:\n    print(n)\nprint("Done")',
       testCases: [
         {

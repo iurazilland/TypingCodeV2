@@ -62,7 +62,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the compound assignment operator so each call to punch() increments self.cnt by 1.",
       "hint_ko": "기존 속성값에 오른쪽 숫자를 더해서 다시 같은 속성에 저장하는 두 글자 복합 대입 연산자를 적으세요.",
       "hint_en": "Use the two-character compound operator that adds to the existing attribute value.",
-      "templateCode": "class Stamp:\n    def __init__(self):\n        self.cnt = 0\n    def punch(self):\n        self.cnt §§ 1\ns = Stamp()\ns.punch()\ns.punch()\nprint(s.cnt)",
+      "templateCode": "class Stamp:\n    def __init__(self):\n        self.cnt = 0\n    def punch(self):\n        self.cnt §§§ 1\ns = Stamp()\ns.punch()\ns.punch()\nprint(s.cnt)",
       "targetCode": "class Stamp:\n    def __init__(self):\n        self.cnt = 0\n    def punch(self):\n        self.cnt += 1\ns = Stamp()\ns.punch()\ns.punch()\nprint(s.cnt)",
       "testCases": [
         {
@@ -99,7 +99,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the attribute reference inside charge() so amount is added to the battery's level.",
       "hint_ko": "메서드 안에서 인스턴스 자신의 잔량 속성을 가리키도록 참조 변수와 점을 포함해 적으세요.",
       "hint_en": "Reference the level attribute on the current instance using self and a dot.",
-      "templateCode": "class Battery:\n    def __init__(self, level=40):\n        self.level = level\n    def charge(self, amount):\n        §§§§§§§§§§ += amount\nb = Battery()\nb.charge(35)\nprint(b.level)",
+      "templateCode": "class Battery:\n    def __init__(self, level=40):\n        self.level = level\n    def charge(self, amount):\n        §§§§§§§§§§§ += amount\nb = Battery()\nb.charge(35)\nprint(b.level)",
       "targetCode": "class Battery:\n    def __init__(self, level=40):\n        self.level = level\n    def charge(self, amount):\n        self.level += amount\nb = Battery()\nb.charge(35)\nprint(b.level)",
       "testCases": [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the condition in pay() so it deducts cost only when the wallet balance is at least cost.",
       "hint_ko": "메서드 안에서 현재 지갑 객체 자신의 잔액 속성을 꺼내 cost와 크기를 비교하세요.",
       "hint_en": "Access the balance attribute on the current instance to compare it against cost.",
-      "templateCode": "class Wallet:\n    def __init__(self, bal):\n        self.bal = bal\n    def pay(self, cost):\n        if §§§§§§§§ >= cost:\n            self.bal -= cost\n        else:\n            print(\"Low\")\nw = Wallet(500)\nw.pay(300)\nw.pay(300)\nprint(w.bal)",
+      "templateCode": "class Wallet:\n    def __init__(self, bal):\n        self.bal = bal\n    def pay(self, cost):\n        if §§§§§§§§§ >= cost:\n            self.bal -= cost\n        else:\n            print(\"Low\")\nw = Wallet(500)\nw.pay(300)\nw.pay(300)\nprint(w.bal)",
       "targetCode": "class Wallet:\n    def __init__(self, bal):\n        self.bal = bal\n    def pay(self, cost):\n        if self.bal >= cost:\n            self.bal -= cost\n        else:\n            print(\"Low\")\nw = Wallet(500)\nw.pay(300)\nw.pay(300)\nprint(w.bal)",
       "testCases": [
         {
@@ -173,7 +173,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Fill Blank] Call the method on elevator instance e that moves it 2 floors lower before printing.",
       "hint_ko": "윗줄에서 위로 올라가는 메서드를 호출한 것처럼, 내려가는 메서드 이름 뒤에 인자 2를 넣어 호출하세요.",
       "hint_en": "Invoke the method that decreases the floor with argument 2 on instance e.",
-      "templateCode": "class Lift:\n    def __init__(self, floor=1):\n        self.floor = floor\n    def up(self, n):\n        self.floor += n\n    def down(self, n):\n        self.floor -= n\ne = Lift(3)\ne.up(4)\ne.§§§§§§§\nprint(e.floor)",
+      "templateCode": "class Lift:\n    def __init__(self, floor=1):\n        self.floor = floor\n    def up(self, n):\n        self.floor += n\n    def down(self, n):\n        self.floor -= n\ne = Lift(3)\ne.up(4)\ne.§§§§§§§§\nprint(e.floor)",
       "targetCode": "class Lift:\n    def __init__(self, floor=1):\n        self.floor = floor\n    def up(self, n):\n        self.floor += n\n    def down(self, n):\n        self.floor -= n\ne = Lift(3)\ne.up(4)\ne.down(2)\nprint(e.floor)",
       "testCases": [
         {
@@ -192,7 +192,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the parameter list, compound addition operator, and deduction method call on the Account instance.",
       "hint_ko": "메서드 첫 매개변수와 잔액을 늘리는 연산자, 그리고 객체의 출금 메서드 호출 방식을 확인하세요.",
       "hint_en": "Check the instance reference parameter, the compound addition operator, and how the deduction method is called on acc.",
-      "templateCode": "class Account:\n    def __init__(self, bal=1000):\n        self.bal = bal\n    def deposit(§§§§, amt):\n        self.bal §§ amt\n    def withdraw(self, amt):\n        if self.bal >= amt:\n            self.bal -= amt\nacc = Account()\nacc.deposit(500)\nacc.§§§§§§§§(int(input()))\nprint(acc.bal)",
+      "templateCode": "class Account:\n    def __init__(self, bal=1000):\n        self.bal = bal\n    def deposit(§§§§§, amt):\n        self.bal §§§ amt\n    def withdraw(self, amt):\n        if self.bal >= amt:\n            self.bal -= amt\nacc = Account()\nacc.deposit(500)\nacc.§§§§§§§§§(int(input()))\nprint(acc.bal)",
       "targetCode": "class Account:\n    def __init__(self, bal=1000):\n        self.bal = bal\n    def deposit(self, amt):\n        self.bal += amt\n    def withdraw(self, amt):\n        if self.bal >= amt:\n            self.bal -= amt\nacc = Account()\nacc.deposit(500)\nacc.withdraw(int(input()))\nprint(acc.bal)",
       "testCases": [
         {
@@ -254,7 +254,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside add_win that adds pt * 10 to self.score using +=.",
       "hint_ko": "들여쓰기 위치에 맞춰 자기 자신의 score 속성에 pt * 10을 복합 대입으로 누적하세요.",
       "hint_en": "Use += on self.score to add pt * 10.",
-      "templateCode": "class GameCard:\n    def __init__(self):\n        self.score = 100\n    def add_win(self, pt):\n        §§§§§§§§§§§§§§§§§§§§§\ng = GameCard()\ng.add_win(3)\nprint(g.score)",
+      "templateCode": "class GameCard:\n    def __init__(self):\n        self.score = 100\n    def add_win(self, pt):\n        §§§§§§§§§§§§§§§§§§§§§§\ng = GameCard()\ng.add_win(3)\nprint(g.score)",
       "targetCode": "class GameCard:\n    def __init__(self):\n        self.score = 100\n    def add_win(self, pt):\n        self.score += pt * 10\ng = GameCard()\ng.add_win(3)\nprint(g.score)",
       "testCases": [
         {
@@ -273,7 +273,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line inside the for loop that calls d.use_fuel(15).",
       "hint_ko": "반복문 들여쓰기에 맞춰 인스턴스 변수 뒤에 점과 메서드 호출식을 적으세요.",
       "hint_en": "Call use_fuel(15) on instance d inside the loop body.",
-      "templateCode": "class Drone:\n    def __init__(self, fuel=60):\n        self.fuel = fuel\n    def use_fuel(self, cost):\n        self.fuel -= cost\nd = Drone()\nfor _ in range(3):\n    §§§§§§§§§§§§§§\nprint(d.fuel)",
+      "templateCode": "class Drone:\n    def __init__(self, fuel=60):\n        self.fuel = fuel\n    def use_fuel(self, cost):\n        self.fuel -= cost\nd = Drone()\nfor _ in range(3):\n    §§§§§§§§§§§§§§§\nprint(d.fuel)",
       "targetCode": "class Drone:\n    def __init__(self, fuel=60):\n        self.fuel = fuel\n    def use_fuel(self, cost):\n        self.fuel -= cost\nd = Drone()\nfor _ in range(3):\n    d.use_fuel(15)\nprint(d.fuel)",
       "testCases": [
         {

@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       prompt_en: '[Fill Blank] Return the first number >= cut early, fallback to the empty constant, and check that ans is not empty.',
       hint_ko: '조기 반환 키워드, 빈 값 상수, 그리고 빈 값이 아님을 검사하는 세 단어 조건을 차례로 채우세요.',
       hint_en: 'Fill in the return keyword, the null constant, and the three-word non-null identity check.',
-      templateCode: 'def find_first(nums, cut):\n    for x in nums:\n        if x >= cut:\n            §§§§§§ x\n    return §§§§\nans = find_first([10, 25, 30], 20)\nprint(ans §§§§§§§§§§§, ans)',
+      templateCode: 'def find_first(nums, cut):\n    for x in nums:\n        if x >= cut:\n            §§§§§§§ x\n    return §§§§§\nans = find_first([10, 25, 30], 20)\nprint(ans §§§§§§§§§§§§, ans)',
       targetCode: 'def find_first(nums, cut):\n    for x in nums:\n        if x >= cut:\n            return x\n    return None\nans = find_first([10, 25, 30], 20)\nprint(ans is not None, ans)',
       testCases: [
         {
@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       prompt_en: '[Fill Blank] Return both the sum and maximum of nums and unpack them into s and m.',
       hint_ko: '반환 키워드, 최댓값 함수, 그리고 호출 결과를 나누어 받을 두 변수를 순서대로 적으세요.',
       hint_en: 'Complete the return keyword, the max function name, and the unpacked variable pair.',
-      templateCode: 'def sum_and_max(nums):\n    §§§§§§ sum(nums), §§§(nums)\n§§§§ = sum_and_max([10, 40, 20])\nprint(s, m)',
+      templateCode: 'def sum_and_max(nums):\n    §§§§§§§ sum(nums), §§§§(nums)\n§§§§§ = sum_and_max([10, 40, 20])\nprint(s, m)',
       targetCode: 'def sum_and_max(nums):\n    return sum(nums), max(nums)\ns, m = sum_and_max([10, 40, 20])\nprint(s, m)',
       testCases: [
         {
@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       prompt_en: '[Fill Blank] Set the default quantity to 1, bind total to the outer scope, and pass quantity 3 by keyword on the second call.',
       hint_ko: '수량 기본값 1 선언, 전역변수 지정 키워드, 그리고 두 번째 호출의 수량 3 키워드 인자를 채우세요.',
       hint_en: 'Fill in the default parameter qty=1, the global keyword, and the keyword argument qty=3.',
-      templateCode: 'total = 0\ndef add_item(price, §§§§§):\n    §§§§§§ total\n    total += price * qty\nadd_item(1000)\nadd_item(500, §§§§§)\nprint(total)',
+      templateCode: 'total = 0\ndef add_item(price, §§§§§§):\n    §§§§§§§ total\n    total += price * qty\nadd_item(1000)\nadd_item(500, §§§§§§)\nprint(total)',
       targetCode: 'total = 0\ndef add_item(price, qty=1):\n    global total\n    total += price * qty\nadd_item(1000)\nadd_item(500, qty=3)\nprint(total)',
       testCases: [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       prompt_en: '[Complete Line] Write the indented line that returns both sum(nums) and len(nums).',
       hint_ko: '반환 키워드 뒤에 합계 함수와 길이 함수를 쉼표로 나열하세요.',
       hint_en: 'Write return sum(nums), len(nums) inside the function.',
-      templateCode: 'def list_stat(nums):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§\ns, c = list_stat([10, 20, 30])\nprint(s, c)',
+      templateCode: 'def list_stat(nums):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§\ns, c = list_stat([10, 20, 30])\nprint(s, c)',
       targetCode: 'def list_stat(nums):\n    return sum(nums), len(nums)\ns, c = list_stat([10, 20, 30])\nprint(s, c)',
       testCases: [
         {
@@ -155,7 +155,7 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       prompt_en: '[Complete Line] Write the function header for power taking x and default parameter n=2.',
       hint_ko: 'def power(x, n=2): 형태로 함수 선언부 첫 줄을 작성하세요.',
       hint_en: 'Write def power(x, n=2): on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§\n    return x ** n\nprint(power(4), power(2, 3))',
+      templateCode: '§§§§§§§§§§§§§§§§§§§\n    return x ** n\nprint(power(4), power(2, 3))',
       targetCode: 'def power(x, n=2):\n    return x ** n\nprint(power(4), power(2, 3))',
       testCases: [
         {

@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the output function name to display the integer 77 on the screen.',
       hint_ko: '괄호 안의 값을 화면에 보여주는 다섯 글자 소문자 내장 함수 이름을 작성합니다.',
       hint_en: 'Write the five-letter lowercase built-in function name that displays values on the screen.',
-      templateCode: '§§§§§(77)',
+      templateCode: '§§§§§§(77)',
       targetCode: 'print(77)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the decimal number for zero point five to complete the two-line output.',
       hint_ko: '정수 부분과 소수 부분 사이에 마침표(.)를 찍어 실수를 표기합니다.',
       hint_en: 'Use a period (.) between the whole part and fractional part to write a float.',
-      templateCode: 'print(§§§)\nprint(-10)',
+      templateCode: 'print(§§§§)\nprint(-10)',
       targetCode: 'print(0.5)\nprint(-10)',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the subtraction operator to print the result of 30 minus 12 (18).',
       hint_ko: '앞의 수에서 뒤의 수를 뺄 때는 두 숫자 사이에 빼기 기호를 넣습니다.',
       hint_en: 'Place the minus sign between the two numbers to subtract the second from the first.',
-      templateCode: 'print(30 § 12)',
+      templateCode: 'print(30 §§ 12)',
       targetCode: 'print(30 - 12)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the addition operator so line 1 outputs 23 and line 2 outputs 10.0.',
       hint_ko: '30에서 15를 뺀 값에 8을 더해야 23이 되므로 빈칸에 더하기 기호를 넣습니다.',
       hint_en: 'Insert the plus sign to add 8 after subtracting 15 from 30.',
-      templateCode: 'print(30 - 15 § 8)\nprint(7.5 + 2.5)',
+      templateCode: 'print(30 - 15 §§ 8)\nprint(7.5 + 2.5)',
       targetCode: 'print(30 - 15 + 8)\nprint(7.5 + 2.5)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 2 blanks with operators so line 1 prints 35 and line 2 prints 4.0.',
       hint_ko: '첫째 줄은 40에 15를 더한 뒤 20을 빼야 하고, 둘째 줄은 6.5에서 2.5를 빼야 합니다.',
       hint_en: 'Add 15 to 40 before subtracting 20 on line 1, and subtract 2.5 from 6.5 on line 2.',
-      templateCode: 'print(40 § 15 - 20)\nprint(6.5 § 2.5)',
+      templateCode: 'print(40 §§ 15 - 20)\nprint(6.5 §§ 2.5)',
       targetCode: 'print(40 + 15 - 20)\nprint(6.5 - 2.5)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print the sum of floats 1.5 and 2.5 (4.0).',
       hint_ko: 'print() 함수의 괄호 안에 두 실수의 덧셈 수식을 그대로 작성해보세요.',
       hint_en: 'Write the addition expression of the two floats inside print().',
-      templateCode: 'print(10)\n§§§§§§§§§§§§§§§§',
+      templateCode: 'print(10)\n§§§§§§§§§§§§§§§§§',
       targetCode: 'print(10)\nprint(1.5 + 2.5)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to subtract 20 from 50 and add 5, printing 35.',
       hint_ko: '첫째 줄의 형태를 참고하여 세 정수의 뺄셈과 덧셈 수식을 print() 안에 적어보세요.',
       hint_en: 'Follow the pattern on line 1 and write the three-number expression inside print().',
-      templateCode: 'print(10 + 20 - 5)\n§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print(10 + 20 - 5)\n§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print(10 + 20 - 5)\nprint(50 - 20 + 5)',
       testCases: [
         {

@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 2 blanks to iterate from n down to 1, adding multiples of 3 and subtracting 1 on evens.',
       hint_ko: '1씩 줄어드는 음수 간격과, 기존 합계에 현재 값을 누적해 더하는 복합 대입 연산자를 채웁니다.',
       hint_en: 'Supply the negative unit step -1 and the compound addition operator +=.',
-      templateCode: 'n = int(input())\ns = 0\nfor i in range(n, 0, §§):\n    if i % 3 == 0:\n        s §§ i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)',
+      templateCode: 'n = int(input())\ns = 0\nfor i in range(n, 0, §§§):\n    if i % 3 == 0:\n        s §§§ i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)',
       targetCode: 'n = int(input())\ns = 0\nfor i in range(n, 0, -1):\n    if i % 3 == 0:\n        s += i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)',
       testCases: [
         {
@@ -51,7 +51,7 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 2 loop-control keywords to stop on "quit" and skip negative values.',
       hint_ko: '반복 전체를 즉시 끝내는 다섯 글자 제어 키워드와, 이번 차례만 넘기는 여덟 글자 제어 키워드를 채웁니다.',
       hint_en: 'Enter the five-letter exit keyword on line 5 and the eight-letter skip keyword on line 7.',
-      templateCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        §§§§§\n    if int(num) < 0:\n        §§§§§§§§\n    total += int(num)\nprint(total)',
+      templateCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        §§§§§§\n    if int(num) < 0:\n        §§§§§§§§§\n    total += int(num)\nprint(total)',
       targetCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        break\n    if int(num) < 0:\n        continue\n    total += int(num)\nprint(total)',
       testCases: [
         {
@@ -75,7 +75,7 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 2 blanks to strip the ones digit each turn and check if the digit sum s is odd.',
       hint_ko: '10으로 나눈 정수 몫으로 갱신하는 복합 대입 연산자와, 나머지를 참·거짓으로 바꾸는 네 글자 함수를 채웁니다.',
       hint_en: 'Use floor-division compound assignment on line 5 and the four-letter boolean casting function on line 6.',
-      templateCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n §§§ 10\nprint(s, §§§§(s % 2))',
+      templateCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n §§§§ 10\nprint(s, §§§§§(s % 2))',
       targetCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s, bool(s % 2))',
       testCases: [
         {
@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented if header checking i % 2 == 0 and i % 5 != 0.',
       hint_ko: '4칸 들여쓰기 뒤에 if i % 2 == 0 and i % 5 != 0:을 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write if i % 2 == 0 and i % 5 != 0:.',
-      templateCode: 'n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        cnt += 1\nprint(cnt)',
+      templateCode: 'n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        cnt += 1\nprint(cnt)',
       targetCode: 'n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 5 != 0:\n        cnt += 1\nprint(cnt)',
       testCases: [
         {
@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       prompt_en: '[Complete Line] Write the 8-space indented if header checking whether r equals c.',
       hint_ko: '8칸 들여쓰기 뒤에 if r == c:를 작성해보세요.',
       hint_en: 'Keep the 8-space indentation and write if r == c:.',
-      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        §§§§§§§§§§\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        §§§§§§§§§§§\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
       testCases: [
         {

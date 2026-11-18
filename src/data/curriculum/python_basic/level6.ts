@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the double-quoted string 10 - 4 = 6 to print it as literal text.',
       hint_ko: '등호(=)가 포함된 수식 문장 전체를 큰따옴표로 감싸서 작성합니다.',
       hint_en: 'Enclose the entire formula text including the equals sign in double quotes.',
-      templateCode: 'print(§§§§§§§§§§§§)',
+      templateCode: 'print(§§§§§§§§§§§§§)',
       targetCode: 'print("10 - 4 = 6")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the unquoted addition expression after the comma to print 7 + 8 = 15.',
       hint_ko: '파이썬이 직접 계산한 결과를 출력하도록 따옴표 없이 두 수의 덧셈식을 적습니다.',
       hint_en: 'Write the addition of 7 and 8 without quotes so Python evaluates it.',
-      templateCode: 'print("7 + 8 =", §§§§§)',
+      templateCode: 'print("7 + 8 =", §§§§§§)',
       targetCode: 'print("7 + 8 =", 7 + 8)',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the division expression after the comma so that 20 / 4 = 5.0 is printed.',
       hint_ko: '쉼표 뒤에 따옴표 없이 20을 4로 나누는 실수 나눗셈 수식을 작성합니다.',
       hint_en: 'Write the unquoted float division of 20 by 4 after the comma.',
-      templateCode: 'print("20 / 4 =", §§§§§§)',
+      templateCode: 'print("20 / 4 =", §§§§§§§)',
       targetCode: 'print("20 / 4 =", 20 / 4)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the modulo expression at the end so Q: 4 R: 2 is printed on one line.',
       hint_ko: '14를 3으로 나눈 나머지를 구하는 수식을 따옴표 없이 마지막 자리에 작성합니다.',
       hint_en: 'Write the unquoted modulo expression of 14 divided by 3 as the final argument.',
-      templateCode: 'print("Q:", 14 // 3, "R:", §§§§§§)',
+      templateCode: 'print("Q:", 14 // 3, "R:", §§§§§§§)',
       targetCode: 'print("Q:", 14 // 3, "R:", 14 % 3)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print 2 ** 4 = 16 on line 1 and 17 % 5 = 2 on line 2.',
       hint_ko: '첫째 줄에는 큰따옴표 수식 문자열과 거듭제곱 연산자를, 둘째 줄에는 나머지 연산자를 채웁니다.',
       hint_en: 'Fill in the double-quoted formula string and power operator on line 1, and the modulo operator on line 2.',
-      templateCode: 'print(§§§§§§§§§§, 2 §§ 4)\nprint("17 % 5 =", 17 § 5)',
+      templateCode: 'print(§§§§§§§§§§§, 2 §§§ 4)\nprint("17 % 5 =", 17 §§ 5)',
       targetCode: 'print("2 ** 4 =", 2 ** 4)\nprint("17 % 5 =", 17 % 5)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Complete Line] Following line 1, write line 2 to print 2 ** 4 = 16.',
       hint_ko: '수식 문자열 "2 ** 4 ="와 실제 수식 2 ** 4를 쉼표로 나열해 작성합니다.',
       hint_en: 'Separate the string "2 ** 4 =" and the expression 2 ** 4 with a comma inside print().',
-      templateCode: 'print("2 ** 3 =", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("2 ** 3 =", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("2 ** 3 =", 2 ** 3)\nprint("2 ** 4 =", 2 ** 4)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       prompt_en: '[Complete Line] Following line 1, write line 2 to print 19 // 5 = 3.',
       hint_ko: '따옴표로 감싼 "19 // 5 =" 뒤에 쉼표를 찍고 정수 몫 수식 19 // 5를 이어 적습니다.',
       hint_en: 'Write "19 // 5 =" followed by a comma and the expression 19 // 5 inside print().',
-      templateCode: 'print("19 % 5 =", 19 % 5)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("19 % 5 =", 19 % 5)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("19 % 5 =", 19 % 5)\nprint("19 // 5 =", 19 // 5)',
       testCases: [
         {

@@ -45,7 +45,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the fallback keyword on line 4 to print "Adult" or "Minor".',
       hint_ko: '앞선 if 조건이 거짓일 때 실행할 분기는 영어로 그밖에를 뜻하는 네 글자 키워드로 시작합니다.',
       hint_en: 'Start the fallback branch with the four-letter English word meaning "otherwise".',
-      templateCode: 'age = int(input())\nif age >= 19:\n    print("Adult")\n§§§§:\n    print("Minor")',
+      templateCode: 'age = int(input())\nif age >= 19:\n    print("Adult")\n§§§§§:\n    print("Minor")',
       targetCode: 'age = int(input())\nif age >= 19:\n    print("Adult")\nelse:\n    print("Minor")',
       testCases: [
         {
@@ -92,7 +92,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the equality operator to print "5x" when n is a multiple of 5, else "No".',
       hint_ko: '5로 나눈 나머지가 0과 일치하는지 확인하는 등호 두 개짜리 비교 기호를 넣습니다.',
       hint_en: 'Use the double-equals operator to check if the remainder equals 0.',
-      templateCode: 'n = int(input())\nif n % 5 §§ 0:\n    print("5x")\nelse:\n    print("No")',
+      templateCode: 'n = int(input())\nif n % 5 §§§ 0:\n    print("5x")\nelse:\n    print("No")',
       targetCode: 'n = int(input())\nif n % 5 == 0:\n    print("5x")\nelse:\n    print("No")',
       testCases: [
         {
@@ -139,7 +139,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound subtraction operator so a wrong answer subtracts 5 from pt.',
       hint_ko: 'else 블록 안에서 기존 점수에서 5를 빼서 저장하는 복합 대입 기호를 입력합니다.',
       hint_en: 'Use the minus-equals operator inside the else branch to deduct 5 points.',
-      templateCode: 'ans = input()\npt = 50\nif ans == "O":\n    pt += 10\nelse:\n    pt §§ 5\nprint(pt)',
+      templateCode: 'ans = input()\npt = 50\nif ans == "O":\n    pt += 10\nelse:\n    pt §§§ 5\nprint(pt)',
       targetCode: 'ans = input()\npt = 50\nif ans == "O":\n    pt += 10\nelse:\n    pt -= 5\nprint(pt)',
       testCases: [
         {
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conjunction keyword so "Result:PASS" prints when both scores are >= 60.',
       hint_ko: 'print("Result", end=":") 뒤에 이어서 찍히도록 두 점수 조건을 세 글자 동시 만족 키워드로 묶습니다.',
       hint_en: 'Join the two score checks with the three-letter conjunction keyword.',
-      templateCode: 'a, b = input().split()\nprint("Result", end=":")\nif int(a) >= 60 §§§ int(b) >= 60:\n    print("PASS")\nelse:\n    print("FAIL")',
+      templateCode: 'a, b = input().split()\nprint("Result", end=":")\nif int(a) >= 60 §§§§ int(b) >= 60:\n    print("PASS")\nelse:\n    print("FAIL")',
       targetCode: 'a, b = input().split()\nprint("Result", end=":")\nif int(a) >= 60 and int(b) >= 60:\n    print("PASS")\nelse:\n    print("FAIL")',
       testCases: [
         {
@@ -210,7 +210,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to update n to its floor quotient by 2 when even, or add 1 otherwise.',
       hint_ko: '나머지 연산자, 정수 몫 복합 대입 연산자, 나머지 분기 키워드를 순서대로 채웁니다.',
       hint_en: 'Enter the modulo operator, floor-division compound assignment, and the fallback branch keyword.',
-      templateCode: 'n = int(input())\nif n § 2 == 0:\n    n §§§ 2\n§§§§:\n    n += 1\nprint(n)',
+      templateCode: 'n = int(input())\nif n §§ 2 == 0:\n    n §§§§ 2\n§§§§§:\n    n += 1\nprint(n)',
       targetCode: 'n = int(input())\nif n % 2 == 0:\n    n //= 2\nelse:\n    n += 1\nprint(n)',
       testCases: [
         {
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line under else: that assigns "No" to ans.',
       hint_ko: '4칸 들여쓰기를 유지하며 ans 변수에 문자열 "No"를 저장해보세요.',
       hint_en: 'Keep the 4-space indentation under else: and assign "No" to ans.',
-      templateCode: 'n = int(input())\nif n % 3 == 0:\n    ans = "3x"\nelse:\n    §§§§§§§§§§\nprint(ans)',
+      templateCode: 'n = int(input())\nif n % 3 == 0:\n    ans = "3x"\nelse:\n    §§§§§§§§§§§\nprint(ans)',
       targetCode: 'n = int(input())\nif n % 3 == 0:\n    ans = "3x"\nelse:\n    ans = "No"\nprint(ans)',
       testCases: [
         {
@@ -306,7 +306,7 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       prompt_en: '[Complete Line] Write the fallback branch header line on line 4.',
       hint_ko: '들여쓰기 없이 네 글자 나머지 분기 키워드와 콜론을 작성합니다.',
       hint_en: 'Write the unindented four-letter fallback keyword followed by a colon.',
-      templateCode: 'pw = input()\nif pw == "1234":\n    print("Open")\n§§§§§\n    print("Lock")',
+      templateCode: 'pw = input()\nif pw == "1234":\n    print("Open")\n§§§§§§\n    print("Lock")',
       targetCode: 'pw = input()\nif pw == "1234":\n    print("Open")\nelse:\n    print("Lock")',
       testCases: [
         {

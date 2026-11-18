@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Fill Blank] Trim outer whitespace from input() into name and print its value and length.',
       hint_ko: '문자열 양끝 공백을 다듬는 다섯 글자 메서드를 호출하세요.',
       hint_en: 'Call the 5-letter string method that trims leading and trailing whitespace.',
-      templateCode: 'name = input().§§§§§()\nprint(f"{name}:{len(name)}")',
+      templateCode: 'name = input().§§§§§§()\nprint(f"{name}:{len(name)}")',
       targetCode: 'name = input().strip()\nprint(f"{name}:{len(name)}")',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Fill Blank] Replace "Java" with "Python" in msg and print the result.',
       hint_ko: '특정 부분 문자열을 다른 문자열로 바꾸는 일곱 글자 메서드를 적으세요.',
       hint_en: 'Write the 7-letter string method that substitutes substrings.',
-      templateCode: 'msg = "Hello Java"\nprint(msg.§§§§§§§("Java", "Python"))',
+      templateCode: 'msg = "Hello Java"\nprint(msg.§§§§§§§§("Java", "Python"))',
       targetCode: 'msg = "Hello Java"\nprint(msg.replace("Java", "Python"))',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Fill Blank] Remove all spaces inside code by replacing " " with an empty string.',
       hint_ko: '두 번째 인자로 아무 글자도 없는 빈 문자열을 전달하세요.',
       hint_en: 'Pass an empty string literal as the second argument.',
-      templateCode: 'code = input()\nres = code.replace(" ", §§)\nprint(res)',
+      templateCode: 'code = input()\nres = code.replace(" ", §§§)\nprint(res)',
       targetCode: 'code = input()\nres = code.replace(" ", "")\nprint(res)',
       testCases: [
         {
@@ -177,7 +177,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Fill Blank] Chain the trimming method before .replace("-", ":") on raw.',
       hint_ko: '양끝 공백을 제거하는 메서드 호출을 점(.) 앞에 완성하세요.',
       hint_en: 'Complete the whitespace-trimming method call before the second dot.',
-      templateCode: 'raw = input()\ns = raw.§§§§§§§.replace("-", ":")\nprint(s)',
+      templateCode: 'raw = input()\ns = raw.§§§§§§§§.replace("-", ":")\nprint(s)',
       targetCode: 'raw = input()\ns = raw.strip().replace("-", ":")\nprint(s)',
       testCases: [
         {
@@ -201,7 +201,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Fill Blank] Strip whitespace, remove "$", and convert clean to an integer to print double its value.',
       hint_ko: '공백 제거 메서드, 문자열 치환 메서드, 정수 변환 함수를 순서대로 채우세요.',
       hint_en: 'Fill in the strip method, replace method, and int conversion function.',
-      templateCode: 'raw = input()\nclean = raw.§§§§§().§§§§§§§("$", "")\nprint(§§§(clean) * 2)',
+      templateCode: 'raw = input()\nclean = raw.§§§§§§().§§§§§§§§("$", "")\nprint(§§§§(clean) * 2)',
       targetCode: 'raw = input()\nclean = raw.strip().replace("$", "")\nprint(int(clean) * 2)',
       testCases: [
         {
@@ -268,7 +268,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that trims outer whitespace from raw and stores it in clean.',
       hint_ko: 'raw에 공백 제거 메서드를 호출한 결과를 clean 변수에 대입하세요.',
       hint_en: 'Assign raw.strip() to the variable clean.',
-      templateCode: 'raw = "   Hello   "\n§§§§§§§§§§§§§§§§§§§\nprint(f"{clean} ({len(clean)})")',
+      templateCode: 'raw = "   Hello   "\n§§§§§§§§§§§§§§§§§§§§\nprint(f"{clean} ({len(clean)})")',
       targetCode: 'raw = "   Hello   "\nclean = raw.strip()\nprint(f"{clean} ({len(clean)})")',
       testCases: [
         {
@@ -287,7 +287,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that removes all "*" from s using .replace() and reassigns to s.',
       hint_ko: 's.replace("*", "") 결과를 다시 s에 대입하세요.',
       hint_en: 'Write s = s.replace("*", "") on the second line.',
-      templateCode: 's = "*P*y*t*h*o*n*"\n§§§§§§§§§§§§§§§§§§§§§§\nprint(s)',
+      templateCode: 's = "*P*y*t*h*o*n*"\n§§§§§§§§§§§§§§§§§§§§§§§\nprint(s)',
       targetCode: 's = "*P*y*t*h*o*n*"\ns = s.replace("*", "")\nprint(s)',
       testCases: [
         {

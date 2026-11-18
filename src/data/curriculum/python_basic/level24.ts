@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conjunction keyword to check if both scores are at least 80.',
       hint_ko: '양쪽 조건을 모두 만족해야 할 때는 영어로 그리고를 뜻하는 세 글자 소문자 키워드를 씁니다.',
       hint_en: 'Use the three-letter lowercase English word meaning "both / also".',
-      templateCode: 'kor = 85\neng = 75\nprint(kor >= 80 §§§ eng >= 80)',
+      templateCode: 'kor = 85\neng = 75\nprint(kor >= 80 §§§§ eng >= 80)',
       targetCode: 'kor = 85\neng = 75\nprint(kor >= 80 and eng >= 80)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to check if either cash or card is at least 5000.',
       hint_ko: '두 조건 중 하나 이상만 참이어도 될 때는 영어로 또는을 뜻하는 두 글자 키워드를 사용합니다.',
       hint_en: 'Use the two-letter lowercase English word meaning "either".',
-      templateCode: 'cash = 2000\ncard = 8000\nprint(cash >= 5000 §§ card >= 5000)',
+      templateCode: 'cash = 2000\ncard = 8000\nprint(cash >= 5000 §§§ card >= 5000)',
       targetCode: 'cash = 2000\ncard = 8000\nprint(cash >= 5000 or card >= 5000)',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conjunction keyword to check if both split scores are at least 70.',
       hint_ko: 'x와 y 두 점수가 동시에 기준을 넘어야 하므로 세 글자 동시 만족 키워드로 연결합니다.',
       hint_en: 'Connect both score comparisons with the three-letter conjunction keyword.',
-      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x >= 70 §§§ y >= 70)',
+      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x >= 70 §§§§ y >= 70)',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x >= 70 and y >= 70)',
       testCases: [
         {
@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to check if day d is "Sat" or "Sun".',
       hint_ko: '토요일과 일요일 중 어느 하나만 일치해도 주말이므로 두 같음 비교식을 두 글자 키워드로 연결합니다.',
       hint_en: 'Join the two equality checks with the two-letter disjunction keyword.',
-      templateCode: 'd = input()\nprint(d == "Sat" §§ d == "Sun")',
+      templateCode: 'd = input()\nprint(d == "Sat" §§§ d == "Sun")',
       targetCode: 'd = input()\nprint(d == "Sat" or d == "Sun")',
       testCases: [
         {
@@ -195,7 +195,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to check if n is a multiple of both 2 and 3, and if its quotient by 10 is at least 5 or n is 0.',
       hint_ko: '첫째 줄 출력에는 동시 만족 키워드를, 둘째 줄 출력에는 정수 몫 연산자와 선택 만족 키워드를 차례로 넣습니다.',
       hint_en: 'Use the conjunction keyword on line 2, then floor division and the disjunction keyword on line 3.',
-      templateCode: 'n = int(input())\nprint(n % 2 == 0 §§§ n % 3 == 0)\nprint(n §§ 10 >= 5 §§ n == 0)',
+      templateCode: 'n = int(input())\nprint(n % 2 == 0 §§§§ n % 3 == 0)\nprint(n §§§ 10 >= 5 §§§ n == 0)',
       targetCode: 'n = int(input())\nprint(n % 2 == 0 and n % 3 == 0)\nprint(n // 10 >= 5 or n == 0)',
       testCases: [
         {
@@ -267,7 +267,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that stores whether n > 0 and n % 3 == 0 in variable ok.',
       hint_ko: '두 비교식을 동시 만족 키워드로 묶어 변수 ok에 대입해보세요.',
       hint_en: 'Join n > 0 and n % 3 == 0 with the conjunction keyword and assign to ok.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)',
       targetCode: 'n = int(input())\nok = n > 0 and n % 3 == 0\nprint(ok)',
       testCases: [
         {
@@ -291,7 +291,7 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       prompt_en: '[Complete Line] Write the line storing whether n % 2 == 0 or n % 5 == 0 in variable ans.',
       hint_ko: '두 나머지 비교식을 선택 만족 키워드로 연결해 변수 ans에 대입해보세요.',
       hint_en: 'Join the two modulo checks with the disjunction keyword and assign to ans.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)',
       targetCode: 'n = int(input())\nans = n % 2 == 0 or n % 5 == 0\nprint(ans)',
       testCases: [
         {

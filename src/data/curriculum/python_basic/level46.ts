@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Fill Blank] Append i * 2 to doubles for each number in range(1, 4) and print doubles.',
       hint_ko: '리스트 끝에 계산된 값을 추가하는 메서드를 호출하세요.',
       hint_en: 'Call the list method that adds an element to the end of doubles.',
-      templateCode: 'doubles = []\nfor i in range(1, 4):\n    doubles.§§§§§§(i * 2)\nprint(doubles)',
+      templateCode: 'doubles = []\nfor i in range(1, 4):\n    doubles.§§§§§§§(i * 2)\nprint(doubles)',
       targetCode: 'doubles = []\nfor i in range(1, 4):\n    doubles.append(i * 2)\nprint(doubles)',
       testCases: [
         {
@@ -93,7 +93,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Fill Blank] Initialize taxed as an empty list on line 2 so the updated prices can be collected.',
       hint_ko: '요소를 하나씩 담기 전 비어 있는 리스트를 나타내는 기호를 적으세요.',
       hint_en: 'Write the literal for an empty list.',
-      templateCode: 'prices = [500, 900]\ntaxed = §§\nfor p in prices:\n    taxed.append(p + 100)\nprint(taxed)',
+      templateCode: 'prices = [500, 900]\ntaxed = §§§\nfor p in prices:\n    taxed.append(p + 100)\nprint(taxed)',
       targetCode: 'prices = [500, 900]\ntaxed = []\nfor p in prices:\n    taxed.append(p + 100)\nprint(taxed)',
       testCases: [
         {
@@ -130,7 +130,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the comparison operator so scores of 80 or above are appended to passed.',
       hint_ko: '왼쪽 값이 오른쪽 기준값 이상인지 판별하는 비교 연산자를 적으세요.',
       hint_en: 'Write the greater-than-or-equal-to operator.',
-      templateCode: 'scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s §§ 80:\n        passed.append(s)\nprint(passed)',
+      templateCode: 'scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s §§§ 80:\n        passed.append(s)\nprint(passed)',
       targetCode: 'scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s >= 80:\n        passed.append(s)\nprint(passed)',
       testCases: [
         {
@@ -172,7 +172,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Fill Blank] Read 3 integers in a loop and append only positive ones to pos.',
       hint_ko: '3회 반복을 만드는 범위 생성 함수를 채우세요.',
       hint_en: 'Fill in the function call that generates a sequence of 3 iterations.',
-      templateCode: 'pos = []\nfor i in §§§§§§§§:\n    n = int(input())\n    if n > 0:\n        pos.append(n)\nprint(pos)',
+      templateCode: 'pos = []\nfor i in §§§§§§§§§:\n    n = int(input())\n    if n > 0:\n        pos.append(n)\nprint(pos)',
       targetCode: 'pos = []\nfor i in range(3):\n    n = int(input())\n    if n > 0:\n        pos.append(n)\nprint(pos)',
       testCases: [
         {
@@ -196,7 +196,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Fill Blank] Initialize res as an empty list, filter multiples of 3 from nums, and store x + 10.',
       hint_ko: '빈 리스트 기호, 순회 키워드, 리스트 추가 메서드를 순서대로 채우세요.',
       hint_en: 'Fill in the empty list literal, iteration keyword, and append method in order.',
-      templateCode: 'nums = [3, 5, 6, 8, 9]\nres = §§\nfor x §§ nums:\n    if x % 3 == 0:\n        res.§§§§§§(x + 10)\nprint(res)',
+      templateCode: 'nums = [3, 5, 6, 8, 9]\nres = §§§\nfor x §§§ nums:\n    if x % 3 == 0:\n        res.§§§§§§§(x + 10)\nprint(res)',
       targetCode: 'nums = [3, 5, 6, 8, 9]\nres = []\nfor x in nums:\n    if x % 3 == 0:\n        res.append(x + 10)\nprint(res)',
       testCases: [
         {
@@ -253,7 +253,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that appends x * 2 to clean inside the if block.',
       hint_ko: '들여쓰기 8칸 뒤에 clean 리스트의 추가 메서드로 x * 2를 전달하세요.',
       hint_en: 'Indent 8 spaces and call the append method on clean with x * 2.',
-      templateCode: 'raw = [5, -2, 8, 0]\nclean = []\nfor x in raw:\n    if x > 0:\n        §§§§§§§§§§§§§§§§§§§\nprint(clean)',
+      templateCode: 'raw = [5, -2, 8, 0]\nclean = []\nfor x in raw:\n    if x > 0:\n        §§§§§§§§§§§§§§§§§§§§\nprint(clean)',
       targetCode: 'raw = [5, -2, 8, 0]\nclean = []\nfor x in raw:\n    if x > 0:\n        clean.append(x * 2)\nprint(clean)',
       testCases: [
         {
@@ -272,7 +272,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that reads int(input()) and appends it to nums.',
       hint_ko: 'nums의 추가 메서드 괄호 안에 정수 입력 변환식을 넣어 작성하세요.',
       hint_en: 'Pass int(input()) directly into the append method of nums.',
-      templateCode: 'nums = []\nfor i in range(2):\n    §§§§§§§§§§§§§§§§§§§§§§§§§\nprint(nums)',
+      templateCode: 'nums = []\nfor i in range(2):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(nums)',
       targetCode: 'nums = []\nfor i in range(2):\n    nums.append(int(input()))\nprint(nums)',
       testCases: [
         {

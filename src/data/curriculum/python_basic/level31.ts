@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the range-generating function name to print "Go" 4 times.',
       hint_ko: '영어로 범위·구간을 뜻하는 다섯 글자 내장 함수를 사용합니다.',
       hint_en: 'Use the five-letter built-in function meaning a numeric span or range.',
-      templateCode: 'for i in §§§§§(4):\n    print("Go")',
+      templateCode: 'for i in §§§§§§(4):\n    print("Go")',
       targetCode: 'for i in range(4):\n    print("Go")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the counted-loop keyword to print integers 0 through 2.',
       hint_ko: '영어로 ~마다를 뜻하는 세 글자 반복 키워드로 루프를 시작합니다.',
       hint_en: 'Begin the counted loop with the three-letter keyword.',
-      templateCode: '§§§ i in range(3):\n    print(i)',
+      templateCode: '§§§§ i in range(3):\n    print(i)',
       targetCode: 'for i in range(3):\n    print(i)',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multiplication operator to print i * 2 on each turn.',
       hint_ko: '반복 변수 i에 2를 곱하는 별표 기호를 빈칸에 넣습니다.',
       hint_en: 'Use the asterisk symbol to multiply i by 2.',
-      templateCode: 'n = int(input())\nfor i in range(n):\n    print(i § 2)',
+      templateCode: 'n = int(input())\nfor i in range(n):\n    print(i §§ 2)',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print(i * 2)',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the membership keyword to pull each i from range(n).',
       hint_ko: '반복 변수 뒤에 ~안에서를 뜻하는 두 글자 키워드를 적어 range(n)과 연결합니다.',
       hint_en: 'Place the two-letter keyword meaning "inside" between loop variable i and range(n).',
-      templateCode: 'n = int(input())\nfor i §§ range(n):\n    print("*" * (i + 1))',
+      templateCode: 'n = int(input())\nfor i §§§ range(n):\n    print("*" * (i + 1))',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print("*" * (i + 1))',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print 1 through n separated by spaces on one line.',
       hint_ko: '반복 시작 키워드, 범위 생성 함수, 그리고 줄 끝 옵션 이름을 차례로 채웁니다.',
       hint_en: 'Enter the loop keyword, range function, and line-end parameter name in order.',
-      templateCode: 'n = int(input())\n§§§ i in §§§§§(n):\n    print(i + 1, §§§=" ")',
+      templateCode: 'n = int(input())\n§§§§ i in §§§§§§(n):\n    print(i + 1, §§§§=" ")',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print(i + 1, end=" ")',
       testCases: [
         {
@@ -257,7 +257,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Complete Line] Write the for loop header iterating i over range(n).',
       hint_ko: 'for i in range(n): 형태로 헤더와 끝 콜론을 작성해보세요.',
       hint_en: 'Write for i in range(n): including the trailing colon.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§\n    print(i * 2, end=" ")',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§\n    print(i * 2, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print(i * 2, end=" ")',
       testCases: [
         {
@@ -281,7 +281,7 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line assigning "*" * (i + 1) to variable line.',
       hint_ko: '4칸 들여쓰기 뒤에 line = "*" * (i + 1)을 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write line = "*" * (i + 1).',
-      templateCode: 'n = int(input())\nfor i in range(n):\n    §§§§§§§§§§§§§§§§§§§§\n    print(line)',
+      templateCode: 'n = int(input())\nfor i in range(n):\n    §§§§§§§§§§§§§§§§§§§§§\n    print(line)',
       targetCode: 'n = int(input())\nfor i in range(n):\n    line = "*" * (i + 1)\n    print(line)',
       testCases: [
         {

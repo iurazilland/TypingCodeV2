@@ -50,7 +50,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the additional condition keyword on line 4 to handle the "stop" command.',
       hint_ko: '앞선 조건이 거짓일 때 새로운 조건을 이어서 검사하는 네 글자 분기 키워드를 입력합니다.',
       hint_en: 'Use the four-letter contraction of "else if" to test a second condition.',
-      templateCode: 'cmd = input()\nif cmd == "start":\n    print("Run")\n§§§§ cmd == "stop":\n    print("Halt")\nelse:\n    print("Wait")',
+      templateCode: 'cmd = input()\nif cmd == "start":\n    print("Run")\n§§§§§ cmd == "stop":\n    print("Halt")\nelse:\n    print("Wait")',
       targetCode: 'cmd = input()\nif cmd == "start":\n    print("Run")\nelif cmd == "stop":\n    print("Halt")\nelse:\n    print("Wait")',
       testCases: [
         {
@@ -107,7 +107,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the greater-or-equal operator on line 4 to test the "Pro" threshold.',
       hint_ko: '20보다 크거나 같음을 뜻하는 부등호+등호 비교 기호를 빈칸에 넣습니다.',
       hint_en: 'Place the greater-than angle bracket followed by the equals sign.',
-      templateCode: 'lv = int(input())\nif lv >= 50:\n    rank = "Master"\nelif lv §§ 20:\n    rank = "Pro"\nelse:\n    rank = "Rookie"\nprint(rank)',
+      templateCode: 'lv = int(input())\nif lv >= 50:\n    rank = "Master"\nelif lv §§§ 20:\n    rank = "Pro"\nelse:\n    rank = "Rookie"\nprint(rank)',
       targetCode: 'lv = int(input())\nif lv >= 50:\n    rank = "Master"\nelif lv >= 20:\n    rank = "Pro"\nelse:\n    rank = "Rookie"\nprint(rank)',
       testCases: [
         {
@@ -164,7 +164,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multi-way branch keyword on line 6 to add a third condition check.',
       hint_ko: 'elif는 개수 제한 없이 여러 개를 연달아 이어 붙일 수 있습니다.',
       hint_en: 'You can chain multiple four-letter else-if keywords in sequence.',
-      templateCode: 'age = int(input())\nif age < 8:\n    fee = 0\nelif age < 14:\n    fee = 500\n§§§§ age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)',
+      templateCode: 'age = int(input())\nif age < 8:\n    fee = 0\nelif age < 14:\n    fee = 500\n§§§§§ age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)',
       targetCode: 'age = int(input())\nif age < 8:\n    fee = 0\nelif age < 14:\n    fee = 500\nelif age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)',
       testCases: [
         {
@@ -221,7 +221,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the chained branch keyword so multiples of 6 do not also trigger the 2x branch.',
       hint_ko: '독립된 if 대신 앞 조건이 거짓일 때만 검사하는 네 글자 분기 키워드를 써야 중복 실행을 막을 수 있습니다.',
       hint_en: 'Use the four-letter chained condition keyword so the second branch is skipped when the first is True.',
-      templateCode: 'n = int(input())\nif n % 6 == 0:\n    print("6x")\n§§§§ n % 2 == 0:\n    print("2x")\nelse:\n    print("Other")',
+      templateCode: 'n = int(input())\nif n % 6 == 0:\n    print("6x")\n§§§§§ n % 2 == 0:\n    print("2x")\nelse:\n    print("Other")',
       targetCode: 'n = int(input())\nif n % 6 == 0:\n    print("6x")\nelif n % 2 == 0:\n    print("2x")\nelse:\n    print("Other")',
       testCases: [
         {
@@ -250,7 +250,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to update pt across the three score tiers and print it.',
       hint_ko: '다중 분기 키워드, 이상 비교 연산자, 그리고 차감 복합 대입 연산자를 순서대로 채웁니다.',
       hint_en: 'Enter the else-if keyword, greater-or-equal operator, and minus-equals operator in order.',
-      templateCode: 's = int(input())\npt = 100\nif s >= 90:\n    pt += 20\n§§§§ s §§ 70:\n    pt += 10\nelse:\n    pt §§ 5\nprint("Pt:" + str(pt))',
+      templateCode: 's = int(input())\npt = 100\nif s >= 90:\n    pt += 20\n§§§§§ s §§§ 70:\n    pt += 10\nelse:\n    pt §§§ 5\nprint("Pt:" + str(pt))',
       targetCode: 's = int(input())\npt = 100\nif s >= 90:\n    pt += 20\nelif s >= 70:\n    pt += 10\nelse:\n    pt -= 5\nprint("Pt:" + str(pt))',
       testCases: [
         {
@@ -332,7 +332,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Complete Line] Write the elif header line testing whether s is at least 70.',
       hint_ko: 'elif 키워드와 s >= 70 조건식, 그리고 끝 콜론을 작성해보세요.',
       hint_en: 'Write elif s >= 70: including the trailing colon.',
-      templateCode: 's = int(input())\npts = 10\nif s >= 90:\n    pts += 5\n§§§§§§§§§§§§§\n    pts += 2\nprint(pts)',
+      templateCode: 's = int(input())\npts = 10\nif s >= 90:\n    pts += 5\n§§§§§§§§§§§§§§\n    pts += 2\nprint(pts)',
       targetCode: 's = int(input())\npts = 10\nif s >= 90:\n    pts += 5\nelif s >= 70:\n    pts += 2\nprint(pts)',
       testCases: [
         {
@@ -356,7 +356,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line assigning "Pro" to rank inside the elif block.',
       hint_ko: '4칸 들여쓰기 뒤에 rank = "Pro"를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write rank = "Pro".',
-      templateCode: 'lv = int(input())\nif lv >= 50:\n    rank = "Master"\nelif lv >= 20:\n    §§§§§§§§§§§§\nelse:\n    rank = "Rookie"\nprint(rank)',
+      templateCode: 'lv = int(input())\nif lv >= 50:\n    rank = "Master"\nelif lv >= 20:\n    §§§§§§§§§§§§§\nelse:\n    rank = "Rookie"\nprint(rank)',
       targetCode: 'lv = int(input())\nif lv >= 50:\n    rank = "Master"\nelif lv >= 20:\n    rank = "Pro"\nelse:\n    rank = "Rookie"\nprint(rank)',
       testCases: [
         {

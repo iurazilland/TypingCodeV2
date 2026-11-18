@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the separator symbol so 50 and 100 print side by side with a space.',
       hint_ko: '한 번의 print() 호출에서 여러 값을 나란히 전달할 때는 값 사이에 쉼표를 찍습니다.',
       hint_en: 'Place a comma between multiple arguments inside a single print() call.',
-      templateCode: 'print(50§ 100)',
+      templateCode: 'print(50§§ 100)',
       targetCode: 'print(50, 100)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multiplication expression of 2 and 3 so 1 2 6 is printed on one line.',
       hint_ko: '마지막 쉼표 뒤에 2와 3을 곱하는 수식을 작성하면 세 번째 값으로 6이 출력됩니다.',
       hint_en: 'Write the expression multiplying 2 by 3 after the second comma.',
-      templateCode: 'print(1, 2, §§§§§)',
+      templateCode: 'print(1, 2, §§§§§§)',
       targetCode: 'print(1, 2, 2 * 3)',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the modulo operator so the quotient and remainder of 25 by 4 print as 6 1.',
       hint_ko: '쉼표 앞에서는 정수 몫을 구했으므로 쉼표 뒤에는 나머지를 구하는 기호를 넣습니다.',
       hint_en: 'Since the first expression computes the quotient, use the remainder symbol in the second.',
-      templateCode: 'print(25 // 4, 25 § 4)',
+      templateCode: 'print(25 // 4, 25 §§ 4)',
       targetCode: 'print(25 // 4, 25 % 4)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the empty print call on line 2 to insert a blank line between the two outputs.',
       hint_ko: '출력 함수 이름 뒤에 아무 인자도 넣지 않은 빈 소괄호를 붙여 작성합니다.',
       hint_en: 'Write the output function name followed by empty parentheses.',
-      templateCode: 'print(1, 2)\n§§§§§§§\nprint(3, 4)',
+      templateCode: 'print(1, 2)\n§§§§§§§§\nprint(3, 4)',
       targetCode: 'print(1, 2)\nprint()\nprint(3, 4)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to convert 150 seconds into minutes (2) and seconds (30) on one line.',
       hint_ko: '정수 몫 연산자, 값을 나열하는 구분 기호, 나머지 연산자를 순서대로 채워 넣습니다.',
       hint_en: 'Fill in the floor division operator, the comma separator, and the modulo operator in order.',
-      templateCode: 'print(150 §§ 60§ 150 § 60)',
+      templateCode: 'print(150 §§§ 60§§ 150 §§ 60)',
       targetCode: 'print(150 // 60, 150 % 60)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to output a blank line between the first and third lines.',
       hint_ko: '괄호 안을 비운 print() 함수를 한 줄로 작성하면 빈 줄이 만들어집니다.',
       hint_en: 'Call print() with empty parentheses on line 2 to create a blank line.',
-      templateCode: 'print(10 + 5)\n§§§§§§§\nprint(10 - 5)',
+      templateCode: 'print(10 + 5)\n§§§§§§§§\nprint(10 - 5)',
       targetCode: 'print(10 + 5)\nprint()\nprint(10 - 5)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print 2 ** 4 and 17 % 5 side by side separated by a comma.',
       hint_ko: 'print() 안에서 거듭제곱 수식과 나머지 수식을 쉼표로 연결해 한 줄로 작성합니다.',
       hint_en: 'Combine the power expression and modulo expression with a comma inside print().',
-      templateCode: 'print(2 ** 3, 10 % 3)\n§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print(2 ** 3, 10 % 3)\n§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print(2 ** 3, 10 % 3)\nprint(2 ** 4, 17 % 5)',
       testCases: [
         {

@@ -63,7 +63,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception-catching keyword so dividing by zero prints Safe instead of crashing.",
       "hint_ko": "try 블록에서 에러가 발생했을 때 흐름을 넘겨받는 여섯 글자 키워드를 콜론 앞에 적으세요.",
       "hint_en": "Write the six-letter keyword before the colon that catches errors raised in the try block.",
-      "templateCode": "try:\n    ans = 50 / 0\n    print(ans)\n§§§§§§:\n    print(\"Safe\")",
+      "templateCode": "try:\n    ans = 50 / 0\n    print(ans)\n§§§§§§§:\n    print(\"Safe\")",
       "targetCode": "try:\n    ans = 50 / 0\n    print(ans)\nexcept:\n    print(\"Safe\")",
       "testCases": [
         {
@@ -100,7 +100,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the opening keyword that attempts risky code before jumping to the fallback block on error.",
       "hint_ko": "위험할 수 있는 코드 실행을 '시도하다'라는 뜻의 세 글자 키워드를 첫 줄 콜론 앞에 적으세요.",
       "hint_en": "Start line 1 with the three-letter keyword meaning to attempt running a block of code.",
-      "templateCode": "§§§:\n    x = int(\"ten\")\n    print(x * 2)\nexcept:\n    print(\"Jump\")",
+      "templateCode": "§§§§:\n    x = int(\"ten\")\n    print(x * 2)\nexcept:\n    print(\"Jump\")",
       "targetCode": "try:\n    x = int(\"ten\")\n    print(x * 2)\nexcept:\n    print(\"Jump\")",
       "testCases": [
         {
@@ -137,7 +137,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the header keyword on line 1 so the valid division runs and skips the error handler.",
       "hint_ko": "예외 검사를 시작할 코드 블록을 여는 세 글자 키워드를 적으세요.",
       "hint_en": "Use the three-letter keyword that opens an exception-checked block.",
-      "templateCode": "§§§:\n    q = 100 // 4\n    print(f\"OK:{q}\")\nexcept:\n    print(\"Err\")",
+      "templateCode": "§§§§:\n    q = 100 // 4\n    print(f\"OK:{q}\")\nexcept:\n    print(\"Err\")",
       "targetCode": "try:\n    q = 100 // 4\n    print(f\"OK:{q}\")\nexcept:\n    print(\"Err\")",
       "testCases": [
         {
@@ -179,7 +179,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the fallback header keyword so invalid input assigns -1 to val before the final print.",
       "hint_ko": "에러가 발생했을 때 대체 값을 설정하는 여섯 글자 예외 처리 키워드를 적으세요.",
       "hint_en": "Use the six-letter keyword that catches the error and runs the fallback assignment.",
-      "templateCode": "s = input()\ntry:\n    val = int(s)\n§§§§§§:\n    val = -1\nprint(f\"Val={val}\")",
+      "templateCode": "s = input()\ntry:\n    val = int(s)\n§§§§§§§:\n    val = -1\nprint(f\"Val={val}\")",
       "targetCode": "s = input()\ntry:\n    val = int(s)\nexcept:\n    val = -1\nprint(f\"Val={val}\")",
       "testCases": [
         {
@@ -203,7 +203,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the attempt keyword, integer conversion function, and exception keyword to safely compute 100 // d.",
       "hint_ko": "시도 블록을 여는 키워드와 문자열을 정수로 바꾸는 내장 함수, 그리고 예외를 잡는 키워드를 차례로 확인하세요.",
       "hint_en": "Check the three-letter attempt keyword, the integer casting function, and the six-letter exception keyword.",
-      "templateCode": "raw = input()\n§§§:\n    d = §§§(raw)\n    ans = 100 // d\n§§§§§§:\n    ans = -1\nprint(f\"Ans:{ans}\")",
+      "templateCode": "raw = input()\n§§§§:\n    d = §§§§(raw)\n    ans = 100 // d\n§§§§§§§:\n    ans = -1\nprint(f\"Ans:{ans}\")",
       "targetCode": "raw = input()\ntry:\n    d = int(raw)\n    ans = 100 // d\nexcept:\n    ans = -1\nprint(f\"Ans:{ans}\")",
       "testCases": [
         {
@@ -270,7 +270,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Complete Line] Write the line that starts the exception-handling block.",
       "hint_ko": "들여쓰기 없이 예외 처리 키워드와 콜론을 적어 블록을 시작하세요.",
       "hint_en": "Write the six-letter exception keyword followed by a colon.",
-      "templateCode": "try:\n    res = int(\"x\")\n§§§§§§§\n    res = 0\nprint(res)",
+      "templateCode": "try:\n    res = int(\"x\")\n§§§§§§§§\n    res = 0\nprint(res)",
       "targetCode": "try:\n    res = int(\"x\")\nexcept:\n    res = 0\nprint(res)",
       "testCases": [
         {
@@ -289,7 +289,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_en": "[Complete Line] Write the indented line inside the exception block that assigns 10 to rate.",
       "hint_ko": "예외 블록 들여쓰기에 맞춰 변수 rate에 숫자 10을 대입하세요.",
       "hint_en": "Indent 4 spaces and assign 10 to variable rate.",
-      "templateCode": "raw = input()\ntry:\n    rate = int(raw)\nexcept:\n    §§§§§§§§§\nprint(rate * 3)",
+      "templateCode": "raw = input()\ntry:\n    rate = int(raw)\nexcept:\n    §§§§§§§§§§\nprint(rate * 3)",
       "targetCode": "raw = input()\ntry:\n    rate = int(raw)\nexcept:\n    rate = 10\nprint(rate * 3)",
       "testCases": [
         {

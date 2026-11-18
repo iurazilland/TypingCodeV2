@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the keyword used to define function start().',
       hint_ko: '파이썬에서 새로운 함수를 선언할 때 맨 앞에 적는 세 글자 키워드를 입력하세요.',
       hint_en: 'Type the three-letter Python keyword that starts a function definition.',
-      templateCode: '§§§ start():\n    print("Ready")\nstart()',
+      templateCode: '§§§§ start():\n    print("Ready")\nstart()',
       targetCode: 'def start():\n    print("Ready")\nstart()',
       testCases: [
         {
@@ -97,7 +97,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Fill Blank] Call function star a second time so two lines of stars are printed.',
       hint_ko: '함수 이름 뒤에 빈 소괄호를 붙여 함수를 실행하는 호출식을 적으세요.',
       hint_en: 'Write the function name followed by empty parentheses to invoke it.',
-      templateCode: 'def star():\n    print("*" * 3)\nstar()\n§§§§§§',
+      templateCode: 'def star():\n    print("*" * 3)\nstar()\n§§§§§§§',
       targetCode: 'def star():\n    print("*" * 3)\nstar()\nstar()',
       testCases: [
         {
@@ -134,7 +134,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Fill Blank] Call bell between Open and Close so Ring! prints in the middle.',
       hint_ko: '위에서 정의한 네 글자 함수 이름 뒤에 호출용 소괄호를 붙여 적으세요.',
       hint_en: 'Invoke the four-letter function defined above using empty parentheses.',
-      templateCode: 'def bell():\n    print("Ring!")\nprint("Open")\n§§§§§§\nprint("Close")',
+      templateCode: 'def bell():\n    print("Ring!")\nprint("Open")\n§§§§§§§\nprint("Close")',
       targetCode: 'def bell():\n    print("Ring!")\nprint("Open")\nbell()\nprint("Close")',
       testCases: [
         {
@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the expression inside show_sum() to print the sum of nums.',
       hint_ko: '숫자 리스트의 합을 계산하는 내장 함수에 변수 nums를 넣어 호출하세요.',
       hint_en: 'Pass list variable nums to the built-in sum function.',
-      templateCode: 'def show_sum():\n    nums = [10, 20, 30]\n    print(§§§§§§§§§)\nshow_sum()',
+      templateCode: 'def show_sum():\n    nums = [10, 20, 30]\n    print(§§§§§§§§§§)\nshow_sum()',
       targetCode: 'def show_sum():\n    nums = [10, 20, 30]\n    print(sum(nums))\nshow_sum()',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the function header, string repetition count 4, and final function call to print Go and ====.',
       hint_ko: '함수 정의 키워드, 등호를 4번 반복할 숫자, 그리고 마지막 줄의 함수 호출식을 차례로 채우세요.',
       hint_en: 'Fill in the def keyword, the repetition count 4, and the banner() function call.',
-      templateCode: '§§§ banner():\n    print("=" * §)\nprint("Go")\n§§§§§§§§',
+      templateCode: '§§§§ banner():\n    print("=" * §§)\nprint("Go")\n§§§§§§§§§',
       targetCode: 'def banner():\n    print("=" * 4)\nprint("Go")\nbanner()',
       testCases: [
         {
@@ -247,7 +247,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Complete Line] Write the function header on line 1 that defines parameterless function show_menu.',
       hint_ko: '함수 정의 키워드 뒤에 함수 이름과 빈 소괄호, 콜론(:)을 붙여 작성하세요.',
       hint_en: 'Start with def followed by show_menu():.',
-      templateCode: '§§§§§§§§§§§§§§§§\n    print("[Menu]")\nshow_menu()',
+      templateCode: '§§§§§§§§§§§§§§§§§\n    print("[Menu]")\nshow_menu()',
       targetCode: 'def show_menu():\n    print("[Menu]")\nshow_menu()',
       testCases: [
         {
@@ -266,7 +266,7 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       prompt_en: '[Complete Line] Write the last line that calls function run_step.',
       hint_ko: '정의된 함수 이름 뒤에 빈 소괄호를 붙여 호출하세요.',
       hint_en: 'Write run_step() on the final line.',
-      templateCode: 'def run_step():\n    print("Step OK")\n§§§§§§§§§§',
+      templateCode: 'def run_step():\n    print("Step OK")\n§§§§§§§§§§§',
       targetCode: 'def run_step():\n    print("Step OK")\nrun_step()',
       testCases: [
         {

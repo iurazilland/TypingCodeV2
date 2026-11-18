@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Fill Blank] Print True if a space (" ") is absent from email, otherwise False.',
       hint_ko: '특정 문자가 들어 있지 않을 때 참이 되는 두 단어 연산자를 적으세요.',
       hint_en: 'Write the two-word operator that tests non-membership.',
-      templateCode: 'email = input()\nprint(" " §§§§§§ email)',
+      templateCode: 'email = input()\nprint(" " §§§§§§§ email)',
       targetCode: 'email = input()\nprint(" " not in email)',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the for-loop header to print each character ch of s on its own line.',
       hint_ko: '반복 변수 ch와 문자열 s 사이에 들어갈 순회 키워드를 적으세요.',
       hint_en: 'Write the iteration keyword between ch and s.',
-      templateCode: 's = input()\nfor ch §§ s:\n    print(ch)',
+      templateCode: 's = input()\nfor ch §§§ s:\n    print(ch)',
       targetCode: 's = input()\nfor ch in s:\n    print(ch)',
       testCases: [
         {
@@ -140,7 +140,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Fill Blank] Count how many times "a" appears in s and print the count.',
       hint_ko: '조건이 참일 때마다 개수 변수 cnt를 1씩 늘리는 복합 대입 연산자를 적으세요.',
       hint_en: 'Use the compound addition operator to increment cnt by 1.',
-      templateCode: 's = input()\ncnt = 0\nfor ch in s:\n    if ch == "a":\n        cnt §§ 1\nprint(cnt)',
+      templateCode: 's = input()\ncnt = 0\nfor ch in s:\n    if ch == "a":\n        cnt §§§ 1\nprint(cnt)',
       targetCode: 's = input()\ncnt = 0\nfor ch in s:\n    if ch == "a":\n        cnt += 1\nprint(cnt)',
       testCases: [
         {
@@ -182,7 +182,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Fill Blank] Stop the loop immediately when "#" is encountered and print the collected cmd string.',
       hint_ko: '반복문을 즉시 탈출하는 다섯 글자 제어 키워드를 채우세요.',
       hint_en: 'Fill in the 5-letter keyword that exits the loop immediately.',
-      templateCode: 's = input()\ncmd = ""\nfor ch in s:\n    if ch == "#":\n        §§§§§\n    cmd += ch\nprint(cmd, len(cmd))',
+      templateCode: 's = input()\ncmd = ""\nfor ch in s:\n    if ch == "#":\n        §§§§§§\n    cmd += ch\nprint(cmd, len(cmd))',
       targetCode: 's = input()\ncmd = ""\nfor ch in s:\n    if ch == "#":\n        break\n    cmd += ch\nprint(cmd, len(cmd))',
       testCases: [
         {
@@ -206,7 +206,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Fill Blank] Iterate through s, check if ch belongs to "0123456789", and add its numeric value to total.',
       hint_ko: '순회 키워드, 포함 연산자, 정수 형변환 함수를 순서대로 채워보세요.',
       hint_en: 'Fill in the iteration keyword, membership operator, and integer conversion function.',
-      templateCode: 's = input()\ntotal = 0\nfor ch §§ s:\n    if ch §§ "0123456789":\n        total += §§§(ch)\nprint(total)',
+      templateCode: 's = input()\ntotal = 0\nfor ch §§§ s:\n    if ch §§§ "0123456789":\n        total += §§§§(ch)\nprint(total)',
       targetCode: 's = input()\ntotal = 0\nfor ch in s:\n    if ch in "0123456789":\n        total += int(ch)\nprint(total)',
       testCases: [
         {
@@ -278,7 +278,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that prints whether both "@" in mail and "." in mail are True.',
       hint_ko: 'print() 안에 두 개의 포함 검사식을 and로 연결해 작성하세요.',
       hint_en: 'Join the two in checks with and inside print().',
-      templateCode: 'mail = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'mail = input()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'mail = input()\nprint("@" in mail and "." in mail)',
       testCases: [
         {
@@ -302,7 +302,7 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that appends ch onto the string res.',
       hint_ko: '문자열 복합 덧셈 연산자를 사용해 res에 ch를 이어붙이세요.',
       hint_en: 'Use += to concatenate ch onto res.',
-      templateCode: 's = input()\nres = ""\nfor ch in s:\n    if ch not in "0123456789":\n        §§§§§§§§§\nprint(res)',
+      templateCode: 's = input()\nres = ""\nfor ch in s:\n    if ch not in "0123456789":\n        §§§§§§§§§§\nprint(res)',
       targetCode: 's = input()\nres = ""\nfor ch in s:\n    if ch not in "0123456789":\n        res += ch\nprint(res)',
       testCases: [
         {

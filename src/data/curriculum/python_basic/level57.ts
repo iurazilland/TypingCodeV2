@@ -57,7 +57,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Fill Blank] Create a single-element tuple containing integer 10 and print it along with its length.',
       hint_ko: '요소가 하나뿐인 튜플은 소괄호 안의 값 바로 뒤에 쉼표를 꼭 붙여야 합니다.',
       hint_en: 'A single-element tuple requires a trailing comma right after the value inside parentheses.',
-      templateCode: 'one = §§§§§\nprint(one, len(one))',
+      templateCode: 'one = §§§§§§\nprint(one, len(one))',
       targetCode: 'one = (10,)\nprint(one, len(one))',
       testCases: [
         {
@@ -94,7 +94,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Fill Blank] Slice the first two elements of tuple pt to print (10, 20).',
       hint_ko: '처음부터 2번 인덱스 직전까지 잘라내는 슬라이싱 구간을 대괄호 안에 적으세요.',
       hint_en: 'Specify the slice from the start up to index 2 inside the square brackets.',
-      templateCode: 'pt = (10, 20, 30, 40)\nprint(pt[§§])',
+      templateCode: 'pt = (10, 20, 30, 40)\nprint(pt[§§§])',
       targetCode: 'pt = (10, 20, 30, 40)\nprint(pt[:2])',
       testCases: [
         {
@@ -131,7 +131,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Fill Blank] Unpack the two elements of info into the variables referenced in the f-string.',
       hint_ko: '마지막 줄 중괄호 안에서 참조하는 이름과 점수 변수 두 개를 쉼표와 공백으로 구분해 적으세요.',
       hint_en: 'Write the two variable names used in the f-string separated by a comma and space.',
-      templateCode: 'info = ("Ace", 95)\n§§§§§§§§§§§ = info\nprint(f"{name}: {score}")',
+      templateCode: 'info = ("Ace", 95)\n§§§§§§§§§§§§ = info\nprint(f"{name}: {score}")',
       targetCode: 'info = ("Ace", 95)\nname, score = info\nprint(f"{name}: {score}")',
       testCases: [
         {
@@ -168,7 +168,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Fill Blank] Unpack each tuple directly in the for loop header so the f-string prints.',
       hint_ko: '출력문에서 사용하고 있는 두 개의 한 글자 변수명을 쉼표와 공백으로 나란히 적어보세요.',
       hint_en: 'Write the two single-letter variable names used in the print statement separated by a comma and space.',
-      templateCode: 'pairs = [("HP", 100), ("MP", 50)]\nfor §§§§ in pairs:\n    print(f"{k}={v}")',
+      templateCode: 'pairs = [("HP", 100), ("MP", 50)]\nfor §§§§§ in pairs:\n    print(f"{k}={v}")',
       targetCode: 'pairs = [("HP", 100), ("MP", 50)]\nfor k, v in pairs:\n    print(f"{k}={v}")',
       testCases: [
         {
@@ -187,7 +187,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the 1-element tuple containing 5, loop unpacking, and compound addition to print Sum:50.',
       hint_ko: '단일 요소 튜플 표기, 반복문 내부에서 더하는 두 좌표 변수, 복합 덧셈 연산자를 순서대로 채우세요.',
       hint_en: 'Fill in the 1-element tuple with 5, the two loop variables, and the compound addition operator.',
-      templateCode: 'scale = §§§§\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor §§§§ in pts:\n    total §§ (x + y) * scale[0]\nprint(f"Sum:{total}")',
+      templateCode: 'scale = §§§§§\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor §§§§§ in pts:\n    total §§§ (x + y) * scale[0]\nprint(f"Sum:{total}")',
       targetCode: 'scale = (5,)\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor x, y in pts:\n    total += (x + y) * scale[0]\nprint(f"Sum:{total}")',
       testCases: [
         {
@@ -244,7 +244,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that unpacks tuple box into the two variables used in the print statement.',
       hint_ko: '출력문 중괄호 안의 두 변수 이름을 쉼표로 나열하고 등호 오른쪽에 튜플 변수를 적으세요.',
       hint_en: 'Place the two variable names from the f-string on the left of = and box on the right.',
-      templateCode: 'box = ("Gold", 250)\n§§§§§§§§§§§§§§§§§§\nprint(f"{item}:{amount}")',
+      templateCode: 'box = ("Gold", 250)\n§§§§§§§§§§§§§§§§§§§\nprint(f"{item}:{amount}")',
       targetCode: 'box = ("Gold", 250)\nitem, amount = box\nprint(f"{item}:{amount}")',
       testCases: [
         {
@@ -263,7 +263,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       prompt_en: '[Complete Line] Write the for loop header that iterates over pts and unpacks each tuple into x and y.',
       hint_ko: '반복문 헤더에서 두 변수 이름을 쉼표로 나란히 적어 리스트를 순회하세요.',
       hint_en: 'Write the for loop header unpacking x and y from pts, ending with a colon.',
-      templateCode: 'pts = [(2, 5), (3, 4)]\ntotal = 0\n§§§§§§§§§§§§§§§§\n    total += x * y\nprint(total)',
+      templateCode: 'pts = [(2, 5), (3, 4)]\ntotal = 0\n§§§§§§§§§§§§§§§§§\n    total += x * y\nprint(total)',
       targetCode: 'pts = [(2, 5), (3, 4)]\ntotal = 0\nfor x, y in pts:\n    total += x * y\nprint(total)',
       testCases: [
         {

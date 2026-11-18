@@ -23,7 +23,7 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "hint_ko": "왼쪽 공백 제거 메서드, 접두사 검사 메서드, 문자열 결합 메서드를 순서대로 채워보세요.",
       "hint_en": "Fill in the left-strip method, the prefix-check method, and the string-join method.",
       "targetCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = [x.lstrip()[5:].strip().lower() for x in logs if x.lstrip().startswith(\"WARN:\")]\nprint(\"|\".join(warns))",
-      "templateCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = [x.§§§§§§()[5:].strip().lower() for x in logs if x.lstrip().§§§§§§§§§§(\"WARN:\")]\nprint(\"|\".§§§§(warns))",
+      "templateCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = [x.§§§§§§§()[5:].strip().lower() for x in logs if x.lstrip().§§§§§§§§§§§(\"WARN:\")]\nprint(\"|\".§§§§§(warns))",
       "testCases": [
         {
           "id": 1,
@@ -42,7 +42,7 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "hint_ko": "대문자 변환 메서드, 숫자 문자열 판별 메서드, 그리고 천 단위 콤마+소수 둘째 자리 서식 지정자를 채우세요.",
       "hint_en": "Fill in the uppercase method, the digit-check method, and the comma + 2-decimal format specifier.",
       "targetCode": "prices = {\"BOOK\": 12000, \"PEN\": 1500}\ndef calc(line):\n    name, qty = line.split(\":\")\n    key = name.strip().upper()\n    if key in prices and qty.isdigit():\n        return f\"{prices[key] * int(qty):,.2f}\"\n    return \"ERR\"\nprint(calc(input()))",
-      "templateCode": "prices = {\"BOOK\": 12000, \"PEN\": 1500}\ndef calc(line):\n    name, qty = line.split(\":\")\n    key = name.strip().§§§§§()\n    if key in prices and qty.§§§§§§§():\n        return f\"{prices[key] * int(qty):§§§§}\"\n    return \"ERR\"\nprint(calc(input()))",
+      "templateCode": "prices = {\"BOOK\": 12000, \"PEN\": 1500}\ndef calc(line):\n    name, qty = line.split(\":\")\n    key = name.strip().§§§§§§()\n    if key in prices and qty.§§§§§§§§():\n        return f\"{prices[key] * int(qty):§§§§§}\"\n    return \"ERR\"\nprint(calc(input()))",
       "testCases": [
         {
           "id": 1,
@@ -66,7 +66,7 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "hint_ko": "코드 번호를 문자로 바꾸는 함수, 역순 슬라이싱, 그리고 3자리 0 채우기 서식 지정자를 채우세요.",
       "hint_en": "Supply the code-to-character function, the reverse slice notation, and the 3-digit zero-padding specifier.",
       "targetCode": "tier = 2\ncode = \"XY9\"\nnum = 7\ntag = chr(ord(\"A\") + tier)\nprint(f\"[{tag}-{code[::-1]}] #{num:03d}\")",
-      "templateCode": "tier = 2\ncode = \"XY9\"\nnum = 7\ntag = §§§(ord(\"A\") + tier)\nprint(f\"[{tag}-{code[§§§§]}] #{num:§§§}\")",
+      "templateCode": "tier = 2\ncode = \"XY9\"\nnum = 7\ntag = §§§§(ord(\"A\") + tier)\nprint(f\"[{tag}-{code[§§§§§]}] #{num:§§§§}\")",
       "testCases": [
         {
           "id": 1,
@@ -152,7 +152,7 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "hint_ko": "ok = s == s[::-1] and s.isalpha() 형태로 두 조건을 and로 연결해 저장하세요.",
       "hint_en": "Write ok = s == s[::-1] and s.isalpha() on the masked line.",
       "targetCode": "s = input().lower().replace(\" \", \"\")\nok = s == s[::-1] and s.isalpha()\nprint(ok)",
-      "templateCode": "s = input().lower().replace(\" \", \"\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
+      "templateCode": "s = input().lower().replace(\" \", \"\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
       "testCases": [
         {
           "id": 1,
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "hint_ko": "msg = f\"{s}: {rate:.1f}%\" 형태로 서식 문자열을 변수 msg에 대입하세요.",
       "hint_en": "Write msg = f\"{s}: {rate:.1f}%\" on the masked line.",
       "targetCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\nmsg = f\"{s}: {rate:.1f}%\"\nprint(msg)",
-      "templateCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(msg)",
+      "templateCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(msg)",
       "testCases": [
         {
           "id": 1,

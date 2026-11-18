@@ -68,7 +68,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the specific exception type raised when int() receives non-numeric text.",
       "hint_ko": "'값(Value)'과 '오류(Error)'를 대소문자 구분(파스칼 표기법)에 맞춰 붙여 적으세요.",
       "hint_en": "Write the PascalCase exception name combining Value and Error.",
-      "templateCode": "raw = input()\ntry:\n    age = int(raw)\n    print(f\"Age:{age}\")\nexcept §§§§§§§§§§:\n    print(\"NaN\")",
+      "templateCode": "raw = input()\ntry:\n    age = int(raw)\n    print(f\"Age:{age}\")\nexcept §§§§§§§§§§§:\n    print(\"NaN\")",
       "targetCode": "raw = input()\ntry:\n    age = int(raw)\n    print(f\"Age:{age}\")\nexcept ValueError:\n    print(\"NaN\")",
       "testCases": [
         {
@@ -115,7 +115,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the exception type raised when computing modulo by zero.",
       "hint_ko": "'숫자 0(Zero)', '나눗셈(Division)', '오류(Error)' 세 단어를 첫 글자 대문자로 이어 붙인 이름을 적으세요.",
       "hint_en": "Write the PascalCase exception name for dividing by zero.",
-      "templateCode": "d = int(input())\ntry:\n    print(25 % d)\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"NoZero\")",
+      "templateCode": "d = int(input())\ntry:\n    print(25 % d)\nexcept §§§§§§§§§§§§§§§§§§:\n    print(\"NoZero\")",
       "targetCode": "d = int(input())\ntry:\n    print(25 % d)\nexcept ZeroDivisionError:\n    print(\"NoZero\")",
       "testCases": [
         {
@@ -167,7 +167,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the second exception type so dividing by 0 prints DivZero separately from BadVal.",
       "hint_ko": "첫 번째 except는 변환 오류를 잡고, 두 번째 except는 0으로 나눌 때 나는 오류를 잡도록 작성하세요.",
       "hint_en": "Specify the division-by-zero exception type on the second except line.",
-      "templateCode": "s = input()\ntry:\n    k = int(s)\n    print(50 // k)\nexcept ValueError:\n    print(\"BadVal\")\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"DivZero\")",
+      "templateCode": "s = input()\ntry:\n    k = int(s)\n    print(50 // k)\nexcept ValueError:\n    print(\"BadVal\")\nexcept §§§§§§§§§§§§§§§§§§:\n    print(\"DivZero\")",
       "targetCode": "s = input()\ntry:\n    k = int(s)\n    print(50 // k)\nexcept ValueError:\n    print(\"BadVal\")\nexcept ZeroDivisionError:\n    print(\"DivZero\")",
       "testCases": [
         {
@@ -224,7 +224,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Fill Blank] Specify the exception type when float(raw) fails so rate falls back to 0.0.",
       "hint_ko": "float() 함수에 숫자가 아닌 문자열을 넣었을 때도 int()와 동일한 값 변환 예외가 발생합니다.",
       "hint_en": "Passing invalid text to float() raises the same invalid-value exception as int().",
-      "templateCode": "raw = input()\ntry:\n    rate = float(raw)\nexcept §§§§§§§§§§:\n    rate = 0.0\nprint(rate * 10)",
+      "templateCode": "raw = input()\ntry:\n    rate = float(raw)\nexcept §§§§§§§§§§§:\n    rate = 0.0\nprint(rate * 10)",
       "targetCode": "raw = input()\ntry:\n    rate = float(raw)\nexcept ValueError:\n    rate = 0.0\nprint(rate * 10)",
       "testCases": [
         {
@@ -248,7 +248,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Fill Blank] Complete the integer conversion and the two specific exception types for parsing and dividing.",
       "hint_ko": "문자열을 정수로 바꾸는 함수와 부적절한 값 예외, 그리고 0 나눗셈 예외 이름을 순서대로 확인하세요.",
       "hint_en": "Check the int() conversion function, the invalid-value exception, and the division-by-zero exception.",
-      "templateCode": "a, b = input().split()\ntry:\n    res = §§§(a) // int(b)\nexcept §§§§§§§§§§:\n    res = -1\nexcept §§§§§§§§§§§§§§§§§:\n    res = -2\nprint(res)",
+      "templateCode": "a, b = input().split()\ntry:\n    res = §§§§(a) // int(b)\nexcept §§§§§§§§§§§:\n    res = -1\nexcept §§§§§§§§§§§§§§§§§§:\n    res = -2\nprint(res)",
       "targetCode": "a, b = input().split()\ntry:\n    res = int(a) // int(b)\nexcept ValueError:\n    res = -1\nexcept ZeroDivisionError:\n    res = -2\nprint(res)",
       "testCases": [
         {
@@ -315,7 +315,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Complete Line] Write the except header line that catches ValueError.",
       "hint_ko": "예외 처리 키워드 뒤에 한 칸을 띄우고 값 변환 예외 이름과 콜론을 적으세요.",
       "hint_en": "Write except followed by ValueError and a colon.",
-      "templateCode": "s = input()\ntry:\n    print(int(s) ** 2)\n§§§§§§§§§§§§§§§§§§\n    print(-1)",
+      "templateCode": "s = input()\ntry:\n    print(int(s) ** 2)\n§§§§§§§§§§§§§§§§§§§\n    print(-1)",
       "targetCode": "s = input()\ntry:\n    print(int(s) ** 2)\nexcept ValueError:\n    print(-1)",
       "testCases": [
         {
@@ -339,7 +339,7 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "prompt_en": "[Complete Line] Write the except header line that catches ZeroDivisionError.",
       "hint_ko": "예외 처리 키워드 뒤에 0 나눗셈 예외 이름과 콜론을 정확히 적으세요.",
       "hint_en": "Write except followed by ZeroDivisionError and a colon.",
-      "templateCode": "d = int(input())\ntry:\n    print(120 // d)\n§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(0)",
+      "templateCode": "d = int(input())\ntry:\n    print(120 // d)\n§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(0)",
       "targetCode": "d = int(input())\ntry:\n    print(120 // d)\nexcept ZeroDivisionError:\n    print(0)",
       "testCases": [
         {

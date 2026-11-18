@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the stop number so integers 3 through 6 inclusive are printed.',
       hint_ko: '끝값은 포함되지 않으므로 마지막에 출력할 6보다 1 큰 숫자를 적어야 합니다.',
       hint_en: 'Because the stop value is excluded, write the number that is 1 greater than 6.',
-      templateCode: 'for i in range(3, §):\n    print(i)',
+      templateCode: 'for i in range(3, §§):\n    print(i)',
       targetCode: 'for i in range(3, 7):\n    print(i)',
       testCases: [
         {
@@ -82,7 +82,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the addition operator so b is included in the range.',
       hint_ko: '끝값 b까지 포함하도록 b에 1을 더하는 기호를 넣습니다.',
       hint_en: 'Add 1 to b so the upper bound includes b.',
-      templateCode: 'a = int(input())\nb = int(input())\nfor i in range(a, b § 1):\n    print(i, end=" ")',
+      templateCode: 'a = int(input())\nb = int(input())\nfor i in range(a, b §§ 1):\n    print(i, end=" ")',
       targetCode: 'a = int(input())\nb = int(input())\nfor i in range(a, b + 1):\n    print(i, end=" ")',
       testCases: [
         {
@@ -124,7 +124,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the step interval to print odd numbers 1, 3, 5, 7, 9.',
       hint_ko: '1에서 시작해 홀수만 거치려면 한 번에 몇 칸씩 건너뛰어야 하는지 숫자로 적어보세요.',
       hint_en: 'Enter the single-digit step needed to jump from one odd number to the next.',
-      templateCode: 'for i in range(1, 10, §):\n    print(i, end=" ")',
+      templateCode: 'for i in range(1, 10, §§):\n    print(i, end=" ")',
       targetCode: 'for i in range(1, 10, 2):\n    print(i, end=" ")',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the multiplication operator to print the 2-times table from 1 to 4.',
       hint_ko: '문자열 라벨 뒤에 실제 계산된 곱셈 결과가 나오도록 별표 기호를 넣습니다.',
       hint_en: 'Use the asterisk operator to compute the product 2 * i.',
-      templateCode: 'for i in range(1, 5):\n    print("2*", i, "=", 2 § i, sep="")',
+      templateCode: 'for i in range(1, 5):\n    print("2*", i, "=", 2 §§ i, sep="")',
       targetCode: 'for i in range(1, 5):\n    print("2*", i, "=", 2 * i, sep="")',
       testCases: [
         {
@@ -185,7 +185,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the square of each even number i from 2 through n.',
       hint_ko: '짝수 간격 숫자 2, 거듭제곱 연산자, 그리고 줄 끝 옵션 이름을 순서대로 채웁니다.',
       hint_en: 'Enter the step 2, the exponent operator, and the end keyword option.',
-      templateCode: 'n = int(input())\nfor i in range(2, n + 1, §):\n    print(i §§ 2, §§§=" ")',
+      templateCode: 'n = int(input())\nfor i in range(2, n + 1, §§):\n    print(i §§§ 2, §§§§=" ")',
       targetCode: 'n = int(input())\nfor i in range(2, n + 1, 2):\n    print(i ** 2, end=" ")',
       testCases: [
         {
@@ -252,7 +252,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Complete Line] Write the for header stepping by 2 from int(a) to int(b) + 1.',
       hint_ko: 'for i in range(int(a), int(b) + 1, 2): 형태로 작성해보세요.',
       hint_en: 'Write for i in range(int(a), int(b) + 1, 2): on line 2.',
-      templateCode: 'a, b = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i)',
+      templateCode: 'a, b = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i)',
       targetCode: 'a, b = input().split()\nfor i in range(int(a), int(b) + 1, 2):\n    print(i)',
       testCases: [
         {
@@ -276,7 +276,7 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       prompt_en: '[Complete Line] Write the for header iterating i from 3 through n with step 3.',
       hint_ko: 'n까지 포함되도록 끝값을 n + 1로 두고 간격을 3으로 지정해보세요.',
       hint_en: 'Write for i in range(3, n + 1, 3): on line 2.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, end=" ")',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(i, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(3, n + 1, 3):\n    print(i, end=" ")',
       testCases: [
         {

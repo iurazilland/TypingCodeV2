@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "찾는 글자의 위치를 반환하고 없으면 -1을 돌려주는 네 글자 탐색 메서드를 적으세요.",
       "hint_en": "Type the 4-letter search method that returns the first index or -1 if absent.",
       "targetCode": "mail = input()\nprint(mail.find(\"@\"))",
-      "templateCode": "mail = input()\nprint(mail.§§§§(\"@\"))",
+      "templateCode": "mail = input()\nprint(mail.§§§§§(\"@\"))",
       "testCases": [
         {
           "id": 1,
@@ -107,7 +107,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "특정 부분 문자열의 등장 횟수를 세는 다섯 글자 메서드를 호출하세요.",
       "hint_en": "Call the 5-letter method that counts occurrences of a substring.",
       "targetCode": "word = input().lower()\nprint(word.count(\"a\"))",
-      "templateCode": "word = input().lower()\nprint(word.§§§§§(\"a\"))",
+      "templateCode": "word = input().lower()\nprint(word.§§§§§§(\"a\"))",
       "testCases": [
         {
           "id": 1,
@@ -149,7 +149,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "왼쪽(left)을 뜻하는 글자 l을 strip 앞에 붙인 여섯 글자 메서드를 입력하세요.",
       "hint_en": "Type the 6-letter method formed by prefixing strip with l for left.",
       "targetCode": "code = \"000420\"\nprint(code.lstrip(\"0\"))",
-      "templateCode": "code = \"000420\"\nprint(code.§§§§§§(\"0\"))",
+      "templateCode": "code = \"000420\"\nprint(code.§§§§§§§(\"0\"))",
       "testCases": [
         {
           "id": 1,
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "구분 기호의 첫 위치 인덱스를 구하는 네 글자 문자열 메서드를 채워보세요.",
       "hint_en": "Fill in the 4-letter string method that locates the index of \"@\".",
       "targetCode": "mail = input().strip()\npos = mail.find(\"@\")\nprint(mail[:pos])",
-      "templateCode": "mail = input().strip()\npos = mail.§§§§(\"@\")\nprint(mail[:pos])",
+      "templateCode": "mail = input().strip()\npos = mail.§§§§§(\"@\")\nprint(mail[:pos])",
       "testCases": [
         {
           "id": 1,
@@ -210,7 +210,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "오른쪽 공백 제거 메서드, 위치 탐색 메서드, 개수 세기 메서드를 차례로 채워보세요.",
       "hint_en": "Fill in the right-strip method, the substring search method, and the occurrence counting method.",
       "targetCode": "line = \"x = 10 # init # ok   \"\ns = line.rstrip()\npos = s.find(\"#\")\nprint(s[:pos].strip(), s.count(\"#\"))",
-      "templateCode": "line = \"x = 10 # init # ok   \"\ns = line.§§§§§§()\npos = s.§§§§(\"#\")\nprint(s[:pos].strip(), s.§§§§§(\"#\"))",
+      "templateCode": "line = \"x = 10 # init # ok   \"\ns = line.§§§§§§§()\npos = s.§§§§§(\"#\")\nprint(s[:pos].strip(), s.§§§§§§(\"#\"))",
       "testCases": [
         {
           "id": 1,
@@ -272,7 +272,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "idx = text.find(\"-\") 형태로 하이픈의 시작 인덱스를 구해 변수 idx에 대입하세요.",
       "hint_en": "Write idx = text.find(\"-\") to store the index of the hyphen.",
       "targetCode": "text = input().strip()\nidx = text.find(\"-\")\nprint(idx)",
-      "templateCode": "text = input().strip()\n§§§§§§§§§§§§§§§§§§§§\nprint(idx)",
+      "templateCode": "text = input().strip()\n§§§§§§§§§§§§§§§§§§§§§\nprint(idx)",
       "testCases": [
         {
           "id": 1,
@@ -296,7 +296,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "hint_ko": "cnt = s.count(\"!\") 형태로 남은 느낌표의 등장 횟수를 변수 cnt에 저장하세요.",
       "hint_en": "Write cnt = s.count(\"!\") to count the remaining exclamation marks.",
       "targetCode": "s = input().rstrip(\"!\")\ncnt = s.count(\"!\")\nprint(cnt)",
-      "templateCode": "s = input().rstrip(\"!\")\n§§§§§§§§§§§§§§§§§§\nprint(cnt)",
+      "templateCode": "s = input().rstrip(\"!\")\n§§§§§§§§§§§§§§§§§§§\nprint(cnt)",
       "testCases": [
         {
           "id": 1,

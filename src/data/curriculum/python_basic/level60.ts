@@ -58,7 +58,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Fill Blank] Use a compound assignment operator to add 20 to d["hp"] and print 100.',
       hint_ko: '기존 값에 오른쪽 숫자를 더해 덮어쓰는 두 글자 연산자를 채우세요.',
       hint_en: 'Fill in the two-character operator that adds to the current value in place.',
-      templateCode: 'd = {"hp": 80, "mp": 30}\nd["hp"] §§ 20\nprint(d["hp"])',
+      templateCode: 'd = {"hp": 80, "mp": 30}\nd["hp"] §§§ 20\nprint(d["hp"])',
       targetCode: 'd = {"hp": 80, "mp": 30}\nd["hp"] += 20\nprint(d["hp"])',
       testCases: [
         {
@@ -95,7 +95,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Fill Blank] Insert the new key "pear" with value 1500 into dictionary shop.',
       hint_ko: '등호 왼쪽에 딕셔너리 이름과 추가할 문자열 키를 대괄호로 감싸 적으세요.',
       hint_en: 'Write the dictionary name followed by the new quoted key in square brackets on the left of =.',
-      templateCode: 'shop = {"apple": 1000}\n§§§§§§§§§§§§ = 1500\nprint(shop["pear"], len(shop))',
+      templateCode: 'shop = {"apple": 1000}\n§§§§§§§§§§§§§ = 1500\nprint(shop["pear"], len(shop))',
       targetCode: 'shop = {"apple": 1000}\nshop["pear"] = 1500\nprint(shop["pear"], len(shop))',
       testCases: [
         {
@@ -132,7 +132,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the keyword that removes the "trash" entry from bag.',
       hint_ko: '컬렉션의 요소나 키를 제거할 때 맨 앞에 적는 세 글자 파이썬 키워드를 입력하세요.',
       hint_en: 'Type the three-letter Python keyword used to delete an item.',
-      templateCode: 'bag = {"key": 1, "trash": 9}\n§§§ bag["trash"]\nprint(bag)',
+      templateCode: 'bag = {"key": 1, "trash": 9}\n§§§§ bag["trash"]\nprint(bag)',
       targetCode: 'bag = {"key": 1, "trash": 9}\ndel bag["trash"]\nprint(bag)',
       testCases: [
         {
@@ -169,7 +169,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Fill Blank] Check that key "mp" is not yet in d so it gets initialized to 40.',
       hint_ko: '컬렉션에 포함되어 있지 않음을 뜻하는 두 단어 연산자를 빈칸에 적으세요.',
       hint_en: 'Write the two-word non-membership operator between "mp" and d.',
-      templateCode: 'd = {"hp": 100}\nif "mp" §§§§§§ d:\n    d["mp"] = 40\nprint(d["mp"])',
+      templateCode: 'd = {"hp": 100}\nif "mp" §§§§§§§ d:\n    d["mp"] = 40\nprint(d["mp"])',
       targetCode: 'd = {"hp": 100}\nif "mp" not in d:\n    d["mp"] = 40\nprint(d["mp"])',
       testCases: [
         {
@@ -188,7 +188,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Fill Blank] Count how many times each word in words appears using dictionary cnts.',
       hint_ko: '이미 등록된 키인지 확인하는 연산자와 기존 횟수 1 증가, 처음 등장했을 때의 초기값을 차례로 채우세요.',
       hint_en: 'Check key membership, increment existing counts by 1, and initialize new keys to 1.',
-      templateCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k §§ cnts:\n        cnts[k] §§ 1\n    else:\n        cnts[k] = §\nprint(cnts["a"], cnts["b"])',
+      templateCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k §§§ cnts:\n        cnts[k] §§§ 1\n    else:\n        cnts[k] = §§\nprint(cnts["a"], cnts["b"])',
       targetCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k in cnts:\n        cnts[k] += 1\n    else:\n        cnts[k] = 1\nprint(cnts["a"], cnts["b"])',
       testCases: [
         {
@@ -245,7 +245,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that assigns integer 10 to key "lv" in dictionary user.',
       hint_ko: '딕셔너리 변수 뒤 대괄호에 문자열 키를 적고 등호 오른쪽에 10을 대입하세요.',
       hint_en: 'Index user with the quoted key "lv" and assign 10.',
-      templateCode: 'user = {"name": "Ace"}\n§§§§§§§§§§§§§§§\nprint(user["name"], user["lv"])',
+      templateCode: 'user = {"name": "Ace"}\n§§§§§§§§§§§§§§§§\nprint(user["name"], user["lv"])',
       targetCode: 'user = {"name": "Ace"}\nuser["lv"] = 10\nprint(user["name"], user["lv"])',
       testCases: [
         {
@@ -264,7 +264,7 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that deletes the "old" entry from dictionary menu.',
       hint_ko: '삭제 키워드 뒤에 딕셔너리 이름과 지울 문자열 키를 대괄호로 지정하세요.',
       hint_en: 'Use the deletion keyword followed by menu["old"].',
-      templateCode: 'menu = {"new": 2000, "old": 1000}\n§§§§§§§§§§§§§§§\nprint(menu)',
+      templateCode: 'menu = {"new": 2000, "old": 1000}\n§§§§§§§§§§§§§§§§\nprint(menu)',
       targetCode: 'menu = {"new": 2000, "old": 1000}\ndel menu["old"]\nprint(menu)',
       testCases: [
         {

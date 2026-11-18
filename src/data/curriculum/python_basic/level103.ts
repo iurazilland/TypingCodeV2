@@ -67,7 +67,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "지퍼(zipper)처럼 양쪽 리스트를 맞물려 묶어주는 세 글자 내장 함수를 적으세요.",
       "hint_en": "Type the 3-letter built-in function that pairs elements like a zipper.",
       "targetCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\nprint(list(zip(names, scores)))",
-      "templateCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\nprint(list(§§§(names, scores)))",
+      "templateCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\nprint(list(§§§§(names, scores)))",
       "testCases": [
         {
           "id": 1,
@@ -104,7 +104,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "사전(dictionary)을 생성하는 네 글자 내장 함수를 입력하세요.",
       "hint_en": "Enter the 4-letter built-in constructor for a dictionary.",
       "targetCode": "keys = [\"a\", \"b\"]\nvals = [10, 20]\nd = dict(zip(keys, vals))\nprint(d[\"a\"], d[\"b\"])",
-      "templateCode": "keys = [\"a\", \"b\"]\nvals = [10, 20]\nd = §§§§(zip(keys, vals))\nprint(d[\"a\"], d[\"b\"])",
+      "templateCode": "keys = [\"a\", \"b\"]\nvals = [10, 20]\nd = §§§§§(zip(keys, vals))\nprint(d[\"a\"], d[\"b\"])",
       "testCases": [
         {
           "id": 1,
@@ -141,7 +141,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "시퀀스를 역순으로 순회하는 여덟 글자 내장 함수를 적으세요.",
       "hint_en": "Write the 8-letter built-in function that iterates over a sequence in reverse.",
       "targetCode": "logs = [\"open\", \"edit\", \"save\"]\nfor x in reversed(logs):\n    print(x)",
-      "templateCode": "logs = [\"open\", \"edit\", \"save\"]\nfor x in §§§§§§§§(logs):\n    print(x)",
+      "templateCode": "logs = [\"open\", \"edit\", \"save\"]\nfor x in §§§§§§§§§(logs):\n    print(x)",
       "testCases": [
         {
           "id": 1,
@@ -178,7 +178,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "두 시퀀스를 나란히 묶어주는 세 글자 내장 함수를 입력하세요.",
       "hint_en": "Enter the 3-letter built-in function that pairs elements from two sequences.",
       "targetCode": "a = [1, 2, 3]\nb = [10, 20, 30]\nprint([x + y for x, y in zip(a, b)])",
-      "templateCode": "a = [1, 2, 3]\nb = [10, 20, 30]\nprint([x + y for x, y in §§§(a, b)])",
+      "templateCode": "a = [1, 2, 3]\nb = [10, 20, 30]\nprint([x + y for x, y in §§§§(a, b)])",
       "testCases": [
         {
           "id": 1,
@@ -197,7 +197,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "사전 생성 함수, 병렬 묶기 함수, 역순 순회 함수를 차례로 채워보세요.",
       "hint_en": "Fill in the dictionary constructor, the parallel-pairing function, and the reverse iterator function.",
       "targetCode": "keys = [\"first\", \"second\", \"third\"]\nvals = [10, 20, 30]\nres = dict(zip(keys, reversed(vals)))\nprint(res)",
-      "templateCode": "keys = [\"first\", \"second\", \"third\"]\nvals = [10, 20, 30]\nres = §§§§(§§§(keys, §§§§§§§§(vals)))\nprint(res)",
+      "templateCode": "keys = [\"first\", \"second\", \"third\"]\nvals = [10, 20, 30]\nres = §§§§§(§§§§(keys, §§§§§§§§§(vals)))\nprint(res)",
       "testCases": [
         {
           "id": 1,
@@ -254,7 +254,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "menu = dict(zip(keys, vals)) 형태로 작성하세요.",
       "hint_en": "Write menu = dict(zip(keys, vals)) on the masked line.",
       "targetCode": "keys = [\"a\", \"b\", \"c\"]\nvals = [1, 2, 3]\nmenu = dict(zip(keys, vals))\nprint(menu)",
-      "templateCode": "keys = [\"a\", \"b\", \"c\"]\nvals = [1, 2, 3]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(menu)",
+      "templateCode": "keys = [\"a\", \"b\", \"c\"]\nvals = [1, 2, 3]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(menu)",
       "testCases": [
         {
           "id": 1,
@@ -273,7 +273,7 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "hint_ko": "rev = list(reversed(nums)) 형태로 역순 반복자를 리스트로 변환해 저장하세요.",
       "hint_en": "Write rev = list(reversed(nums)) on the masked line.",
       "targetCode": "nums = [5, 10, 15]\nrev = list(reversed(nums))\nprint(rev)",
-      "templateCode": "nums = [5, 10, 15]\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(rev)",
+      "templateCode": "nums = [5, 10, 15]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(rev)",
       "testCases": [
         {
           "id": 1,

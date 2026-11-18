@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Fill Blank] Split the input line by spaces into words and print the first word.',
       hint_ko: '문자열을 쪼개어 리스트로 만드는 다섯 글자 메서드를 호출하세요.',
       hint_en: 'Call the 5-letter method that splits a string into a list.',
-      templateCode: 'words = input().§§§§§()\nprint(f"First:{words[0]}, Count:{len(words)}")',
+      templateCode: 'words = input().§§§§§§()\nprint(f"First:{words[0]}, Count:{len(words)}")',
       targetCode: 'words = input().split()\nprint(f"First:{words[0]}, Count:{len(words)}")',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Fill Blank] Pass the comma delimiter to .split() and print the second item.',
       hint_ko: 'split() 괄호 안에 기준이 되는 콤마 문자열을 따옴표로 감싸 적으세요.',
       hint_en: 'Put the comma string literal "," inside the parentheses of split().',
-      templateCode: 'csv = "apple,banana,melon"\nitems = csv.split(§§§)\nprint(items[1])',
+      templateCode: 'csv = "apple,banana,melon"\nitems = csv.split(§§§§)\nprint(items[1])',
       targetCode: 'csv = "apple,banana,melon"\nitems = csv.split(",")\nprint(items[1])',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Fill Blank] Split the input line by whitespace, convert each token to int, and collect even numbers.',
       hint_ko: '입력 문자열을 공백 기준 리스트로 나누는 메서드 호출을 완성하세요.',
       hint_en: 'Complete the method call that splits input() by spaces.',
-      templateCode: 'evens = []\nfor s in input().§§§§§§§:\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(evens)',
+      templateCode: 'evens = []\nfor s in input().§§§§§§§§:\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(evens)',
       targetCode: 'evens = []\nfor s in input().split():\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(evens)',
       testCases: [
         {
@@ -177,7 +177,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Fill Blank] Split line on "=" into k and v, then print them.',
       hint_ko: '등호("=")를 구분자로 전달해 문자열을 두 조각으로 나누는 호출식을 적으세요.',
       hint_en: 'Call split("=") to divide the string on the equals sign.',
-      templateCode: 'line = input().strip()\nk, v = line.§§§§§§§§§§\nprint(f"{k} -> {v}")',
+      templateCode: 'line = input().strip()\nk, v = line.§§§§§§§§§§§\nprint(f"{k} -> {v}")',
       targetCode: 'line = input().strip()\nk, v = line.split("=")\nprint(f"{k} -> {v}")',
       testCases: [
         {
@@ -201,7 +201,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Fill Blank] Split raw on ",", and print the integer sum of the first and last elements.',
       hint_ko: '문자열 분리 메서드, 첫 번째 인덱스, 정수 변환 함수를 차례로 채우세요.',
       hint_en: 'Fill in the split method, index 0, and int() conversion function.',
-      templateCode: 'raw = input().strip()\npts = raw.§§§§§(",")\ntotal = int(pts[§]) + §§§(pts[-1])\nprint(f"Ends:{total}")',
+      templateCode: 'raw = input().strip()\npts = raw.§§§§§§(",")\ntotal = int(pts[§§]) + §§§§(pts[-1])\nprint(f"Ends:{total}")',
       targetCode: 'raw = input().strip()\npts = raw.split(",")\ntotal = int(pts[0]) + int(pts[-1])\nprint(f"Ends:{total}")',
       testCases: [
         {
@@ -268,7 +268,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that splits s on "/" and assigns the list to parts.',
       hint_ko: 's에 구분자 "/"를 넣은 분리 메서드를 호출해 parts에 대입하세요.',
       hint_en: 'Write parts = s.split("/") on the second line.',
-      templateCode: 's = "usr/local/bin"\n§§§§§§§§§§§§§§§§§§§§\nprint(parts[-1], len(parts))',
+      templateCode: 's = "usr/local/bin"\n§§§§§§§§§§§§§§§§§§§§§\nprint(parts[-1], len(parts))',
       targetCode: 's = "usr/local/bin"\nparts = s.split("/")\nprint(parts[-1], len(parts))',
       testCases: [
         {
@@ -287,7 +287,7 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that converts s with int() and appends it to nums.',
       hint_ko: 'nums의 추가 메서드 안에 정수 변환 식을 넣어 작성하세요.',
       hint_en: 'Write nums.append(int(s)) inside the for loop.',
-      templateCode: 'nums = []\nfor s in input().split():\n    §§§§§§§§§§§§§§§§§§§\nprint(nums)',
+      templateCode: 'nums = []\nfor s in input().split():\n    §§§§§§§§§§§§§§§§§§§§\nprint(nums)',
       targetCode: 'nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(nums)',
       testCases: [
         {

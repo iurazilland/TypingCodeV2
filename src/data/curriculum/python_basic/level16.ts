@@ -45,7 +45,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the double-quoted prompt "City: " inside input() and print the result.',
       hint_ko: '콜론과 공백 한 칸까지 포함된 안내 문구를 큰따옴표로 감싸 괄호 안에 적습니다.',
       hint_en: 'Wrap the prompt text including the colon and trailing space in double quotes.',
-      templateCode: 'city = input(§§§§§§§§)\nprint("Go to", city)',
+      templateCode: 'city = input(§§§§§§§§§)\nprint("Go to", city)',
       targetCode: 'city = input("City: ")\nprint("Go to", city)',
       testCases: [
         {
@@ -92,7 +92,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the input function name on line 2 to complete the two prompt inputs.',
       hint_ko: '첫째 줄과 똑같이 안내 문구를 출력하며 입력을 받는 내장 함수 이름을 적습니다.',
       hint_en: 'Write the built-in function name that displays the prompt and reads input.',
-      templateCode: 'job = input("Job: ")\nrank = §§§§§("Rank: ")\nprint(job, rank)',
+      templateCode: 'job = input("Job: ")\nrank = §§§§§§("Rank: ")\nprint(job, rank)',
       targetCode: 'job = input("Job: ")\nrank = input("Rank: ")\nprint(job, rank)',
       testCases: [
         {
@@ -139,7 +139,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string repetition operator on line 2 to repeat the input 4 times.',
       hint_ko: '프롬프트로 입력받은 문자열 변수를 4번 반복하도록 별표 기호를 넣습니다.',
       hint_en: 'Place the asterisk operator between the variable and 4.',
-      templateCode: 'ch = input("Char: ")\nprint(ch § 4)',
+      templateCode: 'ch = input("Char: ")\nprint(ch §§ 4)',
       targetCode: 'ch = input("Char: ")\nprint(ch * 4)',
       testCases: [
         {
@@ -186,7 +186,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the separator option name so the input prints as Team-Alpha.',
       hint_ko: '쉼표로 나열된 두 문자열 사이를 하이픈으로 연결하는 세 글자 옵션 이름을 적습니다.',
       hint_en: 'Write the three-letter separator option name before the equals sign.',
-      templateCode: 'team = input("Team: ")\nprint("Team", team, §§§="-")',
+      templateCode: 'team = input("Team: ")\nprint("Team", team, §§§§="-")',
       targetCode: 'team = input("Team: ")\nprint("Team", team, sep="-")',
       testCases: [
         {
@@ -210,7 +210,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to prompt with "ID: ", append "_OK", and print User:hero_OK.',
       hint_ko: '큰따옴표로 감싼 프롬프트 문자열, 문자열 복합 대입 연산자, 구분자 옵션 이름을 차례로 채웁니다.',
       hint_en: 'Enter the double-quoted prompt string, the += operator, and the sep option name in order.',
-      templateCode: 'uid = input(§§§§§§)\nuid §§ "_OK"\nprint("User", uid, §§§=":")',
+      templateCode: 'uid = input(§§§§§§§)\nuid §§§ "_OK"\nprint("User", uid, §§§§=":")',
       targetCode: 'uid = input("ID: ")\nuid += "_OK"\nprint("User", uid, sep=":")',
       testCases: [
         {
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to prompt with "Nick: " and store the input in variable nick.',
       hint_ko: '변수 nick에 input("Nick: ") 호출 결과를 대입하는 한 줄을 작성합니다.',
       hint_en: 'Assign input("Nick: ") to the variable nick on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§\nprint("Player:", nick)',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§\nprint("Player:", nick)',
       targetCode: 'nick = input("Nick: ")\nprint("Player:", nick)',
       testCases: [
         {
@@ -306,7 +306,7 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print the input string variable code repeated 2 times.',
       hint_ko: 'print() 안에서 변수 code에 문자열 반복 연산자와 2를 곱해 작성합니다.',
       hint_en: 'Multiply code by 2 inside print() on line 2.',
-      templateCode: 'code = input("Code: ")\n§§§§§§§§§§§§§§§',
+      templateCode: 'code = input("Code: ")\n§§§§§§§§§§§§§§§§',
       targetCode: 'code = input("Code: ")\nprint(code * 2)',
       testCases: [
         {

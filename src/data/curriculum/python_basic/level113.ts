@@ -23,7 +23,7 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "hint_ko": "기본값 안전 조회 메서드(3글자), 사본 정렬 내장 함수(6글자), 문자열 결합 메서드(4글자)를 채우세요.",
       "hint_en": "Supply the 3-letter safe lookup method, the 6-letter sorting function, and the 4-letter joining method.",
       "targetCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in sorted(counts)]\nprint(\",\".join(pairs))",
-      "templateCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.§§§(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in §§§§§§(counts)]\nprint(\",\".§§§§(pairs))",
+      "templateCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.§§§§(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in §§§§§§§(counts)]\nprint(\",\".§§§§§(pairs))",
       "testCases": [
         {
           "id": 1,
@@ -47,7 +47,7 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "hint_ko": "별표 가변 매개변수(*nums), 합계 함수(sum), 그리고 소수 둘째 자리 서식(.2f)을 차례로 채우세요.",
       "hint_en": "Fill in *nums, the 3-letter sum function, and the 3-character .2f format specifier.",
       "targetCode": "def calc_total(*nums, bonus=0):\n    return sum(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:.2f}\")",
-      "templateCode": "def calc_total(§§§§§, bonus=0):\n    return §§§(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:§§§}\")",
+      "templateCode": "def calc_total(§§§§§§, bonus=0):\n    return §§§§(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:§§§§}\")",
       "testCases": [
         {
           "id": 1,
@@ -66,7 +66,7 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "hint_ko": "부모 클래스 이름(7글자), 예외 발생 키워드(5글자), 무조건 실행 마무리 키워드(7글자)를 채우세요.",
       "hint_en": "Supply the 7-letter parent class name, the 5-letter exception-raising keyword, and the 7-letter cleanup keyword.",
       "targetCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(Account):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            raise ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\nfinally:\n    print(\"End\")",
-      "templateCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(§§§§§§§):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            §§§§§ ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\n§§§§§§§:\n    print(\"End\")",
+      "templateCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(§§§§§§§§):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            §§§§§§ ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\n§§§§§§§§:\n    print(\"End\")",
       "testCases": [
         {
           "id": 1,
@@ -152,7 +152,7 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "hint_ko": "res = \"PASS\" if avg_ok and all_ok else \"FAIL\" 형태로 조건 표현식을 작성하세요.",
       "hint_en": "Write res = \"PASS\" if avg_ok and all_ok else \"FAIL\" on the masked line.",
       "targetCode": "scores = list(map(int, input().split()))\navg_ok = sum(scores) / len(scores) >= 80\nall_ok = all([s >= 60 for s in scores])\nres = \"PASS\" if avg_ok and all_ok else \"FAIL\"\nprint(res)",
-      "templateCode": "scores = list(map(int, input().split()))\navg_ok = sum(scores) / len(scores) >= 80\nall_ok = all([s >= 60 for s in scores])\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
+      "templateCode": "scores = list(map(int, input().split()))\navg_ok = sum(scores) / len(scores) >= 80\nall_ok = all([s >= 60 for s in scores])\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
       "testCases": [
         {
           "id": 1,
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "hint_ko": "s = sorted(ok, key=lambda h: h.lv, reverse=True) 형태로 작성하세요.",
       "hint_en": "Write s = sorted(ok, key=lambda h: h.lv, reverse=True) on the masked line.",
       "targetCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\nok = [h for h in hs if h.lv >= 10]\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\", \".join([str(h) for h in s]))",
-      "templateCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\", \".join([str(h) for h in s]))",
+      "templateCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\", \".join([str(h) for h in s]))",
       "testCases": [
         {
           "id": 1,

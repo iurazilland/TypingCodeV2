@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound addition operator to accumulate 1 through n into total.',
       hint_ko: '기존 합계 변수에 반복 변수 i를 차례로 더해 저장하는 복합 대입 연산자를 씁니다.',
       hint_en: 'Use the plus-equals operator to add each i onto total.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total §§ i\nprint(total)',
+      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total §§§ i\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)',
       testCases: [
         {
@@ -87,7 +87,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the initial value of total so the sum of odd numbers starts cleanly.',
       hint_ko: '덧셈 누적 변수는 더해도 값에 영향을 주지 않는 숫자에서 출발해야 합니다.',
       hint_en: 'Initialize a sum accumulator to the additive identity digit.',
-      templateCode: 'n = int(input())\ntotal = §\nfor i in range(1, n + 1, 2):\n    total += i\nprint(total)',
+      templateCode: 'n = int(input())\ntotal = §§\nfor i in range(1, n + 1, 2):\n    total += i\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1, 2):\n    total += i\nprint(total)',
       testCases: [
         {
@@ -134,7 +134,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound multiplication operator to multiply 1 through 4.',
       hint_ko: '별표와 등호를 나란히 붙인 복합 대입 연산자를 사용합니다.',
       hint_en: 'Combine the asterisk and equals sign to multiply in place.',
-      templateCode: 'prod = 1\nfor i in range(1, 5):\n    prod §§ i\nprint(prod)',
+      templateCode: 'prod = 1\nfor i in range(1, 5):\n    prod §§§ i\nprint(prod)',
       targetCode: 'prod = 1\nfor i in range(1, 5):\n    prod *= i\nprint(prod)',
       testCases: [
         {
@@ -176,7 +176,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string-casting function to append each number i onto code.',
       hint_ko: '정수 i를 문자열과 이어 붙이려면 세 글자 문자열 변환 함수로 감싸야 합니다.',
       hint_en: 'Wrap i in the three-letter string conversion function.',
-      templateCode: 'n = int(input())\ncode = "ID:"\nfor i in range(n, 0, -1):\n    code += §§§(i)\nprint(code)',
+      templateCode: 'n = int(input())\ncode = "ID:"\nfor i in range(n, 0, -1):\n    code += §§§§(i)\nprint(code)',
       targetCode: 'n = int(input())\ncode = "ID:"\nfor i in range(n, 0, -1):\n    code += str(i)\nprint(code)',
       testCases: [
         {
@@ -200,7 +200,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to compute both the sum and product of 1 through n.',
       hint_ko: '곱셈 누적 초기값 1, 합계 누적 연산자, 그리고 곱셈 누적 연산자를 순서대로 채웁니다.',
       hint_en: 'Enter initial value 1 for prod, then plus-equals and asterisk-equals inside the loop.',
-      templateCode: 'n = int(input())\ntotal = 0\nprod = §\nfor i in range(1, n + 1):\n    total §§ i\n    prod §§ i\nprint(total, prod)',
+      templateCode: 'n = int(input())\ntotal = 0\nprod = §§\nfor i in range(1, n + 1):\n    total §§§ i\n    prod §§§ i\nprint(total, prod)',
       targetCode: 'n = int(input())\ntotal = 0\nprod = 1\nfor i in range(1, n + 1):\n    total += i\n    prod *= i\nprint(total, prod)',
       testCases: [
         {
@@ -272,7 +272,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line adding i onto total with +=.',
       hint_ko: '4칸 들여쓰기 뒤에 total += i를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write total += i.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    §§§§§§§§§§\nprint(total)',
+      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    §§§§§§§§§§§\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    total += i\nprint(total)',
       testCases: [
         {
@@ -296,7 +296,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line multiplying prod by i with *=. ',
       hint_ko: '4칸 들여쓰기 뒤에 prod *= i를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write prod *= i.',
-      templateCode: 'n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    §§§§§§§§§\nprint(prod)',
+      templateCode: 'n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    §§§§§§§§§§\nprint(prod)',
       targetCode: 'n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    prod *= i\nprint(prod)',
       testCases: [
         {

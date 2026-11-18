@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       prompt_en: '[Fill Blank] Unpack each tuple in pts and add x * y to total only when y is not empty.',
       hint_ko: '두 좌표 변수 언패킹, 빈 값이 아님을 검사하는 조건, 복합 덧셈 연산자를 차례로 채우세요.',
       hint_en: 'Fill in the two unpacked loop variables, the non-null identity check, and the compound addition operator.',
-      templateCode: 'pts = [(2, 5), (4, None), (3, 6)]\ntotal = 0\nfor §§§§ in pts:\n    if y §§§§§§§§§§§:\n        total §§ x * y\nprint(total)',
+      templateCode: 'pts = [(2, 5), (4, None), (3, 6)]\ntotal = 0\nfor §§§§§ in pts:\n    if y §§§§§§§§§§§§:\n        total §§§ x * y\nprint(total)',
       targetCode: 'pts = [(2, 5), (4, None), (3, 6)]\ntotal = 0\nfor x, y in pts:\n    if y is not None:\n        total += x * y\nprint(total)',
       testCases: [
         {
@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       prompt_en: '[Fill Blank] Iterate over key-value pairs of scores, collect names with score >= 80, and print the count and first name.',
       hint_ko: '쌍 순회 메서드 호출, 리스트 추가 메서드, 길이를 구하는 함수를 순서대로 적으세요.',
       hint_en: 'Complete the dictionary pair method, the list append method, and the length function.',
-      templateCode: 'scores = {"Kim": 85, "Lee": 72, "Park": 90}\npassed = []\nfor k, v in scores.§§§§§§§:\n    if v >= 80:\n        passed.§§§§§§(k)\nprint(§§§(passed), passed[0])',
+      templateCode: 'scores = {"Kim": 85, "Lee": 72, "Park": 90}\npassed = []\nfor k, v in scores.§§§§§§§§:\n    if v >= 80:\n        passed.§§§§§§§(k)\nprint(§§§§(passed), passed[0])',
       targetCode: 'scores = {"Kim": 85, "Lee": 72, "Park": 90}\npassed = []\nfor k, v in scores.items():\n    if v >= 80:\n        passed.append(k)\nprint(len(passed), passed[0])',
       testCases: [
         {
@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       prompt_en: '[Fill Blank] Deduplicate raw into a list, sort it, and convert the sorted list into a tuple.',
       hint_ko: '리스트 변환 함수, 중복 제거용 집합 변환 함수, 마지막 튜플 변환 함수를 차례로 채우세요.',
       hint_en: 'Fill in the list cast, the inner set cast, and the final tuple cast.',
-      templateCode: 'raw = [30, 10, 30, 20, 10]\narr = §§§§(§§§(raw))\narr.sort()\nres = §§§§§(arr)\nprint(res)',
+      templateCode: 'raw = [30, 10, 30, 20, 10]\narr = §§§§§(§§§§(raw))\narr.sort()\nres = §§§§§§(arr)\nprint(res)',
       targetCode: 'raw = [30, 10, 30, 20, 10]\narr = list(set(raw))\narr.sort()\nres = tuple(arr)\nprint(res)',
       testCases: [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       prompt_en: '[Complete Line] Write the for loop header that unpacks key-value pairs of stock into k and v.',
       hint_ko: 'for k, v in 뒤에 stock의 쌍 반환 메서드를 호출하고 콜론(:)을 붙이세요.',
       hint_en: 'Write the for header iterating over stock.items() with k and v.',
-      templateCode: 'stock = {"pen": 10, "note": 0, "cup": 5}\ntotal = 0\n§§§§§§§§§§§§§§§§§§§§§§§§§§\n    if v > 0:\n        total += v\nprint(total)',
+      templateCode: 'stock = {"pen": 10, "note": 0, "cup": 5}\ntotal = 0\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\n    if v > 0:\n        total += v\nprint(total)',
       targetCode: 'stock = {"pen": 10, "note": 0, "cup": 5}\ntotal = 0\nfor k, v in stock.items():\n    if v > 0:\n        total += v\nprint(total)',
       testCases: [
         {
@@ -155,7 +155,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       prompt_en: '[Complete Line] Deduplicate nums with set() and convert it back to a list in uniq.',
       hint_ko: '집합 변환 결과를 리스트 변환 함수로 감싸 uniq에 대입하세요.',
       hint_en: 'Assign list(set(nums)) to variable uniq.',
-      templateCode: 'nums = [4, 1, 4, 2, 1]\n§§§§§§§§§§§§§§§§§§§§§§\nuniq.sort()\nprint(uniq)',
+      templateCode: 'nums = [4, 1, 4, 2, 1]\n§§§§§§§§§§§§§§§§§§§§§§§\nuniq.sort()\nprint(uniq)',
       targetCode: 'nums = [4, 1, 4, 2, 1]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)',
       testCases: [
         {

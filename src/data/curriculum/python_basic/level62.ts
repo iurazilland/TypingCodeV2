@@ -59,7 +59,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Fill Blank] Convert list nums into a set to print the number of unique values.',
       hint_ko: '집합 변환 함수 안에 리스트 변수 nums를 넣어 호출하세요.',
       hint_en: 'Pass list variable nums into the set constructor function.',
-      templateCode: 'nums = [10, 20, 10, 30]\ns = §§§§§§§§§\nprint(len(s))',
+      templateCode: 'nums = [10, 20, 10, 30]\ns = §§§§§§§§§§\nprint(len(s))',
       targetCode: 'nums = [10, 20, 10, 30]\ns = set(nums)\nprint(len(s))',
       testCases: [
         {
@@ -96,7 +96,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the set method that adds "py" to tags so its length becomes 2.',
       hint_ko: '리스트의 append 대신 집합에 요소 하나를 더할 때 쓰는 세 글자 메서드 이름을 적으세요.',
       hint_en: 'Write the three-letter method name used to insert an element into a set.',
-      templateCode: 'tags = set()\ntags.§§§("py")\ntags.add("js")\nprint(len(tags))',
+      templateCode: 'tags = set()\ntags.§§§§("py")\ntags.add("js")\nprint(len(tags))',
       targetCode: 'tags = set()\ntags.add("py")\ntags.add("js")\nprint(len(tags))',
       testCases: [
         {
@@ -133,7 +133,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Fill Blank] Print the sum of elements in set s alongside max(s).',
       hint_ko: '중복된 5가 하나만 남은 집합 s의 전체 합을 구하는 내장 함수 호출식을 적으세요.',
       hint_en: 'Call the built-in sum function on set s.',
-      templateCode: 's = {5, 15, 5, 25}\nprint(§§§§§§, max(s))',
+      templateCode: 's = {5, 15, 5, 25}\nprint(§§§§§§§, max(s))',
       targetCode: 's = {5, 15, 5, 25}\nprint(sum(s), max(s))',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Fill Blank] Store the set of unique characters from word in uniq and print its length.',
       hint_ko: '문자열 변수 word를 집합 변환 함수에 넣어 호출하세요.',
       hint_en: 'Call the set constructor with variable word as its argument.',
-      templateCode: 'word = "level"\nuniq = §§§§§§§§§\nprint(len(uniq))',
+      templateCode: 'word = "level"\nuniq = §§§§§§§§§§\nprint(len(uniq))',
       targetCode: 'word = "level"\nuniq = set(word)\nprint(len(uniq))',
       testCases: [
         {
@@ -189,7 +189,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Fill Blank] Initialize an empty set, add each word from the list, and print the unique count 3.',
       hint_ko: '빈 집합 생성식과 집합 요소 추가 메서드, 길이를 구하는 함수를 차례로 채우세요.',
       hint_en: 'Fill in the empty set constructor, the element addition method, and the length function.',
-      templateCode: 'words = "go py go js py".split()\ns = §§§§§\nfor w in words:\n    s.§§§(w)\nprint(§§§(s))',
+      templateCode: 'words = "go py go js py".split()\ns = §§§§§§\nfor w in words:\n    s.§§§§(w)\nprint(§§§§(s))',
       targetCode: 'words = "go py go js py".split()\ns = set()\nfor w in words:\n    s.add(w)\nprint(len(s))',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that prints the number of unique elements in nums using set() and len().',
       hint_ko: 'nums를 집합으로 감싸고 다시 길이 함수와 출력 함수로 감싸 한 줄로 작성하세요.',
       hint_en: 'Wrap nums in set(), pass that to len(), and print the result.',
-      templateCode: 'nums = [4, 2, 4, 7, 2]\n§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'nums = [4, 2, 4, 7, 2]\n§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'nums = [4, 2, 4, 7, 2]\nprint(len(set(nums)))',
       testCases: [
         {
@@ -265,7 +265,7 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that adds the string "home" to set visited.',
       hint_ko: '집합 변수 visited 뒤에 요소 추가 메서드를 호출하고 인자로 "home"을 넣으세요.',
       hint_en: 'Call the element addition method on visited with "home" as the argument.',
-      templateCode: 'visited = set()\n§§§§§§§§§§§§§§§§§§§\nprint("home" in visited)',
+      templateCode: 'visited = set()\n§§§§§§§§§§§§§§§§§§§§\nprint("home" in visited)',
       targetCode: 'visited = set()\nvisited.add("home")\nprint("home" in visited)',
       testCases: [
         {

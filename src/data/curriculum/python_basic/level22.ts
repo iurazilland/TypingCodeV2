@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the greater-than operator to check if speed exceeds 60.',
       hint_ko: '왼쪽 값이 오른쪽 값보다 더 큼을 나타내는 부등호 기호 하나를 입력합니다.',
       hint_en: 'Enter the single angle bracket that points closed toward the smaller right-hand side.',
-      templateCode: 'speed = 75\nprint(speed § 60)',
+      templateCode: 'speed = 75\nprint(speed §§ 60)',
       targetCode: 'speed = 75\nprint(speed > 60)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the less-or-equal operator to check if price is at most budget.',
       hint_ko: '작거나 같음(이하)은 왼쪽이 닫힌 부등호 바로 뒤에 등호를 붙여 표기합니다.',
       hint_en: 'Write the less-than angle bracket followed immediately by the equals sign.',
-      templateCode: 'price = 3000\nbudget = 3000\nprint(price §§ budget)',
+      templateCode: 'price = 3000\nbudget = 3000\nprint(price §§§ budget)',
       targetCode: 'price = 3000\nbudget = 3000\nprint(price <= budget)',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the greater-or-equal operator to check if the updated pt is at least 100.',
       hint_ko: '크거나 같음(이상)은 왼쪽이 열린 부등호 바로 뒤에 등호를 붙여 작성합니다.',
       hint_en: 'Place the greater-than angle bracket right before the equals sign.',
-      templateCode: 'pt = int(input("Pt: "))\npt += 10\nprint(pt §§ 100)',
+      templateCode: 'pt = int(input("Pt: "))\npt += 10\nprint(pt §§§ 100)',
       targetCode: 'pt = int(input("Pt: "))\npt += 10\nprint(pt >= 100)',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the less-than operator to complete the chained check 0 < n < 10.',
       hint_ko: '0보다 크고 10보다 작다는 연쇄 부등식이 되도록 오른쪽 빈칸에 미만 기호를 넣습니다.',
       hint_en: 'Complete the chained inequality with the strict less-than symbol before 10.',
-      templateCode: 'n = int(input())\nprint(0 < n § 10)',
+      templateCode: 'n = int(input())\nprint(0 < n §§ 10)',
       targetCode: 'n = int(input())\nprint(0 < n < 10)',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to compute floor quotient q and test if q is between 1 and 9 inclusive.',
       hint_ko: '정수 몫 연산자로 몫을 구한 뒤, 양쪽에 이하 비교 기호 두 개를 넣어 연쇄 비교식을 완성합니다.',
       hint_en: 'Use floor division for q, then place the less-or-equal operator on both sides of q.',
-      templateCode: 'n = int(input())\nq = n §§ 10\nprint(1 §§ q §§ 9)',
+      templateCode: 'n = int(input())\nq = n §§§ 10\nprint(1 §§§ q §§§ 9)',
       targetCode: 'n = int(input())\nq = n // 10\nprint(1 <= q <= 9)',
       testCases: [
         {
@@ -262,7 +262,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that stores whether 1 <= lv <= 10 in variable ok.',
       hint_ko: '변수 ok에 1 이상 10 이하 연쇄 비교식을 대입해보세요.',
       hint_en: 'Assign the chained comparison checking 1 through 10 inclusive to ok.',
-      templateCode: 'lv = int(input())\n§§§§§§§§§§§§§§§§§§\nprint(ok)',
+      templateCode: 'lv = int(input())\n§§§§§§§§§§§§§§§§§§§\nprint(ok)',
       targetCode: 'lv = int(input())\nok = 1 <= lv <= 10\nprint(ok)',
       testCases: [
         {
@@ -286,7 +286,7 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       prompt_en: '[Complete Line] Write the line that prints whether n squared (n ** 2) is at least 50.',
       hint_ko: 'print() 안에서 거듭제곱 연산과 이상 비교 연산자를 결합해보세요.',
       hint_en: 'Combine the power operator and greater-or-equal operator inside print().',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'n = int(input())\nprint(n ** 2 >= 50)',
       testCases: [
         {

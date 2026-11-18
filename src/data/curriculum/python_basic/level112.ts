@@ -68,7 +68,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "반복 변수 p 뒤에 점(.)을 찍고 다섯 글자 가격 속성 이름을 적으세요.",
       "hint_en": "Write p. followed by the 5-letter price attribute name.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Note\", 3000), Product(\"Mug\", 7000)]\nvals = [p.price for p in items]\nprint(sum(vals))",
-      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Note\", 3000), Product(\"Mug\", 7000)]\nvals = [p.§§§§§ for p in items]\nprint(sum(vals))",
+      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Note\", 3000), Product(\"Mug\", 7000)]\nvals = [p.§§§§§§ for p in items]\nprint(sum(vals))",
       "testCases": [
         {
           "id": 1,
@@ -105,7 +105,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "컴프리헨션 뒤쪽에서 조건을 걸러내는 두 글자 키워드를 입력하세요.",
       "hint_en": "Type the 2-letter condition keyword at the end of the list comprehension.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Book\", 12000), Product(\"Pen\", 1500), Product(\"Bag\", 25000)]\npicks = [p.name for p in items if p.price >= 5000]\nprint(picks)",
-      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Book\", 12000), Product(\"Pen\", 1500), Product(\"Bag\", 25000)]\npicks = [p.name for p in items §§ p.price >= 5000]\nprint(picks)",
+      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Book\", 12000), Product(\"Pen\", 1500), Product(\"Bag\", 25000)]\npicks = [p.name for p in items §§§ p.price >= 5000]\nprint(picks)",
       "testCases": [
         {
           "id": 1,
@@ -142,7 +142,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "정렬 기준 함수를 즉석에서 정의하는 여섯 글자 키워드를 입력하세요.",
       "hint_en": "Enter the 6-letter keyword for an inline anonymous function.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=lambda p: p.price)\nprint(\", \".join([str(p) for p in res]))",
-      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=§§§§§§ p: p.price)\nprint(\", \".join([str(p) for p in res]))",
+      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=§§§§§§§ p: p.price)\nprint(\", \".join([str(p) for p in res]))",
       "testCases": [
         {
           "id": 1,
@@ -179,7 +179,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "1번부터 순위 번호와 객체를 동시에 꺼내는 아홉 글자 내장 함수를 적으세요.",
       "hint_en": "Write the 9-letter built-in function that pairs each item with its 1-based rank.",
       "targetCode": "class Student:\n    def __init__(self, name, avg):\n        self.name = name\n        self.avg = avg\n\n    def __str__(self):\n        return f\"{self.name}({self.avg:.1f})\"\n\nst = [Student(\"Jin\", 88.5), Student(\"Ara\", 95.2)]\ntop = sorted(st, key=lambda s: s.avg, reverse=True)\nfor idx, obj in enumerate(top, 1):\n    print(f\"#{idx} {obj}\")",
-      "templateCode": "class Student:\n    def __init__(self, name, avg):\n        self.name = name\n        self.avg = avg\n\n    def __str__(self):\n        return f\"{self.name}({self.avg:.1f})\"\n\nst = [Student(\"Jin\", 88.5), Student(\"Ara\", 95.2)]\ntop = sorted(st, key=lambda s: s.avg, reverse=True)\nfor idx, obj in §§§§§§§§§(top, 1):\n    print(f\"#{idx} {obj}\")",
+      "templateCode": "class Student:\n    def __init__(self, name, avg):\n        self.name = name\n        self.avg = avg\n\n    def __str__(self):\n        return f\"{self.name}({self.avg:.1f})\"\n\nst = [Student(\"Jin\", 88.5), Student(\"Ara\", 95.2)]\ntop = sorted(st, key=lambda s: s.avg, reverse=True)\nfor idx, obj in §§§§§§§§§§(top, 1):\n    print(f\"#{idx} {obj}\")",
       "testCases": [
         {
           "id": 1,
@@ -198,7 +198,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "부모 클래스 이름, 익명 함수 키워드, 문자열 결합 메서드를 순서대로 채워보세요.",
       "hint_en": "Supply the parent class name, the anonymous function keyword, and the string-joining method.",
       "targetCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\nclass SaleItem(Item):\n    def pay(self):\n        return self.price - 500\n\nbag = [SaleItem(\"Mug\", 3000), Item(\"Pen\", 1200)]\ns = sorted(bag, key=lambda x: x.pay())\nprint(\",\".join([x.name for x in s]))",
-      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\nclass SaleItem(§§§§):\n    def pay(self):\n        return self.price - 500\n\nbag = [SaleItem(\"Mug\", 3000), Item(\"Pen\", 1200)]\ns = sorted(bag, key=§§§§§§ x: x.pay())\nprint(\",\".§§§§([x.name for x in s]))",
+      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\nclass SaleItem(§§§§§):\n    def pay(self):\n        return self.price - 500\n\nbag = [SaleItem(\"Mug\", 3000), Item(\"Pen\", 1200)]\ns = sorted(bag, key=§§§§§§§ x: x.pay())\nprint(\",\".§§§§§([x.name for x in s]))",
       "testCases": [
         {
           "id": 1,
@@ -255,7 +255,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "picks = [p.name for p in s if p.price >= 5000] 형태로 작성하세요.",
       "hint_en": "Write picks = [p.name for p in s if p.price >= 5000] on the masked line.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\ns = [Product(\"Book\", 12000), Product(\"Mug\", 6000), Product(\"Pen\", 1500)]\npicks = [p.name for p in s if p.price >= 5000]\nprint(picks)",
-      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\ns = [Product(\"Book\", 12000), Product(\"Mug\", 6000), Product(\"Pen\", 1500)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(picks)",
+      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\ns = [Product(\"Book\", 12000), Product(\"Mug\", 6000), Product(\"Pen\", 1500)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(picks)",
       "testCases": [
         {
           "id": 1,
@@ -274,7 +274,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "hint_ko": "s = sorted(ps, key=lambda p: p.price) 형태로 작성하세요.",
       "hint_en": "Write s = sorted(ps, key=lambda p: p.price) on the masked line.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1500)]\ns = sorted(ps, key=lambda p: p.price)\nprint([p.name for p in s])",
-      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1500)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint([p.name for p in s])",
+      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1500)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint([p.name for p in s])",
       "testCases": [
         {
           "id": 1,

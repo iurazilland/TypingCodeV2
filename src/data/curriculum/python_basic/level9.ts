@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the separator option name so the time prints as 10:20:30.',
       hint_ko: '분리하다(separate)의 앞 세 글자를 딴 옵션 이름을 등호 앞에 작성합니다.',
       hint_en: 'Write the three-letter option name derived from "separate" before the equals sign.',
-      templateCode: 'print(10, 20, 30, §§§=":")',
+      templateCode: 'print(10, 20, 30, §§§§=":")',
       targetCode: 'print(10, 20, 30, sep=":")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the empty-string separator option so No. and 1 print together as No.1.',
       hint_ko: '구분자 옵션 이름 뒤에 등호(=)와 빈 큰따옴표("")를 이어 적습니다.',
       hint_en: 'Write the separator option name followed by = and an empty double-quoted string.',
-      templateCode: 'print("No.", 1, §§§§§§)',
+      templateCode: 'print("No.", 1, §§§§§§§)',
       targetCode: 'print("No.", 1, sep="")',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the line-ending option name so the two print() calls join as Ready!Go.',
       hint_ko: '출력의 끝(마무리)을 뜻하는 영어 세 글자 단어를 등호 앞에 적습니다.',
       hint_en: 'Write the three-letter English word for "end" before the equals sign.',
-      templateCode: 'print("Ready", §§§="!")\nprint("Go")',
+      templateCode: 'print("Ready", §§§§="!")\nprint("Go")',
       targetCode: 'print("Ready", end="!")\nprint("Go")',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the end option with "=" so the first print() connects to 6 on the same line.',
       hint_ko: '줄 끝을 등호 문자열로 마무리하도록 옵션 이름과 ="="를 함께 작성합니다.',
       hint_en: 'Set the line-ending option to "=" so the next print() outputs immediately after the equals sign.',
-      templateCode: 'print(20, 3, sep="//", §§§§§§§)\nprint(20 // 3)',
+      templateCode: 'print(20, 3, sep="//", §§§§§§§§)\nprint(20 // 3)',
       targetCode: 'print(20, 3, sep="//", end="=")\nprint(20 // 3)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks so the two lines of code output Lv3 -> 100 on one line.',
       hint_ko: '첫째 줄에는 구분자 옵션과 줄 끝 옵션 이름을, 둘째 줄에는 거듭제곱 연산자를 채웁니다.',
       hint_en: 'Enter the separator option and line-end option names on line 1, and the power operator on line 2.',
-      templateCode: 'print("Lv", 1 + 2, §§§="", §§§=" -> ")\nprint(10 §§ 2)',
+      templateCode: 'print("Lv", 1 + 2, §§§§="", §§§§=" -> ")\nprint(10 §§§ 2)',
       targetCode: 'print("Lv", 1 + 2, sep="", end=" -> ")\nprint(10 ** 2)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print 10 and 20 with sep="-" so the output becomes Start -> 10-20.',
       hint_ko: 'print() 안에서 10, 20과 하이픈 구분자 옵션을 쉼표로 나열해 작성합니다.',
       hint_en: 'Pass 10, 20, and the hyphen separator option to print() on line 2.',
-      templateCode: 'print("Start", end=" -> ")\n§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("Start", end=" -> ")\n§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("Start", end=" -> ")\nprint(10, 20, sep="-")',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to print "Step" and 1 with sep="" and end=": " so it outputs Step1: Pass.',
       hint_ko: '문자열 "Step", 숫자 1, 빈 구분자 옵션, 콜론 줄 끝 옵션을 한 print() 안에 차례로 적습니다.',
       hint_en: 'Combine "Step", 1, sep="", and end=": " inside print() on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Pass")',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Pass")',
       targetCode: 'print("Step", 1, sep="", end=": ")\nprint("Pass")',
       testCases: [
         {

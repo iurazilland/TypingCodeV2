@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the conditional keyword to print "Danger" when hp <= 20.',
       hint_ko: '영어로 만약을 뜻하는 두 글자 소문자 키워드로 조건문 헤더를 시작합니다.',
       hint_en: 'Begin the conditional header with the two-letter lowercase English word for "supposing".',
-      templateCode: 'hp = 10\n§§ hp <= 20:\n    print("Danger")',
+      templateCode: 'hp = 10\n§§§ hp <= 20:\n    print("Danger")',
       targetCode: 'hp = 10\nif hp <= 20:\n    print("Danger")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound addition operator to add 100 to gold inside the if block.',
       hint_ko: '기존 변수 값에 오른쪽 숫자를 더해 저장하는 복합 대입 연산자를 입력합니다.',
       hint_en: 'Use the plus-equals compound assignment operator to add 100 in place.',
-      templateCode: 'lv = 12\ngold = 200\nif lv >= 10:\n    gold §§ 100\n    print("Up")\nprint(gold)',
+      templateCode: 'lv = 12\ngold = 200\nif lv >= 10:\n    gold §§§ 100\n    print("Up")\nprint(gold)',
       targetCode: 'lv = 12\ngold = 200\nif lv >= 10:\n    gold += 100\n    print("Up")\nprint(gold)',
       testCases: [
         {
@@ -119,7 +119,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound subtraction operator to discount pay by 2000 when pay >= 10000.',
       hint_ko: '빼기 기호와 등호를 나란히 붙인 복합 대입 연산자를 사용합니다.',
       hint_en: 'Combine the minus sign and equals sign to subtract 2000 in place.',
-      templateCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay §§ 2000\nprint(pay)',
+      templateCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay §§§ 2000\nprint(pay)',
       targetCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay -= 2000\nprint(pay)',
       testCases: [
         {
@@ -166,7 +166,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to print "Hit" when n is divisible by 3 or 5.',
       hint_ko: '둘 중 하나만 참이어도 조건문이 실행되도록 두 글자 논리 키워드를 채웁니다.',
       hint_en: 'Join the two divisibility checks with the two-letter disjunction keyword.',
-      templateCode: 'n = int(input())\nif n % 3 == 0 §§ n % 5 == 0:\n    print("Hit")\nprint("End")',
+      templateCode: 'n = int(input())\nif n % 3 == 0 §§§ n % 5 == 0:\n    print("Hit")\nprint("End")',
       targetCode: 'n = int(input())\nif n % 3 == 0 or n % 5 == 0:\n    print("Hit")\nprint("End")',
       testCases: [
         {
@@ -190,7 +190,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks so when n is even and at least 20, 5 is subtracted from n.',
       hint_ko: '조건문 시작 키워드, 동시 만족 논리 키워드, 차감 복합 대입 연산자를 순서대로 입력합니다.',
       hint_en: 'Enter the conditional keyword, the conjunction keyword, and the compound subtraction operator.',
-      templateCode: 'n = int(input())\n§§ n % 2 == 0 §§§ n >= 20:\n    n §§ 5\nprint("Result", n, sep=":")',
+      templateCode: 'n = int(input())\n§§§ n % 2 == 0 §§§§ n >= 20:\n    n §§§ 5\nprint("Result", n, sep=":")',
       targetCode: 'n = int(input())\nif n % 2 == 0 and n >= 20:\n    n -= 5\nprint("Result", n, sep=":")',
       testCases: [
         {
@@ -262,7 +262,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Complete Line] Write the if condition header checking whether n is at least 60.',
       hint_ko: '조건 키워드, 이상 비교식, 그리고 줄 끝의 콜론까지 한 줄로 작성해보세요.',
       hint_en: 'Write the if keyword, comparison n >= 60, and the trailing colon.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§\n    print("Clear")',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§\n    print("Clear")',
       targetCode: 'n = int(input())\nif n >= 60:\n    print("Clear")',
       testCases: [
         {
@@ -286,7 +286,7 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Complete Line] Write the 4-space indented line subtracting 1000 from price using -=.',
       hint_ko: '4칸 들여쓰기 뒤에 price 변수에서 1000을 빼는 복합 대입문을 작성해보세요.',
       hint_en: 'After the 4-space indentation, write the compound subtraction statement on price.',
-      templateCode: 'price = int(input())\nif price >= 5000:\n    §§§§§§§§§§§§§\nprint(price)',
+      templateCode: 'price = int(input())\nif price >= 5000:\n    §§§§§§§§§§§§§§\nprint(price)',
       targetCode: 'price = int(input())\nif price >= 5000:\n    price -= 1000\nprint(price)',
       testCases: [
         {

@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       prompt_en: '[Fill Blank] Delete index 0, set the last item to 50, and print the sum of the first 2 items and total length.',
       hint_ko: '삭제 키워드, 마지막 음수 인덱스, 앞 두 요소를 자르는 슬라이싱을 차례로 채우세요.',
       hint_en: 'Fill in the deletion keyword, negative last index, and 2-element prefix slice.',
-      templateCode: 'nums = [99, 10, 20, 30]\n§§§ nums[0]\nnums[§§] = 50\nprint(sum(nums[§§]), len(nums))',
+      templateCode: 'nums = [99, 10, 20, 30]\n§§§§ nums[0]\nnums[§§§] = 50\nprint(sum(nums[§§§]), len(nums))',
       targetCode: 'nums = [99, 10, 20, 30]\ndel nums[0]\nnums[-1] = 50\nprint(sum(nums[:2]), len(nums))',
       testCases: [
         {
@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       prompt_en: '[Fill Blank] Read 4 integers, collect those >= 50 into valid, and print the largest value and total if non-empty.',
       hint_ko: '빈 리스트 기호, 리스트 추가 메서드, 최댓값 함수를 순서대로 입력하세요.',
       hint_en: 'Fill in the empty list literal, append method, and max function in order.',
-      templateCode: 'valid = §§\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.§§§§§§(n)\nif len(valid) > 0:\n    print(§§§(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
+      templateCode: 'valid = §§§\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.§§§§§§§(n)\nif len(valid) > 0:\n    print(§§§§(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
       targetCode: 'valid = []\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.append(n)\nif len(valid) > 0:\n    print(max(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
       testCases: [
         {
@@ -65,7 +65,7 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       prompt_en: '[Fill Blank] Sort nums descending, pop the first 2 items from index 0 into picked, and concatenate [0].',
       hint_ko: '원본 정렬 메서드, 맨 앞 요소를 꺼내는 호출식, 리스트 연결 연산자를 차례로 채우세요.',
       hint_en: 'Supply the sort method, front pop call, and list concatenation operator.',
-      templateCode: 'nums = [15, 40, 25, 30]\nnums.§§§§(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.§§§§§§)\nprint(picked § [0])',
+      templateCode: 'nums = [15, 40, 25, 30]\nnums.§§§§§(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.§§§§§§§)\nprint(picked §§ [0])',
       targetCode: 'nums = [15, 40, 25, 30]\nnums.sort(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.pop(0))\nprint(picked + [0])',
       testCases: [
         {
@@ -146,7 +146,7 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       prompt_en: '[Complete Line] Complete the indented line that pops the last item from stack and appends it to removed.',
       hint_ko: 'removed의 추가 메서드 괄호 안에 stack의 끝 요소 꺼내기 호출식을 넣으세요.',
       hint_en: 'Pass stack.pop() inside removed.append() inside the while loop.',
-      templateCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(stack), sum(removed))',
+      templateCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(stack), sum(removed))',
       targetCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    removed.append(stack.pop())\nprint(sum(stack), sum(removed))',
       testCases: [
         {
@@ -165,7 +165,7 @@ export const PYTHON_LEVEL_48: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that concatenates nums[:2] and nums[-2:] into ends.',
       hint_ko: '앞 2개 슬라이싱과 뒤 2개 음수 슬라이싱을 +로 이어 ends에 대입하세요.',
       hint_en: 'Assign the sum of the first-two slice and last-two slice of nums to ends.',
-      templateCode: 'nums = [10, 20, 30, 40, 50]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ends, sum(ends))',
+      templateCode: 'nums = [10, 20, 30, 40, 50]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ends, sum(ends))',
       targetCode: 'nums = [10, 20, 30, 40, 50]\nends = nums[:2] + nums[-2:]\nprint(ends, sum(ends))',
       testCases: [
         {

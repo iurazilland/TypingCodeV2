@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Fill Blank] Interpolate the variable user inside the f-string to print the welcome message.',
       hint_ko: '변수 이름을 중괄호 한 쌍으로 감싸 빈칸에 적으세요.',
       hint_en: 'Wrap the variable name in curly braces.',
-      templateCode: 'user = input()\nprint(f"Welcome, §§§§§§!")',
+      templateCode: 'user = input()\nprint(f"Welcome, §§§§§§§!")',
       targetCode: 'user = input()\nprint(f"Welcome, {user}!")',
       testCases: [
         {
@@ -98,7 +98,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Fill Blank] Add the f-string prefix before the opening quote so the braces are interpolated.',
       hint_ko: '따옴표 바로 앞에 포맷 문자열을 뜻하는 영문자 한 글자를 적으세요.',
       hint_en: 'Place the single-letter f-string prefix right before the quote.',
-      templateCode: 'item = "Potion"\ngold = 50\nprint(§"{item}: {gold}G")',
+      templateCode: 'item = "Potion"\ngold = 50\nprint(§§"{item}: {gold}G")',
       targetCode: 'item = "Potion"\ngold = 50\nprint(f"{item}: {gold}G")',
       testCases: [
         {
@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Fill Blank] Write the braced product expression to print the total cost.',
       hint_ko: '중괄호 안에 두 변수를 곱하는 수식을 적어 빈칸을 채우세요.',
       hint_en: 'Put the multiplication expression inside curly braces.',
-      templateCode: 'price = int(input())\nqty = int(input())\nprint(f"Total: §§§§§§§§§§§§§ won")',
+      templateCode: 'price = int(input())\nqty = int(input())\nprint(f"Total: §§§§§§§§§§§§§§ won")',
       targetCode: 'price = int(input())\nqty = int(input())\nprint(f"Total: {price * qty} won")',
       testCases: [
         {
@@ -177,7 +177,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Fill Blank] Interpolate the first element of items inside the second set of braces.',
       hint_ko: 'items의 0번 인덱스를 꺼내는 식을 중괄호로 감싸 적으세요.',
       hint_en: 'Wrap the index-0 expression of items in curly braces.',
-      templateCode: 'items = ["sword", "shield"]\nprint(f"Count:{len(items)}, First:§§§§§§§§§§")',
+      templateCode: 'items = ["sword", "shield"]\nprint(f"Count:{len(items)}, First:§§§§§§§§§§§")',
       targetCode: 'items = ["sword", "shield"]\nprint(f"Count:{len(items)}, First:{items[0]}")',
       testCases: [
         {
@@ -196,7 +196,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Fill Blank] Complete the f-string prefix and braced expressions for the first item and sum of ends.',
       hint_ko: '포맷 문자열 접두사, 첫 번째 요소 중괄호 식, 마지막 요소 음수 인덱스 중괄호 식을 차례로 채우세요.',
       hint_en: 'Fill in the f prefix, braced first element, and braced last element.',
-      templateCode: 's = [70, 80, 90]\nprint(§"§§§§§§ + §§§§§§§ = {s[0] + s[-1]}")',
+      templateCode: 's = [70, 80, 90]\nprint(§§"§§§§§§§ + §§§§§§§§ = {s[0] + s[-1]}")',
       targetCode: 's = [70, 80, 90]\nprint(f"{s[0]} + {s[-1]} = {s[0] + s[-1]}")',
       testCases: [
         {
@@ -258,7 +258,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that assigns f"[{user}:Lv.{lv}]" to tag.',
       hint_ko: '대괄호 안쪽에 두 변수를 중괄호로 감싸 넣은 f-string을 tag에 대입하세요.',
       hint_en: 'Assign the formatted string f"[{user}:Lv.{lv}]" to tag.',
-      templateCode: 'user = input()\nlv = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(tag)',
+      templateCode: 'user = input()\nlv = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(tag)',
       targetCode: 'user = input()\nlv = int(input())\ntag = f"[{user}:Lv.{lv}]"\nprint(tag)',
       testCases: [
         {
@@ -282,7 +282,7 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that prints Area=<product> using an f-string.',
       hint_ko: '중괄호 안에 w * h 수식을 넣은 f-string을 print()로 출력하세요.',
       hint_en: 'Write print(f"Area={w * h}") on the third line.',
-      templateCode: 'w = int(input())\nh = int(input())\n§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'w = int(input())\nh = int(input())\n§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'w = int(input())\nh = int(input())\nprint(f"Area={w * h}")',
       testCases: [
         {

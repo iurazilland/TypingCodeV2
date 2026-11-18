@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the newline escape sequence so [A] and [B] print on two separate lines.',
       hint_ko: '역슬래시(\\) 뒤에 새 줄(new line)을 뜻하는 알파벳 소문자를 붙여 입력합니다.',
       hint_en: 'Type a backslash followed by the lowercase letter for newline.',
-      templateCode: 'print("[A]§§[B]")',
+      templateCode: 'print("[A]§§§[B]")',
       targetCode: 'print("[A]\\n[B]")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the tab escape sequence to insert a tab space between [ID] and [Pt].',
       hint_ko: '역슬래시(\\) 뒤에 탭(tab)의 첫 알파벳 소문자를 붙여 입력합니다.',
       hint_en: 'Type a backslash followed by the lowercase first letter of tab.',
-      templateCode: 'print("[ID]§§[Pt]")',
+      templateCode: 'print("[ID]§§§[Pt]")',
       targetCode: 'print("[ID]\\t[Pt]")',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the escaped double quote so that He said "OK" is printed properly.',
       hint_ko: '큰따옴표 문자열 안에서 큰따옴표를 출력하려면 역슬래시와 큰따옴표를 함께 적습니다.',
       hint_en: 'Write a backslash immediately followed by a double quote.',
-      templateCode: 'print("He said §§OK\\"")',
+      templateCode: 'print("He said §§§OK\\"")',
       targetCode: 'print("He said \\"OK\\"")',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the escape sequence that prints a single backslash so A\\B 25 is displayed.',
       hint_ko: '역슬래시 문자 자체를 화면에 나타내려면 역슬래시 두 개를 나란히 입력합니다.',
       hint_en: 'Type two backslashes side by side to output one literal backslash.',
-      templateCode: 'print("[A]§§[B]", 5 ** 2)',
+      templateCode: 'print("[A]§§§[B]", 5 ** 2)',
       targetCode: 'print("[A]\\\\[B]", 5 ** 2)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the tab-aligned header, a 12-hyphen line, and 500 * 3.',
       hint_ko: '탭 제어 문자, 문자열 반복 연산자, 숫자 곱셈 연산자를 각 줄의 빈칸에 차례로 채웁니다.',
       hint_en: 'Fill in the tab escape sequence on line 1, string repetition on line 2, and multiplication on line 3.',
-      templateCode: 'print("[Item]§§[Price]")\nprint("-" § 12)\nprint("Pen\\t", 500 § 3)',
+      templateCode: 'print("[Item]§§§[Price]")\nprint("-" §§ 12)\nprint("Pen\\t", 500 §§ 3)',
       targetCode: 'print("[Item]\\t[Price]")\nprint("-" * 12)\nprint("Pen\\t", 500 * 3)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Complete Line] Below the header on line 1, write line 2 to print "Book\\t1500" with a tab escape.',
       hint_ko: '첫째 줄처럼 단어와 숫자 사이에 탭 이스케이프 문자를 넣어 print() 문을 완성합니다.',
       hint_en: 'Place the tab escape sequence between Book and 1500 inside print().',
-      templateCode: 'print("Item\\tPrice")\n§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("Item\\tPrice")\n§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("Item\\tPrice")\nprint("Book\\t1500")',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print "C:\\\\py\\nDone" using backslash and newline escapes.',
       hint_ko: '역슬래시 출력에는 \\\\를, 줄바꿈에는 \\n을 사용하여 한 줄의 print() 문으로 작성합니다.',
       hint_en: 'Use \\\\ for the literal backslash and \\n for the line break inside print().',
-      templateCode: 'print("=" * 6)\n§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("=" * 6)\n§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("=" * 6)\nprint("C:\\\\py\\nDone")',
       testCases: [
         {

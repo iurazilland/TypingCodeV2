@@ -22,7 +22,7 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print 30 on line 1 and the quotient and remainder 6 1 on line 2.',
       hint_ko: '소괄호 덧셈식과 정수 몫 연산자, 나머지 연산자를 순서에 맞게 채워보세요.',
       hint_en: 'Complete the parenthesized addition on line 1, then the floor division and modulo operators on line 2.',
-      templateCode: 'print(§§§§§§§§ * 2)\nprint(25 §§ 4, 25 § 4)',
+      templateCode: 'print(§§§§§§§§§ * 2)\nprint(25 §§§ 4, 25 §§ 4)',
       targetCode: 'print((10 + 5) * 2)\nprint(25 // 4, 25 % 4)',
       testCases: [
         {
@@ -41,7 +41,7 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the [====] banner on line 1 and tab-spaced [Lv] and 8 on line 2.',
       hint_ko: '문자열 결합과 반복 연산자로 첫 줄 배너를 완성하고, 둘째 줄에는 탭 이스케이프 문자를 넣습니다.',
       hint_en: 'Use string concatenation and repetition on line 1, and the tab escape sequence on line 2.',
-      templateCode: 'print("[" § "=" § 4 + "]")\nprint("[Lv]§§", 2 ** 3)',
+      templateCode: 'print("[" §§ "=" §§ 4 + "]")\nprint("[Lv]§§§", 2 ** 3)',
       targetCode: 'print("[" + "=" * 4 + "]")\nprint("[Lv]\\t", 2 ** 3)',
       testCases: [
         {
@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks so the two print() calls output 2026-11-17 -> 5.0 on one line.',
       hint_ko: '구분자 옵션과 줄 끝 옵션 이름을 첫째 줄에 채우고, 둘째 줄에는 실수 나눗셈 연산자를 넣습니다.',
       hint_en: 'Fill in the separator and line-end option names on line 1, and the float division operator on line 2.',
-      templateCode: 'print(2026, 11, 17, §§§="-", §§§=" -> ")\nprint(15 § 3)',
+      templateCode: 'print(2026, 11, 17, §§§§="-", §§§§=" -> ")\nprint(15 §§ 3)',
       targetCode: 'print(2026, 11, 17, sep="-", end=" -> ")\nprint(15 / 3)',
       testCases: [
         {
@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print the formula string "3 ** 3 =" and 3 ** 3 separated by a comma.',
       hint_ko: '첫째 줄의 출력 형식을 그대로 따라 밑과 지수를 3으로 바꾼 한 줄을 작성해보세요.',
       hint_en: 'Follow the pattern on line 1 using base 3 and exponent 3 inside print().',
-      templateCode: 'print("2 ** 3 =", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("2 ** 3 =", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("2 ** 3 =", 2 ** 3)\nprint("3 ** 3 =", 3 ** 3)',
       testCases: [
         {
@@ -155,7 +155,7 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print 100 // 30 and 100 % 30 with sep="/" so Ans: 3/10 is printed.',
       hint_ko: '정수 몫 수식, 나머지 수식, 그리고 슬래시 구분자 옵션을 쉼표로 나열해 작성합니다.',
       hint_en: 'Pass 100 // 30, 100 % 30, and sep="/" to print() on line 2.',
-      templateCode: 'print("Ans", end=": ")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("Ans", end=": ")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("Ans", end=": ")\nprint(100 // 30, 100 % 30, sep="/")',
       testCases: [
         {

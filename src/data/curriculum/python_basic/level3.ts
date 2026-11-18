@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the floor division operator to print the integer quotient of 20 divided by 3 (6).',
       hint_ko: '정수 몫을 구할 때는 슬래시 기호를 두 번 연속으로 붙여 작성합니다.',
       hint_en: 'Write two forward slashes side by side to compute the integer quotient.',
-      templateCode: 'print(20 §§ 3)',
+      templateCode: 'print(20 §§§ 3)',
       targetCode: 'print(20 // 3)',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the modulo operator to print the remainder of 20 divided by 3 (2).',
       hint_ko: '나눗셈의 나머지를 구할 때는 퍼센트 기호를 두 수 사이에 넣습니다.',
       hint_en: 'Place the percent symbol between the two numbers to find the remainder.',
-      templateCode: 'print(20 § 3)',
+      templateCode: 'print(20 §§ 3)',
       targetCode: 'print(20 % 3)',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the exponentiation operator to print 10 squared (100).',
       hint_ko: '밑과 지수 사이에 별표 기호 두 개를 연속으로 입력합니다.',
       hint_en: 'Type two asterisks consecutively between the base and the exponent.',
-      templateCode: 'print(10 §§ 2)',
+      templateCode: 'print(10 §§§ 2)',
       targetCode: 'print(10 ** 2)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the modulo operator to print the remainder of (15 + 6) divided by 6 (3).',
       hint_ko: '소괄호 안의 21을 6으로 나눈 나머지를 구하도록 퍼센트 기호를 넣습니다.',
       hint_en: 'Insert the percent sign to get the remainder when 21 is divided by 6.',
-      templateCode: 'print((15 + 6) § 6)',
+      templateCode: 'print((15 + 6) §§ 6)',
       targetCode: 'print((15 + 6) % 6)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the quotient (2) and remainder (10) of 130 by 60, and 3 cubed (27).',
       hint_ko: '첫째 줄에는 정수 몫 연산자, 둘째 줄에는 나머지 연산자, 셋째 줄에는 거듭제곱 연산자를 차례로 채웁니다.',
       hint_en: 'Use floor division on line 1, modulo on line 2, and exponentiation on line 3.',
-      templateCode: 'print(130 §§ 60)\nprint(130 § 60)\nprint(3 §§ 3)',
+      templateCode: 'print(130 §§§ 60)\nprint(130 §§ 60)\nprint(3 §§§ 3)',
       targetCode: 'print(130 // 60)\nprint(130 % 60)\nprint(3 ** 3)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Complete Line] Following the quotient on line 1, write line 2 to print the remainder of 50 divided by 8 (2).',
       hint_ko: '첫째 줄과 같은 숫자에 나머지 연산자를 적용하여 print() 문을 작성해보세요.',
       hint_en: 'Write a print() statement using the modulo operator on 50 and 8.',
-      templateCode: 'print(50 // 8)\n§§§§§§§§§§§§§',
+      templateCode: 'print(50 // 8)\n§§§§§§§§§§§§§§',
       targetCode: 'print(50 // 8)\nprint(50 % 8)',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to add 2 and 3 in parentheses and square the sum (** 2) to print 25.',
       hint_ko: '소괄호로 묶은 덧셈식 뒤에 거듭제곱 연산자와 지수 2를 이어 적어보세요.',
       hint_en: 'Follow the parenthesized addition with the exponentiation operator and 2 inside print().',
-      templateCode: 'print(2 + 3 ** 2)\n§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print(2 + 3 ** 2)\n§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print(2 + 3 ** 2)\nprint((2 + 3) ** 2)',
       testCases: [
         {

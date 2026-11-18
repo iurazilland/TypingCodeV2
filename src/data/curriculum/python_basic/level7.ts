@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string concatenation operator to print HelloWorld without a space.',
       hint_ko: '두 문자열을 빈틈없이 하나로 이어붙일 때는 더하기 기호를 사용합니다.',
       hint_en: 'Use the plus sign between two strings to concatenate them without spaces.',
-      templateCode: 'print("Hello" § "World")',
+      templateCode: 'print("Hello" §§ "World")',
       targetCode: 'print("Hello" + "World")',
       testCases: [
         {
@@ -77,7 +77,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the double-quoted string 5 so that 35 and 8 are printed side by side.',
       hint_ko: '앞의 "3"과 이어붙여져 35가 되도록 숫자 5를 큰따옴표로 감싸 작성합니다.',
       hint_en: 'Wrap 5 in double quotes so it concatenates with "3" to form "35".',
-      templateCode: 'print("3" + §§§, 3 + 5)',
+      templateCode: 'print("3" + §§§§, 3 + 5)',
       targetCode: 'print("3" + "5", 3 + 5)',
       testCases: [
         {
@@ -114,7 +114,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the string repetition operator to repeat "Go" 3 times as GoGoGo.',
       hint_ko: '문자열을 지정한 횟수만큼 반복할 때는 문자열과 숫자 사이에 별표 기호를 넣습니다.',
       hint_en: 'Place the asterisk symbol between the string and the repeat count.',
-      templateCode: 'print("Go" § 3)',
+      templateCode: 'print("Go" §§ 3)',
       targetCode: 'print("Go" * 3)',
       testCases: [
         {
@@ -151,7 +151,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the expression repeating "-" 4 times to print <----> 16.',
       hint_ko: '큰따옴표로 감싼 하이픈 문자열에 반복 연산자와 4를 곱한 식을 작성합니다.',
       hint_en: 'Multiply the double-quoted hyphen string by 4 using the repetition operator.',
-      templateCode: 'print("<" + §§§§§§§ + ">", 2 ** 4)',
+      templateCode: 'print("<" + §§§§§§§§ + ">", 2 ** 4)',
       targetCode: 'print("<" + "-" * 4 + ">", 2 ** 4)',
       testCases: [
         {
@@ -170,7 +170,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the 3 blanks with operators so line 1 prints [====] and line 2 prints 105 100.',
       hint_ko: '첫째 줄에는 문자열 결합과 반복 연산자를, 둘째 줄에는 거듭제곱 연산자를 채웁니다.',
       hint_en: 'Use string concatenation and repetition on line 1, and the exponentiation operator on line 2.',
-      templateCode: 'print("[" § "=" § 4 + "]")\nprint("10" + "5", 10 §§ 2)',
+      templateCode: 'print("[" §§ "=" §§ 4 + "]")\nprint("10" + "5", 10 §§§ 2)',
       targetCode: 'print("[" + "=" * 4 + "]")\nprint("10" + "5", 10 ** 2)',
       testCases: [
         {
@@ -227,7 +227,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Complete Line] Write line 1 to print a 10-character equals divider (==========) using repetition.',
       hint_ko: 'print() 안에서 "=" 문자열에 10을 곱하는 반복 수식을 작성해보세요.',
       hint_en: 'Multiply the string "=" by 10 inside print() on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§\nprint("Start")',
+      templateCode: '§§§§§§§§§§§§§§§§\nprint("Start")',
       targetCode: 'print("=" * 10)\nprint("Start")',
       testCases: [
         {
@@ -246,7 +246,7 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       prompt_en: '[Complete Line] Write line 2 to print string repetition "7" * 3 and numeric product 7 * 3 with a comma.',
       hint_ko: '첫째 줄의 구조를 참고하여 문자열 "7"의 반복식과 숫자 7의 곱셈식을 쉼표로 연결합니다.',
       hint_en: 'Follow line 1 by separating "7" * 3 and 7 * 3 with a comma inside print().',
-      templateCode: 'print("3" * 2, 3 * 2)\n§§§§§§§§§§§§§§§§§§§§§',
+      templateCode: 'print("3" * 2, 3 * 2)\n§§§§§§§§§§§§§§§§§§§§§§',
       targetCode: 'print("3" * 2, 3 * 2)\nprint("7" * 3, 7 * 3)',
       testCases: [
         {
