@@ -58,10 +58,8 @@ export interface CanvasBlockItemProps {
   onBranchConditionChange?: (blockId: string, branchId: string, val: string) => void;
   onAddBranch?: (blockId: string, kind: 'elif' | 'else' | 'except' | 'finally') => void;
   onRemoveBranch?: (blockId: string, branchId: string) => void;
-  onToggleDefReturn?: (blockId: string, show: boolean) => void;
   executingBlockId?: string | null;
   isDebugging?: boolean;
-  onDefReturnValChange?: (blockId: string, val: string) => void;
   onPrintOptionChange?: (blockId: string, field: 'sep' | 'end', val: string) => void;
   onAssignOpChange?: (blockId: string, op: AssignOperator) => void;
   onRemoveInnerBlock?: (parentBlockId: string, cIdx: number, branchId?: string) => void;
@@ -128,8 +126,6 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
     onVarNameChange,
     onBranchConditionChange,
     onRemoveBranch,
-    onToggleDefReturn,
-    onDefReturnValChange,
     onPrintOptionChange,
     onAssignOpChange,
     onMethodNameChange,
@@ -622,12 +618,6 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         {/* 3) Bottom Closing Arm */}
         <SvgBottomClosingArm
           theme={theme}
-          isDef={block.type === 'def'}
-          hasReturn={block.hasReturn}
-          returnVal={block.returnVal}
-          targetReturnVal={block.targetReturnVal}
-          onToggleDefReturn={(show) => onToggleDefReturn?.(block.id, show)}
-          onDefReturnValChange={(val) => onDefReturnValChange?.(block.id, val)}
           hasInnerBlocks={innerBlocks.length > 0 || isMouthSnapTarget}
           tabLeft={tabLeft}
           isNested={isNested}

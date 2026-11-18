@@ -87,9 +87,6 @@ export interface CanvasBlock {
   dictPairs?: DictPair[];
   targetDictPairs?: DictPair[];
   isIfElse?: boolean;
-  hasReturn?: boolean;
-  returnVal?: string;
-  targetReturnVal?: string;
   hasSep?: boolean;
   sepVal?: string;
   targetSepVal?: string;

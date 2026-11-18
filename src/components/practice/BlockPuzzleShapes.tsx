@@ -362,12 +362,6 @@ export const HorizontalPuzzleTab: React.FC<{
 // 4. C-Shape / E-Shape Bottom Closing Arm (ㄷ자/E자 하단 마감 암)
 export const SvgBottomClosingArm: React.FC<{
   theme: BlockTheme;
-  isDef?: boolean;
-  hasReturn?: boolean;
-  returnVal?: string;
-  targetReturnVal?: string;
-  onToggleDefReturn?: (show: boolean) => void;
-  onDefReturnValChange?: (val: string) => void;
   extraButtons?: React.ReactNode;
   hasInnerBlocks?: boolean;
   tabLeft?: number;
@@ -375,12 +369,6 @@ export const SvgBottomClosingArm: React.FC<{
   notchBgColor?: string;
 }> = ({
   theme,
-  isDef = false,
-  hasReturn = false,
-  returnVal = '',
-  targetReturnVal,
-  onToggleDefReturn,
-  onDefReturnValChange,
   extraButtons,
   hasInnerBlocks = false,
   tabLeft,
@@ -409,8 +397,8 @@ export const SvgBottomClosingArm: React.FC<{
         borderRadius: isNested ? '0 6px 6px 0' : '0 6px 6px 6px',
         display: 'flex',
         alignItems: 'center',
-        paddingLeft: (extraButtons || (isDef && hasReturn)) ? `${notchLeft + 24}px` : '0px',
-        paddingRight: (isDef && hasReturn) ? '10px' : '0px',
+        paddingLeft: extraButtons ? `${notchLeft + 24}px` : '0px',
+        paddingRight: '0px',
         gap: '4px',
         whiteSpace: 'nowrap',
         zIndex: 2,
@@ -436,22 +424,8 @@ export const SvgBottomClosingArm: React.FC<{
       {/* 3. 하단 돌출 퍼즐 탭: 다음 블록과 정확한 위치에서 스냅되는 표준 퍼즐 탭 */}
       <PuzzleTab left={effectiveTabLeft} borderColor={theme.border} bg={theme.bg} zIndex={25} />
 
-      {/* 4. 컨트롤 버튼 & def return 입력창 */}
+      {/* 4. 컨트롤 버튼 */}
       {extraButtons}
-      {isDef && hasReturn && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', position: 'relative', zIndex: 6, paddingLeft: '8px' }}>
-          <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem' }}>return</span>
-          <BlockTraceInput
-            value={returnVal}
-            targetValue={targetReturnVal}
-            onChange={(val) => onDefReturnValChange?.(val)}
-            minWidthPx={52}
-            height="22px"
-            borderRadius="5px"
-            fontSize="0.86rem"
-          />
-        </div>
-      )}
     </div>
   );
 };

@@ -2500,14 +2500,6 @@ export function evaluateBlocksWithTrace(
             return sig.value;
           }
         }
-        if (fnDef.hasReturn) {
-          const rawRet = (fnDef.returnVal ?? '').trim();
-          if (!rawRet) throw new Error('SyntaxError: invalid syntax');
-          const parts = splitTopLevelArgs(rawRet);
-          return parts.length > 1
-            ? makeTuple(parts.map((p) => evalNonEmpty(p)))
-            : evalNonEmpty(rawRet);
-        }
         return null;
       } finally {
         currentScope = prevScope;
@@ -3078,8 +3070,6 @@ export function evaluateBlocksWithTrace(
           functions[fName] = {
             args: blk.content || '',
             innerBlocks: blk.innerBlocks || [],
-            hasReturn: blk.hasReturn,
-            returnVal: blk.returnVal,
           };
           recordStep(blk);
         } else if (blk.type === 'class') {
@@ -3106,8 +3096,6 @@ export function evaluateBlocksWithTrace(
               methods[mName] = {
                 args: inner.content || '',
                 innerBlocks: inner.innerBlocks || [],
-                hasReturn: inner.hasReturn,
-                returnVal: inner.returnVal,
               };
             } else if (inner.type === 'variable' && !inner._isExprStmt) {
               const attrName = (inner.varName ?? '').trim();

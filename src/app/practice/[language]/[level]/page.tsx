@@ -169,9 +169,6 @@ interface CanvasBlock {
   dictPairs?: DictPair[];
   targetDictPairs?: DictPair[];
   isIfElse?: boolean;
-  hasReturn?: boolean;
-  returnVal?: string;
-  targetReturnVal?: string;
   hasSep?: boolean;
   sepVal?: string;
   targetSepVal?: string;
@@ -497,8 +494,6 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
         sepVal: partial.hasSep ? (partial.sepVal ?? '" "') : undefined,
         hasEnd: partial.hasEnd,
         endVal: partial.hasEnd ? (partial.endVal ?? '"\\n"') : undefined,
-        hasReturn: partial.hasReturn,
-        returnVal: partial.returnVal,
         isIfElse: partial.isIfElse,
         items: partial.items,
         dictPairs: partial.dictPairs,
@@ -888,24 +883,13 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
             ? parsedLines[i + 1].indent
             : indent + 4;
           const defBody = parseSuite(i + 1, bodyIndent);
-          const innerBlocks = [...defBody.blocks];
-          let hasReturn = false;
-          let targetRetVal: string | undefined = undefined;
-          if (innerBlocks.length > 0 && innerBlocks[innerBlocks.length - 1].type === 'return') {
-            const poppedRet = innerBlocks.pop();
-            hasReturn = true;
-            targetRetVal = poppedRet?.targetContent ?? '';
-          }
           suiteBlocks.push({
             id: nextId('def'),
             type: 'def',
             varName: defMatch[1].trim(),
             content: '',
             targetContent: defMatch[2].trim(),
-            innerBlocks,
-            hasReturn: hasReturn ? true : undefined,
-            returnVal: hasReturn ? '' : undefined,
-            targetReturnVal: hasReturn ? targetRetVal : undefined,
+            innerBlocks: defBody.blocks,
             x: 40,
             y: 66,
           });
@@ -2397,22 +2381,16 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         const fName = (blk.varName || 'my_func').trim();
         const args = (blk.content || '').trim();
         out.push(`${indentStr}def ${fName}(${args}):`);
-        let hasChildren = false;
         if (blk.innerBlocks && blk.innerBlocks.length > 0) {
-          hasChildren = true;
           for (const child of blk.innerBlocks) {
             out.push(...generateBlockLines(child, currentIndentLevel + 1));
           }
-        }
-        if (blk.hasReturn) {
-          const retVal = (blk.returnVal || '').trim();
-          out.push(`${indentStr}    return ${retVal}`);
-        } else if (!hasChildren) {
+        } else {
           out.push(`${indentStr}    pass`);
         }
       } else if (blk.type === 'return') {
         const content = (blk.content || '').trim();
-        out.push(`${indentStr}return ${content}`);
+        out.push(content ? `${indentStr}return ${content}` : `${indentStr}return`);
       } else if (blk.type === 'call') {
         const fnName = (blk.varName || '').trim();
         const inner = blk.argBlock ? generateExpression(blk.argBlock) : (blk.content || '').trim();
@@ -6137,7 +6115,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         dictPairs: b.dictPairs ? b.dictPairs.map(() => ({ key: '', value: '' })) : undefined,
         sepVal: b.hasSep ? '' : b.sepVal,
         endVal: b.hasEnd ? '' : b.endVal,
-        returnVal: b.hasReturn ? '' : b.returnVal,
       }))
     );
     setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
@@ -6413,27 +6390,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           branches: curBranches.map((br) => (br.id === branchId ? { ...br, condition: cond } : br)),
         };
       })
-    );
-  };
-
-  const handleToggleDefReturn = (blockId: string, enable: boolean) => {
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, blockId, (b) => ({
-        ...b,
-        hasReturn: enable,
-        returnVal: enable ? (b.returnVal || 'result') : undefined,
-      }))
-    );
-    if (enable) {
-      showToast('✨ return 반환문이 함수에 추가되었습니다.');
-    } else {
-      showToast('🗑️ return 반환문이 제거되었습니다.');
-    }
-  };
-
-  const handleDefReturnValChange = (blockId: string, val: string) => {
-    setCanvasBlocks((prev) =>
-      updateAnyBlockInTree(prev, blockId, (b) => ({ ...b, returnVal: val }))
     );
   };
 
@@ -8345,8 +8301,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                         }
                       }}
                       onRemoveBranch={handleRemoveBranch}
-                      onToggleDefReturn={handleToggleDefReturn}
-                      onDefReturnValChange={handleDefReturnValChange}
                       onPrintOptionChange={handlePrintOptionChange}
                       onRemoveInnerBlock={(parentBlockId, cIdx, branchId) => {
                         if (branchId) {
@@ -8773,7 +8727,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 const isPrintBlock = target?.type === 'print';
                 const isIfBlock = target?.type === 'if';
                 const isTryBlock = target?.type === 'try';
-                const isDefBlock = target?.type === 'def';
                 const isClassBlock = target?.type === 'class';
                 const hasElseBranch = target?.branches?.some((br) => br.kind === 'else') ?? false;
                 const hasFinallyBranch = target?.branches?.some((br) => br.kind === 'finally') ?? false;
@@ -9061,48 +9014,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                             <>
                               <Plus size={14} color="#22d3ee" />
                               <span>상속 부모 클래스 (Parent) 추가</span>
-                            </>
-                          )}
-                        </button>
-                        <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '4px 0' }} />
-                      </>
-                    )}
-
-                    {/* Def Block Special Actions: Return Toggle */}
-                    {isDefBlock && target && (
-                      <>
-                        <button
-                          onClick={() => {
-                            handleToggleDefReturn(target.id, !target.hasReturn);
-                            setContextMenu({ visible: false, x: 0, y: 0, blockId: null, targetType: 'block' });
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '8px 12px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: 'transparent',
-                            color: '#e9d5ff',
-                            fontSize: '0.82rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            textAlign: 'left',
-                            transition: 'background 0.15s ease',
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(168, 85, 247, 0.2)')}
-                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >
-                          {target.hasReturn ? (
-                            <>
-                              <Trash2 size={14} color="#c084fc" />
-                              <span>return 반환문 제거</span>
-                            </>
-                          ) : (
-                            <>
-                              <Plus size={14} color="#c084fc" />
-                              <span>return 반환문 추가</span>
                             </>
                           )}
                         </button>
