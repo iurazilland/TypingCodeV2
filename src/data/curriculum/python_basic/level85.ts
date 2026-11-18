@@ -6,24 +6,35 @@ export const PYTHON_LEVEL_85: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 85,
-  "title_ko": "85레벨: 클래스 기초 상속(class Child(Parent):)과 메서드 재정의",
-  "title_en": "Level 85: Single Inheritance & Method Overriding Basics",
-  "description_ko": "부모 클래스의 속성과 메서드를 물려받는 단일 상속(class Child(Parent):), 메서드 재정의, 다형성 순회와 isinstance 검사를 익힙니다.",
-  "description_en": "Learn single class inheritance, inheriting parent __init__ and methods, method overriding, polymorphism loops, and isinstance.",
+  "title_ko": "85레벨: 리스트 탐색(.index(), .count()), 뒤집기(.reverse())와 sorted() 사본 정렬",
+  "title_en": "Level 85: List .index(), .count(), .reverse() & sorted() Copy Sorting",
+  "description_ko": "값의 위치와 개수를 찾는 .index()·.count(), 순서를 반전하는 .reverse(), 원본을 보존하며 정렬하는 sorted()를 익힙니다.",
+  "description_en": "Find positions and counts with .index() and .count(), flip order with .reverse(), and sort copies with sorted().",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
     "type",
-    "math",
-    "method",
     "if",
+    "for_range",
+    "range",
     "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
+    "sorted",
     "def",
+    "return",
     "class",
-    "try",
-    "raise"
+    "try"
   ],
   "questions": [
     {
@@ -31,16 +42,16 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] class Dog(Animal):로 부모 클래스를 상속받아 eat()과 전용 메서드 bark()를 호출해보세요.",
-      "prompt_en": "[Block] Declare class Dog(Animal): to inherit __init__ and eat(), and call d.eat() and d.bark().",
-      "hint_ko": "Dog 클래스에 __init__이나 eat을 따로 정의하지 않아도 부모인 Animal로부터 물려받아 호출할 수 있습니다.",
-      "hint_en": "Even without defining __init__ or eat in Dog, instances of Dog inherit both from Animal.",
-      "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def eat(self):\n        return f\"{self.name} eats\"\n\nclass Dog(Animal):\n    def bark(self):\n        return f\"{self.name}:Woof\"\n\nd = Dog(\"Coco\")\nprint(d.eat())\nprint(d.bark())",
+      "prompt_ko": "[블록 조립] votes.index(\"B\")로 첫 등장 인덱스를 찾고 votes.count(\"A\")로 등장 횟수를 세어 출력해보세요.",
+      "prompt_en": "[Block] Use votes.index(\"B\") and votes.count(\"A\") to print the index of \"B\" and count of \"A\".",
+      "hint_ko": ".index(값)은 해당 값이 처음 등장하는 위치 번호를, .count(값)은 리스트 안의 등장 횟수를 반환합니다.",
+      "hint_en": ".index(x) returns the first index of x, while .count(x) returns how many times x appears.",
+      "targetCode": "votes = [\"A\", \"B\", \"A\", \"C\", \"A\"]\nprint(votes.index(\"B\"), votes.count(\"A\"))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Coco eats\nCoco:Woof"
+          "expectedOutput": "1 3"
         }
       ]
     },
@@ -49,17 +60,17 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈칸에 부모 클래스 이름을 채워 Bike가 Vehicle의 초기화와 move 메서드를 상속받게 하세요.",
-      "prompt_en": "[Fill Blank] Fill in the parent class name so Bike inherits __init__ and move from Vehicle.",
-      "hint_ko": "자식 클래스 선언부의 소괄호 안에 맨 위에 정의된 상위(부모) 클래스 이름을 그대로 적으세요.",
-      "hint_en": "Inside the parentheses of the child class header, enter the parent class name defined at the top.",
-      "templateCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(§§§§§§§):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move())\nprint(b.ring())",
-      "targetCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(Vehicle):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move())\nprint(b.ring())",
+      "prompt_ko": "[빈칸 채우기] 숫자 리스트에서 7이 몇 번 등장하는지 개수를 세어 출력하도록 메서드 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the list method name to tally how many times 7 appears in nums.",
+      "hint_ko": "특정 값의 등장 횟수를 세어 정수로 돌려주는 다섯 글자 리스트 메서드를 호출하세요.",
+      "hint_en": "Call the five-letter list method that tallies occurrences of a value.",
+      "templateCode": "nums = [7, 2, 7, 9, 7]\nprint(nums.§§§§§(7))",
+      "targetCode": "nums = [7, 2, 7, 9, 7]\nprint(nums.count(7))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Road moves\nRing!"
+          "expectedOutput": "3"
         }
       ]
     },
@@ -68,16 +79,16 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] Animal을 상속받은 Cat에서 speak() 메서드를 재정의해 Nabi:Meow를 출력해보세요.",
-      "prompt_en": "[Block] Override speak(self) in Cat(Animal) so c.speak() returns Nabi:Meow.",
-      "hint_ko": "__init__은 부모의 것을 그대로 물려쓰고, 동작이 달라지는 speak 메서드만 Cat에서 새로 정의합니다.",
-      "hint_en": "Cat inherits __init__ from Animal as-is and only overrides speak(self) with its own return value.",
-      "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        return \"...\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name}:Meow\"\n\nc = Cat(\"Nabi\")\nprint(c.speak())",
+      "prompt_ko": "[블록 조립] steps.reverse()로 리스트의 현재 순서를 거꾸로 뒤집어 출력해보세요.",
+      "prompt_en": "[Block] Call steps.reverse() to flip the list order in place and print steps.",
+      "hint_ko": ".reverse()는 크기순 정렬이 아니라 현재 들어 있는 앞뒤 순서만 정반대로 뒤집으며 원본을 직접 바꿉니다.",
+      "hint_en": ".reverse() reverses the current element order in place without sorting by value.",
+      "targetCode": "steps = [\"first\", \"second\", \"third\"]\nsteps.reverse()\nprint(steps)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Nabi:Meow"
+          "expectedOutput": "['third', 'second', 'first']"
         }
       ]
     },
@@ -86,17 +97,17 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] Member를 상속받은 VIPMember에서 문자열 표현 메서드를 재정의해 [VIP]Ara:500을 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks so VIPMember inherits Member and overrides __str__.",
-      "hint_ko": "첫 빈칸은 위에 정의된 부모 클래스 이름을, 둘째 빈칸은 7글자 문자열 표현 특별 메서드 이름을 적으세요.",
-      "hint_en": "Inherit from the parent class defined above, and override the 7-character __str__ method.",
-      "templateCode": "class Member:\n    def __init__(self, name, point):\n        self.name = name\n        self.point = point\n\n    def __str__(self):\n        return f\"{self.name}:{self.point}\"\n\nclass VIPMember(§§§§§§):\n    def §§§§§§§(self):\n        return f\"[VIP]{self.name}:{self.point}\"\n\nm = VIPMember(\"Ara\", 500)\nprint(m)",
-      "targetCode": "class Member:\n    def __init__(self, name, point):\n        self.name = name\n        self.point = point\n\n    def __str__(self):\n        return f\"{self.name}:{self.point}\"\n\nclass VIPMember(Member):\n    def __str__(self):\n        return f\"[VIP]{self.name}:{self.point}\"\n\nm = VIPMember(\"Ara\", 500)\nprint(m)",
+      "prompt_ko": "[빈칸 채우기] 기록된 숫자 리스트의 현재 순서를 정반대로 뒤집도록 메서드 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the method name that reverses the order of log in place.",
+      "hint_ko": "원본 리스트의 앞뒤 순서를 거꾸로 뒤집는 일곱 글자 메서드를 호출하세요.",
+      "hint_en": "Call the seven-letter method that reverses a list in place.",
+      "templateCode": "log = [10, 50, 20]\nlog.§§§§§§§()\nprint(log[0], log)",
+      "targetCode": "log = [10, 50, 20]\nlog.reverse()\nprint(log[0], log)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[VIP]Ara:500"
+          "expectedOutput": "20 [20, 50, 10]"
         }
       ]
     },
@@ -105,16 +116,16 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] Dog와 Cat 객체를 리스트에 담아 순회하며 다형성으로 각각의 speak() 결과를 출력해보세요.",
-      "prompt_en": "[Block] Loop through a list of Dog and Cat instances calling pet.speak() polymorphically.",
-      "hint_ko": "반복문 코드는 pet.speak() 한 줄뿐이지만 Dog 객체일 때와 Cat 객체일 때 서로 다른 결과가 반환됩니다.",
-      "hint_en": "A single pet.speak() call in the loop produces different outputs depending on whether pet is a Dog or a Cat.",
-      "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def speak(self):\n        return f\"{self.name}:Woof\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name}:Meow\"\n\npets = [Dog(\"Coco\"), Cat(\"Nabi\")]\nfor pet in pets:\n    print(pet.speak())",
+      "prompt_ko": "[블록 조립] 내장 함수 sorted(raw)로 원본을 그대로 둔 채 오름차순 정렬된 새 리스트를 만들어 출력해보세요.",
+      "prompt_en": "[Block] Use sorted(raw) to create a new sorted list while keeping raw unchanged.",
+      "hint_ko": "원본을 직접 바꾸는 .sort() 메서드와 달리 내장 함수 sorted()는 원본을 건드리지 않고 정렬된 새 리스트를 반환합니다.",
+      "hint_en": "Unlike in-place .sort(), the built-in function sorted() leaves the original unchanged and returns a new sorted list.",
+      "targetCode": "raw = [40, 10, 30]\nordered = sorted(raw)\nprint(raw, ordered)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Coco:Woof\nNabi:Meow"
+          "expectedOutput": "[40, 10, 30] [10, 30, 40]"
         }
       ]
     },
@@ -123,17 +134,17 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 일반 배송(3000)을 상속받은 특급 배송(6000)의 요금 메서드를 재정의해 총합 12000을 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks so Express inherits Delivery, overrides fee(), and sums to 12000.",
-      "hint_ko": "소괄호 안에는 맨 위의 부모 클래스 이름을 적고, 아랫줄에서는 부모와 동일한 3글자 요금 메서드 이름을 재정의하세요.",
-      "hint_en": "Place the parent class name inside parentheses, and override the exact 3-letter method name called below.",
-      "templateCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(§§§§§§§§):\n    def §§§(self):\n        return 6000\n\norders = [Delivery(), Express(), Delivery()]\ntotal = sum([d.fee() for d in orders])\nprint(total)",
-      "targetCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(Delivery):\n    def fee(self):\n        return 6000\n\norders = [Delivery(), Express(), Delivery()]\ntotal = sum([d.fee() for d in orders])\nprint(total)",
+      "prompt_ko": "[빈칸 채우기] 원본 리스트는 그대로 보존하면서 오름차순으로 정렬한 새 리스트를 반환받도록 내장 함수를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the built-in function name that returns a new ascending-ordered duplicate of nums.",
+      "hint_ko": "원본을 변경하지 않고 정렬된 사본 리스트를 만들어 돌려주는 여섯 글자 내장 함수를 적으세요.",
+      "hint_en": "Use the six-letter built-in function that returns a new ordered list.",
+      "templateCode": "nums = [35, 12, 28]\nasc = §§§§§§(nums)\nprint(nums[0], asc[0])",
+      "targetCode": "nums = [35, 12, 28]\nasc = sorted(nums)\nprint(nums[0], asc[0])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "12000"
+          "expectedOutput": "35 12"
         }
       ]
     },
@@ -142,16 +153,16 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 자식 클래스 객체 d에 대해 isinstance(d, Dog)와 isinstance(d, Animal)을 각각 출력해보세요.",
-      "prompt_en": "[Block] Check isinstance(d, Dog) and isinstance(d, Animal) on a Dog instance d.",
-      "hint_ko": "강아지(Dog)는 곧 동물(Animal)이기도 하므로 isinstance(d, Animal) 역시 True가 됩니다.",
-      "hint_en": "Because Dog inherits from Animal, isinstance(d, Animal) evaluates to True just like isinstance(d, Dog).",
-      "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Dog(Animal):\n    def bark(self):\n        return \"Woof\"\n\nd = Dog(\"Coco\")\nprint(isinstance(d, Dog))\nprint(isinstance(d, Animal))",
+      "prompt_ko": "[블록 조립] sorted(scores, reverse=True)로 내림차순 정렬된 새 리스트를 만들어 출력해보세요.",
+      "prompt_en": "[Block] Use sorted(scores, reverse=True) to create a new list sorted in descending order.",
+      "hint_ko": "sorted()는 두 번째 인자로 reverse=True를 주면 큰 값부터 작은 값 순서(내림차순)로 새 리스트를 만듭니다.",
+      "hint_en": "Passing reverse=True to sorted() returns a new list sorted from largest to smallest.",
+      "targetCode": "scores = [75, 92, 84]\ntop = sorted(scores, reverse=True)\nprint(top)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True\nTrue"
+          "expectedOutput": "[92, 84, 75]"
         }
       ]
     },
@@ -160,45 +171,36 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] Animal을 상속받은 Cat 객체 c가 부모 클래스 Animal의 인스턴스인지 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in Animal and isinstance to verify that Cat instance c is an Animal.",
-      "hint_ko": "상속 선언부에는 6글자 부모 클래스 이름을, 출력문에는 10글자 타입 확인 함수를 채우세요.",
-      "hint_en": "Inherit the 6-letter parent class Animal and call the 10-letter isinstance built-in.",
-      "templateCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Cat(§§§§§§):\n    def speak(self):\n        return \"Meow\"\n\nc = Cat(\"Luna\")\nprint(§§§§§§§§§§(c, Animal))",
-      "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Cat(Animal):\n    def speak(self):\n        return \"Meow\"\n\nc = Cat(\"Luna\")\nprint(isinstance(c, Animal))",
+      "prompt_ko": "[빈칸 채우기] 집합의 원소들을 큰 숫자부터 내림차순으로 정렬한 리스트로 만들도록 옵션 키워드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the keyword option name in sorted() to order the set elements from largest to smallest.",
+      "hint_ko": "정렬 방향을 거꾸로(내림차순) 뒤집을 때 True로 설정하는 일곱 글자 키워드 인자 이름을 적으세요.",
+      "hint_en": "Write the seven-letter keyword parameter name used to sort in descending order.",
+      "templateCode": "uniq = {20, 50, 10, 40}\ndesc = sorted(uniq, §§§§§§§=True)\nprint(desc)",
+      "targetCode": "uniq = {20, 50, 10, 40}\ndesc = sorted(uniq, reverse=True)\nprint(desc)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True"
+          "expectedOutput": "[50, 40, 20, 10]"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] Unit을 상속받은 Knight에 음수 피해량 예외 검증과 방어력 경감(max(0, dmg - 5))을 구현하세요.",
-      "prompt_en": "[Block] Inherit Unit in Knight and implement hit(self, dmg) with raise and max(0, dmg - 5).",
-      "hint_ko": "max(0, dmg - 5)는 피해량에서 5를 뺀 값이 음수가 되지 않도록 최소 피해량을 0으로 보장합니다.",
-      "hint_en": "max(0, dmg - 5) ensures the reduced damage never drops below 0 so hp cannot accidentally increase.",
-      "targetCode": "class Unit:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def __str__(self):\n        return f\"{self.name}:{self.hp}\"\n\nclass Knight(Unit):\n    def hit(self, dmg):\n        if dmg < 0:\n            raise ValueError(\"Neg\")\n        self.hp -= max(0, dmg - 5)\n\nk = Knight(\"Arthur\", 50)\ntry:\n    k.hit(int(input()))\nexcept ValueError:\n    print(\"Invalid\")\nprint(k)",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 최고점의 위치 번호와 80점의 등장 횟수, 그리고 내림차순 사본 리스트를 구하도록 세 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the position lookup method, occurrence tallying method, and non-mutating sort function.",
+      "hint_ko": "값의 위치를 찾는 메서드, 개수를 세는 메서드, 그리고 정렬된 새 리스트를 반환하는 내장 함수를 차례로 확인하세요.",
+      "hint_en": "Check the five-letter position method, five-letter tally method, and six-letter sorting function.",
+      "templateCode": "pts = [80, 95, 80, 70]\npos = pts.§§§§§(95)\ncnt = pts.§§§§§(80)\nranked = §§§§§§(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
+      "targetCode": "pts = [80, 95, 80, 70]\npos = pts.index(95)\ncnt = pts.count(80)\nranked = sorted(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
       "testCases": [
         {
           "id": 1,
-          "input": "15",
-          "expectedOutput": "Arthur:40"
-        },
-        {
-          "id": 2,
-          "input": "-3",
-          "expectedOutput": "Invalid\nArthur:50"
-        },
-        {
-          "id": 3,
-          "input": "3",
-          "expectedOutput": "Arthur:50"
+          "input": "",
+          "expectedOutput": "1 2 95"
         }
       ]
     },
@@ -206,23 +208,18 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] Account를 상속받고 입금 시 보너스 10을 더해주는 BonusAccount를 완성하세요.",
-      "prompt_en": "[Fill Blank] Fill in Account and raise so BonusAccount validates amt > 0 and adds +10 bonus.",
-      "hint_ko": "위에 정의된 7글자 부모 클래스 이름을 상속받고, 0 이하 금액은 5글자 키워드로 예외를 일으키세요.",
-      "hint_en": "Inherit the 7-letter parent class Account and throw errors with the 5-letter raise keyword.",
-      "templateCode": "class Account:\n    def __init__(self, owner, bal):\n        self.owner = owner\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.owner}:{self.bal}\"\n\nclass BonusAccount(§§§§§§§):\n    def deposit(self, amt):\n        if amt <= 0:\n            §§§§§ ValueError(\"Bad\")\n        self.bal += amt + 10\n\nacc = BonusAccount(\"Min\", 100)\ntry:\n    acc.deposit(int(input()))\nexcept ValueError as e:\n    print(e)\nprint(acc)",
-      "targetCode": "class Account:\n    def __init__(self, owner, bal):\n        self.owner = owner\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.owner}:{self.bal}\"\n\nclass BonusAccount(Account):\n    def deposit(self, amt):\n        if amt <= 0:\n            raise ValueError(\"Bad\")\n        self.bal += amt + 10\n\nacc = BonusAccount(\"Min\", 100)\ntry:\n    acc.deposit(int(input()))\nexcept ValueError as e:\n    print(e)\nprint(acc)",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 수정이 불가능한 튜플에 리스트 전용 .sort() 메서드를 호출해 발생한 에러를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the AttributeError caused by calling .sort() on a tuple by using the built-in sorting function.",
+      "hint_ko": "튜플이나 집합에는 .sort() 메서드가 없으므로 어떤 시퀀스든 새 정렬 리스트로 만들어 주는 내장 함수를 써야 합니다.",
+      "hint_en": "Tuples do not have a .sort() method; pass the tuple to sorted() and assign the returned list.",
+      "templateCode": "tp = (30, 10, 20)\nans = tp.sort()\nprint(ans)",
+      "targetCode": "tp = (30, 10, 20)\nans = sorted(tp)\nprint(ans)",
       "testCases": [
         {
           "id": 1,
-          "input": "50",
-          "expectedOutput": "Min:160"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Bad\nMin:100"
+          "input": "",
+          "expectedOutput": "[10, 20, 30]"
         }
       ]
     },
@@ -231,17 +228,17 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] Eagle 클래스가 Bird 대신 엉뚱한 Item 클래스를 상속받아 fly 호출이 실패하는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the parent class in class Eagle(...) so Eagle inherits from Bird instead of Item.",
-      "hint_ko": "name 초기화와 fly() 메서드는 Bird 클래스에 정의되어 있으므로 Eagle(Bird)로 상속받아야 합니다.",
-      "hint_en": "Change class Eagle(Item): to class Eagle(Bird): so Eagle inherits __init__ and fly().",
-      "templateCode": "class Item:\n    pass\n\nclass Bird:\n    def __init__(self, name):\n        self.name = name\n\n    def fly(self):\n        return f\"{self.name} flies\"\n\nclass Eagle(Item):\n    def hunt(self):\n        return f\"{self.name} hunts\"\n\ne = Eagle(\"Sky\")\nprint(e.fly())\nprint(e.hunt())",
-      "targetCode": "class Item:\n    pass\n\nclass Bird:\n    def __init__(self, name):\n        self.name = name\n\n    def fly(self):\n        return f\"{self.name} flies\"\n\nclass Eagle(Bird):\n    def hunt(self):\n        return f\"{self.name} hunts\"\n\ne = Eagle(\"Sky\")\nprint(e.fly())\nprint(e.hunt())",
+      "prompt_ko": "[틀린 곳 수정] sorted(nums)만 호출하고 반환값을 변수에 저장하지 않아 정렬되지 않은 원본이 출력되는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Capture the new list returned by sorted(nums) so printing ans outputs the sorted order.",
+      "hint_ko": "sorted()는 원본 리스트를 직접 바꾸지 않고 새 리스트를 반환하므로 반드시 변수에 대입해 받아야 합니다.",
+      "hint_en": "Because sorted() does not mutate nums in place, assign its return value to nums.",
+      "templateCode": "nums = [50, 10, 40]\nsorted(nums)\nprint(nums)",
+      "targetCode": "nums = [50, 10, 40]\nnums = sorted(nums)\nprint(nums)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Sky flies\nSky hunts"
+          "expectedOutput": "[10, 40, 50]"
         }
       ]
     },
@@ -249,18 +246,18 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] Dog에서 부모의 sound() 메서드를 재정의하려다 다른 메서드 이름을 써서 \"...\"이 나오는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the method name in Dog so it overrides sound(self) and prints Woof.",
-      "hint_ko": "메서드 재정의(Overriding)가 동작하려면 부모 클래스의 메서드 이름(sound)과 정확히 일치해야 합니다.",
-      "hint_en": "Change def speak(self): to def sound(self): in Dog so it overrides Animal.sound.",
-      "templateCode": "class Animal:\n    def sound(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def speak(self):\n        return \"Woof\"\n\nd = Dog()\nprint(d.sound())",
-      "targetCode": "class Animal:\n    def sound(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def sound(self):\n        return \"Woof\"\n\nd = Dog()\nprint(d.sound())",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 원본 data를 보존한 채 내림차순으로 정렬한 새 리스트를 변수 top에 저장하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that assigns a descending-sorted copy of data to variable top.",
+      "hint_ko": "sorted() 함수에 data와 reverse=True 옵션을 넣어 top에 대입하세요.",
+      "hint_en": "Assign sorted(data, reverse=True) to variable top.",
+      "templateCode": "data = [15, 40, 25]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(data[0], top[0])",
+      "targetCode": "data = [15, 40, 25]\ntop = sorted(data, reverse=True)\nprint(data[0], top[0])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Woof"
+          "expectedOutput": "15 40"
         }
       ]
     },
@@ -269,36 +266,42 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] Shape 클래스를 상속받는 자식 클래스 Square 선언부(class Square(Shape):) 한 줄을 완성하세요.",
-      "prompt_en": "[Complete Line] Write the class header class Square(Shape): to inherit from Shape.",
-      "hint_ko": "class Square(Shape): 형태로 부모 클래스를 괄호 안에 지정하세요.",
-      "hint_en": "Write class Square(Shape): to declare Square as a subclass of Shape.",
-      "templateCode": "class Shape:\n    def area(self):\n        return 0\n\n§§§§§§§§§§§§§§§§§§§§\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):\n        return self.side ** 2\n\ns = Square(4)\nprint(isinstance(s, Shape), s.area())",
-      "targetCode": "class Shape:\n    def area(self):\n        return 0\n\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):\n        return self.side ** 2\n\ns = Square(4)\nprint(isinstance(s, Shape), s.area())",
+      "prompt_ko": "[한 줄 완성] 리스트 items에서 \"gold\"의 첫 등장 인덱스를 찾아 변수 idx에 저장하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that finds the index of \"gold\" in items and assigns it to idx.",
+      "hint_ko": "리스트의 위치 탐색 메서드에 \"gold\"를 넣어 호출한 결과를 idx에 대입하세요.",
+      "hint_en": "Assign items.index(\"gold\") to variable idx.",
+      "templateCode": "items = [\"wood\", \"silver\", \"gold\", \"gold\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(idx, items.count(\"gold\"))",
+      "targetCode": "items = [\"wood\", \"silver\", \"gold\", \"gold\"]\nidx = items.index(\"gold\")\nprint(idx, items.count(\"gold\"))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True 16"
+          "expectedOutput": "2 2"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] HalfTicket의 재정의된 pay 메서드에서 반값(return self.price // 2)을 반환하는 한 줄을 완성하세요.",
-      "prompt_en": "[Complete Line] Write return self.price // 2 inside HalfTicket.pay.",
-      "hint_ko": "return self.price // 2를 작성해 물려받은 가격 속성의 절반을 반환하세요.",
-      "hint_en": "Write return self.price // 2 inside pay(self).",
-      "templateCode": "class Ticket:\n    def __init__(self, price):\n        self.price = price\n\nclass HalfTicket(Ticket):\n    def pay(self):\n        §§§§§§§§§§§§§§§§§§§§§§\n\nt = HalfTicket(4000)\nprint(t.pay())",
-      "targetCode": "class Ticket:\n    def __init__(self, price):\n        self.price = price\n\nclass HalfTicket(Ticket):\n    def pay(self):\n        return self.price // 2\n\nt = HalfTicket(4000)\nprint(t.pay())",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] .reverse()와 sorted()의 동작 차이를 비교하는 다음 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output comparing in-place .reverse() with non-mutating sorted().",
+      "hint_ko": ".reverse()는 크기 정렬 없이 앞뒤 순서만 뒤집어 [20, 40, 10]으로 만들고, sorted()는 원본을 유지한 채 오름차순 사본을 만듭니다.",
+      "hint_en": ".reverse() flips [10, 40, 20] to [20, 40, 10] in place, while sorted(a) returns [10, 20, 40] without changing a.",
+      "targetCode": "a = [10, 40, 20]\na.reverse()\nb = sorted(a)\nprint(a[0], b[0], a[-1])",
+      "choices": [
+        "20 10 10",
+        "40 10 10",
+        "10 10 20",
+        "20 20 10"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "2000"
+          "expectedOutput": "20 10 10"
         }
       ]
     },
@@ -307,23 +310,23 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] Coupon과 이를 상속받아 pay를 재정의한 HalfCoupon에 대해 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the polymorphism and isinstance check on Coupon and HalfCoupon.",
-      "hint_ko": "부모 객체는 기본 차감식을, 자식 객체는 재정의된 반값 식을 각각 실행하며, 자식 클래스 인스턴스가 부모 클래스 타입 검사에서도 인정되는지 함께 따져보세요.",
-      "hint_en": "Compare the parent's payment formula with the child's overridden formula, and remember how inheritance behaves when checking against the parent class.",
-      "targetCode": "class Coupon:\n    def __init__(self, price):\n        self.price = price\n\n    def pay(self):\n        return self.price - 1000\n\nclass HalfCoupon(Coupon):\n    def pay(self):\n        return self.price // 2\n\nitems = [Coupon(5000), HalfCoupon(5000)]\nres = [c.pay() for c in items]\nprint(res[0], res[1], isinstance(items[1], Coupon))",
+      "prompt_ko": "[출력 결과 예측] 문자열과 튜플에 sorted()와 .count(), .index()를 결합한 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output when applying sorted(), .count(), and .index() to sequence data.",
+      "hint_ko": "문자열 \"cab\"를 sorted()에 넣으면 글자별로 정렬된 리스트 ['a', 'b', 'c']가 된다는 점을 확인하세요.",
+      "hint_en": "sorted(\"cab\") returns ['a', 'b', 'c'], where 'b' sits at index 1.",
+      "targetCode": "letters = sorted(\"cab\")\ntp = (5, 2, 5, 8, 5)\nprint(letters, letters.index(\"b\"), tp.count(5))",
       "choices": [
-        "4000 2500 True",
-        "4000 2500 False",
-        "4000 4000 True",
-        "5000 2500 True"
+        "['a', 'b', 'c'] 1 3",
+        "['c', 'a', 'b'] 2 3",
+        "['a', 'b', 'c'] 2 2",
+        "abc 1 3"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "4000 2500 True"
+          "expectedOutput": "['a', 'b', 'c'] 1 3"
         }
       ]
     }

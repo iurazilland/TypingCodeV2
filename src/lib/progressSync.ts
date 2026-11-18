@@ -2,11 +2,12 @@ import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
 import type {
+  ActiveCurriculumType,
   AdminSectionFeedbackRow,
   SectionDifficultyRating,
   SectionFeedbackRow,
-  UserClearedLevelRow,
   UserProfile,
+  UserRole,
   UserSavedSnippetRow,
   UserSpeedRecordRow,
 } from '@/lib/supabase/types';
@@ -51,11 +52,85 @@ export function deriveDisplayName(user: User): string {
   return raw.slice(0, 40);
 }
 
+function parseClearedLevelsJsonb(raw: unknown): Record<string, number[]> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const result: Record<string, number[]> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    const trackKey = normalizeTrackKey(k);
+    if (!trackKey || !Array.isArray(v)) continue;
+    const nums = Array.from(
+      new Set(
+        v
+          .map((n) => Number(n))
+          .filter((n) => Number.isInteger(n) && n >= 1 && n <= 500)
+      )
+    ).sort((a, b) => a - b);
+    if (nums.length > 0) {
+      result[trackKey] = nums;
+    }
+  }
+  return result;
+}
+
+function hydrateLocalClearedLevelsFromMap(
+  clearedMap: Record<string, number[]>,
+  forceReplaceAll = false
+): void {
+  if (typeof window === 'undefined') return;
+
+  if (forceReplaceAll) {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('cleared_levels_')) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach((k) => localStorage.removeItem(k));
+  }
+
+  for (const [trackId, levels] of Object.entries(clearedMap)) {
+    const existing = forceReplaceAll ? [] : getClearedLevelsLocal(trackId);
+    const merged = Array.from(new Set([...existing, ...levels])).sort((a, b) => a - b);
+    setClearedLevelsLocal(trackId, merged);
+  }
+}
+
+function syncLocalLearningStateFromProfile(profile: UserProfile): void {
+  if (typeof window === 'undefined') return;
+
+  const ackKey = `progress_reset_ack_${profile.id}`;
+  const prevAck = localStorage.getItem(ackKey);
+  const wasResetByInstructor = Boolean(
+    profile.progress_reset_at && profile.progress_reset_at !== prevAck
+  );
+
+  hydrateLocalClearedLevelsFromMap(profile.cleared_levels, wasResetByInstructor);
+
+  if (profile.progress_reset_at) {
+    localStorage.setItem(ackKey, profile.progress_reset_at);
+  }
+
+  if (profile.active_curriculum_type && profile.active_curriculum_id) {
+    localStorage.setItem('active_curriculum_type', profile.active_curriculum_type);
+    localStorage.setItem('active_curriculum_id', profile.active_curriculum_id);
+  }
+
+  if (profile.current_track_id) {
+    localStorage.setItem('current_learning_track', profile.current_track_id);
+  }
+  if (profile.current_level >= 1) {
+    localStorage.setItem('current_learning_level', String(profile.current_level));
+  }
+}
+
 export function normalizeProfileRow(
   raw: Record<string, unknown>,
   fallbackUser?: User
 ): UserProfile {
-  const cleared = Number(raw.cleared_levels_count ?? 0) || 0;
+  const clearedMap = parseClearedLevelsJsonb(raw.cleared_levels);
+  const mapCount = Object.values(clearedMap).reduce((acc, arr) => acc + arr.length, 0);
+  const cleared = Math.max(Number(raw.cleared_levels_count ?? 0) || 0, mapCount);
   const solved = Number(raw.solved_problems_count ?? 0) || 0;
   const totalDays = Number(raw.total_attendance_days ?? 0) || 0;
   const longestStreak = Number(raw.longest_streak ?? 0) || 0;
@@ -63,8 +138,54 @@ export function normalizeProfileRow(
     Number(raw.activity_score ?? 0) ||
     cleared * 100 + solved * 150 + totalDays * 30 + longestStreak * 50;
 
+  const rawRole = typeof raw.role === 'string' ? raw.role : 'student';
+  const role: UserRole =
+    rawRole === 'instructor' || rawRole === 'org_admin' || rawRole === 'super_admin'
+      ? rawRole
+      : 'student';
+
+  const normalizedEmail =
+    typeof raw.email === 'string' && raw.email.trim()
+      ? raw.email.trim().toLowerCase()
+      : fallbackUser?.email
+      ? fallbackUser.email.trim().toLowerCase()
+      : null;
+
+  const activeCurrType: ActiveCurriculumType =
+    raw.active_curriculum_type === 'language' ? 'language' : 'roadmap';
+  const activeCurrId =
+    typeof raw.active_curriculum_id === 'string' && raw.active_curriculum_id.trim()
+      ? raw.active_curriculum_id.trim()
+      : 'starter';
+
+  const currentTrackId =
+    typeof raw.current_track_id === 'string' && raw.current_track_id.trim()
+      ? normalizeTrackKey(raw.current_track_id)
+      : 'py-basic';
+  const rawCurrentLevel = Math.min(
+    500,
+    Math.max(1, Number(raw.current_level ?? 1) || 1)
+  );
+  const trackCleared = clearedMap[currentTrackId] || [];
+  let currentLevel = rawCurrentLevel;
+  if (rawCurrentLevel === 1 && trackCleared.length > 0) {
+    const clearedSet = new Set(trackCleared);
+    let nextUncleared = 1;
+    while (clearedSet.has(nextUncleared) && nextUncleared < 500) {
+      nextUncleared++;
+    }
+    currentLevel = nextUncleared;
+  }
+
+  const completedTracks = Array.isArray(raw.completed_tracks)
+    ? raw.completed_tracks.filter((t): t is string => typeof t === 'string')
+    : (clearedMap['py-basic']?.length ?? 0) >= 113
+    ? ['py-basic']
+    : [];
+
   return {
     id: String(raw.id || fallbackUser?.id || ''),
+    email: normalizedEmail,
     username: typeof raw.username === 'string' ? raw.username : null,
     display_name:
       typeof raw.display_name === 'string' && raw.display_name.trim()
@@ -72,6 +193,7 @@ export function normalizeProfileRow(
         : fallbackUser
         ? deriveDisplayName(fallbackUser)
         : 'Coder',
+    role,
     avatar_preset:
       typeof raw.avatar_preset === 'string' && raw.avatar_preset.trim()
         ? raw.avatar_preset
@@ -81,6 +203,12 @@ export function normalizeProfileRow(
       typeof raw.primary_language === 'string' && raw.primary_language.trim()
         ? raw.primary_language
         : 'Python',
+    active_curriculum_type: activeCurrType,
+    active_curriculum_id: activeCurrId,
+    current_track_id: currentTrackId,
+    current_level: currentLevel,
+    cleared_levels: clearedMap,
+    completed_tracks: completedTracks,
     cleared_levels_count: cleared,
     solved_problems_count: solved,
     current_streak: Number(raw.current_streak ?? 0) || 0,
@@ -95,6 +223,8 @@ export function normalizeProfileRow(
       typeof raw.best_typing_language === 'string' && raw.best_typing_language.trim()
         ? raw.best_typing_language
         : undefined,
+    progress_reset_at:
+      typeof raw.progress_reset_at === 'string' ? raw.progress_reset_at : null,
     created_at:
       typeof raw.created_at === 'string'
         ? raw.created_at
@@ -109,6 +239,7 @@ export function buildFallbackProfile(user: User): UserProfile {
   return normalizeProfileRow(
     {
       id: user.id,
+      email: user.email ? user.email.trim().toLowerCase() : null,
       username: typeof meta.login_id === 'string' ? meta.login_id : null,
       display_name: deriveDisplayName(user),
       avatar_preset: typeof meta.avatar_preset === 'string' ? meta.avatar_preset : 'fox',
@@ -131,7 +262,18 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
     .maybeSingle();
 
   if (!error && data) {
-    return normalizeProfileRow(data as Record<string, unknown>, user);
+    const rawRow = data as Record<string, unknown>;
+    const normalized = normalizeProfileRow(rawRow, user);
+    syncLocalLearningStateFromProfile(normalized);
+
+    // Backfill email if missing on legacy profile row
+    if (!rawRow.email && user.email) {
+      void supabase
+        .from('profiles')
+        .update({ email: user.email.trim().toLowerCase() })
+        .eq('id', user.id);
+    }
+    return normalized;
   }
 
   const fallback = buildFallbackProfile(user);
@@ -140,6 +282,7 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
     .upsert(
       {
         id: user.id,
+        email: fallback.email,
         display_name: fallback.display_name,
         avatar_url: fallback.avatar_url,
       },
@@ -149,14 +292,16 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
     .maybeSingle();
 
   if (!insertError && inserted) {
-    return normalizeProfileRow(inserted as Record<string, unknown>, user);
+    const normalized = normalizeProfileRow(inserted as Record<string, unknown>, user);
+    syncLocalLearningStateFromProfile(normalized);
+    return normalized;
   }
 
   return fallback;
 }
 
 /**
- * Records today's attendance (KST) once per day for the signed-in user.
+ * Records today's attendance (KST) once per day in-place on `public.profiles` (0 new rows).
  */
 export async function recordDailyAttendance(userId: string): Promise<void> {
   if (typeof window === 'undefined' || !isSupabaseConfigured()) return;
@@ -167,19 +312,12 @@ export async function recordDailyAttendance(userId: string): Promise<void> {
 
   try {
     const supabase = createClient();
-    const { error } = await supabase.from('user_attendance').upsert(
-      {
-        user_id: userId,
-        attended_date: todayKst,
-      },
-      { onConflict: 'user_id,attended_date', ignoreDuplicates: true }
-    );
-
-    if (!error) {
+    const { error: rpcErr } = await supabase.rpc('record_daily_attendance');
+    if (!rpcErr) {
       localStorage.setItem(cacheKey, '1');
     }
   } catch {
-    // Non-fatal if migration SQL is not applied yet
+    // Non-fatal
   }
 }
 
@@ -230,69 +368,48 @@ function purgeLegacyStepKeys(): void {
 }
 
 /**
- * Syncs `public.user_cleared_levels`, `public.section_feedbacks`, and today's attendance on login.
+ * Syncs `profiles.cleared_levels` (JSONB), `section_feedbacks`, and today's attendance on login.
  */
 export async function syncProgressOnLogin(user: User): Promise<void> {
   if (typeof window === 'undefined' || !isSupabaseConfigured()) return;
 
   try {
     purgeLegacyStepKeys();
-    await ensureUserProfile(user);
-    await recordDailyAttendance(user.id);
 
     const supabase = createClient();
 
-    // 1) Sync cleared levels bidirectionally
-    const { data: cloudRows, error } = await supabase
-      .from('user_cleared_levels')
-      .select('user_id, track_id, level_number, cleared_at')
-      .eq('user_id', user.id);
-
-    if (!error && cloudRows) {
-      const byTrack = new Map<string, Set<number>>();
-
-      for (const row of cloudRows as UserClearedLevelRow[]) {
-        const tKey = normalizeTrackKey(row.track_id);
-        if (!byTrack.has(tKey)) byTrack.set(tKey, new Set());
-        byTrack.get(tKey)!.add(row.level_number);
+    // Collect local cleared levels across all tracks
+    const clientLevelsMap: Record<string, number[]> = {};
+    const prefix = 'cleared_levels_';
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith(prefix)) continue;
+      const trackId = normalizeTrackKey(key.slice(prefix.length));
+      const localNums = getClearedLevelsLocal(trackId);
+      if (localNums.length > 0) {
+        clientLevelsMap[trackId] = localNums;
       }
+    }
 
-      const rowsToPush: Array<{
-        user_id: string;
-        track_id: string;
-        level_number: number;
-      }> = [];
+    const ackResetAt = localStorage.getItem(`progress_reset_ack_${user.id}`);
 
-      const prefix = 'cleared_levels_';
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (!key || !key.startsWith(prefix)) continue;
-        const trackId = normalizeTrackKey(key.slice(prefix.length));
-        const localNums = getClearedLevelsLocal(trackId);
-        const cloudSet = byTrack.get(trackId) || new Set<number>();
-
-        for (const lvl of localNums) {
-          if (!cloudSet.has(lvl)) {
-            rowsToPush.push({
-              user_id: user.id,
-              track_id: trackId,
-              level_number: lvl,
-            });
-            cloudSet.add(lvl);
-          }
-        }
-        byTrack.set(trackId, cloudSet);
+    // 1) Non-Accumulating Sync via `sync_cleared_levels` RPC (updates `profiles` in-place + attendance)
+    const { data: syncedProfile, error: syncRpcErr } = await supabase.rpc(
+      'sync_cleared_levels',
+      {
+        p_client_levels: clientLevelsMap,
+        p_ack_reset_at: ackResetAt || null,
       }
+    );
 
-      byTrack.forEach((lvlSet, trackId) => {
-        setClearedLevelsLocal(trackId, lvlSet);
-      });
-
-      if (rowsToPush.length > 0) {
-        await supabase
-          .from('user_cleared_levels')
-          .upsert(rowsToPush, { onConflict: 'user_id,track_id,level_number' });
-      }
+    if (!syncRpcErr && syncedProfile) {
+      const normalized = normalizeProfileRow(syncedProfile as Record<string, unknown>, user);
+      syncLocalLearningStateFromProfile(normalized);
+      const todayKst = getTodayKstDateString();
+      localStorage.setItem(`attendance_checked_${user.id}_${todayKst}`, '1');
+    } else {
+      await ensureUserProfile(user);
+      await recordDailyAttendance(user.id);
     }
 
     // 2) Cache which section surveys this user already submitted so we never re-prompt
@@ -315,7 +432,7 @@ export async function syncProgressOnLogin(user: User): Promise<void> {
 }
 
 /**
- * Records a completely cleared level (only called when all questions of a level are solved).
+ * Records a completely cleared level in-place inside `profiles.cleared_levels` (JSONB).
  */
 export async function recordLevelCleared(
   rawLang: string,
@@ -329,6 +446,8 @@ export async function recordLevelCleared(
     if (!existing.includes(levelNum)) {
       setClearedLevelsLocal(trackId, [...existing, levelNum]);
     }
+    localStorage.setItem('current_learning_track', trackId);
+    localStorage.setItem('current_learning_level', String(levelNum + 1));
     dispatchProgressSynced();
   }
 
@@ -341,20 +460,170 @@ export async function recordLevelCleared(
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    await recordDailyAttendance(user.id);
-    const { error } = await supabase.from('user_cleared_levels').upsert(
+    // In-Place JSONB update on `profiles` (also updates current_level & today's attendance in 1 query)
+    const { data: updatedProfile, error: rpcErr } = await supabase.rpc(
+      'record_level_cleared',
       {
-        user_id: user.id,
-        track_id: trackId,
-        level_number: levelNum,
-      },
-      { onConflict: 'user_id,track_id,level_number' }
+        p_track_id: trackId,
+        p_level_number: levelNum,
+      }
     );
-    if (!error) {
+
+    if (!rpcErr && updatedProfile) {
+      const normalized = normalizeProfileRow(updatedProfile as Record<string, unknown>, user);
+      syncLocalLearningStateFromProfile(normalized);
+      const todayKst = getTodayKstDateString();
+      localStorage.setItem(`attendance_checked_${user.id}_${todayKst}`, '1');
       dispatchProgressSynced();
     }
   } catch {
     // Non-fatal
+  }
+}
+
+export function getActiveCurriculumLocal(): {
+  type: ActiveCurriculumType;
+  id: string;
+} {
+  if (typeof window === 'undefined') {
+    return { type: 'roadmap', id: 'starter' };
+  }
+  const rawType = localStorage.getItem('active_curriculum_type');
+  const rawId = localStorage.getItem('active_curriculum_id');
+  const type: ActiveCurriculumType = rawType === 'language' ? 'language' : 'roadmap';
+  const id = rawId && rawId.trim() ? rawId.trim() : 'starter';
+  return { type, id };
+}
+
+export async function saveActiveCurriculumSelection(
+  type: ActiveCurriculumType,
+  id: string
+): Promise<void> {
+  const cleanId = id.trim() || 'starter';
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('active_curriculum_type', type);
+    localStorage.setItem('active_curriculum_id', cleanId);
+  }
+
+  if (!isSupabaseConfigured()) return;
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { error: rpcErr } = await supabase.rpc('update_learning_context', {
+      p_curriculum_type: type,
+      p_curriculum_id: cleanId,
+      p_track_id: null,
+      p_level: null,
+    });
+
+    if (rpcErr) {
+      await supabase
+        .from('profiles')
+        .update({
+          active_curriculum_type: type,
+          active_curriculum_id: cleanId,
+        })
+        .eq('id', user.id);
+    }
+  } catch {
+    // Non-fatal
+  }
+}
+
+export function getCurrentLearningPositionLocal(): {
+  trackId: string;
+  level: number;
+} {
+  if (typeof window === 'undefined') {
+    return { trackId: 'py-basic', level: 1 };
+  }
+  const trackId = normalizeTrackKey(localStorage.getItem('current_learning_track') || 'py-basic');
+  const lvl = Number(localStorage.getItem('current_learning_level') || '1') || 1;
+  return {
+    trackId: trackId || 'py-basic',
+    level: Math.max(1, Math.min(500, lvl)),
+  };
+}
+
+export async function saveCurrentLearningPosition(
+  rawLang: string,
+  levelNum: number
+): Promise<void> {
+  const trackId = normalizeTrackKey(rawLang);
+  const safeLevel = Math.max(1, Math.min(500, Math.round(levelNum)));
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('current_learning_track', trackId);
+    localStorage.setItem('current_learning_level', String(safeLevel));
+  }
+
+  if (!isSupabaseConfigured()) return;
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { error: rpcErr } = await supabase.rpc('update_learning_context', {
+      p_curriculum_type: null,
+      p_curriculum_id: null,
+      p_track_id: trackId,
+      p_level: safeLevel,
+    });
+
+    if (rpcErr) {
+      await supabase
+        .from('profiles')
+        .update({
+          current_track_id: trackId,
+          current_level: safeLevel,
+        })
+        .eq('id', user.id);
+    }
+  } catch {
+    // Non-fatal
+  }
+}
+
+/**
+ * LMS / Admin helper: Resets a student's learning progress (`targetLevel = 1`)
+ * or sets them to resume from a specific level (`targetLevel > 1`, marking `1..targetLevel-1` cleared).
+ */
+export async function setStudentLearningLevel(
+  studentId: string,
+  rawTrackId: string,
+  targetLevel = 1
+): Promise<UserProfile | null> {
+  if (!isSupabaseConfigured()) return null;
+  try {
+    const supabase = createClient();
+    const trackId = normalizeTrackKey(rawTrackId);
+    const safeTarget = Math.max(1, Math.min(500, Math.round(targetLevel)));
+
+    const { data, error } = await supabase.rpc('set_student_learning_level', {
+      p_student_id: studentId,
+      p_track_id: trackId,
+      p_target_level: safeTarget,
+    });
+
+    if (error || !data) return null;
+    const updated = normalizeProfileRow(data as Record<string, unknown>);
+
+    // If the operator reset their own account, immediately sync local state too
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user && user.id === studentId) {
+      syncLocalLearningStateFromProfile(updated);
+      dispatchProgressSynced();
+    }
+    return updated;
+  } catch {
+    return null;
   }
 }
 

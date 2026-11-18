@@ -1,333 +1,329 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_42: PracticeRound = {
-  "id": "py-basic-r42",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 42,
-  "title_ko": "42레벨: 숫자 리스트 필수 집계와 기본 정렬",
-  "title_en": "Level 42: Essential List Aggregations & Basic sort()",
-  "description_ko": "sum(), max(), min()으로 숫자 리스트를 집계하고 .sort() 및 reverse=True 옵션으로 원본 정렬을 수행합니다.",
-  "description_en": "Aggregate numeric lists with sum(), max(), and min(), and sort lists in place with .sort() and reverse=True.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "math",
-    "method",
-    "if",
-    "for_in",
-    "while"
+  id: 'py-basic-r42',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 42,
+  title_ko: '리스트 요소 값 변경(nums[i] = v)과 del 키워드 삭제',
+  title_en: 'Updating List Elements (nums[i] = v) & Deleting with del',
+  description_ko: '인덱스를 지정해 리스트의 특정 위치 값을 수정하거나 교환하고, del 키워드로 요소를 삭제하는 법을 익힙니다.',
+  description_en: 'Learn to update and swap list elements by index and delete elements using the del keyword.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'iter',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] sum(), max(), min()으로 숫자 리스트의 합계, 최댓값, 최솟값을 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the code that prints sum(nums), max(nums), and min(nums).",
-      "hint_ko": "내장 집계 함수 sum(), max(), min()에 리스트를 전달해 즉시 통계값을 얻을 수 있습니다.",
-      "hint_en": "Built-in functions sum(), max(), and min() accept a numeric list directly.",
-      "targetCode": "nums = [10, 40, 20, 30]\nprint(sum(nums))\nprint(max(nums), min(nums))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] nums[0] = 99로 리스트의 첫 번째 요소를 새 값으로 덮어쓰고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Overwrite the first element of nums with 99 using nums[0] = 99 and print the list.',
+      hint_ko: '대괄호 인덱스를 등호 왼쪽에 적으면 해당 위치의 요소 값만 새 값으로 바뀝니다.',
+      hint_en: 'Placing a bracketed index on the left of = replaces the value at that position.',
+      targetCode: 'nums = [10, 20, 30]\nnums[0] = 99\nprint(nums)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "100\n40 10"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] pts 리스트의 최댓값과 최솟값 차이(gap) 및 전체 합계를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the aggregation functions to compute gap and print Sum and Gap.",
-      "hint_ko": "최댓값을 구하는 max 함수와 전체 합계를 구하는 sum 함수를 차례로 채우세요.",
-      "hint_en": "Use max for the largest value and sum for the total.",
-      "templateCode": "pts = [15, 50, 25]\ngap = §§§(pts) - min(pts)\nprint(f\"Sum:{§§§(pts)},Gap:{gap}\")",
-      "targetCode": "pts = [15, 50, 25]\ngap = max(pts) - min(pts)\nprint(f\"Sum:{sum(pts)},Gap:{gap}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Sum:90,Gap:35"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .sort() 메서드로 숫자 리스트를 오름차순 정렬해 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Sort nums in ascending order in place using .sort() and print it.",
-      "hint_ko": ".sort()는 원본 리스트의 순서를 직접 바꾸므로 단독으로 호출한 뒤 리스트를 출력합니다.",
-      "hint_en": "Call .sort() on its own line before printing the mutated list.",
-      "targetCode": "nums = [30, 10, 40, 20]\nnums.sort()\nprint(nums)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 20, 30, 40]"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 메서드와 옵션 값을 채워 scores 리스트를 큰 점수부터 내림차순으로 정렬해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the method and reverse option value to sort scores descending.",
-      "hint_ko": "정렬 메서드 sort와 역순 옵션을 켜는 논리값 True를 차례로 채우세요.",
-      "hint_en": "Call sort and set reverse=True for descending order.",
-      "templateCode": "scores = [75, 95, 80]\nscores.§§§§(reverse=§§§§)\nprint(scores)",
-      "targetCode": "scores = [75, 95, 80]\nscores.sort(reverse=True)\nprint(scores)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[95, 80, 75]"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입력 점수를 리스트에 모으고 sum(scores) / len(scores)로 평균을 구하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Collect input integers into scores and compute sum(scores) / len(scores).",
-      "hint_ko": "실수 나눗셈 연산자(/)로 합계를 개수로 나누면 실수 평균값이 계산됩니다.",
-      "hint_en": "Dividing sum(scores) by len(scores) with / yields the float average.",
-      "targetCode": "scores = []\nfor s in input().split():\n    scores.append(int(s))\navg = sum(scores) / len(scores)\nprint(f\"Avg:{avg}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "70 80 90",
-          "expectedOutput": "Avg:80.0"
+          id: 1,
+          input: '',
+          expectedOutput: '[99, 20, 30]',
         },
-        {
-          "id": 2,
-          "input": "60 90",
-          "expectedOutput": "Avg:75.0"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력된 정수 리스트의 실수 평균(avg)과 최댓값을 계산해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Compute the float average and maximum of nums and print Max and Avg.",
-      "hint_ko": "합계를 구하는 sum 함수와 최댓값을 구하는 max 함수를 차례로 채우세요.",
-      "hint_en": "Use sum(nums) for the numerator and max(nums) in the output string.",
-      "templateCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\navg = §§§(nums) / len(nums)\nprint(f\"Max:{§§§(nums)},Avg:{avg}\")",
-      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\navg = sum(nums) / len(nums)\nprint(f\"Max:{max(nums)},Avg:{avg}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10 30 20",
-          "expectedOutput": "Max:30,Avg:20.0"
-        },
-        {
-          "id": 2,
-          "input": "20 31",
-          "expectedOutput": "Max:31,Avg:25.5"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입력 점수를 오름차순 정렬한 뒤 .pop(0)과 .pop()으로 양끝 극단값을 빼고 합산하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Sort scores ascending, pop both extremes with .pop(0) and .pop(), and sum the rest.",
-      "hint_ko": "정렬 후 맨 앞 최솟값(.pop(0))과 맨 뒤 최댓값(.pop())을 제거하고 남은 요소를 합산합니다.",
-      "hint_en": "Sort first, then pop the first and last elements before summing the remaining scores.",
-      "targetCode": "scores = []\nfor s in input().split():\n    scores.append(int(s))\nscores.sort()\nscores.pop(0)\nscores.pop()\nprint(f\"TrimSum:{sum(scores)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "50 90 80 100 70",
-          "expectedOutput": "TrimSum:240"
-        },
-        {
-          "id": 2,
-          "input": "10 20 30 40",
-          "expectedOutput": "TrimSum:50"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 점수를 내림차순 정렬한 뒤 상위 2개 요소와 그 합계를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Sort input integers descending, slice top 2 into top2, and print Top2 and Sum.",
-      "hint_ko": "정렬 메서드 sort와 합계 함수 sum을 차례로 채우세요.",
-      "hint_en": "Call sort(reverse=True) and total top2 with sum(top2).",
-      "templateCode": "ranks = []\nfor s in input().split():\n    ranks.append(int(s))\nranks.§§§§(reverse=True)\ntop2 = ranks[:2]\nprint(f\"Top2:{top2},Sum:{§§§(top2)}\")",
-      "targetCode": "ranks = []\nfor s in input().split():\n    ranks.append(int(s))\nranks.sort(reverse=True)\ntop2 = ranks[:2]\nprint(f\"Top2:{top2},Sum:{sum(top2)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "70 90 60 80",
-          "expectedOutput": "Top2:[90, 80],Sum:170"
-        },
-        {
-          "id": 2,
-          "input": "50 100 75",
-          "expectedOutput": "Top2:[100, 75],Sum:175"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 오름차순 정렬 후 while sum(bag) > 80: 동안 가장 무거운 끝 요소를 꺼내는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Sort bag ascending and pop the heaviest item while sum(bag) > 80.",
-      "hint_ko": "오름차순 정렬 후에는 가장 큰 값이 맨 끝에 있으므로 .pop()으로 무거운 값부터 제거됩니다.",
-      "hint_en": "After ascending sort, the largest item is at the end, so .pop() removes the heaviest item.",
-      "targetCode": "bag = [50, 20, 40, 30]\nbag.sort()\nwhile sum(bag) > 80:\n    bag.pop()\nprint(f\"Bag:{bag},Sum:{sum(bag)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Bag:[20, 30],Sum:50"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 오름차순 정렬된 bag의 총합이 60을 초과하는 동안 마지막 요소를 꺼내 줄여보세요.",
-      "prompt_en": "[Fill Blank] While the sum of sorted bag exceeds 60, pop the last item and print the result.",
-      "hint_ko": "합계를 구하는 sum 함수와 마지막 요소를 꺼내는 pop 메서드를 차례로 채우세요.",
-      "hint_en": "Use sum(bag) in the while condition and bag.pop() inside the loop.",
-      "templateCode": "bag = [40, 10, 30, 25]\nbag.sort()\nwhile §§§(bag) > 60:\n    bag.§§§()\nprint(f\"Bag:{bag},Sum:{sum(bag)}\")",
-      "targetCode": "bag = [40, 10, 30, 25]\nbag.sort()\nwhile sum(bag) > 60:\n    bag.pop()\nprint(f\"Bag:{bag},Sum:{sum(bag)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Bag:[10, 25],Sum:35"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 최댓값(Max)과 최솟값(Min) 라벨에 반대 함수가 호출된 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the swapped aggregation functions so Max prints max(pts) and Min prints min(pts).",
-      "hint_ko": "Max 자리에는 max(pts)를, Min 자리에는 min(pts)를 넣어야 합니다.",
-      "hint_en": "Swap min(pts) and max(pts) to match their labels.",
-      "templateCode": "pts = [15, 50, 25]\nprint(f\"Max:{min(pts)},Min:{max(pts)}\")",
-      "targetCode": "pts = [15, 50, 25]\nprint(f\"Max:{max(pts)},Min:{min(pts)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Max:50,Min:15"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 오름차순 정렬 후 가장 작은 첫 점수를 빼려다 두 번째 점수가 빠지는 인덱스 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the .pop() index after ascending sort so the lowest score at index 0 is removed.",
-      "hint_ko": "오름차순 정렬 후 최솟값은 0번 인덱스에 있으므로 scores.pop(0)으로 수정하세요.",
-      "hint_en": "Change scores.pop(1) to scores.pop(0) to remove the minimum value.",
-      "templateCode": "scores = [50, 90, 70, 80]\nscores.sort()\nscores.pop(1)\nprint(scores)",
-      "targetCode": "scores = [50, 90, 70, 80]\nscores.sort()\nscores.pop(0)\nprint(scores)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[70, 80, 90]"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 nums를 내림차순(reverse=True)으로 원본 정렬하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that sorts nums in descending order in place.",
-      "hint_ko": "nums.sort(reverse=True) 형태로 내림차순 정렬 메서드를 호출하세요.",
-      "hint_en": "Write nums.sort(reverse=True) on the second line.",
-      "templateCode": "nums = [12, 45, 8, 35]\n§§§§§§§§§§§§§§§§§§§§§§§\nprint(f\"Top:{nums[0]},Sum:{sum(nums)}\")",
-      "targetCode": "nums = [12, 45, 8, 35]\nnums.sort(reverse=True)\nprint(f\"Top:{nums[0]},Sum:{sum(nums)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Top:45,Sum:100"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] scores의 합계를 개수로 나누어 실수 평균을 avg에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that computes sum(scores) / len(scores) into avg.",
-      "hint_ko": "avg = sum(scores) / len(scores) 형태로 평균을 구해 대입하세요.",
-      "hint_en": "Write avg = sum(scores) / len(scores) on the second line.",
-      "templateCode": "scores = [70, 80, 90]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(f\"Avg:{avg}\")",
-      "targetCode": "scores = [70, 80, 90]\navg = sum(scores) / len(scores)\nprint(f\"Avg:{avg}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Avg:80.0"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 내림차순 정렬, .pop(), 평균 계산 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
-      "hint_ko": "내림차순 정렬 후 맨 끝에서 빠지는 숫자를 확인하고, 남은 세 숫자의 최솟값과 실수 평균을 구해보세요.",
-      "hint_en": "Check which value is popped at the end after descending sort, then find min(nums) and avg.",
-      "targetCode": "nums = [30, 50, 10, 40]\nnums.sort(reverse=True)\nnums.pop()\navg = sum(nums) / len(nums)\nprint(f\"{min(nums)}:{avg}\")",
-      "choices": [
-        "30:40.0",
-        "10:30.0",
-        "30:40",
-        "10:32.5"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] items 리스트의 마지막 요소를 "bow"로 변경해 전체 리스트를 출력해보세요.',
+      prompt_en: '[Fill Blank] Update the last element of items to "bow" and print the list.',
+      hint_ko: '뒤에서 첫 번째 위치를 가리키는 음수 인덱스를 대괄호 안에 적으세요.',
+      hint_en: 'Use the negative index that refers to the last item inside the brackets.',
+      templateCode: 'items = ["sword", "shield", "staff"]\nitems[§§] = "bow"\nprint(items)',
+      targetCode: 'items = ["sword", "shield", "staff"]\nitems[-1] = "bow"\nprint(items)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "30:40.0"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: "['sword', 'shield', 'bow']",
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 복합 대입 연산자(+=, *=)로 리스트 특정 요소의 값을 직접 증감시키는 블록을 조립해보세요.',
+      prompt_en: '[Block] Use compound assignment operators (+= and *=) to update list elements in place.',
+      hint_ko: '인덱스로 지정한 요소에도 일반 변수처럼 복합 대입 연산자를 그대로 사용할 수 있습니다.',
+      hint_en: 'Indexed list elements support compound assignment operators just like regular variables.',
+      targetCode: 'hp = [100, 50, 30]\nhp[1] += 20\nhp[-1] *= 2\nprint(hp)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[100, 70, 60]',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 첫 번째 점수에서 15점을 차감하는 복합 대입 연산자를 채워 리스트를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the compound assignment operator to subtract 15 from the first score.',
+      hint_ko: '기존 값에서 오른쪽 값을 빼서 다시 저장하는 두 글자 연산자를 입력하세요.',
+      hint_en: 'Type the two-character operator that subtracts a value in place.',
+      templateCode: 'scores = [95, 80, 70]\nscores[0] §§ 15\nprint(scores)',
+      targetCode: 'scores = [95, 80, 70]\nscores[0] -= 15\nprint(scores)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[80, 80, 70]',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 다중 할당(nums[0], nums[-1] = nums[-1], nums[0])으로 리스트 양끝 요소를 맞바꾸는 블록을 조립해보세요.',
+      prompt_en: '[Block] Swap the first and last elements of nums using simultaneous assignment.',
+      hint_ko: '쉼표로 양끝 인덱스를 나란히 적어 임시 변수 없이 두 위치의 값을 한 번에 교환합니다.',
+      hint_en: 'Simultaneous assignment swaps the values at both indices in a single line.',
+      targetCode: 'nums = [10, 20, 30, 40]\nnums[0], nums[-1] = nums[-1], nums[0]\nprint(nums)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[40, 20, 30, 10]',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] cards 리스트의 첫 번째 요소와 두 번째 요소의 위치를 서로 맞바꾸어 출력해보세요.',
+      prompt_en: '[Fill Blank] Swap the first and second elements of cards and print the list.',
+      hint_ko: '우변의 첫 자리에 와야 할 두 번째 요소 인덱싱 표현식을 채우세요.',
+      hint_en: 'Fill in the indexed expression for the second element on the right-hand side.',
+      templateCode: 'cards = ["A", "B", "C"]\ncards[0], cards[1] = §§§§§§§§, cards[0]\nprint(cards)',
+      targetCode: 'cards = ["A", "B", "C"]\ncards[0], cards[1] = cards[1], cards[0]\nprint(cards)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "['B', 'A', 'C']",
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] del nums[1]로 두 번째 요소를 삭제하고 줄어든 리스트와 길이를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Delete the second element with del nums[1] and print the updated list and its length.',
+      hint_ko: '특정 인덱스의 요소를 삭제하면 뒤쪽 요소들이 앞으로 한 칸씩 당겨집니다.',
+      hint_en: 'Deleting an element shifts all subsequent elements one position to the left.',
+      targetCode: 'nums = [10, 20, 30, 40]\ndel nums[1]\nprint(nums, len(nums))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 30, 40] 3',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 삭제 키워드를 사용해 리스트의 맨 첫 번째 요소를 지우고 결과를 출력해보세요.',
+      prompt_en: '[Fill Blank] Use the deletion keyword to remove the first element of logs and print the list.',
+      hint_ko: '지정한 인덱스의 요소를 제거하는 세 글자 파이썬 키워드를 적으세요.',
+      hint_en: 'Write the 3-letter Python keyword that deletes an indexed item.',
+      templateCode: 'logs = ["err", "ok", "done"]\n§§§ logs[0]\nprint(logs)',
+      targetCode: 'logs = ["err", "ok", "done"]\ndel logs[0]\nprint(logs)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "['ok', 'done']",
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 첫 번째 요소를 지운 뒤, 새로 첫 번째가 된 요소에 5를 누적해 더하고 길이와 함께 출력해보세요.',
+      prompt_en: '[Fill Blank] Delete the first element, add 5 to the new first element, and print the list with its length.',
+      hint_ko: '삭제 키워드, 누적 덧셈 연산자, 길이 함수를 순서대로 채워보세요.',
+      hint_en: 'Fill in the deletion keyword, compound addition operator, and length function in order.',
+      templateCode: 'nums = [99, 10, 20, 30]\n§§§ nums[0]\nnums[0] §§ 5\nprint(nums, §§§(nums))',
+      targetCode: 'nums = [99, 10, 20, 30]\ndel nums[0]\nnums[0] += 5\nprint(nums, len(nums))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[15, 20, 30] 3',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 리스트의 두 번째 요소(20)를 50으로 변경하려다 세 번째 요소가 바뀌는 인덱스 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the index so the second element (20) is updated to 50.',
+      hint_ko: '0번부터 시작하는 인덱스에서 두 번째 요소가 몇 번인지 확인하세요.',
+      hint_en: 'Remember that indexing starts at 0 when targeting the second element.',
+      templateCode: 'nums = [10, 20, 30]\nnums[2] = 50\nprint(nums)',
+      targetCode: 'nums = [10, 20, 30]\nnums[1] = 50\nprint(nums)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 50, 30]',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 잘못된 삭제 키워드로 인해 문법 에러가 발생하는 코드를 올바르게 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the invalid deletion keyword so the last element is removed when len(bag) > 2.',
+      hint_ko: '파이썬에서 리스트 요소를 인덱스로 지울 때는 세 글자 축약 키워드를 사용합니다.',
+      hint_en: 'Use the 3-letter keyword for deleting an element by index in Python.',
+      templateCode: 'bag = ["potion", "key", "trash"]\nif len(bag) > 2:\n    delete bag[-1]\nprint(bag)',
+      targetCode: 'bag = ["potion", "key", "trash"]\nif len(bag) > 2:\n    del bag[-1]\nprint(bag)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "['potion', 'key']",
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] del 키워드로 리스트 nums의 맨 마지막 요소([-1])를 삭제하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that deletes the last element of nums using del and [-1].',
+      hint_ko: '삭제 키워드 뒤에 리스트의 음수 인덱스 [-1]을 적어 마지막 칸을 지우세요.',
+      hint_en: 'Follow the del keyword with the negative index for the last element.',
+      templateCode: 'nums = [10, 20, 30, 99]\n§§§§§§§§§§§§\nprint(nums)',
+      targetCode: 'nums = [10, 20, 30, 99]\ndel nums[-1]\nprint(nums)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 30]',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 입력받은 bonus가 양수일 때 scores의 첫 번째 요소에 bonus를 누적해 더하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the indented line that adds bonus to the first element of scores.',
+      hint_ko: '0번 인덱스 요소에 복합 덧셈 연산자로 입력 변수를 더하세요.',
+      hint_en: 'Use += to add bonus onto index 0 of scores.',
+      templateCode: 'scores = [70, 80, 90]\nbonus = int(input())\nif bonus > 0:\n    §§§§§§§§§§§§§§§§§§\nprint(scores)',
+      targetCode: 'scores = [70, 80, 90]\nbonus = int(input())\nif bonus > 0:\n    scores[0] += bonus\nprint(scores)',
+      testCases: [
+        {
+          id: 1,
+          input: '15',
+          expectedOutput: '[85, 80, 90]',
+        },
+        {
+          id: 2,
+          input: '0',
+          expectedOutput: '[70, 80, 90]',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 리스트 요소 삭제(del)와 값 변경 후 출력 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '0번 요소가 삭제된 직후 어느 숫자가 새로운 0번 요소가 되는지 주의 깊게 추적해보세요.',
+      hint_en: 'Pay attention to which number shifts into index 0 right after del nums[0] runs.',
+      targetCode: 'nums = [10, 20, 30, 40]\ndel nums[0]\nnums[0] += 5\nprint(nums[0], len(nums))',
+      choices: [
+        '25 3',
+        '15 3',
+        '25 4',
+        '20 3',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '25 3',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 반복문과 리스트 양끝 교환(Swap), del 삭제가 결합된 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '반복문으로 앞 두 요소가 2배가 된 뒤 양끝 교환과 가운데 요소 삭제가 차례로 일어납니다.',
+      hint_en: 'Trace doubling the first two items, swapping the ends, and deleting index 1.',
+      targetCode: 'arr = [2, 3, 4]\nfor i in range(2):\n    arr[i] *= 2\narr[0], arr[-1] = arr[-1], arr[0]\ndel arr[1]\nprint(arr, sep="-")',
+      choices: [
+        '[4, 4]',
+        '[4, 6]',
+        '[6, 4]',
+        '[4, 6, 4]',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[4, 4]',
+        },
+      ],
+    },
+  ],
 };

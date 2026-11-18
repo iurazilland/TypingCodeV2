@@ -482,29 +482,6 @@ export default function StageSelectPage({ params }: StageSelectPageProps) {
                         >
                           {isEn ? level.title_en : level.title_ko}
                         </span>
-
-                        {/* Syntax tags */}
-                        {level.syntaxTags && level.syntaxTags.length > 0 && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                            {level.syntaxTags.map((tag, tIdx) => (
-                              <span
-                                key={tIdx}
-                                style={{
-                                  fontFamily: 'var(--font-mono)',
-                                  fontSize: '0.72rem',
-                                  fontWeight: 600,
-                                  color: isLocked ? '#94a3b8' : '#0284c7',
-                                  background: isLocked ? '#f1f5f9' : '#f0f9ff',
-                                  border: isLocked ? '1px solid #e2e8f0' : '1px solid #bae6fd',
-                                  padding: '2px 7px',
-                                  borderRadius: '4px',
-                                }}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
                       </div>
 
                       {/* Right Action */}

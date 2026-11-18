@@ -1,352 +1,324 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_41: PracticeRound = {
-  "id": "py-basic-r41",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 41,
-  "title_ko": "41레벨: 리스트 for 순회와 조건 필터링",
-  "title_en": "Level 41: List for Iteration & Conditional Filtering",
-  "description_ko": "for 반복문과 in / not in 연산자로 리스트를 순회하며 조건 필터링 및 공백 구분 정수 입력 변환을 구현합니다.",
-  "description_en": "Iterate over lists with for, check membership with in/not in, filter elements, and parse space-separated integers.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "math",
-    "method",
-    "if",
-    "for_in",
-    "for_range",
-    "range",
-    "while",
-    "break",
-    "continue"
+  id: 'py-basic-r41',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 41,
+  title_ko: '리스트 생성([ ]), 길이(len())와 양수·음수 인덱싱 (nums[0], nums[-1])',
+  title_en: 'List Creation ([ ]), len() & Positive/Negative Indexing',
+  description_ko: '대괄호([ ])로 리스트를 만들고, len()으로 요소 개수를 구하며 양수·음수 인덱싱(nums[0], nums[-1])으로 값을 꺼내는 법을 익힙니다.',
+  description_en: 'Create lists with square brackets ([ ]), count elements with len(), and access items via positive and negative indexing.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'iter',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] for x in nums: 구문으로 리스트 요소를 순서대로 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the for x in nums: loop that prints each element of the list in order.",
-      "hint_ko": "in 뒤에 리스트 변수를 두면 매 반복마다 리스트 안의 값이 순서대로 반복 변수에 대입됩니다.",
-      "hint_en": "Placing the list after in assigns each element one by one to the loop variable.",
-      "targetCode": "nums = [10, 20, 30]\nfor x in nums:\n    print(x)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 대괄호([]) 안에 10, 20, 30을 담아 리스트 변수 nums를 만들고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Assemble the code that creates a list [10, 20, 30] in nums and prints it.',
+      hint_ko: '대괄호로 감싼 값들을 변수에 대입하면 하나의 리스트로 묶여 저장됩니다.',
+      hint_en: 'Assigning comma-separated values inside square brackets stores them as a list.',
+      targetCode: 'nums = [10, 20, 30]\nprint(nums)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "10\n20\n30"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트의 모든 가격을 순회하며 total에 누적해 총합을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Iterate through prices, accumulate each value into total, and print Total:2500.",
-      "hint_ko": "순회 키워드 in과 누적 덧셈 연산자 +=를 차례로 채우세요.",
-      "hint_en": "Fill in the in keyword and the += compound addition operator.",
-      "templateCode": "prices = [500, 1200, 800]\ntotal = 0\nfor p §§ prices:\n    total §§ p\nprint(f\"Total:{total}\")",
-      "targetCode": "prices = [500, 1200, 800]\ntotal = 0\nfor p in prices:\n    total += p\nprint(f\"Total:{total}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Total:2500"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트에 in과 not in 연산자를 사용해 요소 포함 여부를 확인하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Check item membership and non-membership in roles using in and not in.",
-      "hint_ko": "찾고자 하는 값과 리스트 사이에 in 또는 not in을 적어 포함 여부를 논리값으로 확인합니다.",
-      "hint_en": "Place in or not in between the target value and the list to evaluate membership.",
-      "targetCode": "roles = [\"user\", \"vip\", \"admin\"]\nprint(\"vip\" in roles)\nprint(\"guest\" not in roles)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nTrue"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 단어 w가 금지 목록 bans에 있는지와 없는지를 순서대로 출력해보세요.",
-      "prompt_en": "[Fill Blank] Print whether w is in bans and whether w is not in bans.",
-      "hint_ko": "포함 여부를 묻는 in과 불포함 여부를 묻는 not in을 차례로 채우세요.",
-      "hint_en": "Fill in in for the first check and not in for the second check.",
-      "templateCode": "bans = [\"spam\", \"ad\"]\nw = input().strip()\nprint(w §§ bans, w §§§§§§ bans)",
-      "targetCode": "bans = [\"spam\", \"ad\"]\nw = input().strip()\nprint(w in bans, w not in bans)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "news",
-          "expectedOutput": "False True"
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 30]',
         },
-        {
-          "id": 2,
-          "input": "spam",
-          "expectedOutput": "True False"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] for문과 if 조건문으로 80점 이상인 점수만 passed에 모으는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Filter scores >= 80 into passed using a for loop and an if statement.",
-      "hint_ko": "조건을 만족하는 값만 결과 리스트에 .append()로 추가됩니다.",
-      "hint_en": "Only values satisfying the if condition are appended to passed.",
-      "targetCode": "scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s >= 80:\n        passed.append(s)\nprint(passed)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[85, 90]"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] raw를 순회하며 uniq에 아직 없는 문자만 추가해 중복 없는 리스트를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Loop over raw and append characters not yet in uniq, then print uniq.",
-      "hint_ko": "불포함 연산자 not in과 리스트 추가 메서드 append를 차례로 적으세요.",
-      "hint_en": "Check non-membership with not in and add unseen characters with append.",
-      "templateCode": "raw = [\"A\", \"B\", \"A\", \"C\"]\nuniq = []\nfor ch in raw:\n    if ch §§§§§§ uniq:\n        uniq.§§§§§§(ch)\nprint(uniq)",
-      "targetCode": "raw = [\"A\", \"B\", \"A\", \"C\"]\nuniq = []\nfor ch in raw:\n    if ch not in uniq:\n        uniq.append(ch)\nprint(uniq)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['A', 'B', 'C']"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 공백 구분 입력 조각을 int()로 변환해 10 이상인 정수만 리스트에 모으는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Parse space-separated integers with int() and append those >= 10 to nums.",
-      "hint_ko": "input().split()의 각 문자열을 int(s)로 변환해 조건 검사 후 .append()로 저장합니다.",
-      "hint_en": "Convert each token with int(s) and append it when >= 10.",
-      "targetCode": "nums = []\nfor s in input().split():\n    if int(s) >= 10:\n        nums.append(int(s))\nprint(nums)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5 10 20",
-          "expectedOutput": "[10, 20]"
-        },
-        {
-          "id": 2,
-          "input": "15 3 25",
-          "expectedOutput": "[15, 25]"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백 구분 입력 숫자들을 정수로 바꾸고 짝수만 evens 리스트에 모아 출력해보세요.",
-      "prompt_en": "[Fill Blank] Parse space-separated integers from input and filter even numbers into evens.",
-      "hint_ko": "공백 기준 분리 메서드 split과 정수 변환 함수 int를 차례로 채우세요.",
-      "hint_en": "Use split() to divide the input line and int(s) to convert each token.",
-      "templateCode": "evens = []\nfor s in input().§§§§§():\n    n = §§§(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(f\"Evens:{evens}\")",
-      "targetCode": "evens = []\nfor s in input().split():\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(f\"Evens:{evens}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "3 8 5 12",
-          "expectedOutput": "Evens:[8, 12]"
-        },
-        {
-          "id": 2,
-          "input": "2 7 4",
-          "expectedOutput": "Evens:[2, 4]"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 순회 중 음수는 continue로 건너뛰고 0을 만나면 break로 멈추는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Skip negative values with continue and exit the loop on 0 with break.",
-      "hint_ko": "합산 식(total += x)보다 앞에 continue와 break 조건을 두어 유효한 값만 더합니다.",
-      "hint_en": "Place continue and break checks before total += x.",
-      "targetCode": "logs = [10, -5, 20, 0, 30]\ntotal = 0\nfor x in logs:\n    if x < 0:\n        continue\n    if x == 0:\n        break\n    total += x\nprint(f\"Valid:{total}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Valid:30"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 정수 중 음수는 건너뛰고 99가 나오면 반복을 멈추어 모은 리스트를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Skip negatives, stop when 99 appears, and print Count and Data.",
-      "hint_ko": "다음 차례로 건너뛰는 continue와 반복을 종료하는 break를 차례로 입력하세요.",
-      "hint_en": "Use continue for negative values and break when 99 is encountered.",
-      "templateCode": "nums = []\nfor s in input().split():\n    val = int(s)\n    if val < 0:\n        §§§§§§§§\n    if val == 99:\n        §§§§§\n    nums.append(val)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
-      "targetCode": "nums = []\nfor s in input().split():\n    val = int(s)\n    if val < 0:\n        continue\n    if val == 99:\n        break\n    nums.append(val)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4 -2 7 99 10",
-          "expectedOutput": "Count:2,Data:[4, 7]"
-        },
-        {
-          "id": 2,
-          "input": "-1 5 99",
-          "expectedOutput": "Count:1,Data:[5]"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 80점 이상인 합격 점수만 모으려다 80점 이하가 담기는 비교 연산자 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator so scores of 80 or above ([85, 90]) are collected.",
-      "hint_ko": "80점 이상일 때 추가되어야 하므로 <=를 >=로 수정하세요.",
-      "hint_en": "Change <= to >= so scores of at least 80 are appended.",
-      "templateCode": "scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s <= 80:\n        passed.append(s)\nprint(passed)",
-      "targetCode": "scores = [65, 85, 90, 72]\npassed = []\nfor s in scores:\n    if s >= 80:\n        passed.append(s)\nprint(passed)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[85, 90]"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 공백 구분 입력을 정수 리스트로 모으려다 문자열로 저장되는 변환 함수 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the conversion function so input tokens are appended as integers.",
-      "hint_ko": "문자열 조각 s를 정수로 변환하려면 str(s)가 아니라 int(s)를 사용해야 합니다.",
-      "hint_en": "Replace str(s) with int(s) to store integers in nums.",
-      "templateCode": "nums = []\nfor s in input().split():\n    nums.append(str(s))\nprint(nums)",
-      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(nums)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10 20 30",
-          "expectedOutput": "[10, 20, 30]"
-        },
-        {
-          "id": 2,
-          "input": "5 15",
-          "expectedOutput": "[5, 15]"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 금지어(bans)에 속하지 않는 단어 w를 clean 리스트에 추가하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the indented line that appends allowed word w to clean.",
-      "hint_ko": "clean.append(w) 형태로 통과한 단어를 clean 리스트 끝에 추가하세요.",
-      "hint_en": "Write clean.append(w) inside the if block.",
-      "templateCode": "bans = [\"spam\", \"ad\"]\nclean = []\nfor w in input().split():\n    if w not in bans:\n        §§§§§§§§§§§§§§§\nprint(clean)",
-      "targetCode": "bans = [\"spam\", \"ad\"]\nclean = []\nfor w in input().split():\n    if w not in bans:\n        clean.append(w)\nprint(clean)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "hello spam code",
-          "expectedOutput": "['hello', 'code']"
-        },
-        {
-          "id": 2,
-          "input": "ad news",
-          "expectedOutput": "['news']"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 분리된 각 문자열 s를 정수로 바꾸어 nums 리스트에 추가하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that converts s with int() and appends it to nums.",
-      "hint_ko": "nums.append(int(s)) 형태로 정수로 변환한 값을 리스트에 추가하세요.",
-      "hint_en": "Write nums.append(int(s)) inside the for loop.",
-      "templateCode": "nums = []\nfor s in input().split():\n    §§§§§§§§§§§§§§§§§§§\nprint(nums)",
-      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(nums)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4 8 12",
-          "expectedOutput": "[4, 8, 12]"
-        },
-        {
-          "id": 2,
-          "input": "7 14",
-          "expectedOutput": "[7, 14]"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 리스트 중복 제거(not in)와 continue 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
-      "hint_ko": "초기 리스트에 이미 들어 있는 2, 건너뛰는 0, 중복된 5를 구분하며 리스트 크기와 합계를 추적해보세요.",
-      "hint_en": "Track which numbers are skipped or already in seen to find len(seen) and total.",
-      "targetCode": "seen = [2]\ntotal = 0\nfor s in \"2 5 0 4 5\".split():\n    n = int(s)\n    if n == 0:\n        continue\n    if n not in seen:\n        seen.append(n)\n        total += n\nprint(f\"{len(seen)}:{total}\")",
-      "choices": [
-        "3:9",
-        "4:14",
-        "3:11",
-        "4:16"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 과일 리스트 fruits 아래에 아무 요소도 없는 빈 리스트 empty를 만들어 두 리스트를 출력해보세요.',
+      prompt_en: '[Fill Blank] Complete the empty list assignment for empty and print both lists.',
+      hint_ko: '아무 값도 넣지 않은 대괄호 한 쌍으로 빈 리스트를 표현합니다.',
+      hint_en: 'An empty pair of square brackets represents an empty list.',
+      templateCode: 'fruits = ["apple", "banana"]\nempty = §§\nprint(fruits)\nprint(empty)',
+      targetCode: 'fruits = ["apple", "banana"]\nempty = []\nprint(fruits)\nprint(empty)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3:9"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: "['apple', 'banana']\n[]",
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 내장 함수 len()으로 리스트 nums 안에 들어 있는 요소의 개수를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Use len() to print the number of elements inside nums.',
+      hint_ko: '리스트에 담긴 요소가 4개이므로 개수 측정 함수의 결과로 4가 출력됩니다.',
+      hint_en: 'Because the list holds 4 items, the length function evaluates to 4.',
+      targetCode: 'nums = [10, 20, 30, 40]\nprint(len(nums))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '4',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] colors 리스트에 들어 있는 색상 요소의 전체 개수를 구해 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the built-in function to print the number of items in colors.',
+      hint_ko: '컬렉션의 길이를 구하는 세 글자 내장 함수를 호출하세요.',
+      hint_en: 'Call the 3-letter built-in function that returns the length of a collection.',
+      templateCode: 'colors = ["red", "green", "blue"]\nprint("Count:", §§§(colors))',
+      targetCode: 'colors = ["red", "green", "blue"]\nprint("Count:", len(colors))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Count: 3',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 양수 인덱스 [0]과 [1]로 리스트의 첫 번째 요소와 두 번째 요소를 나란히 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print the first and second elements of nums using positive indices [0] and [1].',
+      hint_ko: '파이썬 리스트의 인덱스 번호는 앞에서부터 0번으로 시작합니다.',
+      hint_en: 'List indices in Python start at 0 from the front.',
+      targetCode: 'nums = [100, 200, 300]\nprint(nums[0], nums[1])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '100 200',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] items 리스트에서 맨 앞 첫 번째 요소와 세 번째 요소를 꺼내 나란히 출력해보세요.',
+      prompt_en: '[Fill Blank] Access the first element and the third element of items and print them.',
+      hint_ko: '가장 앞에 있는 첫 번째 요소의 인덱스 번호를 대괄호 안에 적으세요.',
+      hint_en: 'Write the index number of the very first element inside the brackets.',
+      templateCode: 'items = ["sword", "shield", "potion"]\nprint(items[§], items[2])',
+      targetCode: 'items = ["sword", "shield", "potion"]\nprint(items[0], items[2])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'sword potion',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 음수 인덱스 [-1], [-2]로 뒤쪽 요소를 출력하고 첫 요소와 끝 요소의 정수 평균(//)을 구하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print the last two elements via [-1] and [-2], then print the integer average of the first and last elements.',
+      hint_ko: '뒤에서 첫 번째 요소는 -1번, 뒤에서 두 번째 요소는 -2번 인덱스로 가리킵니다.',
+      hint_en: 'Index -1 refers to the last item and -2 refers to the second-to-last item.',
+      targetCode: 'scores = [70, 80, 90, 100]\nprint(scores[-1], scores[-2])\nprint((scores[0] + scores[-1]) // 2)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '100 90\n85',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 음수 인덱스를 사용해 리스트의 첫 번째 요소와 맨 마지막 요소의 합을 출력해보세요.',
+      prompt_en: '[Fill Blank] Use a negative index to add the first and last elements of nums and print the sum.',
+      hint_ko: '리스트의 맨 끝 요소를 가리키는 음수 인덱스 번호를 대괄호 안에 적으세요.',
+      hint_en: 'Put the negative index for the last element inside the brackets.',
+      templateCode: 'nums = [15, 25, 35, 45]\ntotal = nums[0] + nums[§§]\nprint("Sum", total, sep="=")',
+      targetCode: 'nums = [15, 25, 35, 45]\ntotal = nums[0] + nums[-1]\nprint("Sum", total, sep="=")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Sum=60',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트의 요소 개수가 4개 이상일 때 첫 요소와 마지막 요소의 합을 출력하도록 빈칸을 채워보세요.',
+      prompt_en: '[Fill Blank] Complete the condition and indexing expressions so the sum of the first and last elements prints when the list has at least 4 items.',
+      hint_ko: '리스트 길이 함수를 조건식에 넣고, 양끝 위치를 가리키는 양수·음수 인덱스를 차례로 작성하세요.',
+      hint_en: 'Check the list length in the condition, then index the first and last positions.',
+      templateCode: 'arr = [10, 20, 30, 40]\nif §§§(arr) >= 4:\n    print(arr[§] + arr[§§])',
+      targetCode: 'arr = [10, 20, 30, 40]\nif len(arr) >= 4:\n    print(arr[0] + arr[-1])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '50',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 리스트의 첫 번째 단어와 마지막 단어를 출력하려다 두 번째 단어가 출력되는 인덱스 오류를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the index bug so the first word and last word of tags are printed.',
+      hint_ko: '리스트의 가장 앞 요소는 몇 번 인덱스에서 시작하는지 확인하세요.',
+      hint_en: 'Check which index number refers to the very first item of a list.',
+      templateCode: 'tags = ["py", "js", "go"]\nprint(tags[1], tags[-1])',
+      targetCode: 'tags = ["py", "js", "go"]\nprint(tags[0], tags[-1])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'py go',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] while 반복문으로 리스트의 모든 요소를 합산하려다 반복이 실행되지 않는 조건식 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the comparison operator in the while condition so all elements of nums are summed.',
+      hint_ko: '인덱스 i가 0부터 출발해 리스트 길이보다 작은 동안 반복되어야 합니다.',
+      hint_en: 'Index i starts at 0 and must loop while it remains smaller than the list length.',
+      templateCode: 'nums = [10, 20, 30]\ni = 0\ntotal = 0\nwhile i > len(nums):\n    total += nums[i]\n    i += 1\nprint("Total:", total)',
+      targetCode: 'nums = [10, 20, 30]\ni = 0\ntotal = 0\nwhile i < len(nums):\n    total += nums[i]\n    i += 1\nprint("Total:", total)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Total: 60',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 nums의 첫 번째 요소와 마지막 요소를 더해 변수 ends에 저장하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that adds the first and last elements of nums into ends.',
+      hint_ko: '맨 앞 양수 인덱스와 맨 뒤 음수 인덱스로 꺼낸 두 값을 더해 변수에 대입하세요.',
+      hint_en: 'Add the first item and last item of nums and assign the result to ends.',
+      templateCode: 'nums = [12, 24, 36, 48]\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Ends:", ends)',
+      targetCode: 'nums = [12, 24, 36, 48]\nends = nums[0] + nums[-1]\nprint("Ends:", ends)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Ends: 60',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 nums의 요소 개수와 두 번째 요소를 콜론(":") 구분자(sep)로 연결해 출력하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that prints the length of nums and its second element separated by ":".',
+      hint_ko: 'print() 안에 길이 함수와 1번 인덱스 요소를 쉼표로 나열하고 sep=":" 옵션을 지정하세요.',
+      hint_en: 'Pass the list length, the index-1 item, and sep=":" to print().',
+      templateCode: 'nums = [5, 15, 25]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'nums = [5, 15, 25]\nprint(len(nums), nums[1], sep=":")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3:15',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 리스트 길이와 양수·음수 인덱싱 연산 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '전체 요소의 개수와 앞에서 두 번째, 뒤에서 두 번째 요소의 합을 계산해보세요.',
+      hint_en: 'Count the total elements and add the second item from the front to the second item from the back.',
+      targetCode: 'arr = [10, 20, 30, 40, 50]\nprint(len(arr), arr[1] + arr[-2])',
+      choices: [
+        '5 60',
+        '5 50',
+        '4 60',
+        '5 70',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '5 60',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 빈 리스트 불리언 변환과 인덱싱 몫·나머지 연산 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '빈 리스트의 참·거짓 판정값과 양수·음수 인덱스로 꺼낸 값들의 몫(//)·나머지(%) 합을 구해보세요.',
+      hint_en: 'Evaluate bool([]) and compute the floor division and modulo using the indexed elements.',
+      targetCode: 'nums = [14, 20, 35, 40]\nempty = []\nq = nums[-1] // nums[0]\nr = nums[-2] % nums[0]\nprint(bool(empty), len(nums), q + r)',
+      choices: [
+        'False 4 9',
+        'True 4 9',
+        'False 4 8',
+        'False 3 9',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'False 4 9',
+        },
+      ],
+    },
+  ],
 };

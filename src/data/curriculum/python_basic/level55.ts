@@ -1,361 +1,356 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_55: PracticeRound = {
-  "id": "py-basic-r55",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 55,
-  "title_ko": "55레벨: 런타임 에러의 이해와 try - except 기본 구조",
-  "title_en": "Level 55: Runtime Errors & Basic try - except",
-  "description_ko": "실행 중 발생하는 런타임 에러로 프로그램이 멈추지 않도록 try - except 기본 구조로 안전하게 흐름을 이어갑니다.",
-  "description_en": "Prevent runtime crashes like division by zero or invalid conversions using basic try - except blocks.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "math",
-    "method",
-    "if",
-    "for_range",
-    "for_in",
-    "while",
-    "def",
-    "try"
+  id: 'py-basic-r55',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 55,
+  title_ko: '문자열을 쪼개어 리스트로 만드는 .split()과 분리된 리스트 활용',
+  title_en: 'Splitting Strings into Lists with .split()',
+  description_ko: '.split()과 구분자 지정 .split(",")으로 문자열을 쪼개어 리스트로 만들고, 섹션 5에서 배운 리스트 인덱싱·순회·메서드와 결합합니다.',
+  description_en: 'Split strings into lists using .split() and .split(","), and combine them with list indexing, loops, and methods.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'iter',
+    'method',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] try - except 구문으로 0 나눗셈 에러를 잡아 Error를 출력해보세요.",
-      "prompt_en": "[Block] Use a try - except statement to catch division by zero and print Error.",
-      "hint_ko": "0으로 나누는 연산처럼 에러가 발생하는 코드는 try 블록 안에, 에러 발생 시 대체할 출력은 except 블록 안에 들여쓰기해 작성합니다.",
-      "hint_en": "Place the risky division inside the indented try block, and put the fallback print inside the except block.",
-      "targetCode": "try:\n    print(10 // 0)\nexcept:\n    print(\"Error\")",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] s.split()으로 공백 기준 단어들을 쪼개어 문자열 리스트로 만들고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Split s by whitespace using .split() and print the resulting list and its length.',
+      hint_ko: '인자 없이 .split()을 호출하면 공백을 기준으로 단어들을 나누어 리스트로 반환합니다.',
+      hint_en: 'Calling .split() with no arguments splits on whitespace and returns a list of strings.',
+      targetCode: 's = "red green blue"\nwords = s.split()\nprint(words, len(words))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Error"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 문자열 \"abc\"를 정수로 변환하다 에러가 나면 Invalid를 출력하도록 두 키워드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two exception-handling keywords so converting \"abc\" prints Invalid.",
-      "hint_ko": "첫 빈칸에는 실행을 '시도하다'를 뜻하는 세 글자 키워드를, 둘째 빈칸에는 예외 처리 여섯 글자 키워드를 적으세요.",
-      "hint_en": "Start with the three-letter keyword meaning \"attempt\", and catch the crash with the six-letter exception keyword.",
-      "templateCode": "§§§:\n    n = int(\"abc\")\n    print(n)\n§§§§§§:\n    print(\"Invalid\")",
-      "targetCode": "try:\n    n = int(\"abc\")\n    print(n)\nexcept:\n    print(\"Invalid\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Invalid"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] try에서 에러가 나면 except의 Skip을 출력한 뒤 바깥의 Done을 이어서 출력해보세요.",
-      "prompt_en": "[Block] Catch the error in except to print Skip, then continue execution to print Done.",
-      "hint_ko": "except 블록이 에러를 처리하고 나면 들여쓰기가 끝난 바깥쪽 마지막 출력문까지 프로그램이 멈추지 않고 실행됩니다.",
-      "hint_en": "Once the except block handles the error, the unindented print statement below the block continues to execute.",
-      "targetCode": "try:\n    res = 100 // 0\n    print(res)\nexcept:\n    print(\"Skip\")\nprint(\"Done\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Skip\nDone"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정상 변환될 때 계산 결과만 출력하고 예외 블록을 건너뛴 뒤 End를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two keywords so valid code prints 50, skips Fail, and prints End.",
-      "hint_ko": "실행을 '시도하다'라는 세 글자 키워드와, 에러가 날 때만 동작하는 여섯 글자 예외 키워드로 변환 코드를 감싸세요.",
-      "hint_en": "Wrap the conversion with the three-letter \"attempt\" keyword and the six-letter error-catching keyword.",
-      "templateCode": "§§§:\n    n = int(\"25\")\n    print(n * 2)\n§§§§§§:\n    print(\"Fail\")\nprint(\"End\")",
-      "targetCode": "try:\n    n = int(\"25\")\n    print(n * 2)\nexcept:\n    print(\"Fail\")\nprint(\"End\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "50\nEnd"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입력값을 정수로 바꿔 10을 더하고 에러 시 NaN을 출력해보세요.",
-      "prompt_en": "[Block] Convert input to int and add 10 inside try, or print NaN in except.",
-      "hint_ko": "try 블록에서 에러 없이 모든 줄이 끝나면 except 블록은 자동으로 건너뜁니다.",
-      "hint_en": "When every line inside the try block succeeds without error, the except block is skipped automatically.",
-      "targetCode": "raw = input()\ntry:\n    n = int(raw)\n    print(n + 10)\nexcept:\n    print(\"NaN\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "15",
-          "expectedOutput": "25"
+          id: 1,
+          input: '',
+          expectedOutput: "['red', 'green', 'blue'] 3",
         },
-        {
-          "id": 2,
-          "input": "ten",
-          "expectedOutput": "NaN"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 문자열을 정수로 변환 시도하고 실패하면 0으로 대체해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Try converting s to an int, fall back to 0 on error, and print Rate:{rate}.",
-      "hint_ko": "세 글자 시도 키워드로 정수 변환을 감싸고, 여섯 글자 예외 키워드에서 기본값 0을 대입하세요.",
-      "hint_en": "Use the three-letter attempt keyword and six-letter error keyword to assign 0 on failure.",
-      "templateCode": "s = input()\n§§§:\n    rate = int(s)\n§§§§§§:\n    rate = 0\nprint(f\"Rate:{rate}\")",
-      "targetCode": "s = input()\ntry:\n    rate = int(s)\nexcept:\n    rate = 0\nprint(f\"Rate:{rate}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "35",
-          "expectedOutput": "Rate:35"
-        },
-        {
-          "id": 2,
-          "input": "bad",
-          "expectedOutput": "Rate:0"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] try 안에서 정수 변환과 100 // d 나눗셈을 수행하고 에러 시 안내문을 출력해보세요.",
-      "prompt_en": "[Block] Convert input to int and divide 100 // d inside try, or print Cannot divide.",
-      "hint_ko": "f-string 중괄호 안에서도 수식을 바로 계산할 수 있으며, 수식 계산 중 에러가 발생하면 즉시 except로 이동합니다.",
-      "hint_en": "Expressions inside f-string braces are evaluated directly, and any error during evaluation jumps straight to except.",
-      "targetCode": "s = input()\ntry:\n    d = int(s)\n    print(f\"Ans:{100 // d}\")\nexcept:\n    print(\"Cannot divide\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "25",
-          "expectedOutput": "Ans:4"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Cannot divide"
-        },
-        {
-          "id": 3,
-          "input": "zero",
-          "expectedOutput": "Cannot divide"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환에 성공하면 count에 더하고 에러 시 -1을 저장하도록 키워드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Add int(s) to count on success or set count = -1 on error.",
-      "hint_ko": "변환 중 에러가 나면 즉시 아랫줄 누적식을 건너뛰고 예외 블록으로 이동하도록 세 글자 시도 키워드와 여섯 글자 예외 키워드를 채우세요.",
-      "hint_en": "Use the three-letter attempt keyword and six-letter error keyword so a failed conversion jumps straight to the fallback assignment.",
-      "templateCode": "s = input()\ncount = 0\n§§§:\n    val = int(s)\n    count += val\n§§§§§§:\n    count = -1\nprint(f\"Count:{count}\")",
-      "targetCode": "s = input()\ncount = 0\ntry:\n    val = int(s)\n    count += val\nexcept:\n    count = -1\nprint(f\"Count:{count}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "12",
-          "expectedOutput": "Count:12"
-        },
-        {
-          "id": 2,
-          "input": "err",
-          "expectedOutput": "Count:-1"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] for문 안에서 try - except와 pass로 숫자 문자열만 골라 합계를 출력해보세요.",
-      "prompt_en": "[Block] Use try - except with pass inside a for loop to sum only valid integer strings.",
-      "hint_ko": "pass 키워드는 문법적으로 블록 내용은 필요하지만 실행할 동작이 없을 때 사용하는 빈 실행문입니다.",
-      "hint_en": "The pass keyword is a null statement used when a block is syntactically required but no action is needed.",
-      "targetCode": "items = [\"10\", \"x\", \"25\", \"y\"]\ntotal = 0\nfor s in items:\n    try:\n        total += int(s)\n    except:\n        pass\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "35"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 토큰들을 순회하며 정수로 변환 가능한 값만 합산해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Sum only the tokens that can be converted to int using try - except.",
-      "hint_ko": "for문 안에서도 세 글자 시도 키워드와 여섯 글자 예외 키워드로 변환 코드를 감싸 에러 항목을 건너뛰세요.",
-      "hint_en": "Inside the for loop, wrap the integer addition with the 3-letter try keyword and 6-letter except keyword.",
-      "templateCode": "raw = input().split()\ntotal = 0\nfor s in raw:\n    §§§:\n        total += int(s)\n    §§§§§§:\n        pass\nprint(f\"Sum:{total}\")",
-      "targetCode": "raw = input().split()\ntotal = 0\nfor s in raw:\n    try:\n        total += int(s)\n    except:\n        pass\nprint(f\"Sum:{total}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10 err 20 30",
-          "expectedOutput": "Sum:60"
-        },
-        {
-          "id": 2,
-          "input": "5 x y 15",
-          "expectedOutput": "Sum:20"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 예외 감시 블록을 시작할 때 for:로 잘못 작성된 키워드를 try:로 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the SyntaxError where for: was written instead of try: before the guarded block.",
-      "hint_ko": "except:와 짝을 이루는 예외 감시 블록은 for:가 아니라 try:로 시작해야 합니다.",
-      "hint_en": "Start the exception-guarded block with try: instead of for:.",
-      "templateCode": "s = input()\nfor:\n    n = int(s)\n    print(n * 3)\nexcept:\n    print(\"Bad input\")",
-      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(n * 3)\nexcept:\n    print(\"Bad input\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "abc",
-          "expectedOutput": "Bad input"
-        },
-        {
-          "id": 2,
-          "input": "7",
-          "expectedOutput": "21"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 에러 처리 블록에 return:으로 잘못 적힌 키워드를 except:로 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the SyntaxError by replacing return: with except:.",
-      "hint_ko": "try: 블록에서 발생한 에러를 받아 처리하는 키워드는 return:이 아니라 except:입니다.",
-      "hint_en": "Use except: instead of return: to handle errors raised in the try: block.",
-      "templateCode": "try:\n    print(50 // 0)\nreturn:\n    print(\"ZeroError\")",
-      "targetCode": "try:\n    print(50 // 0)\nexcept:\n    print(\"ZeroError\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "ZeroError"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] try 블록 안에서 50을 int(raw)로 나눈 몫을 ans에 저장하는 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line inside try that assigns 50 // int(raw) to ans.",
-      "hint_ko": "들여쓰기된 자리에서 ans = 50 // int(raw) 수식을 작성하세요.",
-      "hint_en": "Write ans = 50 // int(raw) inside the try block.",
-      "templateCode": "raw = input()\ntry:\n    §§§§§§§§§§§§§§§§§§§§\nexcept:\n    ans = -1\nprint(f\"Result:{ans}\")",
-      "targetCode": "raw = input()\ntry:\n    ans = 50 // int(raw)\nexcept:\n    ans = -1\nprint(f\"Result:{ans}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10",
-          "expectedOutput": "Result:5"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Result:-1"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] try 블록 아래에서 예외를 잡아 처리하는 except 선언 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the except: line to catch conversion errors.",
-      "hint_ko": "예외 처리 키워드 except 뒤에 콜론(:)을 붙여 except:를 작성하세요.",
-      "hint_en": "Write except: at the top level.",
-      "templateCode": "s = input()\ntry:\n    print(int(s) + 10)\n§§§§§§§\n    print(\"Error\")",
-      "targetCode": "s = input()\ntry:\n    print(int(s) + 10)\nexcept:\n    print(\"Error\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "err",
-          "expectedOutput": "Error"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "15"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 반복문 안에서 예외 처리를 수행하는 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact list printed after running the following loop with try - except.",
-      "hint_ko": "네 문자열을 순서대로 대입하며 정상 몫 계산이 끝나는 경우와 0 나눗셈·변환 실패로 예외 블록이 실행되는 경우를 차례로 추적하세요.",
-      "hint_en": "Step through all four strings in order, checking which ones finish floor division cleanly and which ones jump to the fallback append.",
-      "targetCode": "data = [\"4\", \"0\", \"hi\", \"2\"]\nres = []\nfor s in data:\n    try:\n        v = 8 // int(s)\n        res.append(v)\n    except:\n        res.append(-1)\nprint(res)",
-      "choices": [
-        "[2, -1, -1, 4]",
-        "[2, 0, -1, 4]",
-        "[2, -1, 4]",
-        "[2, -1, -1, 2]"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 한 줄로 입력된 문장을 공백 기준으로 쪼개어 단어 리스트 words에 저장하고 첫 단어를 출력해보세요.',
+      prompt_en: '[Fill Blank] Split the input line by spaces into words and print the first word.',
+      hint_ko: '문자열을 쪼개어 리스트로 만드는 다섯 글자 메서드를 호출하세요.',
+      hint_en: 'Call the 5-letter method that splits a string into a list.',
+      templateCode: 'words = input().§§§§§()\nprint(f"First:{words[0]}, Count:{len(words)}")',
+      targetCode: 'words = input().split()\nprint(f"First:{words[0]}, Count:{len(words)}")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[2, -1, -1, 4]"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: 'py js go',
+          expectedOutput: 'First:py, Count:3',
+        },
+        {
+          id: 2,
+          input: 'hello world',
+          expectedOutput: 'First:hello, Count:2',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] s.split("-")으로 하이픈 기준 리스트를 만들고 첫 요소와 마지막 요소를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Split s on "-" using .split("-") and print the first and last elements.',
+      hint_ko: '.split("-")처럼 구분자를 지정하면 해당 기호를 기준으로 잘라 리스트를 만듭니다.',
+      hint_en: 'Passing a delimiter like "-" splits the string wherever that character appears.',
+      targetCode: 's = "2026-11-17"\nparts = s.split("-")\nprint(parts[0], parts[-1])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2026 17',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 콤마 기호로 구분된 과일 문자열을 쪼개어 리스트로 만들고 두 번째 과일을 출력해보세요.',
+      prompt_en: '[Fill Blank] Pass the comma delimiter to .split() and print the second item.',
+      hint_ko: 'split() 괄호 안에 기준이 되는 콤마 문자열을 따옴표로 감싸 적으세요.',
+      hint_en: 'Put the comma string literal "," inside the parentheses of split().',
+      templateCode: 'csv = "apple,banana,melon"\nitems = csv.split(§§§)\nprint(items[1])',
+      targetCode: 'csv = "apple,banana,melon"\nitems = csv.split(",")\nprint(items[1])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'banana',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] for x in s.split(","):로 쪼개진 숫자 문자열들을 순회하며 int(x)로 변환해 합계를 구하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Iterate over s.split(","), convert each token with int(x), and accumulate the sum.',
+      hint_ko: '.split()의 결과는 문자열 리스트이므로 산술 덧셈을 하려면 각 요소를 int()로 변환해야 합니다.',
+      hint_en: 'Because .split() returns strings, convert each piece with int(x) before adding.',
+      targetCode: 's = "10,20,30"\ntotal = 0\nfor x in s.split(","):\n    total += int(x)\nprint(f"Sum:{total}")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Sum:60',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 공백으로 구분된 입력 숫자들을 쪼개어 순회하면서 짝수만 골라 evens 리스트에 담아보세요.',
+      prompt_en: '[Fill Blank] Split the input line by whitespace, convert each token to int, and collect even numbers.',
+      hint_ko: '입력 문자열을 공백 기준 리스트로 나누는 메서드 호출을 완성하세요.',
+      hint_en: 'Complete the method call that splits input() by spaces.',
+      templateCode: 'evens = []\nfor s in input().§§§§§§§:\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(evens)',
+      targetCode: 'evens = []\nfor s in input().split():\n    n = int(s)\n    if n % 2 == 0:\n        evens.append(n)\nprint(evens)',
+      testCases: [
+        {
+          id: 1,
+          input: '3 8 5 12',
+          expectedOutput: '[8, 12]',
+        },
+        {
+          id: 2,
+          input: '2 7 4',
+          expectedOutput: '[2, 4]',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] .strip().split(":")으로 분리한 리스트에서 .pop()으로 끝 요소를 꺼내 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Trim and split raw on ":", then pop the last item and print it with the remaining list.',
+      hint_ko: '.split()이 반환한 리스트에도 .pop()이나 .append() 같은 리스트 메서드를 그대로 쓸 수 있습니다.',
+      hint_en: 'The list returned by .split() supports all list methods such as .pop() and .append().',
+      targetCode: 'raw = "  A:B:C  "\nparts = raw.strip().split(":")\nlast = parts.pop()\nprint(f"{last} / {parts}")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "C / ['A', 'B']",
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] "키=값" 형태의 문자열을 "=" 기준으로 두 변수 k, v에 다중 할당해 출력해보세요.',
+      prompt_en: '[Fill Blank] Split line on "=" into k and v, then print them.',
+      hint_ko: '등호("=")를 구분자로 전달해 문자열을 두 조각으로 나누는 호출식을 적으세요.',
+      hint_en: 'Call split("=") to divide the string on the equals sign.',
+      templateCode: 'line = input().strip()\nk, v = line.§§§§§§§§§§\nprint(f"{k} -> {v}")',
+      targetCode: 'line = input().strip()\nk, v = line.split("=")\nprint(f"{k} -> {v}")',
+      testCases: [
+        {
+          id: 1,
+          input: 'mode=fast',
+          expectedOutput: 'mode -> fast',
+        },
+        {
+          id: 2,
+          input: 'lv=99',
+          expectedOutput: 'lv -> 99',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 콤마로 구분된 점수 문자열을 쪼개어 첫 점수와 마지막 점수의 정수 합을 출력해보세요.',
+      prompt_en: '[Fill Blank] Split raw on ",", and print the integer sum of the first and last elements.',
+      hint_ko: '문자열 분리 메서드, 첫 번째 인덱스, 정수 변환 함수를 차례로 채우세요.',
+      hint_en: 'Fill in the split method, index 0, and int() conversion function.',
+      templateCode: 'raw = input().strip()\npts = raw.§§§§§(",")\ntotal = int(pts[§]) + §§§(pts[-1])\nprint(f"Ends:{total}")',
+      targetCode: 'raw = input().strip()\npts = raw.split(",")\ntotal = int(pts[0]) + int(pts[-1])\nprint(f"Ends:{total}")',
+      testCases: [
+        {
+          id: 1,
+          input: '10,20,30',
+          expectedOutput: 'Ends:40',
+        },
+        {
+          id: 2,
+          input: '15,25,35,45',
+          expectedOutput: 'Ends:60',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 콤마로 연결된 문자열 "10,20,30"을 쪼개려다 구분자를 생략해 분리되지 않는 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Pass the comma delimiter "," to .split() so the three numbers are separated properly.',
+      hint_ko: '공백이 아닌 콤마로 이어진 문자열을 나눌 때는 괄호 안에 ","를 지정해야 합니다.',
+      hint_en: 'Specify "," inside .split(",") when the string is comma-separated.',
+      templateCode: 's = "10,20,30"\nparts = s.split()\nprint(len(parts), parts[0])',
+      targetCode: 's = "10,20,30"\nparts = s.split(",")\nprint(len(parts), parts[0])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 10',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 하이픈("-")으로 구분된 입력 문자열을 잘못된 구분자로 나누어 에러가 나는 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the delimiter argument in .split() so hyphen-separated input unpacks properly.',
+      hint_ko: '입력 데이터의 실제 구분 기호에 맞춰 .split()의 인자를 고치세요.',
+      hint_en: 'Match the delimiter string in .split() to the "-" used in the input.',
+      templateCode: 'raw = input().strip()\ntag, code = raw.split(":")\nprint(f"[{tag}] {code}")',
+      targetCode: 'raw = input().strip()\ntag, code = raw.split("-")\nprint(f"[{tag}] {code}")',
+      testCases: [
+        {
+          id: 1,
+          input: 'KR-101',
+          expectedOutput: '[KR] 101',
+        },
+        {
+          id: 2,
+          input: 'US-205',
+          expectedOutput: '[US] 205',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 문자열 s를 슬래시("/") 기준으로 쪼개어 리스트 변수 parts에 저장하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that splits s on "/" and assigns the list to parts.',
+      hint_ko: 's에 구분자 "/"를 넣은 분리 메서드를 호출해 parts에 대입하세요.',
+      hint_en: 'Write parts = s.split("/") on the second line.',
+      templateCode: 's = "usr/local/bin"\n§§§§§§§§§§§§§§§§§§§§\nprint(parts[-1], len(parts))',
+      targetCode: 's = "usr/local/bin"\nparts = s.split("/")\nprint(parts[-1], len(parts))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'bin 3',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 분리된 각 숫자 문자열 s를 정수로 변환해 리스트 nums에 추가하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the indented line that converts s with int() and appends it to nums.',
+      hint_ko: 'nums의 추가 메서드 안에 정수 변환 식을 넣어 작성하세요.',
+      hint_en: 'Write nums.append(int(s)) inside the for loop.',
+      templateCode: 'nums = []\nfor s in input().split():\n    §§§§§§§§§§§§§§§§§§§\nprint(nums)',
+      targetCode: 'nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(nums)',
+      testCases: [
+        {
+          id: 1,
+          input: '4 8 12',
+          expectedOutput: '[4, 8, 12]',
+        },
+        {
+          id: 2,
+          input: '7 14',
+          expectedOutput: '[7, 14]',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 .split("-")으로 만들어진 리스트의 길이, 인덱싱, 슬라이싱 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '하이픈으로 쪼개진 4개의 요소 중 마지막 요소와 앞 2개 슬라이싱 리스트를 확인하세요.',
+      hint_en: 'Check the count of split parts, the last element, and the first two elements.',
+      targetCode: 'parts = "A-B-C-D".split("-")\nprint(f"{len(parts)}:{parts[-1]}:{parts[:2]}")',
+      choices: [
+        "4:D:['A', 'B']",
+        "4:D:AB",
+        "3:D:['A', 'B']",
+        "4:C:['A', 'B']",
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "4:D:['A', 'B']",
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 문자열 정제(.strip, .replace, .split)와 리스트 중복 제거 순회 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '콤마가 공백으로 바뀐 뒤 쪼개진 숫자들 중 0은 건너뛰고 중복 없이 모았을 때의 리스트 크기와 합계를 구해보세요.',
+      hint_en: 'After replacing commas and splitting, skip 0 and collect unique numbers into seen.',
+      targetCode: 'raw = " 2, 5, 0, 4, 5 ".strip().replace(",", " ")\nseen = [2]\ntotal = 0\nfor s in raw.split():\n    n = int(s)\n    if n == 0:\n        continue\n    if n not in seen:\n        seen.append(n)\n        total += n\nprint(f"{len(seen)}:{total}")',
+      choices: [
+        '3:9',
+        '4:14',
+        '3:11',
+        '4:16',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3:9',
+        },
+      ],
+    },
+  ],
 };

@@ -1,340 +1,365 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_16: PracticeRound = {
-  "id": "py-basic-r16",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 16,
-  "title_ko": "16레벨: 불리언(bool)과 비교 연산자",
-  "title_en": "Level 16: Booleans (bool) & Comparison Operators",
-  "description_ko": "참(True)과 거짓(False) 불리언 자료형과 여섯 가지 비교 연산자(==, !=, >, <, >=, <=)를 익힙니다.",
-  "description_en": "Learn boolean values (True, False) and the six comparison operators (==, !=, >, <, >=, <=).",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "method"
-  ],
-  "questions": [
+  id: 'py-basic-r16',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 16,
+  title_ko: 'input("안내 문구") 프롬프트 출력과 입력값 활용하기',
+  title_en: 'input("Prompt") Message & Using Input Values',
+  description_ko: 'input("안내 문구")로 화면에 안내 메시지를 출력하면서 동시에 사용자 입력을 받는 방법을 익힙니다.',
+  description_en: 'Learn how to display a prompt message inside input("...") while reading user input.',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 참(True)을 뜻하는 불리언 값을 변수 is_ready에 저장하고 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to store the boolean value True in is_ready and print it.",
-      "hint_ko": "\"True\"처럼 따옴표를 붙이면 문자열이 되므로 따옴표 없이 True로 작성합니다.",
-      "hint_en": "Omit quotes around True so Python treats it as a boolean constant rather than a string.",
-      "targetCode": "is_ready = True\nprint(is_ready)",
-      "expectedVariables": {
-        "is_ready": true
-      },
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] input("Name: ")으로 안내 문구를 띄워 이름을 입력받고 "Hi,"와 함께 출력해보세요.',
+      prompt_en: '[Block] Prompt with input("Name: ") to read a name and print it after "Hi,".',
+      hint_ko: 'input() 괄호 안에 문자열을 넣으면 입력을 기다리기 전에 그 안내 문구를 먼저 화면에 출력합니다.',
+      hint_en: 'Passing a string inside input() displays that prompt message before waiting for user input.',
+      targetCode: 'name = input("Name: ")\nprint("Hi,", name)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈칸에 거짓을 뜻하는 불리언 상수를 채워 변수에 저장하고 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the boolean literal for false to store and print it.",
-      "hint_ko": "영어로 거짓을 뜻하는 다섯 글자 단어를 따옴표 없이 첫 글자만 대문자로 적어보세요.",
-      "hint_en": "Write the five-letter English word for untruth without quotes, capitalizing only its first letter.",
-      "templateCode": "is_open = §§§§§\nprint(is_open)",
-      "targetCode": "is_open = False\nprint(is_open)",
-      "expectedVariables": {
-        "is_open": false
-      },
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 부등호 비교 연산자(>, <)로 두 변수 a와 b의 크기를 비교해 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to compare a and b using > and < and print both results.",
-      "hint_ko": "15는 10보다 크므로 첫 번째 비교는 True, 두 번째 비교는 False가 출력됩니다.",
-      "hint_en": "Since 15 is greater than 10, a > b evaluates to True and a < b evaluates to False.",
-      "targetCode": "a = 15\nb = 10\nprint(a > b)\nprint(a < b)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nFalse"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸에 비교 기호를 채워 score(80)가 80 이상인지와 79 이하인지를 차례로 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the comparison operators to check if score (80) is at least 80 and at most 79.",
-      "hint_ko": "이상과 이하를 나타내는 비교 기호는 부등호를 먼저 적고 그 바로 뒤에 등호를 붙여 표기합니다.",
-      "hint_en": "Write greater-or-equal and less-or-equal by placing the angle bracket first, followed immediately by the equals sign.",
-      "templateCode": "score = 80\nprint(score §§ 80)\nprint(score §§ 79)",
-      "targetCode": "score = 80\nprint(score >= 80)\nprint(score <= 79)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nFalse"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 같음(==)과 다름(!=) 비교 연산자로 비밀번호 문자열을 비교하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to test string equality (==) and inequality (!=).",
-      "hint_ko": "등호 한 개(=)는 변수에 값을 저장할 때만 쓰고, 비교할 때는 항상 == 또는 !=를 씁니다.",
-      "hint_en": "A single = assigns a value to a variable, whereas == and != compare two values.",
-      "targetCode": "pw = \"1234\"\nprint(pw == \"1234\")\nprint(pw != \"1234\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nFalse"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸에 비교 기호를 채워 code가 \"A1\"과 같은지, \"B2\"와 다른지를 한 줄에 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the comparison operators to test if code equals \"A1\" and differs from \"B2\".",
-      "hint_ko": "첫째 빈칸에는 등호 두 개를 나란히 붙인 같음 비교 기호를, 둘째 빈칸에는 느낌표와 등호를 붙인 다름 비교 기호를 채워보세요.",
-      "hint_en": "Use two equals signs side by side for equality in the first blank, and an exclamation mark followed by equals for inequality in the second.",
-      "templateCode": "code = \"A1\"\nprint(code §§ \"A1\", code §§ \"B2\")",
-      "targetCode": "code = \"A1\"\nprint(code == \"A1\", code != \"B2\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True True"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 사칙연산과 비교 연산자(>, ==)가 함께 있는 식의 결과를 확인하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to evaluate expressions combining arithmetic and comparison operators.",
-      "hint_ko": "y + 1이 먼저 25로 계산된 다음 x == 25가 비교되어 True가 출력됩니다.",
-      "hint_en": "y + 1 evaluates to 25 first, and then x == 25 evaluates to True.",
-      "targetCode": "x = 25\ny = 4 * 6\nprint(x > y)\nprint(x == y + 1)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nTrue"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸에 비교 기호를 채워 가격(price)이 예산(budget) 이하인지와 예산과 다른지를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the operators to check if price is at most budget and if price differs from budget.",
-      "hint_ko": "작거나 같음(이하)은 왼쪽이 닫힌 부등호 뒤에 등호를 붙이고, 서로 다름은 느낌표 뒤에 등호를 붙여 표기합니다.",
-      "hint_en": "Combine a less-than bracket before equals on line 3, and an exclamation mark before equals on line 4.",
-      "templateCode": "price = 3500\nbudget = 3000\nprint(price §§ budget)\nprint(price §§ budget)",
-      "targetCode": "price = 3500\nbudget = 3000\nprint(price <= budget)\nprint(price != budget)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False\nTrue"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] n % 2 == 0 비교식의 불리언 결과를 변수 res에 저장해 출력해보세요.",
-      "prompt_en": "[Block] Store the boolean result of n % 2 == 0 in variable res and print it.",
-      "hint_ko": "n % 2 == 0이 먼저 판정되어 참·거짓 값이 구해진 뒤 왼쪽 변수 res에 대입됩니다.",
-      "hint_en": "Python evaluates n % 2 == 0 first and stores the resulting boolean in res.",
-      "targetCode": "n = int(input())\nres = n % 2 == 0\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "12",
-          "expectedOutput": "True"
+          id: 1,
+          input: 'Alice',
+          expectedOutput: 'Name: Hi, Alice',
         },
         {
-          "id": 2,
-          "input": "7",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백 분리 메서드와 비교 기호를 채워 첫째 정수가 둘째 정수 이상인지 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the split method and comparison symbol to check if x is at least y.",
-      "hint_ko": "첫째 줄에는 쪼개다·나누다를 뜻하는 다섯 글자 문자열 메서드를, 마지막 줄에는 크거나 같음을 뜻하는 부등호+등호 조합을 적어보세요.",
-      "hint_en": "Call the five-letter method meaning to divide text on line 1, and place the greater-than bracket before equals on line 3.",
-      "templateCode": "a, b = input().§§§§§()\nx, y = int(a), int(b)\nprint(x §§ y)",
-      "targetCode": "a, b = input().split()\nx, y = int(a), int(b)\nprint(x >= y)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "20 15",
-          "expectedOutput": "True"
+          id: 2,
+          input: 'Minsu',
+          expectedOutput: 'Name: Hi, Minsu',
         },
-        {
-          "id": 2,
-          "input": "8 12",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 두 변수 a와 b의 값이 서로 같은지 비교하여 True가 출력되도록 비교 연산자를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator so it checks whether a and b are equal and prints True.",
-      "hint_ko": "현재 서로 다름(!=)을 비교하고 있습니다. 두 값이 서로 같은지 확인하는 등호 두 개(==) 연산자로 고쳐보세요.",
-      "hint_en": "Change the inequality operator (!=) to the equality operator (==) to check if both values are equal.",
-      "templateCode": "a, b = 10, 10\nprint(a != b)",
-      "targetCode": "a, b = 10, 10\nprint(a == b)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력된 정수 n이 20 이상일 때 True가 출력되도록 잘못된 부등호 방향을 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the reversed comparison operator so True prints when n is at least 20.",
-      "hint_ko": "20 이하(<=)가 아니라 20 이상(>=)인지 비교하도록 부등호 방향을 반대로 고쳐보세요.",
-      "hint_en": "Reverse the angle bracket from <= to >= to test whether n is 20 or greater.",
-      "templateCode": "n = int(input())\nprint(n <= 20)",
-      "targetCode": "n = int(input())\nprint(n >= 20)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "25",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "15",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] x를 y로 나눈 나머지가 0과 같은지 비교한 결과를 res에 저장하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the line that stores whether x % y equals 0 in variable res.",
-      "hint_ko": "res = x % y == 0 형태로 나머지 비교식의 결과를 변수 res에 대입해보세요.",
-      "hint_en": "Assign the remainder equality check to res using res = x % y == 0.",
-      "templateCode": "a, b = input().split()\nx, y = int(a), int(b)\n§§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "a, b = input().split()\nx, y = int(a), int(b)\nres = x % y == 0\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "18 6",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "14 5",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 가격(price)이 예산(budget) 이하인지 비교한 결과를 ans에 저장하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the line that stores whether price is at most budget in ans.",
-      "hint_ko": "ans = price <= budget 형태로 이하 비교 연산 결과를 변수 ans에 저장해보세요.",
-      "hint_en": "Assign the less-or-equal comparison to ans using ans = price <= budget.",
-      "templateCode": "price = int(input())\nbudget = 5000\n§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
-      "targetCode": "price = int(input())\nbudget = 5000\nans = price <= budget\nprint(ans)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4500",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "6000",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] When 10 10 is given as input, select the exact output of the following Python code.",
-      "hint_ko": "파이썬에서 숫자와 문자열은 모양이 같아 보여도 자료형이 다르면 같음 비교에서 어떻게 판정되는지, 그리고 짝수 나머지 비교 결과를 차례로 확인해보세요.",
-      "hint_en": "Consider how Python's equality check behaves when comparing an integer against a string with the same digits, then check the remainder condition on the last line.",
-      "targetCode": "a, b = input().split()\nx = int(a)\nprint(x == b)\nprint(x % 2 == 0)",
-      "choices": [
-        "True\nTrue",
-        "False\nTrue",
-        "False\nFalse",
-        "True\nFalse"
       ],
-      "correctChoiceIndex": 1,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 큰따옴표로 감싼 안내 문구 "City: "를 채워 도시를 입력받고 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the double-quoted prompt "City: " inside input() and print the result.',
+      hint_ko: '콜론과 공백 한 칸까지 포함된 안내 문구를 큰따옴표로 감싸 괄호 안에 적습니다.',
+      hint_en: 'Wrap the prompt text including the colon and trailing space in double quotes.',
+      templateCode: 'city = input(§§§§§§§§)\nprint("Go to", city)',
+      targetCode: 'city = input("City: ")\nprint("Go to", city)',
+      testCases: [
         {
-          "id": 1,
-          "input": "10 10",
-          "expectedOutput": "False\nTrue"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: 'Seoul',
+          expectedOutput: 'City: Go to Seoul',
+        },
+        {
+          id: 2,
+          input: 'Busan',
+          expectedOutput: 'City: Go to Busan',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] input("ID: ")와 input("PW: ")를 차례로 호출해 두 입력값을 나란히 출력해보세요.',
+      prompt_en: '[Block] Call input("ID: ") and input("PW: ") in order, then print both values.',
+      hint_ko: '각 input()의 안내 문구가 순서대로 출력되며 두 줄의 입력값이 각 변수에 저장됩니다.',
+      hint_en: 'Each input() prompt displays in turn and stores its respective line of input.',
+      targetCode: 'uid = input("ID: ")\npw = input("PW: ")\nprint(uid, pw)',
+      testCases: [
+        {
+          id: 1,
+          input: 'hero\n1234',
+          expectedOutput: 'ID: PW: hero 1234',
+        },
+        {
+          id: 2,
+          input: 'admin\n9999',
+          expectedOutput: 'ID: PW: admin 9999',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 둘째 줄 빈칸에 입력 함수 이름을 채워 두 개의 프롬프트 입력을 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the input function name on line 2 to complete the two prompt inputs.',
+      hint_ko: '첫째 줄과 똑같이 안내 문구를 출력하며 입력을 받는 내장 함수 이름을 적습니다.',
+      hint_en: 'Write the built-in function name that displays the prompt and reads input.',
+      templateCode: 'job = input("Job: ")\nrank = §§§§§("Rank: ")\nprint(job, rank)',
+      targetCode: 'job = input("Job: ")\nrank = input("Rank: ")\nprint(job, rank)',
+      testCases: [
+        {
+          id: 1,
+          input: 'Mage\nS',
+          expectedOutput: 'Job: Rank: Mage S',
+        },
+        {
+          id: 2,
+          input: 'Knight\nA',
+          expectedOutput: 'Job: Rank: Knight A',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] input("Tag: ")로 받은 문자열에 += "!"로 느낌표를 덧붙여 출력해보세요.',
+      prompt_en: '[Block] Read a string with input("Tag: "), append "!" using +=, and print it.',
+      hint_ko: '프롬프트로 입력받은 결과도 문자열이므로 += 연산자로 뒤에 글자를 이어붙일 수 있습니다.',
+      hint_en: 'The value returned by input("...") is a string, so += appends text to it.',
+      targetCode: 'tag = input("Tag: ")\ntag += "!"\nprint(tag)',
+      testCases: [
+        {
+          id: 1,
+          input: 'VIP',
+          expectedOutput: 'Tag: VIP!',
+        },
+        {
+          id: 2,
+          input: 'NEW',
+          expectedOutput: 'Tag: NEW!',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 둘째 줄 빈칸에 문자열 반복 연산자를 채워 입력받은 기호를 4번 반복 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the string repetition operator on line 2 to repeat the input 4 times.',
+      hint_ko: '프롬프트로 입력받은 문자열 변수를 4번 반복하도록 별표 기호를 넣습니다.',
+      hint_en: 'Place the asterisk operator between the variable and 4.',
+      templateCode: 'ch = input("Char: ")\nprint(ch § 4)',
+      targetCode: 'ch = input("Char: ")\nprint(ch * 4)',
+      testCases: [
+        {
+          id: 1,
+          input: '#',
+          expectedOutput: 'Char: ####',
+        },
+        {
+          id: 2,
+          input: '*',
+          expectedOutput: 'Char: ****',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] input("Year: ")와 input("Month: ")로 받은 두 값을 sep="/" 옵션으로 출력해보세요.',
+      prompt_en: '[Block] Read Year and Month with prompts and print them joined by sep="/".',
+      hint_ko: '두 프롬프트 입력 변수를 쉼표로 나열하고 sep="/"를 지정하면 슬래시로 연결됩니다.',
+      hint_en: 'Pass both input variables to print() with sep="/" to join them with a slash.',
+      targetCode: 'y = input("Year: ")\nm = input("Month: ")\nprint(y, m, sep="/")',
+      testCases: [
+        {
+          id: 1,
+          input: '2026\n11',
+          expectedOutput: 'Year: Month: 2026/11',
+        },
+        {
+          id: 2,
+          input: '2027\n03',
+          expectedOutput: 'Year: Month: 2027/03',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 구분자 옵션 이름을 채워 입력받은 팀명 앞에 Team-이 붙어 출력되게 해보세요.',
+      prompt_en: '[Fill Blank] Fill in the separator option name so the input prints as Team-Alpha.',
+      hint_ko: '쉼표로 나열된 두 문자열 사이를 하이픈으로 연결하는 세 글자 옵션 이름을 적습니다.',
+      hint_en: 'Write the three-letter separator option name before the equals sign.',
+      templateCode: 'team = input("Team: ")\nprint("Team", team, §§§="-")',
+      targetCode: 'team = input("Team: ")\nprint("Team", team, sep="-")',
+      testCases: [
+        {
+          id: 1,
+          input: 'Alpha',
+          expectedOutput: 'Team: Team-Alpha',
+        },
+        {
+          id: 2,
+          input: 'Blue',
+          expectedOutput: 'Team: Team-Blue',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 "ID: " 프롬프트로 입력받은 값 뒤에 "_OK"를 붙이고 User:hero_OK로 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks to prompt with "ID: ", append "_OK", and print User:hero_OK.',
+      hint_ko: '큰따옴표로 감싼 프롬프트 문자열, 문자열 복합 대입 연산자, 구분자 옵션 이름을 차례로 채웁니다.',
+      hint_en: 'Enter the double-quoted prompt string, the += operator, and the sep option name in order.',
+      templateCode: 'uid = input(§§§§§§)\nuid §§ "_OK"\nprint("User", uid, §§§=":")',
+      targetCode: 'uid = input("ID: ")\nuid += "_OK"\nprint("User", uid, sep=":")',
+      testCases: [
+        {
+          id: 1,
+          input: 'hero',
+          expectedOutput: 'ID: User:hero_OK',
+        },
+        {
+          id: 2,
+          input: 'ace',
+          expectedOutput: 'ID: User:ace_OK',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 안내 문구에 따옴표를 빠뜨려 발생한 문법 오류를 고쳐 "Job: "이 출력되게 해보세요.',
+      prompt_en: '[Fix Bug] Add quotes around the prompt message inside input() so "Job: " is displayed.',
+      hint_ko: 'input() 괄호 안의 안내 문구는 반드시 따옴표로 감싸 문자열로 전달해야 합니다.',
+      hint_en: 'The prompt text inside input() must be enclosed in quotes as a string.',
+      templateCode: 'job = input(Job: )\nprint("Role:", job)',
+      targetCode: 'job = input("Job: ")\nprint("Role:", job)',
+      testCases: [
+        {
+          id: 1,
+          input: 'Mage',
+          expectedOutput: 'Job: Role: Mage',
+        },
+        {
+          id: 2,
+          input: 'Healer',
+          expectedOutput: 'Job: Role: Healer',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 프롬프트 문자열의 따옴표 짝 불일치 오류를 고쳐 정상 실행되게 해보세요.',
+      prompt_en: '[Fix Bug] Fix the mismatched quotes in the prompt string inside input() so the code runs.',
+      hint_ko: 'input() 안의 안내 문구도 일반 문자열이므로 여는 따옴표와 닫는 따옴표가 같아야 합니다.',
+      hint_en: 'Make sure the opening and closing quotes of the prompt string match.',
+      templateCode: 'zone = input("Zone: \')\nprint("[" + zone + "]")',
+      targetCode: 'zone = input("Zone: ")\nprint("[" + zone + "]")',
+      testCases: [
+        {
+          id: 1,
+          input: 'A1',
+          expectedOutput: 'Zone: [A1]',
+        },
+        {
+          id: 2,
+          input: 'B2',
+          expectedOutput: 'Zone: [B2]',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 첫째 줄에 안내 문구 "Nick: "을 출력하며 입력을 받아 변수 nick에 저장하는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 1 to prompt with "Nick: " and store the input in variable nick.',
+      hint_ko: '변수 nick에 input("Nick: ") 호출 결과를 대입하는 한 줄을 작성합니다.',
+      hint_en: 'Assign input("Nick: ") to the variable nick on line 1.',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§\nprint("Player:", nick)',
+      targetCode: 'nick = input("Nick: ")\nprint("Player:", nick)',
+      testCases: [
+        {
+          id: 1,
+          input: 'Leo',
+          expectedOutput: 'Nick: Player: Leo',
+        },
+        {
+          id: 2,
+          input: 'Max',
+          expectedOutput: 'Nick: Player: Max',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 둘째 줄에 입력받은 문자열 변수 code를 2번 반복해 출력하는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 2 to print the input string variable code repeated 2 times.',
+      hint_ko: 'print() 안에서 변수 code에 문자열 반복 연산자와 2를 곱해 작성합니다.',
+      hint_en: 'Multiply code by 2 inside print() on line 2.',
+      templateCode: 'code = input("Code: ")\n§§§§§§§§§§§§§§§',
+      targetCode: 'code = input("Code: ")\nprint(code * 2)',
+      testCases: [
+        {
+          id: 1,
+          input: 'AB',
+          expectedOutput: 'Code: ABAB',
+        },
+        {
+          id: 2,
+          input: '7',
+          expectedOutput: 'Code: 77',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '변수 p에 접미사가 이어붙여진 뒤, 첫째 print()의 end=" "와 둘째 print()의 sep=":"이 어떻게 결합되는지 확인하세요.',
+      hint_en: 'Check how += updates p, and how end=" " connects the first print() to the second print() with sep=":".',
+      targetCode: 'p = "ID"\np += "01"\nprint("[User]", end=" ")\nprint(p, "OK", sep=":")',
+      choices: ['[User] ID01:OK', '[User]\nID01:OK', '[User] ID:01:OK', '[User] ID01 OK'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[User] ID01:OK',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '주석 줄을 건너뛰고 문자열 반복과 숫자 거듭제곱 결과를 슬래시(/) 구분자로 연결해보세요.',
+      hint_en: 'Skip the comment line and join the repeated string and squared number with "/".',
+      targetCode: 'ch = "A"\n# ch = "B"\nn = 3\nn **= 2\nprint(ch * 2, n, sep="/")',
+      choices: ['BB/9', 'AA/9', 'AA/6', 'A2/9'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'AA/9',
+        },
+      ],
+    },
+  ],
 };

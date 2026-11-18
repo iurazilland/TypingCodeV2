@@ -1,249 +1,317 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_58: PracticeRound = {
-  "id": "py-basic-r58",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 58,
-  "title_ko": "58레벨: 예외 처리 필수 기초 종합 문제풀이",
-  "title_en": "Level 58: Section 9 Comprehensive Review",
-  "description_ko": "try - except 기본 구조, 4대 핵심 에러 분기, while True 재입력 루프, 안전 도우미 함수를 종합 점검합니다.",
-  "description_en": "Comprehensive Section 9 review synthesizing try - except, 4 core exception types, retry loops, and safe functions.",
-  "totalQuestions": 10,
-  "unlockedBlocks": [],
-  "questions": [
+  id: 'py-basic-r58',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 58,
+  title_ko: '58레벨: 빈 값 None 자료형과 is None, is not None 판별',
+  title_en: 'Level 58: The None Type & is None / is not None Checks',
+  description_ko: '값이 아직 정해지지 않았음을 뜻하는 None 상수와 is None, is not None 판별 패턴을 익힙니다.',
+  description_en: 'Learn the None constant representing absence of a value and how to check it with is None and is not None.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'iter',
+    'method',
+  ],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환 실패와 0 나눗셈 에러를 각각 구분하도록 두 에러 타입을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two exception types to catch invalid integer input and division by zero.",
-      "hint_ko": "숫자가 아닌 문자열을 정수로 바꿀 때 나는 예외와, 0으로 나눌 때 나는 예외 이름을 위아래 순서에 맞게 지정하세요.",
-      "hint_en": "Specify the exception raised by invalid text conversion first, and the exception raised by dividing by zero second.",
-      "templateCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept §§§§§§§§§§:\n    print(\"Err:Val\")\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"Err:Zero\")",
-      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept ValueError:\n    print(\"Err:Val\")\nexcept ZeroDivisionError:\n    print(\"Err:Zero\")",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 변수 val에 빈 값 상수를 대입하고 그 값과 bool(val) 결과를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Assign None to val and print val alongside bool(val).',
+      hint_ko: '값이 없음을 뜻하는 None은 불리언으로 변환하면 거짓(False)으로 판별됩니다.',
+      hint_en: 'None represents the absence of a value and evaluates to False in bool().',
+      targetCode: 'val = None\nprint(val, bool(val))',
+      testCases: [
         {
-          "id": 1,
-          "input": "30",
-          "expectedOutput": "Ans:4"
+          id: 1,
+          input: '',
+          expectedOutput: 'None False',
         },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "Err:Val"
-        },
-        {
-          "id": 3,
-          "input": "0",
-          "expectedOutput": "Err:Zero"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 메뉴판에 있는 이름을 입력할 때까지 재시도하도록 탈출 키워드와 에러 타입을 채워보세요.",
-      "prompt_en": "[Fill Blank] Break out of the retry loop when k is found in prices, or catch missing keys.",
-      "hint_ko": "가격 조회에 성공한 직후에는 무한 반복을 멈추는 키워드를, 없는 메뉴를 찾았을 때는 딕셔너리 키 누락 예외 이름을 적으세요.",
-      "hint_en": "Exit the retry loop immediately after a valid lookup, and catch the exception raised when a dictionary lacks the requested key.",
-      "templateCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().strip()\n    try:\n        cost = prices[k]\n        §§§§§\n    except §§§§§§§§:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
-      "targetCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().strip()\n    try:\n        cost = prices[k]\n        break\n    except KeyError:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "milk\npie",
-          "expectedOutput": "NoMenu\npie:4500"
-        },
-        {
-          "id": 2,
-          "input": "tea",
-          "expectedOutput": "tea:3000"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트 범위를 벗어나면 None을 반환하도록 에러 타입과 반환 상수를 채워보세요.",
-      "prompt_en": "[Fill Blank] Catch out-of-bounds list indexing and return the null constant.",
-      "hint_ko": "리스트 길이 범위를 벗어난 위치 조회에서 발생하는 예외 타입을 잡고, 조회 실패를 뜻하는 '값 없음' 상수를 돌려주세요.",
-      "hint_en": "Catch the out-of-bounds sequence position exception and send back Python's null constant when lookup fails.",
-      "templateCode": "def pick_item(box, idx):\n    try:\n        return box[idx]\n    except §§§§§§§§§§:\n        return §§§§\nitems = [\"Gold\", \"Gem\"]\nres = pick_item(items, 4)\nprint(res is None, pick_item(items, 0))",
-      "targetCode": "def pick_item(box, idx):\n    try:\n        return box[idx]\n    except IndexError:\n        return None\nitems = [\"Gold\", \"Gem\"]\nres = pick_item(items, 4)\nprint(res is None, pick_item(items, 0))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True Gold"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트 인덱스 범위를 벗어났을 때 ValueError로 잘못 적은 에러 타입을 IndexError로 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the uncaught exception on out-of-range list access by replacing ValueError with IndexError.",
-      "hint_ko": "리스트 범위를 벗어난 순번을 조회할 때는 ValueError가 아니라 IndexError가 발생합니다.",
-      "hint_en": "Out-of-bounds list access raises IndexError rather than ValueError.",
-      "templateCode": "caps = [\"Seoul\", \"Tokyo\"]\nidx = int(input())\ntry:\n    print(caps[idx])\nexcept ValueError:\n    print(\"Unknown\")",
-      "targetCode": "caps = [\"Seoul\", \"Tokyo\"]\nidx = int(input())\ntry:\n    print(caps[idx])\nexcept IndexError:\n    print(\"Unknown\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5",
-          "expectedOutput": "Unknown"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Seoul"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트 순회 중 정수 변환 실패를 잡으려다 IndexError로 잘못 적은 예외 타입을 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the crash during list filtering by replacing IndexError with ValueError.",
-      "hint_ko": "문자열 \"err\"를 int(s)로 변환할 때 발생하는 예외는 IndexError가 아니라 ValueError입니다.",
-      "hint_en": "Converting non-numeric text with int(s) raises ValueError rather than IndexError.",
-      "templateCode": "raw = [\"15\", \"err\", \"25\"]\nvalid = []\nfor s in raw:\n    try:\n        n = int(s)\n        valid.append(n)\n    except IndexError:\n        continue\nprint(sum(valid))",
-      "targetCode": "raw = [\"15\", \"err\", \"25\"]\nvalid = []\nfor s in raw:\n    try:\n        n = int(s)\n        valid.append(n)\n    except ValueError:\n        continue\nprint(sum(valid))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "40"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 변환 실패 시 기본값을 반환하지 않고 출력만 하여 덧셈 에러가 나는 줄을 return으로 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the TypeError in addition caused by printing default instead of returning it in except.",
-      "hint_ko": "예외 블록에서 대체값을 화면에 출력만 하고 돌려주지 않아 덧셈식에서 오류가 발생합니다. return default로 수정하세요.",
-      "hint_en": "Send the fallback value back to the caller with return default instead of print(default).",
-      "templateCode": "def to_num(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        print(default)\nans = to_num(\"10\") + to_num(\"bad\", default=5)\nprint(ans)",
-      "targetCode": "def to_num(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        return default\nans = to_num(\"10\") + to_num(\"bad\", default=5)\nprint(ans)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "15"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] x, y를 정수로 변환해 safe_ratio(int(x), int(y))를 호출한 결과를 ans에 저장해보세요.",
-      "prompt_en": "[Complete Line] Call safe_ratio(int(x), int(y)) and store the result in ans.",
-      "hint_ko": "ans = safe_ratio(int(x), int(y)) 형태로 함수를 호출해 반환값을 대입하세요.",
-      "hint_en": "Write ans = safe_ratio(int(x), int(y)).",
-      "templateCode": "def safe_ratio(a, b, fallback=-1):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return fallback\nx, y = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
-      "targetCode": "def safe_ratio(a, b, fallback=-1):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return fallback\nx, y = input().split()\nans = safe_ratio(int(x), int(y))\nprint(ans)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "20 5",
-          "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "20 0",
-          "expectedOutput": "-1"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 딕셔너리에 없는 학생 이름일 때 KeyError를 잡는 except 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the indented except KeyError: line inside the retry loop.",
-      "hint_ko": "들여쓰기된 위치에서 except KeyError:를 작성하세요.",
-      "hint_en": "Write except KeyError: inside the while True loop.",
-      "templateCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    §§§§§§§§§§§§§§§§\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
-      "targetCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    except KeyError:\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Park\nLee",
-          "expectedOutput": "Retry\nLee=95"
-        },
-        {
-          "id": 2,
-          "input": "Kim",
-          "expectedOutput": "Kim=80"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 딕셔너리·리스트 조회와 나눗셈 예외 분기가 결합된 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced by the three calls to calc_item below.",
-      "hint_ko": "나눗셈 식에서는 왼쪽 피연산자(딕셔너리 조회)가 오른쪽 피연산자(리스트 조회)보다 먼저 평가된다는 점에 유의해 세 호출이 어느 분기로 가는지 추적하세요.",
-      "hint_en": "Remember Python evaluates the left operand (dictionary lookup) before the right operand (list lookup) and before division; trace which branch each call hits first.",
-      "targetCode": "def calc_item(store, nums, k, i):\n    try:\n        return store[k] // nums[i]\n    except KeyError:\n        return -10\n    except IndexError:\n        return -20\n    except ZeroDivisionError:\n        return 0\nst = {\"a\": 30, \"b\": 15}\narr = [5, 0]\nr1 = calc_item(st, arr, \"a\", 0)\nr2 = calc_item(st, arr, \"a\", 1)\nr3 = calc_item(st, arr, \"c\", 9)\nprint(r1, r2, r3)",
-      "choices": [
-        "6 0 -20",
-        "6 -20 -10",
-        "5 0 -10",
-        "6 0 -10"
       ],
-      "correctChoiceIndex": 3,
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "6 0 -10"
-        }
-      ]
     },
     {
-      "id": 10,
-      "step": 10,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 안전 변환 함수와 집합(set)을 함께 사용하는 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the output of the following code combining parse_even and a set of unique values.",
-      "hint_ko": "문자열 리스트에서 정수로 변환되면서 짝수 조건까지 통과하는 값들만 추린 뒤, 이미 집합에 등록된 중복 숫자는 건너뛰며 개수와 합계를 세어 보세요.",
-      "hint_en": "Filter for tokens that parse cleanly as even integers, then track how skipping duplicates via the set affects the final count and sum.",
-      "targetCode": "def parse_even(s):\n    try:\n        n = int(s)\n        if n % 2 == 0:\n            return n\n        return None\n    except ValueError:\n        return None\nitems = [\"6\", \"3\", \"py\", \"4\", \"6\"]\nseen = set()\ntotal = 0\nfor s in items:\n    v = parse_even(s)\n    if v is not None and v not in seen:\n        seen.add(v)\n        total += v\nprint(len(seen), total)",
-      "choices": [
-        "2 10",
-        "3 16",
-        "2 16",
-        "3 13"
-      ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 변수 res에 아무 값도 없음을 뜻하는 파이썬 상수를 넣어 출력해보세요.',
+      prompt_en: '[Fill Blank] Assign the Python constant representing no value to res and print it with its type.',
+      hint_ko: '첫 글자만 대문자로 적는 네 글자 빈 값 예약어를 빈칸에 입력하세요.',
+      hint_en: 'Type the four-letter capitalized constant representing an empty value.',
+      templateCode: 'res = §§§§\nprint(res, type(res))',
+      targetCode: 'res = None\nprint(res, type(res))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2 10"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: "None <class 'NoneType'>",
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] val이 None인지 검사하여 비어 있으면 기본값 100을 채워 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Check if val is None and assign the default value 100 before printing.',
+      hint_ko: '파이썬에서 None 여부를 검사할 때는 등호 대신 is None 구문을 사용합니다.',
+      hint_en: 'Use is None rather than == to check whether a variable holds None.',
+      targetCode: 'val = None\nif val is None:\n    val = 100\nprint(val)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '100',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 변수 nick이 비어 있는지 검사하여 기본 이름 "Guest"를 대입해 출력해보세요.',
+      prompt_en: '[Fill Blank] Check whether nick is empty so it defaults to "Guest" and prints.',
+      hint_ko: '객체 동일성을 확인하는 두 글자 키워드와 빈 값 상수를 공백으로 이어 적으세요.',
+      hint_en: 'Combine the two-letter identity keyword with the four-letter null constant.',
+      templateCode: 'nick = None\nif nick §§§§§§§:\n    nick = "Guest"\nprint(nick)',
+      targetCode: 'nick = None\nif nick is None:\n    nick = "Guest"\nprint(nick)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Guest',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] bonus가 None이 아닐 때만 total에 더하고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Add bonus to total only when bonus is not None, then print total.',
+      hint_ko: 'is not None 조건은 변수에 유효한 값이 들어 있을 때 참이 됩니다.',
+      hint_en: 'The condition is not None evaluates to True when a variable holds an actual value.',
+      targetCode: 'bonus = 50\ntotal = 100\nif bonus is not None:\n    total += bonus\nprint(total)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '150',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 할인 쿠폰 변수 coupon이 빈 값이 아닐 때만 가격에서 차감하도록 조건을 채워보세요.',
+      prompt_en: '[Fill Blank] Fill in the condition so coupon is subtracted from price only when it is not empty.',
+      hint_ko: '빈 값이 아님을 확인하는 세 단어 정체성 부정 표현을 빈칸에 적으세요.',
+      hint_en: 'Write the three-word identity negation check that tests for a non-null value.',
+      templateCode: 'coupon = 300\nprice = 2000\nif coupon §§§§§§§§§§§:\n    price -= coupon\nprint(price)',
+      targetCode: 'coupon = 300\nprice = 2000\nif coupon is not None:\n    price -= coupon\nprint(price)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1700',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 리스트 data를 순회하며 None이 아닌 숫자만 골라 합계를 구하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Loop through data and sum only the elements that are not None.',
+      hint_ko: 'None은 숫자와 더할 수 없으므로 반복문 안에서 먼저 걸러낸 뒤 누적합니다.',
+      hint_en: 'Filter out None values inside the loop before adding x to total.',
+      targetCode: 'data = [10, None, 20, None, 30]\ntotal = 0\nfor x in data:\n    if x is not None:\n        total += x\nprint(total)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '60',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트 logs를 순회하며 비어 있는 항목의 개수를 세어 출력해보세요.',
+      prompt_en: '[Fill Blank] Count how many elements in logs are empty and print the count.',
+      hint_ko: '꺼낸 요소 x가 빈 값 상수와 동일한지 확인하는 두 단어 조건을 적으세요.',
+      hint_en: 'Write the two-word identity check testing whether x is the empty constant.',
+      templateCode: 'logs = [5, None, 15, None]\ncnt = 0\nfor x in logs:\n    if x §§§§§§§:\n        cnt += 1\nprint(cnt)',
+      targetCode: 'logs = [5, None, 15, None]\ncnt = 0\nfor x in logs:\n    if x is None:\n        cnt += 1\nprint(cnt)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 초기값을 빈 값으로 설정하고, 리스트에서 유효한 숫자만 누적해 None 25를 출력해보세요.',
+      prompt_en: '[Fill Blank] Initialize ans to the empty constant and sum only valid numbers in items to print None 25.',
+      hint_ko: '빈 값 상수, 유효한 값인지 묻는 정체성 부정 조건, 복합 덧셈 연산자를 순서대로 채우세요.',
+      hint_en: 'Fill in the null constant, the three-word non-null check, and the compound addition operator.',
+      templateCode: 'items = [12, None, 8, 5]\nans = §§§§\ntotal = 0\nfor x in items:\n    if x §§§§§§§§§§§:\n        total §§ x\nprint(ans, total)',
+      targetCode: 'items = [12, None, 8, 5]\nans = None\ntotal = 0\nfor x in items:\n    if x is not None:\n        total += x\nprint(ans, total)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'None 25',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 변수 val을 빈 값으로 초기화하려다 문자열로 적어 Value가 출력되는 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix line 1 where val was assigned a string instead of the actual null constant, so Empty prints.',
+      hint_ko: '따옴표로 감싸면 글자가 있는 문자열이 되므로 따옴표 없는 예약어로 고치세요.',
+      hint_en: 'Remove the quotation marks on line 1 so val holds the null constant rather than a string.',
+      templateCode: 'val = "None"\nif val is None:\n    print("Empty")\nelse:\n    print("Value")',
+      targetCode: 'val = None\nif val is None:\n    print("Empty")\nelse:\n    print("Value")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Empty',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 유효한 숫자만 더해야 하는데 조건이 반대로 적혀 에러가 발생하는 코드를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the condition inside the loop so only non-null numbers are added to total.',
+      hint_ko: '요소가 빈 값일 때가 아니라 빈 값이 아닐 때만 더하도록 조건문을 수정하세요.',
+      hint_en: 'Negate the identity check so total += x runs only when x holds a number.',
+      templateCode: 'nums = [10, None, 20]\ntotal = 0\nfor x in nums:\n    if x is None:\n        total += x\nprint(total)',
+      targetCode: 'nums = [10, None, 20]\ntotal = 0\nfor x in nums:\n    if x is not None:\n        total += x\nprint(total)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 변수 x가 빈 값인지 검사하는 if 조건문 첫 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the if statement header that checks whether variable x is empty.',
+      hint_ko: 'if 키워드 뒤에 변수 x와 정체성 비교 구문, 콜론(:)을 붙여 한 줄을 완성하세요.',
+      hint_en: 'Write the if condition testing x with the null identity check, ending with a colon.',
+      templateCode: 'x = None\n§§§§§§§§§§§§§\n    x = 50\nprint(x)',
+      targetCode: 'x = None\nif x is None:\n    x = 50\nprint(x)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '50',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 반복문 탐색 전에 결과 변수 found를 빈 값 상수로 초기화하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that initializes variable found to the empty constant before the loop.',
+      hint_ko: '변수 found에 아직 찾은 값이 없음을 뜻하는 네 글자 상수를 대입하세요.',
+      hint_en: 'Assign the four-letter null constant to variable found.',
+      templateCode: 'nums = [3, 8, 5]\n§§§§§§§§§§§§\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
+      targetCode: 'nums = [3, 8, 5]\nfound = None\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '8',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 0, 빈 문자열, None이 섞인 리스트에서 is not None 검사와 bool(x) 검사의 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the counts produced by checking is not None versus bool(x) on the list.',
+      hint_ko: '0과 빈 문자열은 None은 아니지만 불리언 변환 시 거짓(Falsy)으로 판별된다는 점을 구별해보세요.',
+      hint_en: 'Remember that 0 and "" are not None, even though bool() evaluates them to False.',
+      targetCode: 'items = [0, "", None, 7]\na = 0\nb = 0\nfor x in items:\n    if x is not None:\n        a += 1\n    if bool(x):\n        b += 1\nprint(a, b)',
+      choices: ['3 1', '1 1', '3 3', '2 1'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 1',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 튜플 언패킹과 None 판별이 결합된 다음 코드의 출력 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the output of the following code combining tuple unpacking and None checks.',
+      hint_ko: '각 튜플의 두 번째 요소가 빈 값이면 10을 더하고, 숫자가 있으면 그 숫자를 더할 때의 총합을 계산해보세요.',
+      hint_en: 'Add 10 whenever the unpacked value v is None, otherwise add v itself.',
+      targetCode: 'records = [("A", 20), ("B", None), ("C", 30)]\ntotal = 0\nfor k, v in records:\n    if v is None:\n        total += 10\n    else:\n        total += v\nprint(f"Total:{total}")',
+      choices: ['Total:60', 'Total:50', 'Total:30', 'Total:70'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Total:60',
+        },
+      ],
+    },
+  ],
 };

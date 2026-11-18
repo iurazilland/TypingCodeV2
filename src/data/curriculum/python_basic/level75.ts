@@ -6,24 +6,33 @@ export const PYTHON_LEVEL_75: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 75,
-  "title_ko": "75레벨: 리스트 컴프리헨션 기초 ([식 for 변수 in 시퀀스 if 조건])",
-  "title_en": "Level 75: List Comprehensions Basics",
-  "description_ko": "for문과 .append() 패턴을 대괄호 한 줄로 압축하는 리스트 컴프리헨션의 변환·필터링·조건 표현식 결합을 익힙니다.",
-  "description_en": "Master list comprehensions for mapping, filtering with if, parsing input().split(), and inline ternary mapping.",
+  "title_ko": "75레벨: 값을 반환(return)하는 메서드와 다중 인스턴스 독립 상태 비교",
+  "title_en": "Level 75: Methods Returning Values & Independent Instances",
+  "description_ko": "메서드에서 계산 결과를 return으로 반환받아 활용하고, 여러 인스턴스가 서로 독립된 상태를 유지하는 원리를 익힙니다.",
+  "description_en": "Return computed values from methods with return and verify how multiple instances maintain independent state.",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
-    "method",
     "type",
-    "math",
-    "sorted",
     "if",
     "for_range",
-    "for_in",
     "range",
-    "def"
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
+    "def",
+    "return",
+    "class"
   ],
   "questions": [
     {
@@ -31,16 +40,16 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 컴프리헨션으로 nums의 각 원소를 2배로 변환한 리스트 doubled를 출력해보세요.",
-      "prompt_en": "[Block] Use a list comprehension to double each number in nums and print doubled.",
-      "hint_ko": "대괄호 맨 앞에 새 리스트에 넣을 계산식(x * 2)을 먼저 적고, 그 뒤에 for x in nums 순회절을 이어 씁니다.",
-      "hint_en": "Write the output expression (x * 2) first inside the square brackets, followed by the for x in nums loop clause.",
-      "targetCode": "nums = [1, 2, 3, 4]\ndoubled = [x * 2 for x in nums]\nprint(doubled)",
+      "prompt_ko": "[블록 조립] 가로(self.w)와 세로(self.h)를 곱한 넓이를 return하는 get_area(self) 메서드를 조립해보세요.",
+      "prompt_en": "[Block] Assemble get_area(self) to return self.w * self.h and print the returned value.",
+      "hint_ko": "메서드 안에서 print 대신 return을 사용하면 계산된 결과를 호출한 곳으로 돌려주어 변수에 담거나 다른 연산에 쓸 수 있습니다.",
+      "hint_en": "Returning a value with return lets the caller store or further combine the computed result.",
+      "targetCode": "class Rect:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def get_area(self):\n        return self.w * self.h\nr = Rect(5, 4)\nprint(r.get_area())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[2, 4, 6, 8]"
+          "expectedOutput": "20"
         }
       ]
     },
@@ -49,17 +58,17 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 1부터 4까지 정수의 제곱수 리스트 [1, 4, 9, 16]을 만들도록 두 반복 키워드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two loop keywords inside the list comprehension to generate squares of 1..4.",
-      "hint_ko": "대괄호 안의 계산식 뒤에 '각 원소에 대해' 반복하는 3글자 키워드와 '~ 안에서' 꺼내는 2글자 키워드를 순서대로 채우세요.",
-      "hint_en": "Follow the squaring expression with the 3-letter iteration keyword and the 2-letter membership keyword.",
-      "templateCode": "squares = [n * n §§§ n §§ range(1, 5)]\nprint(squares)",
-      "targetCode": "squares = [n * n for n in range(1, 5)]\nprint(squares)",
+      "prompt_ko": "[빈칸 채우기] 상품의 단가와 수량을 곱한 총액을 호출부로 돌려주도록 키워드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the keyword that sends the computed total price back to the caller.",
+      "hint_ko": "함수나 메서드에서 계산한 결과값을 호출한 자리로 되돌려주는 여섯 글자 키워드를 적으세요.",
+      "hint_en": "Use the six-letter keyword that sends a result value back from a function or method.",
+      "templateCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        §§§§§§ self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
+      "targetCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        return self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[1, 4, 9, 16]"
+          "expectedOutput": "3600"
         }
       ]
     },
@@ -68,16 +77,16 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 컴프리헨션에서 w.upper()를 호출해 모든 단어를 대문자로 변환해 출력해보세요.",
-      "prompt_en": "[Block] Call w.upper() in a list comprehension to convert every word in words to uppercase.",
-      "hint_ko": "words에서 꺼낸 각 단어 w마다 .upper()가 실행된 결과들이 순서대로 새 리스트에 모입니다.",
-      "hint_en": "Each word w from words has .upper() applied to it, collecting the uppercase results in order.",
-      "targetCode": "words = [\"py\", \"code\", \"ai\"]\nloud = [w.upper() for w in words]\nprint(loud)",
+      "prompt_ko": "[블록 조립] 점수가 80 이상인지 비교한 불리언(True/False) 결과를 반환하는 is_pass(self) 메서드를 조립해보세요.",
+      "prompt_en": "[Block] Assemble is_pass(self) to return self.score >= 80 and print the result for two Exam instances.",
+      "hint_ko": "return self.score >= 80처럼 비교식을 바로 반환하면 조건에 따라 True 또는 False가 돌려집니다.",
+      "hint_en": "Returning a comparison expression like self.score >= 80 directly yields True or False.",
+      "targetCode": "class Exam:\n    def __init__(self, score):\n        self.score = score\n    def is_pass(self):\n        return self.score >= 80\ne1 = Exam(85)\ne2 = Exam(70)\nprint(e1.is_pass(), e2.is_pass())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['PY', 'CODE', 'AI']"
+          "expectedOutput": "True False"
         }
       ]
     },
@@ -86,22 +95,17 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백 입력 숫자들을 정수 리스트로 변환해 합계와 최댓값을 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in the integer conversion and split method to parse space-separated numbers.",
-      "hint_ko": "첫 빈칸은 '정수(integer)'의 앞 세 글자를 딴 변환 함수를, 둘째 빈칸은 문자열을 공백 기준으로 쪼개는 5글자 메서드를 쓰세요.",
-      "hint_en": "First, use the 3-letter conversion function from 'integer'; second, call the 5-letter splitting method.",
-      "templateCode": "nums = [§§§(s) for s in input().§§§§§()]\nprint(sum(nums), max(nums))",
-      "targetCode": "nums = [int(s) for s in input().split()]\nprint(sum(nums), max(nums))",
+      "prompt_ko": "[빈칸 채우기] 나이가 19세 이상인지 판별한 불리언 값을 돌려주도록 비교 대상 속성을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the comparison in is_adult() so it returns whether the member's age is at least 19.",
+      "hint_ko": "메서드 안에서 현재 객체 자신의 나이 속성을 꺼내 19 이상인지 비교하세요.",
+      "hint_en": "Access the age attribute on self to compare it with 19.",
+      "templateCode": "class Member:\n    def __init__(self, age):\n        self.age = age\n    def is_adult(self):\n        return §§§§§§§§ >= 19\nm = Member(22)\nprint(m.is_adult())",
+      "targetCode": "class Member:\n    def __init__(self, age):\n        self.age = age\n    def is_adult(self):\n        return self.age >= 19\nm = Member(22)\nprint(m.is_adult())",
       "testCases": [
         {
           "id": 1,
-          "input": "10 25 15",
-          "expectedOutput": "50 25"
-        },
-        {
-          "id": 2,
-          "input": "3 7 2 8",
-          "expectedOutput": "20 8"
+          "input": "",
+          "expectedOutput": "True"
         }
       ]
     },
@@ -110,16 +114,16 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 컴프리헨션의 for절 뒤에 if 조건절을 붙여 짝수만 골라낸 리스트를 출력해보세요.",
-      "prompt_en": "[Block] Add a trailing if condition in the list comprehension to filter only even numbers.",
-      "hint_ko": "원소를 걸러내는 단독 if절은 else 없이 컴프리헨션의 맨 오른쪽 끝에 작성합니다.",
-      "hint_en": "A filtering if clause without else always goes at the very end of the list comprehension, after the for clause.",
-      "targetCode": "nums = [1, 2, 3, 4, 5, 6]\nevens = [x for x in nums if x % 2 == 0]\nprint(evens)",
+      "prompt_ko": "[블록 조립] Box(10)과 Box(20) 두 인스턴스를 만들고 a만 5를 더한 뒤 두 객체의 값을 비교 출력해보세요.",
+      "prompt_en": "[Block] Create a = Box(10) and b = Box(20), add 5 only to a, and print both values.",
+      "hint_ko": "같은 클래스로 만들었더라도 각 인스턴스는 서로 완전히 분리된 독립적인 self 속성 공간을 가집니다.",
+      "hint_en": "Even when created from the same class, each instance maintains its own independent self attributes.",
+      "targetCode": "class Box:\n    def __init__(self, val):\n        self.val = val\n    def add(self, n):\n        self.val += n\na = Box(10)\nb = Box(20)\na.add(5)\nprint(a.val, b.val)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[2, 4, 6]"
+          "expectedOutput": "15 20"
         }
       ]
     },
@@ -128,17 +132,17 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 4글자 이상인 태그만 골라 대문자 리스트로 만들도록 뒤쪽 필터의 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the filter keyword and length function to keep tags of length 4+ in uppercase.",
-      "hint_ko": "반복절 뒤에서 걸러내는 2글자 조건 키워드를 적고, 문자열 '길이(length)'의 앞 세 글자를 딴 내장 함수로 글자 수를 재세요.",
-      "hint_en": "Place the 2-letter filter condition keyword after the loop, then measure characters with the 3-letter function from 'length'.",
-      "templateCode": "tags = [\"python\", \"go\", \"java\", \"c\"]\nbig = [t.upper() for t in tags §§ §§§(t) >= 4]\nprint(big)",
-      "targetCode": "tags = [\"python\", \"go\", \"java\", \"c\"]\nbig = [t.upper() for t in tags if len(t) >= 4]\nprint(big)",
+      "prompt_ko": "[빈칸 채우기] 두 번째 카운터 인스턴스를 초기값 50으로 생성해 첫 번째 카운터와 독립적으로 동작하는지 확인해보세요.",
+      "prompt_en": "[Fill Blank] Instantiate the second Counter with initial value 50 and assign it to c2.",
+      "hint_ko": "클래스 이름 뒤에 괄호를 붙이고 초기 숫자 50을 인자로 넘겨 새 인스턴스를 생성하세요.",
+      "hint_en": "Call the Counter class with 50 inside parentheses to create a separate instance.",
+      "templateCode": "class Counter:\n    def __init__(self, v=0):\n        self.v = v\n    def inc(self):\n        self.v += 10\nc1 = Counter(10)\nc2 = §§§§§§§§§§§\nc1.inc()\nprint(c1.v, c2.v)",
+      "targetCode": "class Counter:\n    def __init__(self, v=0):\n        self.v = v\n    def inc(self):\n        self.v += 10\nc1 = Counter(10)\nc2 = Counter(50)\nc1.inc()\nprint(c1.v, c2.v)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['PYTHON', 'JAVA']"
+          "expectedOutput": "20 50"
         }
       ]
     },
@@ -147,16 +151,16 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] for절 앞에 삼항 조건 표현식(x if x > 0 else 0)을 배치해 음수를 0으로 바꿔 출력해보세요.",
-      "prompt_en": "[Block] Place a ternary expression (x if x > 0 else 0) before the for clause to replace negatives with 0.",
-      "hint_ko": "for절 뒤의 if는 원소를 제외하는 필터이고, for절 앞의 if-else는 모든 원소를 두 값 중 하나로 변환하는 식입니다.",
-      "hint_en": "An if after for filters out items, whereas an if-else before for maps every item to one of two values.",
-      "targetCode": "nums = [10, -4, 7, -1, 5]\nclean = [x if x > 0 else 0 for x in nums]\nprint(clean)",
+      "prompt_ko": "[블록 조립] 두 지갑 인스턴스 a, b의 get_bal() 반환값을 더해 전체 합계를 출력해보세요.",
+      "prompt_en": "[Block] Sum the values returned by a.get_bal() and b.get_bal() and print the combined balance.",
+      "hint_ko": "각 인스턴스의 메서드가 숫자를 return하므로 a.get_bal() + b.get_bal()처럼 수식에서 바로 더할 수 있습니다.",
+      "hint_en": "Because get_bal() returns a number, you can add a.get_bal() and b.get_bal() directly in an expression.",
+      "targetCode": "class Wallet:\n    def __init__(self, cash, bonus):\n        self.cash = cash\n        self.bonus = bonus\n    def get_bal(self):\n        return self.cash + self.bonus\na = Wallet(1000, 200)\nb = Wallet(500, 100)\nprint(a.get_bal() + b.get_bal())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[10, 0, 7, 0, 5]"
+          "expectedOutput": "1800"
         }
       ]
     },
@@ -165,35 +169,36 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 각 점수가 60 이상이면 \"P\", 아니면 \"F\"로 바꾼 리스트를 만들도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two ternary keywords inside the list comprehension to map scores to \"P\" or \"F\".",
-      "hint_ko": "모든 점수를 두 문자열 중 하나로 바꾸므로, 반복절 앞에서 2글자 조건 키워드와 4글자 '그렇지 않으면' 키워드로 삼항 식을 완성하세요.",
-      "hint_en": "Complete the leading ternary expression with the 2-letter condition keyword and 4-letter 'otherwise' keyword.",
-      "templateCode": "scores = [80, 45, 60, 55]\nres = [\"P\" §§ s >= 60 §§§§ \"F\" for s in scores]\nprint(res)",
-      "targetCode": "scores = [80, 45, 60, 55]\nres = [\"P\" if s >= 60 else \"F\" for s in scores]\nprint(res)",
+      "prompt_ko": "[빈칸 채우기] 두 팀 객체의 총점 반환 메서드를 각각 호출해 점수 차이를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Call the score-returning method on team b so the difference between team a and team b is printed.",
+      "hint_ko": "앞쪽에서 첫 번째 팀의 총점을 구할 때 호출한 것과 같은 메서드를 두 번째 팀 인스턴스에서도 호출하세요.",
+      "hint_en": "Invoke the total() method on instance b just as it is called on instance a.",
+      "templateCode": "class Team:\n    def __init__(self, win, draw):\n        self.win = win\n        self.draw = draw\n    def total(self):\n        return self.win * 3 + self.draw\na = Team(4, 2)\nb = Team(3, 1)\nprint(a.total() - §§§§§§§§§)",
+      "targetCode": "class Team:\n    def __init__(self, win, draw):\n        self.win = win\n        self.draw = draw\n    def total(self):\n        return self.win * 3 + self.draw\na = Team(4, 2)\nb = Team(3, 1)\nprint(a.total() - b.total())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['P', 'F', 'P', 'F']"
+          "expectedOutput": "4"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 2차원 리스트 grid의 각 행 합계를 리스트 컴프리헨션으로 구해 반환하는 함수를 완성해보세요.",
-      "prompt_en": "[Block] Complete row_totals(grid) to return [sum(row) for row in grid] for a 2D list.",
-      "hint_ko": "grid에서 꺼낸 각 행 리스트 row를 내장 함수 sum()에 전달해 행별 합계를 바로 계산합니다.",
-      "hint_en": "Each inner row list unpacked from grid is passed directly to sum() to produce its row total.",
-      "targetCode": "def row_totals(grid):\n    return [sum(row) for row in grid]\n\nm = [[1, 2, 3], [10, 20, 30]]\nprint(row_totals(m))",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 할인 적용 가격을 반환하는 메서드를 완성하고 두 상품 인스턴스의 결제 합계를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete the discounted price method and add the net prices of both products.",
+      "hint_ko": "계산 결과를 돌려주는 키워드와 인스턴스 자신의 할인액 속성 참조, 그리고 두 번째 객체의 메서드 호출식을 확인하세요.",
+      "hint_en": "Check the result-sending keyword, the discount attribute on self, and the method call on p2.",
+      "templateCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        §§§§§§ self.price - §§§§§§§§§\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.§§§§§§§§§§§ + p2.net_price()\nprint(ans)",
+      "targetCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        return self.price - self.disc\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.net_price() + p2.net_price()\nprint(ans)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[6, 60]"
+          "expectedOutput": "7500"
         }
       ]
     },
@@ -201,18 +206,18 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 2차원 리스트의 각 행에서 최댓값만 뽑아 리스트로 반환하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the max function and loop keyword to return the maximum of each row in grid.",
-      "hint_ko": "각 행 리스트에서 가장 큰 값을 구하는 3글자 내장 함수와 컴프리헨션의 3글자 반복 키워드를 채우세요.",
-      "hint_en": "Use the 3-letter built-in function for the largest value and the 3-letter iteration keyword.",
-      "templateCode": "def max_rows(grid):\n    return [§§§(r) §§§ r in grid]\n\nm = [[4, 9, 2], [15, 8, 20]]\nprint(max_rows(m))",
-      "targetCode": "def max_rows(grid):\n    return [max(r) for r in grid]\n\nm = [[4, 9, 2], [15, 8, 20]]\nprint(max_rows(m))",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 두 상자의 무게를 더하려는데 메서드가 값을 반환하지 않고 화면에 출력만 해서 발생한 에러를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the TypeError when adding b1.weight() and b2.weight() by returning the value instead of printing it.",
+      "hint_ko": "메서드 안에서 print만 실행하면 None이 반환되어 덧셈(+) 연산에서 에러가 나므로 결과값을 돌려주어야 합니다.",
+      "hint_en": "Printing inside a method returns None, which cannot be added; return the computed sum instead.",
+      "templateCode": "class Cargo:\n    def __init__(self, box, item):\n        self.box = box\n        self.item = item\n    def weight(self):\n        print(self.box + self.item)\nb1 = Cargo(2, 10)\nb2 = Cargo(3, 15)\nprint(b1.weight() + b2.weight())",
+      "targetCode": "class Cargo:\n    def __init__(self, box, item):\n        self.box = box\n        self.item = item\n    def weight(self):\n        return self.box + self.item\nb1 = Cargo(2, 10)\nb2 = Cargo(3, 15)\nprint(b1.weight() + b2.weight())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[9, 20]"
+          "expectedOutput": "30"
         }
       ]
     },
@@ -221,17 +226,17 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 양수만 골라내려다 조건절 위치가 잘못되어 문법 오류가 나는 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the SyntaxError caused by placing the filter condition before for without else.",
-      "hint_ko": "대체값(else) 없이 조건에 맞는 원소만 걸러내는 필터 조건절은 반복절 앞이 아니라 맨 뒤로 옮겨야 합니다.",
-      "hint_en": "When filtering elements without an else fallback, move the condition clause to the end after the loop clause.",
-      "templateCode": "nums = [5, -2, 8, -1, 3]\npos = [x if x > 0 for x in nums]\nprint(pos)",
-      "targetCode": "nums = [5, -2, 8, -1, 3]\npos = [x for x in nums if x > 0]\nprint(pos)",
+      "prompt_ko": "[틀린 곳 수정] 두 번째 캐릭터 u2의 체력을 회복시켜야 하는데 u1을 두 번 회복시켜 버린 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the bug where heal(20) was called on u1 twice instead of healing u2 on the second call.",
+      "hint_ko": "각 인스턴스는 독립되어 있으므로 두 번째 줄의 메서드 호출 대상 변수가 두 번째 객체를 가리키는지 확인하세요.",
+      "hint_en": "Check which instance variable is used on line 11 so that u2 receives the second heal call.",
+      "templateCode": "class Unit:\n    def __init__(self, hp):\n        self.hp = hp\n    def heal(self, v):\n        self.hp += v\n    def get_hp(self):\n        return self.hp\nu1 = Unit(50)\nu2 = Unit(40)\nu1.heal(10)\nu1.heal(20)\nprint(u1.get_hp(), u2.get_hp())",
+      "targetCode": "class Unit:\n    def __init__(self, hp):\n        self.hp = hp\n    def heal(self, v):\n        self.hp += v\n    def get_hp(self):\n        return self.hp\nu1 = Unit(50)\nu2 = Unit(40)\nu1.heal(10)\nu2.heal(20)\nprint(u1.get_hp(), u2.get_hp())",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[5, 8, 3]"
+          "expectedOutput": "60 60"
         }
       ]
     },
@@ -239,18 +244,18 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 60점 이상이면 \"P\", 미만이면 \"F\"가 되어야 하는데 반대로 나오는 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the swapped labels in the ternary comprehension so >= 60 maps to \"P\" and < 60 to \"F\".",
-      "hint_ko": "삼항 조건 표현식은 (조건이 참일 때의 값 if 조건 else 거짓일 때의 값) 순서입니다. 앞뒤 문자열을 올바르게 바꾸세요.",
-      "hint_en": "In a ternary expression (true_val if cond else false_val), place \"P\" before if and \"F\" after else.",
-      "templateCode": "scores = [75, 40, 90, 55]\ntags = [\"F\" if s >= 60 else \"P\" for s in scores]\nprint(tags)",
-      "targetCode": "scores = [75, 40, 90, 55]\ntags = [\"P\" if s >= 60 else \"F\" for s in scores]\nprint(tags)",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 메서드 안에서 가로(self.w)와 세로(self.h)를 튜플 (self.w, self.h)로 반환하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line inside size(self) that returns the tuple (self.w, self.h).",
+      "hint_ko": "반환 키워드 뒤에 두 속성을 괄호와 쉼표로 묶어 작성하세요.",
+      "hint_en": "Use return followed by (self.w, self.h) at the method body indentation.",
+      "templateCode": "class Frame:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def size(self):\n        §§§§§§§§§§§§§§§§§§§§§§§\nf = Frame(1920, 1080)\nx, y = f.size()\nprint(f\"{x}x{y}\")",
+      "targetCode": "class Frame:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def size(self):\n        return (self.w, self.h)\nf = Frame(1920, 1080)\nx, y = f.size()\nprint(f\"{x}x{y}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['P', 'F', 'P', 'F']"
+          "expectedOutput": "1920x1080"
         }
       ]
     },
@@ -259,46 +264,42 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 3 이상인 값만 골라 10배로 만든 리스트 컴프리헨션을 res에 저장하세요.",
-      "prompt_en": "[Complete Line] Assign to res a list comprehension keeping numbers >= 3 multiplied by 10.",
-      "hint_ko": "res = [n * 10 for n in nums if n >= 3] 형태로 변환식과 뒤쪽 필터 조건을 함께 작성해보세요.",
-      "hint_en": "Write res = [n * 10 for n in nums if n >= 3] to multiply matching items by 10.",
-      "templateCode": "nums = [int(s) for s in input().split()]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "nums = [int(s) for s in input().split()]\nres = [n * 10 for n in nums if n >= 3]\nprint(res)",
+      "prompt_ko": "[한 줄 완성] 두 객체 a와 b의 score() 반환값을 비교해 a가 더 큰지(>) 출력하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the final line that prints whether a.score() is greater than b.score().",
+      "hint_ko": "print() 괄호 안에서 두 인스턴스의 score() 메서드 호출 결과를 부등호(>)로 비교하세요.",
+      "hint_en": "Inside print(), compare a.score() > b.score().",
+      "templateCode": "class Player:\n    def __init__(self, base, mult):\n        self.base = base\n        self.mult = mult\n    def score(self):\n        return self.base * self.mult\na = Player(15, 3)\nb = Player(20, 2)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "class Player:\n    def __init__(self, base, mult):\n        self.base = base\n        self.mult = mult\n    def score(self):\n        return self.base * self.mult\na = Player(15, 3)\nb = Player(20, 2)\nprint(a.score() > b.score())",
       "testCases": [
         {
           "id": 1,
-          "input": "1 3 2 5",
-          "expectedOutput": "[30, 50]"
-        },
-        {
-          "id": 2,
-          "input": "4 0 6",
-          "expectedOutput": "[40, 60]"
+          "input": "",
+          "expectedOutput": "True"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 단어 리스트 words의 각 단어 길이(len(w))를 모은 컴프리헨션을 lens에 저장하세요.",
-      "prompt_en": "[Complete Line] Assign to lens a list comprehension of len(w) for each word w in words.",
-      "hint_ko": "lens = [len(w) for w in words] 형태로 각 단어의 글자 수를 리스트로 만드세요.",
-      "hint_en": "Write lens = [len(w) for w in words] to collect the length of each word.",
-      "templateCode": "words = input().split()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(lens)",
-      "targetCode": "words = input().split()\nlens = [len(w) for w in words]\nprint(lens)",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 두 개의 독립된 Tank 인스턴스에 서로 다른 메서드를 실행한 뒤 반환값을 출력한 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output after mutating two independent Tank instances and calling status().",
+      "hint_ko": "t1과 t2의 초기값(기본값 포함)과 각 객체에 호출된 메서드만 따로 추적해 남은 연료를 계산하세요.",
+      "hint_en": "Track t1 (using default 50) and t2 (starting at 80) independently across their method calls.",
+      "targetCode": "class Tank:\n    def __init__(self, fuel=50):\n        self.fuel = fuel\n    def fill(self, v):\n        self.fuel += v\n    def burn(self, v):\n        self.fuel -= v\n    def status(self):\n        return self.fuel\nt1 = Tank()\nt2 = Tank(80)\nt1.fill(20)\nt2.burn(35)\nt1.burn(10)\nprint(t1.status(), t2.status())",
+      "choices": [
+        "60 45",
+        "70 45",
+        "60 55",
+        "50 45"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
-          "input": "py code ai",
-          "expectedOutput": "[2, 4, 2]"
-        },
-        {
-          "id": 2,
-          "input": "hello world",
-          "expectedOutput": "[5, 5]"
+          "input": "",
+          "expectedOutput": "60 45"
         }
       ]
     },
@@ -307,23 +308,23 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 리스트 컴프리헨션 코드를 실행했을 때 출력되는 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following list comprehension code.",
-      "hint_ko": "지정된 접두사로 시작하는 단어들만 먼저 골라 글자 수를 구한 뒤, 출력할 때 오름차순 정렬이 적용된다는 점을 함께 확인하세요.",
-      "hint_en": "Filter the words by their starting letter first, collect their character lengths, and note that the printed list is sorted ascending.",
-      "targetCode": "words = [\"cat\", \"apple\", \"dog\", \"ant\"]\nlens = [len(w) for w in words if w.startswith(\"a\")]\nprint(sorted(lens), sum(lens))",
+      "prompt_ko": "[출력 결과 예측] 다중 반환 메서드의 튜플 언패킹과 조건부 조기 return이 결합된 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output of the code combining early return and tuple unpacking on two instances.",
+      "hint_ko": "점수가 기준 이상일 때와 미만일 때 각각 어떤 튜플이 반환되어 언패킹되는지 확인하세요.",
+      "hint_en": "Check which branch of grade_info runs for 85 versus 60 and how the unpacked values are formatted.",
+      "targetCode": "class Applicant:\n    def __init__(self, name, pt):\n        self.name = name\n        self.pt = pt\n    def grade_info(self):\n        if self.pt >= 80:\n            return self.name, \"PASS\"\n        return self.name, \"RETRY\"\na1 = Applicant(\"Jun\", 85)\na2 = Applicant(\"Sua\", 60)\nn1, r1 = a1.grade_info()\nn2, r2 = a2.grade_info()\nprint(f\"{n1}:{r1} / {n2}:{r2}\")",
       "choices": [
-        "[3, 5] 8",
-        "[5, 3] 8",
-        "[3, 3, 5] 11",
-        "[3, 5, 3, 3] 14"
+        "Jun:PASS / Sua:RETRY",
+        "Jun:PASS / Sua:PASS",
+        "Jun:RETRY / Sua:RETRY",
+        "Jun:85 / Sua:60"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[3, 5] 8"
+          "expectedOutput": "Jun:PASS / Sua:RETRY"
         }
       ]
     }

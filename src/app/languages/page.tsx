@@ -24,49 +24,92 @@ import LanguageIcon from '@/components/LanguageIcon';
 import { useLanguage } from '@/lib/LanguageContext';
 import { getTrackName, getCategoryName, getSkillName } from '@/lib/curriculumTranslations';
 import { useAuth } from '@/lib/AuthContext';
-import { getClearedLevelsLocal, PROGRESS_SYNCED_EVENT } from '@/lib/progressSync';
+import {
+  getActiveCurriculumLocal,
+  getClearedLevelsLocal,
+  PROGRESS_SYNCED_EVENT,
+  saveActiveCurriculumSelection,
+} from '@/lib/progressSync';
 
 export default function LanguagesPage() {
   const { language } = useLanguage();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isEn = language === 'en';
 
-  // Default: 'starter' (🌱 코딩 첫걸음)
+  // Default for new users: 'starter' (🌱 코딩 첫걸음)
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<string | null>('starter');
   const [selectedTrackId, setSelectedTrackId] = useState<string>('python');
   const [isTopBarOpen, setIsTopBarOpen] = useState<boolean>(false);
   const [isSelectHovered, setIsSelectHovered] = useState<boolean>(false);
   const [progressByModule, setProgressByModule] = useState<Record<string, number>>({});
+  const [nextLevelByModule, setNextLevelByModule] = useState<Record<string, number>>({});
 
-  // Sync progress for unlocked modules
+  // Restore user's active curriculum selection (or default to 'starter' 🌱 코딩 첫걸음 for first-time users)
+  useEffect(() => {
+    if (profile) {
+      if (profile.active_curriculum_type === 'language') {
+        const validTrack = CURRICULUM_TRACKS.some((t) => t.id === profile.active_curriculum_id);
+        setSelectedRoadmapId(null);
+        setSelectedTrackId(validTrack ? profile.active_curriculum_id : 'python');
+      } else {
+        const validRm = LEARNING_ROADMAPS.some((r) => r.id === profile.active_curriculum_id);
+        setSelectedRoadmapId(validRm ? profile.active_curriculum_id : 'starter');
+      }
+      return;
+    }
+
+    const localCurr = getActiveCurriculumLocal();
+    if (localCurr.type === 'language') {
+      const validTrack = CURRICULUM_TRACKS.some((t) => t.id === localCurr.id);
+      setSelectedRoadmapId(null);
+      setSelectedTrackId(validTrack ? localCurr.id : 'python');
+    } else {
+      const validRm = LEARNING_ROADMAPS.some((r) => r.id === localCurr.id);
+      setSelectedRoadmapId(validRm ? localCurr.id : 'starter');
+    }
+  }, [profile]);
+
+  // Sync progress & next level for unlocked modules
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const recomputeProgress = () => {
       try {
         const nextProgress: Record<string, number> = {};
+        const nextLevels: Record<string, number> = {};
         for (const track of CURRICULUM_TRACKS) {
           for (const mod of track.modules) {
             if (mod.isLocked || !mod.practiceUrl.startsWith('/practice/')) continue;
             const rawLang = mod.practiceUrl.replace(/^\/practice\//, '').toLowerCase();
-            const clearedCount = getClearedLevelsLocal(rawLang).filter(
+            const clearedList = getClearedLevelsLocal(rawLang).filter(
               (lvl) => lvl >= 1 && lvl <= mod.totalLevels
-            ).length;
-            if (clearedCount > 0) {
-              nextProgress[mod.id] = clearedCount;
+            );
+            const clearedSet = new Set(clearedList);
+            if (clearedList.length > 0) {
+              nextProgress[mod.id] = clearedList.length;
             }
+            let firstUncleared = 1;
+            for (let l = 1; l <= mod.totalLevels; l++) {
+              if (!clearedSet.has(l)) {
+                firstUncleared = l;
+                break;
+              }
+            }
+            nextLevels[mod.id] = firstUncleared;
           }
         }
         setProgressByModule(nextProgress);
+        setNextLevelByModule(nextLevels);
       } catch {
         setProgressByModule({});
+        setNextLevelByModule({});
       }
     };
 
     recomputeProgress();
     window.addEventListener(PROGRESS_SYNCED_EVENT, recomputeProgress);
     return () => window.removeEventListener(PROGRESS_SYNCED_EVENT, recomputeProgress);
-  }, [user]);
+  }, [user, profile]);
 
   // Soft ice-cyan body background
   useEffect(() => {
@@ -173,7 +216,9 @@ export default function LanguagesPage() {
     const progressPercent = locked
       ? 0
       : Math.min(100, Math.round((completedLevels / Math.max(1, module.totalLevels)) * 100));
+    const isCompleted = !locked && completedLevels >= module.totalLevels;
     const isStarted = !locked && progressPercent > 0;
+    const nextLvl = nextLevelByModule[module.id] || 1;
     const diffColor = DIFFICULTY_COLORS[module.difficulty] || '#10b981';
 
     if (isSingleInStage) {
@@ -362,10 +407,14 @@ export default function LanguagesPage() {
                 >
                   <Play size={14} fill="#ffffff" />
                   <span>
-                    {isStarted
+                    {isCompleted
                       ? isEn
-                        ? 'Continue Learning'
-                        : '이어서 학습하기'
+                        ? 'Course Completed (Review)'
+                        : '🏆 과정 완주 (복습하기)'
+                      : isStarted
+                      ? isEn
+                        ? `Continue Lv.${nextLvl}`
+                        : `Lv.${nextLvl} 이어서 학습하기`
                       : isEn
                       ? 'Start Learning'
                       : '학습 시작하기'}
@@ -574,10 +623,14 @@ export default function LanguagesPage() {
             >
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                 <span>
-                  {isStarted
+                  {isCompleted
                     ? isEn
-                      ? `Continue (${progressPercent}%)`
-                      : `이어하기 (${progressPercent}%)`
+                      ? 'Completed (100%)'
+                      : '🏆 과정 완주 (100%)'
+                    : isStarted
+                    ? isEn
+                      ? `Continue Lv.${nextLvl} (${progressPercent}%)`
+                      : `Lv.${nextLvl} 이어하기 (${progressPercent}%)`
                     : isEn
                     ? 'Start Learning'
                     : '학습 시작'}
@@ -883,6 +936,7 @@ export default function LanguagesPage() {
                         onClick={() => {
                           setSelectedRoadmapId(rm.id);
                           setIsTopBarOpen(false);
+                          void saveActiveCurriculumSelection('roadmap', rm.id);
                         }}
                         style={{
                           textAlign: 'left',
@@ -955,6 +1009,7 @@ export default function LanguagesPage() {
                           setSelectedRoadmapId(null);
                           setSelectedTrackId(track.id);
                           setIsTopBarOpen(false);
+                          void saveActiveCurriculumSelection('language', track.id);
                         }}
                         style={{
                           display: 'inline-flex',

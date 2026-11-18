@@ -1,259 +1,321 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_68: PracticeRound = {
-  "id": "py-basic-r68",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 68,
-  "title_ko": "68레벨: 문자열 부가 기능 & 누적 복습 종합 문제풀이",
-  "title_en": "Level 68: Section 11 Comprehensive Spiral Review",
-  "description_ko": "섹션 11의 문자열 심화 메서드·서식·슬라이싱·문자 코드와 Part 1 누적 문법(반복문, 컬렉션, 함수, 예외, 클래스)을 종합 점검합니다.",
-  "description_en": "Synthesize Section 11 string methods, format specs, slicing, and ord/chr with Part 1 loops, collections, functions, try-except, and classes.",
-  "totalQuestions": 10,
-  "unlockedBlocks": [],
-  "questions": [
+  id: 'py-basic-r68',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 68,
+  title_ko: '68레벨: 다중 값 반환(return a, b) 언패킹과 조건부 조기 return',
+  title_en: 'Level 68: Multiple Return Unpacking & Early Conditional return',
+  description_ko: '쉼표로 여러 값을 동시에 반환해 언패킹으로 받는 방법과, 조건문·반복문 안에서 조기 return으로 함수를 종료하는 패턴을 익힙니다.',
+  description_en: 'Learn to return multiple values as a tuple, unpack them on call, and use early conditional returns in loops.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'dict',
+    'set',
+    'iter',
+    'method',
+    'def',
+    'return',
+  ],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 왼쪽 공백을 지운 로그가 \"WARN:\"으로 시작하면 항목명을 모아 \"|\"로 연결해 출력해보세요. (출력 예: disk|cpu)",
-      "prompt_en": "[Fill Blank] Filter logs starting with \"WARN:\", lowercase the item names, and join them with \"|\".",
-      "hint_ko": "특정 머리말로 시작하는지 판별하는 startswith와 구분자 뒤에 리스트를 하나로 묶는 join 메서드를 채우세요.",
-      "hint_en": "Fill in startswith for the prefix check and join on the separator string.",
-      "targetCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = []\nfor line in logs:\n    s = line.lstrip()\n    if s.startswith(\"WARN:\"):\n        warns.append(s[5:].strip().lower())\nprint(\"|\".join(warns))",
-      "templateCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = []\nfor line in logs:\n    s = line.lstrip()\n    if s.§§§§§§§§§§(\"WARN:\"):\n        warns.append(s[5:].strip().lower())\nprint(\"|\".§§§§(warns))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] return a // b, a % b로 몫과 나머지를 함께 반환하고 결과를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Return both quotient and remainder with return a // b, a % b and print the returned tuple.',
+      hint_ko: 'return 뒤에 여러 값을 쉼표로 나열하면 자동으로 하나의 튜플로 묶여서 반환됩니다.',
+      hint_en: 'Returning comma-separated values automatically packs them into a tuple.',
+      targetCode: 'def div_info(a, b):\n    return a // b, a % b\nres = div_info(17, 5)\nprint(res)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "disk|cpu"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 수량이 숫자 문자열이면 총액에 천 단위 쉼표를 넣어 반환하는 함수 calc를 완성해보세요.",
-      "prompt_en": "[Fill Blank] Validate numeric qty and return the comma-formatted total in calc.",
-      "hint_ko": "수량 문자열이 숫자로만 이루어졌는지 검증하는 isdigit와 천 단위 구분 서식 기호 ,를 차례로 적어보세요.",
-      "hint_en": "Enter isdigit to validate numeric characters and , for thousands grouping.",
-      "targetCode": "prices = {\"BOOK\": 12000, \"PEN\": 1500}\n\ndef calc(line):\n    name, qty = line.split(\":\")\n    key = name.strip().upper()\n    if key in prices and qty.isdigit():\n        return f\"{prices[key] * int(qty):,}\"\n    return \"ERR\"\n\nprint(calc(input()))",
-      "templateCode": "prices = {\"BOOK\": 12000, \"PEN\": 1500}\n\ndef calc(line):\n    name, qty = line.split(\":\")\n    key = name.strip().upper()\n    if key in prices and qty.§§§§§§§():\n        return f\"{prices[key] * int(qty):§}\"\n    return \"ERR\"\n\nprint(calc(input()))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "book:3",
-          "expectedOutput": "36,000"
+          id: 1,
+          input: '',
+          expectedOutput: '(3, 2)',
         },
-        {
-          "id": 2,
-          "input": "pen:x",
-          "expectedOutput": "ERR"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] \"A\"에서 tier칸 뒤 알파벳을 태그로 만들고 잔액을 천 단위와 소수 둘째 자리로 출력해보세요.",
-      "prompt_en": "[Fill Blank] Compute self.tag shifted from \"A\" by tier and format w.bal with commas and 2 decimals.",
-      "hint_ko": "코드 번호를 문자로 되돌리는 내장 함수 chr와 천 단위 구분 및 소수 둘째 자리 서식 ,.2f를 채워보세요.",
-      "hint_en": "Supply chr to convert the code back to a character and ,.2f for the format specifier.",
-      "targetCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = chr(ord(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            pass\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:,.2f}\")",
-      "templateCode": "class Wallet:\n    def __init__(self, tier, bal):\n        self.tag = §§§(ord(\"A\") + tier)\n        self.bal = bal\n\n    def add(self, raw):\n        try:\n            self.bal += int(raw)\n        except ValueError:\n            pass\n\nw = Wallet(1, 1000.5)\nw.add(input())\nprint(f\"[{w.tag}] {w.bal:§§§§}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "250",
-          "expectedOutput": "[B] 1,250.50"
-        },
-        {
-          "id": 2,
-          "input": "skip",
-          "expectedOutput": "[B] 1,000.50"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 각 단어를 대문자로 갱신해 하이픈(-)으로 이어 출력하도록 소문자 변환 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the case conversion method so each word in words is uppercased before joining.",
-      "hint_ko": "단어를 모두 대문자로 바꾸어야 하므로 .lower() 대신 .upper()를 호출하도록 고쳐보세요.",
-      "hint_en": "Replace .lower() with .upper() so each word is converted to uppercase.",
-      "templateCode": "words = input().split()\ni = 0\nwhile i < len(words):\n    words[i] = words[i].lower()\n    i += 1\nprint(\"-\".join(words))",
-      "targetCode": "words = input().split()\ni = 0\nwhile i < len(words):\n    words[i] = words[i].upper()\n    i += 1\nprint(\"-\".join(words))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "py ai",
-          "expectedOutput": "PY-AI"
-        },
-        {
-          "id": 2,
-          "input": "go web dev",
-          "expectedOutput": "GO-WEB-DEV"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 글자만 골라 다음 알파벳으로 1칸씩 밀어 이어 붙이려다 뒤바뀐 ord와 chr를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the TypeError caused by swapping ord() and chr() when shifting letters by +1.",
-      "hint_ko": "문자를 먼저 정수 코드로 바꿔야 덧셈을 할 수 있으므로 안쪽에 ord(c), 바깥쪽에 chr()를 호출하세요.",
-      "hint_en": "Call ord(c) on the inside before adding 1, and wrap the result in chr() on the outside.",
-      "templateCode": "word = input().strip().upper()\nout = \"\"\nfor c in word:\n    if c.isalpha():\n        out += ord(chr(c) + 1)\nprint(out)",
-      "targetCode": "word = input().strip().upper()\nout = \"\"\nfor c in word:\n    if c.isalpha():\n        out += chr(ord(c) + 1)\nprint(out)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "ab1c",
-          "expectedOutput": "BCD"
-        },
-        {
-          "id": 2,
-          "input": "py!",
-          "expectedOutput": "QZ"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 파일명 오른쪽 끝 공백을 제거한 뒤 \".csv\"로 끝나는지 검사하도록 공백 제거 방향을 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the directional strip bug so trailing spaces are removed before checking .endswith(\".csv\").",
-      "hint_ko": "확장자 뒤(오른쪽 끝)에 붙은 공백을 제거해야 하므로 .lstrip()을 .rstrip()으로 수정하세요.",
-      "hint_en": "Replace .lstrip() with .rstrip() to trim trailing whitespace.",
-      "templateCode": "name = input().lstrip()\nif name.endswith(\".csv\"):\n    print(\"OK:\" + name)\nelse:\n    print(\"NO\")",
-      "targetCode": "name = input().rstrip()\nif name.endswith(\".csv\"):\n    print(\"OK:\" + name)\nelse:\n    print(\"NO\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "007_log.csv   ",
-          "expectedOutput": "OK:007_log.csv"
-        },
-        {
-          "id": 2,
-          "input": "007_log.txt   ",
-          "expectedOutput": "NO"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 문자열 s가 회문(s == s[::-1])이면서 글자로만 이루어졌는지 판별해 ok에 저장해보세요.",
-      "prompt_en": "[Complete Line] Check whether s equals its reverse and consists only of letters, storing the boolean in ok.",
-      "hint_ko": "ok = s == s[::-1] and s.isalpha() 형태로 두 조건을 and로 묶어 변수 ok에 저장하세요.",
-      "hint_en": "Write ok = s == s[::-1] and s.isalpha().",
-      "targetCode": "s = input().lower().replace(\" \", \"\")\nok = s == s[::-1] and s.isalpha()\nprint(ok)",
-      "templateCode": "s = input().lower().replace(\" \", \"\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Top Spot",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "12 21",
-          "expectedOutput": "False"
-        },
-        {
-          "id": 3,
-          "input": "Py Code",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 소수 첫째 자리까지 서식화한 f\"{s}: {rate:.1f}%\" 문자열을 msg에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Format s and rate to 1 decimal place as f\"{s}: {rate:.1f}%\" and assign it to msg.",
-      "hint_ko": "msg = f\"{s}: {rate:.1f}%\" 형태로 서식 문자열을 변수 msg에 대입하세요.",
-      "hint_en": "Write msg = f\"{s}: {rate:.1f}%\".",
-      "targetCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\nmsg = f\"{s}: {rate:.1f}%\"\nprint(msg)",
-      "templateCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(msg)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "oxoo",
-          "expectedOutput": "OXOO: 75.0%"
-        },
-        {
-          "id": 2,
-          "input": "xoxo",
-          "expectedOutput": "XOXO: 50.0%"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 접두·접미사 검사 및 역순 슬라이싱 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "양쪽 공백을 걷어낸 뒤 \"#\"으로 시작하면서 \"#\"으로 끝나지 않는 항목만 골라 앞 기호를 떼고 대문자 역순으로 묶습니다.",
-      "hint_en": "Keep items starting with \"#\" and not ending with \"#\", drop the first char, uppercase, reverse, and join with \"/\".",
-      "targetCode": "raw = [\" #Py \", \"js#\", \" #AI#\", \" #Go \"]\nres = []\nfor x in raw:\n    s = x.strip()\n    if s.startswith(\"#\") and not s.endswith(\"#\"):\n        res.append(s[1:].upper()[::-1])\nprint(\"/\".join(res))",
-      "choices": [
-        "YP/OG",
-        "PY/GO",
-        "YP/IA/OG",
-        "yp/og"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "YP/OG"
-        }
-      ]
     },
     {
-      "id": 10,
-      "step": 10,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 .find(), .count(), ord/chr, f-string 서식 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "첫 글자 \"B\"의 문자 코드에 \"0\"의 개수(2개)를 더한 알파벳과, 하이픈 뒤 정수를 2로 나눈 서식 문자열을 확인하세요.",
-      "hint_en": "Shift \"B\" forward by the count of \"0\" (2), and format 2001 / 2 with :,.2f.",
-      "targetCode": "def decode(tag):\n    p = tag.find(\"-\")\n    ch = chr(ord(tag[0]) + tag.count(\"0\"))\n    num = int(tag[p + 1:]) / 2\n    return f\"{ch}:{num:,.2f}\"\n\nprint(decode(\"B-2001\"))",
-      "choices": [
-        "D:1,000.50",
-        "E:1,000.50",
-        "D:1000.50",
-        "C:1,000.50"
-      ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트 nums의 최솟값과 최댓값을 쉼표로 나란히 반환해 (2, 9)를 출력해보세요.',
+      prompt_en: '[Fill Blank] Return the minimum and maximum of nums separated by a comma.',
+      hint_ko: '최솟값 내장 함수 호출과 최댓값 내장 함수 호출을 쉼표와 공백으로 이어 적으세요.',
+      hint_en: 'Write the min and max function calls on nums separated by a comma and space.',
+      templateCode: 'def min_max(nums):\n    return §§§§§§§§§§§§§§§§§§§§\nprint(min_max([4, 9, 2]))',
+      targetCode: 'def min_max(nums):\n    return min(nums), max(nums)\nprint(min_max([4, 9, 2]))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "D:1,000.50"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '(2, 9)',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] div_info(17, 5)가 반환한 두 값을 q, r 변수에 바로 언패킹해 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Unpack the two return values of div_info(17, 5) into q and r and print them.',
+      hint_ko: '튜플 언패킹처럼 호출문 왼쪽에 두 변수를 쉼표로 적으면 반환값들이 순서대로 나뉘어 저장됩니다.',
+      hint_en: 'Unpack multiple return values directly into comma-separated variables on the left of =.',
+      targetCode: 'def div_info(a, b):\n    return a // b, a % b\nq, r = div_info(17, 5)\nprint(f"Q={q}, R={r}")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Q=3, R=2',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 문자열의 첫 글자와 끝 글자를 반환받아 출력문에서 쓰는 두 변수에 언패킹해보세요.',
+      prompt_en: '[Fill Blank] Unpack the returned first and last characters into the two variables printed on the last line.',
+      hint_ko: '마지막 줄 print() 안에 적힌 두 변수 이름을 쉼표와 공백으로 나란히 적으세요.',
+      hint_en: 'Write the two variable names used in print() separated by a comma and space.',
+      templateCode: 'def ends(s):\n    return s[0], s[-1]\n§§§§§§§§§§§ = ends("python")\nprint(first, last)',
+      targetCode: 'def ends(s):\n    return s[0], s[-1]\nfirst, last = ends("python")\nprint(first, last)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'p n',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 80점 이상이면 즉시 "Pass"를 반환하고, 아니면 "Fail"을 반환하는 grade(score) 함수를 조립해보세요.',
+      prompt_en: '[Block] Return "Pass" early when score >= 80, otherwise return "Fail".',
+      hint_ko: 'if 조건이 참이어서 return이 실행되면 함수가 바로 끝나므로 else 없이도 깔끔하게 분기됩니다.',
+      hint_en: 'Because return exits the function immediately, the fallback return below needs no else block.',
+      targetCode: 'def grade(score):\n    if score >= 80:\n        return "Pass"\n    return "Fail"\nprint(grade(85), grade(70))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Pass Fail',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 홀수일 때는 빈 값(None)을 조기 반환하고 짝수일 때만 절반을 반환하도록 채워보세요.',
+      prompt_en: '[Fill Blank] Return None early when n is odd so safe_half(7) yields None.',
+      hint_ko: '반환 키워드와 빈 값 상수를 공백으로 연결해 조기 반환문을 작성하세요.',
+      hint_en: 'Write the return statement that sends back the null constant.',
+      templateCode: 'def safe_half(n):\n    if n % 2 != 0:\n        §§§§§§§§§§§\n    return n // 2\nprint(safe_half(7), safe_half(8))',
+      targetCode: 'def safe_half(n):\n    if n % 2 != 0:\n        return None\n    return n // 2\nprint(safe_half(7), safe_half(8))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'None 4',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 리스트 순회 중 짝수를 만나면 즉시 return True하고, 끝까지 없으면 바깥에서 return False하는 함수를 조립해보세요.',
+      prompt_en: '[Block] Return True immediately when an even number is found in the loop, or return False after the loop.',
+      hint_ko: '반복문 안에서는 찾았을 때만 return True를 하고, return False는 반드시 반복문이 끝난 바깥에 둡니다.',
+      hint_en: 'Return True inside the loop upon finding a match, and place return False outside after the loop.',
+      targetCode: 'def has_even(nums):\n    for x in nums:\n        if x % 2 == 0:\n            return True\n    return False\nprint(has_even([1, 4, 5]))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'True',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 기준 이상인 첫 숫자를 찾으면 즉시 반환하고, 끝까지 못 찾으면 빈 값을 반환하도록 채워보세요.',
+      prompt_en: '[Fill Blank] Complete the fallback return after the loop so it returns None when no match is found.',
+      hint_ko: '반복문이 끝날 때까지 반환되지 않았을 때 빈 값 상수를 돌려주는 문장을 적으세요.',
+      hint_en: 'Return the four-letter null constant after the for loop.',
+      templateCode: 'def find_big(nums, cut):\n    for x in nums:\n        if x >= cut:\n            return x\n    §§§§§§§§§§§\nprint(find_big([10, 25, 30], 20))',
+      targetCode: 'def find_big(nums, cut):\n    for x in nums:\n        if x >= cut:\n            return x\n    return None\nprint(find_big([10, 25, 30], 20))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '25',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈 리스트면 0, 0을 조기 반환하고 아니면 합계와 길이를 다중 반환해 언패킹해보세요.',
+      prompt_en: '[Fill Blank] Return the sum and length of nums and unpack them into s and c.',
+      hint_ko: '반환 키워드, 길이를 구하는 함수, 그리고 호출부에서 언패킹할 두 변수를 차례로 채우세요.',
+      hint_en: 'Fill in the return keyword, the length function name, and the two unpacked variables.',
+      templateCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    §§§§§§ sum(nums), §§§(nums)\n§§§§ = sum_len([10, 20, 30])\nprint(s, c)',
+      targetCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    return sum(nums), len(nums)\ns, c = sum_len([10, 20, 30])\nprint(s, c)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '60 3',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 첫 번째 요소만 검사하고 바로 else: return False로 끝나버리는 조기 반환 위치 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the premature return False inside the loop so all elements are checked before returning False.',
+      hint_ko: 'else 블록을 없애고 모든 요소를 끝까지 확인한 뒤 반복문 바깥에서 False를 반환하도록 고치세요.',
+      hint_en: 'Remove else: and unindent return False so it runs only after the for loop finishes.',
+      templateCode: 'def has_target(nums, target):\n    for x in nums:\n        if x == target:\n            return True\n        else:\n            return False\nprint(has_target([3, 7, 9], 7))',
+      targetCode: 'def has_target(nums, target):\n    for x in nums:\n        if x == target:\n            return True\n    return False\nprint(has_target([3, 7, 9], 7))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'True',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 두 값을 반환하지 않고 출력만 해 언패킹에서 TypeError가 발생한 둘째 줄을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix line 2 so split_num returns the quotient and remainder instead of printing them.',
+      hint_ko: '호출부에서 두 변수로 언패킹하려면 print() 대신 다중 return문을 사용해야 합니다.',
+      hint_en: 'Replace print(a // b, a % b) with return a // b, a % b.',
+      templateCode: 'def split_num(a, b):\n    print(a // b, a % b)\nq, r = split_num(19, 5)\nprint(q, r)',
+      targetCode: 'def split_num(a, b):\n    return a // b, a % b\nq, r = split_num(19, 5)\nprint(q, r)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 4',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 arr의 최솟값과 최댓값을 동시에 반환하는 함수 내부 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the indented line that returns both min(arr) and max(arr).',
+      hint_ko: '반환 키워드 뒤에 최솟값 함수와 최댓값 함수를 쉼표로 나란히 적으세요.',
+      hint_en: 'Write return min(arr), max(arr) inside the function.',
+      templateCode: 'def stats(arr):\n    §§§§§§§§§§§§§§§§§§§§§§§§§\nlow, high = stats([8, 2, 15, 4])\nprint(low, high)',
+      targetCode: 'def stats(arr):\n    return min(arr), max(arr)\nlow, high = stats([8, 2, 15, 4])\nprint(low, high)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 15',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] ends([10, 20, 30]) 호출 결과를 두 변수 first, last로 언패킹해 받는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Unpack the result of ends([10, 20, 30]) into variables first and last.',
+      hint_ko: '등호 왼쪽에 두 변수 이름을 쉼표로 적고 오른쪽에 함수 호출식을 적으세요.',
+      hint_en: 'Write first, last = ends([10, 20, 30]).',
+      templateCode: 'def ends(nums):\n    return nums[0], nums[-1]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(first + last)',
+      targetCode: 'def ends(nums):\n    return nums[0], nums[-1]\nfirst, last = ends([10, 20, 30])\nprint(first + last)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '40',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 반복문 내부 조기 return이 포함된 first_over 함수의 두 호출 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the output of the two calls to first_over featuring early return.',
+      hint_ko: '첫 번째 호출에서 20보다 큰 첫 숫자가 무엇인지, 두 번째 호출에서 조건을 만족하는 숫자가 있는지 확인해보세요.',
+      hint_en: 'Find the first element greater than 20 in the first call, and trace what happens when the second call finishes the loop.',
+      targetCode: 'def first_over(nums, cut):\n    for x in nums:\n        if x > cut:\n            return x\n    return -1\nprint(first_over([10, 25, 40], 20), first_over([5, 15], 20))',
+      choices: ['25 -1', '40 -1', '25 None', '10 -1'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '25 -1',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 0 나눗셈 방어 조기 return과 다중 반환 언패킹이 결합된 다음 코드의 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the output of the code combining an early guard return and tuple unpacking.',
+      hint_ko: '첫 호출은 17을 5로 나눈 몫과 나머지를 반환하고, 두 번째 호출은 b가 0이므로 조기 반환됩니다.',
+      hint_en: 'Unpack the quotient and remainder of 17 and 5 in the first call, and the early return (0, 0) in the second call.',
+      targetCode: 'def calc(a, b):\n    if b == 0:\n        return 0, 0\n    return a // b, a % b\nx, y = calc(17, 5)\nz, w = calc(10, 0)\nprint(x + y, z + w)',
+      choices: ['5 0', '3 0', '5 10', '6 0'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '5 0',
+        },
+      ],
+    },
+  ],
 };

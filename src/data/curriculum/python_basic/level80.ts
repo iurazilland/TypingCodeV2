@@ -6,24 +6,34 @@ export const PYTHON_LEVEL_80: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 80,
-  "title_ko": "80레벨: 논리 일괄 검사(all, any)와 타입 확인(isinstance)",
-  "title_en": "Level 80: Logical Quantifiers (all, any) & isinstance()",
-  "description_ko": "조건 리스트의 전체·부분 참 여부를 판별하는 all(), any()와 객체 타입을 안전하게 검사하는 isinstance()를 익힙니다.",
-  "description_en": "Master logical quantifiers all() and any() along with runtime type checking via isinstance() including custom classes.",
+  "title_ko": "80레벨: 컬렉션·타입 에러 잡기 (IndexError, KeyError, TypeError)",
+  "title_en": "Level 80: Catching IndexError, KeyError & TypeError",
+  "description_ko": "인덱스 범위 초과(IndexError), 딕셔너리 키 부재(KeyError), 자료형 불일치(TypeError)를 정확히 구분해 처리합니다.",
+  "description_en": "Distinguish and handle out-of-range indices (IndexError), missing keys (KeyError), and type mismatches (TypeError).",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
     "type",
-    "math",
-    "map",
+    "if",
+    "for_range",
+    "range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
     "iter",
     "method",
-    "if",
-    "for_in",
     "def",
-    "class"
+    "return",
+    "class",
+    "try"
   ],
   "questions": [
     {
@@ -31,20 +41,21 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] all()로 모든 원소가 양수인지, any()로 20 이상인 원소가 하나라도 있는지 판별해 출력해보세요.",
-      "prompt_en": "[Block] Use all() and any() with list comprehensions to check positivity and >= 20.",
-      "hint_ko": "리스트 컴프리헨션으로 각 원소의 비교 결과([True, True, ...])를 만들어 all()과 any()에 전달합니다.",
-      "hint_en": "Build a list comprehension of boolean comparisons and pass it into all() or any().",
-      "targetCode": "nums = [12, 8, 25]\nall_pos = all([x > 0 for x in nums])\nhas_big = any([x >= 20 for x in nums])\nprint(all_pos, has_big)",
-      "expectedVariables": {
-        "all_pos": true,
-        "has_big": true
-      },
+      "prompt_ko": "[블록 조립] except IndexError:로 리스트 인덱스 범위 초과 에러를 잡아 Out을 출력해보세요.",
+      "prompt_en": "[Block] Catch out-of-range list indexing with except IndexError: and print Out.",
+      "hint_ko": "리스트나 문자열의 길이 범위를 벗어난 인덱스 번호를 조회하면 IndexError가 발생합니다.",
+      "hint_en": "Accessing an index outside the valid range of a list or string raises IndexError.",
+      "targetCode": "nums = [10, 20, 30]\nidx = int(input())\ntry:\n    print(nums[idx])\nexcept IndexError:\n    print(\"Out\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "True True"
+          "input": "1",
+          "expectedOutput": "20"
+        },
+        {
+          "id": 2,
+          "input": "5",
+          "expectedOutput": "Out"
         }
       ]
     },
@@ -53,22 +64,22 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력된 비밀번호에 숫자 문자가 하나라도 포함되어 있는지 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks to check whether the password contains at least one digit.",
-      "hint_ko": "'어느 하나라도' 참인지 묻는 3글자 내장 함수 안에, 글자가 숫자인지 묻는 7글자(isdigit) 메서드를 쓰세요.",
-      "hint_en": "Wrap the list in the 3-letter existential quantifier, testing each character with the 7-letter isdigit method.",
-      "templateCode": "pw = input()\nhas_num = §§§([ch.§§§§§§§() for ch in pw])\nprint(has_num)",
-      "targetCode": "pw = input()\nhas_num = any([ch.isdigit() for ch in pw])\nprint(has_num)",
+      "prompt_ko": "[빈칸 채우기] 문자열의 글자 수 범위를 벗어난 인덱스를 조회할 때 발생하는 에러 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the exception type raised when indexing past the end of a string.",
+      "hint_ko": "시퀀스의 '인덱스(Index)' 범위를 벗어났을 때 나는 오류 이름을 파스칼 표기법으로 적으세요.",
+      "hint_en": "Write the PascalCase exception name for an out-of-bounds index.",
+      "templateCode": "word = \"Python\"\ni = int(input())\ntry:\n    print(word[i])\nexcept §§§§§§§§§§:\n    print(\"None\")",
+      "targetCode": "word = \"Python\"\ni = int(input())\ntry:\n    print(word[i])\nexcept IndexError:\n    print(\"None\")",
       "testCases": [
         {
           "id": 1,
-          "input": "py2026",
-          "expectedOutput": "True"
+          "input": "0",
+          "expectedOutput": "P"
         },
         {
           "id": 2,
-          "input": "secret",
-          "expectedOutput": "False"
+          "input": "9",
+          "expectedOutput": "None"
         }
       ]
     },
@@ -77,16 +88,21 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] isinstance()로 단일 타입(int)과 복수 타입 튜플((int, str))에 해당하는지 각각 판별해 출력해보세요.",
-      "prompt_en": "[Block] Use isinstance() to test values against int and against the tuple (int, str).",
-      "hint_ko": "여러 타입을 검사할 때는 반드시 두 번째 인자를 소괄호 튜플 (int, str)로 묶어 전달해야 합니다.",
-      "hint_en": "When checking multiple types, group them inside parentheses as a single tuple argument: (int, str).",
-      "targetCode": "a = 42\nb = [4, 2]\nc = \"42\"\nprint(isinstance(a, int))\nprint(isinstance(b, (int, str)))\nprint(isinstance(c, (int, str)))",
+      "prompt_ko": "[블록 조립] except KeyError:로 딕셔너리에 없는 키를 조회할 때 발생하는 에러를 잡아 NoKey를 출력해보세요.",
+      "prompt_en": "[Block] Catch missing dictionary key lookups with except KeyError: and print NoKey.",
+      "hint_ko": "딕셔너리에 존재하지 않는 키를 대괄호 d[k]로 찾으면 KeyError가 발생합니다.",
+      "hint_en": "Looking up a non-existent key in a dictionary with brackets d[k] raises KeyError.",
+      "targetCode": "menu = {\"tea\": 3000, \"pie\": 4500}\nk = input()\ntry:\n    print(menu[k])\nexcept KeyError:\n    print(\"NoKey\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "True\nFalse\nTrue"
+          "input": "tea",
+          "expectedOutput": "3000"
+        },
+        {
+          "id": 2,
+          "input": "milk",
+          "expectedOutput": "NoKey"
         }
       ]
     },
@@ -95,17 +111,22 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 변수 x가 정수(int) 타입인지 확인해 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in isinstance and int to check whether x is an integer.",
-      "hint_ko": "'is'와 'instance'를 붙여 쓴 10글자 타입 확인 함수와 '정수(integer)'의 앞 세 글자 타입을 채우세요.",
-      "hint_en": "Combine 'is' + 'instance' into the 10-letter built-in, and pass the 3-letter integer type.",
-      "templateCode": "x = 100\ny = \"100\"\nprint(§§§§§§§§§§(x, §§§))\nprint(isinstance(y, int))",
-      "targetCode": "x = 100\ny = \"100\"\nprint(isinstance(x, int))\nprint(isinstance(y, int))",
+      "prompt_ko": "[빈칸 채우기] 사전에 등록되지 않은 과목명을 조회했을 때 발생하는 예외 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the exception type raised when a dictionary key is not found.",
+      "hint_ko": "딕셔너리의 '키(Key)'가 없을 때 발생하는 여덟 글자 예외 이름을 적으세요.",
+      "hint_en": "Write the eight-letter PascalCase exception name for a missing dictionary key.",
+      "templateCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept §§§§§§§§:\n    print(0)",
+      "targetCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept KeyError:\n    print(0)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "True\nFalse"
+          "input": "Math",
+          "expectedOutput": "95"
+        },
+        {
+          "id": 2,
+          "input": "Sci",
+          "expectedOutput": "0"
         }
       ]
     },
@@ -114,16 +135,16 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] bool(s) 리스트 컴프리헨션으로 입력란 전체 작성 여부(all)와 부분 작성 여부(any)를 출력해보세요.",
-      "prompt_en": "[Block] Convert strings with [bool(s) for s in forms] and print all(filled), any(filled).",
-      "hint_ko": "all(filled)는 모든 칸이 채워졌는지를, any(filled)는 한 칸이라도 채워졌는지를 나타냅니다.",
-      "hint_en": "all(filled) checks if every field is filled, while any(filled) checks if at least one field is filled.",
-      "targetCode": "forms = [\"Kim\", \"seoul\", \"\"]\nfilled = [bool(s) for s in forms]\nprint(all(filled), any(filled))",
+      "prompt_ko": "[블록 조립] 문자열과 정수를 바로 더하려 할 때 발생하는 에러를 except TypeError:로 잡아보세요.",
+      "prompt_en": "[Block] Catch the error raised by adding a string and an integer using except TypeError:.",
+      "hint_ko": "문자열과 숫자처럼 서로 연산할 수 없는 자료형(Type)끼리 연산하면 TypeError가 발생합니다.",
+      "hint_en": "Combining incompatible data types, such as adding a string and an int, raises TypeError.",
+      "targetCode": "try:\n    res = \"Lv.\" + 10\n    print(res)\nexcept TypeError:\n    print(\"TypeErr\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "False True"
+          "expectedOutput": "TypeErr"
         }
       ]
     },
@@ -132,17 +153,17 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 모든 점수가 60 이상인지(all)와 90 이상이 하나라도 있는지(any) 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in all and any to check whether every score passed and at least one is >= 90.",
-      "hint_ko": "전부 참인지 확인하는 3글자 함수와 하나라도 참인지 확인하는 3글자 함수를 차례로 채우세요.",
-      "hint_en": "Use the 3-letter universal quantifier first and the 3-letter existential quantifier second.",
-      "templateCode": "scores = [70, 85, 95]\npassed = [s >= 60 for s in scores]\nace = [s >= 90 for s in scores]\nprint(§§§(passed), §§§(ace))",
-      "targetCode": "scores = [70, 85, 95]\npassed = [s >= 60 for s in scores]\nace = [s >= 90 for s in scores]\nprint(all(passed), any(ace))",
+      "prompt_ko": "[빈칸 채우기] 리스트와 정수를 더하려 할 때 발생하는 자료형 불일치 예외 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the exception type raised when trying to add an integer directly to a list.",
+      "hint_ko": "'자료형(Type)'이 맞지 않아 연산할 수 없을 때 발생하는 아홉 글자 예외 이름을 적으세요.",
+      "hint_en": "Write the nine-letter PascalCase exception name for incompatible data types.",
+      "templateCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept §§§§§§§§§:\n    print(\"BadType\")",
+      "targetCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept TypeError:\n    print(\"BadType\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True True"
+          "expectedOutput": "BadType"
         }
       ]
     },
@@ -151,16 +172,26 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 직접 정의한 Hero 클래스의 인스턴스인지 isinstance()로 각각 판별해 출력해보세요.",
-      "prompt_en": "[Block] Use isinstance(obj, Hero) to check whether h and tag are instances of Hero.",
-      "hint_ko": "Hero(\"Aria\")로 생성한 객체 h는 Hero 인스턴스이므로 True, 일반 문자열 tag는 False가 반환됩니다.",
-      "hint_en": "The object h created via Hero(\"Aria\") returns True, whereas the plain string tag returns False.",
-      "targetCode": "class Hero:\n    def __init__(self, name):\n        self.name = name\nh = Hero(\"Aria\")\ntag = \"slime\"\nprint(h.name, isinstance(h, Hero))\nprint(isinstance(tag, Hero))",
+      "prompt_ko": "[블록 조립] 리스트 인덱스 조회와 딕셔너리 키 조회를 한 try에 넣고 IndexError와 KeyError로 각각 분기해보세요.",
+      "prompt_en": "[Block] Handle out-of-range list access and missing dict key lookup with separate IndexError and KeyError branches.",
+      "hint_ko": "리스트에서 꺼낸 이름을 키로 삼아 딕셔너리를 조회할 때 어느 단계에서 에러가 났는지 구분해 처리할 수 있습니다.",
+      "hint_en": "Separate handlers let you tell whether the list index was out of range or the dictionary key was missing.",
+      "targetCode": "users = [\"Kim\", \"Lee\", \"Park\"]\npts = {\"Kim\": 100, \"Lee\": 80}\nidx = int(input())\ntry:\n    u = users[idx]\n    print(pts[u])\nexcept IndexError:\n    print(\"NoIdx\")\nexcept KeyError:\n    print(\"NoUser\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "Aria True\nFalse"
+          "input": "0",
+          "expectedOutput": "100"
+        },
+        {
+          "id": 2,
+          "input": "5",
+          "expectedOutput": "NoIdx"
+        },
+        {
+          "id": 3,
+          "input": "2",
+          "expectedOutput": "NoUser"
         }
       ]
     },
@@ -169,45 +200,56 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] Hero 클래스를 정의하고 객체 u가 Hero의 인스턴스인지 확인해 True를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the class name Hero and isinstance to verify that u is a Hero instance.",
-      "hint_ko": "첫 빈칸은 아래에서 생성하는 4글자 클래스 이름을, 둘째 빈칸은 10글자 타입 확인 함수를 적으세요.",
-      "hint_en": "Match the 4-letter class name instantiated below, and call the 10-letter isinstance function.",
-      "templateCode": "class §§§§:\n    def __init__(self, hp):\n        self.hp = hp\nu = Hero(100)\nprint(§§§§§§§§§§(u, Hero))",
-      "targetCode": "class Hero:\n    def __init__(self, hp):\n        self.hp = hp\nu = Hero(100)\nprint(isinstance(u, Hero))",
+      "prompt_ko": "[빈칸 채우기] 리스트 범위 초과와 딕셔너리 키 누락을 구분하도록 첫 번째 예외 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the first exception type to catch out-of-bounds list access before checking the dictionary.",
+      "hint_ko": "순번(인덱스)이 리스트 길이를 벗어났을 때 발생하는 예외 이름을 첫 번째 except 뒤에 적으세요.",
+      "hint_en": "Specify the sequence index exception on the first except clause.",
+      "templateCode": "codes = [\"A\", \"B\"]\ntable = {\"A\": 10}\ni = int(input())\ntry:\n    k = codes[i]\n    print(table[k])\nexcept §§§§§§§§§§:\n    print(-1)\nexcept KeyError:\n    print(-2)",
+      "targetCode": "codes = [\"A\", \"B\"]\ntable = {\"A\": 10}\ni = int(input())\ntry:\n    k = codes[i]\n    print(table[k])\nexcept IndexError:\n    print(-1)\nexcept KeyError:\n    print(-2)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "True"
+          "input": "0",
+          "expectedOutput": "10"
+        },
+        {
+          "id": 2,
+          "input": "3",
+          "expectedOutput": "-1"
+        },
+        {
+          "id": 3,
+          "input": "1",
+          "expectedOutput": "-2"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 전체 과목 40점 이상(all)이면서 90점 이상 과목이 존재(any)할 때 Honor를 출력하세요.",
-      "prompt_en": "[Block] Combine all() and any() results with and in an if-else statement.",
-      "hint_ko": "모든 점수가 40 이상이면서 동시에 하나라도 90 이상일 때만 if 블록이 실행됩니다.",
-      "hint_en": "The if branch runs only when every score is at least 40 and at least one score is 90 or above.",
-      "targetCode": "scores = list(map(int, input().split()))\nno_fail = all([s >= 40 for s in scores])\nhas_ace = any([s >= 90 for s in scores])\nif no_fail and has_ace:\n    print(\"Honor\")\nelse:\n    print(\"Normal\")",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 리스트 인덱싱, 딕셔너리 조회, 문자열·숫자 연산에서 발생할 수 있는 세 가지 예외 이름을 순서대로 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the three exception types for out-of-range index, missing key, and incompatible type operations.",
+      "hint_ko": "리스트 순번 초과, 딕셔너리 키 부재, 자료형 불일치에 해당하는 각 예외 이름을 차례로 확인하세요.",
+      "hint_en": "Check the exact exception names for index out of range, missing dictionary key, and wrong operand types.",
+      "templateCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept §§§§§§§§§§:\n    print(\"Idx\")\nexcept §§§§§§§§:\n    print(\"Key\")\nexcept §§§§§§§§§:\n    print(\"Type\")",
+      "targetCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept IndexError:\n    print(\"Idx\")\nexcept KeyError:\n    print(\"Key\")\nexcept TypeError:\n    print(\"Type\")",
       "testCases": [
         {
           "id": 1,
-          "input": "60 95 70",
-          "expectedOutput": "Honor"
+          "input": "5",
+          "expectedOutput": "Idx"
         },
         {
           "id": 2,
-          "input": "35 95 80",
-          "expectedOutput": "Normal"
+          "input": "1",
+          "expectedOutput": "Key"
         },
         {
           "id": 3,
-          "input": "60 75 80",
-          "expectedOutput": "Normal"
+          "input": "0",
+          "expectedOutput": "Type"
         }
       ]
     },
@@ -215,23 +257,18 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력된 숫자들이 모두 양수이면 AllPos, 아니면 NotAll을 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in all and else to print AllPos when every number is positive, else NotAll.",
-      "hint_ko": "모든 조건이 참인지 검사하는 3글자 함수와 조건이 거짓일 때의 4글자 분기 키워드를 채우세요.",
-      "hint_en": "Use the 3-letter universal quantifier and the 4-letter otherwise branch keyword.",
-      "templateCode": "nums = list(map(int, input().split()))\nif §§§([n > 0 for n in nums]):\n    print(\"AllPos\")\n§§§§:\n    print(\"NotAll\")",
-      "targetCode": "nums = list(map(int, input().split()))\nif all([n > 0 for n in nums]):\n    print(\"AllPos\")\nelse:\n    print(\"NotAll\")",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리에 없는 키를 조회할 때 발생하는 에러를 리스트 인덱스 예외로 잘못 적은 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the uncaught exception when looking up a missing dictionary key by specifying the right error type.",
+      "hint_ko": "딕셔너리 중괄호 데이터에서 없는 키를 찾을 때는 IndexError가 아니라 키 예외가 발생합니다.",
+      "hint_en": "Missing dictionary keys raise KeyError rather than IndexError.",
+      "templateCode": "bag = {\"gold\": 50}\ntry:\n    print(bag[\"gem\"])\nexcept IndexError:\n    print(0)",
+      "targetCode": "bag = {\"gold\": 50}\ntry:\n    print(bag[\"gem\"])\nexcept KeyError:\n    print(0)",
       "testCases": [
         {
           "id": 1,
-          "input": "3 8 12",
-          "expectedOutput": "AllPos"
-        },
-        {
-          "id": 2,
-          "input": "5 -1 9",
-          "expectedOutput": "NotAll"
+          "input": "",
+          "expectedOutput": "0"
         }
       ]
     },
@@ -240,17 +277,17 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 혼합 리스트 data에서 정수만 골라 합산해야 하는데 문자열을 골라 오류가 나는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the type argument in isinstance() so only integers are filtered for sum(ints).",
-      "hint_ko": "sum()으로 합계를 구하려면 문자열(str)이 아니라 정수(int) 원소만 골라내야 합니다.",
-      "hint_en": "Change isinstance(x, str) to isinstance(x, int) so only integers are summed.",
-      "templateCode": "data = [10, \"hi\", 25, \"py\", 5]\nints = [x for x in data if isinstance(x, str)]\nprint(sum(ints))",
-      "targetCode": "data = [10, \"hi\", 25, \"py\", 5]\nints = [x for x in data if isinstance(x, int)]\nprint(sum(ints))",
+      "prompt_ko": "[틀린 곳 수정] 문자열과 정수를 더해서 난 에러를 값 변환 에러(ValueError)로 잘못 잡아 멈추는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Change the exception type so the error from adding a string and an integer is properly caught.",
+      "hint_ko": "서로 다른 자료형끼리 더할 수 없어 발생하는 에러는 ValueError가 아니라 자료형 예외입니다.",
+      "hint_en": "Adding a string and an integer raises TypeError, not ValueError.",
+      "templateCode": "try:\n    msg = \"Score: \" + 100\n    print(msg)\nexcept ValueError:\n    print(\"Type mismatch\")",
+      "targetCode": "try:\n    msg = \"Score: \" + 100\n    print(msg)\nexcept TypeError:\n    print(\"Type mismatch\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "40"
+          "expectedOutput": "Type mismatch"
         }
       ]
     },
@@ -258,18 +295,23 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 음수가 하나라도 있는지 검사해야 하는데 모두 음수일 때만 True가 되는 논리 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the quantifier function so has_neg is True when at least one number is negative.",
-      "hint_ko": "단 하나라도 조건을 만족하는지 확인할 때는 all()이 아니라 any()를 사용해야 합니다.",
-      "hint_en": "Replace all(...) with any(...) to test whether at least one number is negative.",
-      "templateCode": "nums = [10, -3, 20]\nhas_neg = all([n < 0 for n in nums])\nprint(has_neg)",
-      "targetCode": "nums = [10, -3, 20]\nhas_neg = any([n < 0 for n in nums])\nprint(has_neg)",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 리스트 인덱스 범위를 벗어났을 때 IndexError를 잡는 except 헤더 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the except header line that catches IndexError.",
+      "hint_ko": "예외 처리 키워드 뒤에 인덱스 예외 이름과 콜론을 적으세요.",
+      "hint_en": "Write except IndexError: with a colon at the end.",
+      "templateCode": "items = [\"X\", \"Y\"]\nidx = int(input())\ntry:\n    print(items[idx])\n§§§§§§§§§§§§§§§§§§\n    print(\"Empty\")",
+      "targetCode": "items = [\"X\", \"Y\"]\nidx = int(input())\ntry:\n    print(items[idx])\nexcept IndexError:\n    print(\"Empty\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "True"
+          "input": "1",
+          "expectedOutput": "Y"
+        },
+        {
+          "id": 2,
+          "input": "4",
+          "expectedOutput": "Empty"
         }
       ]
     },
@@ -278,41 +320,47 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 모든 점수가 60 이상인지 all()로 검사한 결과를 ok에 저장해보세요.",
-      "prompt_en": "[Complete Line] Assign all([s >= 60 for s in scores]) to ok.",
-      "hint_ko": "ok = all([s >= 60 for s in scores]) 형태로 전체 통과 여부를 저장하세요.",
-      "hint_en": "Write ok = all([s >= 60 for s in scores]) to check if all scores are >= 60.",
-      "templateCode": "scores = list(map(int, input().split()))\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
-      "targetCode": "scores = list(map(int, input().split()))\nok = all([s >= 60 for s in scores])\nprint(ok)",
+      "prompt_ko": "[한 줄 완성] 딕셔너리에 찾는 키가 없을 때 KeyError를 잡는 except 헤더 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the except header line that catches KeyError.",
+      "hint_ko": "예외 처리 키워드 뒤에 딕셔너리 키 예외 이름과 콜론을 적으세요.",
+      "hint_en": "Write except KeyError: followed by a colon.",
+      "templateCode": "ranks = {\"Ace\": 1}\nname = input()\ntry:\n    print(ranks[name])\n§§§§§§§§§§§§§§§§\n    print(\"Unranked\")",
+      "targetCode": "ranks = {\"Ace\": 1}\nname = input()\ntry:\n    print(ranks[name])\nexcept KeyError:\n    print(\"Unranked\")",
       "testCases": [
         {
           "id": 1,
-          "input": "70 85 60",
-          "expectedOutput": "True"
+          "input": "Ace",
+          "expectedOutput": "1"
         },
         {
           "id": 2,
-          "input": "90 55 80",
-          "expectedOutput": "False"
+          "input": "Bob",
+          "expectedOutput": "Unranked"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] data에서 isinstance(x, int)가 참인 정수 원소만 골라낸 리스트 컴프리헨션을 nums에 저장하세요.",
-      "prompt_en": "[Complete Line] Assign [x for x in data if isinstance(x, int)] to nums.",
-      "hint_ko": "nums = [x for x in data if isinstance(x, int)] 형태로 정수만 필터링하세요.",
-      "hint_en": "Write nums = [x for x in data if isinstance(x, int)].",
-      "templateCode": "data = [3, \"a\", 7, \"b\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(nums)",
-      "targetCode": "data = [3, \"a\", 7, \"b\"]\nnums = [x for x in data if isinstance(x, int)]\nprint(nums)",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 리스트와 딕셔너리를 함께 조회하는 코드에서 어떤 예외 분기가 실행되는지 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output of the code performing both a list index lookup and a dictionary key lookup.",
+      "hint_ko": "names[2]는 \"Park\"으로 정상 조회되지만, 그 다음 줄의 table[\"Park\"]에서 어떤 에러가 나는지 확인하세요.",
+      "hint_en": "Check whether names[2] succeeds and what happens on the next line when looking up \"Park\" in table.",
+      "targetCode": "names = [\"Kim\", \"Lee\", \"Park\"]\ntable = {\"Kim\": 10, \"Lee\": 20}\ntry:\n    who = names[2]\n    val = table[who]\n    print(val)\nexcept IndexError:\n    print(\"E1\")\nexcept KeyError:\n    print(\"E2\")",
+      "choices": [
+        "E2",
+        "E1",
+        "20",
+        "E1\nE2"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[3, 7]"
+          "expectedOutput": "E2"
         }
       ]
     },
@@ -321,23 +369,23 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "음수 정수도 정수 타입에 속한다는 점에 유의하며, 세 원소가 '전부 정수인지', '전부 양수인지', '하나라도 음수인지' 차례대로 판별해보세요.",
-      "hint_en": "Remember that negative whole numbers are still integers, then check whether every item is int, whether every item is positive, and whether any item is negative.",
-      "targetCode": "data = [4, -2, 8]\nc1 = all([isinstance(x, int) for x in data])\nc2 = all([x > 0 for x in data])\nc3 = any([x < 0 for x in data])\nprint(c1, c2, c3)",
+      "prompt_ko": "[출력 결과 예측] 세 개의 키 목록을 순회하며 딕셔너리 값과 정수를 더할 때의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the final output when looping over keys and adding 5 to each looked-up dictionary value.",
+      "hint_ko": "\"a\"는 정수 10, \"b\"는 문자열 \"20\"(정수와 덧셈 불가), \"c\"는 없는 키라는 점을 각각 추적해보세요.",
+      "hint_en": "Trace \"a\" (int 10), \"b\" (str \"20\" + 5 raises TypeError), and \"c\" (missing key raises KeyError).",
+      "targetCode": "data = {\"a\": 10, \"b\": \"20\"}\nlog = []\nfor k in [\"a\", \"b\", \"c\"]:\n    try:\n        log.append(data[k] + 5)\n    except KeyError:\n        log.append(-1)\n    except TypeError:\n        log.append(-2)\nprint(log)",
       "choices": [
-        "True False True",
-        "True True False",
-        "False False True",
-        "True False False"
+        "[15, -2, -1]",
+        "[15, 25, -1]",
+        "[15, -1, -2]",
+        "[-2, -1]"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "True False True"
+          "expectedOutput": "[15, -2, -1]"
         }
       ]
     }

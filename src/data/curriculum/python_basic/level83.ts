@@ -6,23 +6,34 @@ export const PYTHON_LEVEL_83: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 83,
-  "title_ko": "83레벨: try - except - else - finally 완전한 흐름과 raise 기초",
-  "title_en": "Level 83: Full try-except-else-finally Flow & raise Basics",
-  "description_ko": "예외가 없을 때 실행되는 else, 항상 실행되는 finally, 예외 객체(as e) 확인과 raise로 직접 예외를 발생시키는 흐름을 익힙니다.",
-  "description_en": "Master the full try-except-else-finally flow, inspecting exception messages with as e, and raising validation errors with raise.",
+  "title_ko": "83레벨: 리스트 원하는 위치 삽입(.insert())과 값 찾아 삭제(.remove())",
+  "title_en": "Level 83: List Insertion (.insert()) & Value Removal (.remove())",
+  "description_ko": "원하는 인덱스 위치에 요소를 끼워 넣는 .insert()와 특정 값을 찾아 첫 번째 일치 항목을 지우는 .remove()를 익힙니다.",
+  "description_en": "Learn to insert elements at any index with .insert() and delete the first matching value with .remove().",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
     "type",
     "if",
+    "for_range",
+    "range",
+    "for_in",
     "while",
     "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
     "def",
-    "try",
-    "raise",
-    "method"
+    "return",
+    "class",
+    "try"
   ],
   "questions": [
     {
@@ -30,16 +41,16 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] try-except 뒤에 else 블록을 붙여 예외가 발생하지 않았을 때만 n * 2를 출력해보세요.",
-      "prompt_en": "[Block] Use an else block after try-except so n * 2 prints only when no exception occurs.",
-      "hint_ko": "예외가 발생할 가능성이 있는 코드만 try에 두고, 변환 성공 후 실행할 계산은 else에 분리해 작성합니다.",
-      "hint_en": "Keep only the risky conversion inside try, and place the follow-up calculation in the no-error else block.",
-      "targetCode": "try:\n    n = int(\"25\")\nexcept ValueError:\n    print(\"Error\")\nelse:\n    print(n * 2)",
+      "prompt_ko": "[블록 조립] nums.insert(1, 20)으로 1번 인덱스 위치에 20을 끼워 넣고 리스트를 출력해보세요.",
+      "prompt_en": "[Block] Use nums.insert(1, 20) to insert 20 at index 1 and print the list.",
+      "hint_ko": "맨 끝에 추가하는 .append()와 달리 .insert(인덱스, 값)은 지정한 위치에 요소를 끼워 넣습니다.",
+      "hint_en": "Unlike .append(), .insert(index, value) places the element at the specified index.",
+      "targetCode": "nums = [10, 30]\nnums.insert(1, 20)\nprint(nums)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "50"
+          "expectedOutput": "[10, 20, 30]"
         }
       ]
     },
@@ -48,22 +59,17 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환에 성공했을 때만 n + 10을 출력하고, 실패하면 Bad를 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in the blank so n + 10 prints only when int conversion succeeds.",
-      "hint_ko": "예외가 발생하지 않은 정상 경우에 실행되도록 예외 절 뒤에 4글자 분기 키워드를 적으세요.",
-      "hint_en": "Write the 4-letter 'otherwise' branch keyword that runs only when try succeeds without error.",
-      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\n§§§§:\n    print(n + 10)",
-      "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\nelse:\n    print(n + 10)",
+      "prompt_ko": "[빈칸 채우기] 리스트 맨 앞(0번 인덱스)에 \"A\"를 끼워 넣어 ['A', 'B', 'C']를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the list method name to place \"A\" at index 0.",
+      "hint_ko": "지정한 인덱스 자리에 새 요소를 끼워 넣는 여섯 글자 리스트 메서드를 호출하세요.",
+      "hint_en": "Call the six-letter list method that places an element at a given index.",
+      "templateCode": "items = [\"B\", \"C\"]\nitems.§§§§§§(0, \"A\")\nprint(items)",
+      "targetCode": "items = [\"B\", \"C\"]\nitems.insert(0, \"A\")\nprint(items)",
       "testCases": [
         {
           "id": 1,
-          "input": "15",
-          "expectedOutput": "25"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "Bad"
+          "input": "",
+          "expectedOutput": "['A', 'B', 'C']"
         }
       ]
     },
@@ -72,16 +78,16 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] ZeroDivisionError 예외를 잡은 뒤에도 finally 블록으로 마지막에 항상 End를 출력해보세요.",
-      "prompt_en": "[Block] Catch ZeroDivisionError and use finally to always print End at the end.",
-      "hint_ko": "0으로 나누어 except 블록이 실행된 뒤에도 finally 블록의 코드가 빠짐없이 실행됩니다.",
-      "hint_en": "Even after ZeroDivisionError triggers the except block, the finally block still runs afterward.",
-      "targetCode": "try:\n    print(10 // 0)\nexcept ZeroDivisionError:\n    print(\"Zero\")\nfinally:\n    print(\"End\")",
+      "prompt_ko": "[블록 조립] fruits.remove(\"apple\")로 첫 번째 일치하는 값을 찾아 삭제하고 출력해보세요.",
+      "prompt_en": "[Block] Use fruits.remove(\"apple\") to delete the first matching value and print the list.",
+      "hint_ko": "인덱스로 지우는 del이나 .pop()과 달리 .remove(값)은 일치하는 첫 번째 값 자체를 찾아 삭제합니다.",
+      "hint_en": "Unlike del or .pop(), .remove(value) searches for and deletes the first matching value.",
+      "targetCode": "fruits = [\"apple\", \"banana\", \"apple\"]\nfruits.remove(\"apple\")\nprint(fruits)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Zero\nEnd"
+          "expectedOutput": "['banana', 'apple']"
         }
       ]
     },
@@ -90,22 +96,17 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 변환 실패 시 Err를 출력하고 항상 마지막에 Done을 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in except and finally to catch ValueError and always print Done.",
-      "hint_ko": "예외를 잡는 6글자 키워드와 항상 마지막에 실행되는 7글자 마무리 키워드를 차례로 쓰세요.",
-      "hint_en": "Use the 6-letter exception-catching keyword and the 7-letter unconditional cleanup keyword.",
-      "templateCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\n§§§§§§ ValueError:\n    print(\"Err\")\n§§§§§§§:\n    print(\"Done\")",
-      "targetCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\nexcept ValueError:\n    print(\"Err\")\nfinally:\n    print(\"Done\")",
+      "prompt_ko": "[빈칸 채우기] 점수 리스트에서 값 85를 찾아 삭제한 뒤 100을 끝에 추가해 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the method name that deletes the value 85 from scores before appending 100.",
+      "hint_ko": "인덱스 번호가 아니라 특정 값을 찾아 제거하는 여섯 글자 리스트 메서드를 적으세요.",
+      "hint_en": "Use the six-letter list method that deletes the first occurrence of a value.",
+      "templateCode": "scores = [70, 85, 90]\nscores.§§§§§§(85)\nscores.append(100)\nprint(scores)",
+      "targetCode": "scores = [70, 85, 90]\nscores.remove(85)\nscores.append(100)\nprint(scores)",
       "testCases": [
         {
           "id": 1,
-          "input": "7",
-          "expectedOutput": "OK:7\nDone"
-        },
-        {
-          "id": 2,
-          "input": "hi",
-          "expectedOutput": "Err\nDone"
+          "input": "",
+          "expectedOutput": "[70, 90, 100]"
         }
       ]
     },
@@ -114,16 +115,21 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] age < 0일 때 raise ValueError(\"Invalid\")로 직접 예외를 발생시켜 Invalid를 출력해보세요.",
-      "prompt_en": "[Block] Use raise ValueError(\"Invalid\") when age < 0 and catch it in except ValueError.",
-      "hint_ko": "raise가 실행되는 순간 try 블록의 남은 줄(print(age))은 건너뛰고 except 절로 넘어갑니다.",
-      "hint_en": "As soon as raise executes, Python skips the rest of the try block and enters the matching except handler.",
-      "targetCode": "age = -3\ntry:\n    if age < 0:\n        raise ValueError(\"Invalid\")\n    print(age)\nexcept ValueError:\n    print(\"Invalid\")",
+      "prompt_ko": "[블록 조립] if target in tags:로 포함 여부를 먼저 확인한 뒤 .remove(target)으로 안전하게 삭제해보세요.",
+      "prompt_en": "[Block] Check if target in tags: before calling tags.remove(target), then print tags.",
+      "hint_ko": "리스트에 없는 값을 .remove()하면 ValueError가 발생하므로 in 연산자나 try - except로 방어합니다.",
+      "hint_en": "Because .remove() raises ValueError when the value is absent, guard it with in or try - except.",
+      "targetCode": "tags = [\"py\", \"js\", \"go\"]\ntarget = input()\nif target in tags:\n    tags.remove(target)\nprint(tags)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "Invalid"
+          "input": "js",
+          "expectedOutput": "['py', 'go']"
+        },
+        {
+          "id": 2,
+          "input": "rust",
+          "expectedOutput": "['py', 'js', 'go']"
         }
       ]
     },
@@ -132,22 +138,22 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 음수 나이면 ValueError를 발생시키고 예외 객체 e의 메시지를 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in raise and as to throw ValueError on negative age and print e.",
-      "hint_ko": "예외를 일으키는 5글자 키워드로 오류를 던지고, 발생한 예외 객체를 변수 e로 받도록 2글자 별칭 키워드를 쓰세요.",
-      "hint_en": "Throw the error with the 5-letter raise keyword, and bind the exception object to e using the 2-letter as keyword.",
-      "templateCode": "age = int(input())\ntry:\n    if age < 0:\n        §§§§§ ValueError(\"Invalid\")\n    print(f\"Age:{age}\")\nexcept ValueError §§ e:\n    print(e)",
-      "targetCode": "age = int(input())\ntry:\n    if age < 0:\n        raise ValueError(\"Invalid\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
+      "prompt_ko": "[빈칸 채우기] 리스트에 없는 값을 삭제하려 할 때 발생하는 에러를 잡아 안전하게 건너뛰도록 예외 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the exception type raised when .remove() cannot find the value in the list.",
+      "hint_ko": "리스트 안에 찾는 '값(Value)'이 없어 삭제할 수 없을 때 발생하는 열 글자 예외 이름을 적으세요.",
+      "hint_en": "Specify the ten-letter exception raised when a target value is not found in a list.",
+      "templateCode": "nums = [10, 20, 30]\nx = int(input())\ntry:\n    nums.remove(x)\nexcept §§§§§§§§§§:\n    pass\nprint(nums)",
+      "targetCode": "nums = [10, 20, 30]\nx = int(input())\ntry:\n    nums.remove(x)\nexcept ValueError:\n    pass\nprint(nums)",
       "testCases": [
         {
           "id": 1,
-          "input": "-5",
-          "expectedOutput": "Invalid"
+          "input": "20",
+          "expectedOutput": "[10, 30]"
         },
         {
           "id": 2,
-          "input": "20",
-          "expectedOutput": "Age:20"
+          "input": "99",
+          "expectedOutput": "[10, 20, 30]"
         }
       ]
     },
@@ -156,16 +162,16 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 함수 내부에서 잘못된 점수에 raise로 예외를 발생시키고 호출부 try-except-else로 처리해보세요.",
-      "prompt_en": "[Block] Raise ValueError inside check_score(s) on invalid input and handle it with try-except-else.",
-      "hint_ko": "check_score(90)은 정상이므로 예외 없이 값을 반환하고, 이어서 else 블록이 실행됩니다.",
-      "hint_en": "Because check_score(90) succeeds without raising an error, its return value is printed in the else block.",
-      "targetCode": "def check_score(s):\n    if not isinstance(s, int) or s < 0:\n        raise ValueError(\"Bad\")\n    return s + 5\n\ntry:\n    res = check_score(90)\nexcept ValueError:\n    print(\"Fail\")\nelse:\n    print(res)",
+      "prompt_ko": "[블록 조립] VIP 손님은 0번 인덱스에 끼워 넣고 취소 손님은 값으로 찾아 삭제하는 함수를 조립해보세요.",
+      "prompt_en": "[Block] Insert vip at index 0 and remove cancel by value inside update_queue, then return the list.",
+      "hint_ko": ".insert(0, x)는 대기열 맨 앞에 추가하고, .remove(y)는 해당 이름을 찾아 대기열에서 제외합니다.",
+      "hint_en": ".insert(0, x) places an item at the front of the queue, while .remove(y) deletes a matching item.",
+      "targetCode": "def update_queue(q, vip, cancel):\n    q.insert(0, vip)\n    if cancel in q:\n        q.remove(cancel)\n    return q\nline = [\"Kim\", \"Lee\"]\nprint(update_queue(line, \"Ace\", \"Kim\"))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "95"
+          "expectedOutput": "['Ace', 'Lee']"
         }
       ]
     },
@@ -174,45 +180,41 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 홀수면 Odd 예외를 일으키는 함수를 완성하고 정상일 때만 else에서 결과를 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in raise and else so half_even raises ValueError(\"Odd\") on odd numbers.",
-      "hint_ko": "예외를 일으키는 5글자 키워드와 오류가 없을 때 실행되는 4글자 분기 키워드를 채우세요.",
-      "hint_en": "Use the 5-letter raise keyword and the 4-letter no-error else branch keyword.",
-      "templateCode": "def half_even(n):\n    if n % 2 != 0:\n        §§§§§ ValueError(\"Odd\")\n    return n // 2\n\ntry:\n    res = half_even(int(input()))\nexcept ValueError as e:\n    print(e)\n§§§§:\n    print(res)",
-      "targetCode": "def half_even(n):\n    if n % 2 != 0:\n        raise ValueError(\"Odd\")\n    return n // 2\n\ntry:\n    res = half_even(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(res)",
+      "prompt_ko": "[빈칸 채우기] 반복문으로 리스트의 모든 0을 찾아 제거한 뒤 맨 앞에 99를 넣도록 삭제 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the while loop body so every 0 is removed by value before inserting 99 at index 0.",
+      "hint_ko": "0이 리스트 안에 남아 있는 동안 값 0을 찾아 하나씩 지우는 여섯 글자 메서드를 호출하세요.",
+      "hint_en": "Call the six-letter method that removes a matching value from the list.",
+      "templateCode": "data = [0, 5, 0, 8]\nwhile 0 in data:\n    data.§§§§§§(0)\ndata.insert(0, 99)\nprint(data)",
+      "targetCode": "data = [0, 5, 0, 8]\nwhile 0 in data:\n    data.remove(0)\ndata.insert(0, 99)\nprint(data)",
       "testCases": [
         {
           "id": 1,
-          "input": "8",
-          "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "Odd"
+          "input": "",
+          "expectedOutput": "[99, 5, 8]"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] while True와 try-except-else를 결합해 양수가 입력될 때까지 검증 후 누적하세요.",
-      "prompt_en": "[Block] Combine while True with try-except-else and raise until a positive integer is entered.",
-      "hint_ko": "변환과 양수 검증을 모두 통과했을 때만 else 블록으로 들어가 값을 누적하고 break로 루프를 탈출합니다.",
-      "hint_en": "Only when both int() conversion and the > 0 check succeed does execution enter else to add n and break.",
-      "targetCode": "total = 10\nwhile True:\n    try:\n        n = int(input())\n        if n <= 0:\n            raise ValueError(\"NonPos\")\n    except ValueError:\n        print(\"Retry\")\n    else:\n        total += n\n        break\nprint(total)",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 대기열 맨 앞에 새 항목을 끼워 넣고, 지정한 값을 안전하게 찾아 삭제하도록 세 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the front-insertion method, membership check keyword, and value-removal method.",
+      "hint_ko": "원하는 위치에 삽입하는 메서드, 리스트 포함 여부를 확인하는 키워드, 그리고 값으로 삭제하는 메서드를 확인하세요.",
+      "hint_en": "Check the index-insertion method, the membership operator, and the value-removal method.",
+      "templateCode": "cards = [\"B\", \"C\", \"D\"]\ncards.§§§§§§(0, \"A\")\ndrop = input()\nif drop §§ cards:\n    cards.§§§§§§(drop)\nprint(cards)",
+      "targetCode": "cards = [\"B\", \"C\", \"D\"]\ncards.insert(0, \"A\")\ndrop = input()\nif drop in cards:\n    cards.remove(drop)\nprint(cards)",
       "testCases": [
         {
           "id": 1,
-          "input": "abc\n-2\n15",
-          "expectedOutput": "Retry\nRetry\n25"
+          "input": "C",
+          "expectedOutput": "['A', 'B', 'D']"
         },
         {
           "id": 2,
-          "input": "5",
-          "expectedOutput": "15"
+          "input": "Z",
+          "expectedOutput": "['A', 'B', 'C', 'D']"
         }
       ]
     },
@@ -220,23 +222,18 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 1 이상의 정수가 들어올 때까지 시도 횟수(tries)를 항상 1씩 늘리며 검증하세요.",
-      "prompt_en": "[Fill Blank] Fill in raise and finally to validate n >= 1 while counting attempts.",
-      "hint_ko": "예외를 일으키는 5글자 키워드와 루프 탈출 직전에도 항상 실행되는 7글자 마무리 키워드를 채우세요.",
-      "hint_en": "Use the 5-letter raise keyword and the 7-letter finally keyword.",
-      "templateCode": "tries = 0\nwhile True:\n    try:\n        n = int(input())\n        if n < 1:\n            §§§§§ ValueError(\"Min1\")\n    except ValueError as e:\n        print(e)\n    else:\n        print(f\"Val:{n}\")\n        break\n    §§§§§§§:\n        tries += 1\nprint(f\"Tries:{tries}\")",
-      "targetCode": "tries = 0\nwhile True:\n    try:\n        n = int(input())\n        if n < 1:\n            raise ValueError(\"Min1\")\n    except ValueError as e:\n        print(e)\n    else:\n        print(f\"Val:{n}\")\n        break\n    finally:\n        tries += 1\nprint(f\"Tries:{tries}\")",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 0번 인덱스에 숫자 100을 끼워 넣으려다 인자 순서를 거꾸로 적어 엉뚱한 위치에 들어간 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the argument order in .insert() so 100 is placed at index 0 instead of the end.",
+      "hint_ko": "위치 삽입 메서드는 (값, 인덱스)가 아니라 (인덱스, 값) 순서로 두 인자를 전달해야 합니다.",
+      "hint_en": "Pass the index first and the value second when calling .insert(index, value).",
+      "templateCode": "nums = [10, 20, 30]\nnums.insert(100, 0)\nprint(nums)",
+      "targetCode": "nums = [10, 20, 30]\nnums.insert(0, 100)\nprint(nums)",
       "testCases": [
         {
           "id": 1,
-          "input": "0\n9",
-          "expectedOutput": "Min1\nVal:9\nTries:2"
-        },
-        {
-          "id": 2,
-          "input": "4",
-          "expectedOutput": "Val:4\nTries:1"
+          "input": "",
+          "expectedOutput": "[100, 10, 20, 30]"
         }
       ]
     },
@@ -245,22 +242,17 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 0~100 범위를 벗어날 때 except ValueError가 잡지 못하는 예외 클래스를 일으키는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the raised exception class so except ValueError catches out-of-range inputs.",
-      "hint_ko": "아래 except 절에서 ValueError를 잡고 있으므로 IndexError 대신 ValueError를 발생시켜야 합니다.",
-      "hint_en": "Raise ValueError(\"RangeErr\") instead of IndexError(\"RangeErr\") so the except block catches it.",
-      "templateCode": "pct = int(input())\ntry:\n    if pct < 0 or pct > 100:\n        raise IndexError(\"RangeErr\")\nexcept ValueError as e:\n    print(e)\nelse:\n    print(f\"{pct}%\")",
-      "targetCode": "pct = int(input())\ntry:\n    if pct < 0 or pct > 100:\n        raise ValueError(\"RangeErr\")\nexcept ValueError as e:\n    print(e)\nelse:\n    print(f\"{pct}%\")",
+      "prompt_ko": "[틀린 곳 수정] 리스트에서 값 50을 찾아 지우려다 인덱스 삭제 키워드(del)를 써서 범위 초과 에러가 난 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the IndexError caused by using del nums[50] when trying to delete the value 50 from the list.",
+      "hint_ko": "del 리스트[번호]는 인덱스로 삭제하므로, 값 자체를 찾아 지우려면 리스트의 값 삭제 메서드를 호출해야 합니다.",
+      "hint_en": "del deletes by index; call the list's value-removal method to delete the number 50 itself.",
+      "templateCode": "nums = [10, 50, 90]\ndel nums[50]\nprint(nums)",
+      "targetCode": "nums = [10, 50, 90]\nnums.remove(50)\nprint(nums)",
       "testCases": [
         {
           "id": 1,
-          "input": "150",
-          "expectedOutput": "RangeErr"
-        },
-        {
-          "id": 2,
-          "input": "80",
-          "expectedOutput": "80%"
+          "input": "",
+          "expectedOutput": "[10, 90]"
         }
       ]
     },
@@ -268,23 +260,18 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 음수 나이일 때만 예외가 발생해야 하는데 비교 연산자가 반대여서 양수에서 오류가 나는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator so ValueError(\"Neg\") is raised when age < 0.",
-      "hint_ko": "0보다 작을 때(음수일 때) 예외를 일으켜야 하므로 > 연산자를 < 연산자로 고치세요.",
-      "hint_en": "Change if age > 0: to if age < 0: so only negative ages raise ValueError.",
-      "templateCode": "age = int(input())\ntry:\n    if age > 0:\n        raise ValueError(\"Neg\")\n    print(f\"OK:{age}\")\nexcept ValueError as e:\n    print(e)",
-      "targetCode": "age = int(input())\ntry:\n    if age < 0:\n        raise ValueError(\"Neg\")\n    print(f\"OK:{age}\")\nexcept ValueError as e:\n    print(e)",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 리스트 tasks의 맨 앞(0번 인덱스)에 \"urgent\"를 끼워 넣는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that inserts \"urgent\" at index 0 of the tasks list.",
+      "hint_ko": "리스트 변수 뒤에 위치 삽입 메서드를 호출하고 0과 \"urgent\"를 인자로 넘기세요.",
+      "hint_en": "Call tasks.insert(0, \"urgent\").",
+      "templateCode": "tasks = [\"mail\", \"report\"]\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(tasks)",
+      "targetCode": "tasks = [\"mail\", \"report\"]\ntasks.insert(0, \"urgent\")\nprint(tasks)",
       "testCases": [
         {
           "id": 1,
-          "input": "-5",
-          "expectedOutput": "Neg"
-        },
-        {
-          "id": 2,
-          "input": "20",
-          "expectedOutput": "OK:20"
+          "input": "",
+          "expectedOutput": "['urgent', 'mail', 'report']"
         }
       ]
     },
@@ -293,46 +280,42 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] n < 0일 때 raise ValueError(\"Neg\")로 예외를 발생시키는 한 줄을 작성하세요.",
-      "prompt_en": "[Complete Line] Write raise ValueError(\"Neg\") inside the if n < 0 block.",
-      "hint_ko": "raise ValueError(\"Neg\")를 작성해 음수일 때 예외를 발생시키세요.",
-      "hint_en": "Write raise ValueError(\"Neg\") at the indented line.",
-      "templateCode": "n = int(input())\ntry:\n    if n < 0:\n        §§§§§§§§§§§§§§§§§§§§§§§\n    print(n * 2)\nexcept ValueError as e:\n    print(e)",
-      "targetCode": "n = int(input())\ntry:\n    if n < 0:\n        raise ValueError(\"Neg\")\n    print(n * 2)\nexcept ValueError as e:\n    print(e)",
+      "prompt_ko": "[한 줄 완성] 리스트 scores에서 값 40을 찾아 삭제하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that removes the value 40 from the scores list.",
+      "hint_ko": "리스트 변수 뒤에 값 삭제 메서드를 호출하고 40을 인자로 넣으세요.",
+      "hint_en": "Call scores.remove(40).",
+      "templateCode": "scores = [80, 40, 95, 40]\n§§§§§§§§§§§§§§§§§\nprint(scores, sum(scores))",
+      "targetCode": "scores = [80, 40, 95, 40]\nscores.remove(40)\nprint(scores, sum(scores))",
       "testCases": [
         {
           "id": 1,
-          "input": "-3",
-          "expectedOutput": "Neg"
-        },
-        {
-          "id": 2,
-          "input": "6",
-          "expectedOutput": "12"
+          "input": "",
+          "expectedOutput": "[80, 95, 40] 215"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] finally 블록 안에서 status 변수에 \"Done\"을 저장하는 한 줄을 완성하세요.",
-      "prompt_en": "[Complete Line] Assign \"Done\" to status inside the finally block.",
-      "hint_ko": "status = \"Done\"을 작성해 예외 여부와 상관없이 상태 문자열을 저장하세요.",
-      "hint_en": "Write status = \"Done\" inside the finally block.",
-      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\nfinally:\n    §§§§§§§§§§§§§§§\nprint(n, status)",
-      "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\nfinally:\n    status = \"Done\"\nprint(n, status)",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 중복된 값이 들어 있는 리스트에서 .remove()와 .insert()를 실행했을 때의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output after calling .remove(10) and .insert(1, 99) on a list with duplicates.",
+      "hint_ko": "같은 값이 여러 개 있을 때 .remove(10)은 맨 앞에 있는 첫 번째 10 하나만 지운다는 점에 주의하세요.",
+      "hint_en": ".remove(10) deletes only the first matching 10, leaving the later 10 intact before inserting 99 at index 1.",
+      "targetCode": "nums = [10, 20, 10, 30]\nnums.remove(10)\nnums.insert(1, 99)\nprint(nums)",
+      "choices": [
+        "[20, 99, 10, 30]",
+        "[99, 20, 30]",
+        "[10, 99, 20, 30]",
+        "[20, 10, 99, 30]"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
-          "input": "7",
-          "expectedOutput": "7 Done"
-        },
-        {
-          "id": 2,
-          "input": "x",
-          "expectedOutput": "0 Done"
+          "input": "",
+          "expectedOutput": "[20, 99, 10, 30]"
         }
       ]
     },
@@ -341,23 +324,23 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 리스트 [4, -1]을 순서대로 순회할 때 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output when the loop processes [4, -1] through try-except-else-finally.",
-      "hint_ko": "양수일 때는 정상 분기 뒤 마무리 절이 실행되고, 음수일 때는 예외 분기 뒤 마무리 절이 실행된다는 점(마무리 절은 매 반복마다 실행됨!)을 추적해보세요.",
-      "hint_en": "Trace each loop turn: a valid number runs the no-error branch plus cleanup, while a negative number runs the handler plus cleanup on every turn.",
-      "targetCode": "log = []\nfor x in [4, -1]:\n    try:\n        if x < 0:\n            raise ValueError(\"Neg\")\n    except ValueError as e:\n        log.append(str(e))\n    else:\n        log.append(f\"OK:{x}\")\n    finally:\n        log.append(\"F\")\nprint(\",\".join(log))",
+      "prompt_ko": "[출력 결과 예측]del, .pop(), .remove(), .insert()를 차례대로 실행한 뒤 리스트의 상태를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the final output after combining del, .pop(), .remove(), and .insert().",
+      "hint_ko": "인덱스로 지우는 연산과 값으로 지우는 연산이 각각 어떤 원소를 제거하는지 한 줄씩 순서대로 추적해보세요.",
+      "hint_en": "Trace each step carefully: remove(20) by value, pop() from the end, and insert(0, out) at the front.",
+      "targetCode": "arr = [10, 20, 30, 20, 40]\narr.remove(20)\nout = arr.pop()\narr.insert(0, out)\nprint(arr)",
       "choices": [
-        "OK:4,F,Neg,F",
-        "OK:4,Neg,F",
-        "OK:4,F,Neg,OK:-1,F",
-        "OK:4,F,Error,F"
+        "[40, 10, 30, 20]",
+        "[40, 10, 20, 30]",
+        "[20, 10, 30, 40]",
+        "[40, 10, 30]"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "OK:4,F,Neg,F"
+          "expectedOutput": "[40, 10, 30, 20]"
         }
       ]
     }

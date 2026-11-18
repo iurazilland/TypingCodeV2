@@ -1,75 +1,66 @@
 # 📋 TypingCode V2 커리큘럼 및 기능 검증 보고서 (Verification Report)
 
-본 문서는 **TypingCode V2**의 13개 언어/트랙 커리큘럼, 듀얼 연습 모드(시각적 블록 스튜디오 & 타이핑/퀴즈), 그리고 0ms 로컬 파이썬 AST 실행기 및 멀티 언어 런타임의 무결성을 점검·기록하는 공식 검증 보고서입니다.
+본 문서는 **TypingCode V2**의 13개 언어/트랙 커리큘럼, 듀얼 연습 모드(시각적 블록 스튜디오 & 타이핑/퀴즈), 0ms 로컬 파이썬 AST 실행기, 그리고 V2.4 비누적(Non-Accumulating) DB 스키마의 무결성을 점검·기록하는 공식 검증 보고서입니다.
 
 ---
 
 ## 1. 종합 검증 요약 (Executive Summary)
 
 - **타입스크립트 정적 검사**: `npx tsc --noEmit` 통과 (**0 errors, 100% Type-Safe**).
-- **Python Basic (`py-basic`) 2-Part · 14섹션 · 87레벨 · 1,089문항 전수 검증 통과**:
-  - **베이스라인 보존**: `Lv 1 ~ Lv 15` (`level1.ts` ~ `level15.ts`, 섹션 1~2, 189문항) 기존 검증 데이터 100% 무변경 보존.
-  - **Part 1 — 핵심 개념 기초편 (`섹션 1 ~ 섹션 10`, `Lv 1 ~ Lv 63`, 789문항)**: 필수 최소 함수·문법만 사용하여 `print`·연산자·변수·`input`·`bool`/`if`·`for`/`while`·`str`·`list`·`None`/`tuple`/`dict`/`set`·`def`·`try-except` 기초·`class` 기초까지 완주 (**Part 2 부가 함수/심화 문법 혼입 0건 검증 완료**).
-  - **Part 2 — 반복 심화 & 부가 함수·기능 확장편 (`섹션 11 ~ 섹션 14`, `Lv 64 ~ Lv 87`, 300문항)**: 문자열 부가 메서드·서식(`:.2f`, `:,`, `[::-1]`, `ord`, `chr`) → 컬렉션 부가 메서드·`sorted()`·2차원 리스트·집합 연산자·삼항 연산자·리스트 컴프리헨션 → 실용 내장 함수(`abs`, `round`, `map`, `enumerate`, `zip`, `reversed`, `all`, `any`, `isinstance`)·`*args`·`lambda` → `try-except-else-finally`·`raise`·`__str__`·단일 상속(`class Child(Parent):`) 및 파이널 마스터까지 2회독 나선형 복습 완주.
-  - **누적 나선형 복습 매트릭스 (Cumulative Spiral Review)**: 후속 섹션 전반에 걸쳐 `+=/-=/*=`(198회), `float/str/bool`(58회), `if/elif/else`(230회), `for`(191회), `while`(57회), `f-string`(176회), `list`(289회), `dict/set/tuple/None`(87회), `def`(149회), `try-except`(47회), `class`(52회) 등 총 **1,534건**의 교차 섹션 누적 복습 분포 검증 통과.
-  - **교육학 및 프롬프트 적합성 감사 (`Lv 16 ~ Lv 87`, 900문항)**: `fix_bug`/`fill_blank` 정답 노출 `0건`, 식별자 부분 쪼개기 빈칸 `0건`, 모호한 빈칸 `0건`, 과장 길이 프롬프트(`>125자`) `0건`, 혼동 공백 리터럴 `0건`, `one_line` 한 줄 안내 누락 `0건`, 블록 초기 골격 불일치 `0건`.
-- **0ms 로컬 파이썬 AST 엔진 ([`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts)) & 블록 스튜디오 확장**:
-  - 외부 패키지 추가 없이(`0 npm dependencies`) `try / except [Type | (T1, T2) [as e]] / else / finally`, `raise`, `class Name[(Parent)]:`, `__init__`, `self` 속성 읽기/쓰기/복합 대입, 인스턴스 메서드, `__str__`, 단일 상속 및 메서드 오버라이딩, `isinstance()`, `ord()`, `chr()`, `.isalpha()`, `dict(k=v)`, 삼항 조건식, 리스트 컴프리헨션(격리 스코프), `*args`, `lambda`, `sorted/min/max(..., key=...)`, `f-string` 서식(`:.2f`, `:,`, `:,.2f`) 완벽 지원.
-  - 블록 캔버스([`CanvasBlockItem.tsx`](file:///d:/Projects/TypingCode_V2/src/components/practice/CanvasBlockItem.tsx), [`page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/practice/%5Blanguage%5D/%5Blevel%5D/page.tsx))에 `class` C-블록(내부 `def` 메서드 스냅 허용, `class` 중첩은 최상위 가드 유지), `try-except-else-finally` 다단 분기 E-블록, `raise` 블록, 그리고 `isinstance`/`ord`/`chr` 드롭다운 추가.
-- **`/languages` 진척도 실데이터 연동 ([`languages/page.tsx`](file:///d:/Projects/TypingCode_V2/src/app/languages/page.tsx))**: 하드코딩되어 있던 코스 진척도를 제거하고 `user_cleared_levels` (`cleared_levels_*` 로컬 동기화 캐시) 실제 클리어 레벨 집계 및 6종 학습 방향별 추천 분류 뷰와 연동.
+- **Python Basic (`py-basic`) 2-Part · 14섹션 · 113레벨 · 1,625문항 전수 검증 통과**:
+  - **Part 1 — 핵심 개념 기초편 (`섹션 1 ~ 섹션 10`, `Lv 1 ~ Lv 82`, 10개 섹션)**:
+    - 필수 기초 개념(`print`·연산자 ➔ 변수·`input`·형변환 ➔ `bool`·`if/elif/else` ➔ `for`·`while`·흐름 제어 ➔ **리스트 기초(`Lv 41~48`)** ➔ **문자열·`f-string` 기초(`Lv 49~56`)** ➔ `None`·튜플·딕셔너리·집합 기초(`Lv 57~64`) ➔ **함수 `def` 기초(`Lv 65~71`)** ➔ **클래스 `class` 기초(`Lv 72~77`)** ➔ **예외 처리 `try-except` 기초(`Lv 78~82`)**)를 순차적으로 완주 (**Part 2 전용 심화 문법 선행 노출 0건**).
+  - **Part 2 — 반복 심화 & 부가 함수·기능 확장편 (`섹션 11 ~ 섹션 14`, `Lv 83 ~ Lv 113`, 4개 섹션)**:
+    - `[반복·확장 1]` 컬렉션 심화·2차원 리스트·집합 연산·삼항식·컴프리헨션(`Lv 83~92`) ➔ `[반복·확장 2]` 문자열 심화 메서드·서식 지정자·역순 슬라이싱·아스키 코드(`Lv 93~99`) ➔ `[반복·확장 3]` 실용 내장 함수(`divmod`, `map`, `enumerate`, `zip`, `sorted(key=...)`, `all/any`)·`math`/`random` 모듈(`Lv 100~107`) ➔ `[반복·확장 4]` `*args`/`**kwargs`·`lambda`·클래스 상속·`try-except-else-finally`·`raise` 및 파이널 마스터(`Lv 108~113`).
+  - **단일 개념 핀포인트(Steps 1~8) + 누적 나선형 통합(Steps 9~15) 구조**:
+    - 일반 레벨 99개 × 15문항(`Steps 1~8` 4:4 블록/단일 빈칸 1개 교차 ➔ `Step 9` 2~3빈칸 누적 통합 ➔ `Steps 10~11` `fix_bug` ➔ `Steps 12~13` `one_line` ➔ `Steps 14~15` `predict_output` [`input()` 0건]) + 섹션 종합 복습 레벨 14개 × 10문항 = **총 1,625문항 전수 검증 통과**.
+  - **다중 테스트케이스(`testCases >= 2`) 안티 하드코딩 검증**:
+    - `input()`을 사용하는 모든 실습 문항(일반 레벨 및 종합 복습 레벨 포함 총 379문항)에 최소 2개 이상의 `testCases`를 배치하여 상수 출력 하드코딩 우회를 100% 차단.
+- **시각적 블록 스튜디오 & 터미널 UX 고도화**:
+  - **고정 이름 선언 블록 + 참조/호출 블록 동시 생성**: 변수·컬렉션(`variable`, `list`, `tuple`, `set`, `dict`) 및 함수·클래스(`def`, `class`) 생성 시 이름이 고정된 선언 블록과 참조/호출 블록(`isVarRef: true` / `type: 'call'`)이 한 쌍으로 생성되며, 예제에 쓰인 블록들이 문제 진입 시 도구함에 자동 사전 배치됨.
+  - **메서드 블록 `Tab` 키보드 이동 & 인라인 `input()` 터미널 프롬프트**: 가로 체이닝 메서드 블록을 포함한 전 입력창 시각 좌표순 `Tab` 이동 및 `input("...")` 안내 문구 우측 인라인 커서 정렬 적용.
+- **V2.4 비누적(Non-Accumulating) DB & B2B·B2G 강사 LMS 스키마 (실서버 DB 적용 및 검증 완료)**:
+  - 단일 통합 마이그레이션([`20261118000000_typingcode_v2_unified_schema.sql`](file:///d:/Projects/TypingCode_V2/supabase/migrations/20261118000000_typingcode_v2_unified_schema.sql))을 통해 `user_cleared_levels` 및 `user_attendance` 누적 테이블 데이터를 100% `profiles` 단일 Row(`cleared_levels` JSONB + O(1) 출석 스트릭 컬럼 + `active_curriculum_type/id` + `current_track_id/level` + `completed_tracks`)로 무손실 이관 후 구형 누적 테이블 2종 완전 삭제 확인.
+  - 가입 시 이메일 필수 기입·중복 확인(`check_email_available`), `organizations` · `classrooms` · `classroom_members` 강사 LMS 테이블, 그리고 담당 학생 진도 초기화/특정 레벨 재지정 RPC(`set_student_learning_level`) 동작 검증 완료.
 
 ---
 
-## 2. Python Basic (`py-basic`) 14섹션 · 87레벨 · 1,089문항 세부 검증 현황
+## 2. Python Basic (`py-basic`) 14섹션 · 113레벨 · 1,625문항 세부 검증 현황
 
-| 구분 | 섹션 | 레벨 범위 | 일반 레벨(13Q) | 종합 레벨(10Q) | 총 문항 수 | 검증 상태 |
+| 구분 | 섹션 | 레벨 범위 | 일반 레벨(15Q) | 종합 레벨(10Q) | 총 문항 수 | 검증 상태 |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Part 1** | 섹션 1: 기초 출력과 연산 | `Lv 1 ~ 8` | 7 (`Lv 1~7`) | 1 (`Lv 8`) | 101 | ✅ 통과 (베이스라인 보존) |
-| **Part 1** | 섹션 2: 변수, 자료형과 사용자 입력 | `Lv 9 ~ 15` | 6 (`Lv 9~14`) | 1 (`Lv 15`) | 88 | ✅ 통과 (베이스라인 보존) |
-| **Part 1** | 섹션 3: 불리언, 논리 연산과 조건문 기초 | `Lv 16 ~ 23` | 7 (`Lv 16~22`) | 1 (`Lv 23`) | 101 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 4: 반복문과 흐름 제어 기초 | `Lv 24 ~ 31` | 7 (`Lv 24~30`) | 1 (`Lv 31`) | 101 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 5: 문자열 필수 기초 | `Lv 32 ~ 37` | 5 (`Lv 32~36`) | 1 (`Lv 37`) | 75 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 6: 리스트(List) 필수 기초 | `Lv 38 ~ 43` | 5 (`Lv 38~42`) | 1 (`Lv 43`) | 75 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 7: `None`, 튜플, 딕셔너리, 집합 필수 기초 | `Lv 44 ~ 49` | 5 (`Lv 44~48`) | 1 (`Lv 49`) | 75 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 8: 함수(`def`) 필수 기초 | `Lv 50 ~ 54` | 4 (`Lv 50~53`) | 1 (`Lv 54`) | 62 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 9: 예외 처리(`try - except`) 필수 기초 | `Lv 55 ~ 58` | 3 (`Lv 55~57`) | 1 (`Lv 58`) | 49 | ✅ 통과 (순수성 100%) |
-| **Part 1** | 섹션 10: 클래스와 객체(`class`) 필수 기초 | `Lv 59 ~ 63` | 4 (`Lv 59~62`) | 1 (`Lv 63`) | 62 | ✅ 통과 (Part 1 완주) |
-| **Part 2** | 섹션 11: 문자열 반복 복습 & 부가 메서드·서식 확장 | `Lv 64 ~ 68` | 4 (`Lv 64~67`) | 1 (`Lv 68`) | 62 | ✅ 통과 (2회독 확장) |
-| **Part 2** | 섹션 12: 컬렉션 부가 메서드·2차원·컴프리헨션 | `Lv 69 ~ 76` | 7 (`Lv 69~75`) | 1 (`Lv 76`) | 101 | ✅ 통과 (2회독 확장) |
-| **Part 2** | 섹션 13: 실용 내장 함수 & `*args`·`lambda` 확장 | `Lv 77 ~ 82` | 5 (`Lv 77~81`) | 1 (`Lv 82`) | 75 | ✅ 통과 (2회독 확장) |
-| **Part 2** | 섹션 14: 예외·클래스 심화 기초 & 파이널 마스터 | `Lv 83 ~ 87` | 4 (`Lv 83~86`) | 1 (`Lv 87`) | 62 | ✅ 통과 (파이널 종합) |
-| **합계** | **총 14개 섹션 (Part 1: 10 / Part 2: 4)** | **`Lv 1 ~ 87`** | **73개 레벨 (949Q)** | **14개 레벨 (140Q)** | **1,089문항** | **✅ 100% 통과** |
+| **Part 1** | 섹션 1: 출력(`print`)과 산술 연산자 기초 | `Lv 1 ~ 10` | 9 (`Lv 1~9`) | 1 (`Lv 10`) | 145 | ✅ 통과 |
+| **Part 1** | 섹션 2: 주석, 변수, 기본 자료형과 사용자 입력(`input`) | `Lv 11 ~ 20` | 9 (`Lv 11~19`) | 1 (`Lv 20`) | 145 | ✅ 통과 |
+| **Part 1** | 섹션 3: 불리언, 비교·논리 연산과 조건문(`if`) | `Lv 21 ~ 30` | 9 (`Lv 21~29`) | 1 (`Lv 30`) | 145 | ✅ 통과 |
+| **Part 1** | 섹션 4: 반복문(`for`, `while`)과 흐름 제어 | `Lv 31 ~ 40` | 9 (`Lv 31~39`) | 1 (`Lv 40`) | 145 | ✅ 통과 |
+| **Part 1** | 섹션 5: 리스트(`list`) 필수 기초 | `Lv 41 ~ 48` | 7 (`Lv 41~47`) | 1 (`Lv 48`) | 115 | ✅ 통과 |
+| **Part 1** | 섹션 6: 문자열(`str`) 다루기와 `f-string` 필수 기초 | `Lv 49 ~ 56` | 7 (`Lv 49~55`) | 1 (`Lv 56`) | 115 | ✅ 통과 |
+| **Part 1** | 섹션 7: `None`, 튜플(`tuple`), 딕셔너리(`dict`), 집합(`set`) 기초 | `Lv 57 ~ 64` | 7 (`Lv 57~63`) | 1 (`Lv 64`) | 115 | ✅ 통과 |
+| **Part 1** | 섹션 8: 함수(`def`)와 스코프 필수 기초 | `Lv 65 ~ 71` | 6 (`Lv 65~70`) | 1 (`Lv 71`) | 100 | ✅ 통과 |
+| **Part 1** | 섹션 9: 클래스와 객체(`class`) 필수 기초 | `Lv 72 ~ 77` | 5 (`Lv 72~76`) | 1 (`Lv 77`) | 85 | ✅ 통과 |
+| **Part 1** | 섹션 10: 예외 처리(`try - except`) 필수 기초 | `Lv 78 ~ 82` | 4 (`Lv 78~81`) | 1 (`Lv 82`) | 70 | ✅ 통과 |
+| **Part 2** | 섹션 11: [반복·확장 1] 컬렉션 심화·2차원·컴프리헨션 | `Lv 83 ~ 92` | 9 (`Lv 83~91`) | 1 (`Lv 92`) | 145 | ✅ 통과 |
+| **Part 2** | 섹션 12: [반복·확장 2] 문자열 심화 메서드와 서식 | `Lv 93 ~ 99` | 6 (`Lv 93~98`) | 1 (`Lv 99`) | 100 | ✅ 통과 |
+| **Part 2** | 섹션 13: [반복·확장 3] 실용 내장 함수와 표준 모듈 | `Lv 100 ~ 107` | 7 (`Lv 100~106`) | 1 (`Lv 107`) | 115 | ✅ 통과 |
+| **Part 2** | 섹션 14: [반복·확장 4] 함수·클래스·예외 심화 & 파이널 마스터 | `Lv 108 ~ 113` | 5 (`Lv 108~112`) | 1 (`Lv 113`) | 85 | ✅ 통과 |
+| **합계** | **총 14개 섹션 (Part 1: 10 / Part 2: 4)** | **`Lv 1 ~ 113`** | **99개 레벨 (1,485Q)** | **14개 레벨 (140Q)** | **1,625문항** | **✅ 100% 통과** |
 
-- **유형별 문항 분포 (`1,089문항`)**:
-  - 시각적 블록 모드 (`type: 'block'`): **365문항** (`73개 일반 레벨 × 5문항`)
-  - 타이핑 모드 (`type: 'typing'` — `fill_blank` + `fix_bug` + `one_line`): **623문항** (`73 × 7 + 14 × 8`)
-  - 실행 결과 예측 퀴즈 (`type: 'quiz'`, `kind: 'predict_output'`): **101문항** (`73 × 1 + 14 × 2`)
-
----
-
-## 3. 모듈 및 엔진별 세부 검증 게이트 결과
-
-| 검증 게이트 / 영역 | 검증 항목 | 결과 | 비고 |
-| :--- | :--- | :---: | :--- |
-| **Gate 1: 정적 타입 검사** | `npx tsc --noEmit` | ✅ `Exit 0` | 전 파일 TypeScript 에러 `0건` |
-| **Gate 2: 신규 AST & 블록 엔진** | `try-except-else-finally`, `raise`, `class`/상속, 컴프리헨션, `lambda`, `*args`, `isinstance`, `ord/chr`, `dict(k=v)` | ✅ `11/11 Pass` | 코드 실행 및 `CanvasBlock` 트리 직접 평가 모두 통과 |
-| **Gate 3: 87레벨 스키마 & Part 1 순수성** | `Lv 1~87` (1,089문항) `stdout` 일치, `§` 길이/개행 일치, `fix_bug` 오답 보장, Part 1(`Lv 1~63`) 순수성 | ✅ `1,089/1,089 Pass` | Part 1 내 Part 2 문법 누수 `0건` |
-| **Gate 4: E2E 라우팅 & 블록 팔레트** | `getPracticeRound`, `curriculumSections.ts`, 365개 블록 문항 `createInitialCanvasBlocks` ⇄ `unlockedBlocks` | ✅ `365/365 Pass` | 미해금 블록 참조 `0건` |
-| **Gate 5: 제출 판정 (`checkSubmissionPass`)** | 988개 블록/타이핑 정식 해답 통과 + 하드코딩 우회 반려 + 동치 해법 허용 | ✅ `988/988 Pass` | `for`, `while`, `f-string`, `def`, `return`, `try`, `class`, `lambda` 우회 완벽 차단 |
-| **Gate 6: 교육학 감사 & 누적 나선형 복습** | 8대 프롬프트 결함 감사(`Lv 16~87`) + 섹션 3~14 교차 개념 복습 매트릭스 | ✅ `0 Defects` | 프롬프트 결함 `0건` · 교차 섹션 누적 복습 `1,534회` 확인 |
-| **멀티 언어 런타임 & 웹 프리뷰** | Wandbox 10개 컴파일러 + `WebPreview.tsx` + Linux/VB 클라이언트 런타임 | ✅ 정상 가동 | 총 13개 언어/트랙 하위 호환성 100% 유지 |
+- **유형별 문항 분포 (`1,625문항`)**:
+  - 시각적 블록 모드 (`type: 'block'`): **396문항** (`99개 일반 레벨 × 4문항`)
+  - 타이핑 모드 (`type: 'typing'` — `fill_blank` + `fix_bug` + `one_line`): **1,003문항** (`99 × 9 + 14 × 8`)
+  - 실행 결과 예측 퀴즈 (`type: 'quiz'`, `kind: 'predict_output'`): **226문항** (`99 × 2 + 14 × 2`)
 
 ---
 
-## 4. 지속적 검증 가이드 (Verification Protocol)
+## 3. 지속적 검증 가이드 (Verification Protocol)
 
 1. **정적 빌드 검사**:
    ```bash
    npx tsc --noEmit
    ```
 2. **신규 커리큘럼 레벨/블록 추가 시 필수 체크리스트**:
-   - [ ] 일반 레벨 13문항(홀수 1·3·5·7·9 블록 ⇄ 짝수 2·4·6·8·10 `fill_blank` + 11 `fix_bug` + 12 `one_line` + 13 `predict_output`), 섹션 종합 레벨 10문항(`fill_blank` 3 + `fix_bug` 3 + `one_line` 2 + `predict_output` 2) 규격을 준수하는가?
-   - [ ] Part 1(`Lv 1~63`) 문항에 Part 2 전용 부가 함수나 심화 문법이 선행 노출되지 않았는가?
-   - [ ] 각 레벨 후반부(Steps 9~13)에 이전 섹션 핵심 개념(`while`, `+=`, 형변환, `f-string`, 컬렉션, `def`, `try-except`, `class`)이 누적 복습으로 자연스럽게 결합되어 있는가?
-   - [ ] `templateCode`의 `§` 마스킹 길이·개행 위치가 `targetCode`와 정확히 1:1 일치하며 식별자 중간을 쪼개지 않았는가?
+   - [ ] 일반 레벨 15문항(`Steps 1~8` 블록/단일빈칸 1:1 교차 + `Step 9` 2~3빈칸 누적 + `Steps 10~11` `fix_bug` + `Steps 12~13` `one_line` + `Steps 14~15` `predict_output`), 섹션 종합 레벨 10문항(`fill_blank` 3 + `fix_bug` 3 + `one_line` 2 + `predict_output` 2) 규격을 준수하는가?
+   - [ ] `Steps 2, 4, 6, 8`의 `fill_blank`는 반드시 단일 빈칸 1개만 마스킹되어 있는가?
+   - [ ] `predict_output` 문항에는 `input()`을 사용하지 않았는가?
+   - [ ] `input()`을 사용하는 실습 문항에는 최소 2개 이상의 `testCases`가 포함되어 있는가?
    - [ ] `fix_bug`의 초기 `templateCode`가 그대로 실행될 때 반드시 오답 또는 에러가 발생하는가?

@@ -1,415 +1,345 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_22: PracticeRound = {
-  "id": "py-basic-r22",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 22,
-  "title_ko": "22레벨: 복합 조건문, 중첩 if문과 pass 기초",
-  "title_en": "Level 22: Compound Conditions, Nested if & pass",
-  "description_ko": "복합 논리 조건문, 조건문 안의 중첩 if 구조, 그리고 빈 블록을 채우는 pass 키워드를 익힙니다.",
-  "description_en": "Combine compound logical conditions, nested if statements, and the pass placeholder.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "method",
-    "type",
-    "if"
-  ],
-  "questions": [
+  id: 'py-basic-r22',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 22,
+  title_ko: '크기 비교 연산자 (>, <, >=, <=)와 연쇄 비교 (a <= x <= b)',
+  title_en: 'Relational Operators (>, <, >=, <=) & Chained Comparisons',
+  description_ko: '초과(>), 미만(<), 이상(>=), 이하(<=) 비교 연산자와 파이썬의 연쇄 비교(a <= x <= b)를 익힙니다.',
+  description_en: 'Master relational operators (>, <, >=, <=) and Python chained comparisons (a <= x <= b).',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 두 과목 점수가 모두 60 이상일 때만 \"Pass\"를 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Print \"Pass\" only when both kor >= 60 and eng >= 60 hold True.",
-      "hint_ko": "두 과목 중 하나라도 60 미만이면 and 조건이 거짓이 되어 else 블록의 \"Fail\"이 출력됩니다.",
-      "hint_en": "If either score is below 60, the and condition evaluates to False and the else branch prints \"Fail\".",
-      "targetCode": "a, b = input().split()\nkor = int(a)\neng = int(b)\nif kor >= 60 and eng >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 초과(>)와 미만(<) 비교 연산자로 변수 a와 b의 크기를 비교해 차례로 출력해보세요.',
+      prompt_en: '[Block] Compare a and b using > and < and print both results.',
+      hint_ko: '15는 10보다 크므로 a > b는 True, a < b는 False가 출력됩니다.',
+      hint_en: 'Because 15 is greater than 10, a > b evaluates to True and a < b evaluates to False.',
+      targetCode: 'a = 15\nb = 10\nprint(a > b)\nprint(a < b)',
+      testCases: [
         {
-          "id": 1,
-          "input": "75 80",
-          "expectedOutput": "Pass"
+          id: 1,
+          input: '',
+          expectedOutput: 'True\nFalse',
         },
-        {
-          "id": 2,
-          "input": "90 50",
-          "expectedOutput": "Fail"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 논리 키워드와 분기 키워드를 채워 토·일요일이면 Weekend, 아니면 Weekday를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the logical and fallback keywords to print Weekend or Weekday.",
-      "hint_ko": "토요일이거나 일요일 중 하나만 맞아도 주말이므로 영어로 또는을 뜻하는 두 글자 키워드를, 나머지 분기에는 그밖에를 뜻하는 네 글자 키워드를 넣으세요.",
-      "hint_en": "Use the two-letter English word meaning \"either\" on line 2, and the four-letter fallback keyword meaning \"otherwise\" on line 4.",
-      "templateCode": "day = input()\nif day == \"Sat\" §§ day == \"Sun\":\n    print(\"Weekend\")\n§§§§:\n    print(\"Weekday\")",
-      "targetCode": "day = input()\nif day == \"Sat\" or day == \"Sun\":\n    print(\"Weekend\")\nelse:\n    print(\"Weekday\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Sun",
-          "expectedOutput": "Weekend"
-        },
-        {
-          "id": 2,
-          "input": "Mon",
-          "expectedOutput": "Weekday"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 중첩 if - else로 양수일 때 짝수·홀수를 추가로 판별하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Use a nested if - else inside if n > 0: to distinguish Plus Even and Plus Odd.",
-      "hint_ko": "바깥 조건(n > 0)이 참일 때만 안쪽 조건문(n % 2 == 0)으로 들어가 짝수·홀수를 추가로 판별합니다.",
-      "hint_en": "Only when the outer check (n > 0) is True does execution enter the inner check (n % 2 == 0) to separate even and odd.",
-      "targetCode": "n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print(\"Plus Even\")\n    else:\n        print(\"Plus Odd\")\nelse:\n    print(\"Zero or Minus\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "8",
-          "expectedOutput": "Plus Even"
-        },
-        {
-          "id": 2,
-          "input": "7",
-          "expectedOutput": "Plus Odd"
-        },
-        {
-          "id": 3,
-          "input": "-2",
-          "expectedOutput": "Zero or Minus"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈칸에 자리 채움 키워드를 넣어 음수일 때는 출력을 건너뛰고 Done만 나오게 해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the no-op placeholder keyword so negative numbers skip printing.",
-      "hint_ko": "파이썬에서 들여쓰기 블록을 완전히 비워두면 문법 오류가 나므로, 영어로 지나가다·통과하다를 뜻하는 네 글자 키워드로 자리를 채워줍니다.",
-      "hint_en": "Python forbids an empty indented block; fill it with the four-letter English word meaning \"to skip past / move on\".",
-      "templateCode": "n = int(input())\nif n < 0:\n    §§§§\nelse:\n    print(n)\nprint(\"Done\")",
-      "targetCode": "n = int(input())\nif n < 0:\n    pass\nelse:\n    print(n)\nprint(\"Done\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "-5",
-          "expectedOutput": "Done"
-        },
-        {
-          "id": 2,
-          "input": "12",
-          "expectedOutput": "12\nDone"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 연쇄 비교(18 <= temp <= 26)로 적정 온도를 판별하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Use chained comparison 18 <= temp <= 26 to print \"Good\" or \"Adjust\".",
-      "hint_ko": "18 <= temp <= 26은 18 <= temp and temp <= 26과 동일하게 동작하며 수학 부등식처럼 간결하게 읽힙니다.",
-      "hint_en": "18 <= temp <= 26 works identically to 18 <= temp and temp <= 26 while reading cleanly like math notation.",
-      "targetCode": "temp = int(input())\nif 18 <= temp <= 26:\n    print(\"Good\")\nelse:\n    print(\"Adjust\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "22",
-          "expectedOutput": "Good"
-        },
-        {
-          "id": 2,
-          "input": "30",
-          "expectedOutput": "Adjust"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 조건 키워드와 자리 채움 키워드를 채워 admin이면서 mute일 때 OK만 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the inner conditional keyword and no-op keyword so admin+mute prints OK.",
-      "hint_ko": "4칸 들여쓴 안쪽 조건문은 만약을 뜻하는 두 글자 키워드로 시작하고, 8칸 들여쓴 빈 블록에는 지나가다·통과하다를 뜻하는 네 글자 키워드를 넣으세요.",
-      "hint_en": "Start the nested check on line 4 with the two-letter conditional keyword, and put the four-letter word meaning \"move past\" in the empty block on line 5.",
-      "templateCode": "role = input()\nmode = input()\nif role == \"admin\":\n    §§ mode == \"mute\":\n        §§§§\n    else:\n        print(\"Alert\")\nprint(\"OK\")",
-      "targetCode": "role = input()\nmode = input()\nif role == \"admin\":\n    if mode == \"mute\":\n        pass\n    else:\n        print(\"Alert\")\nprint(\"OK\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "admin\nmute",
-          "expectedOutput": "OK"
-        },
-        {
-          "id": 2,
-          "input": "admin\nloud",
-          "expectedOutput": "Alert\nOK"
-        },
-        {
-          "id": 3,
-          "input": "user\nloud",
-          "expectedOutput": "OK"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 중첩 if - else로 아이디와 비밀번호를 차례로 검사하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Verify id_in in the outer if and pw_in in the nested if.",
-      "hint_ko": "바깥 조건(id_in == \"admin\")이 거짓이면 안쪽 비밀번호 검사는 아예 실행되지 않고 바깥쪽 else로 이동합니다.",
-      "hint_en": "If the outer check (id_in == \"admin\") is False, the inner password check is skipped completely and the outer else runs.",
-      "targetCode": "id_in = input()\npw_in = input()\nif id_in == \"admin\":\n    if pw_in == \"1234\":\n        print(\"Admin OK\")\n    else:\n        print(\"Wrong PW\")\nelse:\n    print(\"No User\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "admin\n1234",
-          "expectedOutput": "Admin OK"
-        },
-        {
-          "id": 2,
-          "input": "admin\n0000",
-          "expectedOutput": "Wrong PW"
-        },
-        {
-          "id": 3,
-          "input": "guest\n1234",
-          "expectedOutput": "No User"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 논리 키워드를 채워 10 이상이면서 (VIP이거나 30 이상)이면 Enter를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the logical keywords so lv >= 10 and (bool(vip) or lv >= 30) prints Enter.",
-      "hint_ko": "기본 레벨 조건과 괄호 조건을 모두 만족해야 하므로 앞에는 그리고를 뜻하는 세 글자를, 괄호 안 둘 중 하나 조건에는 또는을 뜻하는 두 글자를 적으세요.",
-      "hint_en": "Connect the required base check to the parenthesized group with the three-letter conjunction word, and connect the two alternatives inside with the two-letter word.",
-      "templateCode": "lv = int(input())\nvip = int(input())\nif lv >= 10 §§§ (bool(vip) §§ lv >= 30):\n    print(\"Enter\")\nelse:\n    print(\"Deny\")",
-      "targetCode": "lv = int(input())\nvip = int(input())\nif lv >= 10 and (bool(vip) or lv >= 30):\n    print(\"Enter\")\nelse:\n    print(\"Deny\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "15\n1",
-          "expectedOutput": "Enter"
-        },
-        {
-          "id": 2,
-          "input": "35\n0",
-          "expectedOutput": "Enter"
-        },
-        {
-          "id": 3,
-          "input": "15\n0",
-          "expectedOutput": "Deny"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 3과 5의 공배수 조건을 맨 위 if에 두어 FizzBuzz를 판별하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Place the combined 3-and-5 check first to solve FizzBuzz.",
-      "hint_ko": "3과 5의 공배수는 3의 배수이자 5의 배수이므로, 두 조건을 and로 묶은 복합 조건을 가장 먼저 검사해야 합니다.",
-      "hint_en": "Multiples of both 3 and 5 also match the individual divisor checks, so the combined and condition must come first.",
-      "targetCode": "n = int(input())\nif n % 3 == 0 and n % 5 == 0:\n    print(\"FizzBuzz\")\nelif n % 3 == 0:\n    print(\"Fizz\")\nelif n % 5 == 0:\n    print(\"Buzz\")\nelse:\n    print(n)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "15",
-          "expectedOutput": "FizzBuzz"
-        },
-        {
-          "id": 2,
-          "input": "9",
-          "expectedOutput": "Fizz"
-        },
-        {
-          "id": 3,
-          "input": "10",
-          "expectedOutput": "Buzz"
-        },
-        {
-          "id": 4,
-          "input": "7",
-          "expectedOutput": "7"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸을 채워 출금액이 0 이하나 잔액 초과면 넘어가고, 잔액 이하면 차감해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the blanks so invalid amounts do nothing and valid amounts subtract from bal.",
-      "hint_ko": "아무 처리 없이 넘어가는 넷째 줄에는 통과하다를 뜻하는 네 글자 키워드를, 추가 조건을 검사하는 다섯째 줄에는 else if의 네 글자 축약어를 적어보세요.",
-      "hint_en": "Use the four-letter word meaning \"skip past\" for the no-op branch on line 4, and the four-letter contraction of \"else if\" on line 5.",
-      "templateCode": "bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§\n§§§§ amt <= bal:\n    bal -= amt\nelse:\n    pass\nprint(bal)",
-      "targetCode": "bal = 100\namt = int(input())\nif amt <= 0:\n    pass\nelif amt <= bal:\n    bal -= amt\nelse:\n    pass\nprint(bal)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "-10",
-          "expectedOutput": "100"
-        },
-        {
-          "id": 2,
-          "input": "35",
-          "expectedOutput": "65"
-        },
-        {
-          "id": 3,
-          "input": "150",
-          "expectedOutput": "100"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 음수일 때 아무 동작 없이 넘어가도록 잘못된 단어를 파이썬 예약어로 수정해보세요.",
-      "prompt_en": "[Fix Bug] Replace the invalid placeholder word with the Python keyword that cleanly does nothing.",
-      "hint_ko": "셋째 줄에 적힌 단어는 파이썬 예약어가 아니어서 선언되지 않은 이름 오류가 발생합니다. 빈 블록을 그냥 통과할 때 쓰는 네 글자 파이썬 키워드로 고쳐보세요.",
-      "hint_en": "The word on line 3 is not a valid Python keyword; replace it with the four-letter keyword meaning \"move past\" that leaves a block empty.",
-      "templateCode": "n = int(input())\nif n < 0:\n    skip\nelse:\n    n += 10\nprint(n)",
-      "targetCode": "n = int(input())\nif n < 0:\n    pass\nelse:\n    n += 10\nprint(n)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "-5",
-          "expectedOutput": "-5"
-        },
-        {
-          "id": 2,
-          "input": "20",
-          "expectedOutput": "30"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] temp가 18 이상 26 이하일 때 Good이 출력되도록 연쇄 비교 기호를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the chained comparison operators so 18 <= temp <= 26 prints Good.",
-      "hint_ko": "18 >= temp >= 26은 불가능한 조건입니다. 부등호 방향을 모두 <=로 고쳐보세요.",
-      "hint_en": "Reverse both >= operators to <= so it tests 18 <= temp <= 26.",
-      "templateCode": "temp = int(input())\nif 18 >= temp >= 26:\n    print(\"Good\")\nelse:\n    print(\"Adjust\")",
-      "targetCode": "temp = int(input())\nif 18 <= temp <= 26:\n    print(\"Good\")\nelse:\n    print(\"Adjust\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "22",
-          "expectedOutput": "Good"
-        },
-        {
-          "id": 2,
-          "input": "30",
-          "expectedOutput": "Adjust"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 바깥 if n > 0: 안에서 n이 100 이상인지 검사하는 중첩 if 헤더 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the 4-space indented nested header if n >= 100: inside if n > 0:.",
-      "hint_ko": "4칸 들여쓰기 뒤에 if n >= 100:을 작성해보세요.",
-      "hint_en": "Keep the 4-space indentation and write if n >= 100:.",
-      "templateCode": "n = int(input())\nif n > 0:\n    §§§§§§§§§§§§\n        print(\"Big\")",
-      "targetCode": "n = int(input())\nif n > 0:\n    if n >= 100:\n        print(\"Big\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "150",
-          "expectedOutput": "Big"
-        },
-        {
-          "id": 2,
-          "input": "100",
-          "expectedOutput": "Big"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] n이 음수일 때 아무 처리 없이 넘어가도록 빈 블록을 채우는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the 4-space indented pass statement inside if n < 0:.",
-      "hint_ko": "4칸 들여쓰기 뒤에 네 글자 키워드 pass를 작성해보세요.",
-      "hint_en": "Keep the 4-space indentation and write pass.",
-      "templateCode": "n = int(input())\nif n < 0:\n    §§§§\nelse:\n    print(n)\nprint(\"Done\")",
-      "targetCode": "n = int(input())\nif n < 0:\n    pass\nelse:\n    print(n)\nprint(\"Done\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "-5",
-          "expectedOutput": "Done"
-        },
-        {
-          "id": 2,
-          "input": "12",
-          "expectedOutput": "12\nDone"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] When 6 is given as input, select the exact output of the following Python code.",
-      "hint_ko": "입력값 6이 바깥 조건과 안쪽 짝수 조건에서 각각 어떻게 판정되는지 따라가고, 빈 블록 통과 키워드를 만났을 때 변수 값이 변하는지 확인해보세요.",
-      "hint_en": "Trace input 6 through the outer check and the nested even check, then note what effect the no-op placeholder has on res.",
-      "targetCode": "x = int(input())\nres = 10\nif x > 0:\n    if x % 2 == 0:\n        pass\n    else:\n        res += x\nelse:\n    res -= 5\nprint(res)",
-      "choices": [
-        "10",
-        "16",
-        "5",
-        "6"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 초과 비교 기호를 채워 현재 속도(speed)가 60보다 큰지 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the greater-than operator to check if speed exceeds 60.',
+      hint_ko: '왼쪽 값이 오른쪽 값보다 더 큼을 나타내는 부등호 기호 하나를 입력합니다.',
+      hint_en: 'Enter the single angle bracket that points closed toward the smaller right-hand side.',
+      templateCode: 'speed = 75\nprint(speed § 60)',
+      targetCode: 'speed = 75\nprint(speed > 60)',
+      testCases: [
         {
-          "id": 1,
-          "input": "6",
-          "expectedOutput": "10"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: 'True',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 이상(>=)과 이하(<=) 연산자로 score(80)가 80 이상인지와 79 이하인지를 차례로 출력해보세요.',
+      prompt_en: '[Block] Check if score (80) is at least 80 (>=) and at most 79 (<=).',
+      hint_ko: '이상과 이하를 쓸 때는 항상 부등호(>, <)를 먼저 쓰고 등호(=)를 뒤에 붙입니다.',
+      hint_en: 'Always place the angle bracket (> or <) before the equals sign (=).',
+      targetCode: 'score = 80\nprint(score >= 80)\nprint(score <= 79)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'True\nFalse',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 이하 비교 기호를 채워 가격(price)이 예산(budget) 이하인지 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the less-or-equal operator to check if price is at most budget.',
+      hint_ko: '작거나 같음(이하)은 왼쪽이 닫힌 부등호 바로 뒤에 등호를 붙여 표기합니다.',
+      hint_en: 'Write the less-than angle bracket followed immediately by the equals sign.',
+      templateCode: 'price = 3000\nbudget = 3000\nprint(price §§ budget)',
+      targetCode: 'price = 3000\nbudget = 3000\nprint(price <= budget)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'True',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 안내 문구와 함께 점수를 정수로 입력받고, 보너스 5점을 더한(+=) 뒤 80점 이상인지 출력해보세요.',
+      prompt_en: '[Block] Read an integer score with prompt "Score: ", add 5 with +=, and print whether it is >= 80.',
+      hint_ko: '복합 대입 연산(score += 5)으로 점수를 먼저 갱신한 다음 >= 80으로 비교합니다.',
+      hint_en: 'Update score with += 5 first, then compare the updated value against 80.',
+      targetCode: 'score = int(input("Score: "))\nscore += 5\nprint(score >= 80)',
+      testCases: [
+        {
+          id: 1,
+          input: '75',
+          expectedOutput: 'Score: True',
+        },
+        {
+          id: 2,
+          input: '70',
+          expectedOutput: 'Score: False',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 이상 비교 기호를 채워 보너스를 더한 최종 점수가 100 이상인지 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the greater-or-equal operator to check if the updated pt is at least 100.',
+      hint_ko: '크거나 같음(이상)은 왼쪽이 열린 부등호 바로 뒤에 등호를 붙여 작성합니다.',
+      hint_en: 'Place the greater-than angle bracket right before the equals sign.',
+      templateCode: 'pt = int(input("Pt: "))\npt += 10\nprint(pt §§ 100)',
+      targetCode: 'pt = int(input("Pt: "))\npt += 10\nprint(pt >= 100)',
+      testCases: [
+        {
+          id: 1,
+          input: '90',
+          expectedOutput: 'Pt: True',
+        },
+        {
+          id: 2,
+          input: '85',
+          expectedOutput: 'Pt: False',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 연쇄 비교(10 <= x <= 20)로 입력 정수 x가 10 이상 20 이하 범위인지 출력해보세요.',
+      prompt_en: '[Block] Use chained comparison 10 <= x <= 20 to check if integer x is between 10 and 20 inclusive.',
+      hint_ko: '파이썬에서는 수학 부등식처럼 10 <= x <= 20 형태로 양쪽 범위를 한 번에 비교할 수 있습니다.',
+      hint_en: 'Python allows chaining bounds directly like math notation: 10 <= x <= 20.',
+      targetCode: 'x = int(input())\nprint(10 <= x <= 20)',
+      testCases: [
+        {
+          id: 1,
+          input: '15',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '25',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 미만 비교 기호를 채워 정수 n이 0 초과 10 미만(한 자리 양수)인지 연쇄 비교로 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the less-than operator to complete the chained check 0 < n < 10.',
+      hint_ko: '0보다 크고 10보다 작다는 연쇄 부등식이 되도록 오른쪽 빈칸에 미만 기호를 넣습니다.',
+      hint_en: 'Complete the chained inequality with the strict less-than symbol before 10.',
+      templateCode: 'n = int(input())\nprint(0 < n § 10)',
+      targetCode: 'n = int(input())\nprint(0 < n < 10)',
+      testCases: [
+        {
+          id: 1,
+          input: '7',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '10',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n을 10으로 나눈 정수 몫 q가 1 이상 9 이하인지 연쇄 비교로 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks to compute floor quotient q and test if q is between 1 and 9 inclusive.',
+      hint_ko: '정수 몫 연산자로 몫을 구한 뒤, 양쪽에 이하 비교 기호 두 개를 넣어 연쇄 비교식을 완성합니다.',
+      hint_en: 'Use floor division for q, then place the less-or-equal operator on both sides of q.',
+      templateCode: 'n = int(input())\nq = n §§ 10\nprint(1 §§ q §§ 9)',
+      targetCode: 'n = int(input())\nq = n // 10\nprint(1 <= q <= 9)',
+      testCases: [
+        {
+          id: 1,
+          input: '45',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '120',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 등호와 부등호 순서가 잘못된 문법 오류를 고쳐 lv가 30 이상인지 출력해보세요.',
+      prompt_en: '[Fix Bug] Fix the reversed symbol order in the operator so it checks whether lv is at least 30.',
+      hint_ko: '비교 연산자에서 등호는 항상 부등호 뒤에 와야 합니다.',
+      hint_en: 'In relational operators, the angle bracket must always come before the equals sign.',
+      templateCode: 'lv = int(input())\nprint(lv => 30)',
+      targetCode: 'lv = int(input())\nprint(lv >= 30)',
+      testCases: [
+        {
+          id: 1,
+          input: '30',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '20',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 경계값 20도 범위에 포함되도록(10 이상 20 이하) 오른쪽 비교 기호를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the right-hand relational operator so the boundary value 20 is included in 10..20.',
+      hint_ko: '현재 오른쪽 기호가 미만으로 되어 있어 20일 때 거짓이 됩니다. 20 이하가 되도록 고쳐보세요.',
+      hint_en: 'The strict upper bound currently excludes 20; change it to include equality.',
+      templateCode: 'x = int(input())\nprint(10 <= x < 20)',
+      targetCode: 'x = int(input())\nprint(10 <= x <= 20)',
+      testCases: [
+        {
+          id: 1,
+          input: '20',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '21',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 연쇄 비교를 사용해 변수 lv가 1 이상 10 이하인지 판별한 결과를 ok에 저장하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that stores whether 1 <= lv <= 10 in variable ok.',
+      hint_ko: '변수 ok에 1 이상 10 이하 연쇄 비교식을 대입해보세요.',
+      hint_en: 'Assign the chained comparison checking 1 through 10 inclusive to ok.',
+      templateCode: 'lv = int(input())\n§§§§§§§§§§§§§§§§§§\nprint(ok)',
+      targetCode: 'lv = int(input())\nok = 1 <= lv <= 10\nprint(ok)',
+      testCases: [
+        {
+          id: 1,
+          input: '7',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '15',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] n의 제곱(n ** 2)이 50 이상인지 비교한 결과를 출력하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that prints whether n squared (n ** 2) is at least 50.',
+      hint_ko: 'print() 안에서 거듭제곱 연산과 이상 비교 연산자를 결합해보세요.',
+      hint_en: 'Combine the power operator and greater-or-equal operator inside print().',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'n = int(input())\nprint(n ** 2 >= 50)',
+      testCases: [
+        {
+          id: 1,
+          input: '8',
+          expectedOutput: 'True',
+        },
+        {
+          id: 2,
+          input: '6',
+          expectedOutput: 'False',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '경계값 20에서 미만(<)과 이하(<=)의 차이, 그리고 연쇄 비교의 경계 포함 여부를 차례로 확인해보세요.',
+      hint_en: 'Check strict less-than versus less-or-equal at boundary 20, then evaluate the chained comparison.',
+      targetCode: 'x = 20\nprint(x < 20, x <= 20)\nprint(10 < x <= 20)',
+      choices: ['False True\nTrue', 'True True\nTrue', 'False True\nFalse', 'False False\nTrue'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'False True\nTrue',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '거듭제곱과 누적 뺄셈 후의 val 값을 구한 뒤, 연쇄 비교 결과와 다름 비교 결과를 하이픈 구분자로 이어보세요.',
+      hint_en: 'Compute val after exponentiation and -=, then evaluate the chained comparison and != check with sep="-".',
+      targetCode: 'n = 4\nval = n ** 2\nval -= 6\nprint(5 <= val < 10, val != 10, sep="-")',
+      choices: ['True-False', 'False-False', 'False-True', 'True-True'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'False-False',
+        },
+      ],
+    },
+  ],
 };

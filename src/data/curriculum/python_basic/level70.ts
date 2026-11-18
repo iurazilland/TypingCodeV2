@@ -1,331 +1,321 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_70: PracticeRound = {
-  "id": "py-basic-r70",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 70,
-  "title_ko": "70레벨: 리스트 탐색·역순과 sorted() 사본 정렬",
-  "title_en": "Level 70: List index/count/reverse & sorted() Copy Sorting",
-  "description_ko": "값의 위치와 개수를 찾는 .index()·.count(), 순서를 뒤집는 .reverse(), 원본을 보존한 채 정렬된 새 리스트를 만드는 sorted()를 익힙니다.",
-  "description_en": "Learn .index(), .count(), .reverse(), and non-mutating copy sorting with sorted() and reverse=True.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "method",
-    "type",
-    "math",
-    "sorted",
-    "if",
-    "for_in",
-    "while",
-    "try",
-    "def"
+  id: 'py-basic-r70',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 70,
+  title_ko: '70레벨: 지역변수(Local)의 유효 범위와 global 전역변수 기초',
+  title_en: 'Level 70: Local Variable Scope & global Keyword Basics',
+  description_ko: '함수 안에서 만든 지역변수(Local)와 바깥 전역변수(Global)의 차이, return 재할당 패턴과 global 키워드를 익힙니다.',
+  description_en: 'Understand local vs global variable scope, updating globals via return reassignment, and the global keyword.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'dict',
+    'set',
+    'iter',
+    'method',
+    'def',
+    'return',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트의 .index(\"B\")와 .count(\"A\")로 위치 번호와 등장 횟수를 출력해보세요.",
-      "prompt_en": "[Block] Use .index(\"B\") and .count(\"A\") to print the first index of \"B\" and count of \"A\".",
-      "hint_ko": "\"B\"는 1번 인덱스에 위치하고, \"A\"는 리스트 안에 총 3번 등장합니다.",
-      "hint_en": "\"B\" sits at index 1, and \"A\" appears a total of 3 times in the list.",
-      "targetCode": "votes = [\"A\", \"B\", \"A\", \"C\", \"A\"]\nprint(votes.index(\"B\"), votes.count(\"A\"))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 함수 안에서 x = 50을 대입해도 바깥 전역변수 x = 10은 바뀌지 않음을 확인하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Assemble the code showing that assigning x = 50 inside change() does not alter the outer x = 10.',
+      hint_ko: '함수 내부에서 새로 대입한 변수는 그 함수 안에서만 살아있는 별개의 지역변수입니다.',
+      hint_en: 'Assigning to a variable inside a function creates a separate local variable that disappears when the function ends.',
+      targetCode: 'x = 10\ndef change():\n    x = 50\n    print(x)\nchange()\nprint(x)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1 3"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 첫 빈칸에는 9의 첫 인덱스를 찾는 메서드를, 둘째 빈칸에는 4의 개수를 세는 메서드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the method to find the index of 9 and the method to count occurrences of 4.",
-      "hint_ko": "첫 빈칸은 위치 번호를 찾는 index 메서드를, 둘째 빈칸은 개수를 세는 count 메서드를 사용합니다.",
-      "hint_en": "Use index in the first blank and count in the second blank.",
-      "templateCode": "nums = [4, 7, 4, 9, 4]\npos = nums.§§§§§(9)\ncnt = nums.§§§§§(4)\nprint(pos, cnt)",
-      "targetCode": "nums = [4, 7, 4, 9, 4]\npos = nums.index(9)\ncnt = nums.count(4)\nprint(pos, cnt)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 3"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트의 .reverse() 메서드로 현재 원소들의 앞뒤 순서를 정반대로 뒤집어보세요.",
-      "prompt_en": "[Block] Use the list .reverse() method to flip the order of elements in place.",
-      "hint_ko": ".reverse()는 원본 리스트 자체를 직접 변경하므로 호출 후 리스트 변수를 출력하면 뒤집힌 순서를 확인할 수 있습니다.",
-      "hint_en": "Because .reverse() mutates the list in place, print the list variable itself after calling the method.",
-      "targetCode": "steps = [\"first\", \"second\", \"third\"]\nsteps.reverse()\nprint(steps)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['third', 'second', 'first']"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트 순서를 거꾸로 뒤집는 메서드 이름을 채워 뒤집힌 첫 요소와 전체 리스트를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the method name that reverses log in place, then print log[0] and log.",
-      "hint_ko": "현재 순서를 정반대 방향으로 뒤집는 7글자 메서드 reverse를 호출하세요.",
-      "hint_en": "Call the 7-letter in-place method reverse.",
-      "templateCode": "log = [10, 50, 20]\nlog.§§§§§§§()\nprint(log[0], log)",
-      "targetCode": "log = [10, 50, 20]\nlog.reverse()\nprint(log[0], log)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "20 [20, 50, 10]"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 내장 함수 sorted(raw)로 원본을 보존한 채 오름차순 정렬된 새 리스트를 만들어보세요.",
-      "prompt_en": "[Block] Use sorted(raw) to create a new ascending list while keeping raw unchanged.",
-      "hint_ko": "원본을 직접 바꾸는 .sort() 메서드와 달리 sorted()는 정렬된 새 리스트를 반환하므로 변수에 대입해 사용합니다.",
-      "hint_en": "Unlike the in-place .sort() method, sorted() returns a new sorted list that you assign to a variable.",
-      "targetCode": "raw = [40, 10, 30]\nordered = sorted(raw)\nprint(raw)\nprint(ordered)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[40, 10, 30]\n[10, 30, 40]"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 원본 scores를 보존한 채 내림차순 정렬한 새 리스트를 top에 담도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the sorting function and keyword option to create a descending copy in top.",
-      "hint_ko": "사본 정렬 내장 함수 sorted를 쓰고, 역순 정렬 옵션 reverse를 True로 지정하세요.",
-      "hint_en": "Use the built-in function sorted and set the keyword option reverse=True.",
-      "templateCode": "scores = [75, 92, 84]\ntop = §§§§§§(scores, §§§§§§§=True)\nprint(scores[0], top[0])",
-      "targetCode": "scores = [75, 92, 84]\ntop = sorted(scores, reverse=True)\nprint(scores[0], top[0])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "75 92"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .index()를 try - except ValueError로 감싸 없는 좌석일 때 -1을 출력해보세요.",
-      "prompt_en": "[Block] Wrap seats.index(code) in try - except ValueError to print -1 when missing.",
-      "hint_ko": "-1을 반환하는 문자열 .find()와 달리 리스트 .index()는 없을 때 ValueError를 발생시킵니다.",
-      "hint_en": "Unlike string .find() which returns -1, list .index() raises ValueError when an item is not found.",
-      "targetCode": "seats = [\"A1\", \"A2\", \"A3\"]\ncode = input()\ntry:\n    idx = seats.index(code)\n    print(idx)\nexcept ValueError:\n    print(-1)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "A2",
-          "expectedOutput": "1"
+          id: 1,
+          input: '',
+          expectedOutput: '50\n10',
         },
-        {
-          "id": 2,
-          "input": "B9",
-          "expectedOutput": "-1"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 상품의 인덱스를 찾아 출력하되 없으면 예외를 잡아 -1을 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Find the index of target in items or catch ValueError to print -1.",
-      "hint_ko": "위치를 찾는 5글자 메서드 index와 없는 값일 때 발생하는 예외 ValueError를 채우세요.",
-      "hint_en": "Call index on line 4 and catch ValueError on line 6.",
-      "templateCode": "items = [\"pen\", \"book\", \"note\"]\ntarget = input()\ntry:\n    pos = items.§§§§§(target)\n    print(pos)\nexcept §§§§§§§§§§:\n    print(-1)",
-      "targetCode": "items = [\"pen\", \"book\", \"note\"]\ntarget = input()\ntry:\n    pos = items.index(target)\n    print(pos)\nexcept ValueError:\n    print(-1)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "book",
-          "expectedOutput": "1"
-        },
-        {
-          "id": 2,
-          "input": "desk",
-          "expectedOutput": "-1"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 함수 안에서 sorted(nums, reverse=True)로 원본 변형 없이 가장 큰 두 수의 합을 구해보세요.",
-      "prompt_en": "[Block] Use sorted(nums, reverse=True) inside top_two_sum to sum the two largest numbers without mutating data.",
-      "hint_ko": "내림차순으로 정렬된 ranked의 0번과 1번 인덱스가 가장 큰 두 수이며, 바깥의 data[0]은 원래 첫 값을 유지합니다.",
-      "hint_en": "Indices 0 and 1 of ranked hold the two largest numbers, while data[0] keeps its original value.",
-      "targetCode": "def top_two_sum(nums):\n    ranked = sorted(nums, reverse=True)\n    return ranked[0] + ranked[1]\n\ndata = [15, 40, 25, 30]\nprint(top_two_sum(data), data[0])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "70 15"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 내림차순 정렬 사본으로 최고점을 찾고 최고점이 몇 개 있는지 반환하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Sort scores descending with sorted() to find the highest score and return its count.",
-      "hint_ko": "첫 빈칸에는 사본 정렬 함수 sorted를, 둘째 빈칸에는 등장 횟수를 세는 count 메서드를 적으세요.",
-      "hint_en": "Call sorted on line 2 and count on line 4.",
-      "templateCode": "def count_top(scores):\n    ordered = §§§§§§(scores, reverse=True)\n    best = ordered[0]\n    return scores.§§§§§(best)\n\nprint(count_top([80, 95, 95, 70]))",
-      "targetCode": "def count_top(scores):\n    ordered = sorted(scores, reverse=True)\n    best = ordered[0]\n    return scores.count(best)\n\nprint(count_top([80, 95, 95, 70]))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트에서 10의 등장 횟수(3)를 세려다 첫 위치 번호를 구하는 메서드를 쓴 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the method call so cnt counts how many times 10 appears in nums instead of finding its index.",
-      "hint_ko": "특정 값의 위치 번호를 찾는 .index(10) 대신 등장 개수를 세는 .count(10)으로 수정하세요.",
-      "hint_en": "Replace .index(10) with .count(10) to count occurrences of 10.",
-      "templateCode": "nums = [5, 10, 15, 10, 10]\ncnt = nums.index(10)\nprint(cnt)",
-      "targetCode": "nums = [5, 10, 15, 10, 10]\ncnt = nums.count(10)\nprint(cnt)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 오름차순 정렬된 리스트(3개 원소)에서 가장 큰 점수(95)를 출력하도록 잘못된 인덱스를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the index on ascending sorted list ordered so the largest score (95) at index 2 is printed.",
-      "hint_ko": "sorted(scores)는 작은 값부터 큰 값 순서로 정렬하므로 3개 원소 중 가장 큰 값은 2번 인덱스에 있습니다.",
-      "hint_en": "In a 3-element ascending list, the largest element is at index 2, not index 0.",
-      "templateCode": "scores = [70, 95, 80]\nordered = sorted(scores)\nprint(ordered[0])",
-      "targetCode": "scores = [70, 95, 80]\nordered = sorted(scores)\nprint(ordered[2])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "95"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 집합 uniq를 내림차순 정렬 리스트로 만들어 변수 res에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Sort uniq in descending order with sorted(uniq, reverse=True) and assign it to res.",
-      "hint_ko": "res = sorted(uniq, reverse=True) 형태로 내림차순 정렬 사본을 변수 res에 대입하세요.",
-      "hint_en": "Write res = sorted(uniq, reverse=True).",
-      "templateCode": "words = input().split()\nuniq = set(words)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "words = input().split()\nuniq = set(words)\nres = sorted(uniq, reverse=True)\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "cat bat cat dog",
-          "expectedOutput": "['dog', 'cat', 'bat']"
-        },
-        {
-          "id": 2,
-          "input": "b a c a",
-          "expectedOutput": "['c', 'b', 'a']"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 nums의 앞뒤 순서를 제자리에서 뒤집는(.reverse) 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Reverse the list nums in place using .reverse().",
-      "hint_ko": "nums.reverse() 형태로 리스트 역순 메서드를 호출하세요.",
-      "hint_en": "Call nums.reverse() to flip the list order in place.",
-      "templateCode": "nums = [10, 20, 30]\n§§§§§§§§§§§§§§\nprint(nums)",
-      "targetCode": "nums = [10, 20, 30]\nnums.reverse()\nprint(nums)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[30, 20, 10]"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 sorted(), .reverse(), .index(), .count() 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "오름차순 사본 [10, 10, 20, 30]에서 20의 위치 번호와 뒤집힌 원본 리스트의 첫 요소를 각각 확인하세요.",
-      "hint_en": "In copy_a ([10, 10, 20, 30]), 20 sits at index 2; after nums.reverse(), nums[0] is 10.",
-      "targetCode": "nums = [30, 10, 20, 10]\ncopy_a = sorted(nums)\nnums.reverse()\nprint(nums[0], copy_a.index(20), nums.count(10))",
-      "choices": [
-        "10 2 2",
-        "30 2 2",
-        "10 1 2",
-        "10 2 1"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 함수 안에서 지역변수 hp에 200을 대입해 함수 안에서는 200, 바깥에서는 100이 출력되게 해보세요.',
+      prompt_en: '[Fill Blank] Assign 200 to local variable hp inside temp_buff() so 200 and 100 are printed.',
+      hint_ko: '함수 안의 print문에서 출력하고 있는 두 글자 변수 이름을 등호 왼쪽에 적으세요.',
+      hint_en: 'Write the two-letter variable name printed on the next line.',
+      templateCode: 'hp = 100\ndef temp_buff():\n    §§ = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
+      targetCode: 'hp = 100\ndef temp_buff():\n    hp = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "10 2 2"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '200\n100',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 함수 안에서 바깥 전역변수 rate의 값을 읽어와 n * rate를 반환하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Read global variable rate inside calc(n) to return n * rate and print calc(15).',
+      hint_ko: '전역변수의 값을 수정하지 않고 읽기만 할 때는 별도 선언 없이 함수 안에서 바로 참조할 수 있습니다.',
+      hint_en: 'A function can freely read an outer global variable as long as it does not reassign it.',
+      targetCode: 'rate = 2\ndef calc(n):\n    return n * rate\nprint(calc(15))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 함수 안에서 바깥에 선언된 전역변수 bonus를 더해 130을 반환해보세요.',
+      prompt_en: '[Fill Blank] Reference the outer global variable bonus inside total_score(s) to return 130.',
+      hint_ko: '첫째 줄에서 선언된 다섯 글자 전역변수 이름을 덧셈 기호 뒤에 적으세요.',
+      hint_en: 'Write the five-letter global variable name declared on line 1.',
+      templateCode: 'bonus = 50\ndef total_score(s):\n    return s + §§§§§\nprint(total_score(80))',
+      targetCode: 'bonus = 50\ndef total_score(s):\n    return s + bonus\nprint(total_score(80))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '130',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 전역변수 x를 인자로 넘기고 반환값으로 다시 x = add_ten(x)에 덮어써 갱신하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Pass global x into add_ten(x) and reassign the returned value back to x.',
+      hint_ko: '인자로 값을 전달하고 return 결과를 전역변수에 다시 대입하는 것이 가장 안전한 갱신 방법입니다.',
+      hint_en: 'Passing a variable in and reassigning the returned result is the cleanest way to update state.',
+      targetCode: 'def add_ten(n):\n    return n + 10\nx = 20\nx = add_ten(x)\nprint(x)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] level_up 함수에 lv를 전달해 호출한 반환값으로 전역변수 lv를 갱신해보세요.',
+      prompt_en: '[Fill Blank] Call level_up with lv and assign the returned result back to lv.',
+      hint_ko: '위에서 정의한 함수 이름 뒤 소괄호에 변수 lv를 넣어 호출하세요.',
+      hint_en: 'Invoke level_up passing lv as the argument.',
+      templateCode: 'def level_up(lv):\n    return lv + 1\nlv = 5\nlv = §§§§§§§§§§§§\nprint(lv)',
+      targetCode: 'def level_up(lv):\n    return lv + 1\nlv = 5\nlv = level_up(lv)\nprint(lv)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 함수 안에 global count를 선언해 전역변수 count를 직접 1씩 증가시키는 블록을 조립해보세요.',
+      prompt_en: '[Block] Declare global count inside hit() so count += 1 updates the outer variable.',
+      hint_ko: '함수 안에서 전역변수의 값을 직접 변경할 때는 반드시 global 변수명을 먼저 선언해야 합니다.',
+      hint_en: 'Use the global keyword before modifying an outer variable directly inside a function.',
+      targetCode: 'count = 0\ndef hit():\n    global count\n    count += 1\nhit()\nhit()\nprint(count)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 함수 안에서 바깥 전역변수 gold를 직접 수정할 수 있도록 키워드를 채워 150을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the keyword that allows earn(n) to modify the outer variable gold.',
+      hint_ko: '이 변수가 지역변수가 아니라 바깥의 전역변수임을 알려주는 여섯 글자 키워드를 적으세요.',
+      hint_en: 'Type the six-letter keyword that binds gold to the global scope.',
+      templateCode: 'gold = 100\ndef earn(n):\n    §§§§§§ gold\n    gold += n\nearn(50)\nprint(gold)',
+      targetCode: 'gold = 100\ndef earn(n):\n    global gold\n    gold += n\nearn(50)\nprint(gold)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '150',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 전역변수 선언과 복합 덧셈, 함수 호출을 완성하여 25를 출력해보세요.',
+      prompt_en: '[Fill Blank] Complete the outer variable scope declaration, compound addition, and function call to print 25.',
+      hint_ko: '전역변수 지정 키워드, 누적 덧셈 연산자, 그리고 호출할 함수 이름을 차례로 채우세요.',
+      hint_en: 'Fill in the global keyword, the += operator, and the function name add_pt.',
+      templateCode: 'score = 10\ndef add_pt(pt):\n    §§§§§§ score\n    score §§ pt\n§§§§§§(15)\nprint(score)',
+      targetCode: 'score = 10\ndef add_pt(pt):\n    global score\n    score += pt\nadd_pt(15)\nprint(score)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '25',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 함수 안에서 전역변수 선언 없이 count += 1을 실행해 발생한 UnboundLocalError를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the UnboundLocalError inside step() by declaring count as global before incrementing it.',
+      hint_ko: '함수 본문 첫 줄에 count가 전역변수임을 알리는 선언문을 추가하세요.',
+      hint_en: 'Add global count as the first line inside step().',
+      templateCode: 'count = 0\ndef step():\n    count += 1\nstep()\nprint(count)',
+      targetCode: 'count = 0\ndef step():\n    global count\n    count += 1\nstep()\nprint(count)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 함수를 호출만 하고 반환값을 다시 hp에 저장하지 않아 50이 그대로 출력되는 넷째 줄을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix line 4 by assigning the return value of heal(hp) back to variable hp.',
+      hint_ko: '반환된 새 체력 값으로 기존 변수를 덮어쓰도록 hp = 를 앞에 붙이세요.',
+      hint_en: 'Assign the result of heal(hp) back to hp on line 4.',
+      templateCode: 'def heal(hp):\n    return hp + 30\nhp = 50\nheal(hp)\nprint(hp)',
+      targetCode: 'def heal(hp):\n    return hp + 30\nhp = 50\nhp = heal(hp)\nprint(hp)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '80',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 함수 안에서 바깥의 전역변수 total을 직접 수정할 수 있도록 선언하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the indented line that declares total as a global variable.',
+      hint_ko: '전역변수 선언 키워드 뒤에 변수 이름 total을 공백으로 띄워 적으세요.',
+      hint_en: 'Write global total on the first line inside the function.',
+      templateCode: 'total = 100\ndef add_fee(fee):\n    §§§§§§§§§§§§\n    total += fee\nadd_fee(20)\nprint(total)',
+      targetCode: 'total = 100\ndef add_fee(fee):\n    global total\n    total += fee\nadd_fee(20)\nprint(total)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '120',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] boost(val)의 반환값으로 변수 val을 갱신하는 넷째 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Update variable val by assigning it the return value of boost(val).',
+      hint_ko: '등호 왼쪽에 val을 적고 오른쪽에 boost(val) 호출식을 적으세요.',
+      hint_en: 'Write val = boost(val) on line 4.',
+      templateCode: 'def boost(x):\n    return x * 2\nval = 15\n§§§§§§§§§§§§§§§§\nprint(val)',
+      targetCode: 'def boost(x):\n    return x * 2\nval = 15\nval = boost(val)\nprint(val)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 함수 내부에서 지역변수 x = 99를 만들어 반환했을 때 a와 바깥 변수 x의 출력값을 선택해보세요.',
+      prompt_en: '[Predict Output] Select the output of a and outer variable x after calling test().',
+      hint_ko: '반환값을 받은 a에는 99가 담기지만, 바깥 전역변수 x는 영향을 받지 않습니다.',
+      hint_en: 'Variable a receives the returned 99, while the global x remains unchanged.',
+      targetCode: 'x = 10\ndef test():\n    x = 99\n    return x\na = test()\nprint(a, x)',
+      choices: ['99 10', '99 99', '10 10', '10 99'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '99 10',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 지역변수를 쓰는 f1()과 global을 쓰는 f2()를 차례로 호출한 뒤 전역변수 n의 값을 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the value of global variable n after calling f1() and f2().',
+      hint_ko: 'f1()의 대입은 지역변수만 바꾸고 사라지며, f2()만 실제 전역변수 n에 10을 더합니다.',
+      hint_en: 'Only f2() declares global n and modifies the outer variable; f1() only creates a local variable.',
+      targetCode: 'n = 5\ndef f1():\n    n = 20\ndef f2():\n    global n\n    n += 10\nf1()\nf2()\nprint(n)',
+      choices: ['15', '30', '20', '5'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '15',
+        },
+      ],
+    },
+  ],
 };

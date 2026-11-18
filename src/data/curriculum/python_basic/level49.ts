@@ -1,239 +1,336 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_49: PracticeRound = {
-  "id": "py-basic-r49",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 49,
-  "title_ko": "49레벨: None·튜플·딕셔너리·집합 기초 종합 문제풀이",
-  "title_en": "Level 49: Section 7 Comprehensive Review",
-  "description_ko": "None, 튜플 언패킹, 딕셔너리 조작과 .items() 순회, 집합 중복 제거 및 자료구조 형변환을 종합 실습합니다.",
-  "description_en": "Comprehensive practice combining None, tuple unpacking, dictionaries, sets, and collection casting.",
-  "totalQuestions": 10,
-  "unlockedBlocks": [],
-  "questions": [
+  id: 'py-basic-r49',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 49,
+  title_ko: '여러 줄 문자열("""...""")과 문자열 길이(len())',
+  title_en: 'Multi-line Strings ("""...""") & String Length (len())',
+  description_ko: '삼중 따옴표("""...""")로 여러 줄 문자열을 만들고, len()으로 문자열의 글자 수와 리스트 요소 개수를 비교하는 법을 익힙니다.',
+  description_en: 'Create multi-line strings with triple quotes ("""...""") and measure string character counts with len().',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'iter',
+    'method',
+  ],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 초기 우승자를 None으로 두고 튜플 리스트를 순회하며 최고 득점자를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Initialize winner to None and iterate over the tuple list to print the highest scorer.",
-      "hint_ko": "우승자 변수를 '아직 아무 값도 없음'을 뜻하는 예약어 상수로 초기화하고, 조건문에서 정체성 비교 연산자로 확인하세요.",
-      "hint_en": "Initialize the winner variable to the Python constant representing an absent value, and test for that empty state using the identity operator.",
-      "templateCode": "records = [(\"Kim\", 82), (\"Lee\", 95), (\"Park\", 88)]\nwinner = §§§§\nbest = 0\nfor name, sc in records:\n    if winner §§ None or sc > best:\n        winner = name\n        best = sc\nprint(f\"{winner}:{best}\")",
-      "targetCode": "records = [(\"Kim\", 82), (\"Lee\", 95), (\"Park\", 88)]\nwinner = None\nbest = 0\nfor name, sc in records:\n    if winner is None or sc > best:\n        winner = name\n        best = sc\nprint(f\"{winner}:{best}\")",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 삼중 큰따옴표("""...""")로 줄바꿈이 포함된 두 줄 문자열을 만들고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Assemble the code that creates a two-line string with triple double-quotes ("""...""") and prints it.',
+      hint_ko: '삼중 따옴표로 감싸면 엔터 줄바꿈이 문자열 안에 그대로 보존됩니다.',
+      hint_en: 'Triple quotes preserve line breaks directly inside the string.',
+      targetCode: 'msg = """Hello\nPython"""\nprint(msg)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Lee:95"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 단어 빈도수를 집계한 뒤 \"skip\" 키를 삭제하고 남은 결과를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Count token frequencies, delete \"skip\" if present, and print remaining items.",
-      "hint_ko": "제외 대상 키를 세 글자 삭제 키워드로 사전에서 지우고, 남은 키-값 쌍들을 다섯 글자 메서드로 동시에 꺼내 순회하세요.",
-      "hint_en": "Remove the unwanted entry with the 3-letter deletion statement, and iterate over key-value pairs together with the 5-letter method.",
-      "templateCode": "tokens = input().split()\ncnt = {}\nfor t in tokens:\n    if t in cnt:\n        cnt[t] += 1\n    else:\n        cnt[t] = 1\nif \"skip\" in cnt:\n    §§§ cnt[\"skip\"]\nfor k, v in cnt.§§§§§():\n    print(f\"{k}={v}\")",
-      "targetCode": "tokens = input().split()\ncnt = {}\nfor t in tokens:\n    if t in cnt:\n        cnt[t] += 1\n    else:\n        cnt[t] = 1\nif \"skip\" in cnt:\n    del cnt[\"skip\"]\nfor k, v in cnt.items():\n    print(f\"{k}={v}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "ok skip ok go",
-          "expectedOutput": "ok=2\ngo=1"
+          id: 1,
+          input: '',
+          expectedOutput: 'Hello\nPython',
         },
-        {
-          "id": 2,
-          "input": "run run",
-          "expectedOutput": "run=2"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 정수를 집합에 모아 중복을 없앤 뒤 정렬된 튜플로 출력해보세요.",
-      "prompt_en": "[Fill Blank] Collect input integers in a set, sort them as a list, and print as a tuple.",
-      "hint_ko": "빈 집합 생성식으로 출발해 원소를 채워 중복을 걸러낸 뒤, 정렬된 리스트를 마지막에 다섯 글자 불변 자료구조로 감싸 출력하세요.",
-      "hint_en": "Start with an empty set constructor, and finally cast the sorted list to an immutable tuple.",
-      "templateCode": "raw = input().split()\nbag = §§§§§\ni = 0\nwhile i < len(raw):\n    bag.add(int(raw[i]))\n    i += 1\narr = list(bag)\narr.sort()\nprint(§§§§§(arr))",
-      "targetCode": "raw = input().split()\nbag = set()\ni = 0\nwhile i < len(raw):\n    bag.add(int(raw[i]))\n    i += 1\narr = list(bag)\narr.sort()\nprint(tuple(arr))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "30 10 30 20",
-          "expectedOutput": "(10, 20, 30)"
-        },
-        {
-          "id": 2,
-          "input": "7 2 7",
-          "expectedOutput": "(2, 7)"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 튜플 요소를 수정하려다 dict(pt)로 잘못 변환한 줄을 list(pt)로 고쳐 (99, 20)을 출력해보세요.",
-      "prompt_en": "[Fix Bug] Fix the error from converting tuple pt with dict(pt) by changing it to list(pt).",
-      "hint_ko": "튜플의 순서형 요소들을 수정하려면 dict(pt)가 아니라 수정 가능한 리스트 변환 함수 list(pt)를 사용해야 합니다.",
-      "hint_en": "Convert the tuple into a mutable sequence using list(pt) instead of dict(pt) on line 2.",
-      "templateCode": "pt = (10, 20)\narr = dict(pt)\narr[0] = 99\nprint(tuple(arr))",
-      "targetCode": "pt = (10, 20)\narr = list(pt)\narr[0] = 99\nprint(tuple(arr))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "(99, 20)"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 딕셔너리 키 존재 여부를 is로 잘못 검사한 버그를 in으로 고쳐 남은 항목 수를 출력해보세요.",
-      "prompt_en": "[Fix Bug] Fix the membership check before del by replacing is with in.",
-      "hint_ko": "딕셔너리 안에 특정 키가 들어 있는지 확인할 때는 객체 동일성 연산자 is가 아니라 포함 연산자 in을 써야 합니다.",
-      "hint_en": "Use the membership operator in rather than the identity operator is to check whether a key exists in a dictionary.",
-      "templateCode": "stock = {\"apple\": 5, \"banana\": 2}\nkey = input()\nif key is stock:\n    del stock[key]\nprint(len(stock))",
-      "targetCode": "stock = {\"apple\": 5, \"banana\": 2}\nkey = input()\nif key in stock:\n    del stock[key]\nprint(len(stock))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "apple",
-          "expectedOutput": "1"
-        },
-        {
-          "id": 2,
-          "input": "pear",
-          "expectedOutput": "2"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 빈 집합 대신 빈 문자열 str()로 초기화해 오류가 나는 줄을 set()으로 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the initialization bug by replacing str() with set() so .add() works.",
-      "hint_ko": "원소 추가 메서드 .add()로 중복 없이 단어를 모으려면 str()이 아니라 빈 집합 생성식 set()으로 초기화해야 합니다.",
-      "hint_en": "Initialize seen with set() instead of str() so .add() can collect unique words.",
-      "templateCode": "words = input().split()\nseen = str()\nfor w in words:\n    seen.add(w)\nres = list(seen)\nres.sort()\nprint(res)",
-      "targetCode": "words = input().split()\nseen = set()\nfor w in words:\n    seen.add(w)\nres = list(seen)\nres.sort()\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "b a b c",
-          "expectedOutput": "['a', 'b', 'c']"
-        },
-        {
-          "id": 2,
-          "input": "z x z",
-          "expectedOutput": "['x', 'z']"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 조건문 안에서 딕셔너리 info의 \"temp\" 항목을 삭제하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the indented line that deletes info[\"temp\"] inside the if block.",
-      "hint_ko": "삭제 키워드 del 뒤에 딕셔너리 항목 info[\"temp\"]를 적어 해당 키-값 쌍을 제거하세요.",
-      "hint_en": "Use the del statement to remove info[\"temp\"].",
-      "templateCode": "info = {\"user\": \"ora\", \"temp\": None}\nif info[\"temp\"] is None:\n    §§§§§§§§§§§§§§§§\nprint(info)",
-      "targetCode": "info = {\"user\": \"ora\", \"temp\": None}\nif info[\"temp\"] is None:\n    del info[\"temp\"]\nprint(info)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "{'user': 'ora'}"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 nums의 중복을 제거하고 리스트로 변환해 uniq에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that deduplicates nums with set() and converts it to a list in uniq.",
-      "hint_ko": "집합 변환 set(nums)를 리스트 변환 list(...)로 감싸 변수 uniq에 대입하세요.",
-      "hint_en": "Assign list(set(nums)) to uniq.",
-      "templateCode": "nums = [40, 10, 40, 20]\n§§§§§§§§§§§§§§§§§§§§§§\nuniq.sort()\nprint(tuple(uniq))",
-      "targetCode": "nums = [40, 10, 40, 20]\nuniq = list(set(nums))\nuniq.sort()\nprint(tuple(uniq))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "(10, 20, 40)"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced when the following Python code runs.",
-      "hint_ko": "빈 값을 가진 항목이 먼저 제거된 뒤, 사전에 남아 있는 키들과 각 쌍의 곱셈 결과가 어떻게 누적되는지 순서대로 추적해보세요.",
-      "hint_en": "First see which entry gets removed by the empty-value check, then trace how the remaining keys and unpacked pair products accumulate.",
-      "targetCode": "d = {\"x\": (2, 5), \"y\": None, \"z\": (3, 4)}\nif d[\"y\"] is None:\n    del d[\"y\"]\ntotal = 0\ntags = \"\"\nfor k, pt in d.items():\n    a, b = pt\n    total += a * b\n    tags += k\nprint(tags, total)",
-      "choices": [
-        "xz 22",
-        "xyz 22",
-        "xz 14",
-        "xzy 14"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "xz 22"
-        }
-      ]
     },
     {
-      "id": 10,
-      "step": 10,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced when the following Python code runs.",
-      "hint_ko": "반복문을 거치며 중복이 제거된 고유 값들이 총 몇 개 남는지 세어보고, 오름차순 정돈 후 맨 앞 값과 맨 뒤 값의 합을 계산해보세요.",
-      "hint_en": "Count how many unique multiplied numbers remain after deduplication, then order them ascending and add the first and last values.",
-      "targetCode": "raw = [3, 1, 3, 2, 1]\ns = set()\ni = 0\nwhile i < len(raw):\n    s.add(raw[i] * 10)\n    i += 1\narr = list(s)\narr.sort()\nt = tuple(arr)\nprint(len(t), t[0] + t[-1])",
-      "choices": [
-        "3 40",
-        "5 40",
-        "3 30",
-        "5 60"
-      ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 삼중 따옴표를 닫아 두 줄짜리 안내판 문자열 sign을 완성하고 출력해보세요.',
+      prompt_en: '[Fill Blank] Close the triple-quoted multi-line string sign and print it.',
+      hint_ko: '시작할 때 사용한 큰따옴표 세 개를 끝에도 똑같이 적어 닫아주세요.',
+      hint_en: 'Close the multi-line string with three consecutive double quotes.',
+      templateCode: 'sign = """Open!\nClose!§§§\nprint(sign)',
+      targetCode: 'sign = """Open!\nClose!"""\nprint(sign)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 40"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: 'Open!\nClose!',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] len()으로 일반 단어와 공백·느낌표가 포함된 문자열의 글자 수를 각각 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print the character count of word and text (including spaces and punctuation) using len().',
+      hint_ko: '문자열에서 len()은 알파벳뿐 아니라 공백과 특수문자도 각각 1글자로 세어 줍니다.',
+      hint_en: 'len() counts every character in a string, including spaces and symbols.',
+      targetCode: 'word = "Python"\ntext = "Hi Py!"\nprint(len(word), len(text))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6 6',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 입력받은 문자열 msg의 전체 글자 수를 구해 출력해보세요.',
+      prompt_en: '[Fill Blank] Use the length function to print the total character count of msg.',
+      hint_ko: '리스트의 요소 개수를 구할 때와 똑같은 세 글자 내장 함수를 사용합니다.',
+      hint_en: 'Use the same 3-letter built-in function used for list length.',
+      templateCode: 'msg = input()\nprint("Length:", §§§(msg))',
+      targetCode: 'msg = input()\nprint("Length:", len(msg))',
+      testCases: [
+        {
+          id: 1,
+          input: 'Hello',
+          expectedOutput: 'Length: 5',
+        },
+        {
+          id: 2,
+          input: 'Py 2026',
+          expectedOutput: 'Length: 7',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] if len(pw) >= 8: 조건문으로 비밀번호가 8글자 이상이면 "Strong", 아니면 "Weak"를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Check whether len(pw) >= 8 and print "Strong" or "Weak".',
+      hint_ko: 'len(pw)가 돌려주는 정수 길이를 기준 숫자와 비교해 분기합니다.',
+      hint_en: 'Compare the integer returned by len(pw) against 8 in the if condition.',
+      targetCode: 'pw = input()\nif len(pw) >= 8:\n    print("Strong")\nelse:\n    print("Weak")',
+      testCases: [
+        {
+          id: 1,
+          input: 'secret99',
+          expectedOutput: 'Strong',
+        },
+        {
+          id: 2,
+          input: 'pass',
+          expectedOutput: 'Weak',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 두 문자열 a와 b의 글자 수 합계를 계산해 출력해보세요.',
+      prompt_en: '[Fill Blank] Compute and print the sum of the lengths of strings a and b.',
+      hint_ko: '변수 b의 글자 수를 구하는 함수 호출식을 빈칸에 적으세요.',
+      hint_en: 'Write the function call that returns the length of string b.',
+      templateCode: 'a = "Py"\nb = "Code"\nprint(len(a) + §§§§§§)',
+      targetCode: 'a = "Py"\nb = "Code"\nprint(len(a) + len(b))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 문자열 리스트 words에서 리스트 요소 개수(len(words))와 두 번째 단어의 글자 수(len(words[1]))를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print the number of items in words (len(words)) and the character length of words[1] (len(words[1])).',
+      hint_ko: 'len(words)는 리스트 안의 단어 개수를 세고, len(words[1])은 꺼낸 문자열의 글자 수를 셉니다.',
+      hint_en: 'len(words) counts list items, while len(words[1]) counts characters in the second string.',
+      targetCode: 'words = ["Hi", "Python"]\nprint(len(words), len(words[1]))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 6',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] tags 리스트의 전체 요소 개수와 맨 마지막 단어의 글자 수를 나란히 출력해보세요.',
+      prompt_en: '[Fill Blank] Print the length of tags and the character length of its last word.',
+      hint_ko: '두 번째 len() 괄호 안에 리스트의 마지막 요소를 가리키는 음수 인덱싱 식을 넣으세요.',
+      hint_en: 'Pass the negative indexing expression for the last item of tags into len().',
+      templateCode: 'tags = ["go", "rust", "python"]\nprint(len(tags), len(§§§§§§§§))',
+      targetCode: 'tags = ["go", "rust", "python"]\nprint(len(tags), len(tags[-1]))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 6',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트의 첫 번째 단어 길이가 5 이상이면 그 글자 수를 출력하도록 빈칸을 채워보세요.',
+      prompt_en: '[Fill Blank] If the first word in words has at least 5 characters, print that word and its character count.',
+      hint_ko: '길이 함수, 첫 번째 요소 인덱스, 이상 비교 연산자를 차례로 채워보세요.',
+      hint_en: 'Fill in the length function, first-element index, and >= operator.',
+      templateCode: 'words = ["apple", "pie"]\nif §§§(words[§]) §§ 5:\n    print(words[0], len(words[0]))',
+      targetCode: 'words = ["apple", "pie"]\nif len(words[0]) >= 5:\n    print(words[0], len(words[0]))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'apple 5',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 일반 따옴표 하나로 여러 줄 문자열을 감싸 발생한 문법 오류를 삼중 따옴표로 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the syntax error by wrapping the multi-line string in triple quotes.',
+      hint_ko: '여러 줄에 걸친 문자열은 양끝을 큰따옴표 세 개로 감싸야 합니다.',
+      hint_en: 'Use triple double-quotes at both ends of a multi-line string literal.',
+      templateCode: 'banner = "Step 1\nStep 2"\nprint(banner)',
+      targetCode: 'banner = """Step 1\nStep 2"""\nprint(banner)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Step 1\nStep 2',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 문자열 길이를 구하려다 존재하지 않는 메서드를 호출해 발생한 에러를 내장 함수 호출로 수정해보세요.',
+      prompt_en: '[Fix Bug] Replace the invalid .len() method call with the built-in length function.',
+      hint_ko: '파이썬에서 문자열 길이는 점(.) 메서드가 아니라 내장 함수에 인자로 전달해 구합니다.',
+      hint_en: 'Pass word as an argument to the built-in length function instead of calling .len().',
+      templateCode: 'word = "Coding"\nprint(word.len())',
+      targetCode: 'word = "Coding"\nprint(len(word))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 문자열 s를 3번 반복한 문자열의 전체 글자 수를 출력하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that prints the length of s repeated 3 times (s * 3).',
+      hint_ko: 'print()와 길이 함수 안에 문자열 반복 수식 s * 3을 넣어 작성하세요.',
+      hint_en: 'Wrap s * 3 inside len() and pass it to print().',
+      templateCode: 's = "Ab"\n§§§§§§§§§§§§§§§§§',
+      targetCode: 's = "Ab"\nprint(len(s * 3))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 반복문 안에서 각 단어 w의 글자 수를 리스트 lens에 추가하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the indented line that appends the length of w to lens.',
+      hint_ko: '리스트 추가 메서드 괄호 안에 단어 w의 길이를 구하는 식을 넣으세요.',
+      hint_en: 'Call lens.append() with the length of w.',
+      templateCode: 'words = ["a", "py", "code"]\nlens = []\nfor w in words:\n    §§§§§§§§§§§§§§§§§§§\nprint(lens)',
+      targetCode: 'words = ["a", "py", "code"]\nlens = []\nfor w in words:\n    lens.append(len(w))\nprint(lens)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[1, 2, 4]',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 공백·줄바꿈(\n)이 포함된 문자열과 삼중 따옴표 문자열의 len() 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '공백(" ")과 줄바꿈("\\n")도 각각 정확히 1글자로 계산된다는 점을 기억하세요.',
+      hint_en: 'Remember that both a space (" ") and a newline ("\\n") count as 1 character each.',
+      targetCode: 'a = "A B"\nb = """Hi\nPy"""\nprint(len(a), len(b))',
+      choices: [
+        '3 5',
+        '2 4',
+        '3 4',
+        '2 5',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 5',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 문자열 리스트 순회와 글자 수 조건 필터링 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '글자 수가 4글자 이상인 단어만 골라 모은 리스트의 요소 개수와 첫 단어의 길이를 확인하세요.',
+      hint_en: 'Collect words with length >= 4 into long_words, then check its item count and the length of its first word.',
+      targetCode: 'words = ["cat", "tiger", "ox", "bear"]\nlong_words = []\nfor w in words:\n    if len(w) >= 4:\n        long_words.append(w)\nprint(len(long_words), len(long_words[0]))',
+      choices: [
+        '2 5',
+        '2 4',
+        '4 5',
+        '3 5',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 5',
+        },
+      ],
+    },
+  ],
 };

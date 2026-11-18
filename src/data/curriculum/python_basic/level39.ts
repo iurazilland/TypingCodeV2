@@ -1,322 +1,340 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_39: PracticeRound = {
-  "id": "py-basic-r39",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 39,
-  "title_ko": "39레벨: 리스트 요소 값 변경과 기본 슬라이싱·연결",
-  "title_en": "Level 39: List Element Update, Slicing & Concatenation",
-  "description_ko": "인덱스로 리스트 요소 값을 수정하고 기본 슬라이싱과 리스트 연결(+), 반복(*) 연산을 연습합니다.",
-  "description_en": "Practice updating list elements by index, basic list slicing, concatenation (+), and repetition (*).",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "math",
-    "method",
-    "if",
-    "while"
-  ],
-  "questions": [
+  id: 'py-basic-r39',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 39,
+  title_ko: '중첩 for 반복문과 줄 끝 제어(end="", print()) 2차원 출력',
+  title_en: 'Nested for Loops & 2D Output with end="" and print()',
+  description_ko: '바깥 for문과 안쪽 for문을 중첩하고 end=""와 빈 print()를 결합해 2차원 격자와 계단 모양을 출력합니다.',
+  description_en: 'Combine nested for loops with end="" and empty print() to render 2D grids, tables, and staircases.',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type', 'if', 'for_range', 'range', 'while', 'break', 'continue'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 인덱스로 리스트의 특정 위치 요소를 직접 수정하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the code that updates list elements in place using index assignment and +=.",
-      "hint_ko": "대괄호 인덱스를 등호(=)나 복합 대입 연산자(+=) 왼쪽에 두면 해당 칸의 값만 즉시 바뀝니다.",
-      "hint_en": "Placing a bracketed index on the left of = or += updates that slot inside the list.",
-      "targetCode": "nums = [10, 20, 30]\nnums[1] = 50\nnums[0] += 5\nprint(nums)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 바깥 for r in range(2):와 안쪽 for c in range(3):을 중첩해 (r, c) 쌍을 출력해보세요.',
+      prompt_en: '[Block] Nest for c in range(3): inside for r in range(2): to print r and c.',
+      hint_ko: '바깥 r이 1번 바뀔 때마다 안쪽 c가 0, 1, 2 세 번씩 돌아 총 2 * 3 = 6번 출력됩니다.',
+      hint_en: 'For each outer r, the inner loop runs 3 times (0, 1, 2), producing 6 lines in total.',
+      targetCode: 'for r in range(2):\n    for c in range(3):\n        print(r, c)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[15, 50, 30]"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 첫 번째 체력에서 20을 차감하고 마지막 체력을 100으로 변경해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Subtract 20 from the first HP value, set the last HP value to 100, and print hp.",
-      "hint_ko": "첫 줄에는 복합 뺄셈 연산자 -=를, 둘째 줄에는 맨 끝을 가리키는 음수 인덱스 -1을 채우세요.",
-      "hint_en": "Use -= on the first line and negative index -1 on the second line.",
-      "templateCode": "hp = [100, 80, 60]\nhp[0] §§ 20\nhp[§§] = 100\nprint(hp)",
-      "targetCode": "hp = [100, 80, 60]\nhp[0] -= 20\nhp[-1] = 100\nprint(hp)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[80, 80, 100]"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 슬라이싱 nums[1:3]과 nums[:2]로 부분 리스트를 추출하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Extract sublists using nums[1:3] and nums[:2] and print both.",
-      "hint_ko": "[:2]처럼 콜론 앞의 시작 인덱스를 생략하면 0번부터 지정한 끝 번호 직전까지 잘라냅니다.",
-      "hint_en": "Omitting the start index like [:2] slices from index 0 up to index 2.",
-      "targetCode": "nums = [10, 20, 30, 40]\nmid = nums[1:3]\nhead = nums[:2]\nprint(mid)\nprint(head)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[20, 30]\n[10, 20]"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 첫 줄에는 앞의 2개 요소를, 둘째 줄에는 2번 인덱스부터 끝까지의 요소를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Print the first 2 elements on line 1 and elements from index 2 onward on line 2.",
-      "hint_ko": "경계 번호 2를 기준으로 앞부분은 :2, 뒷부분은 2:를 대괄호 안에 적으세요.",
-      "hint_en": "Use :2 for the first two elements and 2: for everything from index 2 onward.",
-      "templateCode": "tags = [\"a\", \"b\", \"c\", \"d\"]\nprint(tags[§§])\nprint(tags[§§])",
-      "targetCode": "tags = [\"a\", \"b\", \"c\", \"d\"]\nprint(tags[:2])\nprint(tags[2:])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['a', 'b']\n['c', 'd']"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 반복(*)과 연결(+) 연산자로 새 리스트를 만드는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Repeat a list with * and concatenate two lists with +.",
-      "hint_ko": "[0] * 3은 0이 3개 담긴 리스트를 만들며, + 연산자로 다른 리스트를 뒤에 연결합니다.",
-      "hint_en": "[0] * 3 creates a list of three zeros, and + joins the second list onto the end.",
-      "targetCode": "base = [0] * 3\nextra = [1, 2]\nmerged = base + extra\nprint(merged)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[0, 0, 0, 1, 2]"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] [\"-\"]가 2개 반복된 slots를 items 뒤에 이어 붙이고 길이와 첫 요소를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Repeat [\"-\"] twice, concatenate after items, and print size and first item.",
-      "hint_ko": "리스트 반복 연산자 *와 리스트 연결 연산자 +를 차례로 채우세요.",
-      "hint_en": "Fill in * to repeat list elements and + to concatenate the two lists.",
-      "templateCode": "slots = [\"-\"] § 2\nitems = [\"gem\"]\nbag = items § slots\nprint(f\"Size:{len(bag)},First:{bag[0]}\")",
-      "targetCode": "slots = [\"-\"] * 2\nitems = [\"gem\"]\nbag = items + slots\nprint(f\"Size:{len(bag)},First:{bag[0]}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Size:3,First:gem"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 문자열과 리스트에 각각 [:2] 슬라이싱을 적용해 결과를 비교하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Apply [:2] slicing to both a string and a list to compare their results.",
-      "hint_ko": "같은 [:2] 문법이라도 문자열은 부분 문자열을, 리스트는 부분 리스트를 반환합니다.",
-      "hint_en": "The same [:2] slice extracts the first two characters from a string and first two items from a list.",
-      "targetCode": "code = \"PY-2026\"\nparts = [\"PY\", \"JS\", \"GO\"]\nprint(code[:2])\nprint(parts[:2])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "PY\n['PY', 'JS']"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 문자열의 2~3번 글자와 리스트의 1~2번 요소를 각각 슬라이싱해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Slice indices 2..3 of word and indices 1..2 of langs, then print both.",
-      "hint_ko": "끝 번호는 포함되지 않으므로 각각 2:4와 1:3을 대괄호 안에 적으세요.",
-      "hint_en": "Because stop indices are exclusive, write 2:4 and 1:3 inside the brackets.",
-      "templateCode": "word = \"PYTHON\"\nlangs = \"PY JS GO RUST\".split()\nprint(f\"Str:{word[§§§]}\")\nprint(langs[§§§])",
-      "targetCode": "word = \"PYTHON\"\nlangs = \"PY JS GO RUST\".split()\nprint(f\"Str:{word[2:4]}\")\nprint(langs[1:3])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Str:TH\n['JS', 'GO']"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 조건에 따라 rates[0]을 갱신한 뒤 rates[:2]로 앞 두 요소를 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Conditionally update rates[0] and slice rates[:2] to print the first two items.",
-      "hint_ko": "조건 분기에 따라 0번 인덱스 값을 수정한 다음 [:2] 슬라이싱으로 앞 두 요소만 확인합니다.",
-      "hint_en": "Update index 0 in the matching branch first, then use [:2] to display the first two elements.",
-      "targetCode": "rates = [10, 20, 30]\nbonus = int(input())\nif bonus > 0:\n    rates[0] += bonus\nelse:\n    rates[0] = 5\nprint(f\"Head:{rates[:2]}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5",
-          "expectedOutput": "Head:[15, 20]"
+          id: 1,
+          input: '',
+          expectedOutput: '0 0\n0 1\n0 2\n1 0\n1 1\n1 2',
         },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Head:[5, 20]"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] fee가 5 이상이면 마지막 가격에, 아니면 첫 가격에 더한 뒤 [99]를 이어 붙여 출력해보세요.",
-      "prompt_en": "[Fill Blank] Add fee to the last item if >= 5 else the first item, then print prices + [99].",
-      "hint_ko": "마지막 요소를 가리키는 음수 인덱스 -1과 리스트 연결 연산자 +를 차례로 채우세요.",
-      "hint_en": "Fill in negative index -1 for the last element and + for list concatenation.",
-      "templateCode": "prices = [10, 20, 30]\nfee = int(input())\nif fee >= 5:\n    prices[§§] += fee\nelse:\n    prices[0] += fee\nprint(prices § [99])",
-      "targetCode": "prices = [10, 20, 30]\nfee = int(input())\nif fee >= 5:\n    prices[-1] += fee\nelse:\n    prices[0] += fee\nprint(prices + [99])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "2",
-          "expectedOutput": "[12, 20, 30, 99]"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "[10, 20, 35, 99]"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 슬라이싱 끝 범위 버그를 수정해 [20, 30, 40] 세 요소가 모두 잘려 출력되도록 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the exclusive stop index in the slice so [20, 30, 40] are all included.",
-      "hint_ko": "슬라이싱 끝 번호는 포함되지 않으므로 1, 2, 3번 인덱스를 가져오려면 끝 번호를 4로 수정하세요.",
-      "hint_en": "Change the stop index from 3 to 4 so indices 1, 2, and 3 are captured.",
-      "templateCode": "nums = [10, 20, 30, 40, 50]\nsub = nums[1:3]\nprint(f\"Count:{len(sub)},Data:{sub}\")",
-      "targetCode": "nums = [10, 20, 30, 40, 50]\nsub = nums[1:4]\nprint(f\"Count:{len(sub)},Data:{sub}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Count:3,Data:[20, 30, 40]"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트의 첫 번째 요소를 99로 변경하려다 두 번째 요소가 변경되는 인덱스 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the target index so the first element of nums becomes 99.",
-      "hint_ko": "리스트의 맨 앞 첫 번째 요소 인덱스는 1이 아니라 0입니다.",
-      "hint_en": "Change nums[1] to nums[0] to update the first element.",
-      "templateCode": "nums = [10, 20, 30]\nnums[1] = 99\nprint(nums)",
-      "targetCode": "nums = [10, 20, 30]\nnums[0] = 99\nprint(nums)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[99, 20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 a의 앞 2개 요소와 리스트 b를 이어 붙여 res에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that concatenates a[:2] and b into res.",
-      "hint_ko": "res = a[:2] + b 형태로 앞 두 요소 슬라이싱과 b를 연결해 저장하세요.",
-      "hint_en": "Write res = a[:2] + b to join the first two items of a with b.",
-      "templateCode": "a = [1, 2, 3]\nb = [0] * 2\na[0] += 9\n§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "a = [1, 2, 3]\nb = [0] * 2\na[0] += 9\nres = a[:2] + b\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 2, 0, 0]"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 nums에서 1번~2번 인덱스 요소를 슬라이싱해 mid에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that slices indices 1 and 2 of nums into mid.",
-      "hint_ko": "mid = nums[1:3] 형태로 1번부터 3번 직전까지 잘라 mid에 대입하세요.",
-      "hint_en": "Write mid = nums[1:3] to extract [20, 30].",
-      "templateCode": "nums = [10, 20, 30, 40]\n§§§§§§§§§§§§§§§\nprint(mid)",
-      "targetCode": "nums = [10, 20, 30, 40]\nmid = nums[1:3]\nprint(mid)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 리스트 반복, 요소 수정, 슬라이싱 연결 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
-      "hint_ko": "[1, 2] * 2로 만들어진 리스트에서 앞 두 칸이 10씩 커진 뒤 nums[1:3] + [9]가 무엇인지 계산해보세요.",
-      "hint_en": "Trace [1, 2, 1, 2] after adding 10 to indices 0 and 1, then evaluate nums[1:3] + [9].",
-      "targetCode": "nums = [1, 2] * 2\ni = 0\nwhile i < 2:\n    nums[i] += 10\n    i += 1\nprint(nums[1:3] + [9])",
-      "choices": [
-        "[12, 1, 9]",
-        "[11, 12, 9]",
-        "[12, 2, 9]",
-        "[2, 1, 9]"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 둘째 줄 빈칸에 반복 시작 키워드를 채워 바깥 i(2번)와 안쪽 j(2번) 이중 반복문을 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the inner loop keyword on line 2 to complete the nested loop.',
+      hint_ko: '4칸 들여쓰기된 안쪽 반복문도 바깥과 같은 세 글자 반복 키워드로 시작합니다.',
+      hint_en: 'Start the 4-space indented inner loop with the three-letter counted-loop keyword.',
+      templateCode: 'for i in range(1, 3):\n    §§§ j in range(1, 3):\n        print(i, j)',
+      targetCode: 'for i in range(1, 3):\n    for j in range(1, 3):\n        print(i, j)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[12, 1, 9]"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '1 1\n1 2\n2 1\n2 2',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 안쪽 루프에서 print("*", end="")로 가로 4칸을 찍고, 바깥 루프에서 빈 print()로 줄바꿈해 2줄 4칸 별을 출력해보세요.',
+      prompt_en: '[Block] Use print("*", end="") in the inner loop and empty print() in the outer loop to draw a 2x4 grid.',
+      hint_ko: '빈 print()는 안쪽 for 헤더와 같은 4칸 들여쓰기 위치에 두어야 한 행이 끝날 때마다 줄이 바뀝니다.',
+      hint_en: 'Align the empty print() at 4 spaces with the inner for header so a newline prints after each row.',
+      targetCode: 'for r in range(2):\n    for c in range(4):\n        print("*", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '****\n****',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 넷째 줄 빈칸에 줄 끝 옵션 이름을 채워 가로로 "#"을 이어 찍는 n x n 정사각형 격자를 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the line-end option name on line 4 to print "#" horizontally across each row.',
+      hint_ko: '줄바꿈 대신 빈 문자열("")로 끝나도록 세 글자 옵션 이름을 적습니다.',
+      hint_en: 'Specify the three-letter parameter name that controls the ending string of print().',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", §§§="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '###\n###\n###',
+        },
+        {
+          id: 2,
+          input: '2',
+          expectedOutput: '##\n##',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 이중 for문으로 2단과 3단(range(2, 4))의 1~3 곱셈 결과(dan * i)를 차례로 출력해보세요.',
+      prompt_en: '[Block] Use nested for loops over range(2, 4) and range(1, 4) to print dan, i, and dan * i.',
+      hint_ko: '바깥 변수 dan이 2일 때 안쪽 i가 1~3을 돌고, 이어서 dan이 3일 때 다시 i가 1~3을 돕니다.',
+      hint_en: 'When dan is 2, i runs 1..3; then when dan is 3, i runs 1..3 again.',
+      targetCode: 'for dan in range(2, 4):\n    for i in range(1, 4):\n        print(dan, i, dan * i)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 1 2\n2 2 4\n2 3 6\n3 1 3\n3 2 6\n3 3 9',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 곱셈 기호를 채워 행(r)과 열(c)을 곱한 2차원 곱셈표 격자를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the multiplication operator to print r * c across each row.',
+      hint_ko: '행 번호 r과 열 번호 c를 곱하는 별표 기호를 넣습니다.',
+      hint_en: 'Use the asterisk symbol to multiply r and c.',
+      templateCode: 'for r in range(1, 4):\n    for c in range(1, 4):\n        print(r § c, end=" ")\n    print()',
+      targetCode: 'for r in range(1, 4):\n    for c in range(1, 4):\n        print(r * c, end=" ")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1 2 3 \n2 4 6 \n3 6 9 ',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 안쪽 반복 범위를 바깥 변수 r에 연동(for c in range(r):)하여 1개부터 n개까지 늘어나는 별 계단을 출력해보세요.',
+      prompt_en: '[Block] Link the inner loop bound to r (for c in range(r):) to print a 1..n star staircase.',
+      hint_ko: 'r이 1부터 n까지 커질 때 안쪽 루프가 r번씩 반복되어 별 개수가 한 줄마다 1개씩 늘어납니다.',
+      hint_en: 'As r grows from 1 to n, the inner loop repeats r times per row.',
+      targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print("*", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '*\n**\n***',
+        },
+        {
+          id: 2,
+          input: '4',
+          expectedOutput: '*\n**\n***\n****',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 셋째 줄 빈칸에 바깥 행 변수를 넣어 n개부터 1개까지 줄어드는 역삼각형 별을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the outer row variable inside the inner range() to print an inverted star triangle.',
+      hint_ko: '바깥 루프에서 n부터 1까지 줄어드는 행 변수 이름을 그대로 안쪽 range()에 전달합니다.',
+      hint_en: 'Pass the outer loop variable r into the inner range().',
+      templateCode: 'n = int(input())\nfor r in range(n, 0, -1):\n    for c in range(§):\n        print("*", end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(n, 0, -1):\n    for c in range(r):\n        print("*", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '***\n**\n*',
+        },
+        {
+          id: 2,
+          input: '2',
+          expectedOutput: '**\n*',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 행과 열이 같은 대각선에는 "1", 나머지 위치에는 "0"을 찍는 n x n 격자를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks to print "1" on the diagonal where row and column match and "0" elsewhere.',
+      hint_ko: '안쪽 반복 시작 키워드, 행과 열이 같은지 확인하는 비교 기호, 그리고 줄 끝 옵션 이름을 채웁니다.',
+      hint_en: 'Enter for, the equality operator ==, and end in order.',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    §§§ c in range(n):\n        if r §§ c:\n            print("1", §§§="")\n        else:\n            print("0", end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '100\n010\n001',
+        },
+        {
+          id: 2,
+          input: '2',
+          expectedOutput: '10\n01',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 1층에 1개부터 n층에 n개까지 별 계단이 출력되도록 안쪽 range()의 변수를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the variable inside the inner range() so a 1..n star staircase is printed.',
+      hint_ko: '안쪽 반복 횟수가 전체 층수 n으로 고정되어 있어 정사각형이 출력됩니다. 현재 층 번호 변수로 고쳐보세요.',
+      hint_en: 'Change range(n) to range(r) on line 3 so each row prints r stars.',
+      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(n):\n        print("*", end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print("*", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '*\n**\n***',
+        },
+        {
+          id: 2,
+          input: '4',
+          expectedOutput: '*\n**\n***\n****',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 열 번호 c가 행 번호 r보다 커질 때 안쪽 루프를 탈출해 숫자 계단이 찍히도록 부등호를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the comparison operator in the inner if check so it breaks when c exceeds r.',
+      hint_ko: '현재 c < r일 때 탈출하도록 되어 있습니다. c가 r보다 클 때 탈출하도록 부등호 방향을 반대로 고치세요.',
+      hint_en: 'Change c < r to c > r so columns 1 through r print before breaking.',
+      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(1, n + 1):\n        if c < r:\n            break\n        print(c, end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(1, n + 1):\n        if c > r:\n            break\n        print(c, end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '1\n12\n123',
+        },
+        {
+          id: 2,
+          input: '4',
+          expectedOutput: '1\n12\n123\n1234',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 바깥 행 변수 r만큼 반복하는 안쪽 for 반복문 헤더(변수 c) 한 줄을 셋째 줄에 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 4-space indented inner loop header for c in range(r):.',
+      hint_ko: '4칸 들여쓰기 뒤에 for c in range(r):을 작성해보세요.',
+      hint_en: 'Keep the 4-space indentation and write for c in range(r):.',
+      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§\n        print(r, end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print(r, end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '1\n22\n333',
+        },
+        {
+          id: 2,
+          input: '2',
+          expectedOutput: '1\n22',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 안쪽 가로 출력이 끝난 뒤 줄을 바꾸기 위해 4칸 들여쓰기된 빈 출력문 한 줄을 다섯째 줄에 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 4-space indented empty print() statement on line 5 to start a new line.',
+      hint_ko: '4칸 들여쓰기 뒤에 괄호 안을 비운 print()를 작성해보세요.',
+      hint_en: 'Keep the 4-space indentation and write print().',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("*", end="")\n    §§§§§§§',
+      targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("*", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '2',
+          expectedOutput: '**\n**',
+        },
+        {
+          id: 2,
+          input: '3',
+          expectedOutput: '***\n***\n***',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '바깥 루프가 2번(r = 0, 1) 돌고 각 행마다 안쪽 루프가 3번(c = 0, 1, 2) 돌 때 cnt가 총 몇 번 증가하는지 계산해보세요.',
+      hint_en: 'Count how many times cnt += 1 runs across 2 outer rows and 3 inner columns.',
+      targetCode: 'cnt = 0\nfor r in range(2):\n    for c in range(3):\n        cnt += 1\nprint(cnt)',
+      choices: ['6', '5', '3', '2'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: 'r이 1, 2, 3으로 변할 때 안쪽 루프에서 c > r이면 탈출하므로 각 행에서 cnt가 몇 번씩 증가하는지 더해보세요.',
+      hint_en: 'Count how many inner turns increment cnt for r = 1, 2, 3 before breaking, and check the final r.',
+      targetCode: 'r = 1\ncnt = 0\nwhile r <= 3:\n    for c in range(1, 5):\n        if c > r:\n            break\n        cnt += 1\n    r += 1\nprint(r, cnt)',
+      choices: ['4 6', '3 6', '4 12', '3 9'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '4 6',
+        },
+      ],
+    },
+  ],
 };

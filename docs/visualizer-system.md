@@ -23,6 +23,9 @@
     - **예외 처리 분기 (`try`)**: `try:` — `except [에러타입]:` (다중 `except` 가능) — `else:` — `finally:`
 - **Right-Chained Method Blocks (가로 체이닝 블록)**:
   - 대상 블록 우측 요철에 직결합되는 메서드 블록 (`.strip()`, `.replace()`, `.split()`, `.append()`, `.pop()`, `.sort()`, `.items()`, `.get()` 등).
+- **고정 이름 선언 블록 + 참조/호출 블록 동시 생성 (`isVarRef`)**:
+  - `+ 변수 생성` 및 `+ 함수 / 클래스 생성` 시 입력한 이름으로 고정된 **선언/대입 블록(`x = [ ]`, `nums = [[ ]]`, `def fn():`, `class Dog:`)** 과 **참조/호출 블록(`x`, `nums`, `fn()`, `Dog()`)** 이 한 쌍으로 생성됩니다.
+  - 문제 진입 시 `extractPresetToolboxItems()`가 예제에 쓰인 모든 변수·컬렉션·함수·클래스를 스캔하여 도구함에 미리 배치해 둡니다.
 
 ### 1.2 SVG 단일 벡터 패스 표준 (Single SVG `<path>` Standard)
 사각형 `div` 조각을 음수 마진(`-1px`)으로 이어 붙이던 구 방식 대신 단일 닫힌 `<path d="..." />` 벡터 외곽선으로 블록을 렌더링합니다.
@@ -41,8 +44,9 @@
 
 - **실시간 변수 카드 렌더링**:
   - 기본형(`int`, `float`, `str`, `bool`, `None`), 컬렉션(`list`, `tuple`, `dict`, `set`), 그리고 사용자 정의 클래스 인스턴스(`<ClassName object>` 및 속성 요약)를 자료형 배지와 함께 실시간 카드로 시각화합니다.
-- **한 줄씩 스텝 실행 (Progressive Step Debugging)**:
+- **한 줄씩 스텝 실행 (Progressive Step Debugging) & 인라인 `input()` 터미널**:
   - 블록 모드와 타이핑 모드 모두에서 각 실행 스텝(`lineIndex` / `blockId`)마다 변수가 생성·갱신되고 터미널 `stdout`이 한 줄씩 쌓이는 과정을 단계별로 추적할 수 있습니다.
+  - `input("안내 문구")` 실행 대기 시 터미널 출력의 마지막 줄 프롬프트 바로 우측에 인라인 입력 커서가 배치되어 실제 파이썬 콘솔과 동일하게 동작합니다.
 
 ---
 

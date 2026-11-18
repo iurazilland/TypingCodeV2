@@ -6,24 +6,34 @@ export const PYTHON_LEVEL_84: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 84,
-  "title_ko": "84레벨: 객체 문자열 표현(__str__)과 예외 안전 클래스 메서드",
-  "title_en": "Level 84: String Representation (__str__) & Exception-Safe Methods",
-  "description_ko": "객체를 보기 좋은 문자열로 반환하는 __str__ 특별 메서드와 잘못된 인자에 raise로 예외를 일으키는 안전한 메서드를 작성합니다.",
-  "description_en": "Define __str__ for automatic string formatting of objects and build exception-safe methods with raise and try-except-finally.",
+  "title_ko": "84레벨: 리스트 확장(.extend()), 비우기(.clear())와 사본 복사(.copy(), [:])",
+  "title_en": "Level 84: List .extend(), .clear() & Shallow Copy (.copy(), [:])",
+  "description_ko": "리스트를 이어 붙이는 .extend(), 전체를 비우는 .clear(), 그리고 참조 공유를 막는 사본 복사(.copy(), [:])를 익힙니다.",
+  "description_en": "Learn to unpack and merge lists with .extend(), empty lists with .clear(), and make independent copies with .copy() and [:].",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
     "type",
-    "math",
-    "method",
     "if",
+    "for_range",
+    "range",
     "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
     "def",
+    "return",
     "class",
-    "try",
-    "raise"
+    "try"
   ],
   "questions": [
     {
@@ -31,16 +41,16 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] Hero 클래스에 __str__(self) 특별 메서드를 정의해 print(hero)로 Aria(100)을 출력해보세요.",
-      "prompt_en": "[Block] Define __str__(self) on Hero so print(hero) automatically displays Aria(100).",
-      "hint_ko": "__str__ 메서드 내부에서는 print()를 쓰지 않고 반드시 문자열을 return으로 반환해야 합니다.",
-      "hint_en": "Inside __str__, always return a string rather than calling print().",
-      "targetCode": "class Hero:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def __str__(self):\n        return f\"{self.name}({self.hp})\"\n\nhero = Hero(\"Aria\", 100)\nprint(hero)",
+      "prompt_ko": "[블록 조립] a.extend(b)로 리스트 a 뒤에 리스트 b의 모든 원소를 풀어서 이어 붙이고 출력해보세요.",
+      "prompt_en": "[Block] Use a.extend(b) to unpack and append all elements of b onto a, then print a.",
+      "hint_ko": ".append(b)는 리스트 통째로 중첩해 넣지만, .extend(b)는 원소들을 하나씩 풀어서 뒤에 이어 붙입니다.",
+      "hint_en": "Unlike .append(b) which nests the list, .extend(b) unpacks and appends each item from b.",
+      "targetCode": "a = [1, 2]\nb = [3, 4]\na.extend(b)\nprint(a)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Aria(100)"
+          "expectedOutput": "[1, 2, 3, 4]"
         }
       ]
     },
@@ -49,17 +59,17 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈칸에 특별 메서드 이름을 채워 Badge 객체 b를 출력했을 때 [Gold] Min이 나오도록 완성하세요.",
-      "prompt_en": "[Fill Blank] Fill in the special method name so printing Badge instance b outputs [Gold] Min.",
-      "hint_ko": "'문자열(string)'의 앞 세 글자 양옆에 밑줄(언더스코어)을 두 개씩 붙인 7글자 특별 메서드 이름을 채우세요.",
-      "hint_en": "Take the first 3 letters of 'string' and surround them with two underscores on each side.",
-      "templateCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def §§§§§§§(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
-      "targetCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def __str__(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
+      "prompt_ko": "[빈칸 채우기] 장바구니 리스트 뒤에 추가 상품 리스트의 원소들을 한꺼번에 이어 붙이도록 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the list method name to append all items from extra onto cart.",
+      "hint_ko": "다른 리스트의 원소들을 풀어서 현재 리스트 끝에 확장하는 여섯 글자 메서드를 호출하세요.",
+      "hint_en": "Call the six-letter method that extends a list with elements from another sequence.",
+      "templateCode": "cart = [\"pen\", \"book\"]\nextra = [\"note\", \"tape\"]\ncart.§§§§§§(extra)\nprint(cart)",
+      "targetCode": "cart = [\"pen\", \"book\"]\nextra = [\"note\", \"tape\"]\ncart.extend(extra)\nprint(cart)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[Gold] Min"
+          "expectedOutput": "['pen', 'book', 'note', 'tape']"
         }
       ]
     },
@@ -68,16 +78,16 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] Point 클래스에 __str__을 정의하고 str(p)로 변환한 좌표 문자열을 출력해보세요.",
-      "prompt_en": "[Block] Define __str__ on Point and convert p with str(p) to print Pos:(3,7).",
-      "hint_ko": "str(p)가 호출될 때 내부적으로 p.__str__()의 반환값인 \"(3,7)\"이 반환됩니다.",
-      "hint_en": "Calling str(p) internally invokes p.__str__() and returns \"(3,7)\".",
-      "targetCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = str(p)\nprint(f\"Pos:{text}\")",
+      "prompt_ko": "[블록 조립] nums.clear()로 리스트 안의 모든 요소를 비우고 빈 리스트와 길이를 출력해보세요.",
+      "prompt_en": "[Block] Use nums.clear() to empty the list completely and print nums and len(nums).",
+      "hint_ko": ".clear()를 호출하면 리스트 안의 모든 원소가 제거되어 빈 리스트 [] 상태가 됩니다.",
+      "hint_en": "Calling .clear() removes every item from the list in place, leaving [].",
+      "targetCode": "nums = [10, 20, 30]\nnums.clear()\nprint(nums, len(nums))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Pos:(3,7)"
+          "expectedOutput": "[] 0"
         }
       ]
     },
@@ -86,17 +96,17 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸을 채워 체력을 회복한 hero 객체를 f-string에 넣어 Info:Leo:100을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks so embedding hero in an f-string prints Info:Leo:100 after healing.",
-      "hint_ko": "첫 빈칸은 7글자 문자열 표현 특별 메서드 이름을, 둘째 빈칸은 체력을 회복한 객체 변수 이름을 적으세요.",
-      "hint_en": "First write the 7-character __str__ method, then place the healed instance variable inside { }.",
-      "templateCode": "class Player:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def heal(self, amt):\n        self.hp += amt\n\n    def §§§§§§§(self):\n        return f\"{self.name}:{self.hp}\"\n\nhero = Player(\"Leo\", 80)\nhero.heal(20)\nprint(f\"Info:{§§§§}\")",
-      "targetCode": "class Player:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def heal(self, amt):\n        self.hp += amt\n\n    def __str__(self):\n        return f\"{self.name}:{self.hp}\"\n\nhero = Player(\"Leo\", 80)\nhero.heal(20)\nprint(f\"Info:{hero}\")",
+      "prompt_ko": "[빈칸 채우기] 임시 기록 리스트의 모든 원소를 한 번에 비우도록 메서드 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the method name that removes all items from temp_log.",
+      "hint_ko": "리스트 내부를 깨끗이 비워 빈 리스트로 만드는 다섯 글자 메서드를 적으세요.",
+      "hint_en": "Use the five-letter list method that empties all elements in place.",
+      "templateCode": "temp_log = [1, 2, 3, 4]\ntemp_log.§§§§§()\nprint(temp_log)",
+      "targetCode": "temp_log = [1, 2, 3, 4]\ntemp_log.clear()\nprint(temp_log)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Info:Leo:100"
+          "expectedOutput": "[]"
         }
       ]
     },
@@ -105,16 +115,16 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 잔액보다 큰 금액을 출금할 때 raise ValueError(\"Lack\")로 차단해 계좌 잔액을 보호해보세요.",
-      "prompt_en": "[Block] Raise ValueError(\"Lack\") in withdraw when amt > self.balance to protect the balance.",
-      "hint_ko": "if amt > self.balance:에서 예외가 발생하므로 아랫줄의 self.balance -= amt는 실행되지 않습니다.",
-      "hint_en": "Because raise executes when amt > self.balance, the subtraction line below it is skipped.",
-      "targetCode": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n\n    def withdraw(self, amt):\n        if amt > self.balance:\n            raise ValueError(\"Lack\")\n        self.balance -= amt\n\n    def __str__(self):\n        return f\"Bal:{self.balance}\"\n\nacc = Account(100)\ntry:\n    acc.withdraw(150)\nexcept ValueError:\n    print(\"Lack\")\nprint(acc)",
+      "prompt_ko": "[블록 조립] b = a로 단순 대입한 뒤 b[0] = 99로 바꾸면 원본 a[0]도 함께 바뀌는지 출력해 확인해보세요.",
+      "prompt_en": "[Block] Assign b = a, change b[0] = 99, and print both a and b to observe shared reference behavior.",
+      "hint_ko": "리스트를 b = a처럼 단순 대입하면 복사본이 생기는 것이 아니라 두 변수가 똑같은 리스트를 함께 가리킵니다.",
+      "hint_en": "Simple assignment b = a aliases the same list object, so mutating b also changes a.",
+      "targetCode": "a = [10, 20, 30]\nb = a\nb[0] = 99\nprint(a, b)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Lack\nBal:100"
+          "expectedOutput": "[99, 20, 30] [99, 20, 30]"
         }
       ]
     },
@@ -123,27 +133,17 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 0 이하 또는 잔액 초과 출금 시 BadAmt를 출력하고 항상 마지막에 계좌를 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks to raise ValueError(\"BadAmt\") and always print acc in finally.",
-      "hint_ko": "잘못된 금액일 때 예외를 일으키는 5글자 키워드와, 항상 마지막에 실행되는 7글자 키워드를 쓰세요.",
-      "hint_en": "Throw the error with the 5-letter raise keyword, and print the account inside the 7-letter finally block.",
-      "templateCode": "class Account:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self.balance = balance\n\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.balance:\n            §§§§§ ValueError(\"BadAmt\")\n        self.balance -= amt\n\n    def __str__(self):\n        return f\"{self.owner}:{self.balance}\"\n\nacc = Account(\"Jin\", 500)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\n§§§§§§§:\n    print(acc)",
-      "targetCode": "class Account:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self.balance = balance\n\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.balance:\n            raise ValueError(\"BadAmt\")\n        self.balance -= amt\n\n    def __str__(self):\n        return f\"{self.owner}:{self.balance}\"\n\nacc = Account(\"Jin\", 500)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nfinally:\n    print(acc)",
+      "prompt_ko": "[빈칸 채우기] 두 변수가 같은 리스트 객체를 가리키는지 id가 아닌 비교 연산자로 확인하고 원본 변화를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the variable name assigned to alias so mutating alias[1] also mutates the first list.",
+      "hint_ko": "원본 리스트 변수를 그대로 대입하면 같은 리스트 참조를 공유하게 됩니다.",
+      "hint_en": "Assign the original list variable so both variables reference the same list.",
+      "templateCode": "origin = [1, 2, 3]\nalias = §§§§§§\nalias[1] = 77\nprint(origin[1], alias[1])",
+      "targetCode": "origin = [1, 2, 3]\nalias = origin\nalias[1] = 77\nprint(origin[1], alias[1])",
       "testCases": [
         {
           "id": 1,
-          "input": "200",
-          "expectedOutput": "Jin:300"
-        },
-        {
-          "id": 2,
-          "input": "-10",
-          "expectedOutput": "BadAmt\nJin:500"
-        },
-        {
-          "id": 3,
-          "input": "900",
-          "expectedOutput": "BadAmt\nJin:500"
+          "input": "",
+          "expectedOutput": "77 77"
         }
       ]
     },
@@ -152,16 +152,16 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] Box에 2개까지만 담기도록 len(self.items) >= 2일 때 Full 예외를 일으키는 코드를 완성해보세요.",
-      "prompt_en": "[Block] Enforce a capacity limit of 2 in Box.add by raising ValueError(\"Full\").",
-      "hint_ko": "세 번째 원소 \"C\"를 추가할 때 예외가 발생해 except 블록이 실행되며, 상자 안에는 2개만 남습니다.",
-      "hint_en": "Adding the third item \"C\" raises ValueError into the except block, leaving exactly 2 items in box.",
-      "targetCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, item):\n        if len(self.items) >= 2:\n            raise ValueError(\"Full\")\n        self.items.append(item)\n\n    def __str__(self):\n        return f\"Count:{len(self.items)}\"\n\nbox = Box()\nfor x in [\"A\", \"B\", \"C\"]:\n    try:\n        box.add(x)\n    except ValueError:\n        print(\"Full\")\nprint(box)",
+      "prompt_ko": "[블록 조립] b = a.copy()로 독립된 사본을 만들고 b[0] = 99로 바꾼 뒤 원본 a와 사본 b를 비교 출력해보세요.",
+      "prompt_en": "[Block] Create an independent shallow copy with b = a.copy(), modify b[0] = 99, and print a and b.",
+      "hint_ko": ".copy() 또는 전체 슬라이싱 [:]을 사용하면 원본과 분리된 새 리스트가 만들어져 원본이 안전하게 보존됩니다.",
+      "hint_en": "Using .copy() or full slicing [:] creates a separate list so changes to b do not affect a.",
+      "targetCode": "a = [10, 20, 30]\nb = a.copy()\nb[0] = 99\nprint(a, b)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Full\nCount:2"
+          "expectedOutput": "[10, 20, 30] [99, 20, 30]"
         }
       ]
     },
@@ -170,40 +170,36 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] Bag에 2개 초과 추가 시 Full 예외를 일으키고 문자열 표현으로 Bag:2를 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in raise and __str__ so Bag limits capacity to 2 and prints Bag:2.",
-      "hint_ko": "예외를 일으키는 5글자 키워드와 객체를 문자열로 표현하는 7글자 특별 메서드 이름을 채우세요.",
-      "hint_en": "Use the 5-letter raise keyword and the 7-character __str__ special method.",
-      "templateCode": "class Bag:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            §§§§§ ValueError(\"Full\")\n        self.items.append(x)\n\n    def §§§§§§§(self):\n        return f\"Bag:{len(self.items)}\"\n\nb = Bag()\nfor v in [10, 20, 30]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(b)",
-      "targetCode": "class Bag:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            raise ValueError(\"Full\")\n        self.items.append(x)\n\n    def __str__(self):\n        return f\"Bag:{len(self.items)}\"\n\nb = Bag()\nfor v in [10, 20, 30]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(b)",
+      "prompt_ko": "[빈칸 채우기] 원본 리스트가 훼손되지 않도록 사본 생성 메서드로 복제한 뒤 사본만 수정해보세요.",
+      "prompt_en": "[Fill Blank] Call the list method that creates an independent duplicate of scores before modifying clone.",
+      "hint_ko": "원본 리스트와 똑같은 원소를 가진 새 사본 리스트를 만드는 네 글자 메서드를 호출하세요.",
+      "hint_en": "Call the four-letter method that returns a shallow duplicate of the list.",
+      "templateCode": "scores = [80, 90, 100]\nclone = scores.§§§§()\nclone[0] = 0\nprint(scores[0], clone[0])",
+      "targetCode": "scores = [80, 90, 100]\nclone = scores.copy()\nclone[0] = 0\nprint(scores[0], clone[0])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Full\nBag:2"
+          "expectedOutput": "80 0"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입금액 검증(raise)과 천 단위 쉼표 서식({self.cash:,})을 결합한 Wallet 클래스를 완성하세요.",
-      "prompt_en": "[Block] Combine deposit validation with {self.cash:,} formatting in Wallet.__str__.",
-      "hint_ko": "f-string의 중괄호 안에서 숫자 변수 뒤에 :,를 붙이면 세 자리마다 쉼표가 자동으로 들어갑니다.",
-      "hint_en": "Adding :, after a numeric variable inside f-string braces inserts thousands commas automatically.",
-      "targetCode": "class Wallet:\n    def __init__(self, owner, cash):\n        self.owner = owner\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            raise ValueError(\"Invalid\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"{self.owner}:{self.cash:,}\"\n\nw = Wallet(\"Sua\", 10000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError:\n    print(\"Err\")\nprint(w)",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 원본 리스트의 사본을 만든 뒤 추가 리스트를 이어 붙이고, 임시 리스트는 비우도록 세 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the duplicating method, list extension method, and list emptying method.",
+      "hint_ko": "독립 사본을 만드는 메서드, 다른 리스트 원소를 이어 붙이는 메서드, 그리고 리스트를 비우는 메서드를 차례로 확인하세요.",
+      "hint_en": "Check the four-letter duplicating method, six-letter extension method, and five-letter emptying method.",
+      "templateCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.§§§§()\nwork.§§§§§§(extra)\nextra.§§§§§()\nprint(base, work, extra)",
+      "targetCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.copy()\nwork.extend(extra)\nextra.clear()\nprint(base, work, extra)",
       "testCases": [
         {
           "id": 1,
-          "input": "5500",
-          "expectedOutput": "Sua:15,500"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Err\nSua:10,000"
+          "input": "",
+          "expectedOutput": "[1, 2] [1, 2, 3, 4] []"
         }
       ]
     },
@@ -211,23 +207,18 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 양쪽 공백을 제거한 문자열이 비어 있으면 Empty 예외를 일으키도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in strip and raise to validate non-empty tag names.",
-      "hint_ko": "양끝 공백을 제거하는 5글자 문자열 메서드와 예외를 일으키는 5글자 키워드를 채우세요.",
-      "hint_en": "Use the 5-letter strip method and the 5-letter raise keyword.",
-      "templateCode": "class Tag:\n    def __init__(self):\n        self.name = \"None\"\n\n    def set_name(self, raw):\n        clean = raw.§§§§§()\n        if not clean:\n            §§§§§ ValueError(\"Empty\")\n        self.name = clean\n\n    def __str__(self):\n        return f\"[{self.name}]\"\n\nt = Tag()\ntry:\n    t.set_name(input())\nexcept ValueError as e:\n    print(e)\nprint(t)",
-      "targetCode": "class Tag:\n    def __init__(self):\n        self.name = \"None\"\n\n    def set_name(self, raw):\n        clean = raw.strip()\n        if not clean:\n            raise ValueError(\"Empty\")\n        self.name = clean\n\n    def __str__(self):\n        return f\"[{self.name}]\"\n\nt = Tag()\ntry:\n    t.set_name(input())\nexcept ValueError as e:\n    print(e)\nprint(t)",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 백업 본을 수정할 때 원본 리스트까지 함께 바뀌어 버리는 참조 공유 버그를 사본 복사로 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the aliasing bug where modifying backup also mutates the original data list.",
+      "hint_ko": "단순 대입(= data)은 같은 리스트를 공유하므로 .copy() 메서드로 독립된 사본을 만들어야 합니다.",
+      "hint_en": "Use data.copy() instead of assigning data directly so the original list remains untouched.",
+      "templateCode": "data = [10, 20, 30]\nbackup = data\nbackup.append(40)\nprint(len(data), len(backup))",
+      "targetCode": "data = [10, 20, 30]\nbackup = data.copy()\nbackup.append(40)\nprint(len(data), len(backup))",
       "testCases": [
         {
           "id": 1,
-          "input": "  Vip  ",
-          "expectedOutput": "[Vip]"
-        },
-        {
-          "id": 2,
-          "input": "   ",
-          "expectedOutput": "Empty\n[None]"
+          "input": "",
+          "expectedOutput": "3 4"
         }
       ]
     },
@@ -236,17 +227,17 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 객체 t를 print(t)로 출력할 때 문자열 표현이 호출되지 않는 특별 메서드 이름 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the special method name so print(t) invokes the string representation Jazz(4).",
-      "hint_ko": "객체를 문자열로 출력할 때 자동 호출되는 특별 메서드는 __len__이 아니라 __str__입니다.",
-      "hint_en": "Change def __len__(self): to def __str__(self): so print(t) uses the formatted string.",
-      "templateCode": "class Ticket:\n    def __init__(self, title, seats):\n        self.title = title\n        self.seats = seats\n\n    def __len__(self):\n        return f\"{self.title}({self.seats})\"\n\nt = Ticket(\"Jazz\", 4)\nprint(t)",
-      "targetCode": "class Ticket:\n    def __init__(self, title, seats):\n        self.title = title\n        self.seats = seats\n\n    def __str__(self):\n        return f\"{self.title}({self.seats})\"\n\nt = Ticket(\"Jazz\", 4)\nprint(t)",
+      "prompt_ko": "[틀린 곳 수정] 두 리스트의 원소를 나란히 합치려다 리스트 안에 리스트가 통째로 중첩되어 들어간 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the bug where [3, 4] was nested inside nums as a single element instead of unpacking its items.",
+      "hint_ko": ".append()는 리스트 하나를 통째로 넣으므로, 원소들을 풀어서 이어 붙이려면 확장 메서드를 써야 합니다.",
+      "hint_en": "Replace .append() with .extend() to unpack the elements into nums.",
+      "templateCode": "nums = [1, 2]\nnums.append([3, 4])\nprint(len(nums), nums)",
+      "targetCode": "nums = [1, 2]\nnums.extend([3, 4])\nprint(len(nums), nums)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Jazz(4)"
+          "expectedOutput": "4 [1, 2, 3, 4]"
         }
       ]
     },
@@ -254,18 +245,18 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 결제 금액(amt)이 잔액(self.cash)보다 클 때 예외가 발생해야 하는데 비교 연산자가 반대인 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator in pay() so ValueError(\"Short\") is raised when amt > self.cash.",
-      "hint_ko": "결제 금액이 보유 현금보다 클 때 잔액 부족 예외를 일으켜야 하므로 <를 >로 수정하세요.",
-      "hint_en": "Change if amt < self.cash: to if amt > self.cash: so over-budget payments raise ValueError.",
-      "templateCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def pay(self, amt):\n        if amt < self.cash:\n            raise ValueError(\"Short\")\n        self.cash -= amt\n\nw = Wallet(100)\ntry:\n    w.pay(150)\nexcept ValueError as e:\n    print(e)",
-      "targetCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def pay(self, amt):\n        if amt > self.cash:\n            raise ValueError(\"Short\")\n        self.cash -= amt\n\nw = Wallet(100)\ntry:\n    w.pay(150)\nexcept ValueError as e:\n    print(e)",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 전체 슬라이싱([:])을 사용해 리스트 a의 독립 사본을 변수 b에 저장하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that assigns a full slice copy of list a to variable b.",
+      "hint_ko": "변수 b에 a[:]를 대입하면 .copy()와 똑같이 독립된 새 리스트 사본이 만들어집니다.",
+      "hint_en": "Assign a[:] to variable b.",
+      "templateCode": "a = [5, 10, 15]\n§§§§§§§§\nb[0] = 99\nprint(a[0], b[0])",
+      "targetCode": "a = [5, 10, 15]\nb = a[:]\nb[0] = 99\nprint(a[0], b[0])",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Short"
+          "expectedOutput": "5 99"
         }
       ]
     },
@@ -274,36 +265,42 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] __str__ 메서드 안에서 f\"{self.title}({self.pages}p)\"를 반환하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Write return f\"{self.title}({self.pages}p)\" inside Book.__str__.",
-      "hint_ko": "return f\"{self.title}({self.pages}p)\" 형태로 포맷 문자열을 반환하세요.",
-      "hint_en": "Write return f\"{self.title}({self.pages}p)\" inside __str__.",
-      "templateCode": "class Book:\n    def __init__(self, title, pages):\n        self.title = title\n        self.pages = pages\n\n    def __str__(self):\n        §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n\nb = Book(\"Python\", 320)\nprint(f\"Book:{b}\")",
-      "targetCode": "class Book:\n    def __init__(self, title, pages):\n        self.title = title\n        self.pages = pages\n\n    def __str__(self):\n        return f\"{self.title}({self.pages}p)\"\n\nb = Book(\"Python\", 320)\nprint(f\"Book:{b}\")",
+      "prompt_ko": "[한 줄 완성] 리스트 team1 뒤에 team2의 모든 원소를 풀어서 이어 붙이는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that extends team1 in place with all elements of team2.",
+      "hint_ko": "team1에서 리스트 확장 메서드를 호출하고 인자로 team2를 전달하세요.",
+      "hint_en": "Call team1.extend(team2).",
+      "templateCode": "team1 = [\"Kim\", \"Lee\"]\nteam2 = [\"Park\", \"Choi\"]\n§§§§§§§§§§§§§§§§§§§\nprint(len(team1), team1)",
+      "targetCode": "team1 = [\"Kim\", \"Lee\"]\nteam2 = [\"Park\", \"Choi\"]\nteam1.extend(team2)\nprint(len(team1), team1)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Book:Python(320p)"
+          "expectedOutput": "4 ['Kim', 'Lee', 'Park', 'Choi']"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 수량 n이 0 이하일 때 raise ValueError(\"Zero\")를 발생시키는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Write raise ValueError(\"Zero\") inside Box.set_qty when n <= 0.",
-      "hint_ko": "raise ValueError(\"Zero\")를 작성해 0 이하 수량일 때 예외를 일으키세요.",
-      "hint_en": "Write raise ValueError(\"Zero\") inside the if block.",
-      "templateCode": "class Box:\n    def set_qty(self, n):\n        if n <= 0:\n            §§§§§§§§§§§§§§§§§§§§§§§§\n        return n\n\nb = Box()\ntry:\n    print(b.set_qty(0))\nexcept ValueError as e:\n    print(e)",
-      "targetCode": "class Box:\n    def set_qty(self, n):\n        if n <= 0:\n            raise ValueError(\"Zero\")\n        return n\n\nb = Box()\ntry:\n    print(b.set_qty(0))\nexcept ValueError as e:\n    print(e)",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 단순 대입 참조(b = a)와 사본 복사(c = a.copy())를 각각 수정했을 때 원본과 사본의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output after mutating both an alias b = a and a copy c = a.copy().",
+      "hint_ko": "b를 통한 수정은 원본 a에 그대로 반영되지만, 사본 c를 통한 수정은 a에 영향을 주지 않습니다.",
+      "hint_en": "Changes through alias b affect a, whereas changes through shallow copy c do not.",
+      "targetCode": "a = [1, 2, 3]\nb = a\nc = a.copy()\nb.append(4)\nc[0] = 9\nprint(a, c)",
+      "choices": [
+        "[1, 2, 3, 4] [9, 2, 3]",
+        "[9, 2, 3, 4] [9, 2, 3]",
+        "[1, 2, 3] [9, 2, 3, 4]",
+        "[1, 2, 3, 4] [9, 2, 3, 4]"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Zero"
+          "expectedOutput": "[1, 2, 3, 4] [9, 2, 3]"
         }
       ]
     },
@@ -312,23 +309,23 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] Vault 객체에 대해 [20, 40] 순서로 take를 호출할 때 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output when v.take(req) runs for [20, 40] on Vault(50).",
-      "hint_ko": "첫 인출 성공 후 줄어든 잔액을 기준으로 두 번째 인출을 비교하며, 예외가 발생할 때는 차감이 일어나지 않고 정상 출력 절도 건너뛴다는 점을 확인하세요.",
-      "hint_en": "Check the remaining balance after the first withdrawal; when the second request exceeds that remainder, subtraction and the else print are skipped.",
-      "targetCode": "class Vault:\n    def __init__(self, gold):\n        self.gold = gold\n\n    def take(self, n):\n        if n > self.gold:\n            raise ValueError(\"Short\")\n        self.gold -= n\n\n    def __str__(self):\n        return f\"G:{self.gold}\"\n\nv = Vault(50)\nfor req in [20, 40]:\n    try:\n        v.take(req)\n    except ValueError as e:\n        print(e)\n    else:\n        print(v)\nprint(f\"End-{v}\")",
+      "prompt_ko": "[출력 결과 예측] .append([3, 4])를 실행한 리스트와 .extend([3, 4])를 실행한 리스트의 길이(len)를 비교한 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output comparing the lengths of lists modified with .append([3, 4]) versus .extend([3, 4]).",
+      "hint_ko": ".append([3, 4])는 리스트 1개를 원소로 추가해 길이가 1만 늘어나고, .extend([3, 4])는 원소 2개를 풀어 넣어 길이가 2 늘어납니다.",
+      "hint_en": ".append([3, 4]) adds one nested list element (+1 length), while .extend([3, 4]) adds two individual elements (+2 length).",
+      "targetCode": "x = [1, 2]\ny = [1, 2]\nx.append([3, 4])\ny.extend([3, 4])\nprint(len(x), len(y))",
       "choices": [
-        "G:30\nShort\nEnd-G:30",
-        "G:30\nShort\nEnd-G:-10",
-        "G:30\nG:-10\nEnd-G:-10",
-        "G:50\nShort\nEnd-G:50"
+        "3 4",
+        "4 4",
+        "3 3",
+        "4 3"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "G:30\nShort\nEnd-G:30"
+          "expectedOutput": "3 4"
         }
       ]
     }

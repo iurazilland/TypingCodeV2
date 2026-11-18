@@ -1,352 +1,320 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_65: PracticeRound = {
-  "id": "py-basic-r65",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 65,
-  "title_ko": "65레벨: 문자열 위치·개수 탐색과 방향별 공백 제거",
-  "title_en": "Level 65: Finding, Counting & Directional Stripping",
-  "description_ko": ".find()와 .count()로 부분 문자열을 탐색하고 .lstrip(), .rstrip()으로 원하는 방향의 공백이나 문자를 제거합니다.",
-  "description_en": "Locate and count substrings with .find() and .count(), and strip characters directionally with .lstrip() and .rstrip().",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "method",
-    "if",
-    "for_in",
-    "while",
-    "def"
+  id: 'py-basic-r65',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 65,
+  title_ko: '65레벨: 매개변수 없는 함수 정의(def)와 함수 호출 기초',
+  title_en: 'Level 65: Defining & Calling Parameterless Functions (def)',
+  description_ko: 'def 키워드로 자주 쓰는 코드를 함수로 묶어 정의하고, 함수 이름 뒤에 소괄호(())를 붙여 호출하는 기초를 익힙니다.',
+  description_en: 'Learn to define reusable parameterless functions with def and execute them by calling fn().',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'dict',
+    'set',
+    'iter',
+    'method',
+    'def',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .find() 메서드로 부분 문자열의 첫 시작 인덱스와 없을 때의 -1을 출력해보세요.",
-      "prompt_en": "[Block] Use the string .find(sub) method to print the first index of \"na\" and -1 when \"z\" is absent.",
-      "hint_ko": "문자열 인덱스는 0번부터 시작하며, \"banana\"에서 \"na\"는 2번 인덱스에서 처음 시작합니다.",
-      "hint_en": "String indices start at 0, so the first \"na\" in \"banana\" begins at index 2.",
-      "targetCode": "text = \"banana\"\nprint(text.find(\"na\"))\nprint(text.find(\"z\"))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] def hello():로 함수를 정의하고 아래에서 hello()를 호출해 인사말을 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Define function hello() with def and call hello() below to print the greeting.',
+      hint_ko: '함수 본문은 4칸 들여쓰기해 작성하고, 바깥에서 함수이름()으로 호출해야 실행됩니다.',
+      hint_en: 'Indent the function body by 4 spaces and call hello() at the top level to run it.',
+      targetCode: 'def hello():\n    print("Hello!")\nhello()',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2\n-1"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 문자열에서 \"@\"가 처음 등장하는 인덱스를 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the method name to print the first index of \"@\" in mail.",
-      "hint_ko": "문자열 안에서 특정 기호의 첫 인덱스를 찾는 네 글자 메서드 find를 적어보세요.",
-      "hint_en": "Type the 4-letter method find to get the first index of \"@\".",
-      "targetCode": "mail = input()\nprint(mail.find(\"@\"))",
-      "templateCode": "mail = input()\nprint(mail.§§§§(\"@\"))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "dev@py.org",
-          "expectedOutput": "3"
+          id: 1,
+          input: '',
+          expectedOutput: 'Hello!',
         },
-        {
-          "id": 2,
-          "input": "hello",
-          "expectedOutput": "-1"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 문자열의 .count() 메서드로 부분 문자열 \"ok\"의 등장 횟수를 세어 출력해보세요.",
-      "prompt_en": "[Block] Use the string .count(sub) method to count and print how many times \"ok\" appears.",
-      "hint_ko": "찾는 부분 문자열이 한 번도 등장하지 않으면 .count()는 0을 반환합니다.",
-      "hint_en": "If the substring does not appear at all, .count() simply returns 0.",
-      "targetCode": "log = \"ok,err,ok,ok\"\ncnt = log.count(\"ok\")\nprint(cnt)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 소문자로 변환한 입력에서 알파벳 \"a\"의 등장 횟수를 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the blank to count how many times \"a\" appears in the lowercased input.",
-      "hint_ko": "특정 글자가 몇 번 등장하는지 세는 다섯 글자 메서드 count를 채워보세요.",
-      "hint_en": "Enter the 5-letter method count to get how many times \"a\" appears.",
-      "targetCode": "word = input().lower()\nprint(word.count(\"a\"))",
-      "templateCode": "word = input().lower()\nprint(word.§§§§§(\"a\"))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Banana",
-          "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "Sky",
-          "expectedOutput": "0"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .lstrip()과 .rstrip()으로 왼쪽 공백과 오른쪽 공백을 각각 제거해 비교해보세요.",
-      "prompt_en": "[Block] Use .lstrip() and .rstrip() to remove leading and trailing whitespace respectively.",
-      "hint_ko": "양쪽을 모두 지우는 .strip()과 달리 원하는 방향의 여백이나 문자만 선택적으로 제거할 때 사용합니다.",
-      "hint_en": "Unlike .strip() which trims both ends, .lstrip() and .rstrip() trim only one chosen direction.",
-      "targetCode": "raw = \"  py  \"\nleft = raw.lstrip()\nright = raw.rstrip()\nprint(f\"[{left}]/[{right}]\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[py  ]/[  py]"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 왼쪽 끝 \"0\"들과 오른쪽 끝 마침표(\".\")들을 차례로 제거해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Remove leading \"0\" chars and trailing \".\" chars from code and print it.",
-      "hint_ko": "왼쪽(left)과 오른쪽(right)의 첫 글자를 strip 앞에 붙인 lstrip과 rstrip을 차례로 연결하세요.",
-      "hint_en": "Chain lstrip and rstrip to trim leading \"0\" and trailing \".\" characters.",
-      "targetCode": "code = input()\nclean = code.lstrip(\"0\").rstrip(\".\")\nprint(clean)",
-      "templateCode": "code = input()\nclean = code.§§§§§§(\"0\").§§§§§§(\".\")\nprint(clean)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0042...",
-          "expectedOutput": "42"
-        },
-        {
-          "id": 2,
-          "input": "0070.",
-          "expectedOutput": "70"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .find(\"@\")로 위치를 찾아 기호 뒷부분 도메인만 슬라이싱해 출력해보세요.",
-      "prompt_en": "[Block] Locate \"@\" with .find(), check pos != -1, and slice mail[pos + 1:] to extract the domain.",
-      "hint_ko": "pos는 구분 기호 자체의 위치이므로, 기호를 제외한 뒷부분을 잘라내려면 시작 인덱스를 pos + 1로 지정합니다.",
-      "hint_en": "Since pos is the index of the delimiter itself, start the slice at pos + 1 to exclude the delimiter.",
-      "targetCode": "mail = input().strip()\npos = mail.find(\"@\")\nif pos != -1:\n    print(mail[pos + 1:])\nelse:\n    print(\"NONE\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "a@py.kr",
-          "expectedOutput": "py.kr"
-        },
-        {
-          "id": 2,
-          "input": "invalid_mail",
-          "expectedOutput": "NONE"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] \"#\" 기호가 있으면 앞부분의 오른쪽 공백을 제거해 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] If \"#\" exists in line, slice before \"#\" and trim trailing spaces before printing.",
-      "hint_ko": "위치 탐색 메서드 find로 기호를 찾고, 슬라이싱한 문자열 뒤에 오른쪽 공백 제거 메서드 rstrip을 호출하세요.",
-      "hint_en": "Use find to locate \"#\", and call rstrip on the slice line[:pos].",
-      "targetCode": "line = input().rstrip()\npos = line.find(\"#\")\nif pos != -1:\n    print(line[:pos].rstrip())\nelse:\n    print(line)",
-      "templateCode": "line = input().rstrip()\npos = line.§§§§(\"#\")\nif pos != -1:\n    print(line[:pos].§§§§§§())\nelse:\n    print(line)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "x = 1  # ok  ",
-          "expectedOutput": "x = 1"
-        },
-        {
-          "id": 2,
-          "input": "y = 20   ",
-          "expectedOutput": "y = 20"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] while 조건에서 .find(\"  \") != -1을 검사하며 연속 공백을 한 칸으로 압축해보세요.",
-      "prompt_en": "[Block] Loop with while msg.find(\"  \") != -1: and .replace(\"  \", \" \") to collapse multiple spaces.",
-      "hint_ko": "반복이 끝난 뒤 .count(\" \")를 호출하면 최종 문자열에 남은 단일 공백의 개수를 확인할 수 있습니다.",
-      "hint_en": "Calling .count(\" \") after the loop finishes counts the remaining single spaces in the normalized string.",
-      "targetCode": "msg = \"a  b    c\"\nwhile msg.find(\"  \") != -1:\n    msg = msg.replace(\"  \", \" \")\nprint(msg, msg.count(\" \"))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "a b c 2"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 연속된 하이픈(\"--\")이 없을 때까지 하나로 줄인 뒤 남은 \"-\" 개수를 함께 출력해보세요.",
-      "prompt_en": "[Fill Blank] Collapse \"--\" into \"-\" in a while loop and print the resulting string and \"-\" count.",
-      "hint_ko": "while 조건에는 위치 탐색 메서드 find를 적고, 출력문에는 개수 세기 메서드 count를 적으세요.",
-      "hint_en": "Use find in the while condition and count in the print statement.",
-      "targetCode": "s = \"--hello--world--\"\nwhile s.find(\"--\") != -1:\n    s = s.replace(\"--\", \"-\")\nprint(s, s.count(\"-\"))",
-      "templateCode": "s = \"--hello--world--\"\nwhile s.§§§§(\"--\") != -1:\n    s = s.replace(\"--\", \"-\")\nprint(s, s.§§§§§(\"-\"))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "-hello-world- 3"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 소문자 입력에 \"py\"가 있으면 FOUND를 출력하도록 비교 연산자 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator so FOUND is printed when \"py\" is present in s.",
-      "hint_ko": ".find()는 부분 문자열을 찾았을 때 -1이 아닌 인덱스를 반환하므로 == -1을 != -1로 수정하세요.",
-      "hint_en": ".find() returns -1 when not found, so check s.find(\"py\") != -1 for presence.",
-      "templateCode": "s = input().lower()\nif s.find(\"py\") == -1:\n    print(\"FOUND\")\nelse:\n    print(\"NO\")",
-      "targetCode": "s = input().lower()\nif s.find(\"py\") != -1:\n    print(\"FOUND\")\nelse:\n    print(\"NO\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Python",
-          "expectedOutput": "FOUND"
-        },
-        {
-          "id": 2,
-          "input": "Java",
-          "expectedOutput": "NO"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 경로 왼쪽 앞의 슬래시(\"/\")들을 제거해야 하는데 반대 방향 메서드를 쓴 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the directional strip method so leading slashes are removed from path to print home/user.",
-      "hint_ko": "문자열 왼쪽(앞쪽) 끝의 문자를 지우려면 .rstrip() 대신 .lstrip()을 사용해야 합니다.",
-      "hint_en": "Use .lstrip(\"/\") instead of .rstrip(\"/\") to remove leading slashes from the left.",
-      "templateCode": "path = \"///home/user\"\nclean = path.rstrip(\"/\")\nprint(clean)",
-      "targetCode": "path = \"///home/user\"\nclean = path.lstrip(\"/\")\nprint(clean)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "home/user"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 오른쪽 \"!\"를 지운 문자열 s에 남아 있는 \"!\" 개수를 세어 cnt에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Count how many \"!\" characters remain in s and assign the count to cnt.",
-      "hint_ko": "cnt = s.count(\"!\") 형태로 남아 있는 느낌표 개수를 변수 cnt에 저장하세요.",
-      "hint_en": "Write cnt = s.count(\"!\") to store the remaining exclamation mark count.",
-      "targetCode": "s = input().rstrip(\"!\")\ncnt = s.count(\"!\")\nprint(cnt)",
-      "templateCode": "s = input().rstrip(\"!\")\n§§§§§§§§§§§§§§§§§§\nprint(cnt)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "hi!wow!!!",
-          "expectedOutput": "1"
-        },
-        {
-          "id": 2,
-          "input": "go!!now!",
-          "expectedOutput": "2"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 문자열 text에서 콜론(\":\")의 첫 인덱스를 찾아 변수 idx에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Find the first index of \":\" in text and assign it to idx.",
-      "hint_ko": "idx = text.find(\":\") 형태로 콜론의 시작 인덱스를 변수 idx에 저장하세요.",
-      "hint_en": "Write idx = text.find(\":\") to store the index of the colon.",
-      "targetCode": "text = input().lstrip()\nidx = text.find(\":\")\nprint(idx)",
-      "templateCode": "text = input().lstrip()\n§§§§§§§§§§§§§§§§§§§§\nprint(idx)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "ID:42",
-          "expectedOutput": "2"
-        },
-        {
-          "id": 2,
-          "input": "NONE",
-          "expectedOutput": "-1"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 .lstrip(), .count(), .find() 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "왼쪽 공백 두 칸만 지워지고 오른쪽 끝 공백 두 칸은 그대로 남는다는 점에 유의하여 길이, 개수, 위치를 계산해보세요.",
-      "hint_en": "Remember that only leading spaces are removed while trailing spaces remain when counting length, matches, and index.",
-      "targetCode": "raw = \"  ab-ab-c  \"\ns = raw.lstrip()\nprint(len(s), s.count(\"ab\"), s.find(\"c\"))",
-      "choices": [
-        "9 2 6",
-        "7 2 6",
-        "9 2 8",
-        "11 2 8"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 함수를 정의하는 키워드를 채워 start() 함수가 Ready를 출력하도록 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the keyword used to define function start().',
+      hint_ko: '파이썬에서 새로운 함수를 선언할 때 맨 앞에 적는 세 글자 키워드를 입력하세요.',
+      hint_en: 'Type the three-letter Python keyword that starts a function definition.',
+      templateCode: '§§§ start():\n    print("Ready")\nstart()',
+      targetCode: 'def start():\n    print("Ready")\nstart()',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "9 2 6"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: 'Ready',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 구분선을 출력하는 line() 함수를 정의하고 두 번 연속 호출하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Define function line() to print five dashes and call it twice.',
+      hint_ko: '한 번 정의한 함수는 필요할 때마다 여러 번 호출해 코드를 재사용할 수 있습니다.',
+      hint_en: 'Once defined, a function can be called multiple times to reuse its code.',
+      targetCode: 'def line():\n    print("-" * 5)\nline()\nline()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '-----\n-----',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 정의된 star 함수를 한 번 더 호출하여 별 세 개를 두 줄로 출력해보세요.',
+      prompt_en: '[Fill Blank] Call function star a second time so two lines of stars are printed.',
+      hint_ko: '함수 이름 뒤에 빈 소괄호를 붙여 함수를 실행하는 호출식을 적으세요.',
+      hint_en: 'Write the function name followed by empty parentheses to invoke it.',
+      templateCode: 'def star():\n    print("*" * 3)\nstar()\n§§§§§§',
+      targetCode: 'def star():\n    print("*" * 3)\nstar()\nstar()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '***\n***',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 시작 출력과 끝 출력 사이에서 sub() 함수를 호출해 순서대로 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Call sub() between the Start and End print statements to see execution order.',
+      hint_ko: '함수는 정의된 위치가 아니라 실제로 호출된 줄에서 본문이 실행됩니다.',
+      hint_en: 'A function runs when it is called, not when its def block is first read.',
+      targetCode: 'def sub():\n    print("2. Inside")\nprint("1. Start")\nsub()\nprint("3. End")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1. Start\n2. Inside\n3. End',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] Open과 Close 사이에서 bell 함수를 호출해 Ring!이 가운데 출력되게 해보세요.',
+      prompt_en: '[Fill Blank] Call bell between Open and Close so Ring! prints in the middle.',
+      hint_ko: '위에서 정의한 네 글자 함수 이름 뒤에 호출용 소괄호를 붙여 적으세요.',
+      hint_en: 'Invoke the four-letter function defined above using empty parentheses.',
+      templateCode: 'def bell():\n    print("Ring!")\nprint("Open")\n§§§§§§\nprint("Close")',
+      targetCode: 'def bell():\n    print("Ring!")\nprint("Open")\nbell()\nprint("Close")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Open\nRing!\nClose',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 함수 본문 안에서 for 반복문으로 1부터 3까지 출력하는 count_three() 함수를 만들고 호출해보세요.',
+      prompt_en: '[Block] Define count_three() containing a for loop from 1 to 3 and call it.',
+      hint_ko: '함수 안의 for문 본문은 한 단계 더 들여쓰기(총 8칸)하여 작성합니다.',
+      hint_en: 'Indent the loop body inside the function by an additional 4 spaces (8 spaces total).',
+      targetCode: 'def count_three():\n    for i in range(1, 4):\n        print(i)\ncount_three()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1\n2\n3',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 함수 안에서 리스트 nums의 전체 합계를 구해 출력하도록 빈칸을 채워보세요.',
+      prompt_en: '[Fill Blank] Complete the expression inside show_sum() to print the sum of nums.',
+      hint_ko: '숫자 리스트의 합을 계산하는 내장 함수에 변수 nums를 넣어 호출하세요.',
+      hint_en: 'Pass list variable nums to the built-in sum function.',
+      templateCode: 'def show_sum():\n    nums = [10, 20, 30]\n    print(§§§§§§§§§)\nshow_sum()',
+      targetCode: 'def show_sum():\n    nums = [10, 20, 30]\n    print(sum(nums))\nshow_sum()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '60',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] banner 함수를 정의하고 등호 4개 반복과 마지막 줄 함수 호출을 완성해 Go와 ====를 출력해보세요.',
+      prompt_en: '[Fill Blank] Complete the function header, string repetition count 4, and final function call to print Go and ====.',
+      hint_ko: '함수 정의 키워드, 등호를 4번 반복할 숫자, 그리고 마지막 줄의 함수 호출식을 차례로 채우세요.',
+      hint_en: 'Fill in the def keyword, the repetition count 4, and the banner() function call.',
+      templateCode: '§§§ banner():\n    print("=" * §)\nprint("Go")\n§§§§§§§§',
+      targetCode: 'def banner():\n    print("=" * 4)\nprint("Go")\nbanner()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Go\n====',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 함수를 호출할 때 소괄호를 빠뜨려 아무것도 출력되지 않는 마지막 줄을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the last line where missing parentheses prevented greet from running.',
+      hint_ko: '함수 이름만 적으면 실행되지 않으므로 이름 뒤에 빈 소괄호를 꼭 붙여야 합니다.',
+      hint_en: 'Add empty parentheses after greet on the last line to actually call the function.',
+      templateCode: 'def greet():\n    print("Welcome!")\ngreet',
+      targetCode: 'def greet():\n    print("Welcome!")\ngreet()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Welcome!',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 함수를 정의하기 전에 먼저 호출해 NameError가 발생한 코드의 순서를 바르게 고쳐보세요.',
+      prompt_en: '[Fix Bug] Fix the NameError caused by calling alarm() before its def block.',
+      hint_ko: '파이썬은 위에서 아래로 코드를 읽으므로 함수를 먼저 정의한 뒤 아래에서 호출해야 합니다.',
+      hint_en: 'Define the function with def first, then place the alarm() call after the definition.',
+      templateCode: 'alarm()\ndef alarm():\n    print("Wake up!")',
+      targetCode: 'def alarm():\n    print("Wake up!")\nalarm()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Wake up!',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 매개변수가 없는 함수 show_menu를 정의하는 첫째 줄 헤더를 작성해보세요.',
+      prompt_en: '[Complete Line] Write the function header on line 1 that defines parameterless function show_menu.',
+      hint_ko: '함수 정의 키워드 뒤에 함수 이름과 빈 소괄호, 콜론(:)을 붙여 작성하세요.',
+      hint_en: 'Start with def followed by show_menu():.',
+      templateCode: '§§§§§§§§§§§§§§§§\n    print("[Menu]")\nshow_menu()',
+      targetCode: 'def show_menu():\n    print("[Menu]")\nshow_menu()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[Menu]',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 위에서 정의한 run_step 함수를 호출해 실행하는 마지막 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the last line that calls function run_step.',
+      hint_ko: '정의된 함수 이름 뒤에 빈 소괄호를 붙여 호출하세요.',
+      hint_en: 'Write run_step() on the final line.',
+      templateCode: 'def run_step():\n    print("Step OK")\n§§§§§§§§§§',
+      targetCode: 'def run_step():\n    print("Step OK")\nrun_step()',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Step OK',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 일반 출력문과 함수 호출이 섞여 있는 다음 코드의 출력 순서를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output sequence of the following code.',
+      hint_ko: 'def 블록은 정의만 해두고 넘어가며, 아래에서 ping()이 호출될 때마다 본문이 실행됩니다.',
+      hint_en: 'Trace top-level print statements and each ping() call in the order they execute.',
+      targetCode: 'def ping():\n    print("P")\nprint("A")\nping()\nprint("B")\nping()',
+      choices: ['A\nP\nB\nP', 'P\nA\nP\nB', 'A\nB\nP\nP', 'P\nA\nB'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'A\nP\nB\nP',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 두 개의 함수를 정의하고 번갈아 호출하는 다음 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the output when calling box(), gap(), and box() in sequence.',
+      hint_ko: '각 함수가 호출되는 순서에 따라 문자열 반복 결과가 어떻게 출력되는지 확인해보세요.',
+      hint_en: 'Follow the three function calls at the bottom in order.',
+      targetCode: 'def box():\n    print("#" * 3)\ndef gap():\n    print("-")\nbox()\ngap()\nbox()',
+      choices: ['###\n-\n###', '###\n###\n-', '-\n###\n###', '#\n-\n#'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '###\n-\n###',
+        },
+      ],
+    },
+  ],
 };

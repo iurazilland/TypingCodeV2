@@ -78,6 +78,7 @@ export interface CanvasBlock {
   type: BlockType;
   varName?: string;
   targetVarName?: string;
+  isVarRef?: boolean;
   assignOp?: AssignOperator;
   content?: string;
   targetContent?: string;
@@ -127,59 +128,74 @@ export const BLOCK_GEOMETRY = {
   MOUTH_SNAP_PADDING: 18,
 };
 export const BLOCK_THEMES: Record<string, { bg: string; shadow: string; border: string }> = {
-  start: { bg: '#059669', shadow: '#047857', border: '#10b981' },
-  // 함수 (파랑 계열 통일)
-  print: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  input: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  len: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  float: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  type: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  round: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  sum: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  min: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  math: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  range: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  map: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  sorted: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  bool: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  iter: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  enumerate: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  zip: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  all: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  any: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  reversed: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  ord: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  chr: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  isinstance: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
-  def: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
-  return: { bg: '#1d4ed8', shadow: '#1e40af', border: '#3b82f6' },
-  call: { bg: '#2563eb', shadow: '#1d4ed8', border: '#3b82f6' },
+  // 0. 시작 블록 (선명한 에메랄드 시그널 그린)
+  start: { bg: '#10b981', shadow: '#059669', border: '#34d399' },
+
+  // 1. 내장 함수 (로얄 블루 통일)
+  print: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  input: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  len: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  int: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  float: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  str: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  type: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  round: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  abs: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  sum: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  min: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  max: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  math: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  range: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  map: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  sorted: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  bool: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  iter: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  enumerate: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  zip: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  all: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  any: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  reversed: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  ord: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  chr: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  isinstance: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+  open: { bg: '#2563eb', shadow: '#1d4ed8', border: '#60a5fa' },
+
+  // 1-2. 메서드 체이닝 (인디고 블루)
+  method: { bg: '#4f46e5', shadow: '#3730a3', border: '#818cf8' },
+
+  // 2. 클래스 / 사용자 정의 함수 (함수=바이올렛, 클래스=시안)
+  def: { bg: '#7c3aed', shadow: '#5b21b6', border: '#a78bfa' },
+  return: { bg: '#7c3aed', shadow: '#5b21b6', border: '#a78bfa' },
+  call: { bg: '#7c3aed', shadow: '#5b21b6', border: '#a78bfa' },
   class: { bg: '#0891b2', shadow: '#0e7490', border: '#22d3ee' },
-  method: { bg: '#7c3aed', shadow: '#6d28d9', border: '#8b5cf6' },
-  for_range: { bg: '#059669', shadow: '#047857', border: '#10b981' },
-  for_in: { bg: '#059669', shadow: '#047857', border: '#10b981' },
-  while: { bg: '#059669', shadow: '#047857', border: '#10b981' },
-  break: { bg: '#475569', shadow: '#334155', border: '#64748b' },
-  continue: { bg: '#475569', shadow: '#334155', border: '#64748b' },
-  if: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
-  elif: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
-  else: { bg: '#d97706', shadow: '#b45309', border: '#f59e0b' },
-  try: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
-  except: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
-  finally: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
-  raise: { bg: '#e11d48', shadow: '#be123c', border: '#fb7185' },
-  variable: { bg: '#ea580c', shadow: '#c2410c', border: '#f97316' },
-  list: { bg: '#0d9488', shadow: '#0f766e', border: '#14b8a6' },
-  tuple: { bg: '#4f46e5', shadow: '#4338ca', border: '#6366f1' },
-  set: { bg: '#9333ea', shadow: '#7e22ce', border: '#a855f7' },
-  dict: { bg: '#c2410c', shadow: '#9a3412', border: '#ea580c' },
-  // 주석 (슬레이트 다크 그레이 계열)
-  comment: { bg: '#1e293b', shadow: '#0f172a', border: '#475569' },
+
+  // 3. 제어 - 반복 및 루프 탈출 (딥 틸 통일)
+  for_range: { bg: '#0d9488', shadow: '#0f766e', border: '#2dd4bf' },
+  for_in: { bg: '#0d9488', shadow: '#0f766e', border: '#2dd4bf' },
+  while: { bg: '#0d9488', shadow: '#0f766e', border: '#2dd4bf' },
+  break: { bg: '#0f766e', shadow: '#115e59', border: '#14b8a6' },
+  continue: { bg: '#0f766e', shadow: '#115e59', border: '#14b8a6' },
+
+  // 3. 제어 - 조건 (앰버 골드 통일)
+  if: { bg: '#d97706', shadow: '#b45309', border: '#fbbf24' },
+  elif: { bg: '#d97706', shadow: '#b45309', border: '#fbbf24' },
+  else: { bg: '#d97706', shadow: '#b45309', border: '#fbbf24' },
+
+  // 3. 제어 - 예외 처리 (로즈 크림슨 통일)
+  try: { bg: '#e11d48', shadow: '#9f1239', border: '#fb7185' },
+  except: { bg: '#e11d48', shadow: '#9f1239', border: '#fb7185' },
+  finally: { bg: '#e11d48', shadow: '#9f1239', border: '#fb7185' },
+  raise: { bg: '#e11d48', shadow: '#9f1239', border: '#fb7185' },
+
+  // 4. 변수 / 자료형 (오렌지 · 웜 코랄 톤온톤 통일)
+  variable: { bg: '#ea580c', shadow: '#9a3412', border: '#fb923c' },
+  list: { bg: '#c2410c', shadow: '#7c2d12', border: '#f97316' },
+  tuple: { bg: '#c2410c', shadow: '#7c2d12', border: '#f97316' },
+  set: { bg: '#c2410c', shadow: '#7c2d12', border: '#f97316' },
+  dict: { bg: '#c2410c', shadow: '#7c2d12', border: '#f97316' },
+
+  // 5. 주석 (슬레이트 다크)
+  comment: { bg: '#334155', shadow: '#1e293b', border: '#64748b' },
 };
 
 export const getBlockInputWidth = (val: string | undefined | null, minChars: number = 1): number => {

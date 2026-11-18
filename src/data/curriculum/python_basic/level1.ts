@@ -1,35 +1,27 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 1레벨: print() 함수와 기본 사칙연산 (15단계)
-// - [1~10단계] 블록 ➔ 타이핑 1:1 교차 5쌍
-// - [11~12단계] 틀린 곳 수정 (fix_bug) 2문항
-// - [13~14단계] 한 줄 완성 (one_line) 2문항
-// - [15단계] 출력 결과 예측 선택 (predict_output) 1문항
-// ============================================================================
 export const PYTHON_LEVEL_1: PracticeRound = {
   id: 'py-basic-r1',
   language: 'python',
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 1,
-  title_ko: '1레벨: print() 함수와 사칙연산의 기초',
-  title_en: 'Level 1: print() & Basic Arithmetic',
+  title_ko: 'print() 함수와 정수·실수 출력, 덧셈(+)과 뺄셈(-)',
+  title_en: 'print(), Int/Float Output & Addition/Subtraction (+, -)',
+  description_ko: '화면에 값을 출력하는 print() 함수와 정수·실수, 덧셈(+)·뺄셈(-) 연산을 익힙니다.',
+  description_en: 'Learn the print() function, integers and floats, and basic addition (+) and subtraction (-).',
   totalQuestions: 15,
   unlockedBlocks: ['print'],
   questions: [
-    // ------------------------------------------------------------------------
-    // 페어 1: 단일 숫자 출력
-    // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] print() 블록으로 숫자 10을 화면에 출력해보세요.',
-      prompt_en: '[Block] Use the print() block to display the number 10 on the screen.',
-      hint_ko: '숫자를 출력할 때는 따옴표 없이 숫자만 그대로 입력합니다.',
-      hint_en: 'Numbers are entered directly inside print() without quotes.',
+      prompt_ko: '[블록 조립] print() 블록을 사용해 양의 정수 10을 화면에 출력해보세요.',
+      prompt_en: '[Block] Use the print() block to display the positive integer 10 on the screen.',
+      hint_ko: '숫자를 출력할 때는 따옴표 없이 숫자만 괄호 안에 그대로 넣습니다.',
+      hint_en: 'Enter numbers directly inside the parentheses of print() without quotes.',
       targetCode: 'print(10)',
       testCases: [
         {
@@ -44,11 +36,11 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸을 채워 숫자 77을 화면에 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the blank to print the number 77 on the screen.',
-      hint_ko: 'print() 함수의 괄호 안에 출력하고 싶은 두 자리 숫자 77을 입력하세요.',
-      hint_en: 'Type the two-digit number 77 inside the print() function parentheses.',
-      templateCode: 'print(§§)',
+      prompt_ko: '[빈칸 채우기] 빈칸에 출력 함수를 채워 정수 77이 화면에 출력되도록 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the output function name to display the integer 77 on the screen.',
+      hint_ko: '괄호 안의 값을 화면에 보여주는 다섯 글자 소문자 내장 함수 이름을 작성합니다.',
+      hint_en: 'Write the five-letter lowercase built-in function name that displays values on the screen.',
+      templateCode: '§§§§§(77)',
       targetCode: 'print(77)',
       testCases: [
         {
@@ -58,20 +50,53 @@ export const PYTHON_LEVEL_1: PracticeRound = {
         },
       ],
     },
-
-    // ------------------------------------------------------------------------
-    // 페어 2: 덧셈(+)과 뺄셈(-) 연산자
-    // ------------------------------------------------------------------------
     {
       id: 3,
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] print() 안에 덧셈 수식 10+5를 조립해 계산 결과 15를 출력해보세요.',
-      prompt_en: '[Block] Assemble the addition expression 10+5 inside print() to output 15.',
-      hint_ko: '10+5처럼 수식을 입력하면 계산 결과 15가 화면에 출력됩니다.',
-      hint_en: 'Python evaluates 10+5 first and prints the sum 15.',
-      targetCode: 'print(10+5)',
+      prompt_ko: '[블록 조립] 소수점이 있는 실수 3.14와 음수 -5를 두 줄로 차례대로 출력해보세요.',
+      prompt_en: '[Block] Print the floating-point number 3.14 and the negative integer -5 on two lines.',
+      hint_ko: 'print() 블록을 위아래로 두 개 연결하면 각 값이 한 줄씩 차례대로 출력됩니다.',
+      hint_en: 'Stack two print() blocks vertically to print each number on its own line.',
+      targetCode: 'print(3.14)\nprint(-5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3.14\n-5',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 영점 오를 뜻하는 소수를 채워 두 줄 출력을 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the decimal number for zero point five to complete the two-line output.',
+      hint_ko: '정수 부분과 소수 부분 사이에 마침표(.)를 찍어 실수를 표기합니다.',
+      hint_en: 'Use a period (.) between the whole part and fractional part to write a float.',
+      templateCode: 'print(§§§)\nprint(-10)',
+      targetCode: 'print(0.5)\nprint(-10)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '0.5\n-10',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] print() 안에 10 + 5 수식을 조립해 덧셈 결과 15를 출력해보세요.',
+      prompt_en: '[Block] Assemble the expression 10 + 5 inside print() to output the sum 15.',
+      hint_ko: '괄호 안에 수식을 넣으면 파이썬이 계산을 마친 결과값만 화면에 출력합니다.',
+      hint_en: 'Python evaluates the expression inside the parentheses first and prints only the result.',
+      targetCode: 'print(10 + 5)',
       testCases: [
         {
           id: 1,
@@ -81,84 +106,39 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       ],
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 뺄셈 연산자를 사용해 계산 결과 10을 출력해보세요.',
-      prompt_en: '[Fill Blank] Use the subtraction operator in the blank to print the result 10.',
-      hint_ko: '30과 20 사이의 빈칸에 뺄셈 기호인 빼기(-)를 입력하세요.',
-      hint_en: 'Type the subtraction operator minus (-) in the blank between 30 and 20.',
-      templateCode: 'print(30§20)',
-      targetCode: 'print(30-20)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '10',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 페어 3: 곱셈 연산자(*)
-    // ------------------------------------------------------------------------
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 별표(*) 곱셈 기호를 사용한 수식 4*5를 조립해 20을 출력해보세요.',
-      prompt_en: '[Block] Trace the multiplication expression 4*5 with * to print 20.',
-      hint_ko: '키보드의 Shift + 8을 눌러 별표(*) 연산자를 입력할 수 있습니다.',
-      hint_en: 'Press Shift + 8 on your keyboard to type the asterisk (*) operator.',
-      targetCode: 'print(4*5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '20',
-        },
-      ],
-    },
-    {
       id: 6,
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 곱셈 연산자를 사용해 계산 결과 42를 출력해보세요.',
-      prompt_en: '[Fill Blank] Use the multiplication operator in the blank to print the result 42.',
-      hint_ko: '6과 7 사이의 빈칸에 곱셈 기호인 별표(*)를 입력하세요.',
-      hint_en: 'Type the multiplication asterisk (*) operator in the blank between 6 and 7.',
-      templateCode: 'print(6§7)',
-      targetCode: 'print(6*7)',
+      prompt_ko: '[빈칸 채우기] 빈칸에 뺄셈 연산자를 채워 30에서 12를 뺀 결과 18을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the subtraction operator to print the result of 30 minus 12 (18).',
+      hint_ko: '앞의 수에서 뒤의 수를 뺄 때는 두 숫자 사이에 빼기 기호를 넣습니다.',
+      hint_en: 'Place the minus sign between the two numbers to subtract the second from the first.',
+      templateCode: 'print(30 § 12)',
+      targetCode: 'print(30 - 12)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '42',
+          expectedOutput: '18',
         },
       ],
     },
-
-    // ------------------------------------------------------------------------
-    // 페어 4: 나눗셈 연산자(/)
-    // ------------------------------------------------------------------------
     {
       id: 7,
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] 슬래시(/) 나눗셈 수식 20/4를 조립해 실수 결과 5.0을 출력해보세요.',
-      prompt_en: '[Block] Trace the division expression 20/4 using / to print the float 5.0.',
-      hint_ko: '20/4의 계산 결과는 정수 5가 아니라 실수 형태인 5.0으로 출력됩니다.',
-      hint_en: 'Even when evenly divisible, 20/4 outputs 5.0 as a floating-point number.',
-      targetCode: 'print(20/4)',
+      prompt_ko: '[블록 조립] 첫째 줄에 20 + 10 - 5의 결과를, 둘째 줄에 50 - 20 + 8의 결과를 출력해보세요.',
+      prompt_en: '[Block] Print the result of 20 + 10 - 5 on line 1 and 50 - 20 + 8 on line 2.',
+      hint_ko: '덧셈과 뺄셈이 섞여 있을 때는 왼쪽에서 오른쪽 순서대로 차근차근 계산됩니다.',
+      hint_en: 'When addition and subtraction are combined, they evaluate from left to right.',
+      targetCode: 'print(20 + 10 - 5)\nprint(50 - 20 + 8)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '5.0',
+          expectedOutput: '25\n38',
         },
       ],
     },
@@ -167,39 +147,36 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 나눗셈 연산자를 사용해 계산 결과 50.0을 출력해보세요.',
-      prompt_en: '[Fill Blank] Use the division operator in the blank to print the result 50.0.',
-      hint_ko: '100과 2 사이의 빈칸에 나눗셈 기호인 슬래시(/)를 입력하세요.',
-      hint_en: 'Type the division slash (/) operator in the blank between 100 and 2.',
-      templateCode: 'print(100§2)',
-      targetCode: 'print(100/2)',
+      prompt_ko: '[빈칸 채우기] 빈칸에 덧셈 연산자를 채워 첫째 줄에 23, 둘째 줄에 10.0이 출력되게 해보세요.',
+      prompt_en: '[Fill Blank] Fill in the addition operator so line 1 outputs 23 and line 2 outputs 10.0.',
+      hint_ko: '30에서 15를 뺀 값에 8을 더해야 23이 되므로 빈칸에 더하기 기호를 넣습니다.',
+      hint_en: 'Insert the plus sign to add 8 after subtracting 15 from 30.',
+      templateCode: 'print(30 - 15 § 8)\nprint(7.5 + 2.5)',
+      targetCode: 'print(30 - 15 + 8)\nprint(7.5 + 2.5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '50.0',
+          expectedOutput: '23\n10.0',
         },
       ],
     },
-
-    // ------------------------------------------------------------------------
-    // 페어 5: 괄호 우선순위 연산
-    // ------------------------------------------------------------------------
     {
       id: 9,
       step: 9,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 소괄호로 덧셈을 먼저 묶은 수식 (10+20)*3을 조립해 90을 출력해보세요.',
-      prompt_en: '[Block] Trace the expression (10+20)*3 so addition runs before multiplication.',
-      hint_ko: '괄호 안의 덧셈이 먼저 계산된 뒤 바깥의 곱셈이 수행되어 90이 출력됩니다.',
-      hint_en: 'The addition inside the parentheses evaluates first, and its sum is multiplied by 3.',
-      targetCode: 'print((10+20)*3)',
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳에 알맞은 연산 기호를 채워 첫째 줄에 35, 둘째 줄에 4.0을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 2 blanks with operators so line 1 prints 35 and line 2 prints 4.0.',
+      hint_ko: '첫째 줄은 40에 15를 더한 뒤 20을 빼야 하고, 둘째 줄은 6.5에서 2.5를 빼야 합니다.',
+      hint_en: 'Add 15 to 40 before subtracting 20 on line 1, and subtract 2.5 from 6.5 on line 2.',
+      templateCode: 'print(40 § 15 - 20)\nprint(6.5 § 2.5)',
+      targetCode: 'print(40 + 15 - 20)\nprint(6.5 - 2.5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '90',
+          expectedOutput: '35\n4.0',
         },
       ],
     },
@@ -207,41 +184,37 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       id: 10,
       step: 10,
       type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 괄호를 채워 2+3을 먼저 계산한 뒤 4를 곱한 결과 20을 출력해보세요.',
-      prompt_en: '[Fill Blank] Add parentheses around 2+3 in the blanks to print the result 20.',
-      hint_ko: '2+3 앞뒤의 빈칸에 각각 여는 괄호 ( 와 닫는 괄호 ) 를 입력하세요.',
-      hint_en: 'Type the opening parenthesis ( and closing parenthesis ) into the blanks around 2+3.',
-      templateCode: 'print(§2+3§*4)',
-      targetCode: 'print((2+3)*4)',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 대소문자 오타로 인해 발생하는 에러를 고쳐 100이 정상 출력되게 해보세요.',
+      prompt_en: '[Fix Bug] Fix the capitalization typo so that 100 is printed without an error.',
+      hint_ko: '파이썬은 대소문자를 엄격히 구분하므로 출력 함수 이름은 모두 소문자로 적어야 합니다.',
+      hint_en: 'Python is case-sensitive, so the output function name must be written entirely in lowercase.',
+      templateCode: 'Print(60 + 40)',
+      targetCode: 'print(60 + 40)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '20',
+          expectedOutput: '100',
         },
       ],
     },
-
-    // ------------------------------------------------------------------------
-    // 11~15단계: 실전 응용 (fix_bug 2 / one_line 2 / predict_output 1)
-    // ------------------------------------------------------------------------
     {
       id: 11,
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 10과 20을 더한 결과 30이 출력되도록 잘못된 연산 기호를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the wrong operator so that the addition result 30 is printed.',
-      hint_ko: '10과 20을 더해야 하므로 뺄셈 기호(-)를 덧셈 기호(+)로 고쳐보세요.',
-      hint_en: 'Change the minus sign (-) to a plus sign (+) to add 10 and 20.',
-      templateCode: 'print(10-20)',
-      targetCode: 'print(10+20)',
+      prompt_ko: '[틀린 곳 수정] 둘째 줄의 잘못된 연산 기호를 고쳐 첫째 줄에 35, 둘째 줄에 5.0이 출력되게 해보세요.',
+      prompt_en: '[Fix Bug] Fix the wrong operator on line 2 so that line 1 prints 35 and line 2 prints 5.0.',
+      hint_ko: '3.5와 1.5를 계산해 5.0을 만들려면 둘째 줄의 뺄셈을 덧셈으로 바꾸어야 합니다.',
+      hint_en: 'Change the subtraction on line 2 to addition so 3.5 and 1.5 sum to 5.0.',
+      templateCode: 'print(25 + 10)\nprint(3.5 - 1.5)',
+      targetCode: 'print(25 + 10)\nprint(3.5 + 1.5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '30',
+          expectedOutput: '35\n5.0',
         },
       ],
     },
@@ -249,18 +222,18 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       id: 12,
       step: 12,
       type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 12와 3을 곱한 결과 36이 출력되도록 연산 기호를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the operator so that 12 multiplied by 3 prints 36.',
-      hint_ko: '나눗셈 기호(/) 대신 곱셈 기호(*)를 사용해야 36이 출력됩니다.',
-      hint_en: 'Replace the division slash (/) with the multiplication asterisk (*).',
-      templateCode: 'print(12/3)',
-      targetCode: 'print(12*3)',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 둘째 줄에 실수 1.5와 2.5를 더한 결과 4.0을 출력하는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 2 to print the sum of floats 1.5 and 2.5 (4.0).',
+      hint_ko: 'print() 함수의 괄호 안에 두 실수의 덧셈 수식을 그대로 작성해보세요.',
+      hint_en: 'Write the addition expression of the two floats inside print().',
+      templateCode: 'print(10)\n§§§§§§§§§§§§§§§§',
+      targetCode: 'print(10)\nprint(1.5 + 2.5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '36',
+          expectedOutput: '10\n4.0',
         },
       ],
     },
@@ -269,36 +242,37 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 13,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 둘째 줄에 3과 7을 먼저 더한 뒤 5를 곱한 결과 50을 출력해보세요.',
-      prompt_en: '[Complete Line] Complete line 2 to add 3 and 7 first, then multiply by 5 to print 50.',
-      hint_ko: '첫째 줄 예제처럼 먼저 더할 두 숫자를 소괄호로 감싼 뒤 곱셈 연산자를 이어 작성해보세요.',
-      hint_en: 'Follow line 1 by wrapping the two numbers to add in parentheses before multiplying.',
-      templateCode: 'print((10+20)*2)\n§§§§§§§§§§§§§§',
-      targetCode: 'print((10+20)*2)\nprint((3+7)*5)',
+      prompt_ko: '[한 줄 완성] 둘째 줄에 50에서 20을 빼고 5를 더한 결과 35를 출력하는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 2 to subtract 20 from 50 and add 5, printing 35.',
+      hint_ko: '첫째 줄의 형태를 참고하여 세 정수의 뺄셈과 덧셈 수식을 print() 안에 적어보세요.',
+      hint_en: 'Follow the pattern on line 1 and write the three-number expression inside print().',
+      templateCode: 'print(10 + 20 - 5)\n§§§§§§§§§§§§§§§§§§',
+      targetCode: 'print(10 + 20 - 5)\nprint(50 - 20 + 5)',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '60\n50',
+          expectedOutput: '25\n35',
         },
       ],
     },
     {
       id: 14,
       step: 14,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 둘째 줄에 90을 3으로 나눈 실수 결과 30.0을 출력해보세요.',
-      prompt_en: '[Complete Line] Complete line 2 to divide 90 by 3 and print 30.0.',
-      hint_ko: '첫째 줄처럼 print() 안에 슬래시(/) 나눗셈 수식 90/3을 작성해보세요.',
-      hint_en: 'Write print(90/3) on the second line using the division operator (/).',
-      templateCode: 'print(40/8)\n§§§§§§§§§§§',
-      targetCode: 'print(40/8)\nprint(90/3)',
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '각 줄의 덧셈과 뺄셈을 왼쪽부터 차례대로 계산한 두 줄의 숫자를 찾아보세요.',
+      hint_en: 'Evaluate the addition and subtraction on each line from left to right.',
+      targetCode: 'print(30 - 10 + 5)\nprint(10 + 20 - 8)',
+      choices: ['25\n22', '15\n22', '25\n28', '15\n28'],
+      correctChoiceIndex: 0,
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '5.0\n30.0',
+          expectedOutput: '25\n22',
         },
       ],
     },
@@ -307,18 +281,18 @@ export const PYTHON_LEVEL_1: PracticeRound = {
       step: 15,
       type: 'quiz',
       kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 올바른 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output that will be printed when the Python code runs.',
-      hint_ko: '첫째 줄은 곱셈(5*2)이 먼저 계산되고, 둘째 줄은 괄호 안의 덧셈(10+5)이 먼저 계산됩니다.',
-      hint_en: 'On line 1, multiplication (5*2) runs before addition. On line 2, parentheses (10+5) evaluate first.',
-      targetCode: 'print(10+5*2)\nprint((10+5)*2)',
-      choices: ['30\n30', '20\n30', '30\n20', '20\n20'],
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '실수가 포함된 덧셈과 뺄셈의 결과는 소수점 첫째 자리(.0 포함)까지 실수로 출력됩니다.',
+      hint_en: 'Addition and subtraction involving floats always produce a floating-point result.',
+      targetCode: 'print(1.5 + 2.5)\nprint(10 - 3.5)',
+      choices: ['4\n6.5', '4.0\n6.5', '4.0\n7.5', '3.0\n6.5'],
       correctChoiceIndex: 1,
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '20\n30',
+          expectedOutput: '4.0\n6.5',
         },
       ],
     },

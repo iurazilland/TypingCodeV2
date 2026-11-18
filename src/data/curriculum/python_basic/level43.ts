@@ -1,249 +1,324 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_43: PracticeRound = {
-  "id": "py-basic-r43",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 43,
-  "title_ko": "43레벨: 리스트 필수 기초 종합 문제풀이",
-  "title_en": "Level 43: Section 6 Comprehensive Review",
-  "description_ko": "1차원 리스트 생성·슬라이싱, .append()/.pop()/.sort(), sum/max/min/len과 문자열·반복문을 종합해 문제를 해결합니다.",
-  "description_en": "Synthesize 1D lists, slicing, .append()/.pop()/.sort(), sum/max/min/len, strings, and loops in comprehensive challenges.",
-  "totalQuestions": 10,
-  "unlockedBlocks": [],
-  "questions": [
+  id: 'py-basic-r43',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 43,
+  title_ko: '리스트 슬라이싱(nums[a:b])과 리스트 연결(+)·반복(*)',
+  title_en: 'List Slicing (nums[a:b]), Concatenation (+) & Repetition (*)',
+  description_ko: '슬라이싱(nums[a:b], nums[:b], nums[a:])으로 부분 리스트를 잘라내고 +와 * 연산자로 리스트를 연결·반복하는 법을 익힙니다.',
+  description_en: 'Extract sublists using slicing (nums[a:b], nums[:b], nums[a:]) and combine or repeat lists with + and *.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'iter',
+  ],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 하이픈을 공백으로 바꾼 문자열을 단어로 나누어 개수와 마지막 단어를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Split the cleaned string into words and print Count and End.",
-      "hint_ko": "공백 기준 단어 리스트로 나누는 split 메서드와 요소 개수를 구하는 len 함수를 채우세요.",
-      "hint_en": "Use split() to divide into words and len(parts) to count the items.",
-      "templateCode": "raw = input().strip().replace(\"-\", \" \")\nparts = raw.§§§§§()\nprint(f\"Count:{§§§(parts)},End:{parts[-1]}\")",
-      "targetCode": "raw = input().strip().replace(\"-\", \" \")\nparts = raw.split()\nprint(f\"Count:{len(parts)},End:{parts[-1]}\")",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 슬라이싱 nums[1:4]로 1번 인덱스부터 3번 인덱스까지 부분 리스트를 잘라 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Slice nums[1:4] to extract elements from index 1 up to (excluding) index 4.',
+      hint_ko: 'range()와 마찬가지로 슬라이싱의 끝 인덱스 번호는 결과에 포함되지 않습니다.',
+      hint_en: 'Just like range(), the stop index in a slice is exclusive.',
+      targetCode: 'nums = [10, 20, 30, 40, 50]\nsub = nums[1:4]\nprint(sub)',
+      testCases: [
         {
-          "id": 1,
-          "input": "  py-code-v2  ",
-          "expectedOutput": "Count:3,End:v2"
+          id: 1,
+          input: '',
+          expectedOutput: '[20, 30, 40]',
         },
-        {
-          "id": 2,
-          "input": "alpha-beta",
-          "expectedOutput": "Count:2,End:beta"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 정수 중 50 이상만 골라 요소가 있으면 최댓값과 합계를, 없으면 Empty를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Filter integers >= 50 into valid; if non-empty print Max and Sum, else Empty.",
-      "hint_ko": "리스트 끝에 추가하는 append 메서드와 최댓값을 구하는 max 함수를 차례로 채우세요.",
-      "hint_en": "Use append to collect qualifying integers and max to find the largest value.",
-      "templateCode": "valid = []\nfor s in input().split():\n    n = int(s)\n    if n >= 50:\n        valid.§§§§§§(n)\nif valid:\n    print(f\"Max:{§§§(valid)},Sum:{sum(valid)}\")\nelse:\n    print(\"Empty\")",
-      "targetCode": "valid = []\nfor s in input().split():\n    n = int(s)\n    if n >= 50:\n        valid.append(n)\nif valid:\n    print(f\"Max:{max(valid)},Sum:{sum(valid)}\")\nelse:\n    print(\"Empty\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "30 60 80 40",
-          "expectedOutput": "Max:80,Sum:140"
-        },
-        {
-          "id": 2,
-          "input": "10 20",
-          "expectedOutput": "Empty"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 정수를 내림차순 정렬한 뒤 앞에서부터 최대 2개를 꺼내 picked에 담고 출력해보세요.",
-      "prompt_en": "[Fill Blank] Sort integers descending, pop up to 2 items from the front into picked, and print picked + [0].",
-      "hint_ko": "원본 정렬 메서드 sort와 맨 앞 요소를 꺼내는 pop(0)을 차례로 채우세요.",
-      "hint_en": "Order in place with sort and extract from the front with pop(0).",
-      "templateCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nnums.§§§§(reverse=True)\npicked = []\nwhile nums and len(picked) < 2:\n    picked.append(nums.§§§§§§)\nprint(picked + [0])",
-      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nnums.sort(reverse=True)\npicked = []\nwhile nums and len(picked) < 2:\n    picked.append(nums.pop(0))\nprint(picked + [0])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "15 40 25 30",
-          "expectedOutput": "[40, 30, 0]"
-        },
-        {
-          "id": 2,
-          "input": "9",
-          "expectedOutput": "[9, 0]"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력 숫자들을 문자열로 변환해 담아 첫 값과 끝 값 덧셈이 문자열 연결이 되는 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the type conversion bug so the first and last numbers are added as integers.",
-      "hint_ko": "산술 덧셈을 하려면 str(s) 대신 int(s)로 정수로 변환해 리스트에 담아야 합니다.",
-      "hint_en": "Change str(s) to int(s) so numeric addition occurs instead of string concatenation.",
-      "templateCode": "nums = []\nfor s in input().split():\n    nums.append(str(s))\nprint(f\"Ends:{nums[0] + nums[-1]}\")",
-      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nprint(f\"Ends:{nums[0] + nums[-1]}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10 20 30",
-          "expectedOutput": "Ends:40"
-        },
-        {
-          "id": 2,
-          "input": "7 5 13",
-          "expectedOutput": "Ends:20"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 오름차순 정렬 후 가장 낮은 첫 점수 하나를 빼려다 두 번째 점수가 빠지는 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the .pop() index after ascending sort so the lowest score at index 0 is removed.",
-      "hint_ko": "오름차순 정렬 후 가장 작은 값은 0번 인덱스에 있으므로 scores.pop(0)으로 고치세요.",
-      "hint_en": "Change scores.pop(1) to scores.pop(0) to remove the lowest score.",
-      "templateCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(1)\nprint(f\"Low:{scores[0]},Sum:{sum(scores)}\")",
-      "targetCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(0)\nprint(f\"Low:{scores[0]},Sum:{sum(scores)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Low:60,Sum:300"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 금지 목록에 없는 정상 단어를 keep에 추가하려다 bans에 추가하는 대상 리스트 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the target list name in .append() so allowed words are added to keep.",
-      "hint_ko": "통과한 단어는 bans가 아니라 결과 리스트 keep에 추가해야 합니다.",
-      "hint_en": "Change bans.append(w) to keep.append(w) inside the if block.",
-      "templateCode": "bans = [\"err\", \"skip\"]\nkeep = []\nfor w in input().split():\n    if w not in bans:\n        bans.append(w)\nprint(keep)",
-      "targetCode": "bans = [\"err\", \"skip\"]\nkeep = []\nfor w in input().split():\n    if w not in bans:\n        keep.append(w)\nprint(keep)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "ok err run skip",
-          "expectedOutput": "['ok', 'run']"
-        },
-        {
-          "id": 2,
-          "input": "err pass",
-          "expectedOutput": "['pass']"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 정수 리스트 nums를 오름차순으로 원본 정렬하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that sorts nums in ascending order in place.",
-      "hint_ko": "nums.sort() 형태로 리스트 원본 정렬 메서드를 호출하세요.",
-      "hint_en": "Write nums.sort() before the print line.",
-      "templateCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\n§§§§§§§§§§§\nprint(f\"Min:{nums[0]},Max:{nums[-1]}\")",
-      "targetCode": "nums = []\nfor s in input().split():\n    nums.append(int(s))\nnums.sort()\nprint(f\"Min:{nums[0]},Max:{nums[-1]}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "30 10 50 20",
-          "expectedOutput": "Min:10,Max:50"
-        },
-        {
-          "id": 2,
-          "input": "9 3 7",
-          "expectedOutput": "Min:3,Max:9"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] stack의 마지막 요소를 꺼내 removed 리스트에 추가하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the indented line that pops from stack and appends to removed.",
-      "hint_ko": "removed.append(stack.pop()) 형태로 꺼낸 값을 바로 추가하세요.",
-      "hint_en": "Write removed.append(stack.pop()) inside the while loop.",
-      "templateCode": "stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(f\"Left:{sum(stack)},Out:{sum(removed)}\")",
-      "targetCode": "stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    removed.append(stack.pop())\nprint(f\"Left:{sum(stack)},Out:{sum(removed)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Left:30,Out:70"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 문자열 치환, 리스트 필터링(continue, break), 정렬 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
-      "hint_ko": "음수는 건너뛰고 0에서 멈춘 뒤 모인 숫자들이 오름차순 정렬된 결과와 합계를 계산해보세요.",
-      "hint_en": "Trace which numbers are collected before 0 stops the loop, then check the sorted list and sum.",
-      "targetCode": "raw = \"30, -5, 10, 0, 20\".replace(\",\", \"\")\nnums = []\nfor s in raw.split():\n    n = int(s)\n    if n < 0:\n        continue\n    if n == 0:\n        break\n    nums.append(n)\nnums.sort()\nprint(f\"{nums}:{sum(nums)}\")",
-      "choices": [
-        "[10, 30]:40",
-        "[10, 20, 30]:60",
-        "[30, 10]:40",
-        "[-5, 10, 30]:35"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 30]:40"
-        }
-      ]
     },
     {
-      "id": 10,
-      "step": 10,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 내림차순 정렬, 양끝 .pop(), 리스트 연결 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
-      "hint_ko": "내림차순 정렬 후 맨 앞과 맨 뒤 값을 꺼내 그 차이를 이어 붙였을 때의 최댓값과 평균을 구해보세요.",
-      "hint_en": "Remove the front and back items after descending sort, append their difference, and find max and average.",
-      "targetCode": "q = [10, 50, 20, 30]\nq.sort(reverse=True)\nfirst = q.pop(0)\nlast = q.pop()\nres = q + [first - last]\nprint(f\"{max(res)}:{sum(res) / len(res)}\")",
-      "choices": [
-        "40:30.0",
-        "50:30.0",
-        "40:30",
-        "30:25.0"
-      ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트에서 1번과 2번 인덱스 두 요소([20, 30])만 잘라내어 출력해보세요.',
+      prompt_en: '[Fill Blank] Complete the slice range to extract indices 1 and 2 ([20, 30]) from nums.',
+      hint_ko: '시작 번호 1과 끝 번호(미포함) 3을 콜론으로 연결해 대괄호 안에 적으세요.',
+      hint_en: 'Join start index 1 and exclusive stop index 3 with a colon inside the brackets.',
+      templateCode: 'nums = [10, 20, 30, 40]\nmid = nums[§§§]\nprint(mid)',
+      targetCode: 'nums = [10, 20, 30, 40]\nmid = nums[1:3]\nprint(mid)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "40:30.0"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '[20, 30]',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 시작이나 끝 인덱스를 생략한 nums[:3]과 nums[2:]로 앞부분과 뒷부분을 잘라 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Slice the first three items with nums[:3] and from index 2 onward with nums[2:].',
+      hint_ko: '콜론 앞을 비우면 맨 처음(0번)부터, 콜론 뒤를 비우면 맨 끝까지 잘라냅니다.',
+      hint_en: 'Omitting the start slices from index 0; omitting the stop slices to the end.',
+      targetCode: 'nums = [10, 20, 30, 40, 50]\nprint(nums[:3])\nprint(nums[2:])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 30]\n[30, 40, 50]',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 시작 인덱스를 생략한 슬라이싱으로 tags 리스트의 맨 앞 2개 요소만 출력해보세요.',
+      prompt_en: '[Fill Blank] Use a slice with an omitted start index to print the first 2 elements of tags.',
+      hint_ko: '콜론 바로 뒤에 끝 인덱스 번호만 적어 앞 두 요소를 잘라내세요.',
+      hint_en: 'Write a colon followed by the stop index inside the brackets.',
+      templateCode: 'tags = ["a", "b", "c", "d"]\nprint(tags[§§])',
+      targetCode: 'tags = ["a", "b", "c", "d"]\nprint(tags[:2])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "['a', 'b']",
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 리스트 반복(*)과 리스트 연결(+) 연산자로 새 리스트를 만들어 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Create a repeated list with * and concatenate two lists with +.',
+      hint_ko: '문자열처럼 리스트도 *로 요소를 반복하고 +로 두 리스트를 이어붙일 수 있습니다.',
+      hint_en: 'Like strings, lists repeat their elements with * and join together with +.',
+      targetCode: 'zeros = [0] * 3\nmerged = zeros + [1, 2]\nprint(merged)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[0, 0, 0, 1, 2]',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 두 리스트 left와 right를 하나로 이어붙여 출력해보세요.',
+      prompt_en: '[Fill Blank] Concatenate left and right into a single list and print it.',
+      hint_ko: '두 리스트를 순서대로 연결하는 연산자를 빈칸에 적으세요.',
+      hint_en: 'Place the concatenation operator between left and right.',
+      templateCode: 'left = [1, 2]\nright = [3, 4]\nprint(left § right)',
+      targetCode: 'left = [1, 2]\nright = [3, 4]\nprint(left + right)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[1, 2, 3, 4]',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 리스트의 앞 2개(nums[:2])와 뒤 2개(nums[-2:])를 슬라이싱해 +로 합치고 길이를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Concatenate the first two items (nums[:2]) and last two items (nums[-2:]) and print the result and its length.',
+      hint_ko: 'nums[-2:]는 뒤에서 두 번째 요소부터 끝까지 잘라낸 부분 리스트입니다.',
+      hint_en: 'nums[-2:] slices from the second-to-last element to the end of the list.',
+      targetCode: 'nums = [10, 20, 30, 40, 50]\nends = nums[:2] + nums[-2:]\nprint(ends, len(ends))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 40, 50] 4',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] [1, 2]를 3번 반복한 리스트에서 앞 4개 요소만 슬라이싱해 출력해보세요.',
+      prompt_en: '[Fill Blank] Repeat [1, 2] three times, then slice and print the first 4 elements.',
+      hint_ko: '리스트를 지정한 횟수만큼 반복 생성하는 연산자를 빈칸에 채우세요.',
+      hint_en: 'Fill in the operator that repeats a list a given number of times.',
+      templateCode: 'seq = [1, 2] § 3\nprint(seq[:4])',
+      targetCode: 'seq = [1, 2] * 3\nprint(seq[:4])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[1, 2, 1, 2]',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트의 앞 2개 요소와 [0]이 2번 반복된 패딩 리스트를 연결해 출력해보세요.',
+      prompt_en: '[Fill Blank] Slice the first 2 elements of nums and concatenate them with [0] repeated twice.',
+      hint_ko: '앞 두 요소를 자르는 슬라이싱, 리스트 연결 연산자, 리스트 반복 연산자를 차례로 채우세요.',
+      hint_en: 'Fill in the 2-item prefix slice, concatenation operator, and repetition operator.',
+      templateCode: 'nums = [5, 10, 15, 20]\nres = nums[§§] § [0] § 2\nprint(res)',
+      targetCode: 'nums = [5, 10, 15, 20]\nres = nums[:2] + [0] * 2\nprint(res)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[5, 10, 0, 0]',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 슬라이싱 구분 기호를 잘못 적어 발생하는 문법 에러를 수정해 [20, 30]을 출력해보세요.',
+      prompt_en: '[Fix Bug] Fix the slice separator syntax error so [20, 30] is printed.',
+      hint_ko: '슬라이싱의 시작과 끝 인덱스 사이는 쉼표가 아닌 다른 기호로 구분합니다.',
+      hint_en: 'Separate the start and stop indices of a slice with the proper punctuation mark.',
+      templateCode: 'nums = [10, 20, 30, 40]\nprint(nums[1, 3])',
+      targetCode: 'nums = [10, 20, 30, 40]\nprint(nums[1:3])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[20, 30]',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 1번부터 3번 인덱스까지 3개의 요소([20, 30, 40])를 잘라내려다 2개만 잘리는 끝 인덱스 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the slice stop index so that three elements ([20, 30, 40]) are extracted.',
+      hint_ko: '끝 인덱스는 포함되지 않으므로 3번 인덱스까지 포함하려면 끝 번호를 1 늘려야 합니다.',
+      hint_en: 'Because the stop index is exclusive, increase it by 1 to include index 3.',
+      templateCode: 'nums = [10, 20, 30, 40, 50]\nsub = nums[1:3]\nprint(len(sub), sub)',
+      targetCode: 'nums = [10, 20, 30, 40, 50]\nsub = nums[1:4]\nprint(len(sub), sub)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 [20, 30, 40]',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 nums의 맨 앞 3개 요소를 슬라이싱해 변수 top3에 저장하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that slices the first 3 elements of nums into top3.',
+      hint_ko: '시작 인덱스를 생략한 슬라이싱 결과를 top3 변수에 대입하세요.',
+      hint_en: 'Assign the 3-element prefix slice of nums to top3.',
+      templateCode: 'nums = [90, 85, 80, 75, 70]\n§§§§§§§§§§§§§§§\nprint(top3)',
+      targetCode: 'nums = [90, 85, 80, 75, 70]\ntop3 = nums[:3]\nprint(top3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[90, 85, 80]',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 a의 앞 2개 요소와 리스트 b를 +로 연결해 res에 저장하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that concatenates the first 2 elements of a with b into res.',
+      hint_ko: 'a의 앞 2개 슬라이싱과 b를 더한 결과를 res에 대입하세요.',
+      hint_en: 'Join the 2-item prefix slice of a with b using + and assign to res.',
+      templateCode: 'a = [10, 20, 30]\nb = [99]\n§§§§§§§§§§§§§§§\nprint(res)',
+      targetCode: 'a = [10, 20, 30]\nb = [99]\nres = a[:2] + b\nprint(res)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 99]',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 양수·음수 슬라이싱과 리스트 연결 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '앞에서 잘라낸 요소와 뒤에서 잘라낸 요소를 합친 새 리스트와 그 길이를 확인하세요.',
+      hint_en: 'Check which elements are captured by nums[:1] and nums[-2:], then count the combined length.',
+      targetCode: 'nums = [10, 20, 30, 40]\nres = nums[:1] + nums[-2:]\nprint(res, len(res))',
+      choices: [
+        '[10, 30, 40] 3',
+        '[10, 20, 30, 40] 4',
+        '[10, 20, 40] 3',
+        '[20, 30, 40] 3',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 30, 40] 3',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 리스트 반복(*), while 반복문 요소 수정, 슬라이싱이 결합된 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '[1, 2]가 두 번 반복된 리스트에서 앞 두 칸이 10씩 증가한 뒤 1~2번 인덱스 슬라이싱 결과를 추적해보세요.',
+      hint_en: 'Trace [1, 2, 1, 2] after adding 10 to indices 0 and 1, then evaluate nums[1:3] + [9].',
+      targetCode: 'nums = [1, 2] * 2\ni = 0\nwhile i < 2:\n    nums[i] += 10\n    i += 1\nprint(nums[1:3] + [9])',
+      choices: [
+        '[12, 1, 9]',
+        '[11, 12, 9]',
+        '[12, 2, 9]',
+        '[2, 1, 9]',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[12, 1, 9]',
+        },
+      ],
+    },
+  ],
 };

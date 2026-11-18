@@ -1,328 +1,318 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_60: PracticeRound = {
-  "id": "py-basic-r60",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 60,
-  "title_ko": "60레벨: 생성자 __init__과 self로 초기 속성 설정하기",
-  "title_en": "Level 60: Initializer __init__ & self Attributes",
-  "description_ko": "__init__ 생성자와 self를 사용해 인스턴스마다 고유한 초기 속성과 기본값, 파생 속성을 설정합니다.",
-  "description_en": "Use __init__ and self to configure unique initial attributes, default parameters, and derived attributes per instance.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "class",
-    "def",
-    "variable",
-    "print",
-    "input",
-    "type",
-    "if",
-    "while",
-    "try"
+  id: 'py-basic-r60',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 60,
+  title_ko: '60레벨: 딕셔너리 쌍 추가·수정(d[k] = v), 삭제(del)와 키 확인(in)',
+  title_en: 'Level 60: Dictionary Insert/Update (d[k] = v), del & Key Check (in)',
+  description_ko: '딕셔너리의 기존 값 수정, 새 키-값 추가, del 삭제 및 in / not in을 이용한 안전한 키 존재 확인을 익힙니다.',
+  description_en: 'Learn how to update existing dictionary values, insert new keys, delete entries with del, and check keys with in.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'dict',
+    'iter',
+    'method',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] __init__(self, name) 생성자로 초기 속성을 설정하는 Pet 클래스를 완성해보세요.",
-      "prompt_en": "[Block] Define Pet with __init__(self, name), instantiate Pet(\"Coco\"), and print p.name.",
-      "hint_ko": "인스턴스를 생성할 때 괄호 안에 넘긴 인자는 __init__의 두 번째 매개변수(self 다음)부터 차례대로 전달됩니다.",
-      "hint_en": "Arguments passed inside ClassName(...) are forwarded starting from the second parameter of __init__ (after self).",
-      "targetCode": "class Pet:\n    def __init__(self, name):\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 딕셔너리 d의 "hp" 키 값을 80으로 수정하고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Update the value of key "hp" in dictionary d to 80 and print it.',
+      hint_ko: '이미 존재하는 키에 새 값을 대입하면 기존 값이 새 값으로 덮어써집니다.',
+      hint_en: 'Assigning to an existing key overwrites its previous value.',
+      targetCode: 'd = {"hp": 60, "mp": 30}\nd["hp"] = 80\nprint(d["hp"])',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Coco"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 생성자 메서드 이름과 인스턴스 자신을 가리키는 참조를 채워 Aria 120을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the initializer method name and the self reference to output Aria 120.",
-      "hint_ko": "첫 빈칸에는 양옆에 밑줄을 두 개씩 붙인 생성자 이름을, 둘째 빈칸에는 인스턴스 '자기 자신'을 뜻하는 네 글자 영단어를 적으세요.",
-      "hint_en": "Wrap init with double underscores on both sides for the method name, and use self on line 4.",
-      "templateCode": "class Hero:\n    def §§§§§§§§(self, name, hp):\n        self.name = name\n        §§§§.hp = hp\nh = Hero(\"Aria\", 120)\nprint(h.name, h.hp)",
-      "targetCode": "class Hero:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\nh = Hero(\"Aria\", 120)\nprint(h.name, h.hp)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Aria 120"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] __init__에 기본값 매개변수 hp=100을 설정하고 두 Hero 인스턴스를 생성해 출력해보세요.",
-      "prompt_en": "[Block] Define __init__(self, name, hp=100) with a default parameter and print two Hero instances.",
-      "hint_ko": "기본값이 없는 필수 매개변수(name)를 앞에 두고, 기본값이 있는 선택 매개변수(hp=100)를 뒤에 배치합니다.",
-      "hint_en": "Place required parameters without defaults (name) before optional parameters with defaults (hp=100).",
-      "targetCode": "class Hero:\n    def __init__(self, name, hp=100):\n        self.name = name\n        self.hp = hp\na = Hero(\"Leo\")\nb = Hero(\"Mia\", 150)\nprint(a.name, a.hp)\nprint(b.name, b.hp)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Leo 100\nMia 150"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 생성자 안에서 단가와 수량을 곱해 총액 파생 속성을 계산하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the blanks so the initializer computes the derived total attribute.",
-      "hint_ko": "첫 빈칸에는 인스턴스 자신을 뜻하는 네 글자 매개변수를 적고, 둘째 빈칸에는 단가 매개변수 이름을 적으세요.",
-      "hint_en": "Place self as the first parameter and multiply price by count on line 4.",
-      "templateCode": "class Order:\n    def __init__(§§§§, item, price, count=1):\n        self.item = item\n        self.total = §§§§§ * count\no = Order(\"Book\", 1200, 3)\nprint(o.item, o.total)",
-      "targetCode": "class Order:\n    def __init__(self, item, price, count=1):\n        self.item = item\n        self.total = price * count\no = Order(\"Book\", 1200, 3)\nprint(o.item, o.total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Book 3600"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입력받은 이름으로 User 인스턴스를 생성하고 아이디와 레벨을 출력해보세요.",
-      "prompt_en": "[Block] Pass input() into User(name) and print its uid and level attributes.",
-      "hint_ko": "f-string 안에서 인스턴스의 속성(u.uid, u.level)을 중괄호로 감싸 원하는 출력 형식을 만들 수 있습니다.",
-      "hint_en": "Wrap instance attributes (u.uid, u.level) in braces inside an f-string to format the output.",
-      "targetCode": "class User:\n    def __init__(self, uid, level=1):\n        self.uid = uid\n        self.level = level\nname = input()\nu = User(name)\nprint(f\"{u.uid}:Lv{u.level}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "neo",
-          "expectedOutput": "neo:Lv1"
+          id: 1,
+          input: '',
+          expectedOutput: '80',
         },
-        {
-          "id": 2,
-          "input": "aria",
-          "expectedOutput": "aria:Lv1"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 제목과 등급 3으로 Badge 인스턴스를 생성해 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Initialize a Badge instance with input title and rank 3 and print it.",
-      "hint_ko": "첫 빈칸에는 인스턴스 자신을 가리키는 네 글자 참조를, 둘째 빈칸에는 선언한 다섯 글자 클래스 이름을 적으세요.",
-      "hint_en": "Use self on line 3 and instantiate Badge on line 6.",
-      "templateCode": "class Badge:\n    def __init__(self, title, rank=1):\n        §§§§.title = title\n        self.rank = rank\nt = input()\nb = §§§§§(t, 3)\nprint(f\"{b.title}:#{b.rank}\")",
-      "targetCode": "class Badge:\n    def __init__(self, title, rank=1):\n        self.title = title\n        self.rank = rank\nt = input()\nb = Badge(t, 3)\nprint(f\"{b.title}:#{b.rank}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Gold",
-          "expectedOutput": "Gold:#3"
-        },
-        {
-          "id": 2,
-          "input": "Pro",
-          "expectedOutput": "Pro:#3"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 생성자에서 self.guild = None으로 초기화한 뒤 is None 조건문으로 값을 채워 출력해보세요.",
-      "prompt_en": "[Block] Initialize self.guild = None in __init__, then check is None to assign \"Round\".",
-      "hint_ko": "아직 정해지지 않은 객체 속성을 표시할 때는 파이썬의 빈 값 상수인 None으로 초기화해 두는 패턴을 자주 사용합니다.",
-      "hint_en": "Initializing an unset attribute to None in __init__ is a standard Python pattern for attributes assigned later.",
-      "targetCode": "class Knight:\n    def __init__(self, name):\n        self.name = name\n        self.guild = None\nk = Knight(\"Arthur\")\nif k.guild is None:\n    k.guild = \"Round\"\nprint(f\"{k.name}-{k.guild}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Arthur-Round"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 생성자에서 80점 이상일 때 합격 속성을 True로 바꾸고 출력해보세요.",
-      "prompt_en": "[Fill Blank] Initialize Exam with score, set passed to True when score >= 80, and print it.",
-      "hint_ko": "첫 빈칸에는 인스턴스 자신을 가리키는 네 글자 참조를 적고, 마지막 줄에는 여섯 글자 합격 여부 속성 이름을 적으세요.",
-      "hint_en": "Use self on line 3 and read e.passed on the final line.",
-      "templateCode": "class Exam:\n    def __init__(self, score):\n        §§§§.score = score\n        self.passed = False\n        if score >= 80:\n            self.passed = True\ne = Exam(int(input()))\nprint(f\"{e.score}:{e.§§§§§§}\")",
-      "targetCode": "class Exam:\n    def __init__(self, score):\n        self.score = score\n        self.passed = False\n        if score >= 80:\n            self.passed = True\ne = Exam(int(input()))\nprint(f\"{e.score}:{e.passed}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "85",
-          "expectedOutput": "85:True"
-        },
-        {
-          "id": 2,
-          "input": "70",
-          "expectedOutput": "70:False"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] Plant(3)으로 초기 높이를 설정하고 while문으로 10 이상이 될 때까지 키워보세요.",
-      "prompt_en": "[Block] Initialize Plant(3) and grow p.height in a while loop until it reaches 10.",
-      "hint_ko": "Plant(3)처럼 인자를 전달하면 생성자의 기본값(height=2) 대신 전달한 값(3)으로 속성이 초기화됩니다.",
-      "hint_en": "Passing an argument as in Plant(3) overrides the initializer's default parameter (height=2) with 3.",
-      "targetCode": "class Plant:\n    def __init__(self, height=2):\n        self.height = height\np = Plant(3)\ndays = 0\nwhile p.height < 10:\n    p.height += 4\n    days += 1\nprint(days, p.height)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2 11"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 초기 전력 40으로 배터리 객체를 생성하고 방전될 때까지 사용 횟수를 세어보세요.",
-      "prompt_en": "[Fill Blank] Initialize Battery(40) and count uses in a while loop until power <= 0.",
-      "hint_ko": "첫 빈칸에는 인스턴스 자신을 가리키는 네 글자 참조를, 둘째 빈칸에는 선언한 일곱 글자 클래스 이름을 적으세요.",
-      "hint_en": "Use self on line 3 and instantiate Battery(40) on line 4.",
-      "templateCode": "class Battery:\n    def __init__(self, power=20):\n        §§§§.power = power\nb = §§§§§§§(40)\nuses = 0\nwhile b.power > 0:\n    b.power -= 15\n    uses += 1\nprint(uses, b.power)",
-      "targetCode": "class Battery:\n    def __init__(self, power=20):\n        self.power = power\nb = Battery(40)\nuses = 0\nwhile b.power > 0:\n    b.power -= 15\n    uses += 1\nprint(uses, b.power)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 -5"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 생성자에서 self.hp 속성에 mp를 잘못 대입한 버그를 고쳐 120:50을 출력해보세요.",
-      "prompt_en": "[Fix Bug] Fix the bug in __init__ where self.hp is assigned mp instead of hp.",
-      "hint_ko": "전달받은 체력 매개변수 hp가 self.hp에 저장되도록 self.hp = mp를 self.hp = hp로 수정하세요.",
-      "hint_en": "Change self.hp = mp to self.hp = hp inside __init__.",
-      "templateCode": "class Hero:\n    def __init__(self, hp, mp):\n        self.hp = mp\n        self.mp = mp\nh = Hero(120, 50)\nprint(f\"{h.hp}:{h.mp}\")",
-      "targetCode": "class Hero:\n    def __init__(self, hp, mp):\n        self.hp = hp\n        self.mp = mp\nh = Hero(120, 50)\nprint(f\"{h.hp}:{h.mp}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "120:50"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 생성자에서 기본값 매개변수 hp=100이 필수 매개변수 name보다 앞에 온 오류를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the SyntaxError in __init__ by placing required parameter name before hp=100.",
-      "hint_ko": "생성자에서도 기본값이 없는 필수 매개변수 name이 먼저 오고 기본값 매개변수 hp=100이 뒤에 와야 합니다.",
-      "hint_en": "Put name before hp=100 after self in the __init__ header.",
-      "templateCode": "class Unit:\n    def __init__(self, hp=100, name):\n        self.name = name\n        self.hp = hp\nu = Unit(\"Kai\")\nprint(u.name, u.hp)",
-      "targetCode": "class Unit:\n    def __init__(self, name, hp=100):\n        self.name = name\n        self.hp = hp\nu = Unit(\"Kai\")\nprint(u.name, u.hp)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Kai 100"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] Pet 클래스 안에서 self와 name을 받는 __init__ 생성자 선언 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the indented def __init__(self, name): header inside Pet.",
-      "hint_ko": "들여쓰기된 위치에서 def __init__(self, name):을 작성하세요.",
-      "hint_en": "Write def __init__(self, name): inside the Pet class.",
-      "templateCode": "class Pet:\n    §§§§§§§§§§§§§§§§§§§§§§§§§\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
-      "targetCode": "class Pet:\n    def __init__(self, name):\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Coco"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] \"Potion\"과 150을 전달해 Item 인스턴스를 생성하고 변수 it에 저장해보세요.",
-      "prompt_en": "[Complete Line] Instantiate Item(\"Potion\", 150) and assign it to variable it.",
-      "hint_ko": "it = Item(\"Potion\", 150) 형태로 인스턴스를 생성하세요.",
-      "hint_en": "Write it = Item(\"Potion\", 150).",
-      "templateCode": "class Item:\n    def __init__(self, name, price, qty=2):\n        self.name = name\n        self.total = price * qty\n§§§§§§§§§§§§§§§§§§§§§§§§\nprint(f\"{it.name}:{it.total}\")",
-      "targetCode": "class Item:\n    def __init__(self, name, price, qty=2):\n        self.name = name\n        self.total = price * qty\nit = Item(\"Potion\", 150)\nprint(f\"{it.name}:{it.total}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Potion:300"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 기본값 매개변수와 파생 속성이 함께 쓰인 Cart 클래스 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the output of the Cart class using default parameters and derived attributes in __init__.",
-      "hint_ko": "첫 장바구니는 수량·수수료 기본값이 그대로 쓰이고, 둘째 장바구니는 전달된 인자로 기본값이 모두 덮어써질 때 각각의 최종 총액을 계산해 보세요.",
-      "hint_en": "Compute the subtotal and final total for the first cart using both defaults, then for the second cart where all three arguments override the defaults.",
-      "targetCode": "class Cart:\n    def __init__(self, price, count=2, fee=5):\n        self.sub = price * count\n        self.total = self.sub + fee\na = Cart(20)\nb = Cart(10, 3, 0)\nprint(a.total, b.total)",
-      "choices": [
-        "45 30",
-        "25 35",
-        "40 30",
-        "45 35"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 복합 대입 연산자로 "hp" 키의 값에 20을 누적해 100을 출력해보세요.',
+      prompt_en: '[Fill Blank] Use a compound assignment operator to add 20 to d["hp"] and print 100.',
+      hint_ko: '기존 값에 오른쪽 숫자를 더해 덮어쓰는 두 글자 연산자를 채우세요.',
+      hint_en: 'Fill in the two-character operator that adds to the current value in place.',
+      templateCode: 'd = {"hp": 80, "mp": 30}\nd["hp"] §§ 20\nprint(d["hp"])',
+      targetCode: 'd = {"hp": 80, "mp": 30}\nd["hp"] += 20\nprint(d["hp"])',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "45 30"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '100',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 빈 딕셔너리 d를 만들고 "mp" 키에 50을 등록해 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Create an empty dictionary d, insert key "mp" with value 50, and print d and len(d).',
+      hint_ko: '딕셔너리에 아직 없는 키를 적어 값을 대입하면 새로운 키-값 쌍이 추가됩니다.',
+      hint_en: 'Assigning to a key that does not exist yet adds a new key-value pair.',
+      targetCode: 'd = {}\nd["mp"] = 50\nprint(d, len(d))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "{'mp': 50} 1",
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 딕셔너리 shop에 새로운 키 "pear"로 가격 1500을 등록해보세요.',
+      prompt_en: '[Fill Blank] Insert the new key "pear" with value 1500 into dictionary shop.',
+      hint_ko: '등호 왼쪽에 딕셔너리 이름과 추가할 문자열 키를 대괄호로 감싸 적으세요.',
+      hint_en: 'Write the dictionary name followed by the new quoted key in square brackets on the left of =.',
+      templateCode: 'shop = {"apple": 1000}\n§§§§§§§§§§§§ = 1500\nprint(shop["pear"], len(shop))',
+      targetCode: 'shop = {"apple": 1000}\nshop["pear"] = 1500\nprint(shop["pear"], len(shop))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1500 2',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] del 키워드로 딕셔너리 d에서 "mp" 항목을 삭제하고 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Delete the "mp" entry from dictionary d using del and print d and len(d).',
+      hint_ko: '리스트에서 요소를 지울 때처럼 del 뒤에 딕셔너리[키]를 적으면 해당 쌍이 삭제됩니다.',
+      hint_en: 'Placing del before d[key] removes that key-value pair from the dictionary.',
+      targetCode: 'd = {"hp": 100, "mp": 50}\ndel d["mp"]\nprint(d, len(d))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "{'hp': 100} 1",
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 딕셔너리 bag에서 불필요한 "trash" 항목을 삭제하는 키워드를 채워보세요.',
+      prompt_en: '[Fill Blank] Fill in the keyword that removes the "trash" entry from bag.',
+      hint_ko: '컬렉션의 요소나 키를 제거할 때 맨 앞에 적는 세 글자 파이썬 키워드를 입력하세요.',
+      hint_en: 'Type the three-letter Python keyword used to delete an item.',
+      templateCode: 'bag = {"key": 1, "trash": 9}\n§§§ bag["trash"]\nprint(bag)',
+      targetCode: 'bag = {"key": 1, "trash": 9}\ndel bag["trash"]\nprint(bag)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "{'key': 1}",
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] "hp" 키가 딕셔너리 d에 존재하는지 in으로 확인한 뒤 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Check if key "hp" is in dictionary d before printing d["hp"].',
+      hint_ko: '딕셔너리에 in 연산자를 쓰면 값이 아니라 키(Key)가 존재하는지 검사합니다.',
+      hint_en: 'The in operator checks whether a key exists in the dictionary.',
+      targetCode: 'd = {"hp": 100}\nif "hp" in d:\n    print(d["hp"])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '100',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 딕셔너리 d에 "mp" 키가 없을 때 초기값 40을 등록하도록 조건을 채워보세요.',
+      prompt_en: '[Fill Blank] Check that key "mp" is not yet in d so it gets initialized to 40.',
+      hint_ko: '컬렉션에 포함되어 있지 않음을 뜻하는 두 단어 연산자를 빈칸에 적으세요.',
+      hint_en: 'Write the two-word non-membership operator between "mp" and d.',
+      templateCode: 'd = {"hp": 100}\nif "mp" §§§§§§ d:\n    d["mp"] = 40\nprint(d["mp"])',
+      targetCode: 'd = {"hp": 100}\nif "mp" not in d:\n    d["mp"] = 40\nprint(d["mp"])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '40',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트 words를 순회하며 각 단어가 등장한 횟수를 cnts 딕셔너리에 세어 출력해보세요.',
+      prompt_en: '[Fill Blank] Count how many times each word in words appears using dictionary cnts.',
+      hint_ko: '이미 등록된 키인지 확인하는 연산자와 기존 횟수 1 증가, 처음 등장했을 때의 초기값을 차례로 채우세요.',
+      hint_en: 'Check key membership, increment existing counts by 1, and initialize new keys to 1.',
+      templateCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k §§ cnts:\n        cnts[k] §§ 1\n    else:\n        cnts[k] = §\nprint(cnts["a"], cnts["b"])',
+      targetCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k in cnts:\n        cnts[k] += 1\n    else:\n        cnts[k] = 1\nprint(cnts["a"], cnts["b"])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 1',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 딕셔너리에서 키가 아닌 값(500)으로 포함 여부를 검사해 No가 출력되는 논리 오류를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the membership check so it tests for the key "gold" rather than the value 500.',
+      hint_ko: 'in 연산자는 항상 키를 기준으로 찾으므로 숫자 값 대신 문자열 키 이름을 적어야 합니다.',
+      hint_en: 'Test whether the string key "gold" is in d instead of checking the integer 500.',
+      templateCode: 'd = {"gold": 500}\nif 500 in d:\n    print("Yes")\nelse:\n    print("No")',
+      targetCode: 'd = {"gold": 500}\nif "gold" in d:\n    print("Yes")\nelse:\n    print("No")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Yes',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 아직 존재하지 않는 키 "score"에 복합 덧셈을 바로 시도해 발생한 KeyError를 초기값 대입으로 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the KeyError caused by using += on a non-existent key by assigning the initial value 10 directly.',
+      hint_ko: '빈 딕셔너리에 처음 키를 등록할 때는 누적 덧셈이 아니라 기본 대입 연산자를 써야 합니다.',
+      hint_en: 'Use simple assignment (=) when inserting a brand-new key into an empty dictionary.',
+      templateCode: 'user = {}\nuser["score"] += 10\nprint(user["score"])',
+      targetCode: 'user = {}\nuser["score"] = 10\nprint(user["score"])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '10',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 딕셔너리 user에 새로운 키 "lv"를 만들고 정수 10을 대입하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that assigns integer 10 to key "lv" in dictionary user.',
+      hint_ko: '딕셔너리 변수 뒤 대괄호에 문자열 키를 적고 등호 오른쪽에 10을 대입하세요.',
+      hint_en: 'Index user with the quoted key "lv" and assign 10.',
+      templateCode: 'user = {"name": "Ace"}\n§§§§§§§§§§§§§§§\nprint(user["name"], user["lv"])',
+      targetCode: 'user = {"name": "Ace"}\nuser["lv"] = 10\nprint(user["name"], user["lv"])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Ace 10',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 딕셔너리 menu에서 "old" 키-값 쌍을 삭제하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that deletes the "old" entry from dictionary menu.',
+      hint_ko: '삭제 키워드 뒤에 딕셔너리 이름과 지울 문자열 키를 대괄호로 지정하세요.',
+      hint_en: 'Use the deletion keyword followed by menu["old"].',
+      templateCode: 'menu = {"new": 2000, "old": 1000}\n§§§§§§§§§§§§§§§\nprint(menu)',
+      targetCode: 'menu = {"new": 2000, "old": 1000}\ndel menu["old"]\nprint(menu)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "{'new': 2000}",
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 문자열을 한 글자씩 순회하며 딕셔너리에 빈도수를 기록하는 다음 코드의 출력 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the output of the following character frequency counting code.',
+      hint_ko: '문자열 "abaac"에서 글자 "a"가 몇 번 등장하고 서로 다른 글자 종류가 몇 개인지 세어보세요.',
+      hint_en: 'Count how many times "a" appears in "abaac" and how many unique keys are created in d.',
+      targetCode: 'd = {}\nfor ch in "abaac":\n    if ch in d:\n        d[ch] += 1\n    else:\n        d[ch] = 1\nprint(d["a"], len(d))',
+      choices: ['3 3', '3 5', '2 3', '3 2'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 3',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 딕셔너리의 키 확인, 값 수정, 삭제가 순서대로 실행될 때의 최종 출력 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the final output after checking, updating, inserting, and deleting keys.',
+      hint_ko: '"a"의 값 변경, "c"의 새로 추가, "b"의 삭제가 일어난 뒤 남은 항목 수와 합계를 추적해보세요.',
+      hint_en: 'Trace the value of "a", the insertion of "c", and the deletion of "b" before evaluating len(bag) and the sum.',
+      targetCode: 'bag = {"a": 10, "b": 20}\nif "a" in bag:\n    bag["a"] += 5\nif "c" not in bag:\n    bag["c"] = 30\ndel bag["b"]\nprint(len(bag), bag["a"] + bag["c"])',
+      choices: ['2 45', '3 45', '2 40', '1 15'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 45',
+        },
+      ],
+    },
+  ],
 };

@@ -1,378 +1,325 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_66: PracticeRound = {
-  "id": "py-basic-r66",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 66,
-  "title_ko": "66레벨: 접두·접미사 및 문자 종류 판별 메서드",
-  "title_en": "Level 66: Prefix/Suffix & Character Classification Methods",
-  "description_ko": ".startswith(), .endswith(), .isdigit(), .isalpha()로 문자열 형식과 문자 구성을 안전하게 검증합니다.",
-  "description_en": "Validate prefixes, suffixes, digits, and alphabetic strings using .startswith(), .endswith(), .isdigit(), and .isalpha().",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "method",
-    "type",
-    "if",
-    "for_in",
-    "def",
-    "try"
+  id: 'py-basic-r66',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 66,
+  title_ko: '66레벨: 매개변수(Parameter)가 있는 함수 정의와 인자 전달',
+  title_en: 'Level 66: Functions with Parameters & Passing Arguments',
+  description_ko: '함수 괄호 안에 매개변수(Parameter)를 선언하고, 호출할 때 숫자·문자열·리스트·딕셔너리 인자를 전달하는 법을 익힙니다.',
+  description_en: 'Learn to declare function parameters and pass numbers, strings, lists, and dictionaries as arguments.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'dict',
+    'set',
+    'iter',
+    'method',
+    'def',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .startswith()와 .endswith()로 파일명의 접두사와 확장자를 검사해보세요.",
-      "prompt_en": "[Block] Check whether the filename begins with \"report\" and ends with \".pdf\".",
-      "hint_ko": "파일 이름의 머리말이나 확장자(.pdf)가 맞는지 확인할 때 슬라이싱 없이도 직관적으로 검사할 수 있습니다.",
-      "hint_en": "These methods let you check file prefixes and extensions like .pdf cleanly without manual slicing.",
-      "targetCode": "name = \"report_v1.pdf\"\nprint(name.startswith(\"report\"))\nprint(name.endswith(\".pdf\"))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 매개변수 name을 받아 f"Hi {name}"을 출력하는 greet(name) 함수를 만들고 "Mina"를 넣어 호출해보세요.',
+      prompt_en: '[Block] Define greet(name) to print f"Hi {name}" and call greet("Mina").',
+      hint_ko: '호출할 때 소괄호에 넣은 "Mina"가 함수의 매개변수 name에 전달됩니다.',
+      hint_en: 'The argument "Mina" passed in the call is assigned to parameter name.',
+      targetCode: 'def greet(name):\n    print(f"Hi {name}")\ngreet("Mina")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nTrue"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 주소가 \"https://\"로 시작하고 \".kr\"로 끝나면 True를 출력하도록 두 메서드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two methods so True is printed when url begins with \"https://\" and ends with \".kr\".",
-      "hint_ko": "시작 여부를 검사하는 startswith와 끝 여부를 검사하는 endswith를 차례로 채워보세요.",
-      "hint_en": "Enter startswith for the prefix check and endswith for the suffix check.",
-      "targetCode": "url = input().strip()\na = url.startswith(\"https://\")\nb = url.endswith(\".kr\")\nprint(a and b)",
-      "templateCode": "url = input().strip()\na = url.§§§§§§§§§§(\"https://\")\nb = url.§§§§§§§§(\".kr\")\nprint(a and b)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "https://a.kr",
-          "expectedOutput": "True"
+          id: 1,
+          input: '',
+          expectedOutput: 'Hi Mina',
         },
-        {
-          "id": 2,
-          "input": "http://a.kr",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .isdigit()와 .isalpha()로 숫자 문자열과 글자 문자열 여부를 각각 판별해보세요.",
-      "prompt_en": "[Block] Use .isdigit() and .isalpha() to test whether strings contain only digits or only letters.",
-      "hint_ko": "빈 문자열(\"\")이거나 공백·특수기호가 한 글자라도 섞여 있으면 두 메서드 모두 False를 반환합니다.",
-      "hint_en": "Both methods return False if the string is empty or contains any whitespace or punctuation.",
-      "targetCode": "pin = \"2026\"\ntag = \"Python\"\nprint(pin.isdigit(), tag.isalpha())",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True True"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 문자열이 숫자로만 구성되었는지와 글자로만 구성되었는지를 순서대로 출력해보세요.",
-      "prompt_en": "[Fill Blank] Print whether s consists purely of digits and purely of letters.",
-      "hint_ko": "숫자 여부를 판별하는 isdigit와 알파벳·글자 여부를 판별하는 isalpha를 차례로 적어보세요.",
-      "hint_en": "Write isdigit first and isalpha second.",
-      "targetCode": "s = input()\nprint(s.isdigit(), s.isalpha())",
-      "templateCode": "s = input()\nprint(s.§§§§§§§(), s.§§§§§§§())",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "404",
-          "expectedOutput": "True False"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "False True"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] for문과 f.lower().endswith(\".png\")로 대소문자 구분 없이 이미지 파일만 골라내보세요.",
-      "prompt_en": "[Block] Chain f.lower().endswith(\".png\") in a for loop to collect PNG files regardless of case.",
-      "hint_ko": "조건 검사에만 f.lower()를 쓰고 imgs.append(f)에는 원본 변수 f를 넣으면 원래 대소문자가 그대로 유지됩니다.",
-      "hint_en": "Using f.lower() only in the if test while appending f keeps the original casing intact in the result list.",
-      "targetCode": "files = [\"a.PNG\", \"doc.txt\", \"b.png\"]\nimgs = []\nfor f in files:\n    if f.lower().endswith(\".png\"):\n        imgs.append(f)\nprint(\",\".join(imgs))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "a.PNG,b.png"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백으로 나눈 토큰 중 숫자로만 이루어진 항목만 정수로 바꿔 합산해보세요.",
-      "prompt_en": "[Fill Blank] Sum only the purely numeric tokens from the space-separated input.",
-      "hint_ko": "숫자 문자열 판별 메서드 isdigit로 확인한 뒤, 정수 변환 함수 int로 감싸 누적하세요.",
-      "hint_en": "Validate numeric tokens with isdigit and convert them using int.",
-      "targetCode": "tokens = input().split()\ntotal = 0\nfor t in tokens:\n    if t.isdigit():\n        total += int(t)\nprint(total)",
-      "templateCode": "tokens = input().split()\ntotal = 0\nfor t in tokens:\n    if t.§§§§§§§():\n        total += §§§(t)\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10 py 25 ai",
-          "expectedOutput": "35"
-        },
-        {
-          "id": 2,
-          "input": "7 8 no",
-          "expectedOutput": "15"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .isdigit()로 양의 정수를 먼저 확인하고 부호 있는 정수는 try - except로 처리해보세요.",
-      "prompt_en": "[Block] Check unsigned digits with .isdigit() first and handle signed integers in else with try - except ValueError.",
-      "hint_ko": "\"-10\"처럼 부호가 붙은 숫자 문자열은 s.isdigit()가 False이지만 int(s)는 정상적으로 -10을 반환합니다.",
-      "hint_en": "A signed string like \"-10\" evaluates to False for s.isdigit(), but int(s) parses it cleanly as -10.",
-      "targetCode": "s = input().strip()\nif s.isdigit():\n    print(\"POS\", int(s))\nelse:\n    try:\n        print(\"SIGNED\", int(s))\n    except ValueError:\n        print(\"NAN\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "25",
-          "expectedOutput": "POS 25"
-        },
-        {
-          "id": 2,
-          "input": "-10",
-          "expectedOutput": "SIGNED -10"
-        },
-        {
-          "id": 3,
-          "input": "abc",
-          "expectedOutput": "NAN"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력이 글자면 대문자로 출력하고 아니면 정수 2배 또는 ERR를 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Print WORD if raw is alphabetic, otherwise try doubling as int or print ERR on ValueError.",
-      "hint_ko": "첫 빈칸에는 글자 판별 메서드 isalpha를 적고, 둘째 빈칸에는 정수 변환 예외 ValueError를 적으세요.",
-      "hint_en": "Use isalpha in the if condition and catch ValueError in the except clause.",
-      "targetCode": "raw = input().strip()\nif raw.isalpha():\n    print(\"WORD\", raw.upper())\nelse:\n    try:\n        print(\"NUM\", int(raw) * 2)\n    except ValueError:\n        print(\"ERR\")",
-      "templateCode": "raw = input().strip()\nif raw.§§§§§§§():\n    print(\"WORD\", raw.upper())\nelse:\n    try:\n        print(\"NUM\", int(raw) * 2)\n    except §§§§§§§§§§:\n        print(\"ERR\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "py",
-          "expectedOutput": "WORD PY"
-        },
-        {
-          "id": 2,
-          "input": "-15",
-          "expectedOutput": "NUM -30"
-        },
-        {
-          "id": 3,
-          "input": "12a",
-          "expectedOutput": "ERR"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .startswith(\"ID-\")와 s[3:].isdigit()를 결합해 ID 번호를 파싱하는 함수를 조립해보세요.",
-      "prompt_en": "[Block] Combine .startswith(\"ID-\") and s[3:].isdigit() inside parse_id to validate and parse ID strings.",
-      "hint_ko": "\"ID-\"가 3글자이므로 인덱스 3부터 끝까지 잘라낸 s[3:]이 숫자 부분에 해당합니다.",
-      "hint_en": "Since \"ID-\" is 3 characters long, the slice s[3:] extracts everything after the prefix.",
-      "targetCode": "def parse_id(s):\n    if s.startswith(\"ID-\") and s[3:].isdigit():\n        return int(s[3:])\n    return None\n\nres = parse_id(input())\nif res is None:\n    print(\"INVALID\")\nelse:\n    print(res + 1)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "ID-109",
-          "expectedOutput": "110"
-        },
-        {
-          "id": 2,
-          "input": "ID-1a",
-          "expectedOutput": "INVALID"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 길이가 5일 때 앞 2글자는 글자, 뒤 3글자는 숫자인지 판별하는 함수 valid_code를 완성해보세요.",
-      "prompt_en": "[Fill Blank] Complete valid_code to return True when s has length 5, first 2 chars letters, and last 3 chars digits.",
-      "hint_ko": "앞 두 글자 s[:2]에는 isalpha를, 뒤 세 글자 s[2:]에는 isdigit를 호출하세요.",
-      "hint_en": "Call isalpha on s[:2] and isdigit on s[2:].",
-      "targetCode": "def valid_code(s):\n    if len(s) == 5:\n        return s[:2].isalpha() and s[2:].isdigit()\n    else:\n        return False\n\nprint(valid_code(input()))",
-      "templateCode": "def valid_code(s):\n    if len(s) == 5:\n        return s[:2].§§§§§§§() and s[2:].§§§§§§§()\n    else:\n        return False\n\nprint(valid_code(input()))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "KR105",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "K1055",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 파일명이 \"test_\"로 시작하고 \".py\"로 끝날 때 RUN을 출력하도록 뒤바뀐 인자를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the swapped prefix/suffix arguments so files starting with \"test_\" and ending with \".py\" print RUN.",
-      "hint_ko": "startswith에는 접두사 \"test_\"를, endswith에는 확장자 \".py\"를 넣도록 두 문자열 인자를 맞바꾸세요.",
-      "hint_en": "Swap the two string arguments so startswith checks \"test_\" and endswith checks \".py\".",
-      "templateCode": "f = input().strip()\nif f.startswith(\".py\") and f.endswith(\"test_\"):\n    print(\"RUN\")\nelse:\n    print(\"SKIP\")",
-      "targetCode": "f = input().strip()\nif f.startswith(\"test_\") and f.endswith(\".py\"):\n    print(\"RUN\")\nelse:\n    print(\"SKIP\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "test_login.py",
-          "expectedOutput": "RUN"
-        },
-        {
-          "id": 2,
-          "input": "main.py",
-          "expectedOutput": "SKIP"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 숫자 문자열일 때만 정수로 변환해 100을 더해야 하는데 글자 판별 메서드를 쓴 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the character classification method so numeric pin strings are converted to int.",
-      "hint_ko": "int(pin) 변환 전에 숫자로만 이루어졌는지 확인해야 하므로 .isalpha()를 .isdigit()로 수정하세요.",
-      "hint_en": "Replace .isalpha() with .isdigit() before calling int(pin).",
-      "templateCode": "pin = input().strip()\nif pin.isalpha():\n    print(int(pin) + 100)\nelse:\n    print(\"INVALID\")",
-      "targetCode": "pin = input().strip()\nif pin.isdigit():\n    print(int(pin) + 100)\nelse:\n    print(\"INVALID\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "250",
-          "expectedOutput": "350"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "INVALID"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] s가 \"A\"로 시작하고 뒷부분 s[1:]이 모두 숫자인지 판별해 ok에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Check whether s starts with \"A\" and s[1:] is all digits, assigning the boolean to ok.",
-      "hint_ko": "ok = s.startswith(\"A\") and s[1:].isdigit() 형태로 두 조건을 and로 연결해 ok에 대입하세요.",
-      "hint_en": "Write ok = s.startswith(\"A\") and s[1:].isdigit().",
-      "targetCode": "s = input().strip()\nok = s.startswith(\"A\") and s[1:].isdigit()\nprint(ok)",
-      "templateCode": "s = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ok)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "A204",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "A20B",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 파일명 name이 \".py\"로 끝나는지 판별한 불리언을 변수 is_py에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Check whether name ends with \".py\" and assign the boolean result to is_py.",
-      "hint_ko": "is_py = name.endswith(\".py\") 형태로 접미사 검사 결과를 변수 is_py에 저장하세요.",
-      "hint_en": "Write is_py = name.endswith(\".py\").",
-      "targetCode": "name = input().strip()\nis_py = name.endswith(\".py\")\nprint(is_py)",
-      "templateCode": "name = input().strip()\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(is_py)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "app.py",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "app.js",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 .isdigit()와 .isalpha() 판별 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "음수 부호(-)나 숫자와 알파벳이 섞인 문자열은 두 판별 메서드에서 모두 거짓이 된다는 점을 기억하세요.",
-      "hint_en": "Remember that minus signs and mixed alphanumeric tokens fail both checks.",
-      "targetCode": "items = [\"120\", \"-5\", \"py3\", \"AI\", \"07\"]\na, b = 0, 0\nfor x in items:\n    if x.isdigit():\n        a += 1\n    elif x.isalpha():\n        b += 1\nprint(a, b)",
-      "choices": [
-        "2 1",
-        "3 1",
-        "2 2",
-        "3 2"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 함수 본문에서 거듭제곱에 사용하는 매개변수 이름을 선언부 소괄호에 채워보세요.',
+      prompt_en: '[Fill Blank] Fill in the parameter name in the function header so 36 is printed.',
+      hint_ko: '둘째 줄 print문 안에서 제곱하고 있는 세 글자 변수 이름을 그대로 적으세요.',
+      hint_en: 'Use the exact three-letter variable name referenced on line 2.',
+      templateCode: 'def square(§§§):\n    print(num ** 2)\nsquare(6)',
+      targetCode: 'def square(num):\n    print(num ** 2)\nsquare(6)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2 1"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '36',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 두 매개변수 a, b를 받아 합과 곱을 출력하는 add_info(a, b) 함수를 정의하고 4, 5로 호출해보세요.',
+      prompt_en: '[Block] Define add_info(a, b) to print a + b and a * b, then call add_info(4, 5).',
+      hint_ko: '매개변수가 여러 개일 때는 쉼표로 나열하며, 호출할 때 넣은 순서대로 값이 전달됩니다.',
+      hint_en: 'Separate multiple parameters with commas; arguments are matched by position.',
+      targetCode: 'def add_info(a, b):\n    print(a + b, a * b)\nadd_info(4, 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '9 20',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 몫과 나머지를 계산하는 두 매개변수를 함수 헤더에 선언해 3 2를 출력해보세요.',
+      prompt_en: '[Fill Blank] Declare the two parameters in div_info so 17 and 5 print 3 2.',
+      hint_ko: '함수 본문에서 나눗셈에 쓰이는 두 한 글자 변수를 쉼표와 공백으로 구분해 적으세요.',
+      hint_en: 'Write the two single-letter parameter names used in the body separated by a comma and space.',
+      templateCode: 'def div_info(§§§§):\n    print(a // b, a % b)\ndiv_info(17, 5)',
+      targetCode: 'def div_info(a, b):\n    print(a // b, a % b)\ndiv_info(17, 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 2',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 점수 score를 전달받아 80 이상이면 Pass, 아니면 Fail을 출력하는 check(score) 함수를 조립해보세요.',
+      prompt_en: '[Block] Define check(score) with an if-else statement and call check(85).',
+      hint_ko: '함수 내부의 if-else 조건문은 전달받은 매개변수 score의 값에 따라 분기합니다.',
+      hint_en: 'The if-else inside the function branches based on the passed score argument.',
+      targetCode: 'def check(score):\n    if score >= 80:\n        print("Pass")\n    else:\n        print("Fail")\ncheck(85)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Pass',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 입력받은 점수 변수 s와 합격 기준 70을 순서대로 전달해 check_cut 함수를 호출해보세요.',
+      prompt_en: '[Fill Blank] Pass input variable s and cutoff 70 into check_cut.',
+      hint_ko: '첫 번째 인자로 점수 변수 s를, 두 번째 인자로 기준 점수 70을 쉼표로 구분해 넣으세요.',
+      hint_en: 'Write s and 70 separated by a comma and space inside the call parentheses.',
+      templateCode: 'def check_cut(score, cut):\n    if score >= cut:\n        print("Pass")\n    else:\n        print("Fail")\ns = int(input())\ncheck_cut(§§§§§)',
+      targetCode: 'def check_cut(score, cut):\n    if score >= cut:\n        print("Pass")\n    else:\n        print("Fail")\ns = int(input())\ncheck_cut(s, 70)',
+      testCases: [
+        {
+          id: 1,
+          input: '80',
+          expectedOutput: 'Pass',
+        },
+        {
+          id: 2,
+          input: '60',
+          expectedOutput: 'Fail',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 리스트 nums를 매개변수로 받아 길이와 합계를 출력하는 list_info(nums) 함수를 조립해보세요.',
+      prompt_en: '[Block] Define list_info(nums) to print len(nums) and sum(nums), then call it with [10, 20, 30].',
+      hint_ko: '함수 인자로 숫자뿐만 아니라 리스트 전체를 전달해 집계 함수를 적용할 수 있습니다.',
+      hint_en: 'You can pass an entire list as an argument and run len() and sum() on the parameter.',
+      targetCode: 'def list_info(nums):\n    print(len(nums), sum(nums))\nlist_info([10, 20, 30])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 60',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 전달받은 딕셔너리 매개변수 menu에서 key에 해당하는 가격을 조회해 출력해보세요.',
+      prompt_en: '[Fill Blank] Look up parameter key inside dictionary parameter menu in the f-string.',
+      hint_ko: '첫 번째 매개변수 이름 뒤 대괄호 안에 두 번째 매개변수 이름을 넣어 조회하세요.',
+      hint_en: 'Index dictionary parameter menu with parameter key using square brackets.',
+      templateCode: 'def show_price(menu, key):\n    print(f"{key}:{§§§§§§§§§}")\nitems = {"tea": 3000, "pie": 4500}\nshow_price(items, "pie")',
+      targetCode: 'def show_price(menu, key):\n    print(f"{key}:{menu[key]}")\nitems = {"tea": 3000, "pie": 4500}\nshow_price(items, "pie")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'pie:4500',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 문자열과 반복 횟수를 받는 매개변수를 선언하고 "Go"와 3을 전달해 GoGoGo를 출력해보세요.',
+      prompt_en: '[Fill Blank] Declare the two parameters and call repeat_tag with "Go" and 3 to print GoGoGo.',
+      hint_ko: '본문에서 곱하고 있는 두 매개변수 이름과, 호출부에 전달할 문자열 "Go" 및 숫자 3을 채우세요.',
+      hint_en: 'Fill in the two parameter names used on line 2 and pass "Go", 3 in the function call.',
+      templateCode: 'def repeat_tag(§§§, §§§):\n    print(tag * cnt)\nrepeat_tag(§§§§§§§)',
+      targetCode: 'def repeat_tag(tag, cnt):\n    print(tag * cnt)\nrepeat_tag("Go", 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'GoGoGo',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 매개변수가 2개인 함수에 인자를 1개만 전달해 발생한 TypeError를 두 번째 인자 8을 추가해 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the TypeError on the last line by passing both arguments 5 and 8 to calc_area.',
+      hint_ko: '선언된 매개변수 개수와 호출할 때 전달하는 인자 개수가 일치해야 합니다.',
+      hint_en: 'Pass two comma-separated arguments (5, 8) to match the two parameters (w, h).',
+      templateCode: 'def calc_area(w, h):\n    print(w * h)\ncalc_area(5)',
+      targetCode: 'def calc_area(w, h):\n    print(w * h)\ncalc_area(5, 8)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '40',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 이름과 레벨 인자의 전달 순서가 뒤바뀌어 발생한 TypeError를 올바른 순서로 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the TypeError by passing the name string and level integer in matching order.',
+      hint_ko: '선언부의 매개변수 순서(name, lv)에 맞춰 문자열을 먼저, 정수를 다음에 전달하세요.',
+      hint_en: 'Pass "Ace" first and 10 second so lv receives the integer.',
+      templateCode: 'def show_tag(name, lv):\n    print(f"{name}:{lv + 1}")\nshow_tag(10, "Ace")',
+      targetCode: 'def show_tag(name, lv):\n    print(f"{name}:{lv + 1}")\nshow_tag("Ace", 10)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Ace:11',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 두 매개변수 a, b를 받는 함수 show_sum의 첫째 줄 헤더를 작성해보세요.',
+      prompt_en: '[Complete Line] Write the function header for show_sum taking parameters a and b.',
+      hint_ko: 'def 키워드 뒤에 함수 이름과 소괄호로 감싼 두 매개변수, 콜론(:)을 적어 완성하세요.',
+      hint_en: 'Write def show_sum(a, b): on line 1.',
+      templateCode: '§§§§§§§§§§§§§§§§§§§\n    print(a + b)\nshow_sum(15, 25)',
+      targetCode: 'def show_sum(a, b):\n    print(a + b)\nshow_sum(15, 25)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '40',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 마지막 줄에서 딕셔너리 inv와 키 "pen"을 인자로 넣어 show_stock 함수를 호출해보세요.',
+      prompt_en: '[Complete Line] Call show_stock with arguments inv and "pen" on the last line.',
+      hint_ko: '함수 이름 뒤 소괄호 안에 딕셔너리 변수와 문자열 키를 쉼표로 구분해 전달하세요.',
+      hint_en: 'Invoke show_stock(inv, "pen") on the final line.',
+      templateCode: 'def show_stock(store, key):\n    print(f"{key}:{store[key]}")\ninv = {"pen": 12, "note": 5}\n§§§§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'def show_stock(store, key):\n    print(f"{key}:{store[key]}")\ninv = {"pen": 12, "note": 5}\nshow_stock(inv, "pen")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'pen:12',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 서로 다른 두 쌍의 인자로 calc 함수를 두 번 호출했을 때의 출력 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the output when calling calc(14, 4) followed by calc(9, 2).',
+      hint_ko: '각 호출에서 전달된 두 숫자의 몫(//)과 나머지(%)가 순서대로 출력됩니다.',
+      hint_en: 'Compute the floor division and modulo for (14, 4) on line 1 and (9, 2) on line 2.',
+      targetCode: 'def calc(a, b):\n    print(a // b, a % b)\ncalc(14, 4)\ncalc(9, 2)',
+      choices: ['3 2\n4 1', '2 3\n1 4', '3.5 2\n4.5 1', '3 2\n4 0'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 2\n4 1',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 리스트와 기준 점수를 인자로 전달받는 다음 함수 호출의 출력 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the output when passing list data and cutoff 80 to count_over.',
+      hint_ko: '전달된 리스트에서 기준값 80 이상인 숫자가 총 몇 개인지 세어보세요.',
+      hint_en: 'Count how many numbers in data are greater than or equal to 80.',
+      targetCode: 'def count_over(nums, cut):\n    cnt = 0\n    for x in nums:\n        if x >= cut:\n            cnt += 1\n    print(cnt)\ndata = [50, 80, 95, 70, 85]\ncount_over(data, 80)',
+      choices: ['3', '2', '4', '5'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3',
+        },
+      ],
+    },
+  ],
 };

@@ -3,7 +3,7 @@
 이 문서는 **TypingCode V2**의 학습 커리큘럼 및 연습 콘텐츠를 제작, 확장, 검증하는 공식 표준 규격(SSOT)을 설명합니다.
 
 > 📌 **참고 문서 안내**:
-> - 파이썬 베이직(2-Part · 14섹션 · 87레벨 · 1,089문항) 및 심화(`py-advanced`) 경계 마스터 로드맵: [`docs/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/python_curriculum.md)
+> - 파이썬 베이직(2-Part · 14섹션 · 113레벨 · 1,625문항) 레벨별 세부 문제 설계 및 누적 복습 마스터 로드맵: [`docs/python_curriculum.md`](file:///d:/Projects/TypingCode_V2/docs/python_curriculum.md)
 > - 언어별 트랙 및 런타임 로드맵: [`docs/LANGUAGE_ROADMAP.md`](file:///d:/Projects/TypingCode_V2/docs/LANGUAGE_ROADMAP.md)
 
 ---
@@ -14,57 +14,69 @@ TypingCode V2는 각 코스 모듈별로 독립된 TypeScript 모듈 파일(`src
 
 | 대상 | 파일 경로 | 설명 |
 | :--- | :--- | :--- |
-| **코스별 레벨 파일** | `src/data/curriculum/[course]/level[N].ts` | 각 레벨 문항(일반 13문항 / 종합 10문항), `unlockedBlocks`, 테스트 케이스 정의 |
+| **코스별 레벨 파일** | `src/data/curriculum/[course]/level[N].ts` | 각 레벨 문항(일반 **15문항** / 종합 **10문항**), `unlockedBlocks`, 테스트 케이스 정의 |
 | **언어 트랙 & 모듈** | [`src/lib/curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts) | 13개 지원 언어의 트랙 정보, `totalLevels`, 스킬셋 메타데이터 |
-| **챕터(섹션) & 태그** | [`src/lib/curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) | 섹션 그룹화(`CourseSection`) 및 레벨 카드 문법 태그(`syntaxTags`) 정의 |
+| **챕터(섹션) & 태그** | [`src/lib/curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) | 섹션 그룹화(`LevelSection`) 및 레벨 카드 문법 태그(`syntaxTags`) 정의 |
 | **연습 라운드 등록소** | [`src/lib/practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) | 레벨별 라운드 매핑(`PRACTICE_ROUNDS`) 및 `getPracticeRound` 제공 |
 | **타입 스키마 정의** | [`src/lib/practiceTypes.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceTypes.ts) | `PracticeRound`, `PracticeQuestion`, `ChallengeKind`, `TestCase` 인터페이스 |
 
 ---
 
-## 2. 2-Part 나선형 커리큘럼 설계 원칙 (2-Part Spiral Curriculum)
+## 2. 2-Part 나선형 커리큘럼 & 다중 계층 누적 복습 원칙 (Cumulative Spiral Architecture)
 
-입문자가 부가 메서드·보조 내장 함수의 홍수에 빠지지 않도록 커리큘럼을 **Part 1(핵심 개념 기초)**과 **Part 2(반복 복습 & 부가 기능 확장)**로 엄격히 분리합니다 (대표 구현: Python Basic `Lv 1 ~ Lv 87`).
+입문자가 한 레벨에서 과도한 개념에 치이지 않고 천천히 앞 내용을 체화하며 나아갈 수 있도록, **한 레벨당 핵심 개념을 1~2개로 잘게 쪼개고(총 113레벨)**, **전 구간 누적 복습**이 매 레벨마다 자동으로 이루어지도록 설계합니다.
 
-1. **Part 1 — 핵심 개념 기초편 (예: Python `섹션 1 ~ 섹션 10`, `Lv 1 ~ Lv 63`, 789문항)**
-   - **최소 필수 함수만 허용**: 부가 메서드나 편의 내장 함수를 **완전히 배제(0건)**하고 가장 본질적인 문법만으로 `입출력` → `변수·입력` → `불리언·조건문` → `반복문(for/while)` → `문자열 기초` → `리스트 기초` → `None·튜플·딕셔너리·집합 기초` → `함수(def) 기초` → `예외 처리(try-except) 기초` → `클래스(class) 기초`까지 언어의 전체 뼈대를 완주합니다.
-2. **Part 2 — 반복 심화 & 부가 함수·기능 확장편 (예: Python `섹션 11 ~ 섹션 14`, `Lv 64 ~ Lv 87`, 300문항)**
-   - Part 1에서 익힌 전 영역을 **처음부터 다시 2회독 나선형으로 복습**하면서, 부가 문자열·컬렉션 메서드, 2차원 리스트, 삼항 조건식·리스트 컴프리헨션, 실용 내장 함수(`abs`, `round`, `map`, `enumerate`, `zip`, `reversed`, `all`, `any`, `sorted`, `isinstance`, `ord`, `chr`), `*args`·`lambda`, `try-except-else-finally`·`raise`, `__str__`·단일 상속을 단계적으로 확장합니다.
+1. **Part 1 — 핵심 개념 기초편 (Python `섹션 1 ~ 섹션 10`, `Lv 1 ~ Lv 82`, 1,180문항)**
+   - 부가 메서드나 편의 내장 함수를 배제하고 가장 본질적인 필수 문법만으로 `기초 출력·연산(Sec 1)` ➔ `주석·변수·사용자 입력(Sec 2)` ➔ `불리언·조건문(Sec 3)` ➔ `반복문(Sec 4)` ➔ `리스트 기초(Sec 5)` ➔ `문자열 기초(Sec 6)` ➔ `튜플·None·딕셔너리·집합 기초(Sec 7)` ➔ `함수(def) 기초(Sec 8)` ➔ `클래스(class) 기초(Sec 9)` ➔ `예외 처리(try-except) 기초(Sec 10)`까지 언어의 전체 뼈대를 완주합니다.
+   - **시퀀스·구조화 연결 최적화**:
+     - `리스트(Sec 5)` ➔ `문자열(Sec 6)`: 시각적으로 요소가 구분되는 리스트에서 `len()`, 인덱싱(`[0]`, `[-1]`), 슬라이싱(`[a:b]`), `in`, `for` 순회를 먼저 익힌 뒤 문자열에서 즉시 복습하고 `.split()`으로 리스트와 재연결합니다.
+     - `함수(Sec 8)` ➔ `클래스(Sec 9)` ➔ `예외 처리(Sec 10)`: `def`, 매개변수, `return` 학습 직후 클래스의 `__init__`과 메서드로 직결하고, 마지막 섹션에서 앞선 모든 런타임 에러를 `try-except`로 방어하며 Part 1을 마무리합니다.
+2. **Part 2 — 반복 심화 & 부가 함수·기능 확장편 (Python `섹션 11 ~ 섹션 14`, `Lv 83 ~ Lv 113`, 445문항)**
+   - Part 1의 순서를 그대로 대칭시켜 **2회독 나선형 복습**을 진행하면서 `컬렉션 심화·복사·컴프리헨션(Sec 11)` ➔ `문자열 심화 메서드·서식(Sec 12)` ➔ `실용 내장 함수·lambda·math 모듈(Sec 13)` ➔ `클래스 상속(super)·예외 확장(else/finally/raise)·파이널 마스터(Sec 14)`를 완성합니다.
 
 ---
 
-## 3. V2 레벨 및 문항 구성 규격 (13-Step Regular / 10-Step Finale)
+## 3. V2 레벨 및 문항 구성 규격 (15-Step Regular / 10-Step Finale)
 
-### 3.1 일반 학습 레벨 (`totalQuestions: 13`)
-블록 조작으로 구조를 먼저 직관화한 직후 텍스트 타이핑으로 즉시 체화하도록 **홀수 블록 ⇄ 짝수 타이핑 1:1 교차 구조**와 **마무리 응용 3문항**으로 구성합니다.
+### 3.1 일반 학습 레벨 (`totalQuestions: 15`)
+전반부 **8문항(4:4 블록·빈칸 교차)**으로 핵심 개념을 부담 없이 익히고, 후반부 **7문항(복합 빈칸 1 + 오류 수정 2 + 한 줄 완성 2 + 코드 독해 2)**에서 **이전 모든 섹션·레벨의 누적 개념과 현재 개념을 종합 복습**합니다.
 
-| 단계 (`step`) | `type` | `kind` | 구성 및 역할 |
-| :---: | :---: | :---: | :--- |
-| **Step 1, 3, 5, 7, 9** | `'block'` | `'standard'` (생략 가능) | **사전 배치 블록 모드**: `targetCode` 기반으로 빈 슬롯이 뚫린 블록 골격이 캔버스에 제공되며 조작·조립으로 문법 구조를 습득 |
-| **Step 2, 4, 6, 8, 10** | `'typing'` | `'fill_blank'` | **빈칸 채우기 타이핑**: 직전 홀수 블록 문제와 짝을 이루며 `templateCode`의 `§` 캡슐 빈칸을 직접 타이핑하여 완성 |
-| **Step 11** | `'typing'` | `'fix_bug'` | **버그 1곳 정밀 수정**: 잘못된 연산자·키워드·인덱스 등 버그가 포함된 `templateCode`(그대로 실행 시 반드시 실패/오답)를 수정 |
-| **Step 12** | `'typing'` | `'one_line'` | **한 줄 코드 추가**: 주어진 코드의 `§` 빈 줄 한 줄을 스스로 작성하여 완성 (프롬프트에 `'한 줄을 추가하여'` / `'한 줄의 코드를'` 포함) |
-| **Step 13** | `'quiz'` | `'predict_output'` | **실행 결과 예측 4지선다**: `targetCode`를 읽고 실행 결과를 머릿속으로 추적해 `choices`(4개) 중 `correctChoiceIndex` 선택 |
+| 구간 | 단계 (`step`) | `type` | `kind` | 빈칸/제약 규격 | 구성 및 교육적 역할 |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **전반부**<br>(4:4 개념 학습)<br>**8문항** | **Step 1, 3, 5, 7** | `'block'` | `'standard'` | 블록 조립 | **4단계 세부 개념 블록 조립**:<br>• `Pair 1 (1~2)`: 신규 개념 가장 쉬운 기본형<br>• `Pair 2 (3~4)`: 신규 개념 두 번째 형태/변형<br>• `Pair 3 (5~6)`: 신규 개념 + 직전 레벨 개념 결합<br>• `Pair 4 (7~8)`: 신규 개념 + 이전 섹션 누적 개념 결합 |
+| | **Step 2, 4, 6, 8** | `'typing'` | `'fill_blank'` | **단일 빈칸 (1곳)** | **핵심 포인트 단일 빈칸**: 직전 홀수 블록 문제와 짝을 이루며, **이번 레벨에서 배우는 가장 중요한 핵심 포인트 딱 1곳만** `§` 빈칸으로 뚫어 인지 부하 없이 즉각 체화 |
+| **후반부**<br>(누적 복습 문제풀이)<br>**7문항** | **Step 9** | `'typing'` | `'fill_blank'` | **복합 빈칸 (2~3곳)** | **누적+현재 결합 복합 빈칸 (1문항)**: **빈칸을 2~3곳** 뚫어 **[이전에 배운 누적 개념 1~2곳] + [현재 레벨 개념 1곳]**을 동시에 채우는 종합 빈칸 문제 |
+| | **Step 10 ~ 11** | `'typing'` | `'fix_bug'` | 초기 코드 실행 시 오답/에러 필수 | **오류 수정 (2문항)**:<br>• `Step 10`: 현재 레벨 개념의 핵심 문법 오류 수정 (이전 개념 문맥 포함)<br>• `Step 11`: **이전 누적 개념의 함정 + 현재 레벨 개념**이 결합된 코드의 버그 수정 |
+| | **Step 12 ~ 13** | `'typing'` | `'one_line'` | 한 줄 전체 `§` 마스킹 | **한 줄 코드 완성 (2문항)**:<br>• `Step 12`: 이전 개념과 연결된 코드에서 현재 레벨의 핵심 한 줄 작성<br>• `Step 13`: **이전 누적 개념 + 현재 레벨 개념을 한 줄에 결합**한 응용 코드 작성 |
+| | **Step 14 ~ 15** | `'quiz'` | `'predict_output'` | **🚫 `input()` 사용 절대 금지** | **순수 코드 독해 4지선다 (2문항)**:<br>• 외부 입력(`input()`) 없이 **변수 리터럴 대입만으로 100% 자급자족**되는 코드로 구성<br>• `Step 14`: 현재 섹션 누적 개념 + 현재 레벨 개념 결합 코드 독해<br>• `Step 15`: **초반~직전 섹션의 주요 누적 개념 + 현재 레벨 개념**을 총동원한 종합 코드 독해 |
 
-#### 레벨 내 미시 나선형 복습 배치 (Intra-Level Micro-Spiral)
-- **Steps 1 ~ 4**: 해당 레벨의 **신규 핵심 개념**만 순수하게 도입 (인지 부하 최소화).
-- **Steps 5 ~ 8**: 신규 개념 + **직전 레벨·직전 섹션 개념** 결합.
-- **Steps 9 ~ 13**: 신규 개념 + **이전 누적 핵심 개념**(`while`, `+=/-=/*=`, `float()/str()/bool()`, `f-string`, `list`, `tuple/None/dict/set`, `def/return`, `try-except`, `class`)을 골고루 순환 결합하여 망각을 방지.
+#### 🔄 다중 계층 누적 복습 법칙 (Multi-Layered Cumulative Review Rule)
+내부 문제를 구성할 때 **단순히 직전 레벨(`Lv.N-1`)의 개념만 넣는 것을 금지**합니다. 뒤에 가서 개념이 복잡해지더라도 앞에서 배운 기초가 몸에 배어 자연스럽게 읽히도록 다음 **3계층 복습 원리**를 모든 레벨의 `Pair 3~4 (Steps 5~8)` 및 `Steps 9~15`에 적용합니다:
+1. **근거리 복습 (Near Review)**: 같은 섹션 내 앞선 레벨들의 개념 (예: `+=` 배울 때 변수 재할당·주석 결합)
+2. **중거리 복습 (Mid Review)**: 직전 1~2개 섹션의 핵심 문법 (예: 조건문 배울 때 `input("문구")`, `int()`, `+=`, `//, %` 결합)
+3. **원거리 상시 복습 (Anchor Review)**: 섹션 1~2에서 배운 기본기(`//, %, **`, 괄호 우선순위, 문자열 `+`/`*`, `\n`/`\t`, `sep`/`end`, 복합 대입 `+=`, 다중 할당 `a, b = b, a`)를 후반부(리스트, 문자열, 딕셔너리, 함수, 클래스, 예외 처리) 문제의 출력 서식과 연산 로직에 끊임없이 재등장시킵니다.
+
+---
 
 ### 3.2 섹션 종합 문제풀이 레벨 (`totalQuestions: 10`)
-각 섹션의 마지막 레벨(예: Python `Lv 8, 15, 23, 31, 37, 43, 49, 54, 58, 63, 68, 76, 82, 87`)은 블록 보조 바퀴를 떼고 순수 타이핑·코드 독해로 섹션 전체와 누적 개념을 검증합니다 (`unlockedBlocks: []`).
-- **Steps 1 ~ 3 (3문항)**: `type: 'typing'`, `kind: 'fill_blank'`
-- **Steps 4 ~ 6 (3문항)**: `type: 'typing'`, `kind: 'fix_bug'`
-- **Steps 7 ~ 8 (2문항)**: `type: 'typing'`, `kind: 'one_line'`
-- **Steps 9 ~ 10 (2문항)**: `type: 'quiz'`, `kind: 'predict_output'`
+각 섹션의 마지막 레벨(Python `Lv 10, 20, 30, 40, 48, 56, 64, 71, 77, 82, 92, 99, 107, 113`)은 블록 없이 순수 타이핑·코드 독해로 해당 섹션 전체와 이전 모든 섹션의 누적 개념을 검증합니다 (`unlockedBlocks: []`).
+- **Steps 1 ~ 3 (3문항)**: `type: 'typing'`, `kind: 'fill_blank'` (**빈칸 2~3곳 복합 빈칸**)
+- **Steps 4 ~ 6 (3문항)**: `type: 'typing'`, `kind: 'fix_bug'` (오류 수정)
+- **Steps 7 ~ 8 (2문항)**: `type: 'typing'`, `kind: 'one_line'` (한 줄 코드 완성)
+- **Steps 9 ~ 10 (2문항)**: `type: 'quiz'`, `kind: 'predict_output'` (**`input()` 없는 순수 코드 독해**)
+
+---
 
 ### 3.3 도구함 해금 블록 키 (`unlockedBlocks`)
 해당 레벨까지의 진도에 맞춰 필요한 블록 키만 선언합니다.
+- **주석 블록(`'comment'`) 상시 해금 규칙**: 주석을 처음 학습하는 레벨(**Lv.11**)부터는 이후 모든 블록 활성 스테이지에서 `'comment'` 블록이 블록 모음창 **최상단**에 기본 배치됩니다.
 
 | 분류 | 블록 키 (`unlockedBlocks`에 지정할 문자열) | 비고 |
 | :--- | :--- | :--- |
-| **입출력·함수·연산** | `'print'`, `'input'`, `'type'`, `'math'`, `'method'`, `'range'`, `'map'`, `'sorted'`, `'iter'`, `'open'`, `'def'`, `'return'` | `'type'` 해금 시 `type`, `int`, `float`, `str`, `bool`, `isinstance`, `ord`, `chr` 드롭다운 활성화 |
-| **제어·예외·클래스** | `'if'`, `'for_range'`, `'for_in'`, `'while'`, `'break'`, `'continue'`, `'try'`, `'raise'`, `'class'` | `'try'` 해금 시 `try-except-else-finally` 다단 블록 활성화; `'class'` 해금 시 내부에 `def` 메서드 스냅 가능 |
+| **주석 (최상단 고정)** | `'comment'` | Lv.11(주석 학습) 이후 모든 일반 레벨에서 최상단 기본 활성화 |
+| **입출력·함수·연산** | `'print'`, `'input'`, `'type'`, `'math'`, `'method'`, `'range'`, `'map'`, `'sorted'`, `'iter'`, `'open'` | `'type'` 해금 시 `type`, `int`, `float`, `str`, `bool`, `isinstance`, `ord`, `chr` 드롭다운 활성화 |
+| **클래스 / 함수 정의** | `'def'`, `'return'`, `'class'` | `+ 함수 / 클래스 생성` 모달 및 `def`, `return`, `class` 블록 활성화 |
+| **제어·예외** | `'if'`, `'for_range'`, `'for_in'`, `'while'`, `'break'`, `'continue'`, `'try'`, `'raise'` | `'try'` 해금 시 `try-except-else-finally` 다단 블록 활성화 |
 | **변수·컬렉션** | `'variable'`, `'list'`, `'tuple'`, `'dict'`, `'set'` | 사용자 변수 생성·재할당·복합 대입 및 컬렉션 블록 |
 
 ---
@@ -73,42 +85,21 @@ TypingCode V2는 각 코스 모듈별로 독립된 TypeScript 모듈 파일(`src
 
 모든 연습 문항은 단순 받아쓰기가 아닌 **자기주도 문제 풀이(Problem-Solving Format)**입니다.
 
-### 4.1 🚫 프롬프트 정답 스포일러 원천 차단 (`fill_blank` & `fix_bug`)
-1. **`fill_blank` / `fix_bug` 프롬프트 내 정답 노출 금지**:
+### 4.1 🚫 프롬프트 규격 및 정답 스포일러 원천 차단
+1. **블록 조립(`block`) 프롬프트**:
+   - 어떻게 블록을 조립해 어떤 결과를 만들지 자연스럽고 간결한 한 문장으로 안내합니다.
+2. **빈칸(`fill_blank`) & 오류 수정(`fix_bug`) 프롬프트 내 정답 노출 금지**:
    - 빈칸에 들어갈 키워드·연산자·메서드명이나 `fix_bug`에서 고쳐야 할 정답 코드를 `prompt_ko` / `prompt_en`에 그대로 적지 않습니다.
-   - ❌ *나쁜 예*: `"틀린 곳의 skip을 pass로 수정하여 음수일 때 건너뛰게 해보세요."` (`pass` 정답 직접 노출)
-   - ⭕ *좋은 예*: `"음수일 때 아무 동작 없이 넘어가려다 잘못된 단어를 적어 발생한 오류를 올바른 파이썬 키워드로 수정해보세요."`
-2. **식별자·키워드 부분 쪼개기 빈칸 금지 (No Broken Partial Identifiers)**:
+3. **식별자·키워드 부분 쪼개기 빈칸 금지 (No Broken Partial Identifiers)**:
    - `pr§§§(10)`, `whi§§`, `ap§§§§`처럼 하나의 식별자나 키워드 중간만 `§`로 뚫지 않습니다. 키워드·변수명·연산자·리터럴 단위로 온전히 마스킹하며, `templateCode.length === targetCode.length` 및 줄바꿈 위치가 정확히 1:1 일치해야 합니다.
-3. **모호하지 않고 간결한 프롬프트 (`<= 125자`)**:
-   - 한국어 프롬프트(`prompt_ko`)는 **125자 이내**로 핵심 조건과 기대 출력을 명료하게 제시합니다.
-   - 문자열 앞뒤에 눈에 보이지 않는 공백(`"Hello "` 등)을 강제해 학습자가 헷갈리는 출력을 피하고, 공백 유무가 직관적인 출력값을 설계합니다.
+4. **코드 독해(`predict_output`) 문항 내 `input()` 절대 금지**:
+   - Step 14, Step 15(및 종합 레벨의 Step 9, Step 10) `predict_output` 문항에서는 터미널 입력 예제를 따로 찾아봐야 하는 `input()`을 절대 넣지 않고, 변수에 값을 직접 대입(`n = 15`, `s = "py"` 등)하여 코드창만 읽고 즉시 풀 수 있도록 작성합니다.
 
-### 4.2 💡 힌트(`hint_ko` / `hint_en`) 작성 절대 원칙 — 유추 유도 & 정답 노출 금지
-1. **정답 직접 제시 금지 → 어원·약어·원리 기반 유추 유도**:
-   - 힌트는 정답 코드를 그대로 불러주는 답안지가 아니라, 학습자가 스스로 정답을 떠올리도록 돕는 **사고 단서**여야 합니다 (`"빈칸에 ...을 입력하세요"`, `"둘째 줄에 ...를 작성하세요"` 등 직접 코드 노출 금지).
-   - 키워드·내장 함수·메서드·옵션은 **영어 원단어의 뜻과 철자 축약 원리** 또는 **개념 규칙**으로 유추하게 안내합니다 (극초반 기초 기호 첫 도입부만 최소 예외 허용).
-   - ❌ *나쁜 예*: `"빈칸에 sep="-"를 입력하세요."`
-   - ⭕ *좋은 예*: `"영어로 '분리하다·구분하다'를 뜻하는 단어 separate의 앞 3글자를 따온 옵션 이름에 하이픈 문자열을 지정해보세요."`
-2. **섹션 종합 문제풀이(`종합 문제풀이`) 힌트 정답 스포일러 0건 원칙 (Strict Zero-Spoiler)**:
-   - 각 섹션 마지막 종합 문제풀이 레벨(예: Python `Lv 8, 15, 23, 31, 37, 43, 49, 54, 58, 63, 68, 76, 82, 87`)의 `hint_ko` / `hint_en`에는 **어떠한 경우에도 정답 토큰·수정한 코드 조각·한 줄 정답 코드·계산된 출력값을 직접 포함하지 않습니다.**
-   - 오직 개념 원리, 연산자 우선순위, 자료형 특성, 영어 어원 단서만으로 추론을 유도합니다.
-3. **군더더기 없는 1~2문장 간결성**:
-   - 불필요한 수식어나 잡설 없이 핵심 추론 단서만 1~2문장으로 담백하게 작성합니다.
-
-### 4.3 🏷️ 문제 유형별 표준 서두 규격
-| 문제 유형 (`kind`) | 표준 표현 (한국어) | 표준 표현 (영문) |
-| :--- | :--- | :--- |
-| **블록 조립** (`block`) | `... 출력해보세요.` / `... 작성해보세요.` | `... and print ...` |
-| **빈칸 채우기** (`fill_blank`) | **`빈칸을 채워 ...`** | `Fill in the blank(s) to ...` |
-| **버그 수정** (`fix_bug`) | **`... 오류를 수정해보세요.`** / **`틀린 곳을 수정하여 ...`** | `Fix the bug/error so that ...` |
-| **한 줄 추가** (`one_line`) | **`... 한 줄을 추가하여 ...`** / **`한 줄의 코드를 작성하여 ...`** | `Add/Write a single line ...` |
-| **결과 예측** (`predict_output`) | **`다음 코드의 실행 결과로 알맞은 것을 골라보세요.`** | `Choose the exact output of the following code.` |
-
-### 4.4 코드 가독성 및 실행 검증 규칙
-- **한 줄 코드 길이**: 블록 캔버스와 타이핑 에디터 가독성을 위해 코드 단일 라인은 가급적 **40~52자 이내**로 간결하게 유지합니다.
-- **실행 결정성**: `set` 다중 원소 등 출력 순서가 비결정적일 수 있는 자료구조는 `len()`, `sum()`, `in` 검사 또는 `sorted()` / `.sort()`를 거쳐 항상 결정적인 `expectedOutput`을 갖도록 작성합니다.
-- **부동소수점 정합성**: 로컬 JS AST 실행기(`blockEvaluator.ts`)와 CPython 간 출력 표기가 1:1 일치하도록 테스트 케이스 입력값을 설계합니다.
+### 4.2 💡 힌트(`hint_ko` / `hint_en`) 작성 절대 원칙 — 1문장 간결성 & 유추 유도
+1. **1문장 간결성**: 모든 힌트는 군더더기 없이 **핵심 단서 1문장**으로 명확하게 작성합니다.
+2. **초반/일반 레벨 vs 종합 레벨 차별화**:
+   - 일반 레벨의 초반부(1~8번)에서는 초보자가 막히지 않도록 직관적인 원리와 작성 단서를 친절히 안내합니다.
+   - 후반부(9~15번) 및 섹션 종합 레벨에서는 정답 코드를 직접 불러주지 않고 개념 원리·우선순위·자료형 특성으로 스스로 추론하도록 유도합니다.
 
 ---
 
@@ -121,9 +112,8 @@ TypingCode V2는 각 코스 모듈별로 독립된 TypeScript 모듈 파일(`src
    npx tsc --noEmit
    ```
 2. **필수 자동 점검 체크리스트**:
-   - [ ] [`curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts)의 `levelNumber` 및 `title_ko`와 레벨 파일의 `roundNumber`·`title_ko`가 정확히 일치하는가?
-   - [ ] [`practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts) 및 [`curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts)의 `totalLevels`에 누락 없이 등록되었는가?
-   - [ ] 모든 문항의 `targetCode`가 [`blockEvaluator.ts`](file:///d:/Projects/TypingCode_V2/src/lib/blockEvaluator.ts) 실행 시 모든 `testCases`의 `expectedOutput`과 100% 일치하는가?
-   - [ ] `fix_bug` 문항의 초기 `templateCode`를 그대로 실행했을 때 반드시 에러가 나거나 오답이 출력되는가?
-   - [ ] 홀수 블록 문항의 `createInitialCanvasBlocks` 블록들이 해당 레벨의 `unlockedBlocks` 범위 내에 있으며, Part 1 레벨에 Part 2 전용 문법이 섞이지 않았는가?
-   - [ ] 모든 문항의 `hint_ko` / `hint_en`이 직접 정답 코드를 알려주지 않고 어원·원리 기반 유추를 유도하며, 특히 종합 문제풀이 레벨의 힌트에 정답 스포일러가 0건인가?
+   - [ ] 일반 레벨은 정확히 **15문항**(`block/fill_blank` 4쌍 8문항 + 복합 `fill_blank` 1문항 + `fix_bug` 2문항 + `one_line` 2문항 + `predict_output` 2문항), 종합 레벨은 정확히 **10문항**인가?
+   - [ ] Step 2, 4, 6, 8의 `fill_blank`는 **빈칸이 1곳**이고, Step 9의 `fill_blank`는 **빈칸이 2~3곳(이전 개념 + 현재 개념)**인가?
+   - [ ] Step 14, 15(종합 레벨 Step 9, 10) `predict_output`의 `targetCode`에 `input(`이 **0건**인가?
+   - [ ] 직전 레벨 개념만 편중되지 않고 이전 섹션·레벨들의 누적 개념이 후반부(Steps 9~15)에 고르게 결합되어 있는가?
+   - [ ] 모든 문항의 `targetCode` 실행 결과가 `testCases`의 `expectedOutput`과 100% 일치하며, `templateCode.length === targetCode.length`를 만족하는가?

@@ -1,357 +1,341 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_19: PracticeRound = {
-  "id": "py-basic-r19",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 19,
-  "title_ko": "19레벨: if 단일 조건문과 들여쓰기",
-  "title_en": "Level 19: Single if Statements & Indentation",
-  "description_ko": "if 조건문과 콜론(:), 4칸 들여쓰기 규칙, 그리고 Truthy 조건 검사를 익힙니다.",
-  "description_en": "Master single if statements, trailing colons, 4-space indentation, and Truthy checks.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "if"
-  ],
-  "questions": [
+  id: 'py-basic-r19',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 19,
+  title_ko: '다중 변수 할당(a, b = 1, 2), 값 교환(Swap)과 input().split()',
+  title_en: 'Multiple Assignment, Swap (a, b = b, a) & input().split()',
+  description_ko: '한 줄에 여러 변수를 선언하는 다중 할당, 값 맞바꾸기(Swap), 공백 기준 입력 분리(input().split())를 익힙니다.',
+  description_en: 'Learn multiple variable assignment, swapping values (a, b = b, a), and splitting input with input().split().',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type', 'method'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] if 조건문으로 score가 80 이상일 때만 \"Pass\"를 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to print \"Pass\" only when score >= 80.",
-      "hint_ko": "조건식 score >= 80이 참이므로 if 블록 안쪽에 끼워진 print(\"Pass\")가 실행됩니다.",
-      "hint_en": "Because score >= 80 is True, the print(\"Pass\") statement nested inside the if block runs.",
-      "targetCode": "score = 90\nif score >= 80:\n    print(\"Pass\")",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 다중 할당(a, b = 10, 20)으로 두 변수를 한 줄에 선언하고 합계 30을 출력해보세요.',
+      prompt_en: '[Block] Assign 10 and 20 to a and b on one line (a, b = 10, 20) and print their sum 30.',
+      hint_ko: '등호 양쪽에 변수를 쉼표로 나열하면 같은 순서의 위치에 있는 값들이 각각 대입됩니다.',
+      hint_en: 'Listing variables and values with commas assigns each value to the variable at the matching position.',
+      targetCode: 'a, b = 10, 20\nprint(a + b)',
+      expectedVariables: { a: 10, b: 20 },
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Pass"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 조건문 키워드와 줄 끝 기호를 채워 체력(hp)이 20 이하일 때 Danger를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the conditional keyword and header punctuation to print Danger when hp <= 20.",
-      "hint_ko": "파이썬 조건문은 영어로 만약을 뜻하는 두 글자 키워드로 시작하고, 조건식 맨 끝에 콜론 기호를 붙여 블록 시작을 알립니다.",
-      "hint_en": "Start a conditional header with the two-letter English word for \"supposing\" and end the line with a colon symbol.",
-      "templateCode": "hp = 10\n§§ hp <= 20§\n    print(\"Danger\")",
-      "targetCode": "hp = 10\nif hp <= 20:\n    print(\"Danger\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Danger"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 조건이 거짓일 때 내부 블록은 건너뛰고 바깥쪽 \"Done\"만 출력되는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks where the false if block is skipped and outer \"Done\" prints.",
-      "hint_ko": "블록 안쪽에 끼워진 실행문과 블록 바깥 아래에 연결된 실행문의 실행 차이를 비교해보세요.",
-      "hint_en": "Compare the statement nested inside the if block with the unindented statement placed below it.",
-      "targetCode": "score = 60\nif score >= 80:\n    print(\"Pass\")\nprint(\"Done\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Done"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 이상 비교 기호를 채워 19세 이상일 때만 Adult를 출력하고 지금은 End만 나오게 해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the greater-or-equal operator so Adult is skipped for age 15 and only End prints.",
-      "hint_ko": "크거나 같음(이상)을 뜻하도록 오른쪽으로 닫힌 부등호 뒤에 등호를 나란히 붙여 조건식을 완성해보세요.",
-      "hint_en": "Place the greater-than angle bracket immediately before the equals sign to test for 19 or older.",
-      "templateCode": "age = 15\nif age §§ 19:\n    print(\"Adult\")\nprint(\"End\")",
-      "targetCode": "age = 15\nif age >= 19:\n    print(\"Adult\")\nprint(\"End\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "End"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 비어 있지 않은 문자열 변수 msg를 if 조건에 바로 넣어 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to test Truthy string msg directly in an if statement.",
-      "hint_ko": "빈 문자열(\"\")은 거짓(Falsy), 글자가 한 글자라도 들어 있는 문자열은 참(Truthy)으로 취급됩니다.",
-      "hint_en": "An empty string (\"\") is Falsy, whereas any string with at least one character is Truthy.",
-      "targetCode": "msg = \"Notice\"\nif msg:\n    print(msg)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Notice"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 조건문 키워드와 끝 기호를 채워 hp가 0이 아닐 때만 Alive가 출력되게 해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the conditional keyword and trailing symbol so Alive prints when hp is non-zero.",
-      "hint_ko": "영어로 만약을 뜻하는 두 글자 조건 키워드를 맨 앞에 적고, 변수 이름 뒤에 콜론 기호를 붙여 조건문 헤더를 완성해보세요.",
-      "hint_en": "Begin line 2 with the two-letter conditional keyword and place a colon right after the variable name.",
-      "templateCode": "hp = int(input())\n§§ hp§\n    print(\"Alive\")\nprint(\"Done\")",
-      "targetCode": "hp = int(input())\nif hp:\n    print(\"Alive\")\nprint(\"Done\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "40",
-          "expectedOutput": "Alive\nDone"
+          id: 1,
+          input: '',
+          expectedOutput: '30',
         },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Done"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] if 블록 안에서 할인 차감과 \"Sale\" 출력을 함께 실행하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to subtract 1000 and print \"Sale\" inside the if block.",
-      "hint_ko": "할인 차감(price -= 1000)과 \"Sale\" 출력이 if 블록 안에서 함께 실행된 뒤, 바깥쪽 print(price)로 이어집니다.",
-      "hint_en": "Both the discount (price -= 1000) and \"Sale\" print run inside the if block before the outer print(price) executes.",
-      "targetCode": "price = 6000\nif price >= 5000:\n    price -= 1000\n    print(\"Sale\")\nprint(price)",
-      "expectedVariables": {
-        "price": 5000
-      },
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Sale\n5000"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 복합 대입 기호를 채워 점수가 100 이상일 때 보너스 50을 더한 점수를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the compound assignment operator to add 50 when point >= 100.",
-      "hint_ko": "조건이 참일 때 기존 점수에 보너스를 누적해 저장할 수 있도록 더하기 기호와 등호를 나란히 붙인 복합 대입 연산자를 써보세요.",
-      "hint_en": "Combine the plus sign followed immediately by the equals sign to add the bonus onto the variable in place.",
-      "templateCode": "point = int(input())\nif point >= 100:\n    point §§ 50\nprint(point)",
-      "targetCode": "point = int(input())\nif point >= 100:\n    point += 50\nprint(point)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "120",
-          "expectedOutput": "170"
-        },
-        {
-          "id": 2,
-          "input": "80",
-          "expectedOutput": "80"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] crit가 0이 아닐 때 공격력(dmg)을 2배로 만드는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Double dmg with *= 2 when crit is non-zero (Truthy).",
-      "hint_ko": "crit가 0이 아닐 때만 안쪽의 복합 대입 연산(dmg *= 2)이 실행되고, 마지막 출력문은 항상 실행됩니다.",
-      "hint_en": "Only a non-zero crit triggers the indented doubling (dmg *= 2), while the final print runs regardless.",
-      "targetCode": "dmg = int(input())\ncrit = int(input())\nif crit:\n    dmg *= 2\nprint(dmg)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "30\n1",
-          "expectedOutput": "60"
-        },
-        {
-          "id": 2,
-          "input": "30\n0",
-          "expectedOutput": "30"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 복합 대입 기호를 채워 짝수면 10을 더하고, 20 이상이면 5를 뺀 값을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the compound operators to add 10 if even, then subtract 5 if >= 20.",
-      "hint_ko": "첫 번째 조건문 안에서는 더하기와 등호를 붙인 누적 연산자를, 두 번째 독립 조건문 안에서는 빼기와 등호를 붙인 차감 연산자를 써보세요.",
-      "hint_en": "Use the plus-equals operator in the first block to add, and the minus-equals operator in the second independent block to subtract.",
-      "templateCode": "n = int(input())\nif n % 2 == 0:\n    n §§ 10\nif n >= 20:\n    n §§ 5\nprint(n)",
-      "targetCode": "n = int(input())\nif n % 2 == 0:\n    n += 10\nif n >= 20:\n    n -= 5\nprint(n)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "12",
-          "expectedOutput": "17"
-        },
-        {
-          "id": 2,
-          "input": "9",
-          "expectedOutput": "9"
-        },
-        {
-          "id": 3,
-          "input": "21",
-          "expectedOutput": "16"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력값이 10 이상일 때만 Big이 출력되도록 if 조건의 비교 연산자를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator in the if header so Big prints when n >= 10.",
-      "hint_ko": "현재 조건식이 n <= 10으로 되어 있습니다. 10 이상일 때 참이 되도록 n >= 10으로 고쳐보세요.",
-      "hint_en": "Change the comparison operator from <= to >= so the block runs when n is at least 10.",
-      "templateCode": "n = int(input())\nif n <= 10:\n    print(\"Big\")\nprint(\"End\")",
-      "targetCode": "n = int(input())\nif n >= 10:\n    print(\"Big\")\nprint(\"End\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "15",
-          "expectedOutput": "Big\nEnd"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "End"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력값 n이 짝수일 때만 10이 더해지도록 나머지 비교 조건식을 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the remainder check so 10 is added only when n is even.",
-      "hint_ko": "2로 나눈 나머지가 1이면 홀수입니다. 짝수일 때 참이 되도록 나머지 비교값을 0으로 고쳐보세요.",
-      "hint_en": "A remainder of 1 tests for odd numbers; change 1 to 0 so the condition matches even numbers.",
-      "templateCode": "n = int(input())\nif n % 2 == 1:\n    n += 10\nprint(n)",
-      "targetCode": "n = int(input())\nif n % 2 == 0:\n    n += 10\nprint(n)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "12",
-          "expectedOutput": "22"
-        },
-        {
-          "id": 2,
-          "input": "7",
-          "expectedOutput": "7"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 변수 n이 60 이상인지 검사하는 if 조건문 헤더 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the if condition header checking whether n is at least 60.",
-      "hint_ko": "if n >= 60: 형태로 조건문 키워드, 비교식, 끝 콜론(:)까지 한 줄로 작성해보세요.",
-      "hint_en": "Write the header line as if n >= 60: including the trailing colon.",
-      "templateCode": "n = int(input())\n§§§§§§§§§§§\n    print(\"Clear\")",
-      "targetCode": "n = int(input())\nif n >= 60:\n    print(\"Clear\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "75",
-          "expectedOutput": "Clear"
-        },
-        {
-          "id": 2,
-          "input": "60",
-          "expectedOutput": "Clear"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] price가 5000 이상일 때 복합 대입 연산자로 1000을 차감하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the indented line that subtracts 1000 from price using -=.",
-      "hint_ko": "4칸 들여쓰기 뒤쪽에 price -= 1000을 작성해 가격을 1000만큼 줄여보세요.",
-      "hint_en": "After the 4-space indentation, write price -= 1000 to apply the discount.",
-      "templateCode": "price = int(input())\nif price >= 5000:\n    §§§§§§§§§§§§§\nprint(price)",
-      "targetCode": "price = int(input())\nif price >= 5000:\n    price -= 1000\nprint(price)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "6000",
-          "expectedOutput": "5000"
-        },
-        {
-          "id": 2,
-          "input": "4000",
-          "expectedOutput": "4000"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output that will be printed when the following Python code runs.",
-      "hint_ko": "빈 문자열이 조건문에서 참과 거짓 중 무엇으로 판정되는지 먼저 확인하고, 이어지는 두 번째 독립 조건문이 실행되는지 차례로 따라가 보세요.",
-      "hint_en": "Check whether an empty string is truthy or falsy for the first condition, then trace whether the second independent condition runs.",
-      "targetCode": "x = 10\nmsg = \"\"\nif msg:\n    x *= 3\nif x >= 10:\n    x += 5\nprint(x)",
-      "choices": [
-        "15",
-        "30",
-        "35",
-        "10"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 쉼표로 구분된 두 변수를 채워 5와 8을 동시 대입하고 곱한 결과 40을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the two comma-separated variables on the left to assign 5 and 8 and print 40.',
+      hint_ko: '등호 왼쪽에 두 변수 이름 x와 y를 쉼표와 공백으로 나란히 적습니다.',
+      hint_en: 'Write x, y separated by a comma on the left side of the assignment.',
+      templateCode: '§§§§ = 5, 8\nprint(x * y)',
+      targetCode: 'x, y = 5, 8\nprint(x * y)',
+      expectedVariables: { x: 5, y: 8 },
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "15"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '40',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] a, b = b, a를 사용해 두 변수의 값을 서로 맞바꾸어 20 10을 출력해보세요.',
+      prompt_en: '[Block] Swap the values of a and b in one line using a, b = b, a and print 20 10.',
+      hint_ko: '파이썬에서는 임시 변수 없이 a, b = b, a 한 줄로 두 변수의 값을 맞바꿀 수 있습니다.',
+      hint_en: 'In Python, a, b = b, a swaps the values of two variables in a single line.',
+      targetCode: 'a, b = 10, 20\na, b = b, a\nprint(a, b)',
+      expectedVariables: { a: 20, b: 10 },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '20 10',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 둘째 줄 빈칸에 순서를 뒤집은 두 변수를 채워 x와 y의 값을 맞바꾸고 B A를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the reversed variables on line 2 to swap x and y and print B A.',
+      hint_ko: '등호 오른쪽에 y와 x를 쉼표로 구분해 반대 순서로 작성합니다.',
+      hint_en: 'Write y, x in reverse order on the right side of the equals sign.',
+      templateCode: 'x, y = "A", "B"\nx, y = §§§§\nprint(x, y)',
+      targetCode: 'x, y = "A", "B"\nx, y = y, x\nprint(x, y)',
+      expectedVariables: { x: 'B', y: 'A' },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'B A',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] first, second = input().split()으로 공백으로 구분된 두 단어를 입력받아 역순으로 출력해보세요.',
+      prompt_en: '[Block] Read two space-separated words with input().split() and print second, first.',
+      hint_ko: 'input().split()은 한 줄에 입력된 문자열을 공백 기준으로 잘라 각 변수에 나누어 담아줍니다.',
+      hint_en: 'input().split() splits a line of input by whitespace and unpacks each part into the variables.',
+      targetCode: 'first, second = input().split()\nprint(second, first)',
+      testCases: [
+        {
+          id: 1,
+          input: 'Hello World',
+          expectedOutput: 'World Hello',
+        },
+        {
+          id: 2,
+          input: 'Python Code',
+          expectedOutput: 'Code Python',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 문자열을 공백 기준으로 쪼개는 메서드 이름을 채워 두 단어를 입력받아 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the method name that splits the input string by whitespace.',
+      hint_ko: '쪼개다(나누다)를 뜻하는 다섯 글자 영어 메서드 이름을 마침표(.) 뒤에 적습니다.',
+      hint_en: 'Write the five-letter method name for splitting strings after the dot.',
+      templateCode: 'city, country = input().§§§§§()\nprint(city, country, sep=", ")',
+      targetCode: 'city, country = input().split()\nprint(city, country, sep=", ")',
+      testCases: [
+        {
+          id: 1,
+          input: 'Seoul Korea',
+          expectedOutput: 'Seoul, Korea',
+        },
+        {
+          id: 2,
+          input: 'Tokyo Japan',
+          expectedOutput: 'Tokyo, Japan',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] input().split()으로 두 숫자 문자열을 받아 int(a) + int(b)로 합계를 출력해보세요.',
+      prompt_en: '[Block] Read a, b = input().split() and print the integer sum int(a) + int(b).',
+      hint_ko: 'split()으로 나뉜 값들은 아직 문자열이므로 숫자 계산을 하려면 각각 int()로 변환해야 합니다.',
+      hint_en: 'Values unpacked from split() are strings, so convert each one with int() before adding.',
+      targetCode: 'a, b = input().split()\nprint(int(a) + int(b))',
+      testCases: [
+        {
+          id: 1,
+          input: '15 25',
+          expectedOutput: '40',
+        },
+        {
+          id: 2,
+          input: '100 230',
+          expectedOutput: '330',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 둘째 줄 빈칸에 정수 변환 함수를 채워 공백으로 입력된 두 수의 곱을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the integer conversion function on line 2 to print the product of the two inputs.',
+      hint_ko: '변수 a와 마찬가지로 변수 b도 정수로 바꾸도록 세 글자 변환 함수를 적습니다.',
+      hint_en: 'Convert variable b to an integer using the three-letter conversion function.',
+      templateCode: 'a, b = input().split()\nx, y = int(a), §§§(b)\nprint(x * y)',
+      targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x * y)',
+      testCases: [
+        {
+          id: 1,
+          input: '6 7',
+          expectedOutput: '42',
+        },
+        {
+          id: 2,
+          input: '12 4',
+          expectedOutput: '48',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 한 줄로 입력된 두 정수의 몫과 나머지를 나란히 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks to split two inputs, convert them to ints, and print their quotient and remainder.',
+      hint_ko: '공백 분리 메서드 이름, 정수 변환 함수 이름, 정수 몫 연산자를 순서대로 채웁니다.',
+      hint_en: 'Enter the split method name, the int function name, and the floor division operator in order.',
+      templateCode: 'a, b = input().§§§§§()\nx, y = §§§(a), int(b)\nprint(x §§ y, x % y)',
+      targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x // y, x % y)',
+      testCases: [
+        {
+          id: 1,
+          input: '25 4',
+          expectedOutput: '6 1',
+        },
+        {
+          id: 2,
+          input: '17 5',
+          expectedOutput: '3 2',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 좌변 변수 개수와 우변 값의 개수가 맞지 않아 발생하는 에러를 수정해 60을 출력해보세요.',
+      prompt_en: '[Fix Bug] Fix the unpacking mismatch on line 1 by adding variable c so a + b + c prints 60.',
+      hint_ko: '우변에 값이 3개(10, 20, 30)이고 둘째 줄에서 c까지 더하고 있으므로 좌변에도 c를 추가해야 합니다.',
+      hint_en: 'Add variable c on the left side of line 1 to match the three values on the right.',
+      templateCode: 'a, b = 10, 20, 30\nprint(a + b + c)',
+      targetCode: 'a, b, c = 10, 20, 30\nprint(a + b + c)',
+      expectedVariables: { a: 10, b: 20, c: 30 },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '60',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] split 메서드 뒤에 빠진 호출 기호를 추가해 두 단어가 정상 분리되게 해보세요.',
+      prompt_en: '[Fix Bug] Add the missing parentheses after split on line 1 so the two words unpack properly.',
+      hint_ko: '메서드를 실제로 실행하려면 이름 끝에 빈 소괄호 ()를 반드시 붙여야 합니다.',
+      hint_en: 'Include empty parentheses () after split to call the method.',
+      templateCode: 'u, p = input().split\nprint(u, p, sep=":")',
+      targetCode: 'u, p = input().split()\nprint(u, p, sep=":")',
+      testCases: [
+        {
+          id: 1,
+          input: 'hero 1234',
+          expectedOutput: 'hero:1234',
+        },
+        {
+          id: 2,
+          input: 'admin pass',
+          expectedOutput: 'admin:pass',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 둘째 줄에 다중 할당으로 두 변수 a와 b의 값을 서로 맞바꾸는 코드(a, b = b, a)를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 2 to swap the values of a and b using multiple assignment.',
+      hint_ko: '등호 왼쪽에 a, b를 적고 오른쪽에 b, a를 적어 값을 교환합니다.',
+      hint_en: 'Write a, b = b, a on line 2 to swap the two variables.',
+      templateCode: 'a, b = 3, 9\n§§§§§§§§§§§\nprint(a, b)',
+      targetCode: 'a, b = 3, 9\na, b = b, a\nprint(a, b)',
+      expectedVariables: { a: 9, b: 3 },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '9 3',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 첫째 줄에 공백으로 구분된 두 입력을 w, h = input().split()으로 받는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 1 to read two space-separated inputs into w and h using input().split().',
+      hint_ko: '좌변에 w, h를 두고 우변에 input().split()을 호출해 대입합니다.',
+      hint_en: 'Assign input().split() to w, h on line 1.',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§\nprint(int(w) * int(h))',
+      targetCode: 'w, h = input().split()\nprint(int(w) * int(h))',
+      testCases: [
+        {
+          id: 1,
+          input: '8 5',
+          expectedOutput: '40',
+        },
+        {
+          id: 2,
+          input: '10 12',
+          expectedOutput: '120',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '두 변수의 값을 먼저 맞바꾼(Swap) 뒤에 x에만 5가 더해진다는 점에 유의하세요.',
+      hint_en: 'Notice that x and y swap values first, and then 5 is added to the new value of x.',
+      targetCode: 'x, y = 10, 20\nx, y = y, x\nx += 5\nprint(x, y, sep="-")',
+      choices: ['15-20', '25-10', '20-15', '10-25'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '25-10',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '문자열 상태에서의 + 결합("45")과 int() 변환 후의 숫자 덧셈(9) 결과를 비교해보세요.',
+      hint_en: 'Compare string concatenation a + b ("45") after swapping with integer addition int(a) + int(b).',
+      targetCode: 'a, b = "5", "4"\na, b = b, a\nprint(a + b, int(a) + int(b))',
+      choices: ['54 9', '45 9', '45 45', '9 9'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '45 9',
+        },
+      ],
+    },
+  ],
 };

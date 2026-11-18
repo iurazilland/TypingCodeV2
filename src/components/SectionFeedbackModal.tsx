@@ -108,7 +108,7 @@ export default function SectionFeedbackModal({
   sectionInfo,
   onClose,
 }: SectionFeedbackModalProps) {
-  const [rating, setRating] = useState<number>(3);
+  const [rating, setRating] = useState<number>(5);
   const [hoveredStar, setHoveredStar] = useState<number>(0);
   const [difficulty, setDifficulty] = useState<SectionDifficultyRating | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -430,8 +430,8 @@ export default function SectionFeedbackModal({
                     ? 'Submitting...'
                     : '제출 중...'
                   : isEn
-                  ? 'Submit Survey'
-                  : '설문 제출'}
+                    ? 'Submit Survey'
+                    : '설문 제출'}
               </button>
             </div>
           </form>

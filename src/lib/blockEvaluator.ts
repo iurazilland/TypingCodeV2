@@ -596,7 +596,7 @@ export function evaluateBlocksWithTrace(
           lineIndex: currentActiveBlock?.lineIndex,
           scope: merged,
           stdout: stdoutBuffer.replace(/\r?\n$/, ''),
-          displayStdout: displayStdoutBuffer.replace(/\r?\n$/, ''),
+          displayStdout: displayStdoutBuffer,
           steps: [...steps],
         };
       }
@@ -1575,7 +1575,8 @@ export function evaluateBlocksWithTrace(
         const truePart = expr.slice(0, firstTernaryIf).trim();
         const condPart = expr.slice(firstTernaryIf + 2, matchingTernaryElse).trim();
         const falsePart = expr.slice(matchingTernaryElse + 4).trim();
-        if (!truePart || !condPart || !falsePart) {
+        // Reject statement-style colons, e.g. `a if c else: b` / `a if c: else b`
+        if (!truePart || !condPart || !falsePart || condPart.endsWith(':') || falsePart.startsWith(':')) {
           throw new Error('SyntaxError: invalid syntax');
         }
         return isPythonTruthy(evalNonEmpty(condPart))

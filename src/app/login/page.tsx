@@ -86,6 +86,10 @@ function LoginPageContent() {
   const [displayName, setDisplayName] = useState('');
   const [avatarPreset, setAvatarPreset] = useState('fox');
   const [signupEmail, setSignupEmail] = useState('');
+  const [emailCheckStatus, setEmailCheckStatus] = useState<
+    'idle' | 'checking' | 'available' | 'taken' | 'invalid'
+  >('idle');
+  const [checkedEmailValue, setCheckedEmailValue] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(true);
@@ -177,6 +181,47 @@ function LoginPageContent() {
     }
   };
 
+  const checkEmailAvailability = async (rawValue?: string): Promise<boolean> => {
+    const candidate = (rawValue ?? signupEmail).trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate)) {
+      setEmailCheckStatus('invalid');
+      return false;
+    }
+
+    if (!isSupabaseConfigured()) {
+      setEmailCheckStatus('available');
+      setCheckedEmailValue(candidate);
+      return true;
+    }
+
+    setEmailCheckStatus('checking');
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.rpc('check_email_available', {
+        p_email: candidate,
+      });
+
+      let isAvailable = Boolean(data);
+      if (error) {
+        const { data: existingRow } = await supabase
+          .from('profiles')
+          .select('id')
+          .ilike('email', candidate)
+          .maybeSingle();
+        isAvailable = !existingRow;
+      }
+
+      setEmailCheckStatus(isAvailable ? 'available' : 'taken');
+      if (isAvailable) {
+        setCheckedEmailValue(candidate);
+      }
+      return isAvailable;
+    } catch {
+      setEmailCheckStatus('idle');
+      return true;
+    }
+  };
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -232,7 +277,7 @@ function LoginPageContent() {
 
     const cleanId = loginId.trim().toLowerCase();
     const cleanName = displayName.trim();
-    const cleanEmail = signupEmail.trim();
+    const cleanEmail = signupEmail.trim().toLowerCase();
 
     if (!/^[a-z0-9_]{4,20}$/.test(cleanId)) {
       setIdCheckStatus('invalid');
@@ -247,6 +292,16 @@ function LoginPageContent() {
     if (!cleanName) {
       setErrorMessage(
         isKo ? '닉네임을 입력해 주세요.' : 'Please enter a nickname.'
+      );
+      return;
+    }
+
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setEmailCheckStatus('invalid');
+      setErrorMessage(
+        isKo
+          ? '가입을 위해 유효한 이메일 주소를 필수로 입력해 주세요.'
+          : 'A valid email address is required to sign up.'
       );
       return;
     }
@@ -285,6 +340,20 @@ function LoginPageContent() {
         return;
       }
 
+      const emailAvailable =
+        emailCheckStatus === 'available' && checkedEmailValue === cleanEmail
+          ? true
+          : await checkEmailAvailability(cleanEmail);
+
+      if (!emailAvailable) {
+        setErrorMessage(
+          isKo
+            ? '이미 가입된 이메일입니다. 로그인 화면에서 로그인해 주세요.'
+            : 'This email is already registered. Please sign in.'
+        );
+        return;
+      }
+
       const supabase = createClient();
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
@@ -315,11 +384,23 @@ function LoginPageContent() {
         return;
       }
 
+      // Supabase returns empty identities[] when email already exists in auth.users
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        setEmailCheckStatus('taken');
+        setErrorMessage(
+          isKo
+            ? '이미 가입된 이메일입니다. 로그인 화면에서 로그인해 주세요.'
+            : 'This email is already registered. Please sign in.'
+        );
+        return;
+      }
+
       if (data.session && data.user) {
-        // Ensure profile row carries username, display_name, and avatar_preset immediately
+        // Ensure profile row carries email, username, display_name, and avatar_preset immediately
         await supabase
           .from('profiles')
           .update({
+            email: cleanEmail,
             username: cleanId,
             display_name: cleanName,
             avatar_preset: avatarPreset,
@@ -1003,18 +1084,23 @@ function LoginPageContent() {
               </div>
             </div>
 
-            {/* 4. Email */}
+            {/* 4. Email (Mandatory) */}
             <div>
               <label
                 style={{
-                  display: 'block',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
                   fontSize: '0.82rem',
                   fontWeight: 700,
                   color: '#334155',
                   marginBottom: '6px',
                 }}
               >
-                {isKo ? '이메일' : 'Email'}
+                <span>{isKo ? '이메일' : 'Email'}</span>
+                <span style={{ color: '#dc2626', fontSize: '0.76rem', fontWeight: 800 }}>
+                  {isKo ? '(필수)' : '(Required)'}
+                </span>
               </label>
               <div style={{ position: 'relative' }}>
                 <Mail
@@ -1025,12 +1111,35 @@ function LoginPageContent() {
                   type="email"
                   required
                   autoComplete="email"
-                  placeholder="you@example.com"
+                  placeholder={isKo ? '이메일 주소 (비밀번호 재설정 및 계정 식별 필수)' : 'you@example.com (required)'}
                   value={signupEmail}
-                  onChange={(e) => setSignupEmail(e.target.value)}
+                  onChange={(e) => {
+                    setSignupEmail(e.target.value);
+                    setEmailCheckStatus('idle');
+                  }}
+                  onBlur={() => {
+                    if (signupEmail.trim().length > 3) {
+                      void checkEmailAvailability(signupEmail);
+                    }
+                  }}
                   style={inputStyle}
                 />
               </div>
+              {emailCheckStatus === 'available' && (
+                <div style={{ fontSize: '0.76rem', color: '#059669', marginTop: '5px', fontWeight: 700 }}>
+                  {isKo ? '사용 가능한 이메일입니다.' : 'Email is available.'}
+                </div>
+              )}
+              {emailCheckStatus === 'taken' && (
+                <div style={{ fontSize: '0.76rem', color: '#dc2626', marginTop: '5px', fontWeight: 700 }}>
+                  {isKo ? '이미 가입된 이메일입니다.' : 'This email is already registered.'}
+                </div>
+              )}
+              {emailCheckStatus === 'invalid' && (
+                <div style={{ fontSize: '0.76rem', color: '#d97706', marginTop: '5px', fontWeight: 700 }}>
+                  {isKo ? '유효한 이메일 형식을 입력해 주세요.' : 'Please enter a valid email address.'}
+                </div>
+              )}
             </div>
 
             {/* 5. Password & Confirm */}

@@ -1,328 +1,319 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_62: PracticeRound = {
-  "id": "py-basic-r62",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 62,
-  "title_ko": "62레벨: 리스트·딕셔너리 속성을 가진 클래스 다루기",
-  "title_en": "Level 62: Classes with List & Dictionary Attributes",
-  "description_ko": "__init__에서 리스트, 딕셔너리, 집합 속성을 초기화하고 메서드로 원소를 추가·합산·안전 조회합니다.",
-  "description_en": "Initialize list, dict, and set attributes inside __init__ and add, aggregate, and safely query elements via methods.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "class",
-    "def",
-    "variable",
-    "method",
-    "math",
-    "for_in",
-    "for_range",
-    "range",
-    "while",
-    "if",
-    "try",
-    "print",
-    "input",
-    "type"
+  id: 'py-basic-r62',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 62,
+  title_ko: '62레벨: 집합(set) 생성, 중복 제거와 요소 추가(.add())',
+  title_en: 'Level 62: Sets (set), Deduplication & Adding Elements (.add())',
+  description_ko: '중복을 허용하지 않는 집합(set)의 생성법, 빈 집합 set()과 .add() 요소 추가, 고유 요소 개수 구하기를 익힙니다.',
+  description_en: 'Learn how sets automatically remove duplicates, create empty sets with set(), and add items using .add().',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'tuple',
+    'dict',
+    'set',
+    'iter',
+    'method',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] __init__에서 빈 리스트 self.items = []를 초기화하고 원소를 추가하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Initialize an empty list attribute self.items = [] in __init__ and append items via Bag.add.",
-      "hint_ko": "객체의 리스트 속성도 일반 리스트와 똑같이 len(b.items)로 원소 개수를 구할 수 있습니다.",
-      "hint_en": "An instance's list attribute works just like any list, so len(b.items) returns its item count.",
-      "targetCode": "class Bag:\n    def __init__(self):\n        self.items = []\n    def add(self, item):\n        self.items.append(item)\nb = Bag()\nb.add(\"Key\")\nb.add(\"Map\")\nprint(b.items, len(b.items))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 중괄호로 집합 {1, 2, 2, 3}을 만들고 중복이 제거된 길이 len(s)를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Create a set {1, 2, 2, 3} and print len(s) to see automatic deduplication.',
+      hint_ko: '집합은 같은 값을 여러 번 넣어도 하나만 남기므로 고유한 값의 개수만 세어집니다.',
+      hint_en: 'Sets automatically discard duplicate values, keeping only unique elements.',
+      targetCode: 's = {1, 2, 2, 3}\nprint(len(s))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['Key', 'Map'] 2"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 생성자에서 빈 리스트 속성을 준비하고, 기록된 모든 숫자의 합계를 반환하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Initialize an empty list attribute in __init__ and return the sum of its numbers to output 40.",
-      "hint_ko": "첫 빈칸에는 빈 리스트를 뜻하는 []를 적고, 둘째 빈칸에는 합계를 구하는 내장 함수 sum을 적으세요.",
-      "hint_en": "Use empty square brackets [] to create a blank list on line 3, and call sum on line 7.",
-      "templateCode": "class Log:\n    def __init__(self):\n        self.nums = §§\n    def push(self, n):\n        self.nums.append(n)\n    def total(self):\n        return §§§(self.nums)\ng = Log()\ng.push(15)\ng.push(25)\nprint(g.total())",
-      "targetCode": "class Log:\n    def __init__(self):\n        self.nums = []\n    def push(self, n):\n        self.nums.append(n)\n    def total(self):\n        return sum(self.nums)\ng = Log()\ng.push(15)\ng.push(25)\nprint(g.total())",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "40"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] __init__에서 빈 딕셔너리 self.scores = {}를 초기화하고 과목 점수를 기록해보세요.",
-      "prompt_en": "[Block] Initialize an empty dictionary attribute self.scores = {} in __init__ and store key-value pairs.",
-      "hint_ko": "인스턴스의 딕셔너리 속성에 저장된 값은 r.scores[\"Math\"]처럼 대괄호 키 조회로 바로 읽을 수 있습니다.",
-      "hint_en": "Values stored in an instance's dictionary attribute can be read with bracket notation like r.scores[\"Math\"].",
-      "targetCode": "class Report:\n    def __init__(self):\n        self.scores = {}\n    def record(self, sub, val):\n        self.scores[sub] = val\nr = Report()\nr.record(\"Math\", 95)\nr.record(\"Code\", 100)\nprint(r.scores[\"Math\"], len(r.scores))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "95 2"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈 딕셔너리 속성을 초기화하고 메뉴 이름을 키로 가격을 등록·조회하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Initialize an empty dict attribute and store and retrieve menu prices by name.",
-      "hint_ko": "첫 빈칸에는 빈 딕셔너리 {}를 적고, 둘째 빈칸에는 전달받은 메뉴 이름 매개변수 name을 키 자리에 넣으세요.",
-      "hint_en": "Use empty braces {} on line 3, and place the parameter name inside the key brackets on line 5.",
-      "templateCode": "class Menu:\n    def __init__(self):\n        self.prices = §§\n    def add(self, name, cost):\n        self.prices[§§§§] = cost\n    def get_cost(self, name):\n        return self.prices[name]\nm = Menu()\nm.add(\"Tea\", 3000)\nm.add(\"Pie\", 4500)\nprint(m.get_cost(\"Tea\"), len(m.prices))",
-      "targetCode": "class Menu:\n    def __init__(self):\n        self.prices = {}\n    def add(self, name, cost):\n        self.prices[name] = cost\n    def get_cost(self, name):\n        return self.prices[name]\nm = Menu()\nm.add(\"Tea\", 3000)\nm.add(\"Pie\", 4500)\nprint(m.get_cost(\"Tea\"), len(m.prices))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3000 2"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 딕셔너리 속성을 조회하는 메서드에 try - except KeyError를 결합해 안전하게 조회해보세요.",
-      "prompt_en": "[Block] Combine try - except KeyError inside Board.lookup to return None when a key is missing.",
-      "hint_ko": "데이터 저장 메서드(put)와 안전 조회 메서드(lookup)를 나누어 정의하면 딕셔너리 속성을 체계적으로 관리할 수 있습니다.",
-      "hint_en": "Separating storage (put) and safe retrieval (lookup) into dedicated methods keeps dictionary state management clean.",
-      "targetCode": "class Board:\n    def __init__(self):\n        self.scores = {}\n    def put(self, k, v):\n        self.scores[k] = v\n    def lookup(self, k):\n        try:\n            return self.scores[k]\n        except KeyError:\n            return None\nb = Board()\nb.put(\"Leo\", 90)\nprint(b.lookup(\"Leo\"))\nprint(b.lookup(\"Mia\"))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "90\nNone"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 딕셔너리 속성에 있는 키면 1을 더하고, 없는 키면 예외 처리로 1을 등록해 2 1을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Increment existing key counts by 1 or initialize missing keys to 1 on KeyError to output 2 1.",
-      "hint_ko": "첫 빈칸에는 1을 더해 저장하는 += 연산자를, 둘째 빈칸에는 없는 키 예외 KeyError를 적으세요.",
-      "hint_en": "Increment existing counts with += on line 6, and catch KeyError on line 7.",
-      "templateCode": "class CounterBox:\n    def __init__(self):\n        self.counts = {}\n    def hit(self, key):\n        try:\n            self.counts[key] §§ 1\n        except §§§§§§§§:\n            self.counts[key] = 1\ncb = CounterBox()\ncb.hit(\"A\")\ncb.hit(\"B\")\ncb.hit(\"A\")\nprint(cb.counts[\"A\"], cb.counts[\"B\"])",
-      "targetCode": "class CounterBox:\n    def __init__(self):\n        self.counts = {}\n    def hit(self, key):\n        try:\n            self.counts[key] += 1\n        except KeyError:\n            self.counts[key] = 1\ncb = CounterBox()\ncb.hit(\"A\")\ncb.hit(\"B\")\ncb.hit(\"A\")\nprint(cb.counts[\"A\"], cb.counts[\"B\"])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2 1"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 두 Cart 인스턴스에 각각 독립된 상품을 담고 리스트 속성을 출력해보세요.",
-      "prompt_en": "[Block] Initialize separate list attributes per Cart instance and add items independently.",
-      "hint_ko": "a.add()는 인스턴스 a의 리스트에만 원소를 추가하므로 인스턴스 b의 리스트에는 영향을 주지 않습니다.",
-      "hint_en": "Calling a.add() mutates only instance a's list, leaving instance b's list completely independent.",
-      "targetCode": "class Cart:\n    def __init__(self):\n        self.items = []\n    def add(self, x):\n        self.items.append(x)\na = Cart()\nb = Cart()\na.add(input())\nb.add(\"Milk\")\nprint(a.items, b.items)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "Bread",
-          "expectedOutput": "['Bread'] ['Milk']"
+          id: 1,
+          input: '',
+          expectedOutput: '3',
         },
-        {
-          "id": 2,
-          "input": "Apple",
-          "expectedOutput": "['Apple'] ['Milk']"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백으로 입력된 두 정수를 센서 리스트에 추가하고 평균값을 계산해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Append two space-separated integer inputs to Sensor and print their average.",
-      "hint_ko": "첫 빈칸에는 리스트 끝에 추가하는 append 메서드를 적고, 분모에는 len(self.data)를 적으세요.",
-      "hint_en": "Call append to add an element to the list, and divide the sum by len(self.data).",
-      "templateCode": "class Sensor:\n    def __init__(self):\n        self.data = []\n    def push(self, val):\n        self.data.§§§§§§(val)\n    def avg(self):\n        return sum(self.data) / §§§§§§§§§§§§§§\ns = Sensor()\na, b = input().split()\ns.push(int(a))\ns.push(int(b))\nprint(s.avg())",
-      "targetCode": "class Sensor:\n    def __init__(self):\n        self.data = []\n    def push(self, val):\n        self.data.append(val)\n    def avg(self):\n        return sum(self.data) / len(self.data)\ns = Sensor()\na, b = input().split()\ns.push(int(a))\ns.push(int(b))\nprint(s.avg())",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10 15",
-          "expectedOutput": "12.5"
-        },
-        {
-          "id": 2,
-          "input": "2 5",
-          "expectedOutput": "3.5"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트 속성의 .append()와 .pop()을 감싼 Stack을 while문으로 비우며 합산해보세요.",
-      "prompt_en": "[Block] Wrap .append() and .pop() in Stack methods and drain the stack in a while loop.",
-      "hint_ko": "self.tasks.pop()은 리스트의 맨 끝 원소를 제거하면서 그 값을 동시에 반환하므로 합계에 바로 더할 수 있습니다.",
-      "hint_en": "self.tasks.pop() removes and returns the last element of the list, so its return value can be added directly to total.",
-      "targetCode": "class Stack:\n    def __init__(self):\n        self.tasks = []\n    def push(self, t):\n        self.tasks.append(t)\n    def pop_item(self):\n        return self.tasks.pop()\nst = Stack()\nst.push(10)\nst.push(20)\ntotal = 0\nwhile len(st.tasks) > 0:\n    total += st.pop_item()\nprint(total, len(st.tasks))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "30 0"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 연료 리스트에 값을 추가하고 빌 때까지 하나씩 꺼내 합산하도록 두 메서드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in append and pop inside Burner so the while loop drains all fuels and prints 40.",
-      "hint_ko": "첫 빈칸에는 리스트 끝에 추가하는 append를, 둘째 빈칸에는 끝 원소를 꺼내 반환하는 pop을 적으세요.",
-      "hint_en": "Use append on line 5 to add fuel and pop on line 7 to remove and return the last fuel value.",
-      "templateCode": "class Burner:\n    def __init__(self):\n        self.fuels = []\n    def load(self, f):\n        self.fuels.§§§§§§(f)\n    def use_one(self):\n        return self.fuels.§§§()\nb = Burner()\nb.load(15)\nb.load(25)\nans = 0\nwhile len(b.fuels) > 0:\n    ans += b.use_one()\nprint(ans)",
-      "targetCode": "class Burner:\n    def __init__(self):\n        self.fuels = []\n    def load(self, f):\n        self.fuels.append(f)\n    def use_one(self):\n        return self.fuels.pop()\nb = Burner()\nb.load(15)\nb.load(25)\nans = 0\nwhile len(b.fuels) > 0:\n    ans += b.use_one()\nprint(ans)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "40"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트로 초기화해야 할 self.items가 빈 딕셔너리로 되어 오류가 납니다. 코드를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix __init__ in Bag where self.items is initialized as a dict {} instead of a list [].",
-      "hint_ko": ".append() 메서드를 사용할 수 있도록 생성자에서 중괄호 {} 대신 대괄호 []로 빈 리스트를 초기화하세요.",
-      "hint_en": "Replace {} with [] in __init__ so self.items is a list that supports .append().",
-      "templateCode": "class Bag:\n    def __init__(self):\n        self.items = {}\n    def add(self, x):\n        self.items.append(x)\nb = Bag()\nb.add(\"Pen\")\nb.add(\"Note\")\nprint(b.items)",
-      "targetCode": "class Bag:\n    def __init__(self):\n        self.items = []\n    def add(self, x):\n        self.items.append(x)\nb = Bag()\nb.add(\"Pen\")\nb.add(\"Note\")\nprint(b.items)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['Pen', 'Note']"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 딕셔너리 속성에 과목(k)과 점수(v)를 저장할 때 키와 값 위치가 뒤바뀐 버그를 고쳐 95를 출력해보세요.",
-      "prompt_en": "[Fix Bug] Fix the swapped key and value in ScoreBook.record so sb.scores[\"Math\"] prints 95.",
-      "hint_ko": "self.scores[키] = 값 순서가 되어야 하므로 대괄호 안에 k를, 등호 오른쪽에 v를 적으세요.",
-      "hint_en": "Store k as the dictionary key and v as the value: self.scores[k] = v.",
-      "templateCode": "class ScoreBook:\n    def __init__(self):\n        self.scores = {}\n    def record(self, k, v):\n        self.scores[v] = k\nsb = ScoreBook()\nsb.record(\"Math\", 95)\nprint(sb.scores[\"Math\"])",
-      "targetCode": "class ScoreBook:\n    def __init__(self):\n        self.scores = {}\n    def record(self, k, v):\n        self.scores[k] = v\nsb = ScoreBook()\nsb.record(\"Math\", 95)\nprint(sb.scores[\"Math\"])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "95"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 금고 인스턴스 v에 150을 입금(deposit)하고 반환된 합계를 total에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Call v.deposit(150) and assign the returned total gold sum to total.",
-      "hint_ko": "total = v.deposit(150) 형태로 입금 메서드의 반환값을 변수 total에 대입하세요.",
-      "hint_en": "Assign the return value of v.deposit(150) to total.",
-      "templateCode": "class Vault:\n    def __init__(self):\n        self.gold = [100, 250]\n    def deposit(self, amount):\n        self.gold.append(amount)\n        return sum(self.gold)\nv = Vault()\n§§§§§§§§§§§§§§§§§§§§§§\nprint(total)",
-      "targetCode": "class Vault:\n    def __init__(self):\n        self.gold = [100, 250]\n    def deposit(self, amount):\n        self.gold.append(amount)\n        return sum(self.gold)\nv = Vault()\ntotal = v.deposit(150)\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "500"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 집합 속성 self.tags에 전달받은 태그 t를 추가(.add)하는 메서드 내부 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line inside add_tag that adds t to the set attribute self.tags.",
-      "hint_ko": "집합 속성 self.tags에서 .add(t) 메서드를 호출해 원소를 추가하세요.",
-      "hint_en": "Call self.tags.add(t) inside the add_tag method.",
-      "templateCode": "class TagSet:\n    def __init__(self):\n        self.tags = set()\n    def add_tag(self, t):\n        §§§§§§§§§§§§§§§§\nts = TagSet()\nts.add_tag(\"py\")\nts.add_tag(\"py\")\nprint(len(ts.tags))",
-      "targetCode": "class TagSet:\n    def __init__(self):\n        self.tags = set()\n    def add_tag(self, t):\n        self.tags.add(t)\nts = TagSet()\nts.add_tag(\"py\")\nts.add_tag(\"py\")\nprint(len(ts.tags))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 딕셔너리 재고를 차감하고 예외를 처리하는 Store 클래스의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the output of the Store class when buying an existing item and a missing item.",
-      "hint_ko": "재고 딕셔너리에 존재하는 과일을 차감했을 때 남는 수량과, 없는 과일을 조회했을 때 예외 블록이 무엇을 돌려주는지 확인하세요.",
-      "hint_en": "Trace the remaining count returned after subtracting from an existing stock key, and check what the exception handler returns for an unknown key.",
-      "targetCode": "class Store:\n    def __init__(self):\n        self.stock = {\"apple\": 3}\n    def buy(self, item, n):\n        try:\n            self.stock[item] -= n\n            return self.stock[item]\n        except KeyError:\n            return None\ns = Store()\nprint(s.buy(\"apple\", 2), s.buy(\"pear\", 1))",
-      "choices": [
-        "1 None",
-        "1 0",
-        "3 None",
-        "None None"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 중복이 있는 리스트 nums를 집합으로 변환해 고유한 숫자의 개수를 출력해보세요.',
+      prompt_en: '[Fill Blank] Convert list nums into a set to print the number of unique values.',
+      hint_ko: '집합 변환 함수 안에 리스트 변수 nums를 넣어 호출하세요.',
+      hint_en: 'Pass list variable nums into the set constructor function.',
+      templateCode: 'nums = [10, 20, 10, 30]\ns = §§§§§§§§§\nprint(len(s))',
+      targetCode: 'nums = [10, 20, 10, 30]\ns = set(nums)\nprint(len(s))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1 None"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: '3',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 빈 집합 s = set()을 만들고 10을 두 번 .add(10)한 뒤 len(s)를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Create an empty set with set(), call s.add(10) twice, and print len(s).',
+      hint_ko: '빈 중괄호 {}는 빈 딕셔너리이므로, 빈 집합은 반드시 set()으로 만들고 .add()로 추가합니다.',
+      hint_en: 'Empty braces {} create a dict, so always use set() for an empty set and .add() to insert items.',
+      targetCode: 's = set()\ns.add(10)\ns.add(10)\nprint(len(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '1',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 집합 tags에 문자열 "py"를 추가하는 메서드를 채워 길이 2를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the set method that adds "py" to tags so its length becomes 2.',
+      hint_ko: '리스트의 append 대신 집합에 요소 하나를 더할 때 쓰는 세 글자 메서드 이름을 적으세요.',
+      hint_en: 'Write the three-letter method name used to insert an element into a set.',
+      templateCode: 'tags = set()\ntags.§§§("py")\ntags.add("js")\nprint(len(tags))',
+      targetCode: 'tags = set()\ntags.add("py")\ntags.add("js")\nprint(len(tags))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 집합 s에 20이 포함되어 있는지(in)와 전체 합계 sum(s)를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print whether 20 is in set s along with sum(s).',
+      hint_ko: '집합은 순서가 없어 인덱싱(s[0])은 불가능하지만 in 검사와 sum(), max() 집계는 가능합니다.',
+      hint_en: 'Sets do not support indexing, but membership checks with in and aggregations like sum() work.',
+      targetCode: 's = {10, 20, 30}\nprint(20 in s, sum(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'True 60',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 중복이 제거된 집합 s의 원소 합계와 최댓값을 나란히 출력해보세요.',
+      prompt_en: '[Fill Blank] Print the sum of elements in set s alongside max(s).',
+      hint_ko: '중복된 5가 하나만 남은 집합 s의 전체 합을 구하는 내장 함수 호출식을 적으세요.',
+      hint_en: 'Call the built-in sum function on set s.',
+      templateCode: 's = {5, 15, 5, 25}\nprint(§§§§§§, max(s))',
+      targetCode: 's = {5, 15, 5, 25}\nprint(sum(s), max(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '45 25',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 문자열 "banana"를 집합으로 바꾸어 고유한 알파벳 종류 수를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Convert string "banana" to a set and print its length to count unique letters.',
+      hint_ko: '문자열에 set()을 적용하면 중복된 글자가 모두 제거되어 서로 다른 글자만 남습니다.',
+      hint_en: 'Passing a string to set() extracts only its distinct characters.',
+      targetCode: 'word = "banana"\nprint(len(set(word)))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 문자열 변수 word의 중복 글자를 제거한 집합을 uniq에 저장해 길이를 출력해보세요.',
+      prompt_en: '[Fill Blank] Store the set of unique characters from word in uniq and print its length.',
+      hint_ko: '문자열 변수 word를 집합 변환 함수에 넣어 호출하세요.',
+      hint_en: 'Call the set constructor with variable word as its argument.',
+      templateCode: 'word = "level"\nuniq = §§§§§§§§§\nprint(len(uniq))',
+      targetCode: 'word = "level"\nuniq = set(word)\nprint(len(uniq))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈 집합을 만들고 분리된 단어들을 하나씩 추가해 고유 단어 수 3을 출력해보세요.',
+      prompt_en: '[Fill Blank] Initialize an empty set, add each word from the list, and print the unique count 3.',
+      hint_ko: '빈 집합 생성식과 집합 요소 추가 메서드, 길이를 구하는 함수를 차례로 채우세요.',
+      hint_en: 'Fill in the empty set constructor, the element addition method, and the length function.',
+      templateCode: 'words = "go py go js py".split()\ns = §§§§§\nfor w in words:\n    s.§§§(w)\nprint(§§§(s))',
+      targetCode: 'words = "go py go js py".split()\ns = set()\nfor w in words:\n    s.add(w)\nprint(len(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 빈 집합을 만들려다 빈 딕셔너리({})로 선언해 .add()에서 에러가 난 첫째 줄을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix line 1 where {} created an empty dictionary instead of an empty set.',
+      hint_ko: '빈 중괄호는 딕셔너리가 되므로 빈 집합 생성 함수를 호출하도록 고치세요.',
+      hint_en: 'Replace {} with the empty set constructor call on line 1.',
+      templateCode: 's = {}\ns.add(10)\ns.add(20)\nprint(len(s))',
+      targetCode: 's = set()\ns.add(10)\ns.add(20)\nprint(len(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 집합에 리스트용 추가 메서드를 사용해 발생한 AttributeError를 올바른 집합 메서드로 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the AttributeError caused by calling a list method on set s to insert 3.',
+      hint_ko: '집합에 요소를 추가할 때는 리스트의 append 대신 집합 전용 세 글자 메서드를 사용합니다.',
+      hint_en: 'Replace the list method with the three-letter method used to add an element to a set.',
+      templateCode: 's = {1, 2}\ns.append(3)\nprint(len(s), sum(s))',
+      targetCode: 's = {1, 2}\ns.add(3)\nprint(len(s), sum(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 6',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 nums의 중복을 집합으로 제거한 뒤 고유 요소의 개수를 바로 출력하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that prints the number of unique elements in nums using set() and len().',
+      hint_ko: 'nums를 집합으로 감싸고 다시 길이 함수와 출력 함수로 감싸 한 줄로 작성하세요.',
+      hint_en: 'Wrap nums in set(), pass that to len(), and print the result.',
+      templateCode: 'nums = [4, 2, 4, 7, 2]\n§§§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'nums = [4, 2, 4, 7, 2]\nprint(len(set(nums)))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 집합 visited에 문자열 "home"을 추가하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the line that adds the string "home" to set visited.',
+      hint_ko: '집합 변수 visited 뒤에 요소 추가 메서드를 호출하고 인자로 "home"을 넣으세요.',
+      hint_en: 'Call the element addition method on visited with "home" as the argument.',
+      templateCode: 'visited = set()\n§§§§§§§§§§§§§§§§§§§\nprint("home" in visited)',
+      targetCode: 'visited = set()\nvisited.add("home")\nprint("home" in visited)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'True',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 중복된 숫자를 집합에 순서대로 추가했을 때 출력될 길이와 합계를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the length and sum of set s after adding the numbers in the list.',
+      hint_ko: '이미 집합에 들어 있는 숫자는 다시 추가되지 않으므로 고유한 숫자들만 더해집니다.',
+      hint_en: 'Duplicate numbers are ignored when added to a set, so only distinct values contribute to len() and sum().',
+      targetCode: 's = set()\nfor x in [10, 20, 10, 30, 20]:\n    s.add(x)\nprint(len(s), sum(s))',
+      choices: ['3 60', '5 90', '3 90', '5 60'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '3 60',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 금지 문자 집합과 문자열 순회가 결합된 다음 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Predict the output when filtering characters of "banana" against set bans.',
+      hint_ko: '집합 bans의 크기와, "banana"의 여섯 글자 중 "a"와 "b"가 아닌 글자가 몇 번 나오는지 세어보세요.',
+      hint_en: 'Find the size of bans and count how many characters in "banana" are neither "a" nor "b".',
+      targetCode: 'bans = set("ab")\ncnt = 0\nfor ch in "banana":\n    if ch not in bans:\n        cnt += 1\nprint(len(bans), cnt)',
+      choices: ['2 2', '2 1', '3 2', '2 4'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '2 2',
+        },
+      ],
+    },
+  ],
 };

@@ -6,34 +6,52 @@ export const PYTHON_LEVEL_87: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 87,
-  "title_ko": "87레벨: 파이썬 베이직 전 과정(Part 1 + Part 2) 파이널 마스터 종합",
-  "title_en": "Level 87: Python Basic Complete (Part 1 + Part 2) Final Master Review",
-  "description_ko": "파이썬 베이직 87레벨 전 과정(제어문·컬렉션·컴프리헨션·가변 인자·lambda·예외 흐름·클래스 상속)을 완성하는 파이널 종합 마스터입니다.",
-  "description_en": "Complete the entire 87-level Python Basic journey across Part 1 and Part 2 in this comprehensive final master challenge.",
-  "totalQuestions": 10,
-  "unlockedBlocks": [],
+  "title_ko": "87레벨: 딕셔너리 안전 조회(.get()), 뷰 메서드(.keys(), .values())와 .pop(), .update()",
+  "title_en": "Level 87: Dictionary .get(), .keys(), .values(), .pop() & .update()",
+  "description_ko": "없는 키도 안전하게 찾는 .get()과 빈도수 집계 패턴, 키·값 목록 뷰(.keys(), .values()), .pop(), .update()를 익힙니다.",
+  "description_en": "Master safe lookup with .get(), frequency counting, dictionary views (.keys(), .values()), .pop(), and .update().",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable",
+    "input",
+    "type",
+    "if",
+    "for_range",
+    "range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
+    "sorted",
+    "def",
+    "return",
+    "class",
+    "try"
+  ],
   "questions": [
     {
       "id": 1,
       "step": 1,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 소문자 단어 빈도를 안전 조회로 세고 키를 사전순 정렬해 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in get and sorted to count lowercase word frequencies and print sorted key:count pairs.",
-      "hint_ko": "키가 없을 때 기본값 0을 돌려주는 3글자 사전 조회 메서드와 키들을 오름차순 배열하는 6글자 정렬 함수를 채우세요.",
-      "hint_en": "Use the 3-letter safe dictionary lookup method and the 6-letter built-in sorting function.",
-      "templateCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.§§§(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in §§§§§§(counts)]\nprint(\",\".join(pairs))",
-      "targetCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in sorted(counts)]\nprint(\",\".join(pairs))",
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] stock.get(\"pen\", 0)과 stock.get(\"note\", 0)으로 없는 키도 에러 없이 안전 조회해 출력해보세요.",
+      "prompt_en": "[Block] Use stock.get(\"pen\", 0) and stock.get(\"note\", 0) to safely look up keys with default 0.",
+      "hint_ko": "d[k]는 없는 키에서 KeyError가 나지만, d.get(k, 기본값)은 키가 없을 때 지정한 기본값을 안전하게 돌려줍니다.",
+      "hint_en": "Unlike d[k], d.get(k, default) never raises KeyError and returns the fallback value when k is absent.",
+      "targetCode": "stock = {\"pen\": 5}\nprint(stock.get(\"pen\", 0), stock.get(\"note\", 0))",
       "testCases": [
         {
           "id": 1,
-          "input": "Py code PY py Code",
-          "expectedOutput": "code:2,py:3"
-        },
-        {
-          "id": 2,
-          "input": "A b a",
-          "expectedOutput": "a:2,b:1"
+          "input": "",
+          "expectedOutput": "5 0"
         }
       ]
     },
@@ -42,41 +60,40 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 가변 인자(*nums)와 기본값 매개변수(bonus=0)로 합계와 평균을 서식에 맞게 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in *nums and sum to total variadic numbers plus bonus=0.",
-      "hint_ko": "여러 위치 인자를 튜플로 묶는 별표 매개변수 표기와 시퀀스 합산 3글자 내장 함수를 채우세요.",
-      "hint_en": "Complete the variadic tuple parameter *nums and the 3-letter summation built-in sum.",
-      "templateCode": "def calc_total(§§§§§, bonus=0):\n    return §§§(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:.2f}\")",
-      "targetCode": "def calc_total(*nums, bonus=0):\n    return sum(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:.2f}\")",
+      "prompt_ko": "[빈칸 채우기] 메뉴판에 없는 음료가 입력되더라도 에러 대신 -1을 돌려받도록 안전 조회 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the dictionary method name that looks up item safely and defaults to -1.",
+      "hint_ko": "키가 없을 때 기본값을 반환하는 세 글자 딕셔너리 안전 조회 메서드를 호출하세요.",
+      "hint_en": "Call the three-letter dictionary method for safe key lookup.",
+      "templateCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.§§§(item, -1))",
+      "targetCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.get(item, -1))",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "Total:1,600 Avg:533.33"
+          "input": "tea",
+          "expectedOutput": "3000"
+        },
+        {
+          "id": 2,
+          "input": "juice",
+          "expectedOutput": "-1"
         }
       ]
     },
     {
       "id": 3,
       "step": 3,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] Account를 상속받은 SafeAccount의 출금 예외 검증을 완성해보세요.",
-      "prompt_en": "[Fill Blank] Fill in Account and raise to complete SafeAccount(Account) withdrawal validation.",
-      "hint_ko": "상위 계좌 클래스(7글자)를 상속받고 잘못된 출금액에서 5글자 키워드로 예외를 일으키세요.",
-      "hint_en": "Inherit from the 7-letter Account class and throw an error with the 5-letter raise keyword.",
-      "templateCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(§§§§§§§):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            §§§§§ ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\nfinally:\n    print(\"End\")",
-      "targetCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(Account):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            raise ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\nfinally:\n    print(\"End\")",
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] list(scores.keys())로 키 리스트를 구하고 sum(scores.values())로 값 합계를 출력해보세요.",
+      "prompt_en": "[Block] Print list(scores.keys()) and sum(scores.values()) to inspect all keys and total the values.",
+      "hint_ko": ".keys()는 모든 키 목록을, .values()는 모든 값 목록을 꺼내주어 list()나 sum(), max()에 바로 넣을 수 있습니다.",
+      "hint_en": ".keys() and .values() expose dictionary keys and values for functions like list(), sum(), and max().",
+      "targetCode": "scores = {\"Kim\": 80, \"Lee\": 90}\nprint(list(scores.keys()), sum(scores.values()))",
       "testCases": [
         {
           "id": 1,
-          "input": "1500",
-          "expectedOutput": "Aria:3,500\nEnd"
-        },
-        {
-          "id": 2,
-          "input": "9000",
-          "expectedOutput": "Denied\nEnd"
+          "input": "",
+          "expectedOutput": "['Kim', 'Lee'] 170"
         }
       ]
     },
@@ -84,47 +101,36 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "id": 4,
       "step": 4,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 쉼표(,)로 구분된 정수들을 분리해야 하는데 콜론(:)으로 분리해 오류가 나는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the delimiter argument in .split(...) so comma-separated integers are parsed properly.",
-      "hint_ko": "입력값의 숫자들은 콜론(:)이 아니라 쉼표(,)로 구분되어 있으므로 split(\",\")로 수정하세요.",
-      "hint_en": "Change input().split(\":\") to input().split(\",\").",
-      "templateCode": "nums = list(map(int, input().split(\":\")))\npos = [n for n in nums if n > 0]\nprint(pos[::-1])",
-      "targetCode": "nums = list(map(int, input().split(\",\")))\npos = [n for n in nums if n > 0]\nprint(pos[::-1])",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 과목별 점수 딕셔너리에서 모든 점수의 최댓값을 구하도록 값 목록 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the dictionary method inside max() to find the highest score among all stored scores.",
+      "hint_ko": "딕셔너리의 모든 '값(value)'들을 모아 돌려주는 여섯 글자 메서드를 호출하세요.",
+      "hint_en": "Call the six-letter method that returns a view of the dictionary's stored numbers.",
+      "templateCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.§§§§§§()))",
+      "targetCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.values()))",
       "testCases": [
         {
           "id": 1,
-          "input": "10,-5,20,30",
-          "expectedOutput": "[30, 20, 10]"
-        },
-        {
-          "id": 2,
-          "input": "-2,4,8",
-          "expectedOutput": "[8, 4]"
+          "input": "",
+          "expectedOutput": "98"
         }
       ]
     },
     {
       "id": 5,
       "step": 5,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 0~100 범위를 벗어날 때 except ValueError가 잡을 수 있도록 발생시키는 예외 클래스를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the exception class in raise so except ValueError catches out-of-range values.",
-      "hint_ko": "호출부의 except ValueError as e:에서 처리할 수 있도록 IndexError 대신 ValueError를 일으키세요.",
-      "hint_en": "Change raise IndexError(\"Range\") to raise ValueError(\"Range\").",
-      "templateCode": "def parse_rate(text):\n    val = int(text)\n    if val < 0 or val > 100:\n        raise IndexError(\"Range\")\n    return val\n\ntry:\n    r = parse_rate(input())\nexcept ValueError as e:\n    print(f\"Err:{e}\")\nelse:\n    print(f\"OK:{r}%\")",
-      "targetCode": "def parse_rate(text):\n    val = int(text)\n    if val < 0 or val > 100:\n        raise ValueError(\"Range\")\n    return val\n\ntry:\n    r = parse_rate(input())\nexcept ValueError as e:\n    print(f\"Err:{e}\")\nelse:\n    print(f\"OK:{r}%\")",
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] out = bag.pop(\"mp\")로 항목을 꺼내 삭제하고 꺼낸 값과 남은 딕셔너리 길이를 출력해보세요.",
+      "prompt_en": "[Block] Use bag.pop(\"mp\") to remove and return the value of \"mp\", then print out and len(bag).",
+      "hint_ko": "del d[k]는 삭제만 하지만, d.pop(k)는 해당 키를 삭제하면서 그 값을 동시에 반환해 변수에 담아 쓸 수 있습니다.",
+      "hint_en": "Unlike del d[k], d.pop(k) removes the key and returns its value at the same time.",
+      "targetCode": "bag = {\"hp\": 100, \"mp\": 40}\nout = bag.pop(\"mp\")\nprint(out, len(bag))",
       "testCases": [
         {
           "id": 1,
-          "input": "120",
-          "expectedOutput": "Err:Range"
-        },
-        {
-          "id": 2,
-          "input": "85",
-          "expectedOutput": "OK:85%"
+          "input": "",
+          "expectedOutput": "40 1"
         }
       ]
     },
@@ -132,47 +138,36 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "id": 6,
       "step": 6,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 세금 100원이 더해진 금액을 반환해야 하는 TaxItem.pay()에서 100원을 빼고 있는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the operator in TaxItem.pay() so it adds 100 tax instead of subtracting 100.",
-      "hint_ko": "세금이 추가되어야 하므로 self.price - 100을 self.price + 100으로 수정하세요.",
-      "hint_en": "Change self.price - 100 to self.price + 100 in TaxItem.pay.",
-      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\n    def __str__(self):\n        return f\"{self.name}:{self.pay()}\"\n\nclass TaxItem(Item):\n    def pay(self):\n        return self.price - 100\n\nbag = [Item(\"Pen\", 900), TaxItem(\"Book\", 1500)]\ns = sorted(bag, key=lambda x: x.pay(), reverse=True)\nprint(\",\".join([str(x) for x in s]))",
-      "targetCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\n    def __str__(self):\n        return f\"{self.name}:{self.pay()}\"\n\nclass TaxItem(Item):\n    def pay(self):\n        return self.price + 100\n\nbag = [Item(\"Pen\", 900), TaxItem(\"Book\", 1500)]\ns = sorted(bag, key=lambda x: x.pay(), reverse=True)\nprint(\",\".join([str(x) for x in s]))",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 대기자 명단 딕셔너리에서 \"Lee\"의 번호표를 꺼내 반환받으면서 삭제하도록 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the dictionary method that removes \"Lee\" and returns its value.",
+      "hint_ko": "지정한 키의 값을 뽑아내어 돌려주면서 딕셔너리에서 지우는 세 글자 메서드를 적으세요.",
+      "hint_en": "Use the three-letter method that pops a key-value pair from a dictionary.",
+      "templateCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.§§§(\"Lee\")\nprint(num, list(wait.keys()))",
+      "targetCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.pop(\"Lee\")\nprint(num, list(wait.keys()))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Book:1600,Pen:900"
+          "expectedOutput": "2 ['Kim', 'Park']"
         }
       ]
     },
     {
       "id": 7,
       "step": 7,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] avg_ok와 all_ok가 모두 참이면 \"PASS\", 아니면 \"FAIL\"을 저장하는 삼항 표현식을 res에 작성하세요.",
-      "prompt_en": "[Complete Line] Assign \"PASS\" if avg_ok and all_ok else \"FAIL\" to res.",
-      "hint_ko": "res = \"PASS\" if avg_ok and all_ok else \"FAIL\" 형태로 조건 표현식을 작성하세요.",
-      "hint_en": "Write res = \"PASS\" if avg_ok and all_ok else \"FAIL\".",
-      "templateCode": "scores = list(map(int, input().split()))\navg_ok = sum(scores) / len(scores) >= 80\nall_ok = all([s >= 60 for s in scores])\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "scores = list(map(int, input().split()))\navg_ok = sum(scores) / len(scores) >= 80\nall_ok = all([s >= 60 for s in scores])\nres = \"PASS\" if avg_ok and all_ok else \"FAIL\"\nprint(res)",
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] d[ch] = d.get(ch, 0) + 1 패턴으로 문자열 \"banana\"의 각 글자 등장 횟수를 세어보세요.",
+      "prompt_en": "[Block] Use counts[ch] = counts.get(ch, 0) + 1 in a loop to count character frequencies in \"banana\".",
+      "hint_ko": "counts.get(ch, 0) + 1을 쓰면 if-else 없이도 처음 나온 글자는 0 + 1 = 1로, 있던 글자는 기존 값 + 1로 누적됩니다.",
+      "hint_en": "counts.get(ch, 0) + 1 initializes unseen keys to 1 and increments existing keys in a single line.",
+      "targetCode": "counts = {}\nfor ch in \"banana\":\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts[\"a\"], counts[\"n\"])",
       "testCases": [
         {
           "id": 1,
-          "input": "85 90 75",
-          "expectedOutput": "PASS"
-        },
-        {
-          "id": 2,
-          "input": "95 95 55",
-          "expectedOutput": "FAIL"
-        },
-        {
-          "id": 3,
-          "input": "70 70 70",
-          "expectedOutput": "FAIL"
+          "input": "",
+          "expectedOutput": "3 2"
         }
       ]
     },
@@ -180,68 +175,168 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "id": 8,
       "step": 8,
       "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 ok를 h.lv 기준 내림차순(reverse=True)으로 정렬해 s에 저장하는 한 줄을 완성하세요.",
-      "prompt_en": "[Complete Line] Assign sorted(ok, key=lambda h: h.lv, reverse=True) to s.",
-      "hint_ko": "s = sorted(ok, key=lambda h: h.lv, reverse=True) 형태로 작성하세요.",
-      "hint_en": "Write s = sorted(ok, key=lambda h: h.lv, reverse=True).",
-      "templateCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25)]\nhs.append(Hero(\"Leo\", 8))\nok = [h for h in hs if h.lv >= 10]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(\", \".join([str(h) for h in s]))",
-      "targetCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25)]\nhs.append(Hero(\"Leo\", 8))\nok = [h for h in hs if h.lv >= 10]\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\", \".join([str(h) for h in s]))",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 기본 설정 딕셔너리에 새 설정 딕셔너리를 한꺼번에 병합·갱신하도록 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the dictionary method that merges patch into cfg in place.",
+      "hint_ko": "다른 딕셔너리의 키-값 쌍들을 현재 딕셔너리에 덮어쓰거나 추가해 갱신하는 여섯 글자 메서드를 호출하세요.",
+      "hint_en": "Call the six-letter method that updates a dictionary with another dictionary's entries.",
+      "templateCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.§§§§§§(patch)\nprint(cfg[\"fps\"], len(cfg))",
+      "targetCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.update(patch)\nprint(cfg[\"fps\"], len(cfg))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Ara(Lv.25), Kai(Lv.12)"
+          "expectedOutput": "60 3"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 가변 인자, 컴프리헨션, set 중복 제거, 내림차순 정렬과 enumerate를 결합한 코드의 실행 결과를 고르세요.",
-      "prompt_en": "[Predict Output] Select the exact output of pick(10, 5, 20, 10, 20, 15) after deduplication, sorting, and enumeration.",
-      "hint_ko": "기준값 이상만 남긴 뒤 집합 변환으로 중복 값이 제거된다는 점, 내림차순 정렬 순서, 그리고 시작 번호가 1부터 붙는다는 점을 차례로 추적해보세요.",
-      "hint_en": "Filter by the threshold first, note that set conversion removes duplicates before descending sort, and trace the 1-based numbering.",
-      "targetCode": "def pick(limit, *nums):\n    valid = [n for n in nums if n >= limit]\n    return sorted(set(valid), reverse=True)\n\nres = pick(10, 5, 20, 10, 20, 15)\ntags = [f\"{i}:{v}\" for i, v in enumerate(res, 1)]\nprint(\"/\".join(tags))",
-      "choices": [
-        "1:20/2:15/3:10",
-        "1:20/2:20/3:15/4:10",
-        "1:10/2:15/3:20",
-        "0:20/1:15/2:10"
-      ],
-      "correctChoiceIndex": 0,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 단어 빈도수를 안전 조회로 누적한 뒤 추가 점수를 병합하고 전체 값의 합계를 출력하도록 세 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the safe lookup method, dictionary merge method, and stored-counts view method.",
+      "hint_ko": "기본값을 지정해 안전 조회하는 메서드, 다른 딕셔너리를 병합하는 메서드, 그리고 값 목록을 꺼내는 메서드를 확인하세요.",
+      "hint_en": "Check the three-letter lookup method, six-letter merge method, and six-letter view method.",
+      "templateCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.§§§(w, 0) + 1\nfreq.§§§§§§({\"c\": 5})\nprint(freq[\"a\"], sum(freq.§§§§§§()))",
+      "targetCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.get(w, 0) + 1\nfreq.update({\"c\": 5})\nprint(freq[\"a\"], sum(freq.values()))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "1:20/2:15/3:10"
+          "expectedOutput": "2 8"
         }
       ]
     },
     {
       "id": 10,
       "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리에 없는 키 \"gold\"를 대괄호로 바로 조회해 발생한 KeyError를 기본값 0을 반환하는 안전 조회로 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Replace the bracket lookup bag[\"gold\"] with a safe lookup returning 0 when the key is missing.",
+      "hint_ko": "없는 키를 조회할 때 에러 없이 기본값 0을 얻으려면 .get(\"gold\", 0) 메서드를 사용해야 합니다.",
+      "hint_en": "Use bag.get(\"gold\", 0) instead of bag[\"gold\"] to avoid KeyError.",
+      "templateCode": "bag = {\"silver\": 10}\nprint(bag[\"gold\"])",
+      "targetCode": "bag = {\"silver\": 10}\nprint(bag.get(\"gold\", 0))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "0"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 글자 빈도수를 셀 때 기본값을 잘못 지정해 모든 글자의 개수가 1씩 더 크게 나오는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the default fallback argument in freq.get() so new characters start at a count of 1 instead of 2.",
+      "hint_ko": "처음 등장한 글자는 이전 등장 횟수가 0번이어야 거기에 1을 더했을 때 정확히 1이 됩니다.",
+      "hint_en": "Pass 0 as the default in .get(ch, 0) + 1 so the first occurrence becomes 0 + 1 = 1.",
+      "templateCode": "freq = {}\nfor ch in \"aba\":\n    freq[ch] = freq.get(ch, 1) + 1\nprint(freq[\"a\"], freq[\"b\"])",
+      "targetCode": "freq = {}\nfor ch in \"aba\":\n    freq[ch] = freq.get(ch, 0) + 1\nprint(freq[\"a\"], freq[\"b\"])",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2 1"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 반복문 안에서 딕셔너리 d의 키 k 빈도수를 d.get(k, 0) + 1로 1 증가시키는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the indented line that increments d[k] using d.get(k, 0) + 1.",
+      "hint_ko": "d[k] = d.get(k, 0) + 1 형태로 안전 조회와 + 1을 결합하세요.",
+      "hint_en": "Write d[k] = d.get(k, 0) + 1 inside the loop.",
+      "templateCode": "d = {}\nfor k in input().split():\n    §§§§§§§§§§§§§§§§§§§§§§\nprint(d.get(\"py\", 0))",
+      "targetCode": "d = {}\nfor k in input().split():\n    d[k] = d.get(k, 0) + 1\nprint(d.get(\"py\", 0))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "py js py",
+          "expectedOutput": "2"
+        },
+        {
+          "id": 2,
+          "input": "go rust",
+          "expectedOutput": "0"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 딕셔너리 cart의 모든 값(가격)들의 합계를 sum()과 .values()로 출력하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that prints the sum of all values in cart.",
+      "hint_ko": "print(sum(cart.values())) 형태로 값 목록의 합계를 출력하세요.",
+      "hint_en": "Write print(sum(cart.values())).",
+      "templateCode": "cart = {\"apple\": 1200, \"milk\": 2500, \"bread\": 1800}\n§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "cart = {\"apple\": 1200, \"milk\": 2500, \"bread\": 1800}\nprint(sum(cart.values()))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "5500"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "step": 14,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 클래스 상속, __str__, raise 예외 처리, lambda 정렬과 isinstance를 통합한 문제의 결과를 고르세요.",
-      "prompt_en": "[Predict Output] Select the exact output of this grand final Python Basic program combining OOP, exceptions, and sorting.",
-      "hint_ko": "기본값이 0 이하인 객체는 예외 메시지를 출력하고 유효 목록에서 제외된다는 점, 재정의된 추가 요금이 반영된 내림차순 순서, 그리고 자식 객체의 부모 타입 인정 여부를 종합해 따져보세요.",
-      "hint_en": "Check which item triggers an exception (and is skipped from ok), order the valid items by their overridden costs descending, and recall whether a subclass counts as an instance of its parent.",
-      "targetCode": "class Ticket:\n    def __init__(self, code, base):\n        self.code = code\n        self.base = base\n\n    def cost(self):\n        if self.base <= 0:\n            raise ValueError(\"Invalid\")\n        return self.base\n\n    def __str__(self):\n        return f\"{self.code}:{self.cost()}\"\n\nclass VIP(Ticket):\n    def cost(self):\n        if self.base <= 0:\n            raise ValueError(\"Invalid\")\n        return self.base + 500\n\nts = [Ticket(\"A\", 1000), VIP(\"B\", 0), VIP(\"C\", 800)]\nok = []\nfor t in ts:\n    try:\n        t.cost()\n    except ValueError as e:\n        print(e)\n    else:\n        ok.append(t)\ns = sorted(ok, key=lambda x: x.cost(), reverse=True)\nout_txt = \",\".join([str(x) for x in s])\nprint(out_txt, isinstance(s[0], Ticket))",
+      "prompt_ko": "[출력 결과 예측] 딕셔너리에 .update(), .pop(), .get()을 차례대로 실행했을 때의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output after running .update(), .pop(), and .get() on a dictionary.",
+      "hint_ko": ".update()는 기존 키 \"a\"의 값을 30으로 덮어쓰고 새 키 \"c\"를 추가하며, .pop(\"b\")는 20을 꺼내 삭제합니다.",
+      "hint_en": ".update() overwrites \"a\" with 30 and adds \"c\": 40; .pop(\"b\") removes \"b\" and returns 20.",
+      "targetCode": "d = {\"a\": 10, \"b\": 20}\nd.update({\"a\": 30, \"c\": 40})\nx = d.pop(\"b\")\ny = d.get(\"b\", 5)\nprint(x, y, sum(d.values()))",
       "choices": [
-        "Invalid\nC:1300,A:1000 True",
-        "Invalid\nA:1000,C:1300 True",
-        "Invalid\nC:1300,A:1000 False",
-        "C:1300,B:500,A:1000 True"
+        "20 5 70",
+        "20 20 70",
+        "10 5 50",
+        "20 5 50"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Invalid\nC:1300,A:1000 True"
+          "expectedOutput": "20 5 70"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 단어 리스트의 글자 수 합계를 구하면서 빈도수 딕셔너리의 키 개수와 최댓값을 출력한 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output of the frequency counter code using .get(), .keys(), and .values().",
+      "hint_ko": "고유 단어는 \"go\", \"py\", \"js\" 3개이고, 가장 많이 등장한 \"py\"의 빈도수는 3입니다.",
+      "hint_en": "There are 3 distinct keys (\"go\", \"py\", \"js\"), and the highest frequency value is 3.",
+      "targetCode": "words = [\"go\", \"py\", \"js\", \"py\", \"go\", \"py\"]\ncnt = {}\nfor w in words:\n    cnt[w] = cnt.get(w, 0) + 1\nprint(len(cnt.keys()), max(cnt.values()), cnt.get(\"c\", 0))",
+      "choices": [
+        "3 3 0",
+        "6 3 0",
+        "3 2 0",
+        "3 3 1"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "3 3 0"
         }
       ]
     }

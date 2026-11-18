@@ -1,329 +1,254 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_40: PracticeRound = {
-  "id": "py-basic-r40",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 40,
-  "title_ko": "40레벨: 리스트 필수 추가와 꺼내기 (.append, .pop)",
-  "title_en": "Level 40: Essential List append() & pop()",
-  "description_ko": ".append()로 리스트 끝에 요소를 추가하고 .pop()과 .pop(0)으로 요소를 꺼내 활용하는 패턴을 익힙니다.",
-  "description_en": "Master adding elements with .append() and removing/returning elements with .pop() and .pop(0).",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "math",
-    "method",
-    "if",
-    "for_range",
-    "range",
-    "while"
-  ],
-  "questions": [
+  id: 'py-basic-r40',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 40,
+  title_ko: '반복문과 흐름 제어 기초 종합 문제풀이',
+  title_en: 'Section 4 Comprehensive Review',
+  description_ko: 'for, range(구간·역순), 누적 합·곱·개수, while, break, continue, 중첩 반복문까지 섹션 1~4 전 범위를 종합 점검합니다.',
+  description_en: 'Comprehensive review of for, range, accumulators, while, break, continue, and nested loops across Sections 1-4.',
+  totalQuestions: 10,
+  unlockedBlocks: [],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .append(30)으로 리스트 맨 끝에 새 요소를 추가하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the code that adds 30 to the end of nums using .append().",
-      "hint_ko": ".append()는 원본 리스트 자체를 직접 변경하므로 단독 문장으로 호출합니다.",
-      "hint_en": "Because .append() mutates the list in place, call it on its own line.",
-      "targetCode": "nums = [10, 20]\nnums.append(30)\nprint(nums)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 n부터 1까지 역순으로 돌며 3의 배수는 더하고 짝수는 1을 빼는 누적 합계를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 2 blanks to iterate from n down to 1, adding multiples of 3 and subtracting 1 on evens.',
+      hint_ko: '1씩 줄어드는 음수 간격과, 기존 합계에 현재 값을 누적해 더하는 복합 대입 연산자를 채웁니다.',
+      hint_en: 'Supply the negative unit step -1 and the compound addition operator +=.',
+      templateCode: 'n = int(input())\ns = 0\nfor i in range(n, 0, §§):\n    if i % 3 == 0:\n        s §§ i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)',
+      targetCode: 'n = int(input())\ns = 0\nfor i in range(n, 0, -1):\n    if i % 3 == 0:\n        s += i\n    elif i % 2 == 0:\n        s -= 1\nprint(s)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈 리스트 cart에 \"milk\"와 \"egg\"를 순서대로 추가해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Add \"milk\" and \"egg\" to the end of cart in order and print cart.",
-      "hint_ko": "리스트 맨 끝에 항목을 덧붙이는 여섯 글자 메서드 append를 두 번 호출하세요.",
-      "hint_en": "Call the 6-letter method append on each line.",
-      "templateCode": "cart = []\ncart.§§§§§§(\"milk\")\ncart.§§§§§§(\"egg\")\nprint(cart)",
-      "targetCode": "cart = []\ncart.append(\"milk\")\ncart.append(\"egg\")\nprint(cart)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['milk', 'egg']"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .pop()으로 리스트의 마지막 요소를 꺼내 변수에 저장하고 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Remove and return the last element from stack using .pop().",
-      "hint_ko": ".pop()을 호출하면 마지막 값은 변수에 담기고 원본 리스트에는 나머지 요소만 남습니다.",
-      "hint_en": "Calling .pop() assigns the removed tail item to last and leaves the rest in stack.",
-      "targetCode": "stack = [10, 20, 30]\nlast = stack.pop()\nprint(last)\nprint(stack)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "30\n[10, 20]"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트에서 맨 앞 요소를 first에, 맨 뒤 요소를 last에 꺼내고 남은 리스트와 함께 출력해보세요.",
-      "prompt_en": "[Fill Blank] Pop the first item into first and the last item into last, then print all three.",
-      "hint_ko": "맨 앞 요소를 꺼내는 pop(0)과 맨 끝 요소를 꺼내는 pop을 각각 채우세요.",
-      "hint_en": "Use pop(0) to extract the front item and pop() for the last item.",
-      "templateCode": "queue = [\"A\", \"B\", \"C\"]\nfirst = queue.§§§§§§\nlast = queue.§§§()\nprint(first, last, queue)",
-      "targetCode": "queue = [\"A\", \"B\", \"C\"]\nfirst = queue.pop(0)\nlast = queue.pop()\nprint(first, last, queue)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "A C ['B']"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] for 반복문 안에서 .append()로 계산된 값들을 빈 리스트에 모으는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Collect computed values into an empty list using .append() inside a for loop.",
-      "hint_ko": "반복문 바깥에서 빈 리스트를 초기화하고 본문에서 매 회차 결과를 .append()로 추가합니다.",
-      "hint_en": "Initialize the empty list before the loop and append each value inside the loop.",
-      "targetCode": "nums = []\nfor i in range(1, 4):\n    nums.append(i * 10)\nprint(f\"Count:{len(nums)},Data:{nums}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Count:3,Data:[10, 20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] n번 반복하며 입력 단어 앞에 번호를 붙여 words 리스트에 추가하고 출력해보세요.",
-      "prompt_en": "[Fill Blank] Loop n times, strip each word, append \"i:w\" to words, and print words.",
-      "hint_ko": "반복 횟수를 만드는 range 함수와 리스트 끝에 추가하는 append 메서드를 채우세요.",
-      "hint_en": "Use range for the loop count and append to add each formatted string.",
-      "templateCode": "n = int(input())\nwords = []\nfor i in §§§§§(n):\n    w = input().strip()\n    words.§§§§§§(f\"{i}:{w}\")\nprint(words)",
-      "targetCode": "n = int(input())\nwords = []\nfor i in range(n):\n    w = input().strip()\n    words.append(f\"{i}:{w}\")\nprint(words)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "2\n cat \ndog",
-          "expectedOutput": "['0:cat', '1:dog']"
+          id: 1,
+          input: '6',
+          expectedOutput: '7',
         },
         {
-          "id": 2,
-          "input": "3\npy\njs\ngo",
-          "expectedOutput": "['0:py', '1:js', '2:go']"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] while stack: 조건과 .pop()으로 모든 요소를 꺼내 합산하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Combine while stack: with .pop() to extract and sum every item until empty.",
-      "hint_ko": ".pop()을 반복할 때마다 리스트 길이가 줄어들어 빈 리스트가 되면 while문이 멈춥니다.",
-      "hint_en": "Each .pop() shrinks the list until it becomes empty and stops the while loop.",
-      "targetCode": "stack = [10, 20, 30]\ntotal = 0\nwhile stack:\n    val = stack.pop()\n    total += val\nprint(f\"Sum:{total},Left:{len(stack)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Sum:60,Left:0"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 단어 리스트가 빌 때까지 맨 앞 요소를 차례대로 꺼내 대괄호 모양으로 이어 붙여보세요.",
-      "prompt_en": "[Fill Blank] While tasks has items, pop from index 0 and append \"[cur]\" onto log.",
-      "hint_ko": "조건 반복 키워드 while과 맨 앞 요소를 꺼내는 pop(0)을 차례로 채우세요.",
-      "hint_en": "Use while for the loop header and pop(0) to remove from the front in order.",
-      "templateCode": "tasks = input().split()\nlog = \"\"\n§§§§§ tasks:\n    cur = tasks.§§§§§§\n    log += f\"[{cur}]\"\nprint(log)",
-      "targetCode": "tasks = input().split()\nlog = \"\"\nwhile tasks:\n    cur = tasks.pop(0)\n    log += f\"[{cur}]\"\nprint(log)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "A B",
-          "expectedOutput": "[A][B]"
+          id: 2,
+          input: '4',
+          expectedOutput: '1',
         },
         {
-          "id": 2,
-          "input": "wake eat code",
-          "expectedOutput": "[wake][eat][code]"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .pop(0)으로 앞에서부터 값을 꺼내 양수만 2배로 clean에 .append()하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Pop items from the front with .pop(0) and .append() doubled positive values to clean.",
-      "hint_ko": ".pop(0)은 맨 앞에서부터 순서대로 요소를 꺼내며, 조건에 맞는 값만 .append()로 모읍니다.",
-      "hint_en": ".pop(0) removes from the front in order, and positive values are appended to clean.",
-      "targetCode": "raw = [5, -1, 8]\nclean = []\nwhile raw:\n    x = raw.pop(0)\n    if x > 0:\n        clean.append(x * 2)\nprint(clean)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 16]"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] raw가 빌 때까지 맨 앞 숫자를 꺼내 양수만 valid 리스트에 추가해 출력해보세요.",
-      "prompt_en": "[Fill Blank] Pop from the front of raw while non-empty and append positive numbers to valid.",
-      "hint_ko": "맨 앞 요소를 꺼내는 pop(0)과 리스트 끝에 덧붙이는 append를 차례로 채우세요.",
-      "hint_en": "Use pop(0) to extract from the front and append to store positive numbers.",
-      "templateCode": "raw = [10, -5, 20]\nvalid = []\nwhile raw:\n    n = raw.§§§§§§\n    if n > 0:\n        valid.§§§§§§(n)\nprint(valid)",
-      "targetCode": "raw = [10, -5, 20]\nvalid = []\nwhile raw:\n    n = raw.pop(0)\n    if n > 0:\n        valid.append(n)\nprint(valid)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 20]"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트의 맨 앞 요소부터 차례로 꺼내려다 인덱스 오류가 나는 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the index argument in .pop() so A, B, C print from the front without an error.",
-      "hint_ko": "맨 앞 요소의 인덱스는 1이 아니라 0이므로 items.pop(0)으로 고쳐야 합니다.",
-      "hint_en": "Change items.pop(1) to items.pop(0) to always remove the front element.",
-      "templateCode": "items = [\"A\", \"B\", \"C\"]\nwhile items:\n    print(items.pop(1))",
-      "targetCode": "items = [\"A\", \"B\", \"C\"]\nwhile items:\n    print(items.pop(0))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "A\nB\nC"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 대기열 queue의 맨 앞 요소를 꺼내 first에 저장하려다 두 번째 요소가 꺼내지는 버그를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the .pop() index so the first element (10) is removed into first.",
-      "hint_ko": "맨 앞 요소를 꺼내려면 pop(1)이 아니라 pop(0)을 호출해야 합니다.",
-      "hint_en": "Change queue.pop(1) to queue.pop(0) to remove the first item.",
-      "templateCode": "queue = [10, 20, 30]\nfirst = queue.pop(1)\nprint(first, queue)",
-      "targetCode": "queue = [10, 20, 30]\nfirst = queue.pop(0)\nprint(first, queue)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "10 [20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] stack의 마지막 요소를 꺼내 top에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that pops the last element of stack into top.",
-      "hint_ko": "top = stack.pop() 형태로 맨 뒤 요소를 꺼내 변수 top에 대입하세요.",
-      "hint_en": "Write top = stack.pop() to remove and store the last element.",
-      "templateCode": "stack = [10, 20]\nstack.append(30)\n§§§§§§§§§§§§§§§§§\nprint(f\"Pop:{top},Len:{len(stack)}\")",
-      "targetCode": "stack = [10, 20]\nstack.append(30)\ntop = stack.pop()\nprint(f\"Pop:{top},Len:{len(stack)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Pop:30,Len:2"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 입력받은 item을 리스트 cart의 맨 끝에 추가하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that appends item to cart.",
-      "hint_ko": "cart.append(item) 형태로 리스트 끝에 요소를 추가하세요.",
-      "hint_en": "Write cart.append(item) to add item to the end of cart.",
-      "templateCode": "cart = [\"milk\"]\nitem = input().strip()\n§§§§§§§§§§§§§§§§§\nprint(cart)",
-      "targetCode": "cart = [\"milk\"]\nitem = input().strip()\ncart.append(item)\nprint(cart)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "bread",
-          "expectedOutput": "['milk', 'bread']"
+          id: 3,
+          input: '9',
+          expectedOutput: '15',
         },
-        {
-          "id": 2,
-          "input": "cheese",
-          "expectedOutput": "['milk', 'cheese']"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 .pop(0), .append(), .pop() 코드의 실행 결과를 예측해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
-      "hint_ko": "맨 앞에서 꺼낸 값이 10배가 되어 끝에 추가된 뒤 .pop()으로 다시 꺼내질 때의 결과를 추적해보세요.",
-      "hint_en": "Trace removing from the front, appending x * 10 to the back, and then popping from the back.",
-      "targetCode": "q = [1, 2, 3]\nx = q.pop(0)\nq.append(x * 10)\ny = q.pop()\nprint(f\"{y}:{q}\")",
-      "choices": [
-        "10:[2, 3]",
-        "30:[1, 2]",
-        "3:[2, 10]",
-        "10:[1, 2, 3]"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 "quit"이면 종료하고 음수는 건너뛰며 양수 값만 합산해 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 2 loop-control keywords to stop on "quit" and skip negative values.',
+      hint_ko: '반복 전체를 즉시 끝내는 다섯 글자 제어 키워드와, 이번 차례만 넘기는 여덟 글자 제어 키워드를 채웁니다.',
+      hint_en: 'Enter the five-letter exit keyword on line 5 and the eight-letter skip keyword on line 7.',
+      templateCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        §§§§§\n    if int(num) < 0:\n        §§§§§§§§\n    total += int(num)\nprint(total)',
+      targetCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        break\n    if int(num) < 0:\n        continue\n    total += int(num)\nprint(total)',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "10:[2, 3]"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: 'item 15\nerr -10\nitem 25\nquit 0',
+          expectedOutput: '40',
+        },
+        {
+          id: 2,
+          input: 'err -5\nitem 8\nquit 0',
+          expectedOutput: '8',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 양의 정수 n의 자릿수 합 s와 s가 홀수인지 여부를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 2 blanks to strip the ones digit each turn and check if the digit sum s is odd.',
+      hint_ko: '10으로 나눈 정수 몫으로 갱신하는 복합 대입 연산자와, 나머지를 참·거짓으로 바꾸는 네 글자 함수를 채웁니다.',
+      hint_en: 'Use floor-division compound assignment on line 5 and the four-letter boolean casting function on line 6.',
+      templateCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n §§§ 10\nprint(s, §§§§(s % 2))',
+      targetCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s, bool(s % 2))',
+      testCases: [
+        {
+          id: 1,
+          input: '384',
+          expectedOutput: '15 True',
+        },
+        {
+          id: 2,
+          input: '204',
+          expectedOutput: '6 False',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 자기 자신 n을 포함한 모든 약수의 총합이 출력되도록 range()의 끝 경계 식을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the range stop operator so the sum of all divisors of n (including n) is printed.',
+      hint_ko: '자기 자신 n까지 포함하려면 끝 경계를 n - 1이 아니라 n + 1로 지정해야 합니다.',
+      hint_en: 'Change n - 1 to n + 1 so n itself is checked as a divisor.',
+      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n - 1):\n    if n % i == 0:\n        total += i\nprint(total)',
+      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        total += i\nprint(total)',
+      testCases: [
+        {
+          id: 1,
+          input: '6',
+          expectedOutput: '12',
+        },
+        {
+          id: 2,
+          input: '10',
+          expectedOutput: '18',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 1부터 n까지 모두 곱한 값(n!)이 출력되도록 prod의 초기값을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the initial value of prod so 1 * 2 * ... * n is computed accurately.',
+      hint_ko: '곱셈 누적 변수가 0에서 시작하면 어떤 수를 곱해도 계속 0이 됩니다.',
+      hint_en: 'Initialize the product accumulator prod to 1 instead of 0.',
+      templateCode: 'n = int(input())\nprod = 0\ni = 1\nwhile i <= n:\n    prod *= i\n    i += 1\nprint(prod)',
+      targetCode: 'n = int(input())\nprod = 1\ni = 1\nwhile i <= n:\n    prod *= i\n    i += 1\nprint(prod)',
+      testCases: [
+        {
+          id: 1,
+          input: '4',
+          expectedOutput: '24',
+        },
+        {
+          id: 2,
+          input: '5',
+          expectedOutput: '120',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 안쪽 반복 범위를 고쳐 1층에 1개부터 n층에 n개까지 "#" 계단이 출력되게 해보세요.',
+      prompt_en: '[Fix Bug] Fix the inner loop range so a staircase of 1 to n "#" characters is printed.',
+      hint_ko: '안쪽 반복 횟수가 전체 층수 n으로 고정되어 있습니다. 현재 층 번호 변수로 고쳐보세요.',
+      hint_en: 'Change range(n) to range(r) on line 3 so each row prints r characters.',
+      templateCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(n):\n        print("#", end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(1, n + 1):\n    for c in range(r):\n        print("#", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '#\n##\n###',
+        },
+        {
+          id: 2,
+          input: '4',
+          expectedOutput: '#\n##\n###\n####',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] i가 짝수(i % 2 == 0)이면서 5의 배수가 아닌지(i % 5 != 0) 검사하는 if 헤더를 넷째 줄에 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 4-space indented if header checking i % 2 == 0 and i % 5 != 0.',
+      hint_ko: '4칸 들여쓰기 뒤에 if i % 2 == 0 and i % 5 != 0:을 작성해보세요.',
+      hint_en: 'Keep the 4-space indentation and write if i % 2 == 0 and i % 5 != 0:.',
+      templateCode: 'n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        cnt += 1\nprint(cnt)',
+      targetCode: 'n = int(input())\ncnt = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 5 != 0:\n        cnt += 1\nprint(cnt)',
+      testCases: [
+        {
+          id: 1,
+          input: '10',
+          expectedOutput: '4',
+        },
+        {
+          id: 2,
+          input: '12',
+          expectedOutput: '5',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 안쪽 반복문에서 행 번호 r과 열 번호 c가 같은지 검사하는 if 헤더 한 줄을 넷째 줄에 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 8-space indented if header checking whether r equals c.',
+      hint_ko: '8칸 들여쓰기 뒤에 if r == c:를 작성해보세요.',
+      hint_en: 'Keep the 8-space indentation and write if r == c:.',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        §§§§§§§§§§\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
+      targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
+      testCases: [
+        {
+          id: 1,
+          input: '3',
+          expectedOutput: '100\n010\n001',
+        },
+        {
+          id: 2,
+          input: '2',
+          expectedOutput: '10\n01',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '반복문 첫 줄에서 n이 먼저 1 증가한다는 점에 유의하며 홀수(1, 3, 5)에서 s가 어떻게 누적되는지 확인해보세요.',
+      hint_en: 'Note that n increments at the top of each turn; trace odd values 1, 3, 5 and check the parity of final s.',
+      targetCode: 'n = 0\ns = 0\nwhile n < 6:\n    n += 1\n    if n % 2 == 0:\n        continue\n    elif n == 5:\n        s += 10\n    else:\n        s += n\nprint(s, bool(s % 2))',
+      choices: ['14 False', '9 True', '19 True', '14 True'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '14 False',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '각 행(r = 1, 2, 3)에서 c == 1은 건너뛰고 c > r + 1이면 안쪽 루프만 탈출할 때 cnt가 몇 번 증가하는지 세어보세요.',
+      hint_en: 'In each row r = 1, 2, 3, c == 1 is skipped and c > r + 1 exits the inner loop; count how many times cnt increments.',
+      targetCode: 'cnt = 0\nfor r in range(1, 4):\n    for c in range(1, 5):\n        if c == 1:\n            continue\n        if c > r + 1:\n            break\n        cnt += 1\nprint(cnt)',
+      choices: ['6', '3', '9', '12'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6',
+        },
+      ],
+    },
+  ],
 };

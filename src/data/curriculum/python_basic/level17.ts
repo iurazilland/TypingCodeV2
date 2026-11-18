@@ -1,355 +1,343 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_17: PracticeRound = {
-  "id": "py-basic-r17",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 17,
-  "title_ko": "17레벨: bool() 형변환과 참·거짓(Truthy / Falsy) 기초",
-  "title_en": "Level 17: bool() Casting & Truthy / Falsy Basics",
-  "description_ko": "bool() 형변환을 통해 0, 0.0, 빈 문자열(\"\")의 거짓(Falsy) 성질과 참(Truthy) 값을 구분합니다.",
-  "description_en": "Use bool() casting to distinguish Falsy values (0, 0.0, \"\") from Truthy values.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type"
-  ],
-  "questions": [
+  id: 'py-basic-r17',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 17,
+  title_ko: '자료형 확인(type())과 정수·실수 형변환 (int(), float())',
+  title_en: 'Checking Types with type() & Casting (int(), float())',
+  description_ko: '값의 자료형을 확인하는 type() 함수와 문자열·숫자를 정수(int())·실수(float())로 변환하는 법을 익힙니다.',
+  description_en: 'Learn how to check data types with type() and convert values to integers (int()) and floats (float()).',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 정수 1과 0을 각각 bool()로 변환해 참(True)과 거짓(False)을 확인하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to convert integers 1 and 0 with bool() and print both results.",
-      "hint_ko": "bool(1)은 True로, bool(0)은 False로 변환되어 변수에 저장됩니다.",
-      "hint_en": "bool(1) evaluates to True and bool(0) evaluates to False.",
-      "targetCode": "a = bool(1)\nb = bool(0)\nprint(a, b)",
-      "expectedVariables": {
-        "a": true,
-        "b": false
-      },
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] type(10)과 type(3.14)를 두 줄로 출력해 정수와 실수의 자료형을 확인해보세요.',
+      prompt_en: '[Block] Print type(10) and type(3.14) on two lines to inspect the integer and float types.',
+      hint_ko: 'type() 함수는 괄호 안의 값이 어떤 자료형(int, float, str 등)인지 알려줍니다.',
+      hint_en: 'The type() function returns the data type (such as int, float, or str) of the value inside.',
+      targetCode: 'print(type(10))\nprint(type(3.14))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True False"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸에 불리언 형변환 함수를 채워 음수 -5와 숫자 0의 참·거짓을 각각 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the boolean casting function in both blanks to convert -5 and 0.",
-      "hint_ko": "값을 참·거짓 자료형으로 바꿀 때는 불리언(boolean)의 앞 네 글자를 딴 내장 변환 함수를 사용합니다.",
-      "hint_en": "To cast values to truth values, use the four-letter built-in function formed from the start of \"boolean\".",
-      "templateCode": "x = §§§§(-5)\ny = §§§§(0)\nprint(x)\nprint(y)",
-      "targetCode": "x = bool(-5)\ny = bool(0)\nprint(x)\nprint(y)",
-      "expectedVariables": {
-        "x": true,
-        "y": false
-      },
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True\nFalse"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 실수 0.0과 2.5를 각각 bool()로 변환해 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to convert floats 0.0 and 2.5 with bool() and print them.",
-      "hint_ko": "정수 0과 마찬가지로 실수 0.0도 비어 있거나 없는 상태를 뜻해 False로 판정됩니다.",
-      "hint_en": "Just like integer 0, floating-point 0.0 is falsy and converts to False.",
-      "targetCode": "f1 = bool(0.0)\nf2 = bool(2.5)\nprint(f1, f2)",
-      "expectedVariables": {
-        "f1": false,
-        "f2": true
-      },
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False True"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸에 불리언 형변환 함수를 채워 실수 0.0과 -0.1의 변환 결과를 나란히 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the boolean casting function twice to print the truthiness of 0.0 and -0.1.",
-      "hint_ko": "음수 실수도 0.0이 아니면 참으로 판정됩니다. 불리언(boolean)의 앞 네 글자를 딴 변환 함수로 두 변수를 각각 감싸보세요.",
-      "hint_en": "Even negative decimals are truthy when non-zero; wrap each variable with the first four letters of \"boolean\".",
-      "templateCode": "zero_f = 0.0\nval_f = -0.1\nprint(§§§§(zero_f), §§§§(val_f))",
-      "targetCode": "zero_f = 0.0\nval_f = -0.1\nprint(bool(zero_f), bool(val_f))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False True"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 빈 문자열(\"\")과 글자가 있는 문자열(\"py\")을 bool()로 변환해 비교하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to convert an empty string (\"\") and \"py\" with bool().",
-      "hint_ko": "따옴표 사이에 아무 글자도 없는 \"\"만 거짓(Falsy)으로 판정됩니다.",
-      "hint_en": "Only a completely empty string \"\" with zero characters is falsy.",
-      "targetCode": "s1 = \"\"\ns2 = \"py\"\nprint(bool(s1))\nprint(bool(s2))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False\nTrue"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환 함수와 불리언 변환 함수를 채워 문자열 \"0\"과 정수 0의 참·거짓 차이를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the integer and boolean casting functions to compare string \"0\" with integer 0.",
-      "hint_ko": "둘째 줄에는 정수(integer)의 앞 세 글자 변환 함수를, 셋째 줄에는 불리언(boolean)의 앞 네 글자 변환 함수를 채워 글자 \"0\"과 숫자 0의 차이를 비교해보세요.",
-      "hint_en": "Use the first three letters of \"integer\" on line 2 and the first four letters of \"boolean\" on line 3 to compare text \"0\" against number 0.",
-      "templateCode": "s = \"0\"\nn = §§§(s)\nprint(bool(s), §§§§(n))",
-      "targetCode": "s = \"0\"\nn = int(s)\nprint(bool(s), bool(n))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "True False"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입력값을 int()로 변환한 뒤 bool()에 넣어 0인지 판별하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Convert input to int() and then bool() to check if it is non-zero.",
-      "hint_ko": "문자열 \"0\"은 글자가 있어서 True이지만, int()로 바꾼 정수 0은 bool(0)에서 False가 됩니다.",
-      "hint_en": "The string \"0\" is non-empty (True), but converting it with int() yields integer 0, which is False in bool().",
-      "targetCode": "n = int(input())\nflag = bool(n)\nprint(flag)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0",
-          "expectedOutput": "False"
+          id: 1,
+          input: '',
+          expectedOutput: "<class 'int'>\n<class 'float'>",
         },
-        {
-          "id": 2,
-          "input": "-3",
-          "expectedOutput": "True"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환 함수와 불리언 변환 함수를 차례로 채워 입력된 정수의 참·거짓을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the integer and boolean casting functions to print the truthiness of input n.",
-      "hint_ko": "첫째 줄에는 정수(integer)의 앞 세 글자 함수를, 둘째 줄에는 불리언(boolean)의 앞 네 글자 함수를 차례로 적어보세요.",
-      "hint_en": "Use the three-letter function from \"integer\" on line 1, and the four-letter function from \"boolean\" on line 2.",
-      "templateCode": "n = §§§(input())\nprint(§§§§(n))",
-      "targetCode": "n = int(input())\nprint(bool(n))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0",
-          "expectedOutput": "False"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "True"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 누적한 변수 cnt와 bool(cnt) 변환 결과를 나란히 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to accumulate cnt with += and print cnt and bool(cnt).",
-      "hint_ko": "누적된 정수 값 자체와 bool() 변환 결과를 쉼표(,)로 나란히 출력합니다.",
-      "hint_en": "Print both the numeric variable and its bool() conversion separated by a comma (,).",
-      "targetCode": "cnt = 0\nadd = int(input())\ncnt += add\nprint(cnt, bool(cnt))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0",
-          "expectedOutput": "0 False"
-        },
-        {
-          "id": 2,
-          "input": "4",
-          "expectedOutput": "4 True"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 문자열 변환 함수와 불리언 변환 함수를 채워 정수 n과 문자열 s의 참·거짓을 비교해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the string and boolean casting functions to compare n and s.",
-      "hint_ko": "둘째 줄에는 문자열(string)의 앞 세 글자 변환 함수를, 셋째 줄에는 불리언(boolean)의 앞 네 글자 함수를 채워보세요.",
-      "hint_en": "Use the three-letter function from \"string\" on line 2, and the four-letter function from \"boolean\" on line 3.",
-      "templateCode": "n = int(input())\ns = §§§(n)\nprint(bool(n), §§§§(s))",
-      "targetCode": "n = int(input())\ns = str(n)\nprint(bool(n), bool(s))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0",
-          "expectedOutput": "False True"
-        },
-        {
-          "id": 2,
-          "input": "9",
-          "expectedOutput": "True True"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력된 0이 정수로 변환되어 False가 출력되도록 첫째 줄의 형변환 함수를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the casting function on line 1 so input 0 becomes integer 0 and prints False.",
-      "hint_ko": "str(input())은 글자 \"0\"을 유지하므로 bool(\"0\")이 True가 됩니다. 정수 변환 함수 int()로 고쳐보세요.",
-      "hint_en": "str(input()) keeps the non-empty string \"0\" (True); convert the input to an integer with int() instead.",
-      "templateCode": "n = str(input())\nflag = bool(n)\nprint(flag)",
-      "targetCode": "n = int(input())\nflag = bool(n)\nprint(flag)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0",
-          "expectedOutput": "False"
-        },
-        {
-          "id": 2,
-          "input": "7",
-          "expectedOutput": "True"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 첫 번째 변수 a에 거짓(False)이 저장되어 False True가 출력되도록 bool() 안의 정수를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the integer inside bool() on line 1 so variable a becomes False and prints False True.",
-      "hint_ko": "정수 중에서는 오직 0만 bool(0)에서 False로 변환됩니다.",
-      "hint_en": "Among integers, only 0 converts to False when passed to bool().",
-      "templateCode": "a = bool(1)\nb = bool(5)\nprint(a, b)",
-      "targetCode": "a = bool(0)\nb = bool(5)\nprint(a, b)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False True"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 누적된 score를 불리언으로 변환해 변수 ans에 저장하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the line that converts score to a boolean and stores it in ans.",
-      "hint_ko": "ans = bool(score) 형태로 불리언 변환 결과를 변수 ans에 저장해보세요.",
-      "hint_en": "Store the boolean conversion in ans using ans = bool(score).",
-      "templateCode": "score = 0\nbonus = int(input())\nscore += bonus\n§§§§§§§§§§§§§§§§§\nprint(ans)",
-      "targetCode": "score = 0\nbonus = int(input())\nscore += bonus\nans = bool(score)\nprint(ans)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "0",
-          "expectedOutput": "False"
-        },
-        {
-          "id": 2,
-          "input": "15",
-          "expectedOutput": "True"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 입력 정수 n을 불리언으로 변환해 변수 is_nz에 저장하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the line that converts integer n to a boolean and stores it in is_nz.",
-      "hint_ko": "is_nz = bool(n) 형태로 정수 n의 참·거짓 변환값을 변수에 대입해보세요.",
-      "hint_en": "Assign the boolean conversion of n to is_nz using is_nz = bool(n).",
-      "templateCode": "n = int(input())\n§§§§§§§§§§§§§§§\nprint(is_nz)",
-      "targetCode": "n = int(input())\nis_nz = bool(n)\nprint(is_nz)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4",
-          "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "False"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 화면에 출력될 올바른 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output that will be printed when the following Python code runs.",
-      "hint_ko": "정수 0과 숫자 0을 글자로 바꾼 문자열 \"0\"이 비어 있는지 여부를 비교해 각각의 참·거짓 판정 결과를 생각해보세요.",
-      "hint_en": "Compare how boolean conversion treats the integer 0 versus a one-character string containing the digit \"0\".",
-      "targetCode": "a = 0\nb = str(a)\nprint(bool(a))\nprint(bool(b))",
-      "choices": [
-        "False\nFalse",
-        "True\nTrue",
-        "False\nTrue",
-        "True\nFalse"
       ],
-      "correctChoiceIndex": 2,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 자료형 확인 함수 이름을 채워 문자열 "10"의 자료형을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the type-checking function name to print the data type of "10".',
+      hint_ko: '값의 종류(자료형)를 뜻하는 영어 네 글자 내장 함수 이름을 적습니다.',
+      hint_en: 'Write the four-letter built-in function name that checks a value\'s data type.',
+      templateCode: 'print(§§§§("10"))',
+      targetCode: 'print(type("10"))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "False\nTrue"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: "<class 'str'>",
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 숫자 문자열을 정수로 바꾸는 int("25")와 실수의 소수점을 버리는 int(3.9)를 더해 28을 출력해보세요.',
+      prompt_en: '[Block] Convert "25" with int("25") and truncate 3.9 with int(3.9), then print their sum 28.',
+      hint_ko: 'int()는 숫자 문자열을 정수로 바꾸고, 실수에 쓰면 소수점 아래를 버린 정수를 만듭니다.',
+      hint_en: 'int() converts a numeric string to an integer and truncates the decimal part of a float.',
+      targetCode: 'a = int("25")\nb = int(3.9)\nprint(a + b)',
+      expectedVariables: { a: 25, b: 3 },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '28',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 정수 변환 함수 이름을 채워 문자열 "40"을 정수로 바꾸고 10을 더한 50을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the integer conversion function name to convert "40" and print 50.',
+      hint_ko: '정수(integer)의 앞 세 글자를 딴 내장 함수 이름을 괄호 앞에 적습니다.',
+      hint_en: 'Write the three-letter built-in function name derived from "integer".',
+      templateCode: 'num = §§§("40")\nprint(num + 10)',
+      targetCode: 'num = int("40")\nprint(num + 10)',
+      expectedVariables: { num: 40 },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '50',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] int(input("Age: "))로 나이를 정수로 입력받아 1을 더한 값을 출력해보세요.',
+      prompt_en: '[Block] Read an integer with int(input("Age: ")) and print age + 1.',
+      hint_ko: 'input()을 int()로 감싸면 입력받은 문자열이 즉시 정수로 변환되어 숫자 덧셈이 가능해집니다.',
+      hint_en: 'Wrapping input() inside int() immediately converts the input string into an integer.',
+      targetCode: 'age = int(input("Age: "))\nprint(age + 1)',
+      testCases: [
+        {
+          id: 1,
+          input: '19',
+          expectedOutput: 'Age: 20',
+        },
+        {
+          id: 2,
+          input: '25',
+          expectedOutput: 'Age: 26',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 정수 변환 함수를 채워 입력값을 정수로 바꾸고 5로 나눈 몫과 나머지를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the integer conversion function to read an int and print its quotient and remainder by 5.',
+      hint_ko: 'input() 바깥을 감싸 문자열을 정수로 바꾸는 세 글자 함수 이름을 적습니다.',
+      hint_en: 'Write the three-letter function name that wraps input() to convert it to an integer.',
+      templateCode: 'n = §§§(input())\nprint(n // 5, n % 5)',
+      targetCode: 'n = int(input())\nprint(n // 5, n % 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '17',
+          expectedOutput: '3 2',
+        },
+        {
+          id: 2,
+          input: '29',
+          expectedOutput: '5 4',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] float(input())으로 실수를 입력받아 += 1.5를 누적한 결과를 출력해보세요.',
+      prompt_en: '[Block] Read a float with float(input()), add 1.5 using +=, and print the result.',
+      hint_ko: 'float()는 소수점이 포함된 숫자 문자열이나 정수를 실수(float) 자료형으로 변환합니다.',
+      hint_en: 'float() converts a numeric string or integer into a floating-point number.',
+      targetCode: 'rate = float(input())\nrate += 1.5\nprint(rate)',
+      testCases: [
+        {
+          id: 1,
+          input: '3.2',
+          expectedOutput: '4.7',
+        },
+        {
+          id: 2,
+          input: '2.5',
+          expectedOutput: '4.0',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 실수 변환 함수 이름을 채워 정수 10을 실수 10.0으로 바꾸어 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the decimal conversion function name to convert 10 into 10.0 and print it.',
+      hint_ko: '부동소수점 실수를 뜻하는 다섯 글자 내장 함수 이름을 괄호 앞에 작성합니다.',
+      hint_en: 'Write the five-letter built-in function name for floating-point numbers.',
+      templateCode: 'x = §§§§§(10)\nprint(x)',
+      targetCode: 'x = float(10)\nprint(x)',
+      expectedVariables: { x: 10.0 },
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '10.0',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 정수를 입력받고 10을 누적해 더한 뒤 3으로 나눈 정수 몫을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks to read an integer, add 10 in place, and print its floor quotient by 3.',
+      hint_ko: '정수 변환 함수 이름, 누적 덧셈 복합 대입 연산자, 정수 몫 연산자를 차례로 채웁니다.',
+      hint_en: 'Enter the integer conversion function, compound addition operator, and floor division operator in order.',
+      templateCode: 'n = §§§(input())\nn §§ 10\nprint(n §§ 3)',
+      targetCode: 'n = int(input())\nn += 10\nprint(n // 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '15',
+          expectedOutput: '8',
+        },
+        {
+          id: 2,
+          input: '20',
+          expectedOutput: '10',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 문자열 입력값에 바로 숫자를 더해 발생한 TypeError를 정수 변환으로 해결해보세요.',
+      prompt_en: '[Fix Bug] Fix the TypeError by converting the input to an integer so lv + 5 prints properly.',
+      hint_ko: 'input()이 반환한 문자열을 정수로 바꾸도록 첫째 줄의 입력 호출 전체를 정수 변환 함수로 감싸세요.',
+      hint_en: 'Wrap the input() call on line 1 inside the integer conversion function.',
+      templateCode: 'lv = input("Lv: ")\nprint(lv + 5)',
+      targetCode: 'lv = int(input("Lv: "))\nprint(lv + 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '10',
+          expectedOutput: 'Lv: 15',
+        },
+        {
+          id: 2,
+          input: '3',
+          expectedOutput: 'Lv: 8',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 첫째 줄의 괄호 짝 불일치 문법 오류를 고쳐 입력 정수의 제곱이 출력되게 해보세요.',
+      prompt_en: '[Fix Bug] Fix the missing closing parenthesis on line 1 so the square of n is printed.',
+      hint_ko: '함수 안에 함수를 중첩해 호출할 때는 여는 소괄호 개수만큼 닫는 소괄호도 맞춰 닫아야 합니다.',
+      hint_en: 'When nesting function calls, make sure every opening parenthesis has a matching closing parenthesis.',
+      templateCode: 'n = int(input()\nprint(n ** 2)',
+      targetCode: 'n = int(input())\nprint(n ** 2)',
+      testCases: [
+        {
+          id: 1,
+          input: '6',
+          expectedOutput: '36',
+        },
+        {
+          id: 2,
+          input: '9',
+          expectedOutput: '81',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 첫째 줄에 int(input("Score: "))으로 정수를 입력받아 변수 score에 저장하는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 1 to read an integer with int(input("Score: ")) into variable score.',
+      hint_ko: '변수 score에 안내 문구가 포함된 입력 호출을 정수로 감싼 식을 대입합니다.',
+      hint_en: 'Assign int(input("Score: ")) to variable score on line 1.',
+      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Bonus:", score + 10)',
+      targetCode: 'score = int(input("Score: "))\nprint("Bonus:", score + 10)',
+      testCases: [
+        {
+          id: 1,
+          input: '85',
+          expectedOutput: 'Score: Bonus: 95',
+        },
+        {
+          id: 2,
+          input: '70',
+          expectedOutput: 'Score: Bonus: 80',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 첫째 줄에 float(input())으로 실수를 입력받아 변수 w에 저장하는 코드를 작성해보세요.',
+      prompt_en: '[Complete Line] Write line 1 to read a float with float(input()) and store it in variable w.',
+      hint_ko: 'input() 호출을 float() 함수로 감싸 변수 w에 대입합니다.',
+      hint_en: 'Wrap input() inside float() and assign it to w on line 1.',
+      templateCode: '§§§§§§§§§§§§§§§§§§\nprint(w * 2)',
+      targetCode: 'w = float(input())\nprint(w * 2)',
+      testCases: [
+        {
+          id: 1,
+          input: '4.5',
+          expectedOutput: '9.0',
+        },
+        {
+          id: 2,
+          input: '1.25',
+          expectedOutput: '2.5',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: 'int(4.8)은 반올림이 아니라 소수점 아래를 버린 정수 4가 된다는 점에 주의해보세요.',
+      hint_en: 'Remember that int(4.8) truncates the decimal part to 4 rather than rounding to 5.',
+      targetCode: 'a = int("15")\nb = int(4.8)\nprint(a + b)\nprint(type(a))',
+      choices: ["20\n<class 'int'>", "19\n<class 'int'>", "19.8\n<class 'float'>", "19\n<class 'str'>"],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "19\n<class 'int'>",
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '실수로 변환된 x와 정수로 변환된 y의 복합 대입 결과를 각각 구해보세요.',
+      hint_en: 'Trace the float conversion on x and the integer conversion and floor division on y.',
+      targetCode: 'x = float(6)\ny = int("17")\ny //= 5\nprint(x, y, sep=":")',
+      choices: ['6:3', '6.0:3', '6.0:3.4', '6:3.0'],
+      correctChoiceIndex: 1,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '6.0:3',
+        },
+      ],
+    },
+  ],
 };

@@ -171,3 +171,4 @@
 3. [ ] [`src/lib/curriculum.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculum.ts): `python` 트랙에 `py-physical-ai` 모듈 등록(`isLocked: false`) 및 `LEARNING_ROADMAPS`에 `physical-ai` 추가
 4. [ ] [`src/lib/curriculumSections.ts`](file:///d:/Projects/TypingCode_V2/src/lib/curriculumSections.ts) & [`src/lib/practiceData.ts`](file:///d:/Projects/TypingCode_V2/src/lib/practiceData.ts): 5개 섹션 메타데이터 및 `PYTHON_PHYSICAL_AI_ROUND_1~25` 매핑 등록
 5. [ ] 검증 게이트 실행: `npx tsc --noEmit --noUnusedLocals` (`0 errors`) 및 전 문항 AST `expectedOutput` 정합성 100% 검증
+

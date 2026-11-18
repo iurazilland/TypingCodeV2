@@ -1,425 +1,375 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_29: PracticeRound = {
-  "id": "py-basic-r29",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 29,
-  "title_ko": "29레벨: break와 continue 반복 제어",
-  "title_en": "Level 29: Loop Control with break & continue",
-  "description_ko": "break로 반복을 즉시 종료하고 continue로 특정 차례를 건너뛰며, while True 무한 루프를 제어합니다.",
-  "description_en": "Exit loops early with break, skip turns with continue, and control while True sentinel loops.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "method",
-    "type",
-    "if",
-    "for_range",
-    "range",
-    "while",
-    "break",
-    "continue"
-  ],
-  "questions": [
+  id: 'py-basic-r29',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 29,
+  title_ko: '중첩 if문(Nested if)과 빈 블록 pass',
+  title_en: 'Nested if Statements & pass Keyword',
+  description_ko: '조건문 안에 또 다른 조건문을 넣는 중첩 if 구조(8칸 들여쓰기)와 아무 동작 없이 넘어가는 pass 키워드를 익힙니다.',
+  description_en: 'Master nested if statements (8-space indentation) and the no-op pass placeholder keyword.',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type', 'if'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] i가 4일 때 break로 반복문을 즉시 탈출하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to exit the loop early with break when i == 4.",
-      "hint_ko": "print(i)보다 위에서 if i == 4: 조건으로 break를 실행하므로 4부터는 출력되지 않고 멈춥니다.",
-      "hint_en": "Because break runs inside if i == 4: before print(i), the loop stops before printing 4.",
-      "targetCode": "for i in range(1, 7):\n    if i == 4:\n        break\n    print(i)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 바깥 if n > 0: 안에 안쪽 if n >= 100:을 중첩해 양수이면서 100 이상일 때 "Big"을 출력해보세요.',
+      prompt_en: '[Block] Nest if n >= 100: inside if n > 0: to print "Big" when n is at least 100.',
+      hint_ko: '바깥 if 안의 중첩 if 헤더는 4칸, 그 안의 print("Big")은 8칸 들여쓰기됩니다.',
+      hint_en: 'The nested if header is indented 4 spaces, and print("Big") inside it is indented 8 spaces.',
+      targetCode: 'n = int(input())\nif n > 0:\n    if n >= 100:\n        print("Big")\nprint("End")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1\n2\n3"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 반복 종료 키워드를 채워 n의 가장 작은 약수(1 제외)만 출력하고 멈춰보세요.",
-      "prompt_en": "[Fill Blank] Fill in the loop-termination keyword to print only the smallest divisor > 1.",
-      "hint_ko": "첫 약수를 출력한 직후 반복문을 깨고 즉시 탈출하도록 영어로 '깨뜨리다·중단하다'를 뜻하는 다섯 글자 키워드를 채워보세요.",
-      "hint_en": "Exit the loop right after printing the first divisor using the 5-letter keyword meaning \"shatter or stop immediately\".",
-      "templateCode": "n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        §§§§§",
-      "targetCode": "n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        break",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "15",
-          "expectedOutput": "3"
+          id: 1,
+          input: '150',
+          expectedOutput: 'Big\nEnd',
         },
         {
-          "id": 2,
-          "input": "12",
-          "expectedOutput": "2"
+          id: 2,
+          input: '50',
+          expectedOutput: 'End',
         },
-        {
-          "id": 3,
-          "input": "7",
-          "expectedOutput": "7"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] continue 키워드로 i가 3일 때만 출력을 건너뛰는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to skip printing when i == 3 using continue.",
-      "hint_ko": "i가 3일 때만 continue를 만나 print(i)를 건너뛰고, 4와 5는 정상적으로 이어서 출력됩니다.",
-      "hint_en": "When i is 3, continue skips print(i) for that turn, and the loop continues with 4 and 5.",
-      "targetCode": "for i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1\n2\n4\n5"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 건너뛰기 키워드를 채워 1부터 n까지 중 3의 배수를 제외한 합을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the skip keyword to exclude multiples of 3 from the sum.",
-      "hint_ko": "아래 합산 줄을 실행하지 않고 곧바로 다음 반복을 이어가도록 영어로 '계속하다'를 뜻하는 여덟 글자 키워드를 입력하세요.",
-      "hint_en": "Skip the addition step for this turn and move on using the 8-letter keyword meaning \"keep going\".",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§\n    total += i\nprint(total)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        continue\n    total += i\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5",
-          "expectedOutput": "12"
-        },
-        {
-          "id": 2,
-          "input": "6",
-          "expectedOutput": "12"
-        },
-        {
-          "id": 3,
-          "input": "4",
-          "expectedOutput": "7"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] while True: 무한 루프에서 \"q\"가 입력되면 break로 종료하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Exit the while True: loop with break when cmd equals \"q\".",
-      "hint_ko": "\"q\"가 입력되면 print()에 도달하기 전에 break가 실행되어 루프가 즉시 종료됩니다.",
-      "hint_en": "When \"q\" is entered, break runs before print(), exiting the loop immediately.",
-      "targetCode": "while True:\n    cmd = input()\n    if cmd == \"q\":\n        break\n    print(\"Run:\" + cmd)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "go\ntest\nq",
-          "expectedOutput": "Run:go\nRun:test"
-        },
-        {
-          "id": 2,
-          "input": "build\nq",
-          "expectedOutput": "Run:build"
-        },
-        {
-          "id": 3,
-          "input": "a\nb\nq",
-          "expectedOutput": "Run:a\nRun:b"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 무한 루프 상수와 종료 키워드를 채워 0이 입력될 때까지 정수의 합을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in True and break to sum integers until 0 is entered.",
-      "hint_ko": "첫 글자가 대문자인 네 글자 참 불리언 상수로 무한 반복을 열고, 0이 들어오면 '중단하다'라는 다섯 글자 키워드로 멈춥니다.",
-      "hint_en": "Open the endless loop with the capitalized 4-letter truth literal, and exit on zero using the 5-letter stop keyword.",
-      "templateCode": "total = 0\nwhile §§§§:\n    x = int(input())\n    if x == 0:\n        §§§§§\n    total += x\nprint(total)",
-      "targetCode": "total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10\n20\n0",
-          "expectedOutput": "30"
-        },
-        {
-          "id": 2,
-          "input": "5\n-2\n7\n0",
-          "expectedOutput": "10"
-        },
-        {
-          "id": 3,
-          "input": "8\n0",
-          "expectedOutput": "8"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 0이면 종료(break)하고 음수면 건너뛰며(continue) 양수만 합산해보세요.",
-      "prompt_en": "[Block] Exit on 0 with break and skip negatives with continue to sum positives.",
-      "hint_ko": "x == 0이면 루프를 탈출하고, x < 0이면 total += x를 건너뛰어 다음 입력을 받으러 올라갑니다.",
-      "hint_en": "x == 0 exits the loop, while x < 0 skips total += x and jumps to the next input.",
-      "targetCode": "total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    if x < 0:\n        continue\n    total += x\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5\n-3\n7\n0",
-          "expectedOutput": "12"
-        },
-        {
-          "id": 2,
-          "input": "10\n-1\n4\n0",
-          "expectedOutput": "14"
-        },
-        {
-          "id": 3,
-          "input": "-5\n8\n0",
-          "expectedOutput": "8"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환 함수와 종료 키워드를 채워 음수 전까지 점수의 평균을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in int and break to print the average of non-negative scores.",
-      "hint_ko": "정수(integer)의 앞 세 글자를 딴 변환 함수로 입력을 읽고, 음수일 때는 다섯 글자 종료 키워드로 탈출하세요.",
-      "hint_en": "Parse each score with the 3-letter function from \"integer\", and exit on a negative input with the 5-letter stop keyword.",
-      "templateCode": "total = 0\ncnt = 0\nwhile True:\n    s = §§§(input())\n    if s < 0:\n        §§§§§\n    total += s\n    cnt += 1\nprint(total / cnt)",
-      "targetCode": "total = 0\ncnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        break\n    total += s\n    cnt += 1\nprint(total / cnt)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "80\n90\n-1",
-          "expectedOutput": "85.0"
-        },
-        {
-          "id": 2,
-          "input": "10\n20\n30\n-5",
-          "expectedOutput": "20.0"
-        },
-        {
-          "id": 3,
-          "input": "7\n3\n-1",
-          "expectedOutput": "5.0"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 합산 직후 total >= limit이면 break로 탈출해 합계를 출력해보세요.",
-      "prompt_en": "[Block] Break out of while True: as soon as total >= limit and print Sum:res.",
-      "hint_ko": "break가 실행되면 아래쪽 i += 1을 거치지 않고 곧바로 루프 바깥의 res = str(total) 줄로 이동합니다.",
-      "hint_en": "When break executes, it skips i += 1 and jumps directly to res = str(total) outside the loop.",
-      "targetCode": "limit = int(input())\ntotal = 0\ni = 1\nwhile True:\n    total += i\n    if total >= limit:\n        break\n    i += 1\nres = str(total)\nprint(\"Sum:\" + res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10",
-          "expectedOutput": "Sum:10"
-        },
-        {
-          "id": 2,
-          "input": "12",
-          "expectedOutput": "Sum:15"
-        },
-        {
-          "id": 3,
-          "input": "6",
-          "expectedOutput": "Sum:6"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸을 채워 \"end\"면 종료하고 \"skip\"이면 건너뛰며 값을 합산해보세요.",
-      "prompt_en": "[Fill Blank] Fill in split and continue to sum values until \"end\".",
-      "hint_ko": "'쪼개다'를 뜻하는 다섯 글자 문자열 메서드로 입력을 나누고, 무시할 명령일 때는 '계속하다'라는 여덟 글자 키워드로 건너뛰세요.",
-      "hint_en": "Split the line using the 5-letter method meaning \"divide\", and skip unwanted lines with the 8-letter \"keep going\" keyword.",
-      "templateCode": "total = 0\nwhile True:\n    cmd, val = input().§§§§§()\n    if cmd == \"end\":\n        break\n    if cmd == \"skip\":\n        §§§§§§§§\n    total += int(val)\nprint(total)",
-      "targetCode": "total = 0\nwhile True:\n    cmd, val = input().split()\n    if cmd == \"end\":\n        break\n    if cmd == \"skip\":\n        continue\n    total += int(val)\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "add 10\nskip 50\nadd 25\nend 0",
-          "expectedOutput": "35"
-        },
-        {
-          "id": 2,
-          "input": "skip 9\nadd 8\nend 0",
-          "expectedOutput": "8"
-        },
-        {
-          "id": 3,
-          "input": "add 4\nadd 6\nskip 3\nend 0",
-          "expectedOutput": "10"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 짝수를 건너뛰고 1부터 n까지의 홀수 합이 출력되도록 continue 조건을 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the remainder condition before continue so even numbers are skipped.",
-      "hint_ko": "현재 i % 2 == 1(홀수)을 건너뛰고 있습니다. 짝수를 건너뛰도록 i % 2 == 0으로 고쳐보세요.",
-      "hint_en": "Change i % 2 == 1 to i % 2 == 0 so even numbers trigger continue and odd numbers are summed.",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 1:\n        continue\n    total += i\nprint(total)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        continue\n    total += i\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5",
-          "expectedOutput": "9"
-        },
-        {
-          "id": 2,
-          "input": "6",
-          "expectedOutput": "9"
-        },
-        {
-          "id": 3,
-          "input": "7",
-          "expectedOutput": "16"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 0이 입력되었을 때만 루프가 종료되도록 break 조건의 비교 연산자를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the comparison operator in the sentinel check so the loop breaks on 0.",
-      "hint_ko": "if x != 0:으로 되어 있어 첫 양수 입력에서 바로 종료됩니다. if x == 0:으로 고쳐보세요.",
-      "hint_en": "Change if x != 0: to if x == 0: so the loop exits only when 0 is entered.",
-      "templateCode": "total = 0\nwhile True:\n    x = int(input())\n    if x != 0:\n        break\n    total += x\nprint(total)",
-      "targetCode": "total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10\n20\n0",
-          "expectedOutput": "30"
-        },
-        {
-          "id": 2,
-          "input": "5\n7\n0",
-          "expectedOutput": "12"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] word가 \"stop\"일 때 무한 루프를 즉시 탈출하는 제어문 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the 8-space indented break statement inside if word == \"stop\":.",
-      "hint_ko": "8칸 들여쓰기 뒤에 다섯 글자 종료 키워드 break를 작성해보세요.",
-      "hint_en": "Keep the 8-space indentation and write break.",
-      "templateCode": "while True:\n    word = input()\n    if word == \"stop\":\n        §§§§§\n    print(word)",
-      "targetCode": "while True:\n    word = input()\n    if word == \"stop\":\n        break\n    print(word)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "hi\nok\nstop",
-          "expectedOutput": "hi\nok"
-        },
-        {
-          "id": 2,
-          "input": "one\nstop",
-          "expectedOutput": "one"
-        },
-        {
-          "id": 3,
-          "input": "a\nb\nc\nstop",
-          "expectedOutput": "a\nb\nc"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] i가 3의 배수일 때 아래 합산을 건너뛰고 다음 반복으로 넘어가는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the 8-space indented continue statement inside if i % 3 == 0:.",
-      "hint_ko": "8칸 들여쓰기 뒤에 여덟 글자 건너뛰기 키워드 continue를 작성해보세요.",
-      "hint_en": "Keep the 8-space indentation and write continue.",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        §§§§§§§§\n    total += i\nprint(total)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        continue\n    total += i\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5",
-          "expectedOutput": "12"
-        },
-        {
-          "id": 2,
-          "input": "6",
-          "expectedOutput": "12"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced when the following Python code runs.",
-      "hint_ko": "짝수일 때 아래 종료 검사까지 건너뛴다는 점에 유의하며 실제로 반복이 멈추는 i와 그때까지 누적된 합을 추적해보세요.",
-      "hint_en": "Notice that even numbers jump past the exit check too—trace what happens at 6 and 7 alongside the running odd sum.",
-      "targetCode": "i = 0\ns = 0\nwhile True:\n    i += 1\n    if i % 2 == 0:\n        continue\n    if i > 6:\n        break\n    s += i\nprint(i, s)",
-      "choices": [
-        "7 9",
-        "6 9",
-        "7 16",
-        "5 9"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 셋째 줄 빈칸에 조건 키워드를 채워 양수일 때 짝수인지 한 번 더 검사하는 중첩 조건문을 완성해보세요.',
+      prompt_en: '[Fill Blank] Fill in the conditional keyword on line 3 to complete the nested even check.',
+      hint_ko: '4칸 들여쓰기된 안쪽 조건문도 바깥과 똑같이 두 글자 조건 키워드로 시작합니다.',
+      hint_en: 'Start the 4-space indented inner check with the same two-letter conditional keyword.',
+      templateCode: 'n = int(input())\nif n > 0:\n    §§ n % 2 == 0:\n        print("PosEven")',
+      targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print("PosEven")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "7 9"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '8',
+          expectedOutput: 'PosEven',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 중첩 if - else로 양수일 때 짝수("Plus Even")와 홀수("Plus Odd")를 나누고, 아니면 "Zero or Minus"를 출력해보세요.',
+      prompt_en: '[Block] Use a nested if-else inside if n > 0: to print "Plus Even", "Plus Odd", or "Zero or Minus".',
+      hint_ko: '바깥 조건(n > 0)이 참일 때만 안쪽 if - else로 들어가고, 거짓이면 바깥 else로 이동합니다.',
+      hint_en: 'Only when n > 0 is True does execution enter the inner if-else; otherwise it jumps to the outer else.',
+      targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print("Plus Even")\n    else:\n        print("Plus Odd")\nelse:\n    print("Zero or Minus")',
+      testCases: [
+        {
+          id: 1,
+          input: '8',
+          expectedOutput: 'Plus Even',
+        },
+        {
+          id: 2,
+          input: '7',
+          expectedOutput: 'Plus Odd',
+        },
+        {
+          id: 3,
+          input: '-2',
+          expectedOutput: 'Zero or Minus',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 여섯째 줄 빈칸에 분기 키워드를 채워 아이디는 맞지만 비밀번호가 틀렸을 때 "Wrong PW"가 출력되게 해보세요.',
+      prompt_en: '[Fill Blank] Fill in the fallback keyword for the inner password check on line 6.',
+      hint_ko: '안쪽 if pw_in == "1234":와 같은 4칸 들여쓰기 줄에 나머지 분기 키워드를 적습니다.',
+      hint_en: 'Write the four-letter fallback keyword aligned with the inner if at 4 spaces.',
+      templateCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    §§§§:\n        print("Wrong PW")\nelse:\n    print("No User")',
+      targetCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    else:\n        print("Wrong PW")\nelse:\n    print("No User")',
+      testCases: [
+        {
+          id: 1,
+          input: 'admin\n0000',
+          expectedOutput: 'Wrong PW',
+        },
+        {
+          id: 2,
+          input: 'admin\n1234',
+          expectedOutput: 'Admin OK',
+        },
+        {
+          id: 3,
+          input: 'guest\n1234',
+          expectedOutput: 'No User',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] n이 음수(n < 0)일 때는 pass로 아무 동작 없이 넘어가고, 아닐 때만 n을 출력한 뒤 마지막에 "Done"을 출력해보세요.',
+      prompt_en: '[Block] Use pass when n < 0, else print n, and finally print "Done".',
+      hint_ko: 'pass는 문법상 들여쓰기 블록이 필요하지만 아무 작업도 하지 않고 지나가고 싶을 때 사용합니다.',
+      hint_en: 'pass is a null operation used when syntax requires an indented block but no action is needed.',
+      targetCode: 'n = int(input())\nif n < 0:\n    pass\nelse:\n    print(n)\nprint("Done")',
+      testCases: [
+        {
+          id: 1,
+          input: '-5',
+          expectedOutput: 'Done',
+        },
+        {
+          id: 2,
+          input: '12',
+          expectedOutput: '12\nDone',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 빈 블록 자리 채움 키워드를 넣어 mode가 "mute"일 때 아무 출력 없이 넘어가게 해보세요.',
+      prompt_en: '[Fill Blank] Fill in the no-op placeholder keyword so "mute" mode does nothing.',
+      hint_ko: '영어로 지나가다·통과하다를 뜻하는 네 글자 소문자 키워드로 빈 블록을 채웁니다.',
+      hint_en: 'Use the four-letter lowercase English keyword meaning "to move past / skip".',
+      templateCode: 'mode = input()\nif mode == "mute":\n    §§§§\nelse:\n    print("Beep")\nprint("OK")',
+      targetCode: 'mode = input()\nif mode == "mute":\n    pass\nelse:\n    print("Beep")\nprint("OK")',
+      testCases: [
+        {
+          id: 1,
+          input: 'mute',
+          expectedOutput: 'OK',
+        },
+        {
+          id: 2,
+          input: 'loud',
+          expectedOutput: 'Beep\nOK',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 바깥 if x > 0: 안에서 짝수면 pass로 넘어가고, 홀수면 res에 x를 더한(+=) 뒤 최종 res를 출력해보세요.',
+      prompt_en: '[Block] Inside if x > 0:, pass if x is even, else add x to res with +=, then print res.',
+      hint_ko: 'x가 양수이면서 짝수일 때는 pass가 실행되어 res가 초기값 10 그대로 유지됩니다.',
+      hint_en: 'When x is positive and even, pass executes and leaves res unchanged at 10.',
+      targetCode: 'x = int(input())\nres = 10\nif x > 0:\n    if x % 2 == 0:\n        pass\n    else:\n        res += x\nprint(res)',
+      testCases: [
+        {
+          id: 1,
+          input: '6',
+          expectedOutput: '10',
+        },
+        {
+          id: 2,
+          input: '5',
+          expectedOutput: '15',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 정수 몫 복합 대입 연산자를 채워 양수이면서 짝수일 때 n을 2로 나눈 몫으로 갱신해보세요.',
+      prompt_en: '[Fill Blank] Fill in the floor-division compound operator to halve n when positive and even.',
+      hint_ko: '슬래시 두 개와 등호를 붙인 몫 복합 대입 연산자를 8칸 들여쓰기 뒤에 작성합니다.',
+      hint_en: 'Use the double-slash-equals operator to update n with its integer quotient.',
+      templateCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        n §§§ 2\n    else:\n        pass\nprint(n)',
+      targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        n //= 2\n    else:\n        pass\nprint(n)',
+      testCases: [
+        {
+          id: 1,
+          input: '14',
+          expectedOutput: '7',
+        },
+        {
+          id: 2,
+          input: '9',
+          expectedOutput: '9',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 출금액(amt)이 0 이하면 넘어가고, 잔액(bal) 이하면 차감해 최종 잔액을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks so non-positive amounts do nothing, valid amounts subtract from bal, and excess amounts do nothing.',
+      hint_ko: '빈 블록 통과 키워드, 다중 조건 분기 키워드, 그리고 차감 복합 대입 연산자를 차례로 채웁니다.',
+      hint_en: 'Enter the no-op keyword, the else-if keyword, and the compound subtraction operator in order.',
+      templateCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§\n§§§§ amt <= bal:\n    bal §§ amt\nelse:\n    pass\nprint(bal)',
+      targetCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    pass\nelif amt <= bal:\n    bal -= amt\nelse:\n    pass\nprint(bal)',
+      testCases: [
+        {
+          id: 1,
+          input: '-10',
+          expectedOutput: '100',
+        },
+        {
+          id: 2,
+          input: '35',
+          expectedOutput: '65',
+        },
+        {
+          id: 3,
+          input: '150',
+          expectedOutput: '100',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 음수일 때 아무 동작 없이 넘어가도록 잘못 적힌 단어를 파이썬 예약어로 수정해보세요.',
+      prompt_en: '[Fix Bug] Replace the invalid word on line 3 with the proper Python no-op keyword.',
+      hint_ko: '파이썬에서 빈 블록을 그냥 통과할 때 쓰는 네 글자 예약어로 고쳐야 NameError가 발생하지 않습니다.',
+      hint_en: 'Replace the undefined identifier with Python’s four-letter no-op keyword.',
+      templateCode: 'n = int(input())\nif n < 0:\n    skip\nelse:\n    n += 10\nprint(n)',
+      targetCode: 'n = int(input())\nif n < 0:\n    pass\nelse:\n    n += 10\nprint(n)',
+      testCases: [
+        {
+          id: 1,
+          input: '-5',
+          expectedOutput: '-5',
+        },
+        {
+          id: 2,
+          input: '20',
+          expectedOutput: '30',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 양수이면서 100 이상일 때 "VIP"가 출력되도록 안쪽 중첩 조건문의 부등호 방향을 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the relational operator in the nested if condition so n >= 100 prints "VIP".',
+      hint_ko: '현재 안쪽 조건이 100 이하로 되어 있습니다. 100 이상이 되도록 부등호를 반대로 고쳐보세요.',
+      hint_en: 'Reverse the angle bracket in the inner condition so it tests for at least 100.',
+      templateCode: 'n = int(input())\nif n > 0:\n    if n <= 100:\n        print("VIP")\n    else:\n        print("Member")',
+      targetCode: 'n = int(input())\nif n > 0:\n    if n >= 100:\n        print("VIP")\n    else:\n        print("Member")',
+      testCases: [
+        {
+          id: 1,
+          input: '120',
+          expectedOutput: 'VIP',
+        },
+        {
+          id: 2,
+          input: '50',
+          expectedOutput: 'Member',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 바깥 if n > 0: 안에서 n이 100 이상인지 검사하는 중첩 if 헤더 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 4-space indented nested header if n >= 100: inside if n > 0:.',
+      hint_ko: '4칸 들여쓰기를 유지하며 if n >= 100:을 작성해보세요.',
+      hint_en: 'Keep the 4-space indentation and write if n >= 100:.',
+      templateCode: 'n = int(input())\nif n > 0:\n    §§§§§§§§§§§§\n        print("Big")',
+      targetCode: 'n = int(input())\nif n > 0:\n    if n >= 100:\n        print("Big")',
+      testCases: [
+        {
+          id: 1,
+          input: '150',
+          expectedOutput: 'Big',
+        },
+        {
+          id: 2,
+          input: '100',
+          expectedOutput: 'Big',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] n이 음수일 때 아무 처리 없이 넘어가도록 빈 블록을 채우는 한 줄을 셋째 줄에 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 4-space indented pass statement inside if n < 0:.',
+      hint_ko: '4칸 들여쓰기 뒤에 네 글자 통과 키워드를 작성해보세요.',
+      hint_en: 'Keep the 4-space indentation and write pass.',
+      templateCode: 'n = int(input())\nif n < 0:\n    §§§§\nelse:\n    print(n)\nprint("Done")',
+      targetCode: 'n = int(input())\nif n < 0:\n    pass\nelse:\n    print(n)\nprint("Done")',
+      testCases: [
+        {
+          id: 1,
+          input: '-5',
+          expectedOutput: 'Done',
+        },
+        {
+          id: 2,
+          input: '12',
+          expectedOutput: '12\nDone',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: 'x = 6이 바깥 조건과 안쪽 짝수 조건에서 참이 되어 pass를 만났을 때 res의 값이 어떻게 되는지 확인해보세요.',
+      hint_en: 'Trace x = 6 into the outer and inner conditions, and observe what pass does to res.',
+      targetCode: 'x = 6\nres = 10\nif x > 0:\n    if x % 2 == 0:\n        pass\n    else:\n        res += x\nelse:\n    res -= 5\nprint(res)',
+      choices: ['10', '16', '5', '6'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '10',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '바깥 if에서 pt += 50이 실행된 뒤 안쪽 중첩 조건의 else 분기가 실행되고, 바깥 elif는 건너뛰어집니다.',
+      hint_en: 'After pt += 50 runs in the outer if, trace the nested else branch and note that the outer elif is skipped.',
+      targetCode: 'n = 70\npt = 100\nif n >= 50:\n    pt += 50\n    if n % 20 == 0:\n        pass\n    else:\n        pt -= 10\nelif n >= 30:\n    pt += 20\nprint(pt)',
+      choices: ['140', '150', '160', '120'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '140',
+        },
+      ],
+    },
+  ],
 };

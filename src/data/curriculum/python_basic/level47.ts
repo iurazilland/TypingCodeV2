@@ -1,339 +1,327 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_47: PracticeRound = {
-  "id": "py-basic-r47",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 47,
-  "title_ko": "47레벨: 집합(set) 기초, 중복 제거와 .add()",
-  "title_en": "Level 47: Sets Basics, Deduplication & .add()",
-  "description_ko": "중복을 허용하지 않는 집합(set)을 생성하고, set()으로 중복 요소를 제거하며 .add()와 in을 활용합니다.",
-  "description_en": "Create sets that forbid duplicates, deduplicate data with set(), and use .add() and membership checks.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "type",
-    "math",
-    "if",
-    "for_in",
-    "while",
-    "break",
-    "input",
-    "method"
+  id: 'py-basic-r47',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 47,
+  title_ko: '숫자 리스트 필수 집계(sum(), max(), min())와 기본 정렬(.sort())',
+  title_en: 'List Aggregations (sum, max, min) & In-Place .sort()',
+  description_ko: '내장 함수 sum(), max(), min()으로 숫자 리스트를 한 번에 집계하고, .sort()로 오름차순·내림차순 정렬하는 법을 익힙니다.',
+  description_en: 'Aggregate numeric lists with sum(), max(), and min(), and sort lists in place using .sort() and reverse=True.',
+  totalQuestions: 15,
+  unlockedBlocks: [
+    'comment',
+    'print',
+    'variable',
+    'input',
+    'type',
+    'if',
+    'for_range',
+    'range',
+    'for_in',
+    'while',
+    'break',
+    'continue',
+    'list',
+    'iter',
+    'method',
+    'math',
   ],
-  "questions": [
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 중괄호({})로 집합(set)을 만들어 중복을 제거하고 길이와 20 포함 여부를 출력해보세요.",
-      "prompt_en": "[Block] Create a set with curly braces ({}) to remove duplicates and print its length and whether 20 is in it.",
-      "hint_ko": "똑같은 값을 여러 번 넣어도 집합 안에는 하나만 남으며, len()과 in 연산자로 원소 개수와 포함 여부를 확인할 수 있습니다.",
-      "hint_en": "Duplicate elements collapse into one inside a set, and you can use len() and in to check its size and membership.",
-      "targetCode": "s = {10, 20, 10, 30}\nprint(len(s), 20 in s)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] sum(nums)로 리스트 총합을 구하고 sum(nums) / len(nums)로 실수 평균을 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Compute the total sum with sum(nums) and the average with sum(nums) / len(nums).',
+      hint_ko: 'sum()은 숫자 리스트의 모든 요소를 더해주며, len()으로 나누면 평균이 됩니다.',
+      hint_en: 'sum() totals all numbers in the list, and dividing by len() gives the average.',
+      targetCode: 'nums = [70, 80, 90]\nprint(sum(nums))\nprint(sum(nums) / len(nums))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 True"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈 집합을 생성하도록 빈칸을 채워 원소 10을 추가한 뒤 길이(1)를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the blank to create an empty set, add 10 to it, and print its length (1).",
-      "hint_ko": "빈 중괄호는 빈 사전으로 인식되므로, 빈 '집합'을 만들 때는 세 글자 자료형 이름 뒤에 빈 소괄호를 붙여 호출해야 합니다.",
-      "hint_en": "Empty curly braces create a dictionary, so call the 3-letter set constructor with empty parentheses to make an empty set.",
-      "templateCode": "empty = §§§§§\nempty.add(10)\nprint(len(empty))",
-      "targetCode": "empty = set()\nempty.add(10)\nprint(len(empty))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .add() 메서드로 집합에 원소를 추가하고 집합 크기와 \"web\" 포함 여부를 출력해보세요.",
-      "prompt_en": "[Block] Use .add() to insert elements into the set and print its size and whether \"web\" is in it.",
-      "hint_ko": "새로운 값은 집합에 추가되어 길이가 늘어나지만, 이미 존재하는 값은 무시되어 크기가 그대로 유지됩니다.",
-      "hint_en": "Adding a new element increases the set's size, while adding an existing element leaves the set unchanged.",
-      "targetCode": "tags = {\"py\"}\ntags.add(\"web\")\ntags.add(\"py\")\nprint(len(tags), \"web\" in tags)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "2 True"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈 집합을 만들고 정수 7을 두 번 추가하여 집합 크기와 5의 미포함 여부를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Create an empty set and add 7 twice, then print the set size and whether 5 is absent.",
-      "hint_ko": "소괄호를 붙인 빈 집합 생성식으로 초기화한 뒤, 집합에 원소를 '더하다'라는 뜻의 세 글자 메서드를 호출하세요.",
-      "hint_en": "Initialize an empty set via its constructor call, then invoke the 3-letter method meaning 'put in / sum up' to insert 7.",
-      "templateCode": "seen = §§§§§\nseen.§§§(7)\nseen.add(7)\nprint(len(seen), 5 not in seen)",
-      "targetCode": "seen = set()\nseen.add(7)\nseen.add(7)\nprint(len(seen), 5 not in seen)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "1 True"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트를 set(nums)에 전달해 중복을 제거하고 고유 원소 개수와 합계를 출력해보세요.",
-      "prompt_en": "[Block] Pass the list to set(nums) to remove duplicates and print the unique count and sum.",
-      "hint_ko": "집합에도 len()과 sum() 함수를 그대로 적용해 고유 원소의 개수와 합계를 바로 구할 수 있습니다.",
-      "hint_en": "You can pass the deduplicated set directly to len() and sum() to get the unique count and total.",
-      "targetCode": "nums = [5, 10, 5, 20, 10]\nuniq = set(nums)\nprint(len(uniq), sum(uniq))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 35"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력된 단어들의 중복을 제거해 고유 단어 개수를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Split input words and deduplicate them with a set to print the unique count.",
-      "hint_ko": "입력 줄을 공백 단위로 '쪼개는' 다섯 글자 메서드로 단어 리스트를 만든 뒤, 중복을 없애는 세 글자 '집합' 변환 함수로 감싸세요.",
-      "hint_en": "Divide the input line into words with the 5-letter splitting method, then deduplicate them using the 3-letter collection constructor.",
-      "templateCode": "words = input().§§§§§()\nuniq = §§§(words)\nprint(f\"Unique:{len(uniq)}\")",
-      "targetCode": "words = input().split()\nuniq = set(words)\nprint(f\"Unique:{len(uniq)}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "cat dog cat bird dog",
-          "expectedOutput": "Unique:3"
+          id: 1,
+          input: '',
+          expectedOutput: '240\n80.0',
         },
-        {
-          "id": 2,
-          "input": "hi hi hi",
-          "expectedOutput": "Unique:1"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 리스트를 set()으로 변환해 중복을 없앤 뒤 for문으로 순회하며 합계를 출력해보세요.",
-      "prompt_en": "[Block] Convert a list with set() to remove duplicates, then iterate with a for loop to print the total.",
-      "hint_ko": "집합은 순서가 보장되지 않지만, 모든 고유 원소를 빠짐없이 한 번씩 꺼내 누적 합계를 구할 때는 문제없이 사용할 수 있습니다.",
-      "hint_en": "Although sets have no fixed order, iterating over a set visits every unique element exactly once.",
-      "targetCode": "coins = [100, 500, 100, 50, 500]\nuniq = set(coins)\ntotal = 0\nfor c in uniq:\n    total += c\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "650"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 단어들의 중복을 제거하고 for문으로 고유 단어 길이 합을 구해보세요.",
-      "prompt_en": "[Fill Blank] Deduplicate input words into a set and sum their lengths with a for loop.",
-      "hint_ko": "단어 리스트를 세 글자 '집합' 변환 함수로 감싸 중복을 없애고, for 반복문의 두 글자 포함 키워드로 순회하세요.",
-      "hint_en": "Wrap the word list in the 3-letter set constructor and iterate over it using the 2-letter membership keyword in the for loop.",
-      "templateCode": "raw = input().split()\nuniq = §§§(raw)\ncnt = 0\nfor w §§ uniq:\n    cnt += len(w)\nprint(len(uniq), cnt)",
-      "targetCode": "raw = input().split()\nuniq = set(raw)\ncnt = 0\nfor w in uniq:\n    cnt += len(w)\nprint(len(uniq), cnt)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "cat dog cat",
-          "expectedOutput": "2 6"
-        },
-        {
-          "id": 2,
-          "input": "hi hi go",
-          "expectedOutput": "2 4"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] while문으로 고유 아이템 3개가 모일 때까지 .add()로 입력받아 출력해보세요.",
-      "prompt_en": "[Block] Use a while loop and .add() to collect 3 distinct inputs and print the result.",
-      "hint_ko": "중복된 값을 .add()해도 집합의 길이(len)는 늘어나지 않으므로, 고유한 값 3개가 채워질 때까지 반복문이 계속 실행됩니다.",
-      "hint_en": "Because duplicate .add() calls do not increase len(picks), the loop continues until 3 unique items are collected.",
-      "targetCode": "picks = set()\nwhile len(picks) < 3:\n    item = input()\n    picks.add(item)\nprint(len(picks), \"gold\" in picks)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "ruby\nruby\ngold\njade",
-          "expectedOutput": "3 True"
-        },
-        {
-          "id": 2,
-          "input": "iron\nwood\niron\ncoal",
-          "expectedOutput": "3 False"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 서로 다른 단어 2개가 모일 때까지 입력받아 집합에 추가해보세요.",
-      "prompt_en": "[Fill Blank] Read inputs and add them to a set until 2 distinct words are collected.",
-      "hint_ko": "빈 집합 생성식으로 초기화한 뒤, 반복문 안에서 집합 전용 세 글자 원소 추가 메서드를 호출하세요.",
-      "hint_en": "Initialize an empty set with its constructor and call the 3-letter insertion method inside the loop.",
-      "templateCode": "seen = §§§§§\nwhile len(seen) < 2:\n    w = input()\n    seen.§§§(w)\nprint(len(seen), \"py\" in seen)",
-      "targetCode": "seen = set()\nwhile len(seen) < 2:\n    w = input()\n    seen.add(w)\nprint(len(seen), \"py\" in seen)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "py\npy\nai",
-          "expectedOutput": "2 True"
-        },
-        {
-          "id": 2,
-          "input": "go\ngo\njs",
-          "expectedOutput": "2 False"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 중괄호 안에 콜론(:)을 써서 딕셔너리가 생성된 버그를 쉼표(,)로 고쳐 집합을 완성해보세요.",
-      "prompt_en": "[Fix Bug] Fix the bug where colons (:) created a dict instead of a set by replacing them with commas (,).",
-      "hint_ko": "중괄호 안에 콜론(:)을 넣으면 딕셔너리가 되어 .add()를 쓸 수 없습니다. 콜론 두 곳을 쉼표(,)로 바꾸어 집합으로 만드세요.",
-      "hint_en": "Colons inside curly braces create a dictionary rather than a set; replace the colons with commas.",
-      "templateCode": "s = {10: 20, 30: 10}\ns.add(40)\nprint(len(s), sum(s))",
-      "targetCode": "s = {10, 20, 30, 10}\ns.add(40)\nprint(len(s), sum(s))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "4 100"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트를 집합 대신 문자열(str)로 잘못 변환해 오류가 나는 줄을 set(nums)로 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the bug where nums is converted with str(nums) instead of set(nums).",
-      "hint_ko": "중복을 제거하고 .add() 메서드를 사용하려면 str(nums)가 아니라 집합 변환 함수 set(nums)를 호출해야 합니다.",
-      "hint_en": "To deduplicate the list and call .add(), convert nums using set(nums) instead of str(nums).",
-      "templateCode": "nums = [10, 20, 10]\nuniq = str(nums)\nuniq.add(30)\nprint(len(uniq), sum(uniq))",
-      "targetCode": "nums = [10, 20, 10]\nuniq = set(nums)\nuniq.add(30)\nprint(len(uniq), sum(uniq))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 60"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 logs의 중복을 제거한 집합을 변수 uniq에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that converts logs into a deduplicated set stored in uniq.",
-      "hint_ko": "변수 uniq에 대입(=) 기호를 쓰고, 리스트 logs를 세 글자 집합 변환 함수 set()으로 감싸세요.",
-      "hint_en": "Assign set(logs) to the variable uniq.",
-      "templateCode": "logs = [\"login\", \"view\", \"login\", \"pay\"]\n§§§§§§§§§§§§§§§§\nprint(len(uniq))",
-      "targetCode": "logs = [\"login\", \"view\", \"login\", \"pay\"]\nuniq = set(logs)\nprint(len(uniq))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 입력받은 단어 w를 집합 tags에 추가하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that adds input word w into the set tags.",
-      "hint_ko": "집합 변수 tags 뒤에 점(.)을 찍고 원소 추가 메서드 add(w)를 호출하세요.",
-      "hint_en": "Call the .add(w) method on the set variable tags.",
-      "templateCode": "tags = {\"py\", \"ai\"}\nw = input()\n§§§§§§§§§§§\nprint(len(tags), w in tags)",
-      "targetCode": "tags = {\"py\", \"ai\"}\nw = input()\ntags.add(w)\nprint(len(tags), w in tags)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "web",
-          "expectedOutput": "3 True"
-        },
-        {
-          "id": 2,
-          "input": "py",
-          "expectedOutput": "2 True"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced when the following Python code runs.",
-      "hint_ko": "리스트에서 중복이 걸러진 초기 원소들이 무엇인지 적은 뒤, 이미 들어 있는 값과 새로운 값을 각각 추가했을 때 최종 원소 개수와 합을 구해보세요.",
-      "hint_en": "Write out the unique numbers from the list, see what happens when an existing number and a new number are inserted, and find the final count and total.",
-      "targetCode": "nums = [2, 4, 2, 6, 4]\ns = set(nums)\ns.add(6)\ns.add(8)\nprint(len(s), sum(s))",
-      "choices": [
-        "4 20",
-        "5 26",
-        "3 12",
-        "4 18"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 내장 함수를 사용해 숫자 리스트 prices의 전체 합계를 출력해보세요.',
+      prompt_en: '[Fill Blank] Use the built-in aggregation function to print the total of prices.',
+      hint_ko: '리스트의 모든 숫자를 한 번에 더해주는 세 글자 내장 함수를 적으세요.',
+      hint_en: 'Write the 3-letter built-in function that returns the sum of a list.',
+      templateCode: 'prices = [1200, 800, 500]\nprint("Total:", §§§(prices))',
+      targetCode: 'prices = [1200, 800, 500]\nprint("Total:", sum(prices))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "4 20"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: 'Total: 2500',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] max(nums)와 min(nums)로 최댓값, 최솟값 및 두 값의 차이를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print max(nums), min(nums), and their difference max(nums) - min(nums).',
+      hint_ko: 'max()는 가장 큰 수를, min()은 가장 작은 수를 즉시 찾아 반환합니다.',
+      hint_en: 'max() returns the largest value and min() returns the smallest value.',
+      targetCode: 'nums = [15, 50, 25, 40]\nprint(max(nums), min(nums))\nprint(max(nums) - min(nums))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '50 15\n35',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트 pts에서 가장 큰 값에서 가장 작은 값을 뺀 차이(gap)를 구해 출력해보세요.',
+      prompt_en: '[Fill Blank] Compute the difference between the largest and smallest values in pts.',
+      hint_ko: '리스트에서 최댓값을 구하는 세 글자 내장 함수를 빈칸에 적으세요.',
+      hint_en: 'Write the 3-letter built-in function that finds the maximum value.',
+      templateCode: 'pts = [12, 45, 30]\ngap = §§§(pts) - min(pts)\nprint("Gap:", gap)',
+      targetCode: 'pts = [12, 45, 30]\ngap = max(pts) - min(pts)\nprint("Gap:", gap)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Gap: 33',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] nums.sort()로 리스트를 작은 수부터 큰 수 순서(오름차순)로 정렬해 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Sort nums in ascending order in place using .sort() and print the list.',
+      hint_ko: '.sort()는 원본 리스트 자체의 순서를 직접 바꾸며 반환값은 없습니다.',
+      hint_en: '.sort() mutates the list in place in ascending order and returns None.',
+      targetCode: 'nums = [30, 10, 40, 20]\nnums.sort()\nprint(nums)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 30, 40]',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트 data를 오름차순으로 제자리 정렬한 뒤 출력해보세요.',
+      prompt_en: '[Fill Blank] Call the in-place sorting method on data and print the sorted list.',
+      hint_ko: '리스트를 오름차순으로 정렬하는 네 글자 메서드를 입력하세요.',
+      hint_en: 'Type the 4-letter method that sorts a list in place.',
+      templateCode: 'data = [9, 2, 7, 4]\ndata.§§§§()\nprint(data)',
+      targetCode: 'data = [9, 2, 7, 4]\ndata.sort()\nprint(data)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[2, 4, 7, 9]',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] scores.sort(reverse=True)로 내림차순 정렬한 뒤 상위 3개 점수(scores[:3])를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Sort scores descending with reverse=True and slice the top 3 scores (scores[:3]).',
+      hint_ko: 'reverse=True 옵션을 주면 큰 값부터 앞으로 오도록 내림차순 정렬됩니다.',
+      hint_en: 'Passing reverse=True sorts the list in descending order from largest to smallest.',
+      targetCode: 'scores = [75, 95, 60, 85, 90]\nscores.sort(reverse=True)\nprint(scores[:3])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[95, 90, 85]',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트 ranks를 큰 수부터 내림차순으로 정렬하도록 옵션 값을 채워보세요.',
+      prompt_en: '[Fill Blank] Fill in the boolean option value to sort ranks in descending order.',
+      hint_ko: '역순 정렬 옵션을 켜는 불리언 참 값을 첫 글자 대문자로 적으세요.',
+      hint_en: 'Write the capitalized boolean literal for true.',
+      templateCode: 'ranks = [40, 90, 70]\nranks.sort(reverse=§§§§)\nprint(ranks)',
+      targetCode: 'ranks = [40, 90, 70]\nranks.sort(reverse=True)\nprint(ranks)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[90, 70, 40]',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 점수를 내림차순 정렬한 뒤 상위 2개를 잘라 그 합계와 정수 평균(//)을 출력해보세요.',
+      prompt_en: '[Fill Blank] Order scores descending, slice the top 2, and print their total and integer average.',
+      hint_ko: '정렬 메서드, 합계 함수, 길이 함수를 차례로 채워보세요.',
+      hint_en: 'Fill in the sort method, sum function, and length function in order.',
+      templateCode: 'scores = [70, 95, 85, 60]\nscores.§§§§(reverse=True)\ntop2 = scores[:2]\nprint(§§§(top2), sum(top2) // §§§(top2))',
+      targetCode: 'scores = [70, 95, 85, 60]\nscores.sort(reverse=True)\ntop2 = scores[:2]\nprint(sum(top2), sum(top2) // len(top2))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '180 90',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 정렬된 리스트를 출력하려다 print() 안에서 정렬 메서드를 바로 호출해 None이 출력되는 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the bug where printing the return value of .sort() outputs None instead of the sorted list.',
+      hint_ko: '원본 정렬 메서드는 단독 줄에서 먼저 호출하고, 다음 줄에서 리스트 변수를 출력해야 합니다.',
+      hint_en: 'Call .sort() on its own line first, then pass nums to print() on the next line.',
+      templateCode: 'nums = [30, 10, 20]\nnums.append(5)\nprint(nums.sort())',
+      targetCode: 'nums = [30, 10, 20]\nnums.append(5)\nnums.sort()\nprint(nums)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[5, 10, 20, 30]',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 최댓값(Max)과 최솟값(Min) 라벨에 반대 함수가 호출된 버그를 알맞게 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the swapped aggregation functions so Max prints the largest value and Min prints the smallest.',
+      hint_ko: '각 라벨에 맞도록 최댓값 함수와 최솟값 함수의 위치를 서로 바꾸세요.',
+      hint_en: 'Match the maximum function to the Max label and the minimum function to the Min label.',
+      templateCode: 'pts = [15, 50, 25]\nprint("Max:", min(pts), "Min:", max(pts))',
+      targetCode: 'pts = [15, 50, 25]\nprint("Max:", max(pts), "Min:", min(pts))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Max: 50 Min: 15',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 s의 전체 합계에서 최댓값과 최솟값을 뺀 결과를 출력하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that prints sum(s) minus max(s) and min(s).',
+      hint_ko: 'print() 안에서 합계 함수 결과에 최댓값 함수와 최솟값 함수 결과를 차례로 빼세요.',
+      hint_en: 'Inside print(), subtract max(s) and min(s) from sum(s).',
+      templateCode: 's = [10, 50, 20, 30, 40]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
+      targetCode: 's = [10, 50, 20, 30, 40]\nprint(sum(s) - max(s) - min(s))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '90',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 nums를 오름차순으로 원본 정렬하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that sorts nums in ascending order in place.',
+      hint_ko: '리스트 변수 뒤에 점(.)을 찍고 오름차순 정렬 메서드를 호출하세요.',
+      hint_en: 'Call the in-place sort method on nums.',
+      templateCode: 'nums = [40, 10, 30, 20]\n§§§§§§§§§§§\nprint(nums[0], nums[-1])',
+      targetCode: 'nums = [40, 10, 30, 20]\nnums.sort()\nprint(nums[0], nums[-1])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '10 40',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 내림차순 정렬과 .pop(), 평균 계산 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '내림차순 정렬 후 맨 끝에서 제거되는 값이 가장 작은 수라는 점에 유의해 최솟값과 평균을 구해보세요.',
+      hint_en: 'After descending sort, .pop() removes the smallest value at the end; find the new min and average.',
+      targetCode: 'nums = [30, 50, 10, 40]\nnums.sort(reverse=True)\nnums.pop()\navg = sum(nums) / len(nums)\nprint(min(nums), avg)',
+      choices: [
+        '30 40.0',
+        '10 30.0',
+        '30 40',
+        '10 32.5',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30 40.0',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 오름차순 정렬과 while 조건부 .pop() 반복 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '오름차순 정렬된 리스트에서 합계가 60 이하가 될 때까지 가장 큰 끝 요소를 하나씩 꺼낸 결과를 추적해보세요.',
+      hint_en: 'After ascending sort, pop the largest elements from the end until sum(bag) is 60 or less.',
+      targetCode: 'bag = [40, 10, 30, 25]\nbag.sort()\nwhile sum(bag) > 60:\n    bag.pop()\nprint(bag, sum(bag))',
+      choices: [
+        '[10, 25] 35',
+        '[10, 25, 30] 65',
+        '[40, 10] 50',
+        '[25, 30] 55',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 25] 35',
+        },
+      ],
+    },
+  ],
 };

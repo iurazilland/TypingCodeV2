@@ -6,23 +6,34 @@ export const PYTHON_LEVEL_79: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 79,
-  "title_ko": "79레벨: 병렬 묶기 zip()과 역순 순회 reversed()",
-  "title_en": "Level 79: Parallel Pairing zip() & Reverse Iteration reversed()",
-  "description_ko": "여러 시퀀스를 나란히 짝짓는 zip(), dict(zip()) 패턴과 원본을 보존하며 역순 순회하는 reversed()를 익힙니다.",
-  "description_en": "Learn parallel pairing with zip(), dict(zip()), and non-mutating reverse iteration with reversed().",
+  "title_ko": "79레벨: 수치·변환 에러 잡기 (ValueError, ZeroDivisionError)",
+  "title_en": "Level 79: Catching ValueError & ZeroDivisionError",
+  "description_ko": "잘못된 숫자 변환(ValueError)과 0 나눗셈(ZeroDivisionError)을 구체적으로 지정하여 원인별로 알맞게 대처합니다.",
+  "description_en": "Specify ValueError and ZeroDivisionError in separate except clauses to handle conversion and division errors precisely.",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
     "type",
-    "math",
-    "map",
+    "if",
+    "for_range",
+    "range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
     "iter",
     "method",
-    "if",
-    "for_in",
-    "def"
+    "def",
+    "return",
+    "class",
+    "try"
   ],
   "questions": [
     {
@@ -30,16 +41,21 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] zip(names, scores)로 두 리스트의 같은 위치 원소를 튜플 쌍으로 묶어 출력해보세요.",
-      "prompt_en": "[Block] Pair elements from names and scores with list(zip(names, scores)) and print pairs.",
-      "hint_ko": "zip()이 반환하는 반복자를 list()로 감싸면 짝지어진 (이름, 점수) 튜플들의 리스트를 한눈에 확인할 수 있습니다.",
-      "hint_en": "Wrapping the zip() iterator in list() materializes the paired tuples into a printable list.",
-      "targetCode": "names = [\"Kim\", \"Lee\"]\nscores = [90, 85]\npairs = list(zip(names, scores))\nprint(pairs)",
+      "prompt_ko": "[블록 조립] except ValueError:를 지정해 숫자가 아닌 문자열 변환 에러를 잡아 BadInt를 출력해보세요.",
+      "prompt_en": "[Block] Use except ValueError: to catch invalid integer conversion and print BadInt.",
+      "hint_ko": "int(\"abc\")처럼 자료형은 맞지만 값의 내용이 부적절할 때는 ValueError가 발생합니다.",
+      "hint_en": "Passing non-numeric text like \"abc\" to int() raises a ValueError.",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(n + 5)\nexcept ValueError:\n    print(\"BadInt\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[('Kim', 90), ('Lee', 85)]"
+          "input": "10",
+          "expectedOutput": "15"
+        },
+        {
+          "id": 2,
+          "input": "abc",
+          "expectedOutput": "BadInt"
         }
       ]
     },
@@ -48,17 +64,22 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 빈칸을 채워 names와 scores를 병렬로 짝지은 튜플 리스트를 만들어 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in list and zip to pair names and scores into a list of tuples.",
-      "hint_ko": "바깥에는 4글자 리스트 변환 함수를, 안쪽에는 '지퍼(zipper)'의 앞 세 글자를 딴 병렬 묶기 함수를 쓰세요.",
-      "hint_en": "Wrap the 3-letter 'zipper' pairing function inside the 4-letter list constructor.",
-      "templateCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\npairs = §§§§(§§§(names, scores))\nprint(pairs)",
-      "targetCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\npairs = list(zip(names, scores))\nprint(pairs)",
+      "prompt_ko": "[빈칸 채우기] 문자열을 정수로 바꿀 수 없을 때 발생하는 구체적인 에러 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the specific exception type raised when int() receives non-numeric text.",
+      "hint_ko": "'값(Value)'과 '오류(Error)'를 대소문자 구분(파스칼 표기법)에 맞춰 붙여 적으세요.",
+      "hint_en": "Write the PascalCase exception name combining Value and Error.",
+      "templateCode": "raw = input()\ntry:\n    age = int(raw)\n    print(f\"Age:{age}\")\nexcept §§§§§§§§§§:\n    print(\"NaN\")",
+      "targetCode": "raw = input()\ntry:\n    age = int(raw)\n    print(f\"Age:{age}\")\nexcept ValueError:\n    print(\"NaN\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[('Amy', 95), ('Bob', 88)]"
+          "input": "20",
+          "expectedOutput": "Age:20"
+        },
+        {
+          "id": 2,
+          "input": "twenty",
+          "expectedOutput": "NaN"
         }
       ]
     },
@@ -67,19 +88,21 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] reversed()로 원본 변경 없이 뒤집은 리스트와 뒤집은 문자열을 각각 만들어 출력해보세요.",
-      "prompt_en": "[Block] Use reversed() with list() and \"\".join() to print a reversed list and reversed string.",
-      "hint_ko": "역순 반복자를 list()로 감싸면 뒤집힌 리스트가 되고, \"\".join()에 넣으면 뒤집힌 문자열이 만들어집니다.",
-      "hint_en": "Pass the reverse iterator to list() for a reversed list, or to \"\".join() for a reversed string.",
-      "targetCode": "nums = [10, 20, 30]\nrev_nums = list(reversed(nums))\nrev_word = \"\".join(reversed(\"code\"))\nprint(rev_nums, rev_word)",
-      "expectedVariables": {
-        "rev_word": "edoc"
-      },
+      "prompt_ko": "[블록 조립] except ZeroDivisionError:로 0 나눗셈 에러를 잡아 ZeroDiv를 출력해보세요.",
+      "prompt_en": "[Block] Catch division by zero with except ZeroDivisionError: and print ZeroDiv.",
+      "hint_ko": "/, //, % 연산에서 나누는 수(분모)가 0이면 언제나 ZeroDivisionError가 발생합니다.",
+      "hint_en": "Dividing by 0 with /, //, or % always raises ZeroDivisionError.",
+      "targetCode": "n = int(input())\ntry:\n    print(60 // n)\nexcept ZeroDivisionError:\n    print(\"ZeroDiv\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "[30, 20, 10] edoc"
+          "input": "15",
+          "expectedOutput": "4"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "ZeroDiv"
         }
       ]
     },
@@ -88,17 +111,22 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 키 리스트 keys와 값 리스트 vals를 짝지어 딕셔너리로 만들고 hp와 mp 값을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks to build a dictionary by pairing keys and vals, then print hp and mp.",
-      "hint_ko": "안쪽에는 '지퍼(zipper)'의 앞 3글자 함수로 키와 값을 맞물리고, 바깥은 '사전(dictionary)'의 앞 4글자 생성자로 감싸세요.",
-      "hint_en": "Pair the two lists inside using the 3-letter 'zipper' function, and wrap it outside with the 4-letter dict constructor.",
-      "templateCode": "keys = [\"hp\", \"mp\"]\nvals = [120, 60]\nstat = §§§§(§§§(keys, vals))\nprint(stat[\"hp\"], stat[\"mp\"])",
-      "targetCode": "keys = [\"hp\", \"mp\"]\nvals = [120, 60]\nstat = dict(zip(keys, vals))\nprint(stat[\"hp\"], stat[\"mp\"])",
+      "prompt_ko": "[빈칸 채우기] 분모가 0이어서 나머지를 구할 수 없을 때 발생하는 구체적인 에러 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the exception type raised when computing modulo by zero.",
+      "hint_ko": "'숫자 0(Zero)', '나눗셈(Division)', '오류(Error)' 세 단어를 첫 글자 대문자로 이어 붙인 이름을 적으세요.",
+      "hint_en": "Write the PascalCase exception name for dividing by zero.",
+      "templateCode": "d = int(input())\ntry:\n    print(25 % d)\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"NoZero\")",
+      "targetCode": "d = int(input())\ntry:\n    print(25 % d)\nexcept ZeroDivisionError:\n    print(\"NoZero\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "120 60"
+          "input": "7",
+          "expectedOutput": "4"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "NoZero"
         }
       ]
     },
@@ -107,21 +135,26 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] dict(zip(keys, vals))로 상점 사전을 만들고 target 가격을 출력하세요.",
-      "prompt_en": "[Block] Build store with dict(zip(keys, vals)) and print store.get(target, 0).",
-      "hint_ko": "생성된 딕셔너리에서 .get(target, 0)으로 조회하면 없는 상품일 때도 오류 없이 0을 반환합니다.",
-      "hint_en": "Looking up the target with .get(target, 0) returns 0 safely when the item is not in the dictionary.",
-      "targetCode": "keys = input().split()\nvals = list(map(int, input().split()))\nstore = dict(zip(keys, vals))\ntarget = input()\nprint(store.get(target, 0))",
+      "prompt_ko": "[블록 조립] 한 try 아래에 ValueError와 ZeroDivisionError를 나란히 두어 에러 종류별로 다르게 출력해보세요.",
+      "prompt_en": "[Block] Chain except ValueError: and except ZeroDivisionError: beneath a single try block.",
+      "hint_ko": "if - elif처럼 여러 개의 except 블록을 나란히 두면 실제로 발생한 에러 종류에 맞는 블록 하나만 실행됩니다.",
+      "hint_en": "Like elif branches, chaining multiple except blocks runs only the first handler matching the raised error.",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(100 // n)\nexcept ValueError:\n    print(\"ValErr\")\nexcept ZeroDivisionError:\n    print(\"ZeroErr\")",
       "testCases": [
         {
           "id": 1,
-          "input": "apple milk\n1500 2000\nmilk",
-          "expectedOutput": "2000"
+          "input": "25",
+          "expectedOutput": "4"
         },
         {
           "id": 2,
-          "input": "pen book\n800 3500\nbag",
-          "expectedOutput": "0"
+          "input": "hi",
+          "expectedOutput": "ValErr"
+        },
+        {
+          "id": 3,
+          "input": "0",
+          "expectedOutput": "ZeroErr"
         }
       ]
     },
@@ -130,22 +163,27 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력된 단어 리스트를 역순 리스트로 만든 뒤 하이픈(-)으로 연결해 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in list and reversed to reverse the input words and join them with \"-\".",
-      "hint_ko": "바깥에는 4글자 리스트 함수를, 안쪽에는 '뒤집다(reverse)'에 -d를 붙인 8글자 역순 함수를 쓰세요.",
-      "hint_en": "Use the 4-letter list constructor outside and the 8-letter reversed built-in inside.",
-      "templateCode": "words = input().split()\nrev = §§§§(§§§§§§§§(words))\nprint(\"-\".join(rev))",
-      "targetCode": "words = input().split()\nrev = list(reversed(words))\nprint(\"-\".join(rev))",
+      "prompt_ko": "[빈칸 채우기] 정수 변환 실패와 0 나눗셈 에러를 각각 구분해 처리하도록 두 번째 예외 이름을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the second exception type so dividing by 0 prints DivZero separately from BadVal.",
+      "hint_ko": "첫 번째 except는 변환 오류를 잡고, 두 번째 except는 0으로 나눌 때 나는 오류를 잡도록 작성하세요.",
+      "hint_en": "Specify the division-by-zero exception type on the second except line.",
+      "templateCode": "s = input()\ntry:\n    k = int(s)\n    print(50 // k)\nexcept ValueError:\n    print(\"BadVal\")\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"DivZero\")",
+      "targetCode": "s = input()\ntry:\n    k = int(s)\n    print(50 // k)\nexcept ValueError:\n    print(\"BadVal\")\nexcept ZeroDivisionError:\n    print(\"DivZero\")",
       "testCases": [
         {
           "id": 1,
-          "input": "a b c",
-          "expectedOutput": "c-b-a"
+          "input": "10",
+          "expectedOutput": "5"
         },
         {
           "id": 2,
-          "input": "py code",
-          "expectedOutput": "code-py"
+          "input": "x",
+          "expectedOutput": "BadVal"
+        },
+        {
+          "id": 3,
+          "input": "0",
+          "expectedOutput": "DivZero"
         }
       ]
     },
@@ -154,21 +192,26 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] for item in reversed(logs):로 마지막 항목부터 역순 순회하며 Undo:항목을 출력하세요.",
-      "prompt_en": "[Block] Iterate through reversed(logs) to print Undo:{item} from last to first.",
-      "hint_ko": ".reverse() 메서드는 원본 리스트 자체를 뒤집지만, reversed() 함수는 순회 순서만 거꾸로 제공합니다.",
-      "hint_en": "Unlike list.reverse(), which mutates the list in place, reversed() yields items in reverse order cleanly.",
-      "targetCode": "logs = input().split()\nfor item in reversed(logs):\n    print(f\"Undo:{item}\")",
+      "prompt_ko": "[블록 조립] ValueError나 ZeroDivisionError 발생 시 ans에 기본값 0을 대입해 이후 덧셈을 이어가보세요.",
+      "prompt_en": "[Block] Set ans = 0 when ValueError or ZeroDivisionError occurs, then print ans + 10.",
+      "hint_ko": "예외 블록 안에서 변수에 안전한 기본값을 넣어 두면 try - except 바깥에서도 에러 없이 계산을 계속할 수 있습니다.",
+      "hint_en": "Assigning a safe fallback value to ans in each except block allows subsequent calculations to proceed.",
+      "targetCode": "s = input()\ntry:\n    ans = 80 // int(s)\nexcept ValueError:\n    ans = -1\nexcept ZeroDivisionError:\n    ans = 0\nprint(ans + 10)",
       "testCases": [
         {
           "id": 1,
-          "input": "open edit save",
-          "expectedOutput": "Undo:save\nUndo:edit\nUndo:open"
+          "input": "4",
+          "expectedOutput": "30"
         },
         {
           "id": 2,
-          "input": "move jump",
-          "expectedOutput": "Undo:jump\nUndo:move"
+          "input": "abc",
+          "expectedOutput": "9"
+        },
+        {
+          "id": 3,
+          "input": "0",
+          "expectedOutput": "10"
         }
       ]
     },
@@ -177,40 +220,51 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 딕셔너리의 키·값 쌍을 문자열로 모은 뒤 역순으로 쉼표 연결해 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks to format key-value pairs from stock and join them in reverse order.",
-      "hint_ko": "첫 빈칸은 딕셔너리의 키·값 쌍을 꺼내는 5글자 메서드를, 둘째 빈칸은 8글자 역순 순회 내장 함수를 쓰세요.",
-      "hint_en": "First call the 5-letter items() method, then pass lines into the 8-letter reversed() built-in.",
-      "templateCode": "stock = {\"pen\": 5, \"bag\": 2}\nlines = []\nfor k, v in stock.§§§§§():\n    lines.append(f\"{k}={v}\")\nprint(\", \".join(§§§§§§§§(lines)))",
-      "targetCode": "stock = {\"pen\": 5, \"bag\": 2}\nlines = []\nfor k, v in stock.items():\n    lines.append(f\"{k}={v}\")\nprint(\", \".join(reversed(lines)))",
+      "prompt_ko": "[빈칸 채우기] 실수 변환에 실패했을 때 기본값 0.0을 대입하도록 예외 타입을 채워보세요.",
+      "prompt_en": "[Fill Blank] Specify the exception type when float(raw) fails so rate falls back to 0.0.",
+      "hint_ko": "float() 함수에 숫자가 아닌 문자열을 넣었을 때도 int()와 동일한 값 변환 예외가 발생합니다.",
+      "hint_en": "Passing invalid text to float() raises the same invalid-value exception as int().",
+      "templateCode": "raw = input()\ntry:\n    rate = float(raw)\nexcept §§§§§§§§§§:\n    rate = 0.0\nprint(rate * 10)",
+      "targetCode": "raw = input()\ntry:\n    rate = float(raw)\nexcept ValueError:\n    rate = 0.0\nprint(rate * 10)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "bag=2, pen=5"
+          "input": "1.5",
+          "expectedOutput": "15.0"
+        },
+        {
+          "id": 2,
+          "input": "err",
+          "expectedOutput": "0.0"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 소문자로 통일한 단어와 reversed()로 뒤집은 문자열을 비교해 회문 여부를 반환하는 함수를 완성하세요.",
-      "prompt_en": "[Block] Complete is_pal(word) using .lower() and \"\".join(reversed(clean)) to check for a palindrome.",
-      "hint_ko": "비교 연산자(==)의 결과 자체가 불리언(True/False)이므로 return clean == rev로 바로 반환합니다.",
-      "hint_en": "Because == already evaluates to True or False, return clean == rev directly.",
-      "targetCode": "def is_pal(word):\n    clean = word.lower()\n    rev = \"\".join(reversed(clean))\n    return clean == rev\ntext = input()\nprint(is_pal(text))",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 공백으로 입력된 두 값을 정수로 바꿔 나누되, 변환 실패와 0 나눗셈을 각각 잡아내도록 세 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the integer conversion and the two specific exception types for parsing and dividing.",
+      "hint_ko": "문자열을 정수로 바꾸는 함수와 부적절한 값 예외, 그리고 0 나눗셈 예외 이름을 순서대로 확인하세요.",
+      "hint_en": "Check the int() conversion function, the invalid-value exception, and the division-by-zero exception.",
+      "templateCode": "a, b = input().split()\ntry:\n    res = §§§(a) // int(b)\nexcept §§§§§§§§§§:\n    res = -1\nexcept §§§§§§§§§§§§§§§§§:\n    res = -2\nprint(res)",
+      "targetCode": "a, b = input().split()\ntry:\n    res = int(a) // int(b)\nexcept ValueError:\n    res = -1\nexcept ZeroDivisionError:\n    res = -2\nprint(res)",
       "testCases": [
         {
           "id": 1,
-          "input": "Level",
-          "expectedOutput": "True"
+          "input": "30 6",
+          "expectedOutput": "5"
         },
         {
           "id": 2,
-          "input": "Python",
-          "expectedOutput": "False"
+          "input": "ten 5",
+          "expectedOutput": "-1"
+        },
+        {
+          "id": 3,
+          "input": "30 0",
+          "expectedOutput": "-2"
         }
       ]
     },
@@ -218,23 +272,18 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 리스트 ks, vs를 짝지어 딕셔너리로 반환하는 함수 make_dict를 완성해보세요.",
-      "prompt_en": "[Fill Blank] Fill in dict and zip so make_dict(ks, vs) returns a paired dictionary.",
-      "hint_ko": "바깥에는 4글자 사전 생성 함수를, 안쪽에는 3글자 병렬 묶기 함수를 채우세요.",
-      "hint_en": "Use the 4-letter dict constructor outside and the 3-letter zip function inside.",
-      "templateCode": "def make_dict(ks, vs):\n    return §§§§(§§§(ks, vs))\nkeys = input().split()\nvals = list(map(int, input().split()))\nprint(make_dict(keys, vals))",
-      "targetCode": "def make_dict(ks, vs):\n    return dict(zip(ks, vs))\nkeys = input().split()\nvals = list(map(int, input().split()))\nprint(make_dict(keys, vals))",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 문자열을 정수로 바꾸다 발생하는 에러를 엉뚱한 예외 이름으로 잡으려다 프로그램이 멈추는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the wrong exception type in except so int(\"ten\") is properly caught.",
+      "hint_ko": "나눗셈이 전혀 없는 정수 변환 코드이므로 0 나눗셈 예외가 아니라 값 변환 예외를 지정해야 합니다.",
+      "hint_en": "Converting \"ten\" with int() raises an invalid-value error, not a division-by-zero error.",
+      "templateCode": "try:\n    n = int(\"ten\")\n    print(n)\nexcept ZeroDivisionError:\n    print(\"Invalid\")",
+      "targetCode": "try:\n    n = int(\"ten\")\n    print(n)\nexcept ValueError:\n    print(\"Invalid\")",
       "testCases": [
         {
           "id": 1,
-          "input": "a b\n10 20",
-          "expectedOutput": "{'a': 10, 'b': 20}"
-        },
-        {
-          "id": 2,
-          "input": "x\n5",
-          "expectedOutput": "{'x': 5}"
+          "input": "",
+          "expectedOutput": "Invalid"
         }
       ]
     },
@@ -243,22 +292,17 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 상품명으로 가격을 조회해야 하는데 키와 값을 묶는 인자 순서가 바뀐 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the swapped argument order in zip() so item names become keys and prices become values.",
-      "hint_ko": "짝지어진 쌍으로 딕셔너리를 만들 때는 첫 번째 인자의 원소가 키, 두 번째 인자의 원소가 값이 됩니다.",
-      "hint_en": "When pairing lists into a dictionary, the first list becomes keys and the second becomes values; swap the two arguments.",
-      "templateCode": "keys = input().split()\nvals = list(map(int, input().split()))\nmenu = dict(zip(vals, keys))\nitem = input()\nprint(menu.get(item, 0))",
-      "targetCode": "keys = input().split()\nvals = list(map(int, input().split()))\nmenu = dict(zip(keys, vals))\nitem = input()\nprint(menu.get(item, 0))",
+      "prompt_ko": "[틀린 곳 수정] 0으로 나눈 나머지를 구할 때 발생하는 에러를 잡지 못해 멈추는 코드의 예외 이름을 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Change the exception type so computing 45 % 0 is caught and prints ZeroMod.",
+      "hint_ko": "정수끼리 0으로 나눈 나머지(%)를 구할 때는 값 변환 에러가 아니라 0 나눗셈 에러가 발생합니다.",
+      "hint_en": "Modulo by zero raises the division-by-zero exception rather than the invalid-value exception.",
+      "templateCode": "try:\n    r = 45 % 0\n    print(r)\nexcept ValueError:\n    print(\"ZeroMod\")",
+      "targetCode": "try:\n    r = 45 % 0\n    print(r)\nexcept ZeroDivisionError:\n    print(\"ZeroMod\")",
       "testCases": [
         {
           "id": 1,
-          "input": "tea cake\n1500 2000\ncake",
-          "expectedOutput": "2000"
-        },
-        {
-          "id": 2,
-          "input": "pen bag\n800 3500\npen",
-          "expectedOutput": "800"
+          "input": "",
+          "expectedOutput": "ZeroMod"
         }
       ]
     },
@@ -266,18 +310,23 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 이름:점수 형식으로 출력되어야 하는데 zip 인자 순서가 바뀌어 거꾸로 출력되는 버그를 수정하세요.",
-      "prompt_en": "[Fix Bug] Fix the argument order in zip() so names unpack into k and scores unpack into v.",
-      "hint_ko": "for k, v in zip(a, b): 형태로 이름 리스트 a를 먼저 전달해야 k에 이름이 담깁니다.",
-      "hint_en": "Pass a first and b second in zip(a, b) so k receives the name and v receives the score.",
-      "templateCode": "a = [\"Kim\", \"Lee\"]\nb = [90, 85]\nfor k, v in zip(b, a):\n    print(f\"{k}:{v}\")",
-      "targetCode": "a = [\"Kim\", \"Lee\"]\nb = [90, 85]\nfor k, v in zip(a, b):\n    print(f\"{k}:{v}\")",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 숫자가 아닌 문자열 변환 에러(ValueError)를 잡는 except 헤더 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the except header line that catches ValueError.",
+      "hint_ko": "예외 처리 키워드 뒤에 한 칸을 띄우고 값 변환 예외 이름과 콜론을 적으세요.",
+      "hint_en": "Write except followed by ValueError and a colon.",
+      "templateCode": "s = input()\ntry:\n    print(int(s) ** 2)\n§§§§§§§§§§§§§§§§§§\n    print(-1)",
+      "targetCode": "s = input()\ntry:\n    print(int(s) ** 2)\nexcept ValueError:\n    print(-1)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "Kim:90\nLee:85"
+          "input": "6",
+          "expectedOutput": "36"
+        },
+        {
+          "id": 2,
+          "input": "no",
+          "expectedOutput": "-1"
         }
       ]
     },
@@ -286,36 +335,47 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 두 리스트 keys, vals를 dict와 zip으로 짝지은 딕셔너리를 menu에 저장해보세요.",
-      "prompt_en": "[Complete Line] Assign dict(zip(keys, vals)) to menu.",
-      "hint_ko": "menu = dict(zip(keys, vals)) 형태로 두 리스트를 병렬로 묶어 사전을 생성하세요.",
-      "hint_en": "Write menu = dict(zip(keys, vals)) to pair keys and values into a dictionary.",
-      "templateCode": "keys = [\"a\", \"b\", \"c\"]\nvals = [1, 2, 3]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(menu)",
-      "targetCode": "keys = [\"a\", \"b\", \"c\"]\nvals = [1, 2, 3]\nmenu = dict(zip(keys, vals))\nprint(menu)",
+      "prompt_ko": "[한 줄 완성] 0으로 나눌 때 발생하는 에러(ZeroDivisionError)를 잡는 except 헤더 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the except header line that catches ZeroDivisionError.",
+      "hint_ko": "예외 처리 키워드 뒤에 0 나눗셈 예외 이름과 콜론을 정확히 적으세요.",
+      "hint_en": "Write except followed by ZeroDivisionError and a colon.",
+      "templateCode": "d = int(input())\ntry:\n    print(120 // d)\n§§§§§§§§§§§§§§§§§§§§§§§§§\n    print(0)",
+      "targetCode": "d = int(input())\ntry:\n    print(120 // d)\nexcept ZeroDivisionError:\n    print(0)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "{'a': 1, 'b': 2, 'c': 3}"
+          "input": "12",
+          "expectedOutput": "10"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "0"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 nums를 reversed()와 list()로 뒤집은 새 리스트를 rev에 저장해보세요.",
-      "prompt_en": "[Complete Line] Assign list(reversed(nums)) to rev.",
-      "hint_ko": "rev = list(reversed(nums)) 형태로 역순 반복자를 리스트로 변환해 저장하세요.",
-      "hint_en": "Write rev = list(reversed(nums)) to store the reversed list.",
-      "templateCode": "nums = [10, 20, 30]\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(rev)",
-      "targetCode": "nums = [10, 20, 30]\nrev = list(reversed(nums))\nprint(rev)",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 첫 줄의 변환에서 곧바로 에러가 발생할 때 어떤 except 블록이 실행되는지 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output when the first line inside try raises an exception before the division line.",
+      "hint_ko": "첫 줄 int(\"zero\")에서 이미 에러가 발생하므로 아랫줄의 // 0 연산까지는 도달하지도 않는다는 점에 주의하세요.",
+      "hint_en": "Because int(\"zero\") fails on the first line, execution jumps straight to the matching handler before reaching // 0.",
+      "targetCode": "try:\n    n = int(\"zero\")\n    ans = 10 // 0\n    print(ans)\nexcept ZeroDivisionError:\n    print(\"A\")\nexcept ValueError:\n    print(\"B\")\nprint(\"C\")",
+      "choices": [
+        "B\nC",
+        "A\nC",
+        "A\nB\nC",
+        "B"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[30, 20, 10]"
+          "expectedOutput": "B\nC"
         }
       ]
     },
@@ -324,23 +384,23 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "두 번째 리스트가 뒤에서부터 역순으로 꺼내진다는 점과, 두 시퀀스의 길이가 다를 때 병렬 묶기는 더 짧은 길이에 맞춰 종료된다는 점을 함께 따져보세요.",
-      "hint_en": "Remember two rules: the second list is read from back to front, and parallel pairing stops as soon as the shorter sequence ends.",
-      "targetCode": "a = [1, 2, 3, 4]\nb = [10, 20, 30]\nres = [x + y for x, y in zip(a, reversed(b))]\nprint(res)",
+      "prompt_ko": "[출력 결과 예측] 문자열 리스트를 순회하며 다중 except 분기로 점수를 누적하는 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the final total after handling both conversion and division-by-zero errors in a loop.",
+      "hint_ko": "\"5\"는 정상 나눗셈(20 // 5 = 4), \"0\"은 ZeroDivisionError(+1), \"x\"는 ValueError(-2)로 처리됩니다.",
+      "hint_en": "Trace each element: \"5\" gives 20 // 5, \"0\" triggers the zero-division branch, and \"x\" triggers the value-error branch.",
+      "targetCode": "data = [\"5\", \"0\", \"x\", \"4\"]\ntotal = 0\nfor s in data:\n    try:\n        total += 20 // int(s)\n    except ValueError:\n        total -= 2\n    except ZeroDivisionError:\n        total += 1\nprint(total)",
       "choices": [
-        "[31, 22, 13]",
-        "[11, 22, 33]",
-        "[34, 23, 12]",
-        "[31, 22, 13, 4]"
+        "8",
+        "9",
+        "10",
+        "7"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[31, 22, 13]"
+          "expectedOutput": "8"
         }
       ]
     }

@@ -6,24 +6,33 @@ export const PYTHON_LEVEL_72: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 72,
-  "title_ko": "72레벨: 딕셔너리 부가 메서드와 dict() 생성자",
-  "title_en": "Level 72: Extended Dictionary Methods & dict() Constructor",
-  "description_ko": "안전 조회 .get()과 빈도수 카운터 패턴, .keys()·.values()·.pop()·.update(), 그리고 dict() 생성자를 익힙니다.",
-  "description_en": "Master .get() frequency counters, .keys(), .values(), .pop(), .update(), and the dict() constructor.",
+  "title_ko": "72레벨: 클래스(class) 정의와 인스턴스 객체 생성 첫걸음",
+  "title_en": "Level 72: Defining Classes (class) & Creating Instances",
+  "description_ko": "class 키워드로 클래스(설계도)를 정의하고 인스턴스 객체를 생성해 속성과 self 메서드를 다루는 기초를 익힙니다.",
+  "description_en": "Learn to define classes with class, instantiate objects, assign attributes, and write basic methods using self.",
   "totalQuestions": 15,
   "unlockedBlocks": [
+    "comment",
     "print",
     "variable",
     "input",
-    "method",
     "type",
-    "math",
-    "sorted",
     "if",
+    "for_range",
+    "range",
     "for_in",
     "while",
-    "try",
-    "def"
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
+    "def",
+    "return",
+    "class"
   ],
   "questions": [
     {
@@ -31,16 +40,16 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 1,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 딕셔너리의 .get(키, 기본값) 메서드로 없는 키도 에러 없이 안전하게 조회해보세요.",
-      "prompt_en": "[Block] Use the dictionary .get(key, default) method to safely look up keys without KeyError.",
-      "hint_ko": "대괄호 인덱싱은 없는 키에서 오류가 발생하지만, .get()은 프로그램이 멈추지 않고 기본값을 돌려줍니다.",
-      "hint_en": "Unlike bracket indexing, .get() never crashes on missing keys and cleanly falls back to the second argument.",
-      "targetCode": "stock = {\"pen\": 5}\nprint(stock.get(\"pen\"))\nprint(stock.get(\"note\"))\nprint(stock.get(\"note\", 0))",
+      "prompt_ko": "[블록 조립] class Dog:를 정의하고 d = Dog()로 인스턴스를 생성해 기본 속성 species를 출력해보세요.",
+      "prompt_en": "[Block] Define class Dog:, create an instance d = Dog(), and print its species attribute.",
+      "hint_ko": "클래스 이름 뒤에 빈 소괄호 ()를 붙여 호출하면 설계도로부터 실제 객체(인스턴스)가 만들어집니다.",
+      "hint_en": "Calling the class name with empty parentheses () creates an actual instance object from the class blueprint.",
+      "targetCode": "class Dog:\n    species = \"Canine\"\nd = Dog()\nprint(d.species)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "5\nNone\n0"
+          "expectedOutput": "Canine"
         }
       ]
     },
@@ -49,22 +58,17 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 메뉴의 가격을 안전 조회하되 없으면 -1을 돌려받도록 메서드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the dictionary method that looks up item safely and defaults to -1.",
-      "hint_ko": "없는 키를 찾아도 오류가 나지 않도록 안전하게 값을 가져오는 3글자 메서드 get을 쓰세요.",
-      "hint_en": "Call the 3-letter dictionary method get so missing keys return -1.",
-      "templateCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\ncost = prices.§§§(item, -1)\nprint(cost)",
-      "targetCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\ncost = prices.get(item, -1)\nprint(cost)",
+      "prompt_ko": "[빈칸 채우기] 고양이 클래스를 선언하여 인스턴스의 울음소리 속성 Meow를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Declare the Cat blueprint so that printing the instance attribute outputs Meow.",
+      "hint_ko": "객체의 설계도를 정의할 때는 다섯 글자 클래스 선언 키워드를 맨 앞에 적습니다.",
+      "hint_en": "Start the definition with the five-letter keyword used to declare a blueprint for objects.",
+      "templateCode": "§§§§§ Cat:\n    sound = \"Meow\"\nc = Cat()\nprint(c.sound)",
+      "targetCode": "class Cat:\n    sound = \"Meow\"\nc = Cat()\nprint(c.sound)",
       "testCases": [
         {
           "id": 1,
-          "input": "tea",
-          "expectedOutput": "3000"
-        },
-        {
-          "id": 2,
-          "input": "juice",
-          "expectedOutput": "-1"
+          "input": "",
+          "expectedOutput": "Meow"
         }
       ]
     },
@@ -73,16 +77,16 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] counts.get(ch, 0) + 1 패턴으로 각 글자의 등장 빈도수를 누적해보세요.",
-      "prompt_en": "[Block] Use counts[ch] = counts.get(ch, 0) + 1 in a loop to count character frequencies.",
-      "hint_ko": "이미 등장했던 글자는 현재 저장된 개수가 반환되고, 처음 나온 글자는 기본값 0이 반환되어 거기에 1이 더해집니다.",
-      "hint_en": "Existing characters return their current count while new characters default to 0 before adding 1.",
-      "targetCode": "word = \"banana\"\ncounts = {}\nfor ch in word:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts[\"a\"], counts[\"n\"])",
+      "prompt_ko": "[블록 조립] 빈 Dog 클래스의 인스턴스 d에 d.name = \"Coco\" 속성을 부여하고 출력해보세요.",
+      "prompt_en": "[Block] Create a Dog instance d, assign d.name = \"Coco\", and print d.name.",
+      "hint_ko": "생성된 인스턴스 변수 뒤에 점(.)과 속성 이름을 적으면 해당 객체에 새로운 속성을 저장하거나 읽을 수 있습니다.",
+      "hint_en": "Use a dot (.) after the instance variable name to assign or read an attribute on that object.",
+      "targetCode": "class Dog:\n    pass\nd = Dog()\nd.name = \"Coco\"\nprint(d.name)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "3 2"
+          "expectedOutput": "Coco"
         }
       ]
     },
@@ -91,22 +95,17 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 단어들의 등장 횟수를 세고 \"py\"의 개수(없으면 0)를 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks with the safe lookup method to count words and print the count of \"py\".",
-      "hint_ko": "집계할 때와 결과를 읽을 때 모두 키가 없으면 기본값 0을 돌려주는 3글자 메서드 get을 사용하세요.",
-      "hint_en": "Call get in both blanks so absent words evaluate to 0.",
-      "templateCode": "words = input().split()\nfreq = {}\nfor w in words:\n    freq[w] = freq.§§§(w, 0) + 1\nprint(freq.§§§(\"py\", 0))",
-      "targetCode": "words = input().split()\nfreq = {}\nfor w in words:\n    freq[w] = freq.get(w, 0) + 1\nprint(freq.get(\"py\", 0))",
+      "prompt_ko": "[빈칸 채우기] 생성된 강아지 인스턴스에 이름과 나이 속성을 부여하고 나란히 출력해보세요.",
+      "prompt_en": "[Fill Blank] Instantiate the Dog class, assign its name and age attributes, and print them.",
+      "hint_ko": "설계도인 클래스로부터 실제 객체를 만들려면 클래스 이름 뒤에 빈 소괄호를 붙여 호출해야 합니다.",
+      "hint_en": "Call the class name followed by empty parentheses to create a new instance object.",
+      "templateCode": "class Dog:\n    pass\nd = §§§§§\nd.name = \"Bori\"\nd.age = 3\nprint(d.name, d.age)",
+      "targetCode": "class Dog:\n    pass\nd = Dog()\nd.name = \"Bori\"\nd.age = 3\nprint(d.name, d.age)",
       "testCases": [
         {
           "id": 1,
-          "input": "py js py py",
-          "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "go rust",
-          "expectedOutput": "0"
+          "input": "",
+          "expectedOutput": "Bori 3"
         }
       ]
     },
@@ -115,16 +114,16 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 5,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] .pop()으로 항목을 꺼내 삭제하고 .keys()와 .values()로 남은 키 목록과 값 합계를 구해보세요.",
-      "prompt_en": "[Block] Use .pop() to remove an entry, and use .keys() and .values() to inspect remaining keys and values.",
-      "hint_ko": ".keys() 뷰를 list()로 감싸면 일반 리스트가 되고, .values() 뷰를 sum()에 넘기면 모든 값을 바로 합산할 수 있습니다.",
-      "hint_en": "Wrap .keys() in list() to build a list of keys, and pass .values() directly into sum() to total the values.",
-      "targetCode": "scores = {\"kim\": 80, \"lee\": 90, \"park\": 70}\nout = scores.pop(\"park\")\nnames = list(scores.keys())\nprint(out, names, sum(scores.values()))",
+      "prompt_ko": "[블록 조립] 클래스 안에 def bark(self): 메서드를 정의하고 d.bark()로 호출해 Woof!를 출력해보세요.",
+      "prompt_en": "[Block] Define a method def bark(self): inside Dog and call d.bark() to print Woof!.",
+      "hint_ko": "클래스 내부에 정의하는 메서드는 항상 첫 번째 매개변수로 자기 자신을 가리키는 self를 받아야 합니다.",
+      "hint_en": "Every instance method defined inside a class must take self as its first parameter.",
+      "targetCode": "class Dog:\n    def bark(self):\n        print(\"Woof!\")\nd = Dog()\nd.bark()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "70 ['kim', 'lee'] 170"
+          "expectedOutput": "Woof!"
         }
       ]
     },
@@ -133,17 +132,17 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] patch를 병합한 cfg에서 정렬된 키 목록과 모든 설정값의 합계를 출력하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the methods to list cfg's keys for sorting and sum its values.",
-      "hint_ko": "사전의 키 목록을 돌려주는 keys 메서드와 값 목록을 돌려주는 values 메서드를 각각 호출하세요.",
-      "hint_en": "Call keys() inside sorted(...) and values() inside sum(...).",
-      "templateCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.update(patch)\nprint(sorted(cfg.§§§§()), sum(cfg.§§§§§§()))",
-      "targetCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.update(patch)\nprint(sorted(cfg.keys()), sum(cfg.values()))",
+      "prompt_ko": "[빈칸 채우기] 로봇 클래스의 인사 메서드가 정상 동작하도록 첫 번째 매개변수를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the required first parameter of the instance method so r.greet() prints Beep!.",
+      "hint_ko": "인스턴스 메서드의 첫 번째 매개변수 자리에는 호출한 객체 자신을 뜻하는 네 글자 표준 이름을 적습니다.",
+      "hint_en": "Write the four-letter standard parameter name representing the calling instance itself.",
+      "templateCode": "class Robot:\n    def greet(§§§§):\n        print(\"Beep!\")\nr = Robot()\nr.greet()",
+      "targetCode": "class Robot:\n    def greet(self):\n        print(\"Beep!\")\nr = Robot()\nr.greet()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['fps', 'hdr', 'vol'] 111"
+          "expectedOutput": "Beep!"
         }
       ]
     },
@@ -152,16 +151,16 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] dict() 생성자로 (키, 값) 튜플 리스트를 딕셔너리로 만들고 .update()로 병합해보세요.",
-      "prompt_en": "[Block] Build dictionaries from (key, value) pairs with dict() and merge them in place with .update().",
-      "hint_ko": ".update() 실행 시 이미 있던 키(\"hp\")는 새 값으로 덮어써지고, 없던 키(\"atk\")는 새로 추가됩니다.",
-      "hint_en": "During .update(), existing keys like \"hp\" are overwritten with the new value while new keys like \"atk\" are added.",
-      "targetCode": "p1 = dict([(\"hp\", 100), (\"mp\", 40)])\np2 = dict([(\"hp\", 120), (\"atk\", 25)])\np1.update(p2)\nprint(p1[\"hp\"], p1[\"mp\"], p1[\"atk\"])",
+      "prompt_ko": "[블록 조립] 메서드 안에서 self.name 속성을 읽어 f-string으로 \"Hi, Coco\"를 출력해보세요.",
+      "prompt_en": "[Block] Read self.name inside the intro method and print \"Hi, Coco\" using an f-string.",
+      "hint_ko": "메서드 내부에서는 첫 번째 매개변수 self 뒤에 점(.)을 찍어 해당 인스턴스의 속성에 접근합니다.",
+      "hint_en": "Inside a method, access the current instance's attributes using self followed by a dot.",
+      "targetCode": "class Dog:\n    def intro(self):\n        print(f\"Hi, {self.name}\")\nd = Dog()\nd.name = \"Coco\"\nd.intro()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "120 40 25"
+          "expectedOutput": "Hi, Coco"
         }
       ]
     },
@@ -170,40 +169,41 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] (키, 값) 쌍 리스트로 딕셔너리를 생성하는 함수와 \"exp\" 항목을 꺼내 삭제하는 메서드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the constructor function to build user and the method to remove and return \"exp\".",
-      "hint_ko": "4글자 생성자 함수 dict로 딕셔너리를 만들고, 항목을 꺼내 지우는 3글자 메서드 pop을 쓰세요.",
-      "hint_en": "Use dict first and pop second.",
-      "templateCode": "pairs = [(\"id\", 7), (\"lv\", 3), (\"exp\", 50)]\nuser = §§§§(pairs)\ndropped = user.§§§(\"exp\")\nprint(dropped, list(user.keys()))",
-      "targetCode": "pairs = [(\"id\", 7), (\"lv\", 3), (\"exp\", 50)]\nuser = dict(pairs)\ndropped = user.pop(\"exp\")\nprint(dropped, list(user.keys()))",
+      "prompt_ko": "[빈칸 채우기] 플레이어 객체의 이름과 레벨이 f-string으로 출력되도록 메서드 내부의 속성 접근자를 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the attribute access inside show() so it prints the player's name and level.",
+      "hint_ko": "메서드 안에서 현재 인스턴스 자신의 속성을 읽을 때는 첫 번째 매개변수 이름 뒤에 점을 붙여 참조합니다.",
+      "hint_en": "Reference the current instance inside the method using its first parameter before the dot.",
+      "templateCode": "class Player:\n    lv = 1\n    def show(self):\n        print(f\"{§§§§.id}:Lv.{self.lv}\")\np = Player()\np.id = \"Ace\"\np.show()",
+      "targetCode": "class Player:\n    lv = 1\n    def show(self):\n        print(f\"{self.id}:Lv.{self.lv}\")\np = Player()\np.id = \"Ace\"\np.show()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "50 ['id', 'lv']"
+          "expectedOutput": "Ace:Lv.1"
         }
       ]
     },
     {
       "id": 9,
       "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] .get(k) 반환값이 None인지 if res is None:으로 검사해 분기하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Call ranks.get(k) and branch with if res is None: to handle missing keys.",
-      "hint_ko": "None인지 확인할 때는 등호(==) 대신 객체 동일성 연산자인 is None을 사용하는 것이 파이썬 표준 관례입니다.",
-      "hint_en": "Checking for None with is None is the standard Python idiom after a default-free .get() lookup.",
-      "targetCode": "ranks = {\"gold\": 1, \"silver\": 2}\nk = input()\nres = ranks.get(k)\nif res is None:\n    print(\"unranked\")\nelse:\n    print(f\"Rank:{res}\")",
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 배지 클래스를 선언하고, 자기 자신의 제목 속성을 대괄호 서식으로 출력하는 메서드를 완성한 뒤 호출해보세요.",
+      "prompt_en": "[Fill Blank] Complete the blueprint declaration, the instance attribute access in display(), and the method call.",
+      "hint_ko": "설계도 선언 키워드, 메서드 내부에서 객체 자신을 가리키는 참조 변수, 그리고 인스턴스 메서드 호출식을 차례로 확인하세요.",
+      "hint_en": "Check the blueprint definition keyword, the instance self-reference inside the method, and the method call on the instance.",
+      "templateCode": "§§§§§ Badge:\n    def display(self):\n        print(f\"[{§§§§.title}]\")\nb = Badge()\nb.title = input()\nb.§§§§§§§§§",
+      "targetCode": "class Badge:\n    def display(self):\n        print(f\"[{self.title}]\")\nb = Badge()\nb.title = input()\nb.display()",
       "testCases": [
         {
           "id": 1,
-          "input": "gold",
-          "expectedOutput": "Rank:1"
+          "input": "VIP",
+          "expectedOutput": "[VIP]"
         },
         {
           "id": 2,
-          "input": "bronze",
-          "expectedOutput": "unranked"
+          "input": "GOLD",
+          "expectedOutput": "[GOLD]"
         }
       ]
     },
@@ -211,23 +211,18 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 10,
       "step": 10,
       "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 키가 bag에 있으면 꺼내 삭제한 값과 남은 값들의 합을 출력하도록 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] If k is in bag, pop its value and print it with the sum of remaining values.",
-      "hint_ko": "첫 빈칸에는 항목을 꺼내 삭제하는 pop을, 둘째 빈칸에는 값 목록을 돌려주는 values를 적으세요.",
-      "hint_en": "Call pop on line 4 and values on line 5.",
-      "templateCode": "bag = dict([(\"coin\", 10), (\"gem\", 25)])\nk = input()\nif k in bag:\n    val = bag.§§§(k)\n    print(val, sum(bag.§§§§§§()))\nelse:\n    print(0, sum(bag.values()))",
-      "targetCode": "bag = dict([(\"coin\", 10), (\"gem\", 25)])\nk = input()\nif k in bag:\n    val = bag.pop(k)\n    print(val, sum(bag.values()))\nelse:\n    print(0, sum(bag.values()))",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 클래스 내부 메서드를 호출했을 때 매개변수 개수가 맞지 않아 발생하는 에러를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the method definition inside Alarm so calling a.ring() does not raise a TypeError.",
+      "hint_ko": "인스턴스를 통해 메서드를 호출하면 파이썬이 객체 자신을 첫 번째 인자로 자동 전달하므로 매개변수 선언이 필요합니다.",
+      "hint_en": "Python automatically passes the instance as the first argument when calling a method, so the parameter list must accept it.",
+      "templateCode": "class Alarm:\n    def ring():\n        print(\"Wake up!\")\na = Alarm()\na.ring()",
+      "targetCode": "class Alarm:\n    def ring(self):\n        print(\"Wake up!\")\na = Alarm()\na.ring()",
       "testCases": [
         {
           "id": 1,
-          "input": "coin",
-          "expectedOutput": "10 25"
-        },
-        {
-          "id": 2,
-          "input": "ring",
-          "expectedOutput": "0 35"
+          "input": "",
+          "expectedOutput": "Wake up!"
         }
       ]
     },
@@ -236,17 +231,17 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 처음 등장한 글자의 기본값이 1로 잘못 설정되어 개수가 1씩 더 나오는 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the default argument in counts.get(ch, 1) so unseen characters start from 0 before adding 1.",
-      "hint_ko": "처음 나온 글자는 이전 개수가 0이어야 거기에 1을 더했을 때 1이 되므로 .get(ch, 0)으로 수정하세요.",
-      "hint_en": "Change the fallback value in counts.get(ch, 1) from 1 to 0.",
-      "templateCode": "text = \"abba\"\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 1) + 1\nprint(counts[\"a\"], counts[\"b\"])",
-      "targetCode": "text = \"abba\"\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts[\"a\"], counts[\"b\"])",
+      "prompt_ko": "[틀린 곳 수정] 클래스로부터 실제 인스턴스를 생성하지 않고 설계도 자체를 대입해 메서드가 실행되지 않는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the bug where Lamp is assigned without instantiation so l.turn_on() works properly.",
+      "hint_ko": "클래스 이름만 적으면 설계도 자체를 가리키므로, 실제 인스턴스 객체를 생성하려면 호출 괄호가 있어야 합니다.",
+      "hint_en": "Writing just the class name refers to the class itself; add parentheses to create an instance object.",
+      "templateCode": "class Lamp:\n    power = 10\n    def turn_on(self):\n        print(f\"ON:{self.power * 2}W\")\nl = Lamp\nl.turn_on()",
+      "targetCode": "class Lamp:\n    power = 10\n    def turn_on(self):\n        print(f\"ON:{self.power * 2}W\")\nl = Lamp()\nl.turn_on()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "2 2"
+          "expectedOutput": "ON:20W"
         }
       ]
     },
@@ -254,18 +249,18 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "id": 12,
       "step": 12,
       "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 딕셔너리에서 \"pen\"을 삭제하지 않고 값만 조회해야 하는데 .pop()을 쓴 버그를 고쳐 5 2를 출력해보세요.",
-      "prompt_en": "[Fix Bug] Replace .pop(\"pen\") with .get(\"pen\") so \"pen\" is looked up without removing it from stock.",
-      "hint_ko": ".pop()은 항목을 삭제하므로 딕셔너리를 유지한 채 값만 가져오려면 .get() 메서드를 사용해야 합니다.",
-      "hint_en": "Use stock.get(\"pen\") instead of stock.pop(\"pen\") to preserve the entry.",
-      "templateCode": "stock = {\"pen\": 5, \"book\": 3}\ncnt = stock.pop(\"pen\")\nprint(cnt, len(stock))",
-      "targetCode": "stock = {\"pen\": 5, \"book\": 3}\ncnt = stock.get(\"pen\")\nprint(cnt, len(stock))",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] Knight 클래스의 인스턴스를 생성해 변수 k에 저장하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that creates an instance of Knight and assigns it to variable k.",
+      "hint_ko": "변수 이름 오른쪽에 대입 연산자와 클래스 호출식을 적어 새로운 인스턴스를 만드세요.",
+      "hint_en": "Assign the result of calling the class with empty parentheses to variable k.",
+      "templateCode": "class Knight:\n    rank = \"S\"\n§§§§§§§§§§§§\nk.name = \"Arthur\"\nprint(f\"{k.name}-{k.rank}\")",
+      "targetCode": "class Knight:\n    rank = \"S\"\nk = Knight()\nk.name = \"Arthur\"\nprint(f\"{k.name}-{k.rank}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "5 2"
+          "expectedOutput": "Arthur-S"
         }
       ]
     },
@@ -274,36 +269,42 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 딕셔너리 sales의 모든 값(.values())의 총합을 구해 변수 total에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Sum all values of sales using sum(sales.values()) and assign the result to total.",
-      "hint_ko": "total = sum(sales.values()) 형태로 모든 매출 값의 합계를 변수 total에 대입하세요.",
-      "hint_en": "Write total = sum(sales.values()).",
-      "templateCode": "sales = {\"mon\": 120, \"tue\": 80, \"wed\": 150}\nsales.update({\"tue\": 100})\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)",
-      "targetCode": "sales = {\"mon\": 120, \"tue\": 80, \"wed\": 150}\nsales.update({\"tue\": 100})\ntotal = sum(sales.values())\nprint(total)",
+      "prompt_ko": "[한 줄 완성] 생성된 카운터 인스턴스 c의 report 메서드를 호출하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that calls the report method on instance c.",
+      "hint_ko": "인스턴스 변수 뒤에 점(.)을 찍고 메서드 이름과 빈 소괄호를 붙여 실행하세요.",
+      "hint_en": "Use dot notation on instance c followed by the method name and empty parentheses.",
+      "templateCode": "class Counter:\n    step = 5\n    def report(self):\n        print(self.count * self.step)\nc = Counter()\nc.count = 4\n§§§§§§§§§§",
+      "targetCode": "class Counter:\n    step = 5\n    def report(self):\n        print(self.count * self.step)\nc = Counter()\nc.count = 4\nc.report()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "370"
+          "expectedOutput": "20"
         }
       ]
     },
     {
       "id": 14,
       "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] (키, 값) 튜플 리스트 pairs를 dict() 생성자로 변환해 변수 pt에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Convert pairs into a dictionary using dict(pairs) and assign it to pt.",
-      "hint_ko": "pt = dict(pairs) 형태로 딕셔너리 생성자 호출 결과를 변수 pt에 저장하세요.",
-      "hint_en": "Write pt = dict(pairs).",
-      "templateCode": "pairs = [(\"x\", 10), (\"y\", 20)]\n§§§§§§§§§§§§§§§§\nprint(pt[\"x\"] + pt[\"y\"])",
-      "targetCode": "pairs = [(\"x\", 10), (\"y\", 20)]\npt = dict(pairs)\nprint(pt[\"x\"] + pt[\"y\"])",
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 두 개의 객체에 각각 다른 속성값을 대입하고 메서드를 호출했을 때의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output when two instances receive different attribute values and call tag().",
+      "hint_ko": "각 인스턴스의 self는 메서드를 호출한 바로 그 객체 자신을 가리키므로 서로의 속성이 섞이지 않습니다.",
+      "hint_en": "Each instance's self refers to the specific object on which the method was called.",
+      "targetCode": "class Note:\n    prefix = \"#\"\n    def tag(self):\n        print(f\"{self.prefix}{self.word}\")\na = Note()\nb = Note()\na.word = \"Py\"\nb.word = \"Code\"\nb.prefix = \"@\"\na.tag()\nb.tag()",
+      "choices": [
+        "#Py\n@Code",
+        "@Py\n@Code",
+        "#Py\n#Code",
+        "#Code\n@Py"
+      ],
+      "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "30"
+          "expectedOutput": "#Py\n@Code"
         }
       ]
     },
@@ -312,23 +313,23 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 dict(), .update(), .pop(), .get() 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following dictionary code.",
-      "hint_ko": "병합 시 \"b\"가 5로 덮어써지고, \"a\"를 .pop()으로 삭제한 뒤 다시 .get(\"a\", 100)으로 조회할 때 반환값을 확인하세요.",
-      "hint_en": "Trace how update sets \"b\" to 5, pop removes \"a\" (10), and get(\"a\", 100) returns the fallback 100.",
-      "targetCode": "d = dict([(\"a\", 10), (\"b\", 20)])\nd.update({\"b\": 5, \"c\": 15})\nx = d.pop(\"a\")\ny = d.get(\"a\", 100)\nprint(x, y, sum(d.values()))",
+      "prompt_ko": "[출력 결과 예측] 반복문과 조건문, 인스턴스 속성 연산이 결합된 다음 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output of the code combining a loop, conditional check, and instance attribute updates.",
+      "hint_ko": "리스트를 순회하며 짝수일 때만 객체의 보너스 배율 속성이 곱해져 누적되는 과정을 추적해보세요.",
+      "hint_en": "Trace which numbers in the list are even and multiply them by the instance's rate attribute before adding.",
+      "targetCode": "class ScoreBox:\n    rate = 2\n    def calc(self):\n        return self.base + self.bonus\nsb = ScoreBox()\nsb.base = 10\nsb.bonus = 0\nfor n in [3, 4, 5, 6]:\n    if n % 2 == 0:\n        sb.bonus += n * sb.rate\nprint(sb.calc())",
       "choices": [
-        "10 100 20",
-        "10 10 30",
-        "10 None 20",
-        "20 100 20"
+        "20",
+        "30",
+        "46",
+        "28"
       ],
-      "correctChoiceIndex": 0,
+      "correctChoiceIndex": 1,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "10 100 20"
+          "expectedOutput": "30"
         }
       ]
     }

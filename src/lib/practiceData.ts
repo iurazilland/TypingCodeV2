@@ -86,12 +86,38 @@ import { PYTHON_LEVEL_84 } from '@/data/curriculum/python_basic/level84';
 import { PYTHON_LEVEL_85 } from '@/data/curriculum/python_basic/level85';
 import { PYTHON_LEVEL_86 } from '@/data/curriculum/python_basic/level86';
 import { PYTHON_LEVEL_87 } from '@/data/curriculum/python_basic/level87';
+import { PYTHON_LEVEL_88 } from '@/data/curriculum/python_basic/level88';
+import { PYTHON_LEVEL_89 } from '@/data/curriculum/python_basic/level89';
+import { PYTHON_LEVEL_90 } from '@/data/curriculum/python_basic/level90';
+import { PYTHON_LEVEL_91 } from '@/data/curriculum/python_basic/level91';
+import { PYTHON_LEVEL_92 } from '@/data/curriculum/python_basic/level92';
+import { PYTHON_LEVEL_93 } from '@/data/curriculum/python_basic/level93';
+import { PYTHON_LEVEL_94 } from '@/data/curriculum/python_basic/level94';
+import { PYTHON_LEVEL_95 } from '@/data/curriculum/python_basic/level95';
+import { PYTHON_LEVEL_96 } from '@/data/curriculum/python_basic/level96';
+import { PYTHON_LEVEL_97 } from '@/data/curriculum/python_basic/level97';
+import { PYTHON_LEVEL_98 } from '@/data/curriculum/python_basic/level98';
+import { PYTHON_LEVEL_99 } from '@/data/curriculum/python_basic/level99';
+import { PYTHON_LEVEL_100 } from '@/data/curriculum/python_basic/level100';
+import { PYTHON_LEVEL_101 } from '@/data/curriculum/python_basic/level101';
+import { PYTHON_LEVEL_102 } from '@/data/curriculum/python_basic/level102';
+import { PYTHON_LEVEL_103 } from '@/data/curriculum/python_basic/level103';
+import { PYTHON_LEVEL_104 } from '@/data/curriculum/python_basic/level104';
+import { PYTHON_LEVEL_105 } from '@/data/curriculum/python_basic/level105';
+import { PYTHON_LEVEL_106 } from '@/data/curriculum/python_basic/level106';
+import { PYTHON_LEVEL_107 } from '@/data/curriculum/python_basic/level107';
+import { PYTHON_LEVEL_108 } from '@/data/curriculum/python_basic/level108';
+import { PYTHON_LEVEL_109 } from '@/data/curriculum/python_basic/level109';
+import { PYTHON_LEVEL_110 } from '@/data/curriculum/python_basic/level110';
+import { PYTHON_LEVEL_111 } from '@/data/curriculum/python_basic/level111';
+import { PYTHON_LEVEL_112 } from '@/data/curriculum/python_basic/level112';
+import { PYTHON_LEVEL_113 } from '@/data/curriculum/python_basic/level113';
 
 // ============================================================================
-// [Part 1] 핵심 개념 기초편 (Core Concept Foundations — Lv 1~63)
+// [Part 1] 핵심 개념 기초편 (Core Concept Foundations — Lv 1~82)
 // ============================================================================
 
-// Section 1: 기초 출력과 연산 (Lv 1~7: 15단계 / Lv 8 종합 문제풀이: 10단계)
+// Section 1: 기초 출력과 연산 (Lv 1~9: 15단계 / Lv 10 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_1: PracticeRound = PYTHON_LEVEL_1;
 export const PYTHON_BASIC_ROUND_2: PracticeRound = PYTHON_LEVEL_2;
 export const PYTHON_BASIC_ROUND_3: PracticeRound = PYTHON_LEVEL_3;
@@ -100,27 +126,25 @@ export const PYTHON_BASIC_ROUND_5: PracticeRound = PYTHON_LEVEL_5;
 export const PYTHON_BASIC_ROUND_6: PracticeRound = PYTHON_LEVEL_6;
 export const PYTHON_BASIC_ROUND_7: PracticeRound = PYTHON_LEVEL_7;
 export const PYTHON_BASIC_ROUND_8: PracticeRound = PYTHON_LEVEL_8;
-
-// Section 2: 변수, 자료형과 사용자 입력 (Lv 9~14: 15단계 / Lv 15 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_9: PracticeRound = PYTHON_LEVEL_9;
 export const PYTHON_BASIC_ROUND_10: PracticeRound = PYTHON_LEVEL_10;
+
+// Section 2: 주석, 변수와 사용자 입력 (Lv 11~19: 15단계 / Lv 20 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_11: PracticeRound = PYTHON_LEVEL_11;
 export const PYTHON_BASIC_ROUND_12: PracticeRound = PYTHON_LEVEL_12;
 export const PYTHON_BASIC_ROUND_13: PracticeRound = PYTHON_LEVEL_13;
 export const PYTHON_BASIC_ROUND_14: PracticeRound = PYTHON_LEVEL_14;
 export const PYTHON_BASIC_ROUND_15: PracticeRound = PYTHON_LEVEL_15;
-
-// Section 3: 불리언, 논리 연산과 조건문 기초 (Lv 16~22: 15단계 / Lv 23 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_16: PracticeRound = PYTHON_LEVEL_16;
 export const PYTHON_BASIC_ROUND_17: PracticeRound = PYTHON_LEVEL_17;
 export const PYTHON_BASIC_ROUND_18: PracticeRound = PYTHON_LEVEL_18;
 export const PYTHON_BASIC_ROUND_19: PracticeRound = PYTHON_LEVEL_19;
 export const PYTHON_BASIC_ROUND_20: PracticeRound = PYTHON_LEVEL_20;
+
+// Section 3: 불리언, 논리 연산과 조건문 기초 (Lv 21~29: 15단계 / Lv 30 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_21: PracticeRound = PYTHON_LEVEL_21;
 export const PYTHON_BASIC_ROUND_22: PracticeRound = PYTHON_LEVEL_22;
 export const PYTHON_BASIC_ROUND_23: PracticeRound = PYTHON_LEVEL_23;
-
-// Section 4: 반복문과 흐름 제어 기초 (Lv 24~30: 15단계 / Lv 31 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_24: PracticeRound = PYTHON_LEVEL_24;
 export const PYTHON_BASIC_ROUND_25: PracticeRound = PYTHON_LEVEL_25;
 export const PYTHON_BASIC_ROUND_26: PracticeRound = PYTHON_LEVEL_26;
@@ -128,87 +152,115 @@ export const PYTHON_BASIC_ROUND_27: PracticeRound = PYTHON_LEVEL_27;
 export const PYTHON_BASIC_ROUND_28: PracticeRound = PYTHON_LEVEL_28;
 export const PYTHON_BASIC_ROUND_29: PracticeRound = PYTHON_LEVEL_29;
 export const PYTHON_BASIC_ROUND_30: PracticeRound = PYTHON_LEVEL_30;
-export const PYTHON_BASIC_ROUND_31: PracticeRound = PYTHON_LEVEL_31;
 
-// Section 5: 문자열 필수 기초 (Lv 32~36: 15단계 / Lv 37 종합 문제풀이: 10단계)
+// Section 4: 반복문과 흐름 제어 기초 (Lv 31~39: 15단계 / Lv 40 종합 문제풀이: 10단계)
+export const PYTHON_BASIC_ROUND_31: PracticeRound = PYTHON_LEVEL_31;
 export const PYTHON_BASIC_ROUND_32: PracticeRound = PYTHON_LEVEL_32;
 export const PYTHON_BASIC_ROUND_33: PracticeRound = PYTHON_LEVEL_33;
 export const PYTHON_BASIC_ROUND_34: PracticeRound = PYTHON_LEVEL_34;
 export const PYTHON_BASIC_ROUND_35: PracticeRound = PYTHON_LEVEL_35;
 export const PYTHON_BASIC_ROUND_36: PracticeRound = PYTHON_LEVEL_36;
 export const PYTHON_BASIC_ROUND_37: PracticeRound = PYTHON_LEVEL_37;
-
-// Section 6: 리스트(List) 필수 기초 (Lv 38~42: 15단계 / Lv 43 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_38: PracticeRound = PYTHON_LEVEL_38;
 export const PYTHON_BASIC_ROUND_39: PracticeRound = PYTHON_LEVEL_39;
 export const PYTHON_BASIC_ROUND_40: PracticeRound = PYTHON_LEVEL_40;
+
+// Section 5: 리스트(List) 필수 기초 (Lv 41~47: 15단계 / Lv 48 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_41: PracticeRound = PYTHON_LEVEL_41;
 export const PYTHON_BASIC_ROUND_42: PracticeRound = PYTHON_LEVEL_42;
 export const PYTHON_BASIC_ROUND_43: PracticeRound = PYTHON_LEVEL_43;
-
-// Section 7: None, 튜플, 딕셔너리, 집합 필수 기초 (Lv 44~48: 15단계 / Lv 49 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_44: PracticeRound = PYTHON_LEVEL_44;
 export const PYTHON_BASIC_ROUND_45: PracticeRound = PYTHON_LEVEL_45;
 export const PYTHON_BASIC_ROUND_46: PracticeRound = PYTHON_LEVEL_46;
 export const PYTHON_BASIC_ROUND_47: PracticeRound = PYTHON_LEVEL_47;
 export const PYTHON_BASIC_ROUND_48: PracticeRound = PYTHON_LEVEL_48;
-export const PYTHON_BASIC_ROUND_49: PracticeRound = PYTHON_LEVEL_49;
 
-// Section 8: 함수(def) 필수 기초 (Lv 50~53: 15단계 / Lv 54 종합 문제풀이: 10단계)
+// Section 6: 문자열(String) 필수 기초 (Lv 49~55: 15단계 / Lv 56 종합 문제풀이: 10단계)
+export const PYTHON_BASIC_ROUND_49: PracticeRound = PYTHON_LEVEL_49;
 export const PYTHON_BASIC_ROUND_50: PracticeRound = PYTHON_LEVEL_50;
 export const PYTHON_BASIC_ROUND_51: PracticeRound = PYTHON_LEVEL_51;
 export const PYTHON_BASIC_ROUND_52: PracticeRound = PYTHON_LEVEL_52;
 export const PYTHON_BASIC_ROUND_53: PracticeRound = PYTHON_LEVEL_53;
 export const PYTHON_BASIC_ROUND_54: PracticeRound = PYTHON_LEVEL_54;
-
-// Section 9: 예외 처리(try - except) 필수 기초 (Lv 55~57: 15단계 / Lv 58 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_55: PracticeRound = PYTHON_LEVEL_55;
 export const PYTHON_BASIC_ROUND_56: PracticeRound = PYTHON_LEVEL_56;
+
+// Section 7: 튜플·None·딕셔너리·집합 필수 기초 (Lv 57~63: 15단계 / Lv 64 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_57: PracticeRound = PYTHON_LEVEL_57;
 export const PYTHON_BASIC_ROUND_58: PracticeRound = PYTHON_LEVEL_58;
-
-// Section 10: 클래스와 객체(class) 필수 기초 (Lv 59~62: 15단계 / Lv 63 Part 1 완주 종합: 10단계)
 export const PYTHON_BASIC_ROUND_59: PracticeRound = PYTHON_LEVEL_59;
 export const PYTHON_BASIC_ROUND_60: PracticeRound = PYTHON_LEVEL_60;
 export const PYTHON_BASIC_ROUND_61: PracticeRound = PYTHON_LEVEL_61;
 export const PYTHON_BASIC_ROUND_62: PracticeRound = PYTHON_LEVEL_62;
 export const PYTHON_BASIC_ROUND_63: PracticeRound = PYTHON_LEVEL_63;
-
-// ============================================================================
-// [Part 2] 반복 심화 & 부가 함수·기능 확장편 (Spiral Review & Extensions — Lv 64~87)
-// ============================================================================
-
-// Section 11: 문자열 반복 복습 & 부가 메서드·서식 확장 (Lv 64~67: 15단계 / Lv 68 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_64: PracticeRound = PYTHON_LEVEL_64;
+
+// Section 8: 함수(def) 필수 기초 (Lv 65~70: 15단계 / Lv 71 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_65: PracticeRound = PYTHON_LEVEL_65;
 export const PYTHON_BASIC_ROUND_66: PracticeRound = PYTHON_LEVEL_66;
 export const PYTHON_BASIC_ROUND_67: PracticeRound = PYTHON_LEVEL_67;
 export const PYTHON_BASIC_ROUND_68: PracticeRound = PYTHON_LEVEL_68;
-
-// Section 12: 자료구조 반복 복습 & 부가 메서드·2차원·컴프리헨션 (Lv 69~75: 15단계 / Lv 76 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_69: PracticeRound = PYTHON_LEVEL_69;
 export const PYTHON_BASIC_ROUND_70: PracticeRound = PYTHON_LEVEL_70;
 export const PYTHON_BASIC_ROUND_71: PracticeRound = PYTHON_LEVEL_71;
+
+// Section 9: 클래스(class)와 객체 필수 기초 (Lv 72~76: 15단계 / Lv 77 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_72: PracticeRound = PYTHON_LEVEL_72;
 export const PYTHON_BASIC_ROUND_73: PracticeRound = PYTHON_LEVEL_73;
 export const PYTHON_BASIC_ROUND_74: PracticeRound = PYTHON_LEVEL_74;
 export const PYTHON_BASIC_ROUND_75: PracticeRound = PYTHON_LEVEL_75;
 export const PYTHON_BASIC_ROUND_76: PracticeRound = PYTHON_LEVEL_76;
-
-// Section 13: 실용·부가 내장 함수 & 가변 인자·lambda 확장 (Lv 77~81: 15단계 / Lv 82 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_77: PracticeRound = PYTHON_LEVEL_77;
+
+// Section 10: 예외 처리(try - except) 필수 기초 (Lv 78~81: 15단계 / Lv 82 Part 1 완주 종합: 10단계)
 export const PYTHON_BASIC_ROUND_78: PracticeRound = PYTHON_LEVEL_78;
 export const PYTHON_BASIC_ROUND_79: PracticeRound = PYTHON_LEVEL_79;
 export const PYTHON_BASIC_ROUND_80: PracticeRound = PYTHON_LEVEL_80;
 export const PYTHON_BASIC_ROUND_81: PracticeRound = PYTHON_LEVEL_81;
 export const PYTHON_BASIC_ROUND_82: PracticeRound = PYTHON_LEVEL_82;
 
-// Section 14: 예외 처리·클래스 심화 기초 & 전 과정 마스터 (Lv 83~86: 15단계 / Lv 87 파이널 마스터: 10단계)
+// ============================================================================
+// [Part 2] 반복 심화 & 부가 함수·기능 확장편 (Spiral Review & Extensions — Lv 83~113)
+// ============================================================================
+
+// Section 11: [반복·확장 1] 컬렉션 심화, 복사와 컴프리헨션 (Lv 83~91: 15단계 / Lv 92 종합 문제풀이: 10단계)
 export const PYTHON_BASIC_ROUND_83: PracticeRound = PYTHON_LEVEL_83;
 export const PYTHON_BASIC_ROUND_84: PracticeRound = PYTHON_LEVEL_84;
 export const PYTHON_BASIC_ROUND_85: PracticeRound = PYTHON_LEVEL_85;
 export const PYTHON_BASIC_ROUND_86: PracticeRound = PYTHON_LEVEL_86;
 export const PYTHON_BASIC_ROUND_87: PracticeRound = PYTHON_LEVEL_87;
+export const PYTHON_BASIC_ROUND_88: PracticeRound = PYTHON_LEVEL_88;
+export const PYTHON_BASIC_ROUND_89: PracticeRound = PYTHON_LEVEL_89;
+export const PYTHON_BASIC_ROUND_90: PracticeRound = PYTHON_LEVEL_90;
+export const PYTHON_BASIC_ROUND_91: PracticeRound = PYTHON_LEVEL_91;
+export const PYTHON_BASIC_ROUND_92: PracticeRound = PYTHON_LEVEL_92;
+
+// Section 12: [반복·확장 2] 문자열 심화 메서드와 서식 (Lv 93~98: 15단계 / Lv 99 종합 문제풀이: 10단계)
+export const PYTHON_BASIC_ROUND_93: PracticeRound = PYTHON_LEVEL_93;
+export const PYTHON_BASIC_ROUND_94: PracticeRound = PYTHON_LEVEL_94;
+export const PYTHON_BASIC_ROUND_95: PracticeRound = PYTHON_LEVEL_95;
+export const PYTHON_BASIC_ROUND_96: PracticeRound = PYTHON_LEVEL_96;
+export const PYTHON_BASIC_ROUND_97: PracticeRound = PYTHON_LEVEL_97;
+export const PYTHON_BASIC_ROUND_98: PracticeRound = PYTHON_LEVEL_98;
+export const PYTHON_BASIC_ROUND_99: PracticeRound = PYTHON_LEVEL_99;
+
+// Section 13: [반복·확장 3] 실용 내장 함수, lambda와 표준 모듈 (Lv 100~106: 15단계 / Lv 107 종합 문제풀이: 10단계)
+export const PYTHON_BASIC_ROUND_100: PracticeRound = PYTHON_LEVEL_100;
+export const PYTHON_BASIC_ROUND_101: PracticeRound = PYTHON_LEVEL_101;
+export const PYTHON_BASIC_ROUND_102: PracticeRound = PYTHON_LEVEL_102;
+export const PYTHON_BASIC_ROUND_103: PracticeRound = PYTHON_LEVEL_103;
+export const PYTHON_BASIC_ROUND_104: PracticeRound = PYTHON_LEVEL_104;
+export const PYTHON_BASIC_ROUND_105: PracticeRound = PYTHON_LEVEL_105;
+export const PYTHON_BASIC_ROUND_106: PracticeRound = PYTHON_LEVEL_106;
+export const PYTHON_BASIC_ROUND_107: PracticeRound = PYTHON_LEVEL_107;
+
+// Section 14: [반복·확장 4] 클래스 상속·예외 확장과 파이널 마스터 (Lv 108~112: 15단계 / Lv 113 파이널 마스터: 10단계)
+export const PYTHON_BASIC_ROUND_108: PracticeRound = PYTHON_LEVEL_108;
+export const PYTHON_BASIC_ROUND_109: PracticeRound = PYTHON_LEVEL_109;
+export const PYTHON_BASIC_ROUND_110: PracticeRound = PYTHON_LEVEL_110;
+export const PYTHON_BASIC_ROUND_111: PracticeRound = PYTHON_LEVEL_111;
+export const PYTHON_BASIC_ROUND_112: PracticeRound = PYTHON_LEVEL_112;
+export const PYTHON_BASIC_ROUND_113: PracticeRound = PYTHON_LEVEL_113;
 
 const ALL_PYTHON_BASIC_ROUNDS: PracticeRound[] = [
   PYTHON_BASIC_ROUND_1,
@@ -298,6 +350,32 @@ const ALL_PYTHON_BASIC_ROUNDS: PracticeRound[] = [
   PYTHON_BASIC_ROUND_85,
   PYTHON_BASIC_ROUND_86,
   PYTHON_BASIC_ROUND_87,
+  PYTHON_BASIC_ROUND_88,
+  PYTHON_BASIC_ROUND_89,
+  PYTHON_BASIC_ROUND_90,
+  PYTHON_BASIC_ROUND_91,
+  PYTHON_BASIC_ROUND_92,
+  PYTHON_BASIC_ROUND_93,
+  PYTHON_BASIC_ROUND_94,
+  PYTHON_BASIC_ROUND_95,
+  PYTHON_BASIC_ROUND_96,
+  PYTHON_BASIC_ROUND_97,
+  PYTHON_BASIC_ROUND_98,
+  PYTHON_BASIC_ROUND_99,
+  PYTHON_BASIC_ROUND_100,
+  PYTHON_BASIC_ROUND_101,
+  PYTHON_BASIC_ROUND_102,
+  PYTHON_BASIC_ROUND_103,
+  PYTHON_BASIC_ROUND_104,
+  PYTHON_BASIC_ROUND_105,
+  PYTHON_BASIC_ROUND_106,
+  PYTHON_BASIC_ROUND_107,
+  PYTHON_BASIC_ROUND_108,
+  PYTHON_BASIC_ROUND_109,
+  PYTHON_BASIC_ROUND_110,
+  PYTHON_BASIC_ROUND_111,
+  PYTHON_BASIC_ROUND_112,
+  PYTHON_BASIC_ROUND_113,
 ];
 
 // Map of rounds by language and round number

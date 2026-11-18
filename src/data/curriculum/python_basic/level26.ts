@@ -1,421 +1,345 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_26: PracticeRound = {
-  "id": "py-basic-r26",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 26,
-  "title_ko": "26레벨: for 반복문과 누적 연산",
-  "title_en": "Level 26: for Loops & Accumulator Pattern",
-  "description_ko": "누적 합계(+=), 누적 곱셈(*=), 개수 세기(+= 1) 패턴과 평균 계산을 실습합니다.",
-  "description_en": "Practice sum (+=), product (*=), and counter (+= 1) accumulators along with float averages.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "input",
-    "type",
-    "if",
-    "for_range",
-    "range"
-  ],
-  "questions": [
+  id: 'py-basic-r26',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 26,
+  title_ko: 'if 단일 조건문과 들여쓰기(4칸) 규칙',
+  title_en: 'Single if Statements & 4-Space Indentation',
+  description_ko: 'if 조건문 헤더의 콜론(:)과 4칸 들여쓰기 규칙, 블록 안팎의 실행 흐름 차이를 익힙니다.',
+  description_en: 'Master single if statements, trailing colons (:), 4-space indentation, and block execution flow.',
+  totalQuestions: 15,
+  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type', 'if'],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 누적 변수 total에 1부터 5까지 더한 합계를 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Assemble the blocks to accumulate the sum of 1..5 in total and print it.",
-      "hint_ko": "최종 합계 출력문은 반복이 모두 끝난 뒤 한 번만 실행되도록 for 블록 바깥 아래에 놓습니다.",
-      "hint_en": "Place the final print(total) outside below the for block so the sum is printed once after all iterations finish.",
-      "targetCode": "total = 0\nfor i in range(1, 6):\n    total += i\nprint(total)",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] if 조건문으로 score가 80 이상일 때만 "Pass"를 출력하는 블록을 조립해보세요.',
+      prompt_en: '[Block] Print "Pass" only when score >= 80 using an if statement.',
+      hint_ko: '조건식 score >= 80이 참이므로 if 블록 안쪽에 들여쓰기된 print("Pass")가 실행됩니다.',
+      hint_en: 'Because score >= 80 is True, the indented print("Pass") inside the if block runs.',
+      targetCode: 'score = 90\nif score >= 80:\n    print("Pass")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "15"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 초기값과 복합 대입 연산자를 채워 1부터 n까지의 합을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the initial sum value and compound operator to sum 1..n.",
-      "hint_ko": "더해도 값이 변하지 않는 출발 숫자로 초기화한 뒤, 덧셈 기호와 등호를 나란히 붙인 복합 대입 연산자로 누적해보세요.",
-      "hint_en": "Start the sum accumulator at the additive identity digit, then combine the plus sign and equals sign to add each i.",
-      "templateCode": "n = int(input())\ntotal = §\nfor i in range(1, n + 1):\n    total §§ i\nprint(total)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4",
-          "expectedOutput": "10"
+          id: 1,
+          input: '',
+          expectedOutput: 'Pass',
         },
-        {
-          "id": 2,
-          "input": "10",
-          "expectedOutput": "55"
-        },
-        {
-          "id": 3,
-          "input": "6",
-          "expectedOutput": "21"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] prod를 1로 초기화하고 1부터 4까지 차례로 곱해 출력하는 블록을 조립해보세요.",
-      "prompt_en": "[Block] Initialize prod = 1 and multiply 1..4 using *= inside the loop.",
-      "hint_ko": "초기값을 0으로 두면 어떤 수를 곱해도 계속 0이 되므로 곱셈 누적은 반드시 1에서 출발해야 합니다.",
-      "hint_en": "Starting at 0 would keep every product at 0, so a multiplication accumulator must start at 1.",
-      "targetCode": "prod = 1\nfor i in range(1, 5):\n    prod *= i\nprint(prod)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "24"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 곱셈 초기값과 복합 대입 연산자를 채워 1부터 n까지의 곱을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the initial product value and compound operator for 1..n.",
-      "hint_ko": "곱해도 값이 변하지 않는 한 자리 숫자로 시작하고, 별표와 등호를 나란히 붙인 복합 대입 연산자로 곱해보세요.",
-      "hint_en": "Start with the single digit that leaves any number unchanged when multiplied, then use the asterisk-equals operator.",
-      "templateCode": "n = int(input())\nprod = §\nfor i in range(1, n + 1):\n    prod §§ i\nprint(prod)",
-      "targetCode": "n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    prod *= i\nprint(prod)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "5",
-          "expectedOutput": "120"
-        },
-        {
-          "id": 2,
-          "input": "3",
-          "expectedOutput": "6"
-        },
-        {
-          "id": 3,
-          "input": "4",
-          "expectedOutput": "24"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] count += 1로 n 이하 3의 배수가 총 몇 개인지 세어 출력해보세요.",
-      "prompt_en": "[Block] Use count += 1 to count how many multiples of 3 exist up to n.",
-      "hint_ko": "range(3, n + 1, 3)이 3의 배수마다 한 번씩 돌면서 count를 1씩 증가시킵니다.",
-      "hint_en": "range(3, n + 1, 3) steps through each multiple of 3 and increments count by 1 each time.",
-      "targetCode": "n = int(input())\ncount = 0\nfor i in range(3, n + 1, 3):\n    count += 1\nprint(count)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "10",
-          "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "15",
-          "expectedOutput": "5"
-        },
-        {
-          "id": 3,
-          "input": "5",
-          "expectedOutput": "1"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 복합 대입 연산자를 채워 n 이하 짝수의 개수와 합계를 함께 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the compound assignment operator to print the count and sum of evens.",
-      "hint_ko": "짝수를 만날 때마다 개수를 1씩 늘리도록 덧셈 기호와 등호를 나란히 붙인 복합 대입 연산자를 채워보세요.",
-      "hint_en": "Combine the plus sign and equals sign into a compound assignment operator to increment the count each turn.",
-      "templateCode": "n = int(input())\ntotal = 0\ncount = 0\nfor i in range(2, n + 1, 2):\n    total += i\n    count §§ 1\nprint(count, total)",
-      "targetCode": "n = int(input())\ntotal = 0\ncount = 0\nfor i in range(2, n + 1, 2):\n    total += i\n    count += 1\nprint(count, total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "6",
-          "expectedOutput": "3 12"
-        },
-        {
-          "id": 2,
-          "input": "10",
-          "expectedOutput": "5 30"
-        },
-        {
-          "id": 3,
-          "input": "4",
-          "expectedOutput": "2 6"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] n개의 입력을 반복 합산한 뒤 평균(total / n)을 출력해보세요.",
-      "prompt_en": "[Block] Sum n integer inputs inside a for loop and print total / n.",
-      "hint_ko": "나눗셈 연산자(/)는 나누어떨어질 때에도 소수점이 포함된 실수(float) 형태로 평균을 반환합니다.",
-      "hint_en": "The division operator (/) always returns the average as a floating-point number (float).",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    x = int(input())\n    total += x\nprint(total / n)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "2\n3\n5",
-          "expectedOutput": "4.0"
-        },
-        {
-          "id": 2,
-          "input": "4\n1\n2\n3\n6",
-          "expectedOutput": "3.0"
-        },
-        {
-          "id": 3,
-          "input": "2\n2\n5",
-          "expectedOutput": "3.5"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 정수 변환 함수와 나눗셈 기호를 채워 n개 정수의 평균을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the int function and division operator to print the average.",
-      "hint_ko": "정수(integer)의 앞 세 글자를 딴 변환 함수와, 소수점 결과를 내는 슬래시 나눗셈 기호를 채워보세요.",
-      "hint_en": "Use the conversion function from the first 3 letters of \"integer\" and the single-slash division symbol.",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += §§§(input())\nprint(total § n)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\nprint(total / n)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "2\n10\n20",
-          "expectedOutput": "15.0"
-        },
-        {
-          "id": 2,
-          "input": "4\n2\n4\n6\n8",
-          "expectedOutput": "5.0"
-        },
-        {
-          "id": 3,
-          "input": "2\n1\n4",
-          "expectedOutput": "2.5"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 반복 합산 후 100 이상이면 Goal, 미만이면 Short와 합계를 출력해보세요.",
-      "prompt_en": "[Block] Sum n inputs, then branch with if-else to print Goal or Short.",
-      "hint_ko": "정수 합계 total을 문자열과 +로 이어 붙이기 위해 str(total)로 먼저 변환합니다.",
-      "hint_en": "Convert the integer sum total with str(total) before concatenating it onto a label string with +.",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\nres = str(total)\nif total >= 100:\n    print(\"Goal:\" + res)\nelse:\n    print(\"Short:\" + res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "3\n40\n35\n30",
-          "expectedOutput": "Goal:105"
-        },
-        {
-          "id": 2,
-          "input": "2\n50\n40",
-          "expectedOutput": "Short:90"
-        },
-        {
-          "id": 3,
-          "input": "2\n60\n40",
-          "expectedOutput": "Goal:100"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 문자열 변환 함수와 분기 키워드를 채워 n >= 3이면 ID-코드, 아니면 S-코드를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in str and else to print ID-code when n >= 3 or S-code otherwise.",
-      "hint_ko": "넷째 줄에는 문자열 변환 함수 str을, 일곱째 줄에는 나머지 분기 키워드 else를 채워보세요.",
-      "hint_en": "Wrap i in str() on line 4, and write else on line 7.",
-      "templateCode": "n = int(input())\ncode = \"\"\nfor i in range(1, n + 1):\n    code += §§§(i)\nif n >= 3:\n    print(\"ID-\" + code)\n§§§§:\n    print(\"S-\" + code)",
-      "targetCode": "n = int(input())\ncode = \"\"\nfor i in range(1, n + 1):\n    code += str(i)\nif n >= 3:\n    print(\"ID-\" + code)\nelse:\n    print(\"S-\" + code)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4",
-          "expectedOutput": "ID-1234"
-        },
-        {
-          "id": 2,
-          "input": "3",
-          "expectedOutput": "ID-123"
-        },
-        {
-          "id": 3,
-          "input": "2",
-          "expectedOutput": "S-12"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 누적 곱셈 변수의 초기값을 고쳐 1부터 n까지의 곱이 올바르게 출력되게 해보세요.",
-      "prompt_en": "[Fix Bug] Fix the accumulator initial value so the product of 1..n does not evaluate to 0.",
-      "hint_ko": "곱셈 누적 변수가 0에서 출발하고 있어 뒤에 어떤 숫자를 곱해도 결과가 계속 0으로 고정되는 버그입니다.",
-      "hint_en": "Starting a product accumulator at zero forces every multiplication result to remain zero; fix the initial value.",
-      "templateCode": "n = int(input())\nprod = 0\nfor i in range(1, n + 1):\n    prod *= i\nprint(prod)",
-      "targetCode": "n = int(input())\nprod = 1\nfor i in range(1, n + 1):\n    prod *= i\nprint(prod)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4",
-          "expectedOutput": "24"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "120"
-        },
-        {
-          "id": 3,
-          "input": "3",
-          "expectedOutput": "6"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 1부터 n까지 더해 합계가 출력되도록 잘못된 복합 대입 연산자를 수정해보세요.",
-      "prompt_en": "[Fix Bug] Fix the compound assignment operator so 1 through n are added onto total.",
-      "hint_ko": "현재 total -= i로 빼고 있습니다. 값을 누적해 더하도록 total += i로 고쳐보세요.",
-      "hint_en": "Change total -= i to total += i so each i is added to the running sum.",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total -= i\nprint(total)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "4",
-          "expectedOutput": "10"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "15"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 누적된 합계 total을 개수 n으로 나눈 평균을 변수 avg에 저장하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the line that stores the average total / n in variable avg.",
-      "hint_ko": "avg = total / n 형태로 나눗셈 결과를 변수 avg에 저장해보세요.",
-      "hint_en": "Write avg = total / n after the loop.",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\n§§§§§§§§§§§§§§§\nprint(avg)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(n):\n    total += int(input())\navg = total / n\nprint(avg)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "2\n10\n20",
-          "expectedOutput": "15.0"
-        },
-        {
-          "id": 2,
-          "input": "4\n10\n20\n30\n40",
-          "expectedOutput": "25.0"
-        },
-        {
-          "id": 3,
-          "input": "2\n5\n8",
-          "expectedOutput": "6.5"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 반복문 안에서 복합 대입 연산자로 변수 total에 i를 누적해 더하는 한 줄을 작성해보세요.",
-      "prompt_en": "[Complete Line] Write the indented line adding i onto total with +=.",
-      "hint_ko": "4칸 들여쓰기 뒤에 total += i를 작성해보세요.",
-      "hint_en": "Keep the 4-space indentation and write total += i.",
-      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    §§§§§§§§§§\nprint(total)",
-      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(2, n + 1, 2):\n    total += i\nprint(total)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "6",
-          "expectedOutput": "12"
-        },
-        {
-          "id": 2,
-          "input": "8",
-          "expectedOutput": "20"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 알맞은 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced when the following Python code runs.",
-      "hint_ko": "1부터 6 직전까지 2씩 건너뛰며 선택되는 숫자들을 차례로 적고, 반복 횟수(count)와 누적 합(total)을 각각 계산해보세요.",
-      "hint_en": "List the numbers visited from 1 up to right before 6 with step 2, then track both the turn count and running sum.",
-      "targetCode": "total = 0\ncount = 0\nfor i in range(1, 6, 2):\n    total += i\n    count += 1\nprint(str(count) + \":\" + str(total))",
-      "choices": [
-        "3:9",
-        "3:15",
-        "5:15",
-        "2:4"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 조건문 시작 키워드를 채워 체력(hp)이 20 이하일 때 "Danger"를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the conditional keyword to print "Danger" when hp <= 20.',
+      hint_ko: '영어로 만약을 뜻하는 두 글자 소문자 키워드로 조건문 헤더를 시작합니다.',
+      hint_en: 'Begin the conditional header with the two-letter lowercase English word for "supposing".',
+      templateCode: 'hp = 10\n§§ hp <= 20:\n    print("Danger")',
+      targetCode: 'hp = 10\nif hp <= 20:\n    print("Danger")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3:9"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '',
+          expectedOutput: 'Danger',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 조건이 거짓일 때 if 블록 안의 두 줄은 건너뛰고 바깥쪽 print(pt)만 실행되게 조립해보세요.',
+      prompt_en: '[Block] Assemble the code where the false if block is skipped and only the outer print(pt) runs.',
+      hint_ko: '4칸 들여쓰기된 두 줄은 if 블록에 속해 건너뛰어지고, 들여쓰기가 없는 마지막 줄은 항상 실행됩니다.',
+      hint_en: 'The two 4-space indented lines belong to the if block and are skipped, while the unindented final line always runs.',
+      targetCode: 'pt = 50\nif pt >= 100:\n    pt += 20\n    print("Bonus")\nprint(pt)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '50',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 누적 덧셈 연산자를 채워 lv가 10 이상일 때 gold에 100을 더하고 "Up"과 gold를 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the compound addition operator to add 100 to gold inside the if block.',
+      hint_ko: '기존 변수 값에 오른쪽 숫자를 더해 저장하는 복합 대입 연산자를 입력합니다.',
+      hint_en: 'Use the plus-equals compound assignment operator to add 100 in place.',
+      templateCode: 'lv = 12\ngold = 200\nif lv >= 10:\n    gold §§ 100\n    print("Up")\nprint(gold)',
+      targetCode: 'lv = 12\ngold = 200\nif lv >= 10:\n    gold += 100\n    print("Up")\nprint(gold)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Up\n300',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] "Price: " 안내 문구로 정수를 입력받아 5000 이상일 때만 1000을 할인(-=)한 뒤 가격을 출력해보세요.',
+      prompt_en: '[Block] Read an integer with prompt "Price: ", subtract 1000 with -= if >= 5000, and print price.',
+      hint_ko: '할인 차감(price -= 1000)은 if 블록 안에 넣고, 최종 출력 print(price)는 if 블록 바깥에 둡니다.',
+      hint_en: 'Place price -= 1000 inside the if block and the final print(price) outside.',
+      targetCode: 'price = int(input("Price: "))\nif price >= 5000:\n    price -= 1000\nprint(price)',
+      testCases: [
+        {
+          id: 1,
+          input: '6000',
+          expectedOutput: 'Price: 5000',
+        },
+        {
+          id: 2,
+          input: '4000',
+          expectedOutput: 'Price: 4000',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 차감 복합 대입 연산자를 채워 금액이 10000 이상일 때만 2000원을 할인해 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the compound subtraction operator to discount pay by 2000 when pay >= 10000.',
+      hint_ko: '빼기 기호와 등호를 나란히 붙인 복합 대입 연산자를 사용합니다.',
+      hint_en: 'Combine the minus sign and equals sign to subtract 2000 in place.',
+      templateCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay §§ 2000\nprint(pay)',
+      targetCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay -= 2000\nprint(pay)',
+      testCases: [
+        {
+          id: 1,
+          input: '12000',
+          expectedOutput: 'Pay: 10000',
+        },
+        {
+          id: 2,
+          input: '8000',
+          expectedOutput: 'Pay: 8000',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 입력 정수 n이 양수(n > 0)이면서 짝수(n % 2 == 0)일 때만 "PosEven"을 출력하고 마지막에 "Done"을 출력해보세요.',
+      prompt_en: '[Block] Print "PosEven" only when n > 0 and n % 2 == 0, then always print "Done".',
+      hint_ko: '두 조건을 and로 연결해 if 헤더에 넣고, "Done"은 if 블록 바깥에서 출력합니다.',
+      hint_en: 'Join both conditions with and in the if header, and print "Done" outside the block.',
+      targetCode: 'n = int(input())\nif n > 0 and n % 2 == 0:\n    print("PosEven")\nprint("Done")',
+      testCases: [
+        {
+          id: 1,
+          input: '8',
+          expectedOutput: 'PosEven\nDone',
+        },
+        {
+          id: 2,
+          input: '7',
+          expectedOutput: 'Done',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 선택 만족 논리 키워드를 채워 n이 3의 배수이거나 5의 배수일 때 "Hit"을 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the disjunction keyword to print "Hit" when n is divisible by 3 or 5.',
+      hint_ko: '둘 중 하나만 참이어도 조건문이 실행되도록 두 글자 논리 키워드를 채웁니다.',
+      hint_en: 'Join the two divisibility checks with the two-letter disjunction keyword.',
+      templateCode: 'n = int(input())\nif n % 3 == 0 §§ n % 5 == 0:\n    print("Hit")\nprint("End")',
+      targetCode: 'n = int(input())\nif n % 3 == 0 or n % 5 == 0:\n    print("Hit")\nprint("End")',
+      testCases: [
+        {
+          id: 1,
+          input: '10',
+          expectedOutput: 'Hit\nEnd',
+        },
+        {
+          id: 2,
+          input: '7',
+          expectedOutput: 'End',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n이 짝수이면서 20 이상일 때 n에서 5를 빼고 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks so when n is even and at least 20, 5 is subtracted from n.',
+      hint_ko: '조건문 시작 키워드, 동시 만족 논리 키워드, 차감 복합 대입 연산자를 순서대로 입력합니다.',
+      hint_en: 'Enter the conditional keyword, the conjunction keyword, and the compound subtraction operator.',
+      templateCode: 'n = int(input())\n§§ n % 2 == 0 §§§ n >= 20:\n    n §§ 5\nprint("Result", n, sep=":")',
+      targetCode: 'n = int(input())\nif n % 2 == 0 and n >= 20:\n    n -= 5\nprint("Result", n, sep=":")',
+      testCases: [
+        {
+          id: 1,
+          input: '24',
+          expectedOutput: 'Result:19',
+        },
+        {
+          id: 2,
+          input: '14',
+          expectedOutput: 'Result:14',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] if 조건문 헤더 끝에 빠진 기호를 추가하여 문법 오류를 수정해보세요.',
+      prompt_en: '[Fix Bug] Add the missing punctuation at the end of the if header line to fix the syntax error.',
+      hint_ko: '파이썬의 모든 제어문 헤더 줄 맨 끝에는 블록 시작을 알리는 콜론이 반드시 있어야 합니다.',
+      hint_en: 'Every control-flow header line in Python must end with a colon.',
+      templateCode: 'n = int(input())\nif n >= 10\n    print("Big")\nprint("End")',
+      targetCode: 'n = int(input())\nif n >= 10:\n    print("Big")\nprint("End")',
+      testCases: [
+        {
+          id: 1,
+          input: '15',
+          expectedOutput: 'Big\nEnd',
+        },
+        {
+          id: 2,
+          input: '5',
+          expectedOutput: 'End',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] if 조건식 안에서 대입 기호를 잘못 쓴 문법 오류를 같음 비교 연산자로 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the syntax error in the if condition by replacing assignment with equality comparison.',
+      hint_ko: '조건식에서 나머지가 0과 같은지 확인할 때는 등호 한 개가 아니라 두 개를 써야 합니다.',
+      hint_en: 'Use two equals signs instead of one when testing equality inside an if condition.',
+      templateCode: 'n = int(input())\nif n % 2 = 0:\n    n += 10\nprint(n)',
+      targetCode: 'n = int(input())\nif n % 2 == 0:\n    n += 10\nprint(n)',
+      testCases: [
+        {
+          id: 1,
+          input: '12',
+          expectedOutput: '22',
+        },
+        {
+          id: 2,
+          input: '7',
+          expectedOutput: '7',
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 변수 n이 60 이상인지 검사하는 if 조건문 헤더 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the if condition header checking whether n is at least 60.',
+      hint_ko: '조건 키워드, 이상 비교식, 그리고 줄 끝의 콜론까지 한 줄로 작성해보세요.',
+      hint_en: 'Write the if keyword, comparison n >= 60, and the trailing colon.',
+      templateCode: 'n = int(input())\n§§§§§§§§§§§\n    print("Clear")',
+      targetCode: 'n = int(input())\nif n >= 60:\n    print("Clear")',
+      testCases: [
+        {
+          id: 1,
+          input: '75',
+          expectedOutput: 'Clear',
+        },
+        {
+          id: 2,
+          input: '60',
+          expectedOutput: 'Clear',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] price가 5000 이상일 때 4칸 들여쓰기된 블록 안에서 price를 1000만큼 차감(-=)하는 한 줄을 작성해보세요.',
+      prompt_en: '[Complete Line] Write the 4-space indented line subtracting 1000 from price using -=.',
+      hint_ko: '4칸 들여쓰기 뒤에 price 변수에서 1000을 빼는 복합 대입문을 작성해보세요.',
+      hint_en: 'After the 4-space indentation, write the compound subtraction statement on price.',
+      templateCode: 'price = int(input())\nif price >= 5000:\n    §§§§§§§§§§§§§\nprint(price)',
+      targetCode: 'price = int(input())\nif price >= 5000:\n    price -= 1000\nprint(price)',
+      testCases: [
+        {
+          id: 1,
+          input: '6000',
+          expectedOutput: '5000',
+        },
+        {
+          id: 2,
+          input: '4000',
+          expectedOutput: '4000',
+        },
+      ],
+    },
+    {
+      id: 14,
+      step: 14,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '조건이 거짓일 때 4칸 들여쓰기된 줄들은 모두 건너뛰어지고 들여쓰기가 없는 바깥 줄만 실행됩니다.',
+      hint_en: 'When the condition is False, all 4-space indented lines are skipped and only the unindented outer line runs.',
+      targetCode: 'x = 10\nif x > 20:\n    x += 5\n    print("In", end=" ")\nprint("Out", x, sep=":")',
+      choices: ['Out:10', 'In Out:15', 'Out:15', 'In Out:10'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Out:10',
+        },
+      ],
+    },
+    {
+      id: 15,
+      step: 15,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
+      hint_ko: '첫 번째 독립 조건문(짝수 판별)에서 n이 어떻게 바뀌는지 구한 뒤, 바뀐 n으로 두 번째 조건문(20 이상)을 검사해보세요.',
+      hint_en: 'Update n in the first if statement, then test the updated n in the second independent if statement.',
+      targetCode: 'n = 14\nif n % 2 == 0:\n    n += 8\nif n >= 20:\n    n -= 5\nprint(n)',
+      choices: ['17', '22', '9', '14'],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '17',
+        },
+      ],
+    },
+  ],
 };

@@ -1,41 +1,33 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
-// ============================================================================
-// 파이썬 기초 5레벨: 문자열 연산(+)과 반복(*) (15단계)
-// - [1~10단계] 블록 ➔ 타이핑 1:1 교차 5쌍
-// - [11~12단계] 틀린 곳 수정 (fix_bug) 2문항
-// - [13~14단계] 한 줄 완성 (one_line) 2문항
-// - [15단계] 출력 결과 예측 선택 (predict_output) 1문항
-// ============================================================================
 export const PYTHON_LEVEL_5: PracticeRound = {
   id: 'py-basic-r5',
   language: 'python',
   trackId: 'python',
   moduleId: 'py-basic',
   roundNumber: 5,
-  title_ko: '5레벨: 문자열 연산(+)과 반복(*)',
-  title_en: 'Level 5: String Concatenation & Repetition',
+  title_ko: '문자열(" ", \' \') 출력과 따옴표 중첩 규칙',
+  title_en: 'Strings (" ", \' \') & Nested Quotes Rules',
+  description_ko: '큰따옴표("")와 작은따옴표(\'\')로 문자열을 출력하는 법과 문장 안에 따옴표를 넣는 규칙을 익힙니다.',
+  description_en: 'Learn how to print strings with double ("") and single (\'\') quotes and nest quotes inside strings.',
   totalQuestions: 15,
   unlockedBlocks: ['print'],
   questions: [
-    // ------------------------------------------------------------------------
-    // 페어 1: 쉼표(,) 문자열 나란히 출력 (자동 공백 복습)
-    // ------------------------------------------------------------------------
     {
       id: 1,
       step: 1,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] 두 문자열 "Hello"와 "World"를 쉼표(,)로 나열해 공백을 두고 출력해보세요.',
-      prompt_en: '[Block] Separate "Hello" and "World" with a comma (,) inside print() to output Hello World.',
-      hint_ko: '각 문자열을 독립된 따옴표로 감싼 뒤 쉼표로 나열합니다.',
-      hint_en: 'Enclose each word in its own pair of quotes and separate them with a comma.',
-      targetCode: 'print("Hello", "World")',
+      prompt_ko: '[블록 조립] 큰따옴표로 감싼 문자열 "Hello"를 조립해 화면에 출력해보세요.',
+      prompt_en: '[Block] Assemble the double-quoted string "Hello" inside print() to display it.',
+      hint_ko: '문자열을 출력할 때는 양쪽 따옴표 기호는 사라지고 안쪽의 글자만 화면에 나타납니다.',
+      hint_en: 'When a string is printed, the surrounding quotes are not displayed—only the characters inside.',
+      targetCode: 'print("Hello")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Hello World',
+          expectedOutput: 'Hello',
         },
       ],
     },
@@ -44,218 +36,30 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸을 채워 두 단어 사이에 공백이 들어간 Python Code를 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the blank so the two words print with a space as Python Code.',
-      hint_ko: '두 문자열 사이에 공백 한 칸을 자동으로 넣어 나란히 출력하려면 빈칸에 쉼표(,)를 입력하세요.',
-      hint_en: 'Enter a comma (,) in the blank to separate the two strings with an automatic space.',
-      templateCode: 'print("Python"§ "Code")',
-      targetCode: 'print("Python", "Code")',
+      prompt_ko: '[빈칸 채우기] 빈칸에 큰따옴표로 감싼 단어 World를 채워 화면에 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the double-quoted word World inside print() to display it.',
+      hint_ko: '단어 앞뒤를 큰따옴표로 감싸야 파이썬이 문자열 데이터로 인식합니다.',
+      hint_en: 'Enclose the word in double quotes on both sides so Python treats it as a string.',
+      templateCode: 'print(§§§§§§§)',
+      targetCode: 'print("World")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Python Code',
+          expectedOutput: 'World',
         },
       ],
     },
-
-    // ------------------------------------------------------------------------
-    // 페어 2: 문자열 덧셈(+) 이어붙이기 (쉼표와의 공백 차이 대조)
-    // ------------------------------------------------------------------------
     {
       id: 3,
       step: 3,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] 덧셈 기호(+)로 두 문자열을 공백 없이 이어붙여 HelloWorld를 출력해보세요.',
-      prompt_en: '[Block] Use the plus (+) operator between strings to print HelloWorld without a space.',
-      hint_ko: '문자열에서의 + 연산자는 숫자 계산이 아니라 글자 이어붙이기(결합)로 동작합니다.',
-      hint_en: 'Between strings, + joins text together without adding spaces.',
-      targetCode: 'print("Hello"+"World")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'HelloWorld',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸을 채워 두 단어가 공백 없이 하나로 이어진 PythonCode를 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the blank to join the two words without spaces into PythonCode.',
-      hint_ko: '두 문자열을 빈칸 없이 하나로 합치려면 사이의 빈칸에 덧셈 기호(+)를 입력하세요.',
-      hint_en: 'Type the plus (+) operator into the blank between the two strings to join them without spaces.',
-      templateCode: 'print("Python"§"Code")',
-      targetCode: 'print("Python"+"Code")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'PythonCode',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 페어 3: 문자열 곱셈(*) 구분선 반복
-    // ------------------------------------------------------------------------
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 문자열 "="에 *20을 곱해 등호가 20번 반복된 구분선을 출력해보세요.',
-      prompt_en: '[Block] Multiply "=" by 20 with * to print a 20-character divider line.',
-      hint_ko: '* 연산자로 같은 기호를 반복해 긴 구분선을 간편하게 만들 수 있습니다.',
-      hint_en: 'String repetition with * lets you create long divider lines easily.',
-      targetCode: 'print("="*20)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '====================',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸을 채워 하이픈 문자가 15번 연속 이어진 구분선을 완성해보세요.',
-      prompt_en: '[Fill Blank] Fill in the blank to print a 15-character dash divider line.',
-      hint_ko: '하이픈 기호가 15번 연속으로 반복되도록 빈칸에 숫자 15를 입력하세요.',
-      hint_en: 'Enter the number 15 into the blank to repeat the dash 15 times.',
-      templateCode: 'print("-"*§§)',
-      targetCode: 'print("-"*15)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '---------------',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 페어 4: 단어/글자 반복
-    // ------------------------------------------------------------------------
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 단어 문자열 "Hi"에 *3을 곱해 HiHiHi를 출력해보세요.',
-      prompt_en: '[Block] Repeat the word string "Hi" three times using * to print HiHiHi.',
-      hint_ko: '반복할 문자열 뒤에는 공백 없이 단어 전체가 횟수만큼 이어져 출력됩니다.',
-      hint_en: 'The entire quoted word is repeated back-to-back without spaces.',
-      targetCode: 'print("Hi"*3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'HiHiHi',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸을 채워 글자가 세 번 연속 반복된 HaHaHa를 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the blank to repeat the text three times as HaHaHa.',
-      hint_ko: '문자열을 지정한 횟수만큼 반복하려면 "Ha"와 3 사이의 빈칸에 곱셈 기호(*)를 입력하세요.',
-      hint_en: 'Enter the asterisk (*) operator into the blank between "Ha" and 3.',
-      templateCode: 'print("Ha"§3)',
-      targetCode: 'print("Ha"*3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'HaHaHa',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 페어 5: 문자열 반복 vs 숫자 곱셈 대조
-    // ------------------------------------------------------------------------
-    {
-      id: 9,
-      step: 9,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 문자열 반복 "3"*3과 숫자 곱셈 3*3을 나란히 조립해 결과를 비교해보세요.',
-      prompt_en: '[Block] Compare string repetition "3"*3 and numeric multiplication 3*3 side by side.',
-      hint_ko: '"3"*3은 글자 "3"을 세 번 이어붙이고, 3*3은 숫자 3과 3을 곱한 값을 출력합니다.',
-      hint_en: '"3"*3 repeats the character "3" three times, whereas 3*3 calculates the numeric product.',
-      targetCode: 'print("3"*3, 3*3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '333 9',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 두 빈칸을 채워 글자 반복과 숫자 계산 결과 777 21을 나란히 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in both blanks to output text repetition (777) and multiplication (21).',
-      hint_ko: '문자열 반복과 숫자 곱셈 모두 별표(*) 연산자를 사용합니다. 두 빈칸 모두에 *를 입력하세요.',
-      hint_en: 'Enter the asterisk (*) operator in both blanks.',
-      templateCode: 'print("7"§3, 7§3)',
-      targetCode: 'print("7"*3, 7*3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '777 21',
-        },
-      ],
-    },
-
-    // ------------------------------------------------------------------------
-    // 11~15단계: 실전 응용 (fix_bug 2 / one_line 2 / predict_output 1)
-    // ------------------------------------------------------------------------
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열 Go가 3번 반복된 GoGoGo가 출력되도록 연산 기호를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the operator so the string Go repeats 3 times as GoGoGo.',
-      hint_ko: '문자열을 정수 횟수만큼 반복하려면 덧셈(+) 대신 곱셈(*) 기호를 사용해야 합니다.',
-      hint_en: 'Use the multiplication operator (*) instead of + to repeat a string.',
-      templateCode: 'print("Go"+3)',
-      targetCode: 'print("Go"*3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'GoGoGo',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 두 문자열이 공백 없이 이어진 Python이 출력되도록 기호를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the symbol between the strings so Python prints without a space.',
-      hint_ko: '쉼표(,)는 공백을 넣으므로, 빈틈없이 이어붙이려면 덧셈 기호(+)로 고쳐보세요.',
-      hint_en: 'Replace the comma (,) with a plus sign (+) to concatenate without a space.',
-      templateCode: 'print("Py","thon")',
-      targetCode: 'print("Py"+"thon")',
+      prompt_ko: "[블록 조립] 작은따옴표('')로 감싼 문자열 'Python'을 조립해 출력해보세요.",
+      prompt_en: "[Block] Assemble the single-quoted string 'Python' inside print() to display it.",
+      hint_ko: '파이썬에서는 큰따옴표뿐만 아니라 작은따옴표로도 문자열을 똑같이 만들 수 있습니다.',
+      hint_en: 'In Python, single quotes create strings just like double quotes as long as both ends match.',
+      targetCode: "print('Python')",
       testCases: [
         {
           id: 1,
@@ -265,40 +69,210 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       ],
     },
     {
-      id: 13,
-      step: 13,
+      id: 4,
+      step: 4,
       type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 둘째 줄에 별 기호 글자가 10번 연속 반복된 **********를 출력해보세요.',
-      prompt_en: '[Complete Line] Complete line 2 using string repetition to print 10 asterisks (**********).',
-      hint_ko: '첫째 줄의 문자열 반복 구조를 참고하여, 따옴표 안의 문자만 별 기호(*)로 바꾸어보세요.',
-      hint_en: 'Follow the string repetition pattern on line 1, changing the quoted character to *.',
-      templateCode: 'print("="*10)\n§§§§§§§§§§§§§',
-      targetCode: 'print("="*10)\nprint("*"*10)',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 작은따옴표로 감싼 단어 Coding을 채워 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the single-quoted word Coding inside print() to display it.',
+      hint_ko: '단어의 시작과 끝을 모두 작은따옴표로 감싸서 문자열을 완성합니다.',
+      hint_en: 'Wrap both the beginning and end of the word with single quotes.',
+      templateCode: 'print(§§§§§§§§)',
+      targetCode: "print('Coding')",
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '==========\n**********',
+          expectedOutput: 'Coding',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 문자열 "Level"과 숫자 5를 쉼표(,)로 나열해 Level 5를 출력해보세요.',
+      prompt_en: '[Block] Separate the string "Level" and the number 5 with a comma to print Level 5.',
+      hint_ko: '문자열은 따옴표로 감싸고 숫자는 따옴표 없이 쉼표 뒤에 나란히 적습니다.',
+      hint_en: 'Enclose the string in quotes and place the number without quotes after the comma.',
+      targetCode: 'print("Level", 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Level 5',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸에 큰따옴표로 감싼 Score: 라벨을 채워 Score: 100이 출력되게 해보세요.',
+      prompt_en: '[Fill Blank] Fill in the double-quoted label Score: so that Score: 100 is printed.',
+      hint_ko: '콜론(:)까지 포함된 글자 전체를 큰따옴표로 감싸 쉼표 앞에 작성합니다.',
+      hint_en: 'Wrap the label text including the colon in double quotes before the comma.',
+      templateCode: 'print(§§§§§§§§, 100)',
+      targetCode: 'print("Score:", 100)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Score: 100',
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'block',
+      kind: 'standard',
+      prompt_ko: '[블록 조립] 작은따옴표가 들어간 "Let\'s go"와 큰따옴표가 들어간 \'Say "Hi"\'를 두 줄로 출력해보세요.',
+      prompt_en: '[Block] Print "Let\'s go" on line 1 and \'Say "Hi"\' on line 2.',
+      hint_ko: '문장 안에 작은따옴표가 있으면 바깥을 큰따옴표로 감싸고, 큰따옴표가 있으면 바깥을 작은따옴표로 감쌉니다.',
+      hint_en: 'Use outer double quotes when the text contains a single quote, and outer single quotes when it contains double quotes.',
+      targetCode: 'print("Let\'s go")\nprint(\'Say "Hi"\')',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Let\'s go\nSay "Hi"',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: "[빈칸 채우기] 빈칸에 큰따옴표로 감싼 It's fun 문자열을 채워 출력해보세요.",
+      prompt_en: "[Fill Blank] Fill in the double-quoted string It's fun to display it without a quote conflict.",
+      hint_ko: '문장 중간에 작은따옴표(어포스트로피)가 포함되어 있으므로 바깥 양쪽은 큰따옴표로 감쌉니다.',
+      hint_en: 'Because the phrase contains an apostrophe, enclose the entire string in outer double quotes.',
+      templateCode: 'print(§§§§§§§§§§)',
+      targetCode: 'print("It\'s fun")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "It's fun",
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 문자열 라벨 Div: 와 20을 3으로 나눈 몫(6), 나머지(2)를 한 줄에 출력해보세요.',
+      prompt_en: '[Fill Blank] Fill in the 3 blanks to print the label Div: followed by the quotient (6) and remainder (2) of 20 by 3.',
+      hint_ko: '큰따옴표로 감싼 라벨 문자열, 정수 몫 연산자, 나머지 연산자를 차례대로 채웁니다.',
+      hint_en: 'Enter the double-quoted label string, the floor division operator, and the modulo operator in order.',
+      templateCode: 'print(§§§§§§, 20 §§ 3, 20 § 3)',
+      targetCode: 'print("Div:", 20 // 3, 20 % 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Div: 6 2',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 양쪽 따옴표의 짝이 맞지 않아 발생하는 문법 오류를 고쳐 Hello Python을 출력해보세요.',
+      prompt_en: '[Fix Bug] Fix the mismatched quotes so that Hello Python is printed without a syntax error.',
+      hint_ko: '문자열을 여는 따옴표와 닫는 따옴표는 반드시 같은 종류로 통일해야 합니다.',
+      hint_en: 'The opening and closing quotes of a string must be of the same quote type.',
+      templateCode: 'print("Hello Python\')',
+      targetCode: 'print("Hello Python")',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Hello Python',
+        },
+      ],
+    },
+    {
+      id: 11,
+      step: 11,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: "[틀린 곳 수정] 어포스트로피 기호와 바깥 따옴표가 충돌하지 않도록 수정해 It's ok: 10을 출력해보세요.",
+      prompt_en: "[Fix Bug] Fix the outer quotes so the apostrophe does not break the string and prints It's ok: 10.",
+      hint_ko: '문자열 안에 작은따옴표가 들어 있을 때는 바깥 양쪽을 큰따옴표로 감싸야 끊기지 않습니다.',
+      hint_en: 'Wrap the string in outer double quotes when it contains an inner single quote.',
+      templateCode: "print('It's ok:', 5 + 5)",
+      targetCode: 'print("It\'s ok:", 5 + 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "It's ok: 10",
+        },
+      ],
+    },
+    {
+      id: 12,
+      step: 12,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 둘째 줄에 큰따옴표 문자열 "Stage"와 숫자 3을 쉼표로 나열해 Stage 3을 출력해보세요.',
+      prompt_en: '[Complete Line] Write line 2 to print the string "Stage" and the number 3 separated by a comma.',
+      hint_ko: '첫째 줄의 형태를 참고하여 문자열 라벨과 숫자를 쉼표로 구분해 작성합니다.',
+      hint_en: 'Follow line 1 by separating the quoted string and the number with a comma inside print().',
+      templateCode: 'print("World", 1)\n§§§§§§§§§§§§§§§§§',
+      targetCode: 'print("World", 1)\nprint("Stage", 3)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'World 1\nStage 3',
+        },
+      ],
+    },
+    {
+      id: 13,
+      step: 13,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 둘째 줄에 문자열 "Max:"와 거듭제곱 수식 2 ** 5를 쉼표로 나열해 Max: 32를 출력해보세요.',
+      prompt_en: '[Complete Line] Write line 2 to print "Max:" and the expression 2 ** 5 separated by a comma.',
+      hint_ko: '따옴표로 감싼 라벨 뒤에 쉼표를 찍고 거듭제곱 계산식을 이어 적어보세요.',
+      hint_en: 'Place a comma after the quoted label and write the exponentiation expression.',
+      templateCode: 'print("Min:", 2 ** 2)\n§§§§§§§§§§§§§§§§§§§§§',
+      targetCode: 'print("Min:", 2 ** 2)\nprint("Max:", 2 ** 5)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: 'Min: 4\nMax: 32',
         },
       ],
     },
     {
       id: 14,
       step: 14,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 둘째 줄에 "Hi"와 "All"을 + 연산자로 이어붙여 HiAll을 출력해보세요.',
-      prompt_en: '[Complete Line] Complete line 2 by joining "Hi" and "All" with + to print HiAll.',
-      hint_ko: '첫째 줄처럼 두 문자열을 + 기호로 연결해 print("Hi"+"All")을 작성해보세요.',
-      hint_en: 'Write print("Hi"+"All") on line 2 using the + operator.',
-      templateCode: 'print("A"+"B")\n§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("A"+"B")\nprint("Hi"+"All")',
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '바깥 따옴표는 출력되지 않고 안쪽 따옴표와 계산된 수식의 값만 출력됩니다.',
+      hint_en: 'Outer quotes are stripped, while inner nested quotes and evaluated numbers are printed.',
+      targetCode: 'print("It\'s", 10 + 5)\nprint(\'Say "Go"\')',
+      choices: ['It\'s 15\nSay "Go"', '"It\'s" 15\n\'Say "Go"\'', 'It\'s 10 + 5\nSay Go', 'It\'s 15\nSay Go'],
+      correctChoiceIndex: 0,
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'AB\nHiAll',
+          expectedOutput: 'It\'s 15\nSay "Go"',
         },
       ],
     },
@@ -307,18 +281,18 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 15,
       type: 'quiz',
       kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 올바른 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output that will be printed when the Python code runs.',
-      hint_ko: '따옴표로 감싼 "2"와 "3"은 문자열이므로 +는 이어붙이기, *3은 글자 3회 반복으로 동작합니다.',
-      hint_en: 'Quoted "2" and "3" are strings: + concatenates them, and "2"*3 repeats the character three times.',
-      targetCode: 'print("2"+"3")\nprint("2"*3, 2*3)',
-      choices: ['5\n6 6', '23\n222 6', '23\n6 6', '5\n222 6'],
+      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
+      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
+      hint_ko: '따옴표 안의 숫자는 글자 그대로 출력되고, 따옴표 밖의 수식은 계산된 결과로 출력됩니다.',
+      hint_en: 'Quoted numbers print as literal characters, whereas unquoted expressions are evaluated.',
+      targetCode: 'print("Lv", (1 + 2) * 3)\nprint()\nprint("Pt:", 100 // 3)',
+      choices: ['Lv 9\nPt: 33', 'Lv 9\n\nPt: 33', 'Lv 7\n\nPt: 33.3', 'Lv 9\n\nPt: 1'],
       correctChoiceIndex: 1,
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: '23\n222 6',
+          expectedOutput: 'Lv 9\n\nPt: 33',
         },
       ],
     },

@@ -1,334 +1,229 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_48: PracticeRound = {
-  "id": "py-basic-r48",
-  "language": "python",
-  "trackId": "python",
-  "moduleId": "py-basic",
-  "roundNumber": 48,
-  "title_ko": "48레벨: 필수 자료구조 형변환 (list, tuple, set)",
-  "title_en": "Level 48: Essential Collection Casting (list, tuple, set)",
-  "description_ko": "list(), tuple(), set() 함수로 자료구조를 자유롭게 변환하고, 중복 제거 후 오름차순 정렬 패턴을 완성합니다.",
-  "description_en": "Convert freely among collections with list(), tuple(), and set(), including deduplicate-and-sort patterns.",
-  "totalQuestions": 15,
-  "unlockedBlocks": [
-    "print",
-    "variable",
-    "type",
-    "math",
-    "if",
-    "for_in",
-    "while",
-    "break",
-    "input",
-    "method"
-  ],
-  "questions": [
+  id: 'py-basic-r48',
+  language: 'python',
+  trackId: 'python',
+  moduleId: 'py-basic',
+  roundNumber: 48,
+  title_ko: '리스트 필수 기초 종합 문제풀이',
+  title_en: 'Section 5 Comprehensive Review',
+  description_ko: '리스트 생성·인덱싱·수정·del·슬라이싱·연결, .append()/.pop()/.sort(), sum/max/min/len과 반복·조건문을 종합해 문제를 해결합니다.',
+  description_en: 'Synthesize list indexing, mutation, del, slicing, .append()/.pop()/.sort(), aggregations, conditionals, and loops.',
+  totalQuestions: 10,
+  unlockedBlocks: [],
+  questions: [
     {
-      "id": 1,
-      "step": 1,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] list(\"ABC\")로 문자열의 각 글자를 담은 리스트를 만들고 리스트와 길이를 출력해보세요.",
-      "prompt_en": "[Block] Convert \"ABC\" into a list of characters with list() and print the list and its length.",
-      "hint_ko": "공백 기준으로 단어를 쪼개는 .split()과 달리, list(문자열)는 문자열을 한 글자씩 모두 분리해 리스트로 만듭니다.",
-      "hint_en": "Unlike .split(), calling list() on a string breaks every individual character into a separate list item.",
-      "targetCode": "chars = list(\"ABC\")\nprint(chars, len(chars))",
-      "testCases": [
+      id: 1,
+      step: 1,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 첫 요소를 삭제하고 마지막 요소를 50으로 수정한 뒤, 앞 2개 요소의 합과 전체 길이를 출력해보세요.',
+      prompt_en: '[Fill Blank] Delete index 0, set the last item to 50, and print the sum of the first 2 items and total length.',
+      hint_ko: '삭제 키워드, 마지막 음수 인덱스, 앞 두 요소를 자르는 슬라이싱을 차례로 채우세요.',
+      hint_en: 'Fill in the deletion keyword, negative last index, and 2-element prefix slice.',
+      templateCode: 'nums = [99, 10, 20, 30]\n§§§ nums[0]\nnums[§§] = 50\nprint(sum(nums[§§]), len(nums))',
+      targetCode: 'nums = [99, 10, 20, 30]\ndel nums[0]\nnums[-1] = 50\nprint(sum(nums[:2]), len(nums))',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "['A', 'B', 'C'] 3"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "step": 2,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트 nums를 변경 불가능한 튜플로 변환하도록 형변환 함수를 채워 출력해보세요.",
-      "prompt_en": "[Fill Blank] Fill in the casting function to convert list nums into an immutable tuple and print it.",
-      "hint_ko": "수정이 불가능한 소괄호 자료형으로 바꾸기 위해 '튜플'을 뜻하는 다섯 글자 영단어 변환 함수 이름을 적어보세요.",
-      "hint_en": "Fill in the 5-letter conversion function that turns a sequence into an immutable parenthesized collection.",
-      "templateCode": "nums = [10, 20, 30]\nfixed = §§§§§(nums)\nprint(fixed)",
-      "targetCode": "nums = [10, 20, 30]\nfixed = tuple(nums)\nprint(fixed)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "(10, 20, 30)"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "step": 3,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 튜플을 list()로 변환해 30을 추가한 뒤 다시 tuple()로 감싸 출력해보세요.",
-      "prompt_en": "[Block] Convert the tuple with list(), append 30, and convert it back with tuple() to print.",
-      "hint_ko": "튜플에는 .append()가 없으므로 가변 자료형인 리스트로 잠시 바꾸어 요소를 추가한 뒤 다시 튜플로 변환합니다.",
-      "hint_en": "Tuples lack .append(), so cast to a mutable list first, append the item, and cast back to a tuple.",
-      "targetCode": "pt = (10, 20)\ntmp = list(pt)\ntmp.append(30)\npt3 = tuple(tmp)\nprint(pt3)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "(10, 20, 30)"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "step": 4,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 중복을 먼저 제거한 뒤 정렬 가능한 리스트로 변환하도록 두 빈칸을 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the two casting functions to deduplicate nums and convert it to a list for .sort().",
-      "hint_ko": "안쪽 괄호에서는 세 글자 '집합' 함수로 중복부터 없애고, 바깥쪽에서는 정렬 메서드를 쓸 수 있도록 네 글자 '리스트' 함수로 감싸세요.",
-      "hint_en": "Deduplicate inside first with the 3-letter unordered collection function, then wrap outside with the 4-letter sortable sequence function.",
-      "templateCode": "nums = [30, 10, 20, 10, 30]\nuniq = §§§§(§§§(nums))\nuniq.sort()\nprint(uniq)",
-      "targetCode": "nums = [30, 10, 20, 10, 30]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "step": 5,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 입력 단어들의 중복을 없애고 오름차순 정렬한 뒤 튜플로 출력해보세요.",
-      "prompt_en": "[Block] Deduplicate and sort input words, then convert to a tuple and print.",
-      "hint_ko": "집합(set)으로 중복을 없앤 뒤 리스트(list)로 바꾸어 정렬하고, 최종 결과를 튜플(tuple)로 변환합니다.",
-      "hint_en": "Deduplicate with set(), convert to list() to sort in place, and then wrap the sorted list in tuple().",
-      "targetCode": "words = input().split()\nuniq = list(set(words))\nuniq.sort()\nres = tuple(uniq)\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "pear apple pear banana",
-          "expectedOutput": "('apple', 'banana', 'pear')"
+          id: 1,
+          input: '',
+          expectedOutput: '30 3',
         },
-        {
-          "id": 2,
-          "input": "b a b",
-          "expectedOutput": "('a', 'b')"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "step": 6,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력 단어의 중복 글자를 없애고 정렬해 고유 글자 수와 첫 글자를 출력해보세요.",
-      "prompt_en": "[Fill Blank] Deduplicate and sort the characters of input word, then print count and first letter.",
-      "hint_ko": "안쪽 세 글자 '집합' 변환으로 중복 글자를 없애고 바깥 네 글자 '리스트' 변환으로 감싸 정렬이 가능하게 만드세요.",
-      "hint_en": "Cast through the 3-letter deduplicating type into the 4-letter sequence type so .sort() can order the letters.",
-      "templateCode": "word = input()\nletters = §§§§(§§§(word))\nletters.sort()\nprint(f\"{len(letters)}:{letters[0]}\")",
-      "targetCode": "word = input()\nletters = list(set(word))\nletters.sort()\nprint(f\"{len(letters)}:{letters[0]}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "banana",
-          "expectedOutput": "3:a"
-        },
-        {
-          "id": 2,
-          "input": "zoom",
-          "expectedOutput": "3:m"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "step": 7,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] 딕셔너리 안의 리스트를 list(set(...))과 .sort()로 정리해 다시 저장하고 출력해보세요.",
-      "prompt_en": "[Block] Deduplicate and sort the list inside the dictionary, assign it back, and print the result.",
-      "hint_ko": "정렬이 끝난 리스트를 user[\"badges\"] = clean으로 다시 저장해야 딕셔너리 내부 데이터가 갱신됩니다.",
-      "hint_en": "Reassigning the sorted list back to user[\"badges\"] updates the dictionary's stored value.",
-      "targetCode": "user = {\"id\": \"neo\", \"badges\": [3, 1, 3, 2]}\nclean = list(set(user[\"badges\"]))\nclean.sort()\nuser[\"badges\"] = clean\nprint(user[\"id\"], user[\"badges\"])",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "neo [1, 2, 3]"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "step": 8,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 중복 점수를 제거해 정렬한 뒤 튜플로 변환·언패킹하여 최저점과 최고점을 출력해보세요.",
-      "prompt_en": "[Fill Blank] Deduplicate and sort raw, cast to a tuple to unpack low and high, and print them.",
-      "hint_ko": "정렬 메서드를 호출할 수 있도록 첫 빈칸엔 네 글자 '리스트' 변환 함수를, 아래 언패킹 줄엔 다섯 글자 '튜플' 변환 함수를 채우세요.",
-      "hint_en": "Convert the set using the 4-letter mutable sequence function before sorting, then cast to the 5-letter immutable sequence type.",
-      "templateCode": "raw = [95, 80, 95, 80]\npair = §§§§(set(raw))\npair.sort()\nlow, high = §§§§§(pair)\nprint(f\"Low:{low} High:{high}\")",
-      "targetCode": "raw = [95, 80, 95, 80]\npair = list(set(raw))\npair.sort()\nlow, high = tuple(pair)\nprint(f\"Low:{low} High:{high}\")",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "Low:80 High:95"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "step": 9,
-      "type": "block",
-      "kind": "standard",
-      "prompt_ko": "[블록 조립] while문으로 정수 리스트를 만든 뒤 중복을 제거·정렬해 평균을 출력해보세요.",
-      "prompt_en": "[Block] Build an integer list with a while loop, deduplicate and sort it, and print its average.",
-      "hint_ko": "중복이 제거된 uniq 리스트를 기준으로 sum(uniq) / len(uniq)를 계산하면 중복을 제외한 평균이 구해집니다.",
-      "hint_en": "Dividing sum(uniq) by len(uniq) calculates the mean of the deduplicated numbers.",
-      "targetCode": "raw = input().split()\nnums = []\ni = 0\nwhile i < len(raw):\n    nums.append(int(raw[i]))\n    i += 1\nuniq = list(set(nums))\nuniq.sort()\navg = sum(uniq) / len(uniq)\nprint(uniq, avg)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "20 10 20 30",
-          "expectedOutput": "[10, 20, 30] 20.0"
-        },
-        {
-          "id": 2,
-          "input": "5 15 5",
-          "expectedOutput": "[5, 15] 10.0"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "step": 10,
-      "type": "typing",
-      "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 집합에 모은 정수들을 리스트로 변환해 정렬한 뒤 튜플로 출력해보세요.",
-      "prompt_en": "[Fill Blank] Convert the set of integers to a list, sort it, and print it as a tuple.",
-      "hint_ko": "정렬할 수 있도록 첫 빈칸에는 네 글자 '리스트' 변환 함수를, 마지막 출력문에는 다섯 글자 '튜플' 변환 함수를 채우세요.",
-      "hint_en": "Cast the set to a mutable list with the 4-letter function so it can be sorted, then wrap it in the 5-letter tuple function.",
-      "templateCode": "raw = input().split()\nbag = set()\ni = 0\nwhile i < len(raw):\n    bag.add(int(raw[i]))\n    i += 1\nuniq = §§§§(bag)\nuniq.sort()\nprint(§§§§§(uniq))",
-      "targetCode": "raw = input().split()\nbag = set()\ni = 0\nwhile i < len(raw):\n    bag.add(int(raw[i]))\n    i += 1\nuniq = list(bag)\nuniq.sort()\nprint(tuple(uniq))",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "30 10 30 20",
-          "expectedOutput": "(10, 20, 30)"
-        },
-        {
-          "id": 2,
-          "input": "5 2 5",
-          "expectedOutput": "(2, 5)"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "step": 11,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 집합을 정렬하려다 dict()로 잘못 감싼 버그를 list()로 수정해 [1, 2, 4]를 출력해보세요.",
-      "prompt_en": "[Fix Bug] Fix the bug where set(nums) is wrapped in dict() instead of list() before sorting.",
-      "hint_ko": "중복이 제거된 집합을 .sort()로 정렬하려면 dict()가 아니라 순서가 있는 list()로 감싸 변환해야 합니다.",
-      "hint_en": "To sort a deduplicated set with .sort(), wrap it in list() rather than dict().",
-      "templateCode": "nums = [4, 1, 4, 2]\nuniq = dict(set(nums))\nuniq.sort()\nprint(uniq)",
-      "targetCode": "nums = [4, 1, 4, 2]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[1, 2, 4]"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "step": 12,
-      "type": "typing",
-      "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 튜플에 값을 추가하려다 dict(pt)로 잘못 변환한 줄을 list(pt)로 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the bug where tuple pt is converted with dict(pt) instead of list(pt) before .append().",
-      "hint_ko": "튜플의 원소들을 유지한 채 .append()를 호출하려면 dict(pt)가 아니라 list(pt)로 변환해야 합니다.",
-      "hint_en": "Convert the tuple using list(pt) instead of dict(pt) so .append(30) works properly.",
-      "templateCode": "pt = (10, 20)\ntmp = dict(pt)\ntmp.append(30)\npt3 = tuple(tmp)\nprint(pt3)",
-      "targetCode": "pt = (10, 20)\ntmp = list(pt)\ntmp.append(30)\npt3 = tuple(tmp)\nprint(pt3)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "(10, 20, 30)"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "step": 13,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 리스트 nums의 중복을 제거하고 리스트로 변환해 uniq에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that deduplicates nums with set() and converts it to a list in uniq.",
-      "hint_ko": "안쪽에서 set(nums)로 중복을 없애고 바깥쪽에서 list(...)로 감싸 변수 uniq에 대입하세요.",
-      "hint_en": "Assign list(set(nums)) to the variable uniq.",
-      "templateCode": "nums = [30, 10, 30, 20]\n§§§§§§§§§§§§§§§§§§§§§§\nuniq.sort()\nprint(uniq)",
-      "targetCode": "nums = [30, 10, 30, 20]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "[10, 20, 30]"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "step": 14,
-      "type": "typing",
-      "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 정렬된 리스트 uniq를 튜플로 변환하여 변수 res에 저장하는 한 줄을 완성해보세요.",
-      "prompt_en": "[Complete Line] Complete the line that converts the sorted list uniq into a tuple stored in res.",
-      "hint_ko": "변수 res에 대입(=) 기호를 쓰고, 다섯 글자 튜플 변환 함수 tuple(uniq)를 호출하세요.",
-      "hint_en": "Assign tuple(uniq) to the variable res.",
-      "templateCode": "tags = [\"py\", \"ai\", \"py\"]\nuniq = list(set(tags))\nuniq.sort()\n§§§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "tags = [\"py\", \"ai\", \"py\"]\nuniq = list(set(tags))\nuniq.sort()\nres = tuple(uniq)\nprint(res)",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "('ai', 'py')"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "step": 15,
-      "type": "quiz",
-      "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 화면에 출력될 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output produced when the following Python code runs.",
-      "hint_ko": "단어에서 중복 글자가 빠지면 총 몇 글자가 남는지 세어보고, 알파벳 사전순으로 줄 세웠을 때 맨 앞 글자와 맨 끝 글자가 무엇인지 따져보세요.",
-      "hint_en": "Count how many distinct letters appear in the word, then order those distinct letters alphabetically to identify the first and last.",
-      "targetCode": "word = \"level\"\nuniq = list(set(word))\nuniq.sort()\nt = tuple(uniq)\nprint(len(t), t[0], t[-1])",
-      "choices": [
-        "3 e v",
-        "5 l l",
-        "3 l v",
-        "4 e v"
       ],
-      "correctChoiceIndex": 0,
-      "testCases": [
+    },
+    {
+      id: 2,
+      step: 2,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 4개의 입력 정수 중 50 이상만 골라 valid에 모으고, 요소가 있으면 최댓값과 합계를 출력해보세요.',
+      prompt_en: '[Fill Blank] Read 4 integers, collect those >= 50 into valid, and print the largest value and total if non-empty.',
+      hint_ko: '빈 리스트 기호, 리스트 추가 메서드, 최댓값 함수를 순서대로 입력하세요.',
+      hint_en: 'Fill in the empty list literal, append method, and max function in order.',
+      templateCode: 'valid = §§\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.§§§§§§(n)\nif len(valid) > 0:\n    print(§§§(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
+      targetCode: 'valid = []\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.append(n)\nif len(valid) > 0:\n    print(max(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
+      testCases: [
         {
-          "id": 1,
-          "input": "",
-          "expectedOutput": "3 e v"
-        }
-      ]
-    }
-  ]
+          id: 1,
+          input: '30\n60\n80\n40',
+          expectedOutput: '80:140',
+        },
+        {
+          id: 2,
+          input: '10\n20\n30\n40',
+          expectedOutput: 'Empty',
+        },
+      ],
+    },
+    {
+      id: 3,
+      step: 3,
+      type: 'typing',
+      kind: 'fill_blank',
+      prompt_ko: '[빈칸 채우기] 리스트를 내림차순 정렬한 뒤, 앞에서부터 2개를 꺼내 picked에 담고 [0]을 이어붙여 출력해보세요.',
+      prompt_en: '[Fill Blank] Sort nums descending, pop the first 2 items from index 0 into picked, and concatenate [0].',
+      hint_ko: '원본 정렬 메서드, 맨 앞 요소를 꺼내는 호출식, 리스트 연결 연산자를 차례로 채우세요.',
+      hint_en: 'Supply the sort method, front pop call, and list concatenation operator.',
+      templateCode: 'nums = [15, 40, 25, 30]\nnums.§§§§(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.§§§§§§)\nprint(picked § [0])',
+      targetCode: 'nums = [15, 40, 25, 30]\nnums.sort(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.pop(0))\nprint(picked + [0])',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[40, 30, 0]',
+        },
+      ],
+    },
+    {
+      id: 4,
+      step: 4,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 입력 숫자들을 정수로 담아 양끝 요소의 산술 합을 구하려다 문자열 연결이 되는 형변환 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the type conversion bug so the first and last numbers are added as integers.',
+      hint_ko: '산술 덧셈이 이루어지도록 입력값을 문자열이 아닌 정수로 변환해 리스트에 담으세요.',
+      hint_en: 'Convert each input line to an integer instead of a string before appending.',
+      templateCode: 'nums = []\nfor i in range(3):\n    nums.append(str(input()))\nprint("Ends:", nums[0] + nums[-1])',
+      targetCode: 'nums = []\nfor i in range(3):\n    nums.append(int(input()))\nprint("Ends:", nums[0] + nums[-1])',
+      testCases: [
+        {
+          id: 1,
+          input: '10\n20\n30',
+          expectedOutput: 'Ends: 40',
+        },
+        {
+          id: 2,
+          input: '7\n5\n13',
+          expectedOutput: 'Ends: 20',
+        },
+      ],
+    },
+    {
+      id: 5,
+      step: 5,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 오름차순 정렬 후 가장 낮은 첫 점수 하나를 빼려다 두 번째 점수가 빠지는 인덱스 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the .pop() index after ascending sort so the lowest score at index 0 is removed.',
+      hint_ko: '오름차순 정렬 후 최솟값은 맨 앞(0번)에 위치합니다.',
+      hint_en: 'After ascending sort, the minimum value is at index 0.',
+      templateCode: 'scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(1)\nprint(scores[0], sum(scores))',
+      targetCode: 'scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(0)\nprint(scores[0], sum(scores))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '60 300',
+        },
+      ],
+    },
+    {
+      id: 6,
+      step: 6,
+      type: 'typing',
+      kind: 'fix_bug',
+      prompt_ko: '[틀린 곳 수정] 금지 목록(bans)에 없는 정상 단어만 keep 리스트에 모으려다 대상 리스트 이름을 잘못 적은 버그를 수정해보세요.',
+      prompt_en: '[Fix Bug] Fix the target list name in .append() so allowed words are collected into keep.',
+      hint_ko: '조건을 통과한 단어는 금지 목록이 아니라 결과 리스트에 추가해야 합니다.',
+      hint_en: 'Append allowed words to keep rather than bans.',
+      templateCode: 'words = ["ok", "err", "run", "skip"]\nbans = ["err", "skip"]\nkeep = []\nfor w in words:\n    if w not in bans:\n        bans.append(w)\nprint(keep)',
+      targetCode: 'words = ["ok", "err", "run", "skip"]\nbans = ["err", "skip"]\nkeep = []\nfor w in words:\n    if w not in bans:\n        keep.append(w)\nprint(keep)',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: "['ok', 'run']",
+        },
+      ],
+    },
+    {
+      id: 7,
+      step: 7,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] stack의 마지막 요소를 꺼내어 removed 리스트에 바로 추가하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the indented line that pops the last item from stack and appends it to removed.',
+      hint_ko: 'removed의 추가 메서드 괄호 안에 stack의 끝 요소 꺼내기 호출식을 넣으세요.',
+      hint_en: 'Pass stack.pop() inside removed.append() inside the while loop.',
+      templateCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(stack), sum(removed))',
+      targetCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    removed.append(stack.pop())\nprint(sum(stack), sum(removed))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '30 70',
+        },
+      ],
+    },
+    {
+      id: 8,
+      step: 8,
+      type: 'typing',
+      kind: 'one_line',
+      prompt_ko: '[한 줄 완성] 리스트 nums의 앞 2개 요소와 뒤 2개 요소를 슬라이싱해 +로 연결하여 ends에 저장하는 한 줄을 완성해보세요.',
+      prompt_en: '[Complete Line] Complete the line that concatenates nums[:2] and nums[-2:] into ends.',
+      hint_ko: '앞 2개 슬라이싱과 뒤 2개 음수 슬라이싱을 +로 이어 ends에 대입하세요.',
+      hint_en: 'Assign the sum of the first-two slice and last-two slice of nums to ends.',
+      templateCode: 'nums = [10, 20, 30, 40, 50]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ends, sum(ends))',
+      targetCode: 'nums = [10, 20, 30, 40, 50]\nends = nums[:2] + nums[-2:]\nprint(ends, sum(ends))',
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 20, 40, 50] 120',
+        },
+      ],
+    },
+    {
+      id: 9,
+      step: 9,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 리스트 순회 필터링(continue, break)과 오름차순 정렬 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '음수는 건너뛰고 0에서 멈춘 뒤 모인 숫자들이 오름차순 정렬된 결과와 합계를 계산해보세요.',
+      hint_en: 'Trace which numbers are collected before 0 stops the loop, then check the sorted list and sum.',
+      targetCode: 'raw = [30, -5, 10, 0, 20]\nnums = []\nfor n in raw:\n    if n < 0:\n        continue\n    if n == 0:\n        break\n    nums.append(n)\nnums.sort()\nprint(nums, sum(nums))',
+      choices: [
+        '[10, 30] 40',
+        '[10, 20, 30] 60',
+        '[30, 10] 40',
+        '[-5, 10, 30] 35',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '[10, 30] 40',
+        },
+      ],
+    },
+    {
+      id: 10,
+      step: 10,
+      type: 'quiz',
+      kind: 'predict_output',
+      prompt_ko: '[출력 결과 예측] 다음 내림차순 정렬, 양끝 .pop(), 리스트 연결 및 집계 코드의 실행 결과를 예측해보세요.',
+      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
+      hint_ko: '내림차순 정렬 후 맨 앞(최댓값)과 맨 뒤(최솟값)를 꺼내고, 그 차이를 남은 리스트에 이어붙였을 때의 최댓값과 실수 평균을 구해보세요.',
+      hint_en: 'Pop the front and back items after descending sort, append their difference, and find max and float average.',
+      targetCode: 'q = [10, 50, 20, 30]\nq.sort(reverse=True)\nfirst = q.pop(0)\nlast = q.pop()\nres = q + [first - last]\nprint(max(res), sum(res) / len(res))',
+      choices: [
+        '40 30.0',
+        '50 30.0',
+        '40 30',
+        '30 25.0',
+      ],
+      correctChoiceIndex: 0,
+      testCases: [
+        {
+          id: 1,
+          input: '',
+          expectedOutput: '40 30.0',
+        },
+      ],
+    },
+  ],
 };

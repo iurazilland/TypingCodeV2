@@ -6,10 +6,10 @@ export const PYTHON_LEVEL_82: PracticeRound = {
   "trackId": "python",
   "moduleId": "py-basic",
   "roundNumber": 82,
-  "title_ko": "82레벨: 실용 내장 함수 & 함수 확장 누적 복습 종합",
-  "title_en": "Level 82: Section 13 Comprehensive Spiral Review",
-  "description_ko": "수치·반복자·논리·타입 내장 함수(abs, round, map, enumerate, zip, reversed, all, any, isinstance)와 *args, lambda를 종합 점검합니다.",
-  "description_en": "Comprehensive synthesis of abs, round, map, enumerate, zip, reversed, all, any, isinstance, *args, and lambda.",
+  "title_ko": "82레벨: 예외 처리 기초 & 핵심 개념 기초편(Part 1) 완주 종합",
+  "title_en": "Level 82: Section 10 & Part 1 Core Foundations Master Review",
+  "description_ko": "예외 처리(try - except)와 입출력·조건·반복·컬렉션·함수·클래스까지 Part 1 핵심 기초 전 과정을 종합 점검합니다.",
+  "description_en": "Master review of Part 1 synthesizing try - except with I/O, conditionals, loops, collections, functions, and classes.",
   "totalQuestions": 10,
   "unlockedBlocks": [],
   "questions": [
@@ -18,22 +18,27 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 1,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 정수 리스트를 나란히 짝지어 각 차이의 절댓값 중 최댓값을 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in both blanks to pair two integer lists, take each absolute difference, and print the max.",
-      "hint_ko": "두 정수의 부호 없는 차이 크기를 구하는 3글자 함수와, 두 리스트를 나란히 묶는 3글자 병렬 순회 함수를 채우세요.",
-      "hint_en": "Fill in the 3-letter built-in for absolute magnitude and the 3-letter parallel-pairing built-in.",
-      "templateCode": "a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nerrs = [§§§(x - y) for x, y in §§§(a, b)]\nprint(max(errs))",
-      "targetCode": "a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nerrs = [abs(x - y) for x, y in zip(a, b)]\nprint(max(errs))",
+      "prompt_ko": "[빈칸 채우기] 정수 변환 실패와 0 나눗셈 에러를 각각 구분해 처리하도록 세 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the attempt keyword and the two specific exception types for parsing and floor division.",
+      "hint_ko": "시도 블록 키워드와 잘못된 값 변환 예외, 그리고 0 나눗셈 예외 이름을 순서대로 확인하세요.",
+      "hint_en": "Check the three-letter attempt keyword, the invalid-value exception, and the division-by-zero exception.",
+      "templateCode": "s = input()\n§§§:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept §§§§§§§§§§:\n    print(\"Err:Val\")\nexcept §§§§§§§§§§§§§§§§§:\n    print(\"Err:Zero\")",
+      "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept ValueError:\n    print(\"Err:Val\")\nexcept ZeroDivisionError:\n    print(\"Err:Zero\")",
       "testCases": [
         {
           "id": 1,
-          "input": "15 32 50\n12 38 49",
-          "expectedOutput": "6"
+          "input": "30",
+          "expectedOutput": "Ans:4"
         },
         {
           "id": 2,
-          "input": "10 2\n8 5",
-          "expectedOutput": "3"
+          "input": "abc",
+          "expectedOutput": "Err:Val"
+        },
+        {
+          "id": 3,
+          "input": "0",
+          "expectedOutput": "Err:Zero"
         }
       ]
     },
@@ -42,22 +47,22 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 2,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 점수 내림차순으로 정렬한 뒤 1위부터 번호표를 붙여 출력하세요.",
-      "prompt_en": "[Fill Blank] Fill in lambda and enumerate to sort descending by score and print 1-based rankings.",
-      "hint_ko": "두 번째 요소를 정렬 기준으로 삼는 6글자 익명 함수 키워드와 1번부터 번호를 붙이는 9글자 열거 함수를 채우세요.",
-      "hint_en": "Use the 6-letter inline function keyword for sorting and the 9-letter 1-based numbering iterator.",
-      "templateCode": "names = input().split()\npts = list(map(int, input().split()))\nboard = dict(zip(names, pts))\nit = board.items()\ntop = sorted(it, key=§§§§§§ x: x[1], reverse=True)\nfor r, pair in §§§§§§§§§(top, 1):\n    print(f\"{r}.{pair[0]}:{pair[1]}\")",
-      "targetCode": "names = input().split()\npts = list(map(int, input().split()))\nboard = dict(zip(names, pts))\nit = board.items()\ntop = sorted(it, key=lambda x: x[1], reverse=True)\nfor r, pair in enumerate(top, 1):\n    print(f\"{r}.{pair[0]}:{pair[1]}\")",
+      "prompt_ko": "[빈칸 채우기] 메뉴판에 있는 이름을 입력할 때까지 반복하고 성공 시 탈출하도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Complete the retry loop with the string trimming method, loop exit keyword, and missing-key exception.",
+      "hint_ko": "양끝 공백을 지우는 문자열 메서드, 루프 즉시 탈출 키워드, 그리고 딕셔너리 키 누락 예외 이름을 확인하세요.",
+      "hint_en": "Use the whitespace-trimming method, the loop-exit keyword, and the missing-key exception.",
+      "templateCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().§§§§§()\n    try:\n        cost = prices[k]\n        §§§§§\n    except §§§§§§§§:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
+      "targetCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nwhile True:\n    k = input().strip()\n    try:\n        cost = prices[k]\n        break\n    except KeyError:\n        print(\"NoMenu\")\nprint(f\"{k}:{cost}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "Kim Lee Park\n80 95 90",
-          "expectedOutput": "1.Lee:95\n2.Park:90\n3.Kim:80"
+          "input": "milk\npie",
+          "expectedOutput": "NoMenu\npie:4500"
         },
         {
           "id": 2,
-          "input": "Ana Ben\n70 85",
-          "expectedOutput": "1.Ben:85\n2.Ana:70"
+          "input": "  tea  ",
+          "expectedOutput": "tea:3000"
         }
       ]
     },
@@ -66,17 +71,17 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 3,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 가변 인자로 받은 항목들이 모두 Item 인스턴스인지 확인해 맞으면 가격 합계, 아니면 0을 반환하세요.",
-      "prompt_en": "[Fill Blank] Fill in all and isinstance so check_cart sums prices only if every item is an Item.",
-      "hint_ko": "전체 참 여부를 판별하는 3글자 함수와 클래스 인스턴스인지 확인하는 10글자 함수를 조합하세요.",
-      "hint_en": "Combine the 3-letter universal quantifier built-in with the 10-letter runtime class-checking built-in.",
-      "templateCode": "class Item:\n    def __init__(self, price):\n        self.price = price\ndef check_cart(*xs):\n    if not §§§([§§§§§§§§§§(g, Item) for g in xs]):\n        return 0\n    return sum([g.price for g in xs])\nprint(check_cart(Item(500), Item(1200)))\nprint(check_cart(Item(500), \"coupon\"))",
-      "targetCode": "class Item:\n    def __init__(self, price):\n        self.price = price\ndef check_cart(*xs):\n    if not all([isinstance(g, Item) for g in xs]):\n        return 0\n    return sum([g.price for g in xs])\nprint(check_cart(Item(500), Item(1200)))\nprint(check_cart(Item(500), \"coupon\"))",
+      "prompt_ko": "[빈칸 채우기] 안전 정수 변환 함수와 가계부 클래스를 완성해 유효 금액 합계와 고유 태그 수를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete parse_num() and the Ledger class to print the sum of valid amounts and count of unique tags.",
+      "hint_ko": "값 변환 예외 이름과 생성자 특수 메서드 이름, 그리고 리스트 끝에 추가하는 메서드를 차례로 확인하세요.",
+      "hint_en": "Check the invalid-value exception, the double-underscore initializer name, and the list append method.",
+      "templateCode": "def parse_num(raw):\n    try:\n        return int(raw)\n    except §§§§§§§§§§:\n        return None\nclass Ledger:\n    def §§§§§§§§(self):\n        self.records = []\n        self.tags = set()\n    def add(self, tag, raw):\n        val = parse_num(raw)\n        if val is not None:\n            self.records.§§§§§§(val)\n            self.tags.add(tag)\nlg = Ledger()\nfor t, r in [(\"food\", \"120\"), (\"err\", \"x\"), (\"food\", \"80\")]:\n    lg.add(t, r)\nprint(sum(lg.records), len(lg.tags))",
+      "targetCode": "def parse_num(raw):\n    try:\n        return int(raw)\n    except ValueError:\n        return None\nclass Ledger:\n    def __init__(self):\n        self.records = []\n        self.tags = set()\n    def add(self, tag, raw):\n        val = parse_num(raw)\n        if val is not None:\n            self.records.append(val)\n            self.tags.add(tag)\nlg = Ledger()\nfor t, r in [(\"food\", \"120\"), (\"err\", \"x\"), (\"food\", \"80\")]:\n    lg.add(t, r)\nprint(sum(lg.records), len(lg.tags))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "1700\n0"
+          "expectedOutput": "200 1"
         }
       ]
     },
@@ -85,27 +90,22 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 음수가 하나라도 있으면 HasNegative를 출력해야 하는데 전부 음수일 때만 감지되는 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the quantifier logic bug so HasNegative prints whenever at least one number is negative.",
-      "hint_ko": "단 하나라도 조건을 만족하면 참이 되는 부분 논리 검사 함수 any()로 바꾸세요.",
-      "hint_en": "Switch from all() to any() so it triggers when at least one number is negative.",
-      "templateCode": "try:\n    nums = list(map(int, input().split()))\n    if all([n < 0 for n in nums]):\n        print(\"HasNegative\")\n    else:\n        print(\"AllZeroOrPos\")\nexcept ValueError:\n    print(\"BadInput\")",
-      "targetCode": "try:\n    nums = list(map(int, input().split()))\n    if any([n < 0 for n in nums]):\n        print(\"HasNegative\")\n    else:\n        print(\"AllZeroOrPos\")\nexcept ValueError:\n    print(\"BadInput\")",
+      "prompt_ko": "[틀린 곳 수정] 리스트 인덱스 범위를 벗어났을 때 잡아야 할 예외 이름이 잘못 적힌 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Replace the wrong exception type so out-of-range list access prints Unknown.",
+      "hint_ko": "리스트의 유효 인덱스 범위를 벗어났을 때는 값 변환 예외가 아니라 인덱스 예외가 발생합니다.",
+      "hint_en": "Out-of-bounds list indexing raises IndexError rather than ValueError.",
+      "templateCode": "caps = [\"Seoul\", \"Tokyo\"]\nidx = int(input())\ntry:\n    print(caps[idx])\nexcept ValueError:\n    print(\"Unknown\")",
+      "targetCode": "caps = [\"Seoul\", \"Tokyo\"]\nidx = int(input())\ntry:\n    print(caps[idx])\nexcept IndexError:\n    print(\"Unknown\")",
       "testCases": [
         {
           "id": 1,
-          "input": "10 -5 20",
-          "expectedOutput": "HasNegative"
+          "input": "5",
+          "expectedOutput": "Unknown"
         },
         {
           "id": 2,
-          "input": "0 8 15",
-          "expectedOutput": "AllZeroOrPos"
-        },
-        {
-          "id": 3,
-          "input": "10 two 30",
-          "expectedOutput": "BadInput"
+          "input": "0",
+          "expectedOutput": "Seoul"
         }
       ]
     },
@@ -114,22 +114,17 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 5,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 정렬된 정수들을 역순으로 하이픈(-) 연결하려다 map 변환 타입이 잘못된 버그를 고쳐보세요.",
-      "prompt_en": "[Fix Bug] Fix the conversion type inside map() when joining reversed sorted integers with hyphens.",
-      "hint_ko": "문자열 결합 메서드 .join()에 전달하려면 정수(int)가 아니라 문자열(str)로 일괄 변환해야 합니다.",
-      "hint_en": "Change map(int, reversed(nums)) to map(str, reversed(nums)) before joining.",
-      "templateCode": "nums = sorted(map(int, input().split()))\ntext = \"-\".join(map(int, reversed(nums)))\nprint(text)",
-      "targetCode": "nums = sorted(map(int, input().split()))\ntext = \"-\".join(map(str, reversed(nums)))\nprint(text)",
+      "prompt_ko": "[틀린 곳 수정] 리스트 순회 중 정수 변환 실패를 잡으려다 인덱스 예외를 적어 프로그램이 멈추는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the exception type inside the loop so non-numeric strings are caught and skipped.",
+      "hint_ko": "문자열 \"err\"를 int(s)로 바꿀 때 발생하는 예외는 IndexError가 아니라 값 변환 예외입니다.",
+      "hint_en": "Converting non-numeric text with int(s) raises ValueError, not IndexError.",
+      "templateCode": "raw = [\"15\", \"err\", \"25\"]\nvalid = []\nfor s in raw:\n    try:\n        valid.append(int(s))\n    except IndexError:\n        continue\nprint(sum(valid))",
+      "targetCode": "raw = [\"15\", \"err\", \"25\"]\nvalid = []\nfor s in raw:\n    try:\n        valid.append(int(s))\n    except ValueError:\n        continue\nprint(sum(valid))",
       "testCases": [
         {
           "id": 1,
-          "input": "12 3 25",
-          "expectedOutput": "25-12-3"
-        },
-        {
-          "id": 2,
-          "input": "8 100 40",
-          "expectedOutput": "100-40-8"
+          "input": "",
+          "expectedOutput": "40"
         }
       ]
     },
@@ -138,17 +133,17 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 재고 수량(값)이 가장 큰 항목을 찾아야 하는데 상품명(키) 인덱스를 비교하는 버그를 고쳐보세요. (출력: cup:22)",
-      "prompt_en": "[Fix Bug] Fix the tuple index in key=lambda x: ... so max() compares the stock count (index 1).",
-      "hint_ko": "(상품명, 수량) 튜플에서 수량은 0번이 아니라 1번 인덱스(x[1])입니다.",
-      "hint_en": "In each (key, value) tuple from .items(), the quantity is at x[1], not x[0].",
-      "templateCode": "stock = {\"pen\": 15, \"bag\": 4, \"cup\": 22}\ntop = max(stock.items(), key=lambda x: x[0])\nprint(f\"{top[0]}:{top[1]}\")",
-      "targetCode": "stock = {\"pen\": 15, \"bag\": 4, \"cup\": 22}\ntop = max(stock.items(), key=lambda x: x[1])\nprint(f\"{top[0]}:{top[1]}\")",
+      "prompt_ko": "[틀린 곳 수정] 변환 실패 시 기본값을 반환하지 않고 출력만 하여 바깥 덧셈식에서 에러가 나는 버그를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the TypeError in addition caused by printing default instead of returning it in except.",
+      "hint_ko": "함수 호출 결과를 수식에서 더하려면 예외 블록에서도 값을 화면에 출력만 하지 말고 호출부로 돌려주어야 합니다.",
+      "hint_en": "Return default instead of printing it so the caller can add the two results.",
+      "templateCode": "def to_num(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        print(default)\nans = to_num(\"10\") + to_num(\"bad\", default=5)\nprint(ans)",
+      "targetCode": "def to_num(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        return default\nans = to_num(\"10\") + to_num(\"bad\", default=5)\nprint(ans)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "cup:22"
+          "expectedOutput": "15"
         }
       ]
     },
@@ -157,17 +152,27 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 7,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 절댓값 리스트 vals의 평균을 소수 둘째 자리까지 반올림해 반환하는 return 문을 완성하세요. (출력: 5.67)",
-      "prompt_en": "[Complete Line] Write return round(sum(vals) / len(vals), 2) inside avg_abs.",
-      "hint_ko": "return round(sum(vals) / len(vals), 2) 형태로 평균을 반올림해 반환하세요.",
-      "hint_en": "Write return round(sum(vals) / len(vals), 2) inside the function.",
-      "templateCode": "def avg_abs(*nums):\n    vals = [abs(n) for n in nums]\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(avg_abs(-4, 5, -8))",
-      "targetCode": "def avg_abs(*nums):\n    vals = [abs(n) for n in nums]\n    return round(sum(vals) / len(vals), 2)\nprint(avg_abs(-4, 5, -8))",
+      "prompt_ko": "[한 줄 완성] 안전 나눗셈 인스턴스 sd의 calc 메서드에 input()을 전달해 반환값을 ans에 저장하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Call sd.calc(input()) and store the returned integer in variable ans.",
+      "hint_ko": "변수 ans에 인스턴스 sd의 calc(input()) 호출 결과를 대입하세요.",
+      "hint_en": "Assign the result of sd.calc(input()) to ans.",
+      "templateCode": "class SafeDiv:\n    def __init__(self, base):\n        self.base = base\n    def calc(self, raw):\n        try:\n            return self.base // int(raw)\n        except ZeroDivisionError:\n            return -1\n        except ValueError:\n            return -2\nsd = SafeDiv(100)\n§§§§§§§§§§§§§§§§§§§§§§\nprint(ans)",
+      "targetCode": "class SafeDiv:\n    def __init__(self, base):\n        self.base = base\n    def calc(self, raw):\n        try:\n            return self.base // int(raw)\n        except ZeroDivisionError:\n            return -1\n        except ValueError:\n            return -2\nsd = SafeDiv(100)\nans = sd.calc(input())\nprint(ans)",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "5.67"
+          "input": "25",
+          "expectedOutput": "4"
+        },
+        {
+          "id": 2,
+          "input": "0",
+          "expectedOutput": "-1"
+        },
+        {
+          "id": 3,
+          "input": "abc",
+          "expectedOutput": "-2"
         }
       ]
     },
@@ -176,17 +181,22 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 혼합 리스트 raw에 str 타입 원소가 하나라도 있는지 any()와 isinstance()로 검사해 res에 저장하세요.",
-      "prompt_en": "[Complete Line] Assign any([isinstance(x, str) for x in raw]) to res.",
-      "hint_ko": "res = any([isinstance(x, str) for x in raw]) 형태로 작성해보세요.",
-      "hint_en": "Write res = any([isinstance(x, str) for x in raw]).",
-      "templateCode": "raw = [15, \"skip\", -20, 3, None]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(res)",
-      "targetCode": "raw = [15, \"skip\", -20, 3, None]\nres = any([isinstance(x, str) for x in raw])\nprint(res)",
+      "prompt_ko": "[한 줄 완성] 딕셔너리에 없는 학생 이름일 때 KeyError를 잡는 except 헤더 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the indented except KeyError: line inside the while True retry loop.",
+      "hint_ko": "들여쓰기 4칸 위치에 딕셔너리 키 누락 예외를 잡는 except 헤더를 작성하세요.",
+      "hint_en": "Write except KeyError: indented by 4 spaces.",
+      "templateCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    §§§§§§§§§§§§§§§§\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
+      "targetCode": "scores = {\"Kim\": 80, \"Lee\": 95}\nwhile True:\n    name = input()\n    try:\n        pt = scores[name]\n        break\n    except KeyError:\n        print(\"Retry\")\nprint(f\"{name}={pt}\")",
       "testCases": [
         {
           "id": 1,
-          "input": "",
-          "expectedOutput": "True"
+          "input": "Park\nLee",
+          "expectedOutput": "Retry\nLee=95"
+        },
+        {
+          "id": 2,
+          "input": "Kim",
+          "expectedOutput": "Kim=80"
         }
       ]
     },
@@ -195,23 +205,23 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 9,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "두 번째 리스트가 뒤에서부터 역순으로 꺼내져 첫 번째 리스트와 짝지어진 뒤, 각 거리 값에 1부터 시작하는 순서 번호가 곱해지는 과정을 따라가 보세요.",
-      "hint_en": "First pair the first list with the backward order of the second list to get each positive difference, then multiply each difference by its 1-based rank.",
-      "targetCode": "a = [10, 20, 30]\nb = [4, 25, 18]\ngaps = [abs(x - y) for x, y in zip(a, reversed(b))]\nres = [i * g for i, g in enumerate(gaps, 1)]\nprint(res)",
+      "prompt_ko": "[출력 결과 예측] 딕셔너리·리스트 조회와 나눗셈 예외 분기가 결합된 함수 호출 세 번의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the exact output produced by the three calls to calc_item below.",
+      "hint_ko": "나눗셈 식에서 왼쪽(딕셔너리 조회)이 오른쪽(리스트 조회)보다 먼저 평가된다는 점에 유의해 어느 에러가 먼저 나는지 추적하세요.",
+      "hint_en": "Python evaluates store[k] on the left before nums[i] on the right; trace which error triggers first on the third call.",
+      "targetCode": "def calc_item(store, nums, k, i):\n    try:\n        return store[k] // nums[i]\n    except KeyError:\n        return -10\n    except IndexError:\n        return -20\n    except ZeroDivisionError:\n        return 0\nst = {\"a\": 30, \"b\": 15}\narr = [5, 0]\nr1 = calc_item(st, arr, \"a\", 0)\nr2 = calc_item(st, arr, \"a\", 1)\nr3 = calc_item(st, arr, \"c\", 9)\nprint(r1, r2, r3)",
       "choices": [
-        "[8, 10, 78]",
-        "[6, 10, 36]",
-        "[8, 5, 26]",
-        "[0, 5, 52]"
+        "6 0 -20",
+        "6 -20 -10",
+        "5 0 -10",
+        "6 0 -10"
       ],
-      "correctChoiceIndex": 0,
+      "correctChoiceIndex": 3,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[8, 10, 78]"
+          "expectedOutput": "6 0 -10"
         }
       ]
     },
@@ -220,23 +230,23 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "step": 10,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
-      "hint_ko": "문자열을 걸러낸 정수들 가운데 0으로부터의 크기가 가장 작은 원소(원래 부호는 그대로 유지됨!)를 찾고, 모든 정수가 0이 아닌지 함께 확인해보세요.",
-      "hint_en": "Filter out non-integers, see which remaining integer has the smallest magnitude (retaining its original sign), and check whether every integer is non-zero.",
-      "targetCode": "def pick(*xs):\n    nums = [x for x in xs if isinstance(x, int)]\n    s = sorted(nums, key=lambda n: abs(n))\n    return s[0], all([n != 0 for n in nums])\nprint(pick(\"skip\", -7, 3, -2, 5))",
+      "prompt_ko": "[출력 결과 예측] 클래스 메서드와 예외 처리, 집합·리스트 집계가 모두 결합된 Part 1 완주 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output of the Part 1 master code combining a class, exception handling, a set, and list sum.",
+      "hint_ko": "짝수 정수로 변환된 값만 집합과 리스트에 추가되며, 집합은 중복된 숫자 10을 하나로 합친다는 점을 확인하세요.",
+      "hint_en": "Only valid even integers are added; notice that the list keeps duplicates while the set removes them.",
+      "targetCode": "class FilterBox:\n    def __init__(self):\n        self.nums = []\n        self.uniq = set()\n    def push(self, s):\n        try:\n            n = int(s)\n            if n % 2 == 0:\n                self.nums.append(n)\n                self.uniq.add(n)\n        except ValueError:\n            pass\nfb = FilterBox()\nfor token in [\"10\", \"7\", \"bad\", \"10\", \"4\"]:\n    fb.push(token)\nprint(sum(fb.nums), len(fb.uniq))",
       "choices": [
-        "(-2, True)",
-        "(2, True)",
-        "(-7, True)",
-        "(-2, False)"
+        "24 2",
+        "24 3",
+        "14 2",
+        "31 3"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "(-2, True)"
+          "expectedOutput": "24 2"
         }
       ]
     }

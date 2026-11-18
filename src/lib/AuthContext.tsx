@@ -153,7 +153,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const keysToRemove: string[] = [];
         for (let i = 0; i < localStorage.length; i++) {
           const k = localStorage.key(i);
-          if (k && (k.startsWith('cleared_levels_') || k.startsWith('section_feedback_'))) {
+          if (
+            k &&
+            (k.startsWith('cleared_levels_') ||
+              k.startsWith('section_feedback_') ||
+              k.startsWith('progress_reset_ack_') ||
+              k === 'active_curriculum_type' ||
+              k === 'active_curriculum_id' ||
+              k === 'current_learning_track' ||
+              k === 'current_learning_level')
+          ) {
             keysToRemove.push(k);
           }
         }

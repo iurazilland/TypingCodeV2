@@ -245,11 +245,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           gap: '8px',
           padding: '7px 14px 7px 12px',
           borderRadius: block.nextBlockId ? '16px 16px 0 0' : '16px 16px 6px 6px',
-          background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+          background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           boxShadow: block.nextBlockId
-            ? '0 4px 12px rgba(16, 185, 129, 0.25)'
-            : '0 2px 0 #065f46, 0 4px 12px rgba(16, 185, 129, 0.35)',
-          border: '1px solid #10b981',
+            ? '0 4px 12px rgba(34, 197, 94, 0.25)'
+            : '0 2px 0 #14532d, 0 4px 12px rgba(34, 197, 94, 0.35)',
+          border: '1px solid #4ade80',
           color: '#ffffff',
           fontWeight: 800,
           fontSize: '0.82rem',
@@ -270,11 +270,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             height: '20px',
             borderRadius: '50%',
             background: '#ffffff',
-            color: '#047857',
+            color: '#15803d',
             boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
           }}
         >
-          <Play size={11} fill="#047857" style={{ marginLeft: '1px' }} />
+          <Play size={11} fill="#15803d" style={{ marginLeft: '1px' }} />
         </div>
         <span style={{ fontWeight: 800, letterSpacing: '-0.3px', color: '#ffffff', fontSize: '0.85rem' }}>실행</span>
         <span
@@ -290,7 +290,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           Start
         </span>
         {/* Standard Puzzle Tab pointing downwards */}
-        <PuzzleTab left={BLOCK_GEOMETRY.TAB_LEFT_ROOT} borderColor="#10b981" bg="#047857" zIndex={20} />
+        <PuzzleTab left={BLOCK_GEOMETRY.TAB_LEFT_ROOT} borderColor="#4ade80" bg="#15803d" zIndex={20} />
       </div>
     );
   }
@@ -318,7 +318,6 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '2px',
-            margin: '0 2px',
           }}
         >
           <CanvasBlockItem
@@ -355,7 +354,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           value={block.content || ''}
           targetValue={block.targetContent}
           onChange={(val) => onContentChange(val, block.id, parentBlockId, cIdx, branchId)}
-          fontSize="0.88rem"
+          height={isSlotArg ? '20px' : '24px'}
+          padding={isSlotArg ? '0 5px' : '1px 6px'}
+          borderRadius={isSlotArg ? '5px' : '6px'}
+          minWidthPx={isSlotArg ? 20 : 22}
+          fontSize={isSlotArg ? '0.82rem' : '0.88rem'}
           background={isArgSlotTarget ? '#fef9c3' : '#ffffff'}
           border={isArgSlotTarget ? '2px solid #eab308' : '1px solid rgba(0,0,0,0.2)'}
           boxShadow={isArgSlotTarget ? '0 0 0 2.5px rgba(250, 204, 21, 0.5), 0 0 10px rgba(234, 179, 8, 0.65)' : 'none'}
@@ -412,10 +415,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             display: 'flex',
             alignItems: 'center',
             whiteSpace: 'nowrap',
-            gap: '4px',
+            gap: block.type === 'for_range' ? '3px' : '4px',
             minHeight: `${BLOCK_GEOMETRY.ARM_HEIGHT}px`,
             height: `${BLOCK_GEOMETRY.ARM_HEIGHT}px`,
-            padding: '0 10px',
+            padding: block.type === 'for_range' ? '0 8px' : '0 10px',
             borderRadius: isNested ? '0 6px 6px 0' : '6px 6px 6px 0',
             background: theme.bg,
             border: `1px solid ${theme.border}`,
@@ -470,11 +473,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           ) : block.type === 'class' ? (
             <>
               <span style={{ color: '#ffffff' }}>class</span>
-              <BlockTraceInput
-                value={block.varName ?? (block.targetVarName !== undefined ? '' : 'MyClass')}
-                targetValue={block.targetVarName}
-                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-              />
+              <span style={{ color: '#ffffff', fontWeight: 900 }}>
+                {block.varName || block.targetVarName || 'MyClass'}
+              </span>
               {block.content !== undefined || block.targetContent !== undefined ? (
                 <>
                   <span>(</span>
@@ -492,11 +493,9 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           ) : (
             <>
               <span style={{ color: '#ffffff' }}>def</span>
-              <BlockTraceInput
-                value={block.varName ?? (block.targetVarName !== undefined ? '' : 'my_func')}
-                targetValue={block.targetVarName}
-                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-              />
+              <span style={{ color: '#ffffff', fontWeight: 900 }}>
+                {block.varName || block.targetVarName || 'my_func'}
+              </span>
               <span>(</span>
               <BlockTraceInput
                 value={block.content || ''}
@@ -1171,6 +1170,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
           <span>{block.methodName || 'method'}</span>
           <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
           <select
+            tabIndex={-1}
             value={block.methodName || 'method'}
             onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
@@ -1234,10 +1234,10 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '5px',
-        minHeight: isSlotArg ? '28px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
-        height: isSlotArg ? '28px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
-        padding: isSlotArg ? '0 8px' : '0 12px',
+        gap: isSlotArg ? '2px' : '5px',
+        minHeight: isSlotArg ? '26px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
+        height: isSlotArg ? '26px' : `${BLOCK_GEOMETRY.STATEMENT_HEIGHT}px`,
+        padding: isSlotArg ? '0 5px' : '0 12px',
         boxSizing: 'border-box',
         borderRadius: isSlotArg ? '6px' : isNested ? '0 6px 0 0' : '6px',
         background: theme.bg,
@@ -1246,14 +1246,14 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         boxShadow: (isNested || isSlotArg) ? 'none' : `0 2px 0 ${theme.shadow}, 0 4px 10px rgba(0, 0, 0, 0.25)`,
         color: '#ffffff',
         fontWeight: 800,
-        fontSize: isSlotArg ? '0.84rem' : '0.90rem',
+        fontSize: isSlotArg ? '0.82rem' : '0.90rem',
         fontFamily: 'var(--font-mono)',
         position: (isNested || isSlotArg || isToolbox) ? 'relative' : 'absolute',
         width: 'fit-content',
         userSelect: 'none',
         cursor: 'grab',
         ...(isSlotArg
-          ? { margin: '0 2px' }
+          ? { margin: 0 }
           : isNested
           ? { marginTop: cIdx === 0 ? '0px' : '-1px' }
           : isToolbox
@@ -1347,6 +1347,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             <span>{block.type}</span>
             <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
             <select
+              tabIndex={-1}
               value={block.type}
               onMouseDown={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
@@ -1402,6 +1403,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             <span>{block.type}</span>
             <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
             <select
+              tabIndex={-1}
               value={block.type}
               onMouseDown={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
@@ -1456,6 +1458,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
             <span>{block.type}</span>
             <span style={{ fontSize: isSlotArg ? '0.58rem' : '0.62rem', transform: 'scaleY(0.85)', opacity: 0.9 }}>▼</span>
             <select
+              tabIndex={-1}
               value={block.type}
               onMouseDown={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
@@ -1484,28 +1487,24 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         </>
       ) : block.type === 'call' ? (
         <>
-          <BlockTraceInput
-            value={block.varName ?? (block.targetVarName !== undefined ? '' : 'my_func')}
-            targetValue={block.targetVarName}
-            onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-            fontSize="0.88rem"
-          />
+          <span style={{ color: '#ffffff', fontWeight: 900 }}>
+            {block.varName || block.targetVarName || 'my_func'}
+          </span>
           <span>(</span>
           {renderArgSlot('call')}
           <span>)</span>
         </>
       ) : block.type === 'variable' ? (
         <>
-          <BlockTraceInput
-            value={block.varName ?? (block.targetVarName !== undefined ? '' : 'x')}
-            targetValue={block.targetVarName}
-            onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-            fontSize="0.88rem"
-          />
+          <span style={{ color: '#ffffff', fontWeight: 900 }}>
+            {block.varName || block.targetVarName || 'x'}
+          </span>
           {!(
             isSlotArg ||
+            block.isVarRef ||
             (Boolean(block.attachedMethodId) &&
               !(block.content || '').trim() &&
+              !block.targetContent &&
               !block.argBlock &&
               (!block.assignOp || block.assignOp === '='))
           ) && (
@@ -1536,6 +1535,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               >
                 <span>{block.assignOp || '='}</span>
                 <select
+                  tabIndex={-1}
                   value={block.assignOp || '='}
                   onMouseDown={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
@@ -1599,14 +1599,11 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
         <span style={{ color: '#ffffff' }}>{block.type}</span>
       ) : (
         <>
-          {block.varName !== undefined && (
+          {(block.varName !== undefined || block.targetVarName !== undefined) && (
             <>
-              <BlockTraceInput
-                value={block.varName}
-                targetValue={block.targetVarName}
-                onChange={(val) => onVarNameChange?.(val, block.id, parentBlockId, cIdx, branchId)}
-                fontSize="0.88rem"
-              />
+              <span style={{ color: '#ffffff', fontWeight: 900 }}>
+                {block.varName || block.targetVarName}
+              </span>
               <span>=</span>
             </>
           )}

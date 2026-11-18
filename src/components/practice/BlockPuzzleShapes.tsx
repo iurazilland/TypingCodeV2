@@ -36,7 +36,7 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
   minChars = 1,
   minWidthPx = 0,
   height = '24px',
-  padding = '2px 7px',
+  padding = '1px 6px',
   borderRadius = '6px',
   fontSize = '0.88rem',
   fontWeight = 800,
@@ -52,7 +52,7 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
 }) => {
   const valStr = value ?? '';
   const targetStr = targetValue ?? '';
-  const effectiveMinWidth = Math.max(minWidthPx, 32);
+  const effectiveMinWidth = Math.max(minWidthPx, 22);
   const isMismatch =
     targetValue !== undefined && !allowAnyText && valStr.length > 0 && !targetStr.startsWith(valStr);
 
@@ -91,7 +91,7 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
         transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
       }}
     >
-      {/* Native DOM auto-sizer for current value (prevents any text clipping or horizontal input scroll) */}
+      {/* Native DOM auto-sizer for current value (symmetric left/right padding) */}
       <span
         aria-hidden="true"
         style={{
@@ -99,7 +99,6 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
           visibility: 'hidden',
           whiteSpace: 'pre',
           padding,
-          paddingRight: '10px',
           fontFamily: 'var(--font-mono)',
           fontSize,
           fontWeight,
@@ -117,7 +116,6 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
           style={{
             gridArea: '1 / 1',
             padding,
-            paddingRight: '10px',
             display: 'flex',
             alignItems: 'center',
             fontFamily: 'var(--font-mono)',
@@ -148,6 +146,32 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
           e.preventDefault();
           e.stopPropagation();
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Tab') {
+            const canvasEl = e.currentTarget.closest('#tour-col-canvas');
+            if (!canvasEl) return;
+            const inputs = Array.from(
+              canvasEl.querySelectorAll<HTMLInputElement>('input[type="text"]:not(:disabled)')
+            ).filter((el) => el.offsetParent !== null);
+            if (inputs.length <= 1) return;
+            const rects = new Map(inputs.map((el) => [el, el.getBoundingClientRect()]));
+            inputs.sort((a, b) => {
+              const ra = rects.get(a)!;
+              const rb = rects.get(b)!;
+              if (Math.abs(ra.top - rb.top) > 12) {
+                return ra.top - rb.top;
+              }
+              return ra.left - rb.left;
+            });
+            const idx = inputs.indexOf(e.currentTarget);
+            if (idx === -1) return;
+            e.preventDefault();
+            const nextIdx = e.shiftKey
+              ? (idx - 1 + inputs.length) % inputs.length
+              : (idx + 1) % inputs.length;
+            inputs[nextIdx].focus();
+          }
+        }}
         onFocus={targetValue !== undefined ? undefined : onFocus}
         onClick={targetValue !== undefined ? undefined : onClick}
         onChange={(e) => onChange(e.target.value)}
@@ -155,7 +179,7 @@ export const BlockTraceInput: React.FC<BlockTraceInputProps> = ({
           position: 'absolute',
           inset: 0,
           zIndex: 1,
-          width: '100%',
+          width: 'calc(100% + 2px)',
           height: '100%',
           padding,
           margin: 0,
