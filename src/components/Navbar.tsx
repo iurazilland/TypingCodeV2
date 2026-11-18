@@ -10,10 +10,12 @@ import {
   ChevronDown,
   Code2,
   Flame,
+  GraduationCap,
   Keyboard,
   LogOut,
   Menu,
   Settings,
+  ShieldCheck,
   Trophy,
   User,
   X,
@@ -477,30 +479,82 @@ export default function Navbar() {
                   </Link>
 
                   {isAdmin && (
-                    <Link
-                      href="/admin/feedbacks"
-                      onClick={() => setIsProfileMenuOpen(false)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '9px',
-                        padding: '10px 12px',
-                        borderRadius: '10px',
-                        color: '#0f172a',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        textDecoration: 'none',
-                        transition: 'background 0.15s ease',
-                        marginTop: '2px',
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)')
-                      }
-                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                    >
-                      <BarChart3 size={15} style={{ color: '#6366f1' }} />
-                      <span>{language === 'ko' ? '설문 대시보드' : 'Survey Dashboard'}</span>
-                    </Link>
+                    <>
+                      <Link
+                        href="/lms"
+                        onClick={() => setIsProfileMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '9px',
+                          padding: '10px 12px',
+                          borderRadius: '10px',
+                          color: '#0f172a',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          transition: 'background 0.15s ease',
+                          marginTop: '2px',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'rgba(16, 185, 129, 0.12)')
+                        }
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <GraduationCap size={15} style={{ color: '#059669' }} />
+                        <span>{language === 'ko' ? '강사용 LMS 리더보드' : 'Instructor LMS Board'}</span>
+                      </Link>
+
+                      <Link
+                        href="/admin"
+                        onClick={() => setIsProfileMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '9px',
+                          padding: '10px 12px',
+                          borderRadius: '10px',
+                          color: '#0f172a',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          transition: 'background 0.15s ease',
+                          marginTop: '2px',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'rgba(245, 158, 11, 0.12)')
+                        }
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <ShieldCheck size={15} style={{ color: '#d97706' }} />
+                        <span>{language === 'ko' ? '관리자 페이지' : 'Admin Console'}</span>
+                      </Link>
+
+                      <Link
+                        href="/admin/feedbacks"
+                        onClick={() => setIsProfileMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '9px',
+                          padding: '10px 12px',
+                          borderRadius: '10px',
+                          color: '#0f172a',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          transition: 'background 0.15s ease',
+                          marginTop: '2px',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)')
+                        }
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <BarChart3 size={15} style={{ color: '#6366f1' }} />
+                        <span>{language === 'ko' ? '설문 대시보드' : 'Survey Dashboard'}</span>
+                      </Link>
+                    </>
                   )}
 
                   <button
@@ -660,26 +714,68 @@ export default function Navbar() {
                 <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
               </Link>
               {isAdmin && (
-                <Link
-                  href="/admin/feedbacks"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '12px 16px',
-                    borderRadius: '12px',
-                    fontSize: '0.96rem',
-                    fontWeight: 700,
-                    color: '#0f172a',
-                    background: '#f5f3ff',
-                    border: '1px solid #c4b5fd',
-                    textDecoration: 'none',
-                  }}
-                >
-                  <BarChart3 size={18} style={{ color: '#6366f1' }} />
-                  <span>{language === 'ko' ? '설문 대시보드' : 'Survey Dashboard'}</span>
-                </Link>
+                <>
+                  <Link
+                    href="/lms"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px 16px',
+                      borderRadius: '12px',
+                      fontSize: '0.96rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      background: '#ecfdf5',
+                      border: '1px solid #a7f3d0',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <GraduationCap size={18} style={{ color: '#059669' }} />
+                    <span>{language === 'ko' ? '강사용 LMS 리더보드' : 'Instructor LMS Board'}</span>
+                  </Link>
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px 16px',
+                      borderRadius: '12px',
+                      fontSize: '0.96rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      background: '#fffbeb',
+                      border: '1px solid #fde68a',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <ShieldCheck size={18} style={{ color: '#d97706' }} />
+                    <span>{language === 'ko' ? '관리자 페이지' : 'Admin Console'}</span>
+                  </Link>
+                  <Link
+                    href="/admin/feedbacks"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px 16px',
+                      borderRadius: '12px',
+                      fontSize: '0.96rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      background: '#f5f3ff',
+                      border: '1px solid #c4b5fd',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <BarChart3 size={18} style={{ color: '#6366f1' }} />
+                    <span>{language === 'ko' ? '설문 대시보드' : 'Survey Dashboard'}</span>
+                  </Link>
+                </>
               )}
               <button
                 type="button"

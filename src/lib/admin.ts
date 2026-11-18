@@ -8,6 +8,8 @@ import type { UserProfile } from '@/lib/supabase/types';
 export const DEFAULT_ADMIN_IDS: readonly string[] = [
   'iurazilland@gmail.com',
   'iurazilland',
+  'easypower@nate.com',
+  'easypower',
   'admin',
   'easyp',
   'typingcode',
@@ -25,7 +27,7 @@ export function getConfiguredAdminIds(): string[] {
 }
 
 /**
- * 현재 로그인한 사용자가 지정된 관리자 ID인지 판별합니다.
+ * 현재 로그인한 사용자가 지정된 관리자 ID 또는 관리자 역할인지 판별합니다.
  */
 export function isAdminUser(
   profile?: UserProfile | null,
@@ -33,11 +35,22 @@ export function isAdminUser(
 ): boolean {
   if (!user && !profile) return false;
 
+  if (profile?.role === 'super_admin' || profile?.role === 'org_admin') {
+    return true;
+  }
+
   const adminSet = new Set(getConfiguredAdminIds());
   const candidates: string[] = [];
 
   if (profile?.username) {
     candidates.push(profile.username.trim().toLowerCase());
+  }
+
+  if (profile?.email) {
+    const cleanProfileEmail = profile.email.trim().toLowerCase();
+    candidates.push(cleanProfileEmail);
+    const pPrefix = cleanProfileEmail.split('@')[0];
+    if (pPrefix) candidates.push(pPrefix);
   }
 
   if (user?.email) {

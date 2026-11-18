@@ -957,8 +957,8 @@ export default function TypingStage({
 
                           let isCharError = false;
 
-                          if (isLineAllBlank) {
-                            // 한 줄 전체가 빈칸(§§§...)인 경우: 글자 수가 적든 넘치든 절대 오타 처리하지 않음
+                          if (question.kind === 'fix_bug' || isLineAllBlank) {
+                            // 틀린 곳 수정(fix_bug) 문제 및 전체 빈칸 줄에서는 어느 곳에서도 오타(빨간색) 표시를 하지 않음
                             isCharError = false;
                           } else if (hasBlankInLine) {
                             // 줄 내부에 빈칸 슬롯(print(§§))이 있는 경우
@@ -982,14 +982,6 @@ export default function TypingStage({
                                   isCharError = true;
                                 }
                               }
-                            }
-                          } else if (question.kind === 'fix_bug') {
-                            // 오타 수정: templateCode(화면 가이드) 또는 targetCode(정답 코드) 둘 중 하나라도 일치하면 정상
-                            // 둘 다 아닌 엉뚱한 글자를 입력했을 때만 오타(빨간색 글자)로 즉시 표시
-                            const templateChar = (targetLines[lineIdx] || '')[colIdx];
-                            const targetChar = (targetCodeLines[lineIdx] || '')[colIdx];
-                            if (userChar !== templateChar && userChar !== targetChar) {
-                              isCharError = true;
                             }
                           } else {
                             // 일반 고정 코드: 표시된 글자와 다르면 오타 처리

@@ -604,19 +604,68 @@ export async function setStudentLearningLevel(
     const trackId = normalizeTrackKey(rawTrackId);
     const safeTarget = Math.max(1, Math.min(500, Math.round(targetLevel)));
 
-    const { data, error } = await supabase.rpc('set_student_learning_level', {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    let { data, error } = await supabase.rpc('set_student_learning_level', {
       p_student_id: studentId,
       p_track_id: trackId,
       p_target_level: safeTarget,
     });
 
+    // If the operator is a designated admin/instructor whose DB role is still 'student'
+    // and the student is not yet in one of their classrooms, auto-link via an instructor classroom and retry.
+    if ((error || !data) && user && user.id !== studentId) {
+      const { data: existingCls } = await supabase
+        .from('classrooms')
+        .select('id')
+        .eq('instructor_id', user.id)
+        .limit(1)
+        .maybeSingle();
+
+      let classroomId: string | null = (existingCls as { id?: string } | null)?.id || null;
+      if (!classroomId) {
+        const randCode = Array.from({ length: 6 }, () =>
+          'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'.charAt(Math.floor(Math.random() * 32))
+        ).join('');
+        const { data: createdCls } = await supabase
+          .from('classrooms')
+          .insert({
+            instructor_id: user.id,
+            name: '기본 담당 학습반',
+            description: '관리자/강사 진도 관리용 기본 학급',
+            invite_code: randCode,
+            assigned_tracks: [trackId],
+          })
+          .select('id')
+          .maybeSingle();
+        classroomId = (createdCls as { id?: string } | null)?.id || null;
+      }
+
+      if (classroomId) {
+        await supabase.from('classroom_members').upsert(
+          {
+            classroom_id: classroomId,
+            student_id: studentId,
+          },
+          { onConflict: 'classroom_id,student_id' }
+        );
+
+        const retry = await supabase.rpc('set_student_learning_level', {
+          p_student_id: studentId,
+          p_track_id: trackId,
+          p_target_level: safeTarget,
+        });
+        data = retry.data;
+        error = retry.error;
+      }
+    }
+
     if (error || !data) return null;
     const updated = normalizeProfileRow(data as Record<string, unknown>);
 
     // If the operator reset their own account, immediately sync local state too
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
     if (user && user.id === studentId) {
       syncLocalLearningStateFromProfile(updated);
       dispatchProgressSynced();
