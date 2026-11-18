@@ -622,7 +622,7 @@ function createInitialCanvasBlocks(question?: PracticeQuestion, unlockedList?: s
         else if (p === 0 && b === 0 && c === 0) {
           const three = line.slice(k, k + 3);
           const two = line.slice(k, k + 2);
-          if (three === '//=') return { pos: k, op: '//=' };
+          if (three === '//=' || three === '**=') return { pos: k, op: three as AssignOperator };
           if (['+=', '-=', '*=', '/=', '%='].includes(two)) return { pos: k, op: two as AssignOperator };
         }
       }

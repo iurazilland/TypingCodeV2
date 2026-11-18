@@ -71,7 +71,7 @@ export interface IfBranch {
   innerBlocks: CanvasBlock[];
 }
 
-export type AssignOperator = '=' | '+=' | '-=' | '*=' | '/=' | '//=' | '%=';
+export type AssignOperator = '=' | '+=' | '-=' | '*=' | '/=' | '//=' | '%=' | '**=';
 
 export interface CanvasBlock {
   id: string;

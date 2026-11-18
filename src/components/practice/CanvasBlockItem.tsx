@@ -1502,7 +1502,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
               <div
                 onMouseDown={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
-                title="클릭하여 대입 연산자 선택 (=, +=, -=, *=, /=, //=, %=)"
+                title="클릭하여 대입 연산자 선택 (=, +=, -=, *=, /=, //=, %=, **=)"
                 style={{
                   position: 'relative',
                   display: 'inline-flex',
@@ -1549,6 +1549,7 @@ export const CanvasBlockItem: React.FC<CanvasBlockItemProps> = (props) => {
                   <option value="/=">/=</option>
                   <option value="//=">//=</option>
                   <option value="%=">%=</option>
+                  <option value="**=">**=</option>
                 </select>
               </div>
               {renderArgSlot('variable', true)}

@@ -28,6 +28,7 @@ import { useLanguage } from '@/lib/LanguageContext';
 import { getConfiguredAdminIds, isAdminUser } from '@/lib/admin';
 import { createClient } from '@/lib/supabase/client';
 import {
+  generateAlphanumericInviteCode,
   normalizeProfileRow,
   setStudentLearningLevel,
 } from '@/lib/progressSync';
@@ -57,10 +58,7 @@ const CURRICULUM_LABELS: Record<string, string> = {
 };
 
 function generateInviteCode(): string {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return Array.from({ length: 6 }, () =>
-    chars.charAt(Math.floor(Math.random() * chars.length))
-  ).join('');
+  return generateAlphanumericInviteCode(8);
 }
 
 function profileToStudentRow(p: UserProfile): ClassroomStudentProgressRow {

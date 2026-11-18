@@ -8,17 +8,25 @@ import {
   ArrowLeft,
   ArrowRight,
   AtSign,
+  Building2,
   CheckCircle2,
+  Copy,
+  GraduationCap,
+  KeyRound,
   Lock,
   Mail,
+  RefreshCw,
+  Sparkles,
   User,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
+import { generateAlphanumericInviteCode } from '@/lib/progressSync';
 import { AVATAR_PRESETS } from '@/lib/avatarPresets';
 import UserAvatar from '@/components/UserAvatar';
+import type { OrganizationType } from '@/lib/supabase/types';
 
 function localizeLoginCode(code: string, isKo: boolean): string {
   switch (code) {
@@ -78,6 +86,17 @@ function LoginPageContent() {
   const [resetConfirmPassword, setResetConfirmPassword] = useState('');
 
   // Sign-up fields
+  const [signupAccountType, setSignupAccountType] = useState<'student' | 'instructor'>('student');
+  const [assignedInviteCode, setAssignedInviteCode] = useState<string>(() =>
+    generateAlphanumericInviteCode(8)
+  );
+  const [copiedInvite, setCopiedInvite] = useState(false);
+  const [instructorOrgType, setInstructorOrgType] = useState<OrganizationType>('school');
+  const [instructorOrgName, setInstructorOrgName] = useState('');
+  const [instructorClassName, setInstructorClassName] = useState('');
+  const [agreeGroupPlanNotice, setAgreeGroupPlanNotice] = useState(true);
+  const [studentInviteCode, setStudentInviteCode] = useState('');
+
   const [loginId, setLoginId] = useState('');
   const [idCheckStatus, setIdCheckStatus] = useState<
     'idle' | 'checking' | 'available' | 'taken' | 'invalid'
@@ -354,7 +373,20 @@ function LoginPageContent() {
         return;
       }
 
+      const isInstructorSignup = signupAccountType === 'instructor';
+      if (isInstructorSignup && !agreeGroupPlanNotice) {
+        setErrorMessage(
+          isKo
+            ? '강사 계정 가입을 위해 단체 구독제 및 학급 운영 안내에 동의해 주세요.'
+            : 'Please confirm the group subscription plan notice for instructor accounts.'
+        );
+        return;
+      }
+
       const supabase = createClient();
+      const targetRedirectAfterSignup =
+        safeNext || (isInstructorSignup ? '/lms' : '/languages');
+
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
         password: signupPassword,
@@ -365,8 +397,24 @@ function LoginPageContent() {
             name: cleanName,
             full_name: cleanName,
             avatar_preset: avatarPreset,
+            account_role: isInstructorSignup ? 'instructor' : 'student',
+            instructor_invite_code: isInstructorSignup ? assignedInviteCode : null,
+            instructor_org_type: isInstructorSignup ? instructorOrgType : null,
+            instructor_org_name:
+              isInstructorSignup && instructorOrgName.trim()
+                ? instructorOrgName.trim()
+                : null,
+            instructor_class_name:
+              isInstructorSignup
+                ? instructorClassName.trim() || `${cleanName} 강사님의 기본 학습반`
+                : null,
+            instructor_plan_seats: isInstructorSignup ? 30 : null,
+            student_invite_code:
+              !isInstructorSignup && studentInviteCode.trim()
+                ? studentInviteCode.trim().toUpperCase()
+                : null,
           },
-          emailRedirectTo: buildCallbackUrl(),
+          emailRedirectTo: buildCallbackUrl(targetRedirectAfterSignup),
         },
       });
 
@@ -408,11 +456,15 @@ function LoginPageContent() {
           .eq('id', data.user.id);
 
         await refreshSessionAndProfile();
-        router.replace(safeNext || '/languages');
+        router.replace(targetRedirectAfterSignup);
         router.refresh();
       } else {
         setInfoMessage(
-          isKo
+          isInstructorSignup
+            ? isKo
+              ? `강사 계정 인증 이메일을 발송했습니다! 배정된 학급 초대코드 [${assignedInviteCode}]는 이메일 인증 후 강사용 LMS 리더보드에서 바로 확인하실 수 있습니다.`
+              : `Verification email sent! Your assigned invite code [${assignedInviteCode}] will be active once verified.`
+            : isKo
             ? '인증 이메일을 발송했습니다. 메일함의 확인 링크를 클릭하면 가입이 완료됩니다!'
             : 'Verification email sent! Click the link in your inbox to finish signing up.'
         );
@@ -923,6 +975,422 @@ function LoginPageContent() {
             onSubmit={handleSignupSubmit}
             style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
+            {/* 0. Account Type Selector: 일반 학습자 vs 강사 · 교육기관 계정 */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  color: '#334155',
+                  marginBottom: '6px',
+                }}
+              >
+                {isKo ? '가입 계정 유형 선택' : 'Select Account Type'}
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => setSignupAccountType('student')}
+                  style={{
+                    padding: '12px 12px',
+                    borderRadius: '14px',
+                    border:
+                      signupAccountType === 'student'
+                        ? '2px solid #0891b2'
+                        : '1.5px solid #cbd5e1',
+                    background:
+                      signupAccountType === 'student'
+                        ? 'rgba(8, 145, 178, 0.08)'
+                        : '#f8fafc',
+                    color: '#0f172a',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      color: signupAccountType === 'student' ? '#0e7490' : '#0f172a',
+                    }}
+                  >
+                    <User size={16} />
+                    <span>{isKo ? '일반 학습자 계정' : 'Learner Account'}</span>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '0.74rem',
+                      color: '#64748b',
+                      marginTop: '4px',
+                      lineHeight: 1.35,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {isKo
+                      ? '개인 코딩 학습 및 학급 초대코드 입장'
+                      : 'Individual learning & join classes'}
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSignupAccountType('instructor')}
+                  style={{
+                    padding: '12px 12px',
+                    borderRadius: '14px',
+                    border:
+                      signupAccountType === 'instructor'
+                        ? '2px solid #059669'
+                        : '1.5px solid #cbd5e1',
+                    background:
+                      signupAccountType === 'instructor'
+                        ? 'rgba(5, 150, 105, 0.09)'
+                        : '#f8fafc',
+                    color: '#0f172a',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      color: signupAccountType === 'instructor' ? '#047857' : '#0f172a',
+                    }}
+                  >
+                    <GraduationCap size={16} />
+                    <span>{isKo ? '강사 · 기관 계정' : 'Instructor Account'}</span>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '0.74rem',
+                      color: '#64748b',
+                      marginTop: '4px',
+                      lineHeight: 1.35,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {isKo
+                      ? '단체 구독 학급 개설 · 초대코드 발급 · LMS'
+                      : 'Group plan, invite code & LMS board'}
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* 0-B. Instructor Account: Group Subscription Plan Notice & Assigned Alphanumeric Invite Code */}
+            {signupAccountType === 'instructor' ? (
+              <div
+                style={{
+                  borderRadius: '16px',
+                  background: 'linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%)',
+                  border: '1.5px solid #6ee7b7',
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '8px',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontWeight: 900,
+                      fontSize: '0.88rem',
+                      color: '#065f46',
+                    }}
+                  >
+                    <Sparkles size={15} color="#059669" />
+                    <span>
+                      {isKo
+                        ? 'B2B · B2G 강사 단체 구독제 안내 & 초대코드 배정'
+                        : 'B2B/B2G Group Subscription & Assigned Invite Code'}
+                    </span>
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      padding: '2px 8px',
+                      borderRadius: '999px',
+                      background: '#059669',
+                      color: '#ffffff',
+                    }}
+                  >
+                    {isKo ? '기본 30석 제공' : '30 Seats Default'}
+                  </span>
+                </div>
+
+                <ul
+                  style={{
+                    margin: 0,
+                    paddingLeft: '18px',
+                    fontSize: '0.78rem',
+                    color: '#065f46',
+                    lineHeight: 1.55,
+                    fontWeight: 600,
+                  }}
+                >
+                  <li>
+                    <strong>단체 구독제(좌석제 라이선스):</strong> 학교(B2G)·학원·기업(B2B) 단위로 학생 좌석을 배정하여 전 과정 커리큘럼과 LMS 대시보드를 이용할 수 있습니다.
+                  </li>
+                  <li>
+                    <strong>강사용 LMS 리더보드 제공:</strong> 담당 학생들의 현재 학습 커리큘럼, 진도율, 연속 출석 스트릭을 한눈에 관리하고 학생별 학습 레벨 초기화(<code>Lv.1</code>) 및 특정 레벨(<code>Lv.K</code>) 지정을 지원합니다.
+                  </li>
+                </ul>
+
+                {/* Assigned Alphanumeric Invite Code Box */}
+                <div
+                  style={{
+                    background: '#ffffff',
+                    borderRadius: '12px',
+                    border: '1.5px solid #34d399',
+                    padding: '11px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '10px',
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '0.73rem',
+                        fontWeight: 800,
+                        color: '#047857',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                      }}
+                    >
+                      <KeyRound size={13} />
+                      <span>
+                        {isKo
+                          ? '배정된 내 학급 초대코드 (영문+숫자 8자리)'
+                          : 'Assigned Classroom Invite Code (Alphanumeric)'}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '1.22rem',
+                        fontWeight: 900,
+                        letterSpacing: '0.12em',
+                        color: '#0f172a',
+                        marginTop: '2px',
+                      }}
+                    >
+                      {assignedInviteCode}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                          void navigator.clipboard.writeText(assignedInviteCode);
+                          setCopiedInvite(true);
+                          setTimeout(() => setCopiedInvite(false), 1800);
+                        }
+                      }}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '6px 10px',
+                        borderRadius: '8px',
+                        border: '1px solid #a7f3d0',
+                        background: '#ecfdf5',
+                        color: '#065f46',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <Copy size={12} />
+                      <span>{copiedInvite ? '복사됨!' : '복사'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAssignedInviteCode(generateAlphanumericInviteCode(8));
+                        setCopiedInvite(false);
+                      }}
+                      title={isKo ? '새 초대코드 재발급' : 'Regenerate code'}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '6px 8px',
+                        borderRadius: '8px',
+                        border: '1px solid #cbd5e1',
+                        background: '#f8fafc',
+                        color: '#475569',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <RefreshCw size={13} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Organization & Initial Classroom Name Inputs */}
+                <div style={{ display: 'grid', gridTemplateColumns: '125px 1fr', gap: '8px' }}>
+                  <select
+                    value={instructorOrgType}
+                    onChange={(e) => setInstructorOrgType(e.target.value as OrganizationType)}
+                    style={{
+                      padding: '9px 10px',
+                      borderRadius: '10px',
+                      border: '1px solid #6ee7b7',
+                      background: '#ffffff',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                    }}
+                  >
+                    <option value="school">학교 (B2G)</option>
+                    <option value="academy">학원 (B2B)</option>
+                    <option value="company">기업 (B2B)</option>
+                    <option value="government">공공기관</option>
+                  </select>
+
+                  <div style={{ position: 'relative' }}>
+                    <Building2
+                      size={15}
+                      style={{ position: 'absolute', left: '11px', top: '11px', color: '#059669' }}
+                    />
+                    <input
+                      type="text"
+                      maxLength={60}
+                      placeholder={
+                        isKo
+                          ? '소속 학교/학원/기관명 (예: 서울코딩고)'
+                          : 'Organization / School name'
+                      }
+                      value={instructorOrgName}
+                      onChange={(e) => setInstructorOrgName(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '9px 12px 9px 34px',
+                        borderRadius: '10px',
+                        border: '1px solid #6ee7b7',
+                        background: '#ffffff',
+                        fontSize: '0.83rem',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    maxLength={60}
+                    placeholder={
+                      isKo
+                        ? '기본 개설 학급명 (예: 1학년 3반 파이썬 기초 — 미입력 시 자동 생성)'
+                        : 'Initial classroom name (optional)'
+                    }
+                    value={instructorClassName}
+                    onChange={(e) => setInstructorClassName(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid #6ee7b7',
+                      background: '#ffffff',
+                      fontSize: '0.83rem',
+                    }}
+                  />
+                </div>
+
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '7px',
+                    fontSize: '0.77rem',
+                    fontWeight: 700,
+                    color: '#065f46',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={agreeGroupPlanNotice}
+                    onChange={(e) => setAgreeGroupPlanNotice(e.target.checked)}
+                    style={{ accentColor: '#059669' }}
+                  />
+                  <span>
+                    {isKo
+                      ? '단체 구독제 안내 및 배정된 초대코드(영문+숫자) 학급 개설에 동의합니다.'
+                      : 'I confirm the group subscription plan and classroom invite code assignment.'}
+                  </span>
+                </label>
+              </div>
+            ) : (
+              /* Student Optional Classroom Invite Code Input */
+              <div
+                style={{
+                  borderRadius: '12px',
+                  background: '#f8fafc',
+                  border: '1px solid #cbd5e1',
+                  padding: '10px 12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '10px',
+                }}
+              >
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#334155' }}>
+                  🏫 강사님께 받은 <strong>학급 초대코드</strong>가 있나요? (선택)
+                </div>
+                <input
+                  type="text"
+                  maxLength={10}
+                  placeholder="영문+숫자 코드"
+                  value={studentInviteCode}
+                  onChange={(e) =>
+                    setStudentInviteCode(
+                      e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+                    )
+                  }
+                  style={{
+                    width: '130px',
+                    padding: '6px 10px',
+                    borderRadius: '8px',
+                    border: '1px solid #cbd5e1',
+                    background: '#ffffff',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
+                    textAlign: 'center',
+                    letterSpacing: '0.06em',
+                  }}
+                />
+              </div>
+            )}
+
             {/* 1. Login ID with duplicate check */}
             <div>
               <label

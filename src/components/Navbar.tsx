@@ -68,6 +68,11 @@ export default function Navbar() {
   const currentStreak = profile?.current_streak || 0;
   const totalAttendance = profile?.total_attendance_days || 0;
   const isAdmin = isAdminUser(profile, user);
+  const isInstructor =
+    isAdmin ||
+    profile?.role === 'instructor' ||
+    profile?.role === 'org_admin' ||
+    user?.user_metadata?.account_role === 'instructor';
   const codeTypingLabel =
     (t.nav as Record<string, string>).codeTyping ||
     (language === 'ko' ? '코드타자' : 'Code Typing');
@@ -478,33 +483,35 @@ export default function Navbar() {
                     <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
                   </Link>
 
+                  {isInstructor && (
+                    <Link
+                      href="/lms"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '9px',
+                        padding: '10px 12px',
+                        borderRadius: '10px',
+                        color: '#0f172a',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        transition: 'background 0.15s ease',
+                        marginTop: '2px',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = 'rgba(16, 185, 129, 0.12)')
+                      }
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <GraduationCap size={15} style={{ color: '#059669' }} />
+                      <span>{language === 'ko' ? '강사용 LMS 리더보드' : 'Instructor LMS Board'}</span>
+                    </Link>
+                  )}
+
                   {isAdmin && (
                     <>
-                      <Link
-                        href="/lms"
-                        onClick={() => setIsProfileMenuOpen(false)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '9px',
-                          padding: '10px 12px',
-                          borderRadius: '10px',
-                          color: '#0f172a',
-                          fontSize: '0.85rem',
-                          fontWeight: 700,
-                          textDecoration: 'none',
-                          transition: 'background 0.15s ease',
-                          marginTop: '2px',
-                        }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.background = 'rgba(16, 185, 129, 0.12)')
-                        }
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        <GraduationCap size={15} style={{ color: '#059669' }} />
-                        <span>{language === 'ko' ? '강사용 LMS 리더보드' : 'Instructor LMS Board'}</span>
-                      </Link>
-
                       <Link
                         href="/admin"
                         onClick={() => setIsProfileMenuOpen(false)}
@@ -713,28 +720,30 @@ export default function Navbar() {
                 <Settings size={18} style={{ color: '#0891b2' }} />
                 <span>{language === 'ko' ? '내 정보' : 'My Profile'}</span>
               </Link>
+              {isInstructor && (
+                <Link
+                  href="/lms"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    fontSize: '0.96rem',
+                    fontWeight: 700,
+                    color: '#0f172a',
+                    background: '#ecfdf5',
+                    border: '1px solid #a7f3d0',
+                    textDecoration: 'none',
+                  }}
+                >
+                  <GraduationCap size={18} style={{ color: '#059669' }} />
+                  <span>{language === 'ko' ? '강사용 LMS 리더보드' : 'Instructor LMS Board'}</span>
+                </Link>
+              )}
               {isAdmin && (
                 <>
-                  <Link
-                    href="/lms"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '12px 16px',
-                      borderRadius: '12px',
-                      fontSize: '0.96rem',
-                      fontWeight: 700,
-                      color: '#0f172a',
-                      background: '#ecfdf5',
-                      border: '1px solid #a7f3d0',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <GraduationCap size={18} style={{ color: '#059669' }} />
-                    <span>{language === 'ko' ? '강사용 LMS 리더보드' : 'Instructor LMS Board'}</span>
-                  </Link>
                   <Link
                     href="/admin"
                     onClick={() => setIsMobileMenuOpen(false)}

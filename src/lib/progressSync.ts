@@ -14,6 +14,39 @@ import type {
 
 export const PROGRESS_SYNCED_EVENT = 'typingcode-progress-synced';
 
+/**
+ * Generates an uppercase alphanumeric invite code (6-10 chars) that strictly
+ * guarantees BOTH letters (A-Z excluding I, O) and digits (2-9).
+ */
+export function generateAlphanumericInviteCode(length = 8): string {
+  const safeLen = Math.max(6, Math.min(10, Math.round(length)));
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const digits = '23456789';
+  const all = letters + digits;
+
+  const chars: string[] = [
+    letters.charAt(Math.floor(Math.random() * letters.length)),
+    letters.charAt(Math.floor(Math.random() * letters.length)),
+    letters.charAt(Math.floor(Math.random() * letters.length)),
+    digits.charAt(Math.floor(Math.random() * digits.length)),
+    digits.charAt(Math.floor(Math.random() * digits.length)),
+    digits.charAt(Math.floor(Math.random() * digits.length)),
+  ];
+
+  while (chars.length < safeLen) {
+    chars.push(all.charAt(Math.floor(Math.random() * all.length)));
+  }
+
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = chars[i];
+    chars[i] = chars[j];
+    chars[j] = tmp;
+  }
+
+  return chars.join('');
+}
+
 function dispatchProgressSynced() {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new Event(PROGRESS_SYNCED_EVENT));
@@ -139,9 +172,15 @@ export function normalizeProfileRow(
     cleared * 100 + solved * 150 + totalDays * 30 + longestStreak * 50;
 
   const rawRole = typeof raw.role === 'string' ? raw.role : 'student';
+  const metaRole =
+    typeof fallbackUser?.user_metadata?.account_role === 'string'
+      ? fallbackUser.user_metadata.account_role
+      : null;
   const role: UserRole =
     rawRole === 'instructor' || rawRole === 'org_admin' || rawRole === 'super_admin'
       ? rawRole
+      : metaRole === 'instructor' || metaRole === 'org_admin'
+      ? metaRole
       : 'student';
 
   const normalizedEmail =
@@ -249,6 +288,104 @@ export function buildFallbackProfile(user: User): UserProfile {
   );
 }
 
+async function provisionInstructorClassroomOrStudentJoin(
+  user: User,
+  profile: UserProfile
+): Promise<void> {
+  if (!isSupabaseConfigured()) return;
+  const meta = user.user_metadata || {};
+
+  try {
+    const supabase = createClient();
+
+    // 1) Instructor sign-up: auto-provision organization + initial classroom with assigned invite code
+    if (profile.role === 'instructor' || meta.account_role === 'instructor') {
+      const { data: existingCls } = await supabase
+        .from('classrooms')
+        .select('id')
+        .eq('instructor_id', user.id)
+        .limit(1)
+        .maybeSingle();
+
+      if (!existingCls) {
+        let orgId: string | null = null;
+        const rawOrgName =
+          typeof meta.instructor_org_name === 'string'
+            ? meta.instructor_org_name.trim()
+            : '';
+
+        if (rawOrgName) {
+          const { data: createdOrg } = await supabase
+            .from('organizations')
+            .insert({
+              name: rawOrgName.slice(0, 80),
+              org_type:
+                meta.instructor_org_type === 'academy' ||
+                meta.instructor_org_type === 'company' ||
+                meta.instructor_org_type === 'government'
+                  ? meta.instructor_org_type
+                  : 'school',
+              owner_id: user.id,
+              max_seats: Number(meta.instructor_plan_seats) || 30,
+            })
+            .select('id')
+            .maybeSingle();
+          orgId = (createdOrg as { id?: string } | null)?.id || null;
+        }
+
+        const rawInvite =
+          typeof meta.instructor_invite_code === 'string' &&
+          /^[A-Z0-9]{6,10}$/.test(meta.instructor_invite_code.trim().toUpperCase())
+            ? meta.instructor_invite_code.trim().toUpperCase()
+            : generateAlphanumericInviteCode(8);
+
+        const className =
+          (typeof meta.instructor_class_name === 'string' &&
+            meta.instructor_class_name.trim()) ||
+          `${profile.display_name} 강사님의 기본 학습반`;
+
+        await supabase.from('classrooms').insert({
+          org_id: orgId,
+          instructor_id: user.id,
+          name: className.slice(0, 80),
+          description: rawOrgName
+            ? `${rawOrgName} 단체 구독 학습반`
+            : '강사 가입 시 자동 개설된 기본 학습반',
+          invite_code: rawInvite,
+          assigned_tracks: ['py-basic'],
+        });
+      }
+    }
+
+    // 2) Student sign-up with optional classroom invite code
+    if (
+      typeof meta.student_invite_code === 'string' &&
+      meta.student_invite_code.trim()
+    ) {
+      const cleanCode = meta.student_invite_code.trim().toUpperCase();
+      const { data: targetCls } = await supabase
+        .from('classrooms')
+        .select('id')
+        .eq('invite_code', cleanCode)
+        .maybeSingle();
+
+      const clsId = (targetCls as { id?: string } | null)?.id;
+      if (clsId) {
+        await supabase.from('classroom_members').upsert(
+          {
+            classroom_id: clsId,
+            student_id: user.id,
+            student_label: profile.display_name,
+          },
+          { onConflict: 'classroom_id,student_id' }
+        );
+      }
+    }
+  } catch {
+    // Non-fatal
+  }
+}
+
 export async function ensureUserProfile(user: User): Promise<UserProfile> {
   if (!isSupabaseConfigured()) {
     return buildFallbackProfile(user);
@@ -273,6 +410,7 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
         .update({ email: user.email.trim().toLowerCase() })
         .eq('id', user.id);
     }
+    void provisionInstructorClassroomOrStudentJoin(user, normalized);
     return normalized;
   }
 
@@ -294,6 +432,7 @@ export async function ensureUserProfile(user: User): Promise<UserProfile> {
   if (!insertError && inserted) {
     const normalized = normalizeProfileRow(inserted as Record<string, unknown>, user);
     syncLocalLearningStateFromProfile(normalized);
+    void provisionInstructorClassroomOrStudentJoin(user, normalized);
     return normalized;
   }
 
@@ -626,9 +765,7 @@ export async function setStudentLearningLevel(
 
       let classroomId: string | null = (existingCls as { id?: string } | null)?.id || null;
       if (!classroomId) {
-        const randCode = Array.from({ length: 6 }, () =>
-          'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'.charAt(Math.floor(Math.random() * 32))
-        ).join('');
+        const randCode = generateAlphanumericInviteCode(8);
         const { data: createdCls } = await supabase
           .from('classrooms')
           .insert({
