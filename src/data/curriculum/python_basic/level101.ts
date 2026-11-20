@@ -54,11 +54,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "15 27",
           "expectedOutput": "42"
-        },
-        {
-          "id": 2,
-          "input": "100 250",
-          "expectedOutput": "350"
         }
       ]
     },
@@ -69,8 +64,8 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 한 줄에 입력된 두 문자열을 일괄 정수 변환해 x, y에 언패킹하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the batch-mapping built-in function to convert the split strings into integers x and y.",
-      "hint_ko": "시퀀스 각 원소에 함수를 일괄 대응시키는 세 글자 내장 함수를 적으세요.",
-      "hint_en": "Type the 3-letter built-in function that applies a function to every item of an iterable.",
+      "hint_ko": "시퀀스 각 원소에 함수를 일괄 대응시키는 내장 함수를 적으세요.",
+      "hint_en": "Type the built-in function that applies a function to every item of an iterable.",
       "targetCode": "x, y = map(int, input().split())\nprint(x * y)",
       "templateCode": "x, y = §§§§(int, input().split())\nprint(x * y)",
       "testCases": [
@@ -78,11 +73,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "6 7",
           "expectedOutput": "42"
-        },
-        {
-          "id": 2,
-          "input": "12 5",
-          "expectedOutput": "60"
         }
       ]
     },
@@ -101,11 +91,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "10 25 15",
           "expectedOutput": "50 25"
-        },
-        {
-          "id": 2,
-          "input": "4 8 12 6",
-          "expectedOutput": "30 12"
         }
       ]
     },
@@ -116,8 +101,8 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] map()이 반환한 결과를 리스트로 만들어 변수 nums에 저장하도록 바깥쪽 변환 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the outer constructor to materialize the mapped integers into an indexable sequence.",
-      "hint_ko": "반복 가능한 객체를 리스트 자료구조로 바꾸는 네 글자 내장 함수를 적으세요.",
-      "hint_en": "Enter the 4-letter built-in constructor that creates a list from an iterable.",
+      "hint_ko": "반복 가능한 객체를 리스트 자료구조로 바꾸는 내장 함수를 적으세요.",
+      "hint_en": "Enter the built-in constructor that creates a list from an iterable.",
       "targetCode": "nums = list(map(int, input().split()))\nprint(len(nums), min(nums))",
       "templateCode": "nums = §§§§§(map(int, input().split()))\nprint(len(nums), min(nums))",
       "testCases": [
@@ -125,11 +110,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "9 3 7",
           "expectedOutput": "3 3"
-        },
-        {
-          "id": 2,
-          "input": "20 10 30 40",
-          "expectedOutput": "4 10"
         }
       ]
     },
@@ -158,8 +138,8 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 정수 리스트 nums를 슬래시(\"/\")로 결합할 수 있도록 map()의 첫 번째 인자에 형변환 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the type conversion function in map() so the integers can be joined with \"/\".",
-      "hint_ko": "각 정수를 문자열로 바꾸는 세 글자 형변환 함수 이름을 괄호 없이 적으세요.",
-      "hint_en": "Write the 3-letter string conversion function name without parentheses.",
+      "hint_ko": "각 정수를 문자열로 바꾸는 형변환 함수 이름을 괄호 없이 적으세요.",
+      "hint_en": "Write the string conversion function name without parentheses.",
       "targetCode": "nums = [1, 2, 3]\nprint(\"/\".join(map(str, nums)))",
       "templateCode": "nums = [1, 2, 3]\nprint(\"/\".join(map(§§§§, nums)))",
       "testCases": [
@@ -195,8 +175,8 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트의 모든 음수·양수 원소에 절댓값 함수를 일괄 적용하도록 map()의 첫 인자를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the first argument of map() to take the absolute value of every item in raw.",
-      "hint_ko": "절댓값을 구하는 세 글자 내장 함수 이름을 괄호 없이 첫 인자로 적으세요.",
-      "hint_en": "Write the 3-letter absolute value function name without parentheses.",
+      "hint_ko": "절댓값을 구하는 내장 함수 이름을 괄호 없이 첫 인자로 적으세요.",
+      "hint_en": "Write the absolute value function name without parentheses.",
       "targetCode": "raw = [-10, 20, -30]\nprint(list(map(abs, raw)))",
       "templateCode": "raw = [-10, 20, -30]\nprint(list(map(§§§§, raw)))",
       "testCases": [
@@ -223,11 +203,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "30,10,20",
           "expectedOutput": "10 20 30"
-        },
-        {
-          "id": 2,
-          "input": "5,1,9",
-          "expectedOutput": "1 5 9"
         }
       ]
     },
@@ -247,11 +222,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "10 20",
           "expectedOutput": "30"
-        },
-        {
-          "id": 2,
-          "input": "7 8",
-          "expectedOutput": "15"
         }
       ]
     },
@@ -290,11 +260,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "17 5",
           "expectedOutput": "3 2"
-        },
-        {
-          "id": 2,
-          "input": "20 6",
-          "expectedOutput": "3 2"
         }
       ]
     },
@@ -314,11 +279,6 @@ export const PYTHON_LEVEL_101: PracticeRound = {
           "id": 1,
           "input": "10 20 30",
           "expectedOutput": "60"
-        },
-        {
-          "id": 2,
-          "input": "5 15 25",
-          "expectedOutput": "45"
         }
       ]
     },

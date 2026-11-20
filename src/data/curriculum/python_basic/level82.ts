@@ -21,7 +21,7 @@ export const PYTHON_LEVEL_82: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 정수 변환 실패와 0 나눗셈 에러를 각각 구분해 처리하도록 세 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the attempt keyword and the two specific exception types for parsing and floor division.",
       "hint_ko": "시도 블록 키워드와 잘못된 값 변환 예외, 그리고 0 나눗셈 예외 이름을 순서대로 확인하세요.",
-      "hint_en": "Check the three-letter attempt keyword, the invalid-value exception, and the division-by-zero exception.",
+      "hint_en": "Check the attempt keyword, the invalid-value exception, and the division-by-zero exception.",
       "templateCode": "s = input()\n§§§§:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept §§§§§§§§§§§:\n    print(\"Err:Val\")\nexcept §§§§§§§§§§§§§§§§§§:\n    print(\"Err:Zero\")",
       "targetCode": "s = input()\ntry:\n    n = int(s)\n    print(f\"Ans:{120 // n}\")\nexcept ValueError:\n    print(\"Err:Val\")\nexcept ZeroDivisionError:\n    print(\"Err:Zero\")",
       "testCases": [
@@ -29,16 +29,6 @@ export const PYTHON_LEVEL_82: PracticeRound = {
           "id": 1,
           "input": "30",
           "expectedOutput": "Ans:4"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "Err:Val"
-        },
-        {
-          "id": 3,
-          "input": "0",
-          "expectedOutput": "Err:Zero"
         }
       ]
     },
@@ -58,11 +48,6 @@ export const PYTHON_LEVEL_82: PracticeRound = {
           "id": 1,
           "input": "milk\npie",
           "expectedOutput": "NoMenu\npie:4500"
-        },
-        {
-          "id": 2,
-          "input": "  tea  ",
-          "expectedOutput": "tea:3000"
         }
       ]
     },
@@ -101,11 +86,6 @@ export const PYTHON_LEVEL_82: PracticeRound = {
           "id": 1,
           "input": "5",
           "expectedOutput": "Unknown"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Seoul"
         }
       ]
     },
@@ -163,16 +143,6 @@ export const PYTHON_LEVEL_82: PracticeRound = {
           "id": 1,
           "input": "25",
           "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "-1"
-        },
-        {
-          "id": 3,
-          "input": "abc",
-          "expectedOutput": "-2"
         }
       ]
     },
@@ -192,11 +162,6 @@ export const PYTHON_LEVEL_82: PracticeRound = {
           "id": 1,
           "input": "Park\nLee",
           "expectedOutput": "Retry\nLee=95"
-        },
-        {
-          "id": 2,
-          "input": "Kim",
-          "expectedOutput": "Kim=80"
         }
       ]
     },

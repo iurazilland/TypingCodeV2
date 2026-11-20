@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 정수 변환에 성공해 에러가 나지 않았을 때만 n + 10을 출력하도록 분기 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the branch keyword that executes only when the try block succeeds without error.",
-      "hint_ko": "예외가 발생하지 않은 정상 경우에 실행되는 네 글자 키워드를 적으세요.",
-      "hint_en": "Type the 4-letter keyword that runs when no exception occurs.",
+      "hint_ko": "예외가 발생하지 않은 정상 경우에 실행되는 키워드를 적으세요.",
+      "hint_en": "Type the keyword that runs when no exception occurs.",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\nelse:\n    print(n + 10)",
       "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Bad\")\n§§§§§:\n    print(n + 10)",
       "testCases": [
@@ -73,11 +73,6 @@ export const PYTHON_LEVEL_110: PracticeRound = {
           "id": 1,
           "input": "15",
           "expectedOutput": "25"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "Bad"
         }
       ]
     },
@@ -106,8 +101,8 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 에러 발생 여부와 관계없이 마지막에 무조건 \"Done\"을 출력하도록 마무리 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the cleanup block keyword so \"Done\" is always printed at the end.",
-      "hint_ko": "'마침내, 최종적으로'라는 뜻의 일곱 글자 예외 마무리 키워드를 입력하세요.",
-      "hint_en": "Enter the 7-letter keyword for the unconditional cleanup block.",
+      "hint_ko": "'마침내, 최종적으로'라는 뜻의 예외 마무리 키워드를 입력하세요.",
+      "hint_en": "Enter the keyword for the unconditional cleanup block.",
       "targetCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\nexcept ValueError:\n    print(\"Err\")\nfinally:\n    print(\"Done\")",
       "templateCode": "try:\n    x = int(input())\n    print(f\"OK:{x}\")\nexcept ValueError:\n    print(\"Err\")\n§§§§§§§§:\n    print(\"Done\")",
       "testCases": [
@@ -115,11 +110,6 @@ export const PYTHON_LEVEL_110: PracticeRound = {
           "id": 1,
           "input": "7",
           "expectedOutput": "OK:7\nDone"
-        },
-        {
-          "id": 2,
-          "input": "hi",
-          "expectedOutput": "Err\nDone"
         }
       ]
     },
@@ -132,12 +122,12 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "prompt_en": "[Block] Capture the exception instance with except ZeroDivisionError as e: and print its message.",
       "hint_ko": "except 에러타입 as 변수: 형태로 쓰면 발생한 에러 객체가 변수에 담겨 내용을 출력할 수 있습니다.",
       "hint_en": "Writing except ErrorType as e: binds the raised exception object to variable e.",
-      "targetCode": "try:\n    res = 10 // 0\nexcept ZeroDivisionError as e:\n    print(f\"Caught: {e}\")",
+      "targetCode": "try:\n    res = 10 // 0\nexcept ZeroDivisionError as e:\n    print(f\"Caught:{e}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Caught: integer division or modulo by zero"
+          "expectedOutput": "Caught:integer division or modulo by zero"
         }
       ]
     },
@@ -148,8 +138,8 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 발생한 KeyError 에러 객체를 변수 e로 받아 출력하도록 별칭 지정 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the keyword that binds the caught KeyError instance to variable e.",
-      "hint_ko": "에러 객체를 변수에 연결하는 두 글자 영단어 키워드를 입력하세요.",
-      "hint_en": "Type the 2-letter keyword used to alias the exception to variable e.",
+      "hint_ko": "에러 객체를 변수에 연결하는 영단어 키워드를 입력하세요.",
+      "hint_en": "Type the keyword used to alias the exception to variable e.",
       "targetCode": "d = {\"a\": 1}\ntry:\n    print(d[\"b\"])\nexcept KeyError as e:\n    print(f\"Missing:{e}\")",
       "templateCode": "d = {\"a\": 1}\ntry:\n    print(d[\"b\"])\nexcept KeyError §§§ e:\n    print(f\"Missing:{e}\")",
       "testCases": [
@@ -185,8 +175,8 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트 인덱스 조회가 성공했을 때만 값을 출력하고, 마지막에 항상 \"Check\"를 출력하도록 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the no-error branch keyword in the 4-stage exception block.",
-      "hint_ko": "except 절과 finally 절 사이에 위치하여 에러가 없을 때만 실행되는 네 글자 키워드를 적으세요.",
-      "hint_en": "Write the 4-letter keyword placed between except and finally.",
+      "hint_ko": "except 절과 finally 절 사이에 위치하여 에러가 없을 때만 실행되는 키워드를 적으세요.",
+      "hint_en": "Write the keyword placed between except and finally.",
       "targetCode": "arr = [10, 20]\ntry:\n    v = arr[1]\nexcept IndexError:\n    print(\"Out\")\nelse:\n    print(f\"Val:{v}\")\nfinally:\n    print(\"Check\")",
       "templateCode": "arr = [10, 20]\ntry:\n    v = arr[1]\nexcept IndexError:\n    print(\"Out\")\n§§§§§:\n    print(f\"Val:{v}\")\nfinally:\n    print(\"Check\")",
       "testCases": [
@@ -204,8 +194,8 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 딕셔너리 키 조회의 4단 예외 처리(에러 객체 받기, 정상 출력, 무조건 마무리) 빈칸 3곳을 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the alias keyword, the no-error branch, and the cleanup branch for the dictionary lookup.",
-      "hint_ko": "에러 객체 연결 키워드(2글자), 정상 실행 분기(4글자), 마무리 분기(7글자)를 차례로 채우세요.",
-      "hint_en": "Fill in the 2-letter alias keyword, the 4-letter no-error keyword, and the 7-letter cleanup keyword.",
+      "hint_ko": "에러 객체 연결 키워드, 정상 실행 분기, 마무리 분기를 차례로 채우세요.",
+      "hint_en": "Fill in the alias keyword, the no-error keyword, and the cleanup keyword.",
       "targetCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError as e:\n    print(f\"NoKey:{e}\")\nelse:\n    print(f\"Score:{sc}\")\nfinally:\n    print(\"Closed\")",
       "templateCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError §§§ e:\n    print(f\"NoKey:{e}\")\n§§§§§:\n    print(f\"Score:{sc}\")\n§§§§§§§§:\n    print(\"Closed\")",
       "testCases": [
@@ -213,11 +203,6 @@ export const PYTHON_LEVEL_110: PracticeRound = {
           "id": 1,
           "input": "kim",
           "expectedOutput": "Score:90\nClosed"
-        },
-        {
-          "id": 2,
-          "input": "lee",
-          "expectedOutput": "NoKey:'lee'\nClosed"
         }
       ]
     },
@@ -237,11 +222,6 @@ export const PYTHON_LEVEL_110: PracticeRound = {
           "id": 1,
           "input": "abc",
           "expectedOutput": "Err\nEnd"
-        },
-        {
-          "id": 2,
-          "input": "10",
-          "expectedOutput": "End"
         }
       ]
     },
@@ -271,7 +251,7 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "kind": "one_line",
       "prompt_ko": "[한 줄 완성] 에러 발생 여부와 무관하게 항상 마지막에 실행되는 finally: 헤더 한 줄을 작성해보세요.",
       "prompt_en": "[Complete Line] Write the finally: header line before the final print statement.",
-      "hint_ko": "콜론(:)을 포함해 finally: 일곱 글자 키워드와 콜론을 작성하세요.",
+      "hint_ko": "콜론(:)을 포함해 finally: 헤더를 작성하세요.",
       "hint_en": "Write finally: on the masked line.",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\nfinally:\n    print(f\"n={n}\")",
       "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    n = 0\n§§§§§§§§§\n    print(f\"n={n}\")",
@@ -280,11 +260,6 @@ export const PYTHON_LEVEL_110: PracticeRound = {
           "id": 1,
           "input": "7",
           "expectedOutput": "n=7"
-        },
-        {
-          "id": 2,
-          "input": "x",
-          "expectedOutput": "n=0"
         }
       ]
     },

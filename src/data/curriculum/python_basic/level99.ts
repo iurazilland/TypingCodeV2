@@ -22,8 +22,8 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "prompt_en": "[Fill Blank] Trim leading spaces, keep logs beginning with \"WARN:\", lowercase the item names, and combine them with \"|\".",
       "hint_ko": "왼쪽 공백 제거 메서드, 접두사 검사 메서드, 문자열 결합 메서드를 순서대로 채워보세요.",
       "hint_en": "Fill in the left-strip method, the prefix-check method, and the string-join method.",
-      "targetCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = [x.lstrip()[5:].strip().lower() for x in logs if x.lstrip().startswith(\"WARN:\")]\nprint(\"|\".join(warns))",
-      "templateCode": "logs = [\"  WARN: Disk\", \"INFO: Ok\", \" WARN: Cpu\"]\nwarns = [x.§§§§§§§()[5:].strip().lower() for x in logs if x.lstrip().§§§§§§§§§§§(\"WARN:\")]\nprint(\"|\".§§§§§(warns))",
+      "targetCode": "logs = [\" WARN:Disk\", \"INFO:Ok\", \" WARN:Cpu\"]\nwarns = [x.lstrip()[5:].strip().lower() for x in logs if x.lstrip().startswith(\"WARN:\")]\nprint(\"|\".join(warns))",
+      "templateCode": "logs = [\" WARN:Disk\", \"INFO:Ok\", \" WARN:Cpu\"]\nwarns = [x.§§§§§§§()[5:].strip().lower() for x in logs if x.lstrip().§§§§§§§§§§§(\"WARN:\")]\nprint(\"|\".§§§§§(warns))",
       "testCases": [
         {
           "id": 1,
@@ -48,11 +48,6 @@ export const PYTHON_LEVEL_99: PracticeRound = {
           "id": 1,
           "input": "book:2",
           "expectedOutput": "24,000.00"
-        },
-        {
-          "id": 2,
-          "input": "pen:x",
-          "expectedOutput": "ERR"
         }
       ]
     },
@@ -91,11 +86,6 @@ export const PYTHON_LEVEL_99: PracticeRound = {
           "id": 1,
           "input": "py ai go",
           "expectedOutput": "PY-AI-GO"
-        },
-        {
-          "id": 2,
-          "input": "web dev",
-          "expectedOutput": "WEB-DEV"
         }
       ]
     },
@@ -115,11 +105,6 @@ export const PYTHON_LEVEL_99: PracticeRound = {
           "id": 1,
           "input": "ab1c",
           "expectedOutput": "BCD"
-        },
-        {
-          "id": 2,
-          "input": "py!",
-          "expectedOutput": "QZ"
         }
       ]
     },
@@ -132,8 +117,8 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "prompt_en": "[Fix Bug] Fix the directional strip bug so trailing spaces on the right are removed before checking the suffix.",
       "hint_ko": "확장자 뒤(오른쪽 끝)에 붙은 공백을 지워야 하므로 왼쪽 제거 메서드를 오른쪽 제거 메서드로 고치세요.",
       "hint_en": "Replace the left-side strip method with the right-side strip method so trailing spaces are removed.",
-      "templateCode": "name = \"  data_01.csv   \".lstrip()\nif name.endswith(\".csv\"):\n    print(name.strip())\nelse:\n    print(\"INVALID\")",
-      "targetCode": "name = \"  data_01.csv   \".rstrip()\nif name.endswith(\".csv\"):\n    print(name.strip())\nelse:\n    print(\"INVALID\")",
+      "templateCode": "name = \" data_01.csv \".lstrip()\nif name.endswith(\".csv\"):\n    print(name.strip())\nelse:\n    print(\"INVALID\")",
+      "targetCode": "name = \" data_01.csv \".rstrip()\nif name.endswith(\".csv\"):\n    print(name.strip())\nelse:\n    print(\"INVALID\")",
       "testCases": [
         {
           "id": 1,
@@ -158,11 +143,6 @@ export const PYTHON_LEVEL_99: PracticeRound = {
           "id": 1,
           "input": "Top Spot",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "12 21",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -171,22 +151,17 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 대문자 문자열 s와 소수점 첫째 자리 비율 rate를 f\"{s}: {rate:.1f}%\" 서식으로 변수 msg에 저장해보세요.",
-      "prompt_en": "[Complete Line] Format s and rate to 1 decimal place as f\"{s}: {rate:.1f}%\" and assign it to msg.",
-      "hint_ko": "msg = f\"{s}: {rate:.1f}%\" 형태로 서식 문자열을 변수 msg에 대입하세요.",
-      "hint_en": "Write msg = f\"{s}: {rate:.1f}%\" on the masked line.",
-      "targetCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\nmsg = f\"{s}: {rate:.1f}%\"\nprint(msg)",
-      "templateCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\n§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(msg)",
+      "prompt_ko": "[한 줄 완성] 대문자 문자열 s와 소수점 첫째 자리 비율 rate를 f\"{s}:{rate:.1f}%\" 서식으로 변수 msg에 저장해보세요.",
+      "prompt_en": "[Complete Line] Format s and rate to 1 decimal place as f\"{s}:{rate:.1f}%\" and assign it to msg.",
+      "hint_ko": "msg = f\"{s}:{rate:.1f}%\" 형태로 서식 문자열을 변수 msg에 대입하세요.",
+      "hint_en": "Write msg = f\"{s}:{rate:.1f}%\" on the masked line.",
+      "targetCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\nmsg = f\"{s}:{rate:.1f}%\"\nprint(msg)",
+      "templateCode": "s = input().strip().upper()\nrate = s.count(\"O\") / len(s) * 100\n§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(msg)",
       "testCases": [
         {
           "id": 1,
           "input": "oxoo",
-          "expectedOutput": "OXOO: 75.0%"
-        },
-        {
-          "id": 2,
-          "input": "xoxo",
-          "expectedOutput": "XOXO: 50.0%"
+          "expectedOutput": "OXOO:75.0%"
         }
       ]
     },

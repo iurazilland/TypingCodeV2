@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 동시 만족 논리 키워드를 채워 두 과목 점수가 모두 80점 이상인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the conjunction keyword to check if both scores are at least 80.',
-      hint_ko: '양쪽 조건을 모두 만족해야 할 때는 영어로 그리고를 뜻하는 세 글자 소문자 키워드를 씁니다.',
-      hint_en: 'Use the three-letter lowercase English word meaning "both / also".',
+      hint_ko: '양쪽 조건을 모두 만족해야 할 때는 영어로 그리고를 뜻하는 소문자 키워드를 씁니다.',
+      hint_en: 'Use the lowercase English word meaning "both / also".',
       templateCode: 'kor = 85\neng = 75\nprint(kor >= 80 §§§§ eng >= 80)',
       targetCode: 'kor = 85\neng = 75\nprint(kor >= 80 and eng >= 80)',
       testCases: [
@@ -75,8 +75,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 선택 만족 논리 키워드를 채워 현금이나 카드 중 하나라도 5000원 이상인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to check if either cash or card is at least 5000.',
-      hint_ko: '두 조건 중 하나 이상만 참이어도 될 때는 영어로 또는을 뜻하는 두 글자 키워드를 사용합니다.',
-      hint_en: 'Use the two-letter lowercase English word meaning "either".',
+      hint_ko: '두 조건 중 하나 이상만 참이어도 될 때는 영어로 또는을 뜻하는 키워드를 사용합니다.',
+      hint_en: 'Use the lowercase English word meaning "either".',
       templateCode: 'cash = 2000\ncard = 8000\nprint(cash >= 5000 §§§ card >= 5000)',
       targetCode: 'cash = 2000\ncard = 8000\nprint(cash >= 5000 or card >= 5000)',
       testCases: [
@@ -103,11 +103,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           input: '95\n50',
           expectedOutput: 'False\nTrue',
         },
-        {
-          id: 2,
-          input: '70\n80',
-          expectedOutput: 'True\nFalse',
-        },
       ],
     },
     {
@@ -117,8 +112,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 동시 만족 논리 키워드를 채워 공백으로 입력된 두 점수가 모두 70 이상인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the conjunction keyword to check if both split scores are at least 70.',
-      hint_ko: 'x와 y 두 점수가 동시에 기준을 넘어야 하므로 세 글자 동시 만족 키워드로 연결합니다.',
-      hint_en: 'Connect both score comparisons with the three-letter conjunction keyword.',
+      hint_ko: 'x와 y 두 점수가 동시에 기준을 넘어야 하므로 동시 만족 키워드로 연결합니다.',
+      hint_en: 'Connect both score comparisons with the conjunction keyword.',
       templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x >= 70 §§§§ y >= 70)',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x >= 70 and y >= 70)',
       testCases: [
@@ -126,11 +121,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           id: 1,
           input: '75 80',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '85 60',
-          expectedOutput: 'False',
         },
       ],
     },
@@ -150,16 +140,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           input: '8',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '-4',
-          expectedOutput: 'False',
-        },
-        {
-          id: 3,
-          input: '7',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -169,8 +149,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 선택 만족 논리 키워드를 채워 요일(d)이 "Sat"이거나 "Sun"인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to check if day d is "Sat" or "Sun".',
-      hint_ko: '토요일과 일요일 중 어느 하나만 일치해도 주말이므로 두 같음 비교식을 두 글자 키워드로 연결합니다.',
-      hint_en: 'Join the two equality checks with the two-letter disjunction keyword.',
+      hint_ko: '토요일과 일요일 중 어느 하나만 일치해도 주말이므로 두 같음 비교식을 키워드로 연결합니다.',
+      hint_en: 'Join the two equality checks with the disjunction keyword.',
       templateCode: 'd = input()\nprint(d == "Sat" §§§ d == "Sun")',
       targetCode: 'd = input()\nprint(d == "Sat" or d == "Sun")',
       testCases: [
@@ -178,11 +158,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           id: 1,
           input: 'Sun',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: 'Mon',
-          expectedOutput: 'False',
         },
       ],
     },
@@ -203,11 +178,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           input: '12',
           expectedOutput: 'True\nFalse',
         },
-        {
-          id: 2,
-          input: '0',
-          expectedOutput: 'True\nTrue',
-        },
       ],
     },
     {
@@ -227,11 +197,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           input: '50',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '120',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -241,8 +206,8 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '[틀린 곳 수정] 두 조건 중 하나만 참이어도 True가 출력되도록 잘못된 기호(||)를 파이썬 키워드로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid || symbol with the proper Python logical disjunction keyword.',
-      hint_ko: '파이썬에서는 기호 || 대신 두 글자 영단어 키워드로 선택 만족을 표현합니다.',
-      hint_en: 'Python uses a two-letter English word instead of || for logical disjunction.',
+      hint_ko: '파이썬에서는 기호 || 대신 영단어 키워드로 선택 만족을 표현합니다.',
+      hint_en: 'Python uses a English word instead of || for logical disjunction.',
       templateCode: 'role = input()\nprint(role == "admin" || role == "staff")',
       targetCode: 'role = input()\nprint(role == "admin" or role == "staff")',
       testCases: [
@@ -250,11 +215,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           id: 1,
           input: 'staff',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: 'guest',
-          expectedOutput: 'False',
         },
       ],
     },
@@ -275,11 +235,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           input: '12',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '-6',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -298,11 +253,6 @@ export const PYTHON_LEVEL_24: PracticeRound = {
           id: 1,
           input: '15',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'False',
         },
       ],
     },

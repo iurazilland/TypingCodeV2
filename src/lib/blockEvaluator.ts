@@ -435,6 +435,8 @@ export function evaluateBlocksWithTrace(
   try {
     const scope: Record<string, any> = {};
     let currentScope: Record<string, any> = scope;
+    let currentGlobals: Set<string> = new Set();
+    let currentClassContext: string | undefined = undefined;
     const floatVars = new Set<string>();
     const functions: Record<string, any> = {};
     const classes: Record<
@@ -448,6 +450,38 @@ export function evaluateBlocksWithTrace(
       }
     > = {};
     const BUILTIN_TYPE_NAMES = new Set(['int', 'float', 'str', 'bool', 'list', 'tuple', 'dict', 'set']);
+
+    const pyGcd = (a: number, b: number): number => {
+      let x = Math.abs(Math.trunc(a));
+      let y = Math.abs(Math.trunc(b));
+      while (y !== 0) {
+        const t = y;
+        y = x % y;
+        x = t;
+      }
+      return x;
+    };
+    const pyFactorial = (n: number): number => {
+      const k = Math.trunc(n);
+      if (k < 0) throw new Error('ValueError: factorial() not defined for negative values');
+      let res = 1;
+      for (let i = 2; i <= k; i++) res *= i;
+      return res;
+    };
+    const MATH_MODULE: Record<string, any> = {
+      __isModule: true,
+      name: 'math',
+      pi: Math.PI,
+      e: Math.E,
+      sqrt: (x: any) => Math.sqrt(Number(x)),
+      ceil: (x: any) => Math.ceil(Number(x)),
+      floor: (x: any) => Math.floor(Number(x)),
+      gcd: (a: any, b: any) => pyGcd(Number(a), Number(b)),
+      factorial: (x: any) => pyFactorial(Number(x)),
+      fabs: (x: any) => Math.abs(Number(x)),
+      pow: (a: any, b: any) => Math.pow(Number(a), Number(b)),
+      trunc: (x: any) => Math.trunc(Number(x)),
+    };
     let activeCaughtException: Error | null = null;
     let currentActiveBlock: any = null;
     let stdoutBuffer = '';
@@ -472,10 +506,13 @@ export function evaluateBlocksWithTrace(
       Boolean(
         val &&
           typeof val === 'object' &&
-          (val.__isInstance || val.__isClass || val.__isLambda || val.__isBuiltinType)
+          (val.__isInstance || val.__isClass || val.__isLambda || val.__isBuiltinType || val.__isModule || typeof val === 'function')
       );
 
-    const lookupClassMethod = (className: string, methodName: string): any | null => {
+    const lookupClassMethodWithOwner = (
+      className: string,
+      methodName: string
+    ): { method: any; ownerClass: string } | null => {
       let curr: string | undefined = className;
       const visited = new Set<string>();
       while (curr && !visited.has(curr)) {
@@ -483,11 +520,16 @@ export function evaluateBlocksWithTrace(
         const cls: any = classes[curr];
         if (!cls) break;
         if (Object.prototype.hasOwnProperty.call(cls.methods, methodName)) {
-          return cls.methods[methodName];
+          return { method: cls.methods[methodName], ownerClass: curr };
         }
         curr = cls.parentName;
       }
       return null;
+    };
+
+    const lookupClassMethod = (className: string, methodName: string): any | null => {
+      const found = lookupClassMethodWithOwner(className, methodName);
+      return found ? found.method : null;
     };
 
     const lookupClassAttr = (className: string, attrName: string): { found: boolean; value: any } => {
@@ -545,11 +587,24 @@ export function evaluateBlocksWithTrace(
     };
 
     const hasVar = (name: string): boolean =>
+      (currentGlobals.has(name) && Object.prototype.hasOwnProperty.call(scope, name)) ||
       Object.prototype.hasOwnProperty.call(currentScope, name) ||
       Object.prototype.hasOwnProperty.call(scope, name);
 
-    const getVar = (name: string): any =>
-      Object.prototype.hasOwnProperty.call(currentScope, name) ? currentScope[name] : scope[name];
+    const getVar = (name: string): any => {
+      if (currentGlobals.has(name) && Object.prototype.hasOwnProperty.call(scope, name)) {
+        return scope[name];
+      }
+      return Object.prototype.hasOwnProperty.call(currentScope, name) ? currentScope[name] : scope[name];
+    };
+
+    const setVarInCurrentOrGlobal = (name: string, val: any): void => {
+      if (currentScope !== scope && currentGlobals.has(name)) {
+        scope[name] = val;
+      } else {
+        currentScope[name] = val;
+      }
+    };
 
     const cloneScope = (s: Record<string, any>) => {
       const res: Record<string, any> = {};
@@ -703,10 +758,11 @@ export function evaluateBlocksWithTrace(
       const stripped = (rawExpr || '').trim().replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""');
       const outer = findBalancedOuterCall(stripped);
       if (outer) {
-        if (['int', 'len', 'bool', 'round'].includes(outer.fnName)) return false;
-        if (outer.fnName === 'float') return true;
+        if (['int', 'len', 'bool', 'round', 'ceil', 'floor', 'gcd', 'factorial'].includes(outer.fnName)) return false;
+        if (['float', 'sqrt', 'fabs', 'pow'].includes(outer.fnName)) return true;
       }
-      if (/\bfloat\s*\(/.test(stripped)) return true;
+      if (/^(?:math\.)?(?:ceil|floor|gcd|factorial|trunc)\s*\(/.test(stripped)) return false;
+      if (/\b(?:float|sqrt|fabs)\s*\(/.test(stripped)) return true;
       if (/(?:^|[^\w.])\d+\.\d*(?:[^\w.]|$)/.test(stripped)) return true;
       if (/(^|[^/])\/([^/]|$)/.test(stripped)) return true;
       if (currentScope === scope) {
@@ -775,7 +831,11 @@ export function evaluateBlocksWithTrace(
         return `{${Array.from(val).map((v) => formatPythonRepr(v)).join(', ')}}`;
       }
       if (typeof val === 'object') {
-        const entries = Object.entries(val).map(([k, v]) => `'${k}': ${formatPythonRepr(v)}`);
+        const intKeySet: Set<string> | undefined = (val as any).__intKeys;
+        const entries = Object.entries(val).map(([k, v]) => {
+          const kRepr = intKeySet && intKeySet.has(k) ? k : `'${k}'`;
+          return `${kRepr}: ${formatPythonRepr(v)}`;
+        });
         return `{${entries.join(', ')}}`;
       }
       return String(val);
@@ -968,12 +1028,21 @@ export function evaluateBlocksWithTrace(
     const applyMethodCall = (targetVal: any, mName: string, rawArgsStr: string): any => {
       const rawArgs = splitTopLevelArgs(rawArgsStr);
 
+      if (targetVal && typeof targetVal === 'object' && targetVal.__isModule) {
+        const mArgs = rawArgs.map((a) => evalNonEmpty(a));
+        const member = targetVal[mName];
+        if (typeof member === 'function') {
+          return member(...mArgs);
+        }
+        throw new Error(`AttributeError: module '${targetVal.name}' has no attribute '${mName}'`);
+      }
+
       if (isInstanceObj(targetVal)) {
-        const methodDef = lookupClassMethod(targetVal.__className, mName);
-        if (methodDef) {
+        const found = lookupClassMethodWithOwner(targetVal.__className, mName);
+        if (found) {
           const hasKw = rawArgs.some((a) => findStandaloneAssignIndex(a) > 0);
           const posArgs = hasKw ? [] : rawArgs.map((a) => evalNonEmpty(a));
-          return executeFunction(methodDef, posArgs, rawArgs, targetVal);
+          return executeFunction(found.method, posArgs, rawArgs, targetVal, found.ownerClass);
         }
         if (
           Object.prototype.hasOwnProperty.call(targetVal.__attrs, mName) &&
@@ -2047,6 +2116,151 @@ export function evaluateBlocksWithTrace(
         if (wrapsBraces && cDepth === 0 && !q) {
           const inner = expr.slice(1, -1).trim();
           if (!inner) return {};
+
+          // Detect top-level dict/set comprehension 'for' clauses inside {...}
+          const forIndices: number[] = [];
+          {
+            let iq: string | null = null;
+            let ip = 0, ib = 0, ic = 0;
+            for (let k = 0; k < inner.length; k++) {
+              const ch = inner[k];
+              if (iq) {
+                if (ch === '\\' && k + 1 < inner.length) { k++; continue; }
+                if (ch === iq) iq = null;
+                continue;
+              }
+              if (ch === '"' || ch === "'") { iq = ch; continue; }
+              if (ch === '(') { ip++; continue; }
+              if (ch === ')') { ip--; continue; }
+              if (ch === '[') { ib++; continue; }
+              if (ch === ']') { ib--; continue; }
+              if (ch === '{') { ic++; continue; }
+              if (ch === '}') { ic--; continue; }
+              if (
+                ip === 0 && ib === 0 && ic === 0 &&
+                ch === 'f' &&
+                inner.slice(k, k + 3) === 'for' &&
+                (k === 0 || !/[a-zA-Z0-9_.]/.test(inner[k - 1])) &&
+                (k + 3 >= inner.length || !/[a-zA-Z0-9_]/.test(inner[k + 3]))
+              ) {
+                forIndices.push(k);
+              }
+            }
+          }
+
+          if (forIndices.length > 0) {
+            const eltExpr = inner.slice(0, forIndices[0]).trim();
+            if (!eltExpr) throw new Error('SyntaxError: invalid syntax');
+            const kvParts = splitTopLevelColon(eltExpr);
+            const isDictComp = Boolean(kvParts && kvParts.length === 2);
+
+            const clauses: { vars: string[]; iterExpr: string; condExprs: string[] }[] = [];
+            for (let fIdx = 0; fIdx < forIndices.length; fIdx++) {
+              const segEnd = fIdx + 1 < forIndices.length ? forIndices[fIdx + 1] : inner.length;
+              const seg = inner.slice(forIndices[fIdx], segEnd).trim();
+              const clauseM = seg.match(/^for\s+([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s+in\s+([\s\S]+)$/);
+              if (!clauseM) throw new Error('SyntaxError: invalid syntax');
+              const vars = clauseM[1].split(',').map((s) => s.trim());
+              for (const v of vars) {
+                if (!isValidPythonIdentifier(v)) throw new Error('SyntaxError: invalid syntax');
+              }
+              const rest = clauseM[2].trim();
+              const ifSplits: number[] = [];
+              let rq: string | null = null;
+              let rp = 0, rb = 0, rc = 0;
+              for (let k = 0; k < rest.length; k++) {
+                const ch = rest[k];
+                if (rq) {
+                  if (ch === '\\' && k + 1 < rest.length) { k++; continue; }
+                  if (ch === rq) rq = null;
+                  continue;
+                }
+                if (ch === '"' || ch === "'") { rq = ch; continue; }
+                if (ch === '(') { rp++; continue; }
+                if (ch === ')') { rp--; continue; }
+                if (ch === '[') { rb++; continue; }
+                if (ch === ']') { rb--; continue; }
+                if (ch === '{') { rc++; continue; }
+                if (ch === '}') { rc--; continue; }
+                if (
+                  rp === 0 && rb === 0 && rc === 0 &&
+                  ch === 'i' &&
+                  rest.slice(k, k + 2) === 'if' &&
+                  (k === 0 || !/[a-zA-Z0-9_.]/.test(rest[k - 1])) &&
+                  (k + 2 >= rest.length || !/[a-zA-Z0-9_]/.test(rest[k + 2]))
+                ) {
+                  ifSplits.push(k);
+                }
+              }
+              const iterExpr = (ifSplits.length > 0 ? rest.slice(0, ifSplits[0]) : rest).trim();
+              if (!iterExpr) throw new Error('SyntaxError: invalid syntax');
+              const condExprs: string[] = [];
+              for (let sIdx = 0; sIdx < ifSplits.length; sIdx++) {
+                const cEnd = sIdx + 1 < ifSplits.length ? ifSplits[sIdx + 1] : rest.length;
+                const cExpr = rest.slice(ifSplits[sIdx] + 2, cEnd).trim();
+                if (!cExpr) throw new Error('SyntaxError: invalid syntax');
+                condExprs.push(cExpr);
+              }
+              clauses.push({ vars, iterExpr, condExprs });
+            }
+
+            const compDict: Record<string, any> = {};
+            const compIntKeys = new Set<string>();
+            Object.defineProperty(compDict, '__intKeys', { value: compIntKeys, enumerable: false });
+            const compSet = new Set<any>();
+            const prevScope = currentScope;
+            const compScope: Record<string, any> = { ...currentScope };
+            currentScope = compScope;
+            try {
+              const runClause = (cIdx: number) => {
+                if (cIdx >= clauses.length) {
+                  if (isDictComp && kvParts) {
+                    const kVal = evalNonEmpty(kvParts[0]);
+                    const vVal = evalNonEmpty(kvParts[1]);
+                    if (typeof kVal === 'number') compIntKeys.add(String(kVal));
+                    compDict[String(kVal)] = vVal;
+                  } else {
+                    const itemVal = evalNonEmpty(eltExpr);
+                    if (!Array.from(compSet).some((x) => pyEquals(x, itemVal))) compSet.add(itemVal);
+                  }
+                  return;
+                }
+                const cl = clauses[cIdx];
+                const seqItems = toIterableArray(evalNonEmpty(cl.iterExpr));
+                for (const item of seqItems) {
+                  if (--maxSteps <= 0) {
+                    throw new Error('RuntimeError: maximum comprehension steps exceeded');
+                  }
+                  if (cl.vars.length === 1) {
+                    compScope[cl.vars[0]] = item;
+                  } else {
+                    const unpacked = toIterableArray(item);
+                    if (unpacked.length !== cl.vars.length) {
+                      throw new Error(`ValueError: cannot unpack ${unpacked.length} values into ${cl.vars.length}`);
+                    }
+                    cl.vars.forEach((vn, idx) => {
+                      compScope[vn] = unpacked[idx];
+                    });
+                  }
+                  let passFilter = true;
+                  for (const condE of cl.condExprs) {
+                    if (!isPythonTruthy(evalNonEmpty(condE))) {
+                      passFilter = false;
+                      break;
+                    }
+                  }
+                  if (passFilter) {
+                    runClause(cIdx + 1);
+                  }
+                }
+              };
+              runClause(0);
+            } finally {
+              currentScope = prevScope;
+            }
+            return isDictComp ? compDict : compSet;
+          }
+
           const items = splitTopLevelArgs(inner);
           const firstColon = splitTopLevelColon(items[0]);
           if (firstColon) {
@@ -2158,11 +2372,11 @@ export function evaluateBlocksWithTrace(
             __className: fnName,
             __attrs: {},
           };
-          const initMethod = lookupClassMethod(fnName, '__init__');
-          if (initMethod) {
+          const initFound = lookupClassMethodWithOwner(fnName, '__init__');
+          if (initFound) {
             const hasKw = rawArgs.some((a) => findStandaloneAssignIndex(a) > 0);
             const posArgs = hasKw ? [] : rawArgs.map((a) => evalNonEmpty(a));
-            executeFunction(initMethod, posArgs, rawArgs, inst);
+            executeFunction(initFound.method, posArgs, rawArgs, inst, initFound.ownerClass);
           } else if (rawArgs.length > 0) {
             throw new Error(`TypeError: ${fnName}() takes no arguments`);
           }
@@ -2180,6 +2394,10 @@ export function evaluateBlocksWithTrace(
           if (candidate && typeof candidate === 'object' && candidate.__isLambda) {
             const posArgs = rawArgs.map((a) => evalNonEmpty(a));
             return invokeLambda(candidate, posArgs);
+          }
+          if (typeof candidate === 'function') {
+            const posArgs = rawArgs.map((a) => evalNonEmpty(a));
+            return candidate(...posArgs);
           }
         }
 
@@ -2327,6 +2545,15 @@ export function evaluateBlocksWithTrace(
           if (fnArgs.length !== 1) throw new Error('TypeError: any() takes exactly one argument');
           return toIterableArray(fnArgs[0]).some(isPythonTruthy);
         }
+        if (fnName === 'divmod') {
+          if (fnArgs.length !== 2) throw new Error('TypeError: divmod expected 2 arguments');
+          const a = Number(fnArgs[0]);
+          const b = Number(fnArgs[1]);
+          if (b === 0) throw new Error('ZeroDivisionError: integer division or modulo by zero');
+          const q = Math.floor(a / b);
+          const r = ((a % b) + b) % b;
+          return makeTuple([q, r]);
+        }
         if (fnName === 'chr') {
           return String.fromCodePoint(pyInt(fnArgs[0]));
         }
@@ -2341,9 +2568,31 @@ export function evaluateBlocksWithTrace(
         throw new Error(`NameError: name '${fnName}' is not defined`);
       }
 
-      // 16. Method call: "hello".split(), input().split(), my_list.append(10), d.bark(), etc.
+      // 16. Method call: "hello".split(), input().split(), my_list.append(10), d.bark(), super().__init__(...), etc.
       const methodCall = findBalancedMethodCall(expr);
       if (methodCall) {
+        if (methodCall.receiver === 'super()') {
+          const selfObj = hasVar('self') ? getVar('self') : null;
+          const activeCls = currentClassContext || (isInstanceObj(selfObj) ? selfObj.__className : undefined);
+          const parentName = activeCls ? classes[activeCls]?.parentName : undefined;
+          if (!parentName || !isInstanceObj(selfObj)) {
+            throw new Error('RuntimeError: super(): no current class or self instance');
+          }
+          const foundParentMethod = lookupClassMethodWithOwner(parentName, methodCall.methodName);
+          if (!foundParentMethod) {
+            throw new Error(`AttributeError: 'super' object has no attribute '${methodCall.methodName}'`);
+          }
+          const rawArgs = splitTopLevelArgs(methodCall.argsStr);
+          const hasKw = rawArgs.some((a) => findStandaloneAssignIndex(a) > 0);
+          const posArgs = hasKw ? [] : rawArgs.map((a) => evalNonEmpty(a));
+          return executeFunction(
+            foundParentMethod.method,
+            posArgs,
+            rawArgs,
+            selfObj,
+            foundParentMethod.ownerClass
+          );
+        }
         const targetVal = evalNonEmpty(methodCall.receiver);
         return applyMethodCall(targetVal, methodCall.methodName, methodCall.argsStr);
       }
@@ -2380,14 +2629,29 @@ export function evaluateBlocksWithTrace(
       throw new Error('SyntaxError: invalid syntax');
     };
 
-    const executeFunction = (fnDef: any, callArgs: any[], rawCallArgs?: string[], boundSelf?: any): any => {
+    const executeFunction = (
+      fnDef: any,
+      callArgs: any[],
+      rawCallArgs?: string[],
+      boundSelf?: any,
+      ownerClassName?: string
+    ): any => {
       const fnLocalScope: Record<string, any> = {};
       const paramSpecs = splitTopLevelArgs(fnDef.args || '');
       const parsedParams: { name: string; defaultExpr?: string; isVarArgs?: boolean }[] = [];
       let varArgsIndex = -1;
+      let kwArgsParamName: string | null = null;
 
       for (const spec of paramSpecs) {
         const trimmedSpec = spec.trim();
+        if (trimmedSpec.startsWith('**')) {
+          if (kwArgsParamName !== null) throw new Error('SyntaxError: invalid syntax');
+          const pName = trimmedSpec.slice(2).trim();
+          if (!isValidPythonIdentifier(pName)) throw new Error('SyntaxError: invalid syntax');
+          kwArgsParamName = pName;
+          fnLocalScope[pName] = {};
+          continue;
+        }
         if (trimmedSpec.startsWith('*') && !trimmedSpec.startsWith('**')) {
           if (varArgsIndex !== -1) throw new Error('SyntaxError: invalid syntax');
           const pName = trimmedSpec.slice(1).trim();
@@ -2436,6 +2700,10 @@ export function evaluateBlocksWithTrace(
             const kVal = evalNonEmpty(ra.slice(eqIdx + 1));
             const targetParam = parsedParams.find((p) => p.name === kName && !p.isVarArgs);
             if (!targetParam) {
+              if (kwArgsParamName !== null) {
+                fnLocalScope[kwArgsParamName][kName] = kVal;
+                continue;
+              }
               throw new Error(`TypeError: unexpected keyword argument '${kName}'`);
             }
             if (kwBound.has(kName)) {
@@ -2492,7 +2760,11 @@ export function evaluateBlocksWithTrace(
       }
 
       const prevScope = currentScope;
+      const prevGlobals = currentGlobals;
+      const prevClassCtx = currentClassContext;
       currentScope = fnLocalScope;
+      currentGlobals = new Set();
+      currentClassContext = ownerClassName;
       try {
         if (fnDef.innerBlocks && fnDef.innerBlocks.length > 0) {
           const sig = runBlockList(fnDef.innerBlocks);
@@ -2503,6 +2775,8 @@ export function evaluateBlocksWithTrace(
         return null;
       } finally {
         currentScope = prevScope;
+        currentGlobals = prevGlobals;
+        currentClassContext = prevClassCtx;
       }
     };
 
@@ -2787,14 +3061,14 @@ export function evaluateBlocksWithTrace(
             continue;
           }
 
-          // Multiple assignment / tuple unpacking: a, b = 10, 20 or a, b = input().split()
+          // Multiple assignment / tuple unpacking: a, b = 10, 20 or nums[0], nums[-1] = nums[-1], nums[0]
           const topLhsParts = splitTopLevelArgs(rawVarName);
           if (topLhsParts.length > 1) {
             if (op !== '=') {
               throw new Error('SyntaxError: illegal expression for augmented assignment');
             }
             for (const tn of topLhsParts) {
-              if (!isValidPythonIdentifier(tn)) {
+              if (!isValidPythonIdentifier(tn) && !findBalancedPostfixBracket(tn)) {
                 throw new Error('SyntaxError: invalid syntax');
               }
             }
@@ -2830,17 +3104,37 @@ export function evaluateBlocksWithTrace(
             }
 
             topLhsParts.forEach((tn: string, idx: number) => {
-              currentScope[tn] = unpackedItems[idx].val;
-              if (currentScope === scope) {
-                if (unpackedItems[idx].isFloat) floatVars.add(tn);
-                else floatVars.delete(tn);
+              const bLhs = findBalancedPostfixBracket(tn);
+              if (bLhs) {
+                const container = evalNonEmpty(bLhs.receiver);
+                if (isTuple(container) || typeof container === 'string') {
+                  throw new Error('TypeError: object does not support item assignment');
+                }
+                const keyVal = evalNonEmpty(bLhs.bracketContent);
+                if (Array.isArray(container)) {
+                  const rIdx = pyInt(keyVal) < 0 ? container.length + pyInt(keyVal) : pyInt(keyVal);
+                  if (rIdx < 0 || rIdx >= container.length) {
+                    throw new Error('IndexError: list assignment index out of range');
+                  }
+                  container[rIdx] = unpackedItems[idx].val;
+                } else if (container && typeof container === 'object' && !(container instanceof Set)) {
+                  container[String(keyVal)] = unpackedItems[idx].val;
+                } else {
+                  throw new Error('TypeError: object does not support item assignment');
+                }
+              } else {
+                setVarInCurrentOrGlobal(tn, unpackedItems[idx].val);
+                if (currentScope === scope || currentGlobals.has(tn)) {
+                  if (unpackedItems[idx].isFloat) floatVars.add(tn);
+                  else floatVars.delete(tn);
+                }
               }
             });
             recordStep(blk);
             continue;
           }
 
-          // Evaluate RHS (supporting unparenthesized comma tuple like t = 10, 20)
+          // Evaluate RHS (supporting unparenthesized comma tuple like t = 10, 20, excluding lambda a, b: ...)
           let rhsVal: any;
           let rhsIsFloat = false;
           if (blk.argBlock) {
@@ -2850,7 +3144,8 @@ export function evaluateBlocksWithTrace(
               (typeof rhsVal === 'number' && !Number.isInteger(rhsVal));
           } else {
             if (!rawRhs) throw new Error('SyntaxError: invalid syntax');
-            const rhsParts = splitTopLevelArgs(rawRhs);
+            const isLambdaRhs = /^lambda(?![a-zA-Z0-9_])/.test(rawRhs);
+            const rhsParts = isLambdaRhs ? [rawRhs] : splitTopLevelArgs(rawRhs);
             if (rhsParts.length > 1) {
               rhsVal = makeTuple(rhsParts.map((p) => evalNonEmpty(p)));
             } else {
@@ -2950,8 +3245,8 @@ export function evaluateBlocksWithTrace(
           }
 
           if (op === '=') {
-            currentScope[rawVarName] = rhsVal;
-            if (currentScope === scope) {
+            setVarInCurrentOrGlobal(rawVarName, rhsVal);
+            if (currentScope === scope || currentGlobals.has(rawVarName)) {
               if (typeof rhsVal === 'number' && rhsIsFloat) floatVars.add(rawVarName);
               else floatVars.delete(rawVarName);
             }
@@ -2961,15 +3256,39 @@ export function evaluateBlocksWithTrace(
             }
             const lhsVal = getVar(rawVarName);
             const lhsIsFloat =
-              (currentScope === scope && floatVars.has(rawVarName)) ||
+              ((currentScope === scope || currentGlobals.has(rawVarName)) && floatVars.has(rawVarName)) ||
               (typeof lhsVal === 'number' && !Number.isInteger(lhsVal));
             const nextVal = applyCompoundValue(lhsVal, op, rhsVal);
-            currentScope[rawVarName] = nextVal;
-            if (currentScope === scope) {
+            setVarInCurrentOrGlobal(rawVarName, nextVal);
+            if (currentScope === scope || currentGlobals.has(rawVarName)) {
               if (op === '/=' || (typeof nextVal === 'number' && (lhsIsFloat || rhsIsFloat))) {
                 floatVars.add(rawVarName);
               } else {
                 floatVars.delete(rawVarName);
+              }
+            }
+          }
+          recordStep(blk);
+        } else if (blk.type === 'global') {
+          const names = (blk.content || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+          for (const gn of names) {
+            if (!isValidPythonIdentifier(gn)) throw new Error('SyntaxError: invalid syntax');
+            currentGlobals.add(gn);
+          }
+          recordStep(blk);
+        } else if (blk.type === 'import') {
+          const impStmt = (blk.content || '').trim();
+          if (impStmt === 'import math') {
+            scope['math'] = MATH_MODULE;
+          } else {
+            const fromM = impStmt.match(/^from\s+math\s+import\s+([\s\S]+)$/);
+            if (fromM) {
+              const items = fromM[1].split(',').map((s: string) => s.trim()).filter(Boolean);
+              for (const item of items) {
+                if (!(item in MATH_MODULE)) {
+                  throw new Error(`ImportError: cannot import name '${item}' from 'math'`);
+                }
+                scope[item] = MATH_MODULE[item];
               }
             }
           }
@@ -3520,9 +3839,9 @@ export function parsePythonCodeToBlocks(code: string): any[] {
     let blockIndent: number | undefined = exactBlockIndent;
 
     while (i < rawLines.length) {
-      const line = rawLines[i];
-      const codeOnly = stripPythonComment(line);
-      const trimmed = codeOnly.trim();
+      let line = rawLines[i];
+      let codeOnly = stripPythonComment(line);
+      let trimmed = codeOnly.trim();
 
       if (!trimmed) {
         i++;
@@ -3542,6 +3861,27 @@ export function parsePythonCodeToBlocks(code: string): any[] {
       const lineIndex = i;
       i++;
 
+      // Join multiline triple-quoted string literals ("""...""" or '''...''') into a single logical line
+      const countTriple = (s: string, q3: string) => (s.match(new RegExp(q3, 'g')) || []).length;
+      const openQ3 =
+        countTriple(codeOnly, '"""') % 2 === 1
+          ? '"""'
+          : countTriple(codeOnly, "'''") % 2 === 1
+          ? "'''"
+          : null;
+      if (openQ3) {
+        while (i < rawLines.length) {
+          const nextRaw = rawLines[i];
+          i++;
+          line += '\\n' + nextRaw;
+          codeOnly += '\\n' + nextRaw;
+          if (nextRaw.includes(openQ3)) {
+            break;
+          }
+        }
+        trimmed = codeOnly.trim();
+      }
+
       if (/^(?:elif|else|except|finally)\b/.test(trimmed)) {
         throw new Error('SyntaxError: invalid syntax');
       }
@@ -3559,6 +3899,27 @@ export function parsePythonCodeToBlocks(code: string): any[] {
       }
       if (trimmed === 'continue') {
         list.push({ id: `py-line-${lineIndex}`, type: 'continue', lineIndex });
+        continue;
+      }
+      if (/^global\s+[a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*$/.test(trimmed)) {
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'global',
+          content: trimmed.replace(/^global\s+/, '').trim(),
+          lineIndex,
+        });
+        continue;
+      }
+      if (
+        /^import\s+math$/.test(trimmed) ||
+        /^from\s+math\s+import\s+[a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*$/.test(trimmed)
+      ) {
+        list.push({
+          id: `py-line-${lineIndex}`,
+          type: 'import',
+          content: trimmed,
+          lineIndex,
+        });
         continue;
       }
 

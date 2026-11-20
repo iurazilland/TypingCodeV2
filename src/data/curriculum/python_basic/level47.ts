@@ -55,8 +55,8 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 내장 함수를 사용해 숫자 리스트 prices의 전체 합계를 출력해보세요.',
       prompt_en: '[Fill Blank] Use the built-in aggregation function to print the total of prices.',
-      hint_ko: '리스트의 모든 숫자를 한 번에 더해주는 세 글자 내장 함수를 적으세요.',
-      hint_en: 'Write the 3-letter built-in function that returns the sum of a list.',
+      hint_ko: '리스트의 모든 숫자를 한 번에 더해주는 내장 함수를 적으세요.',
+      hint_en: 'Write the built-in function that returns the sum of a list.',
       templateCode: 'prices = [1200, 800, 500]\nprint("Total:", §§§§(prices))',
       targetCode: 'prices = [1200, 800, 500]\nprint("Total:", sum(prices))',
       testCases: [
@@ -92,8 +92,8 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 리스트 pts에서 가장 큰 값에서 가장 작은 값을 뺀 차이(gap)를 구해 출력해보세요.',
       prompt_en: '[Fill Blank] Compute the difference between the largest and smallest values in pts.',
-      hint_ko: '리스트에서 최댓값을 구하는 세 글자 내장 함수를 빈칸에 적으세요.',
-      hint_en: 'Write the 3-letter built-in function that finds the maximum value.',
+      hint_ko: '리스트에서 최댓값을 구하는 내장 함수를 빈칸에 적으세요.',
+      hint_en: 'Write the built-in function that finds the maximum value.',
       templateCode: 'pts = [12, 45, 30]\ngap = §§§§(pts) - min(pts)\nprint("Gap:", gap)',
       targetCode: 'pts = [12, 45, 30]\ngap = max(pts) - min(pts)\nprint("Gap:", gap)',
       testCases: [
@@ -129,8 +129,8 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 리스트 data를 오름차순으로 제자리 정렬한 뒤 출력해보세요.',
       prompt_en: '[Fill Blank] Call the in-place sorting method on data and print the sorted list.',
-      hint_ko: '리스트를 오름차순으로 정렬하는 네 글자 메서드를 입력하세요.',
-      hint_en: 'Type the 4-letter method that sorts a list in place.',
+      hint_ko: '리스트를 오름차순으로 정렬하는 메서드를 입력하세요.',
+      hint_en: 'Type the method that sorts a list in place.',
       templateCode: 'data = [9, 2, 7, 4]\ndata.§§§§§()\nprint(data)',
       targetCode: 'data = [9, 2, 7, 4]\ndata.sort()\nprint(data)',
       testCases: [

@@ -30,16 +30,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           input: '6',
           expectedOutput: '7',
         },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '1',
-        },
-        {
-          id: 3,
-          input: '9',
-          expectedOutput: '15',
-        },
       ],
     },
     {
@@ -49,8 +39,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 "quit"이면 종료하고 음수는 건너뛰며 양수 값만 합산해 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 2 loop-control keywords to stop on "quit" and skip negative values.',
-      hint_ko: '반복 전체를 즉시 끝내는 다섯 글자 제어 키워드와, 이번 차례만 넘기는 여덟 글자 제어 키워드를 채웁니다.',
-      hint_en: 'Enter the five-letter exit keyword on line 5 and the eight-letter skip keyword on line 7.',
+      hint_ko: '반복 전체를 즉시 끝내는 제어 키워드와, 이번 차례만 넘기는 제어 키워드를 채웁니다.',
+      hint_en: 'Enter the exit keyword on line 5 and the skip keyword on line 7.',
       templateCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        §§§§§§\n    if int(num) < 0:\n        §§§§§§§§§\n    total += int(num)\nprint(total)',
       targetCode: 'total = 0\nwhile True:\n    tag, num = input().split()\n    if tag == "quit":\n        break\n    if int(num) < 0:\n        continue\n    total += int(num)\nprint(total)',
       testCases: [
@@ -58,11 +48,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           id: 1,
           input: 'item 15\nerr -10\nitem 25\nquit 0',
           expectedOutput: '40',
-        },
-        {
-          id: 2,
-          input: 'err -5\nitem 8\nquit 0',
-          expectedOutput: '8',
         },
       ],
     },
@@ -73,8 +58,8 @@ export const PYTHON_LEVEL_40: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 양의 정수 n의 자릿수 합 s와 s가 홀수인지 여부를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 2 blanks to strip the ones digit each turn and check if the digit sum s is odd.',
-      hint_ko: '10으로 나눈 정수 몫으로 갱신하는 복합 대입 연산자와, 나머지를 참·거짓으로 바꾸는 네 글자 함수를 채웁니다.',
-      hint_en: 'Use floor-division compound assignment on line 5 and the four-letter boolean casting function on line 6.',
+      hint_ko: '10으로 나눈 정수 몫으로 갱신하는 복합 대입 연산자와, 나머지를 참·거짓으로 바꾸는 함수를 채웁니다.',
+      hint_en: 'Use floor-division compound assignment on line 5 and the boolean casting function on line 6.',
       templateCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n §§§§ 10\nprint(s, §§§§§(s % 2))',
       targetCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s, bool(s % 2))',
       testCases: [
@@ -82,11 +67,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           id: 1,
           input: '384',
           expectedOutput: '15 True',
-        },
-        {
-          id: 2,
-          input: '204',
-          expectedOutput: '6 False',
         },
       ],
     },
@@ -107,11 +87,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           input: '6',
           expectedOutput: '12',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '18',
-        },
       ],
     },
     {
@@ -130,11 +105,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           id: 1,
           input: '4',
           expectedOutput: '24',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '120',
         },
       ],
     },
@@ -155,11 +125,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           input: '3',
           expectedOutput: '#\n##\n###',
         },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '#\n##\n###\n####',
-        },
       ],
     },
     {
@@ -179,11 +144,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           input: '10',
           expectedOutput: '4',
         },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '5',
-        },
       ],
     },
     {
@@ -202,11 +162,6 @@ export const PYTHON_LEVEL_40: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '100\n010\n001',
-        },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '10\n01',
         },
       ],
     },

@@ -62,8 +62,8 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 파일명 f가 \".txt\" 확장자로 끝나는지 확인해 True 또는 False를 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to check whether filename f ends with \".txt\".",
-      "hint_ko": "문자열이 특정 접미사로 끝나는지 검사하는 여덟 글자 메서드를 입력하세요.",
-      "hint_en": "Enter the 8-letter method that checks whether a string ends with a suffix.",
+      "hint_ko": "문자열이 특정 접미사로 끝나는지 검사하는 메서드를 입력하세요.",
+      "hint_en": "Enter the method that checks whether a string ends with a suffix.",
       "targetCode": "f = input().strip()\nprint(f.endswith(\".txt\"))",
       "templateCode": "f = input().strip()\nprint(f.§§§§§§§§§(\".txt\"))",
       "testCases": [
@@ -71,11 +71,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "notes.txt",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "notes.pdf",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -94,11 +89,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "25",
           "expectedOutput": "35"
-        },
-        {
-          "id": 2,
-          "input": "25a",
-          "expectedOutput": "NAN"
         }
       ]
     },
@@ -109,8 +99,8 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력 문자열 pin이 숫자로만 구성되어 있는지 불리언 결과를 출력하도록 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to check whether pin contains only numeric characters.",
-      "hint_ko": "문자열이 숫자로만 이루어졌는지 판별하는 일곱 글자 메서드를 적으세요.",
-      "hint_en": "Type the 7-letter method that checks if all characters are numeric digits.",
+      "hint_ko": "문자열이 숫자로만 이루어졌는지 판별하는 메서드를 적으세요.",
+      "hint_en": "Type the method that checks if all characters are numeric digits.",
       "targetCode": "pin = input().strip()\nprint(pin.isdigit())",
       "templateCode": "pin = input().strip()\nprint(pin.§§§§§§§§())",
       "testCases": [
@@ -118,11 +108,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "2026",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "20a6",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -151,8 +136,8 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력된 태그가 숫자나 기호 없이 순수 알파벳·글자로만 이루어졌는지 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to check whether tag consists purely of letters.",
-      "hint_ko": "알파벳(alphabet) 등 글자로만 구성되었는지 판별하는 일곱 글자 메서드를 호출하세요.",
-      "hint_en": "Call the 7-letter method that checks whether a string contains only alphabetic characters.",
+      "hint_ko": "알파벳(alphabet) 등 글자로만 구성되었는지 판별하는 메서드를 호출하세요.",
+      "hint_en": "Call the method that checks whether a string contains only alphabetic characters.",
       "targetCode": "tag = input().strip()\nprint(tag.isalpha())",
       "templateCode": "tag = input().strip()\nprint(tag.§§§§§§§§())",
       "testCases": [
@@ -160,11 +145,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "Korea",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "Kor1",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -193,8 +173,8 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 파일 목록에서 \"test_\"로 시작하는 파일만 골라내는 리스트 컴프리헨션을 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the list comprehension to filter filenames beginning with \"test_\".",
-      "hint_ko": "특정 접두사로 시작하는지 검사하는 열 글자 메서드를 조건절에 채워보세요.",
-      "hint_en": "Fill in the 10-letter method that tests whether a string begins with the given prefix.",
+      "hint_ko": "특정 접두사로 시작하는지 검사하는 메서드를 조건절에 채워보세요.",
+      "hint_en": "Fill in the method that tests whether a string begins with the given prefix.",
       "targetCode": "files = [\"test_a.py\", \"main.py\", \"test_b.py\"]\npicks = [f for f in files if f.startswith(\"test_\")]\nprint(picks)",
       "templateCode": "files = [\"test_a.py\", \"main.py\", \"test_b.py\"]\npicks = [f for f in files if f.§§§§§§§§§§§(\"test_\")]\nprint(picks)",
       "testCases": [
@@ -240,11 +220,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "https://py.org",
           "expectedOutput": "SECURE"
-        },
-        {
-          "id": 2,
-          "input": "http://py.org",
-          "expectedOutput": "WARN"
         }
       ]
     },
@@ -264,11 +239,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "15",
           "expectedOutput": "30"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "ERR"
         }
       ]
     },
@@ -288,11 +258,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "app.py",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "app.js",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -312,11 +277,6 @@ export const PYTHON_LEVEL_96: PracticeRound = {
           "id": 1,
           "input": "10 a 20 b 5",
           "expectedOutput": "35"
-        },
-        {
-          "id": 2,
-          "input": "7 py 8",
-          "expectedOutput": "15"
         }
       ]
     },

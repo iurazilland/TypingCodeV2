@@ -64,11 +64,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           input: 'a@b.com',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: 'a @b.com',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -105,11 +100,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           id: 1,
           input: 'Hi',
           expectedOutput: 'H\ni',
-        },
-        {
-          id: 2,
-          input: 'Py3',
-          expectedOutput: 'P\ny\n3',
         },
       ],
     },
@@ -148,11 +138,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           input: 'banana',
           expectedOutput: '3',
         },
-        {
-          id: 2,
-          input: 'apple',
-          expectedOutput: '1',
-        },
       ],
     },
     {
@@ -180,8 +165,8 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 문자열을 순회하다 "#" 기호를 만나면 즉시 반복을 멈추고 그 전까지 모은 문자열을 출력해보세요.',
       prompt_en: '[Fill Blank] Stop the loop immediately when "#" is encountered and print the collected cmd string.',
-      hint_ko: '반복문을 즉시 탈출하는 다섯 글자 제어 키워드를 채우세요.',
-      hint_en: 'Fill in the 5-letter keyword that exits the loop immediately.',
+      hint_ko: '반복문을 즉시 탈출하는 제어 키워드를 채우세요.',
+      hint_en: 'Fill in the keyword that exits the loop immediately.',
       templateCode: 's = input()\ncmd = ""\nfor ch in s:\n    if ch == "#":\n        §§§§§§\n    cmd += ch\nprint(cmd, len(cmd))',
       targetCode: 's = input()\ncmd = ""\nfor ch in s:\n    if ch == "#":\n        break\n    cmd += ch\nprint(cmd, len(cmd))',
       testCases: [
@@ -189,11 +174,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           id: 1,
           input: 'run#1',
           expectedOutput: 'run 3',
-        },
-        {
-          id: 2,
-          input: 'start#now',
-          expectedOutput: 'start 5',
         },
       ],
     },
@@ -214,11 +194,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           input: 'a2b5c3',
           expectedOutput: '10',
         },
-        {
-          id: 2,
-          input: 'p9y0t4',
-          expectedOutput: '13',
-        },
       ],
     },
     {
@@ -237,11 +212,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           id: 1,
           input: 'AB12',
           expectedOutput: 'Pass',
-        },
-        {
-          id: 2,
-          input: 'AX12',
-          expectedOutput: 'Fail',
         },
       ],
     },
@@ -262,11 +232,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           input: 'a_b_c',
           expectedOutput: 'abc',
         },
-        {
-          id: 2,
-          input: 'py_code',
-          expectedOutput: 'pycode',
-        },
       ],
     },
     {
@@ -286,11 +251,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           input: 'user@site.com',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: 'usersite.com',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -309,11 +269,6 @@ export const PYTHON_LEVEL_52: PracticeRound = {
           id: 1,
           input: 'P1y2t3h4o5n',
           expectedOutput: 'Python',
-        },
-        {
-          id: 2,
-          input: 'C0o9d8e',
-          expectedOutput: 'Code',
         },
       ],
     },

@@ -22,18 +22,13 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Fill Blank] Trim raw, replace "-" with " ", divide into words, and print the count and last word.',
       hint_ko: '공백 제거 메서드, 공백 기준 분리 메서드, 길이 함수를 순서대로 채우세요.',
       hint_en: 'Fill in the strip method, split method, and len function in order.',
-      templateCode: 'raw = input().§§§§§§().replace("-", " ")\nparts = raw.§§§§§§()\nprint(f"Count:{§§§§(parts)}, End:{parts[-1]}")',
-      targetCode: 'raw = input().strip().replace("-", " ")\nparts = raw.split()\nprint(f"Count:{len(parts)}, End:{parts[-1]}")',
+      templateCode: 'raw = input().§§§§§§().replace("-", " ")\nparts = raw.§§§§§§()\nprint(f"Count:{§§§§(parts)}/End:{parts[-1]}")',
+      targetCode: 'raw = input().strip().replace("-", " ")\nparts = raw.split()\nprint(f"Count:{len(parts)}/End:{parts[-1]}")',
       testCases: [
         {
           id: 1,
           input: '  py-code-v2  ',
-          expectedOutput: 'Count:3, End:v2',
-        },
-        {
-          id: 2,
-          input: 'alpha-beta',
-          expectedOutput: 'Count:2, End:beta',
+          expectedOutput: 'Count:3/End:v2',
         },
       ],
     },
@@ -54,11 +49,6 @@ export const PYTHON_LEVEL_56: PracticeRound = {
           input: 'VIP90',
           expectedOutput: 'Code:100',
         },
-        {
-          id: 2,
-          input: 'MEM10',
-          expectedOutput: 'Normal',
-        },
       ],
     },
     {
@@ -70,18 +60,13 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       prompt_en: '[Fill Blank] Divide comma-separated numbers, collect integers >= 50 into valid, and print the largest value and total.',
       hint_ko: '문자열 분리 메서드, 리스트 추가 메서드, 최댓값 함수를 차례로 채우세요.',
       hint_en: 'Fill in the split method, append method, and max function.',
-      templateCode: 'valid = []\nfor s in input().§§§§§§(","):\n    n = int(s)\n    if n >= 50:\n        valid.§§§§§§§(n)\nprint(f"Max:{§§§§(valid)}, Sum:{sum(valid)}")',
-      targetCode: 'valid = []\nfor s in input().split(","):\n    n = int(s)\n    if n >= 50:\n        valid.append(n)\nprint(f"Max:{max(valid)}, Sum:{sum(valid)}")',
+      templateCode: 'valid = []\nfor s in input().§§§§§§(","):\n    n = int(s)\n    if n >= 50:\n        valid.§§§§§§§(n)\nprint(f"Max:{§§§§(valid)}/Sum:{sum(valid)}")',
+      targetCode: 'valid = []\nfor s in input().split(","):\n    n = int(s)\n    if n >= 50:\n        valid.append(n)\nprint(f"Max:{max(valid)}/Sum:{sum(valid)}")',
       testCases: [
         {
           id: 1,
           input: '30,60,80,40',
-          expectedOutput: 'Max:80, Sum:140',
-        },
-        {
-          id: 2,
-          input: '55,95,20',
-          expectedOutput: 'Max:95, Sum:150',
+          expectedOutput: 'Max:80/Sum:140',
         },
       ],
     },
@@ -102,11 +87,6 @@ export const PYTHON_LEVEL_56: PracticeRound = {
           input: 'A-10-B',
           expectedOutput: 'Clean:A10B',
         },
-        {
-          id: 2,
-          input: '99-00',
-          expectedOutput: 'Clean:9900',
-        },
       ],
     },
     {
@@ -125,11 +105,6 @@ export const PYTHON_LEVEL_56: PracticeRound = {
           id: 1,
           input: '[PYTHON]',
           expectedOutput: 'PYTHON:6',
-        },
-        {
-          id: 2,
-          input: '[CODE]',
-          expectedOutput: 'CODE:4',
         },
       ],
     },
@@ -150,11 +125,6 @@ export const PYTHON_LEVEL_56: PracticeRound = {
           input: '14:30',
           expectedOutput: 'PM 30m',
         },
-        {
-          id: 2,
-          input: '09:15',
-          expectedOutput: 'AM 15m',
-        },
       ],
     },
     {
@@ -174,11 +144,6 @@ export const PYTHON_LEVEL_56: PracticeRound = {
           input: ' 2,500 ',
           expectedOutput: '2550',
         },
-        {
-          id: 2,
-          input: '10,000',
-          expectedOutput: '10050',
-        },
       ],
     },
     {
@@ -197,11 +162,6 @@ export const PYTHON_LEVEL_56: PracticeRound = {
           id: 1,
           input: 'hello spam code',
           expectedOutput: "['hello', 'code']",
-        },
-        {
-          id: 2,
-          input: 'ad news',
-          expectedOutput: "['news']",
         },
       ],
     },

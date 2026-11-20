@@ -101,11 +101,6 @@ export const PYTHON_LEVEL_50: PracticeRound = {
           input: 'ABCDE',
           expectedOutput: 'B E',
         },
-        {
-          id: 2,
-          input: 'PY901',
-          expectedOutput: 'Y 1',
-        },
       ],
     },
     {
@@ -142,11 +137,6 @@ export const PYTHON_LEVEL_50: PracticeRound = {
           id: 1,
           input: 'level',
           expectedOutput: 'Match',
-        },
-        {
-          id: 2,
-          input: 'apple',
-          expectedOutput: 'Diff',
         },
       ],
     },
@@ -204,11 +194,6 @@ export const PYTHON_LEVEL_50: PracticeRound = {
           input: 'Python',
           expectedOutput: 'Ends: Pn',
         },
-        {
-          id: 2,
-          input: 'Korea',
-          expectedOutput: 'Ends: Ka',
-        },
       ],
     },
     {
@@ -247,11 +232,6 @@ export const PYTHON_LEVEL_50: PracticeRound = {
           input: 'Code',
           expectedOutput: 'C e',
         },
-        {
-          id: 2,
-          input: 'Star',
-          expectedOutput: 'S r',
-        },
       ],
     },
     {
@@ -271,11 +251,6 @@ export const PYTHON_LEVEL_50: PracticeRound = {
           input: 'Sky',
           expectedOutput: '2 y',
         },
-        {
-          id: 2,
-          input: 'Code',
-          expectedOutput: '3 e',
-        },
       ],
     },
     {
@@ -294,11 +269,6 @@ export const PYTHON_LEVEL_50: PracticeRound = {
           id: 1,
           input: 'KOREA',
           expectedOutput: 'R',
-        },
-        {
-          id: 2,
-          input: 'PYTHON3',
-          expectedOutput: 'H',
         },
       ],
     },

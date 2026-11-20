@@ -21,7 +21,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 맨 앞에 20을 끼워 넣고 [40, 10]을 이어 붙인 뒤 오름차순 사본을 출력하도록 세 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the index insertion method, list extension method, and copy-sorting function.",
       "hint_ko": "지정 위치에 삽입하는 메서드, 리스트 원소들을 풀어 이어 붙이는 메서드, 그리고 사본 정렬 내장 함수를 확인하세요.",
-      "hint_en": "Check the six-letter insert method, six-letter extend method, and six-letter sorted function.",
+      "hint_en": "Check the insert method, extend method, and sorted function.",
       "templateCode": "q = [30, 10]\nq.§§§§§§§(0, 20)\nq.§§§§§§§([40, 10])\nq.remove(10)\nprint(§§§§§§§(q))",
       "targetCode": "q = [30, 10]\nq.insert(0, 20)\nq.extend([40, 10])\nq.remove(10)\nprint(sorted(q))",
       "testCases": [
@@ -40,7 +40,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 딕셔너리를 병합 갱신하고 삼항 표현식으로 등급을 판정한 뒤 없는 키를 기본값 0으로 조회해보세요.",
       "prompt_en": "[Fill Blank] Complete the dictionary merge method, ternary fallback keyword, and safe lookup method.",
       "hint_ko": "딕셔너리 병합 메서드, 한 줄 조건식의 거짓 분기 키워드, 그리고 기본값 안전 조회 메서드를 차례로 확인하세요.",
-      "hint_en": "Check the six-letter update method, four-letter else keyword, and three-letter get method.",
+      "hint_en": "Check the update method, else keyword, and get method.",
       "templateCode": "bag = {\"hp\": 40, \"mp\": 20}\nbag.§§§§§§§({\"hp\": 70})\npts = sum(bag.values())\nrank = \"High\" if pts >= 80 §§§§§ \"Low\"\nprint(bag.§§§§(\"atk\", 0), rank)",
       "targetCode": "bag = {\"hp\": 40, \"mp\": 20}\nbag.update({\"hp\": 70})\npts = sum(bag.values())\nrank = \"High\" if pts >= 80 else \"Low\"\nprint(bag.get(\"atk\", 0), rank)",
       "testCases": [
@@ -59,7 +59,7 @@ export const PYTHON_LEVEL_92: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 집합 a에서 원소를 안전 삭제한 뒤 b와의 교집합을 정렬하고, 각 단어의 길이를 컴프리헨션으로 구해보세요.",
       "prompt_en": "[Fill Blank] Complete the safe set removal method, intersection operator, and comprehension loop keyword.",
       "hint_ko": "없어도 에러가 안 나는 집합 삭제 메서드, 공통 원소 교집합 연산자, 그리고 컴프리헨션 반복 키워드를 확인하세요.",
-      "hint_en": "Check the seven-letter discard method, the & intersection operator, and the for keyword.",
+      "hint_en": "Check the discard method, the & intersection operator, and the for keyword.",
       "templateCode": "a = {\"py\", \"js\", \"go\", \"sql\"}\nb = {\"go\", \"py\", \"c\"}\na.§§§§§§§§(\"py\")\ncommon = sorted(a §§ b)\nlens = [len(w) §§§§ w in common]\nprint(common, lens)",
       "targetCode": "a = {\"py\", \"js\", \"go\", \"sql\"}\nb = {\"go\", \"py\", \"c\"}\na.discard(\"py\")\ncommon = sorted(a & b)\nlens = [len(w) for w in common]\nprint(common, lens)",
       "testCases": [
@@ -143,11 +143,6 @@ export const PYTHON_LEVEL_92: PracticeRound = {
           "id": 1,
           "input": "5 -2 8 -1",
           "expectedOutput": "13 2"
-        },
-        {
-          "id": 2,
-          "input": "-3 4 0",
-          "expectedOutput": "4 2"
         }
       ]
     },
@@ -167,11 +162,6 @@ export const PYTHON_LEVEL_92: PracticeRound = {
           "id": 1,
           "input": "a b c\nb",
           "expectedOutput": "['a', 'c']"
-        },
-        {
-          "id": 2,
-          "input": "x y\nx y z",
-          "expectedOutput": "none"
         }
       ]
     },

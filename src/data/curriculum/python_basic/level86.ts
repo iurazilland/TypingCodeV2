@@ -99,8 +99,8 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 각 행에서 가장 큰 숫자만 뽑아 total에 누적하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function name to add the largest number from each row to total.",
-      "hint_ko": "각 행 리스트 row에서 최댓값을 구하는 세 글자 내장 함수를 호출하세요.",
-      "hint_en": "Call the three-letter built-in function that returns the maximum value of row.",
+      "hint_ko": "각 행 리스트 row에서 최댓값을 구하는 내장 함수를 호출하세요.",
+      "hint_en": "Call the built-in function that returns the maximum value of row.",
       "templateCode": "scores = [[70, 90], [85, 80], [60, 95]]\ntotal = 0\nfor row in scores:\n    total += §§§§(row)\nprint(total)",
       "targetCode": "scores = [[70, 90], [85, 80], [60, 95]]\ntotal = 0\nfor row in scores:\n    total += max(row)\nprint(total)",
       "testCases": [

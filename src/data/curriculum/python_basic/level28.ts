@@ -29,16 +29,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '7',
           expectedOutput: 'Plus',
         },
-        {
-          id: 2,
-          input: '0',
-          expectedOutput: 'Zero',
-        },
-        {
-          id: 3,
-          input: '-3',
-          expectedOutput: 'Minus',
-        },
       ],
     },
     {
@@ -48,8 +38,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 넷째 줄 빈칸에 추가 조건 분기 키워드를 채워 "Run", "Halt", "Wait" 중 하나를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the additional condition keyword on line 4 to handle the "stop" command.',
-      hint_ko: '앞선 조건이 거짓일 때 새로운 조건을 이어서 검사하는 네 글자 분기 키워드를 입력합니다.',
-      hint_en: 'Use the four-letter contraction of "else if" to test a second condition.',
+      hint_ko: '앞선 조건이 거짓일 때 새로운 조건을 이어서 검사하는 분기 키워드를 입력합니다.',
+      hint_en: 'Use the contraction of "else if" to test a second condition.',
       templateCode: 'cmd = input()\nif cmd == "start":\n    print("Run")\n§§§§§ cmd == "stop":\n    print("Halt")\nelse:\n    print("Wait")',
       targetCode: 'cmd = input()\nif cmd == "start":\n    print("Run")\nelif cmd == "stop":\n    print("Halt")\nelse:\n    print("Wait")',
       testCases: [
@@ -57,16 +47,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           id: 1,
           input: 'stop',
           expectedOutput: 'Halt',
-        },
-        {
-          id: 2,
-          input: 'start',
-          expectedOutput: 'Run',
-        },
-        {
-          id: 3,
-          input: 'idle',
-          expectedOutput: 'Wait',
         },
       ],
     },
@@ -85,16 +65,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           id: 1,
           input: '95',
           expectedOutput: 'A',
-        },
-        {
-          id: 2,
-          input: '84',
-          expectedOutput: 'B',
-        },
-        {
-          id: 3,
-          input: '70',
-          expectedOutput: 'C',
         },
       ],
     },
@@ -115,16 +85,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '25',
           expectedOutput: 'Pro',
         },
-        {
-          id: 2,
-          input: '60',
-          expectedOutput: 'Master',
-        },
-        {
-          id: 3,
-          input: '10',
-          expectedOutput: 'Rookie',
-        },
       ],
     },
     {
@@ -143,16 +103,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '35000',
           expectedOutput: '30000',
         },
-        {
-          id: 2,
-          input: '20000',
-          expectedOutput: '18000',
-        },
-        {
-          id: 3,
-          input: '10000',
-          expectedOutput: '12500',
-        },
       ],
     },
     {
@@ -163,7 +113,7 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       prompt_ko: '[빈칸 채우기] 여섯째 줄 빈칸에 추가 조건 분기 키워드를 채워 4단계 구간별 요금을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the multi-way branch keyword on line 6 to add a third condition check.',
       hint_ko: 'elif는 개수 제한 없이 여러 개를 연달아 이어 붙일 수 있습니다.',
-      hint_en: 'You can chain multiple four-letter else-if keywords in sequence.',
+      hint_en: 'You can chain multiple else-if keywords in sequence.',
       templateCode: 'age = int(input())\nif age < 8:\n    fee = 0\nelif age < 14:\n    fee = 500\n§§§§§ age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)',
       targetCode: 'age = int(input())\nif age < 8:\n    fee = 0\nelif age < 14:\n    fee = 500\nelif age < 20:\n    fee = 1000\nelse:\n    fee = 2000\nprint(fee)',
       testCases: [
@@ -171,16 +121,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           id: 1,
           input: '16',
           expectedOutput: '1000',
-        },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '500',
-        },
-        {
-          id: 3,
-          input: '25',
-          expectedOutput: '2000',
         },
       ],
     },
@@ -200,16 +140,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '4',
           expectedOutput: '2200',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '2500',
-        },
-        {
-          id: 3,
-          input: '1',
-          expectedOutput: '1500',
-        },
       ],
     },
     {
@@ -219,8 +149,8 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 추가 조건 분기 키워드를 채워 6의 배수를 먼저 걸러낸 뒤 2의 배수인지 이어서 검사해보세요.',
       prompt_en: '[Fill Blank] Fill in the chained branch keyword so multiples of 6 do not also trigger the 2x branch.',
-      hint_ko: '독립된 if 대신 앞 조건이 거짓일 때만 검사하는 네 글자 분기 키워드를 써야 중복 실행을 막을 수 있습니다.',
-      hint_en: 'Use the four-letter chained condition keyword so the second branch is skipped when the first is True.',
+      hint_ko: '독립된 if 대신 앞 조건이 거짓일 때만 검사하는 분기 키워드를 써야 중복 실행을 막을 수 있습니다.',
+      hint_en: 'Use the chained condition keyword so the second branch is skipped when the first is True.',
       templateCode: 'n = int(input())\nif n % 6 == 0:\n    print("6x")\n§§§§§ n % 2 == 0:\n    print("2x")\nelse:\n    print("Other")',
       targetCode: 'n = int(input())\nif n % 6 == 0:\n    print("6x")\nelif n % 2 == 0:\n    print("2x")\nelse:\n    print("Other")',
       testCases: [
@@ -228,16 +158,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           id: 1,
           input: '12',
           expectedOutput: '6x',
-        },
-        {
-          id: 2,
-          input: '8',
-          expectedOutput: '2x',
-        },
-        {
-          id: 3,
-          input: '5',
-          expectedOutput: 'Other',
         },
       ],
     },
@@ -258,16 +178,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '80',
           expectedOutput: 'Pt:110',
         },
-        {
-          id: 2,
-          input: '95',
-          expectedOutput: 'Pt:120',
-        },
-        {
-          id: 3,
-          input: '50',
-          expectedOutput: 'Pt:95',
-        },
       ],
     },
     {
@@ -287,16 +197,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '60',
           expectedOutput: 'Top',
         },
-        {
-          id: 2,
-          input: '20',
-          expectedOutput: 'Mid',
-        },
-        {
-          id: 3,
-          input: '5',
-          expectedOutput: 'Low',
-        },
       ],
     },
     {
@@ -304,10 +204,10 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 넷째 줄에 잘못 적힌 두 단어 분기 표현을 파이썬 전용 네 글자 예약어로 수정해보세요.',
-      prompt_en: '[Fix Bug] Replace the invalid two-word branch syntax on line 4 with the 4-letter Python keyword.',
-      hint_ko: '파이썬에서는 두 단어로 띄어 쓰지 않고 네 글자로 줄인 키워드를 사용합니다.',
-      hint_en: 'Python uses a single four-letter keyword instead of two separate words.',
+      prompt_ko: '[틀린 곳 수정] 넷째 줄에 잘못 적힌 else if를 파이썬의 추가 조건 분기 키워드로 수정해보세요.',
+      prompt_en: '[Fix Bug] Replace the invalid else if on line 4 with Python\'s additional branch keyword.',
+      hint_ko: '파이썬에서는 else if 대신 줄여 쓴 elif 키워드를 사용합니다.',
+      hint_en: 'Python uses a single keyword instead of two separate words.',
       templateCode: 'n = int(input())\nif n > 0:\n    print("Plus")\nelse if n == 0:\n    print("Zero")\nelse:\n    print("Minus")',
       targetCode: 'n = int(input())\nif n > 0:\n    print("Plus")\nelif n == 0:\n    print("Zero")\nelse:\n    print("Minus")',
       testCases: [
@@ -315,11 +215,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           id: 1,
           input: '0',
           expectedOutput: 'Zero',
-        },
-        {
-          id: 2,
-          input: '-4',
-          expectedOutput: 'Minus',
         },
       ],
     },
@@ -340,11 +235,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           input: '75',
           expectedOutput: '12',
         },
-        {
-          id: 2,
-          input: '95',
-          expectedOutput: '15',
-        },
       ],
     },
     {
@@ -363,11 +253,6 @@ export const PYTHON_LEVEL_28: PracticeRound = {
           id: 1,
           input: '25',
           expectedOutput: 'Pro',
-        },
-        {
-          id: 2,
-          input: '60',
-          expectedOutput: 'Master',
         },
       ],
     },

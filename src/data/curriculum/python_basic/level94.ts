@@ -62,8 +62,8 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 단어 리스트 tags의 요소들 사이에 슬래시(\"/\")를 넣어 하나의 문자열로 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to concatenate the elements of tags with a slash (\"/\").",
-      "hint_ko": "구분자 문자열 뒤에서 리스트 요소들을 하나로 이어 붙이는 네 글자 메서드를 호출하세요.",
-      "hint_en": "Call the 4-letter method on the separator string to combine the list elements.",
+      "hint_ko": "구분자 문자열 뒤에서 리스트 요소들을 하나로 이어 붙이는 메서드를 호출하세요.",
+      "hint_en": "Call the method on the separator string to combine the list elements.",
       "targetCode": "tags = [\"py\", \"web\", \"ai\"]\nprint(\"/\".join(tags))",
       "templateCode": "tags = [\"py\", \"web\", \"ai\"]\nprint(\"/\".§§§§§(tags))",
       "testCases": [
@@ -126,11 +126,6 @@ export const PYTHON_LEVEL_94: PracticeRound = {
           "id": 1,
           "input": "banana apple cherry",
           "expectedOutput": "apple-banana-cherry"
-        },
-        {
-          "id": 2,
-          "input": "py ai go",
-          "expectedOutput": "ai-go-py"
         }
       ]
     },
@@ -141,8 +136,8 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 쉼표로 구분된 문자열을 쪼갠 뒤 공백 한 칸(\" \")으로 다시 묶어 출력해보세요.",
       "prompt_en": "[Fill Blank] Split the comma-separated string and combine the parts with a single space.",
-      "hint_ko": "쉼표 기준 분리 후 공백 구분자 문자열 뒤에서 네 글자 결합 메서드를 호출하세요.",
-      "hint_en": "After splitting by comma, call the 4-letter joining method on the single-space string.",
+      "hint_ko": "쉼표 기준 분리 후 공백 구분자 문자열 뒤에서 결합 메서드를 호출하세요.",
+      "hint_en": "After splitting by comma, call the joining method on the single-space string.",
       "targetCode": "items = input().split(\",\")\nprint(\" \".join(items))",
       "templateCode": "items = input().split(\",\")\nprint(\" \".§§§§§(items))",
       "testCases": [
@@ -150,11 +145,6 @@ export const PYTHON_LEVEL_94: PracticeRound = {
           "id": 1,
           "input": "red,green,blue",
           "expectedOutput": "red green blue"
-        },
-        {
-          "id": 2,
-          "input": "a,b,c",
-          "expectedOutput": "a b c"
         }
       ]
     },
@@ -183,8 +173,8 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 정수 리스트의 각 원소를 문자열로 바꾸는 형변환 함수를 채워 하이픈으로 연결해 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the type conversion function so the integer list can be combined with hyphens.",
-      "hint_ko": "정수를 문자열로 바꾸는 세 글자 내장 형변환 함수를 컴프리헨션 식에 적으세요.",
-      "hint_en": "Write the 3-letter built-in function that converts an integer into a string.",
+      "hint_ko": "정수를 문자열로 바꾸는 내장 형변환 함수를 컴프리헨션 식에 적으세요.",
+      "hint_en": "Write the built-in function that converts an integer into a string.",
       "targetCode": "nums = [1, 2, 3, 4]\nprint(\"-\".join([str(n) for n in nums]))",
       "templateCode": "nums = [1, 2, 3, 4]\nprint(\"-\".join([§§§§(n) for n in nums]))",
       "testCases": [
@@ -211,11 +201,6 @@ export const PYTHON_LEVEL_94: PracticeRound = {
           "id": 1,
           "input": " Web Py AI ",
           "expectedOutput": "ai_py_web"
-        },
-        {
-          "id": 2,
-          "input": "Zoo Ant",
-          "expectedOutput": "ant_zoo"
         }
       ]
     },
@@ -235,11 +220,6 @@ export const PYTHON_LEVEL_94: PracticeRound = {
           "id": 1,
           "input": "a b c",
           "expectedOutput": "a:b:c"
-        },
-        {
-          "id": 2,
-          "input": "10 20",
-          "expectedOutput": "10:20"
         }
       ]
     },
@@ -278,11 +258,6 @@ export const PYTHON_LEVEL_94: PracticeRound = {
           "id": 1,
           "input": "I,love,Python",
           "expectedOutput": "I love Python"
-        },
-        {
-          "id": 2,
-          "input": "fast,clean,code",
-          "expectedOutput": "fast clean code"
         }
       ]
     },

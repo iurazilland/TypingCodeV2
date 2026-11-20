@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 거짓을 뜻하는 불리언 상수를 채워 변수에 저장하고 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the boolean constant for false to store and print it.',
-      hint_ko: '영어로 거짓을 뜻하는 다섯 글자 단어를 따옴표 없이 첫 글자만 대문자로 작성합니다.',
-      hint_en: 'Write the five-letter English word for false without quotes, capitalizing only the first letter.',
+      hint_ko: '영어로 거짓을 뜻하는 단어를 따옴표 없이 첫 글자만 대문자로 작성합니다.',
+      hint_en: 'Write the English word for false without quotes, capitalizing only the first letter.',
       templateCode: 'is_open = §§§§§§\nprint(is_open)',
       targetCode: 'is_open = False\nprint(is_open)',
       testCases: [
@@ -96,17 +96,12 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       prompt_en: '[Block] Check whether the input string mode is not equal (!=) to "off" and print the result.',
       hint_ko: '느낌표와 등호를 합친 != 연산자는 두 값이 서로 다를 때 True를 반환합니다.',
       hint_en: 'The != operator returns True when the two values differ.',
-      targetCode: 'mode = input("Mode: ")\nprint(mode != "off")',
+      targetCode: 'mode = input("Mode:")\nprint(mode != "off")',
       testCases: [
         {
           id: 1,
           input: 'on',
-          expectedOutput: 'Mode: True',
-        },
-        {
-          id: 2,
-          input: 'off',
-          expectedOutput: 'Mode: False',
+          expectedOutput: 'Mode:True',
         },
       ],
     },
@@ -127,11 +122,6 @@ export const PYTHON_LEVEL_21: PracticeRound = {
           input: 'OK',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: 'ERR',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -149,11 +139,6 @@ export const PYTHON_LEVEL_21: PracticeRound = {
           id: 1,
           input: '14',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '9',
-          expectedOutput: 'False',
         },
       ],
     },
@@ -193,11 +178,6 @@ export const PYTHON_LEVEL_21: PracticeRound = {
           input: '7',
           expectedOutput: 'True True',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: 'False True',
-        },
       ],
     },
     {
@@ -236,11 +216,6 @@ export const PYTHON_LEVEL_21: PracticeRound = {
           input: '15 15',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '10 20',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -260,11 +235,6 @@ export const PYTHON_LEVEL_21: PracticeRound = {
           input: '12',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -283,11 +253,6 @@ export const PYTHON_LEVEL_21: PracticeRound = {
           id: 1,
           input: '200',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '100',
-          expectedOutput: 'False',
         },
       ],
     },

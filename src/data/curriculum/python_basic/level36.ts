@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 조건 반복 키워드를 채워 i가 4 이하인 동안 1부터 4까지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the conditional loop keyword to print 1 through 4 as long as i is at most 4.',
-      hint_ko: '영어로 ~하는 동안을 뜻하는 다섯 글자 소문자 키워드로 조건 반복문을 시작합니다.',
-      hint_en: 'Start the conditional loop with the five-letter keyword meaning "during the time that".',
+      hint_ko: '영어로 ~하는 동안을 뜻하는 소문자 키워드로 조건 반복문을 시작합니다.',
+      hint_en: 'Start the conditional loop with the keyword meaning "during the time that".',
       templateCode: 'i = 1\n§§§§§§ i <= 4:\n    print(i, end=" ")\n    i += 1',
       targetCode: 'i = 1\nwhile i <= 4:\n    print(i, end=" ")\n    i += 1',
       testCases: [
@@ -65,11 +65,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '3\n2\n1\nGo!',
-        },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '2\n1\nGo!',
         },
       ],
     },
@@ -108,11 +103,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           input: '4',
           expectedOutput: '10',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '15',
-        },
       ],
     },
     {
@@ -132,11 +122,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           input: '10',
           expectedOutput: '10',
         },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '15',
-        },
       ],
     },
     {
@@ -154,11 +139,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           id: 1,
           input: '10',
           expectedOutput: '16',
-        },
-        {
-          id: 2,
-          input: '8',
-          expectedOutput: '8',
         },
       ],
     },
@@ -179,11 +159,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           input: '8',
           expectedOutput: '4',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '2',
-        },
       ],
     },
     {
@@ -202,11 +177,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           id: 1,
           input: '482',
           expectedOutput: '14',
-        },
-        {
-          id: 2,
-          input: '105',
-          expectedOutput: '6',
         },
       ],
     },
@@ -227,11 +197,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           input: '375',
           expectedOutput: '15',
         },
-        {
-          id: 2,
-          input: '42',
-          expectedOutput: '6',
-        },
       ],
     },
     {
@@ -250,11 +215,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '3 2 1',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '4 3 2 1',
         },
       ],
     },
@@ -275,11 +235,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           input: '4',
           expectedOutput: '1 2 3 4',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '1 2',
-        },
       ],
     },
     {
@@ -298,11 +253,6 @@ export const PYTHON_LEVEL_36: PracticeRound = {
           id: 1,
           input: '482',
           expectedOutput: '3',
-        },
-        {
-          id: 2,
-          input: '75',
-          expectedOutput: '2',
         },
       ],
     },

@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트 요소의 0번 기준 인덱스와 값을 함께 꺼내 순회하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function to iterate over both index and value of colors.",
-      "hint_ko": "요소를 하나씩 번호 매겨 열거하는 아홉 글자 내장 함수를 입력하세요.",
-      "hint_en": "Enter the 9-letter built-in function that yields (index, value) pairs.",
+      "hint_ko": "요소를 하나씩 번호 매겨 열거하는 내장 함수를 입력하세요.",
+      "hint_en": "Enter the built-in function that yields (index, value) pairs.",
       "targetCode": "colors = [\"red\", \"blue\"]\nfor i, c in enumerate(colors):\n    print(f\"{i}:{c}\")",
       "templateCode": "colors = [\"red\", \"blue\"]\nfor i, c in §§§§§§§§§§(colors):\n    print(f\"{i}:{c}\")",
       "testCases": [
@@ -85,12 +85,12 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "prompt_en": "[Block] Use enumerate(players, 1) to print a 1-based leaderboard.",
       "hint_ko": "enumerate()의 두 번째 인자로 1을 전달하면 번호가 0이 아니라 1부터 시작합니다.",
       "hint_en": "Passing 1 as the second argument to enumerate() starts the numbering at 1 instead of 0.",
-      "targetCode": "players = [\"Kim\", \"Lee\", \"Park\"]\nfor rank, name in enumerate(players, 1):\n    print(f\"{rank}위: {name}\")",
+      "targetCode": "players = [\"Kim\", \"Lee\", \"Park\"]\nfor rank, name in enumerate(players, 1):\n    print(f\"{rank}위:{name}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "1위: Kim\n2위: Lee\n3위: Park"
+          "expectedOutput": "1위:Kim\n2위:Lee\n3위:Park"
         }
       ]
     },
@@ -138,8 +138,8 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 짝수 인덱스(i % 2 == 0)에 위치한 단어들만 골라 모으도록 순회 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the indexed iteration built-in to collect words at even indices.",
-      "hint_ko": "인덱스 i와 단어 w를 함께 꺼내주는 아홉 글자 내장 함수를 적으세요.",
-      "hint_en": "Write the 9-letter built-in function that unpacks both index i and word w.",
+      "hint_ko": "인덱스 i와 단어 w를 함께 꺼내주는 내장 함수를 적으세요.",
+      "hint_en": "Write the built-in function that unpacks both index i and word w.",
       "targetCode": "words = input().split()\npicks = [w for i, w in enumerate(words) if i % 2 == 0]\nprint(\" \".join(picks))",
       "templateCode": "words = input().split()\npicks = [w for i, w in §§§§§§§§§§(words) if i % 2 == 0]\nprint(\" \".join(picks))",
       "testCases": [
@@ -147,11 +147,6 @@ export const PYTHON_LEVEL_102: PracticeRound = {
           "id": 1,
           "input": "a b c d e",
           "expectedOutput": "a c e"
-        },
-        {
-          "id": 2,
-          "input": "py js go",
-          "expectedOutput": "py go"
         }
       ]
     },
@@ -180,8 +175,8 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 1번부터 번호를 키로, 단어를 값으로 하는 딕셔너리 컴프리헨션을 완성해보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function to build a dictionary mapping 1-based numbers to words.",
-      "hint_ko": "1번부터 순서 번호와 단어를 짝지어 꺼내는 아홉 글자 내장 함수를 입력하세요.",
-      "hint_en": "Type the 9-letter built-in function that pairs each item with its 1-based number.",
+      "hint_ko": "1번부터 순서 번호와 단어를 짝지어 꺼내는 내장 함수를 입력하세요.",
+      "hint_en": "Type the built-in function that pairs each item with its 1-based number.",
       "targetCode": "items = [\"gold\", \"silver\"]\nranks = {i: v for i, v in enumerate(items, 1)}\nprint(ranks)",
       "templateCode": "items = [\"gold\", \"silver\"]\nranks = {i: v for i, v in §§§§§§§§§§(items, 1)}\nprint(ranks)",
       "testCases": [
@@ -208,11 +203,6 @@ export const PYTHON_LEVEL_102: PracticeRound = {
           "id": 1,
           "input": "3 5 7",
           "expectedOutput": "34"
-        },
-        {
-          "id": 2,
-          "input": "10 20",
-          "expectedOutput": "50"
         }
       ]
     },

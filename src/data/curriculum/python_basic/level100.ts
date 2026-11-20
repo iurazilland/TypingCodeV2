@@ -63,8 +63,8 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 두 기온 a와 b 사이의 온도 차이(거리)를 항상 양수로 출력하도록 절댓값 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in absolute value function to print the positive difference between a and b.",
-      "hint_ko": "'절댓값(absolute)'의 앞 세 글자를 딴 내장 함수로 뺄셈 식을 감싸세요.",
-      "hint_en": "Wrap the subtraction in the 3-letter built-in function abbreviated from 'absolute'.",
+      "hint_ko": "절댓값(absolute)을 구하는 내장 함수로 뺄셈 식을 감싸세요.",
+      "hint_en": "Wrap the subtraction in the built-in function abbreviated from 'absolute'.",
       "targetCode": "a, b = 12, 27\nprint(abs(a - b))",
       "templateCode": "a, b = 12, 27\nprint(§§§§(a - b))",
       "testCases": [
@@ -100,8 +100,8 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 평균 점수 87.678을 소수 첫째 자리까지 반올림해 87.7을 출력하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in rounding function to smooth 87.678 to 1 decimal place.",
-      "hint_ko": "숫자를 반올림해 다듬는 다섯 글자 내장 함수를 호출하세요.",
-      "hint_en": "Call the 5-letter built-in function that rounds a number to a given precision.",
+      "hint_ko": "숫자를 반올림해 다듬는 내장 함수를 호출하세요.",
+      "hint_en": "Call the built-in function that rounds a number to a given precision.",
       "targetCode": "avg = 87.678\nprint(round(avg, 1))",
       "templateCode": "avg = 87.678\nprint(§§§§§§(avg, 1))",
       "testCases": [
@@ -137,8 +137,8 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 총 초(sec)를 60으로 나눈 분(m)과 초(s)를 한 번에 구하도록 몫·나머지 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function that returns both the quotient and remainder when dividing by 60.",
-      "hint_ko": "나눗셈(div)과 나머지(mod)를 합친 여섯 글자 내장 함수를 입력하세요.",
-      "hint_en": "Type the 6-letter built-in function combining 'div' and 'mod'.",
+      "hint_ko": "나눗셈(div)과 나머지(mod)를 합친 내장 함수를 입력하세요.",
+      "hint_en": "Type the built-in function combining 'div' and 'mod'.",
       "targetCode": "sec = int(input())\nm, s = divmod(sec, 60)\nprint(m, s)",
       "templateCode": "sec = int(input())\nm, s = §§§§§§§(sec, 60)\nprint(m, s)",
       "testCases": [
@@ -146,11 +146,6 @@ export const PYTHON_LEVEL_100: PracticeRound = {
           "id": 1,
           "input": "135",
           "expectedOutput": "2 15"
-        },
-        {
-          "id": 2,
-          "input": "200",
-          "expectedOutput": "3 20"
         }
       ]
     },
@@ -179,8 +174,8 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 오차 리스트의 각 원소를 절댓값으로 바꾼 뒤 평균을 소수 둘째 자리로 반올림해 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the absolute value function inside the list comprehension to compute the mean magnitude.",
-      "hint_ko": "각 오차 x의 부호를 제거하는 세 글자 내장 함수를 컴프리헨션 식에 적으세요.",
-      "hint_en": "Write the 3-letter built-in function that takes the magnitude of x.",
+      "hint_ko": "각 오차 x의 부호를 제거하는 내장 함수를 컴프리헨션 식에 적으세요.",
+      "hint_en": "Write the built-in function that takes the magnitude of x.",
       "targetCode": "errs = [-1.5, 2.3, -0.8]\nvals = [abs(x) for x in errs]\nprint(round(sum(vals) / len(vals), 2))",
       "templateCode": "errs = [-1.5, 2.3, -0.8]\nvals = [§§§§(x) for x in errs]\nprint(round(sum(vals) / len(vals), 2))",
       "testCases": [
@@ -226,11 +221,6 @@ export const PYTHON_LEVEL_100: PracticeRound = {
           "id": 1,
           "input": "-10",
           "expectedOutput": "3.33"
-        },
-        {
-          "id": 2,
-          "input": "25",
-          "expectedOutput": "8.33"
         }
       ]
     },

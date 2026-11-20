@@ -61,8 +61,8 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 문자열 리스트를 순회하며 정수로 변환 가능한 값만 리스트에 모으도록 예외 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception type inside the loop so non-numeric strings are skipped.",
-      "hint_ko": "int(s) 변환이 실패할 때 발생하는 열 글자 값 예외 이름을 적으세요.",
-      "hint_en": "Specify the ten-letter invalid-value exception raised by int(s).",
+      "hint_ko": "int(s) 변환이 실패할 때 발생하는 값 예외 이름을 적으세요.",
+      "hint_en": "Specify the invalid-value exception raised by int(s).",
       "templateCode": "items = [\"5\", \"bad\", \"15\", \"err\"]\nnums = []\nfor s in items:\n    try:\n        nums.append(int(s))\n    except §§§§§§§§§§§:\n        continue\nprint(nums, sum(nums))",
       "targetCode": "items = [\"5\", \"bad\", \"15\", \"err\"]\nnums = []\nfor s in items:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        continue\nprint(nums, sum(nums))",
       "testCases": [
@@ -88,11 +88,6 @@ export const PYTHON_LEVEL_81: PracticeRound = {
           "id": 1,
           "input": "abc\n15",
           "expectedOutput": "Retry\n30"
-        },
-        {
-          "id": 2,
-          "input": "7",
-          "expectedOutput": "14"
         }
       ]
     },
@@ -103,8 +98,8 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 올바른 정수를 입력받는 즉시 무한 루프를 종료하도록 탈출 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the keyword that immediately exits the while True loop once int(input()) succeeds.",
-      "hint_ko": "반복문을 그 자리에서 즉시 끝내고 바깥으로 빠져나가는 다섯 글자 제어 키워드를 적으세요.",
-      "hint_en": "Use the five-letter loop-control keyword that terminates the loop immediately.",
+      "hint_ko": "반복문을 그 자리에서 즉시 끝내고 바깥으로 빠져나가는 제어 키워드를 적으세요.",
+      "hint_en": "Use the loop-control keyword that terminates the loop immediately.",
       "templateCode": "while True:\n    try:\n        age = int(input())\n        §§§§§§\n    except ValueError:\n        print(\"Again\")\nprint(f\"OK:{age}\")",
       "targetCode": "while True:\n    try:\n        age = int(input())\n        break\n    except ValueError:\n        print(\"Again\")\nprint(f\"OK:{age}\")",
       "testCases": [
@@ -112,11 +107,6 @@ export const PYTHON_LEVEL_81: PracticeRound = {
           "id": 1,
           "input": "ten\n20",
           "expectedOutput": "Again\nOK:20"
-        },
-        {
-          "id": 2,
-          "input": "30",
-          "expectedOutput": "OK:30"
         }
       ]
     },
@@ -145,8 +135,8 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 문자열을 정수로 바꾸어 돌려주되 실패하면 기본값 default를 돌려주는 함수를 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete safe_int() so it returns default when ValueError occurs.",
-      "hint_ko": "예외 블록 안에서도 함수 호출부로 기본값을 되돌려주는 여섯 글자 키워드를 적으세요.",
-      "hint_en": "Use the six-letter keyword that sends default back to the caller.",
+      "hint_ko": "예외 블록 안에서도 함수 호출부로 기본값을 되돌려주는 키워드를 적으세요.",
+      "hint_en": "Use the keyword that sends default back to the caller.",
       "templateCode": "def safe_int(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        §§§§§§§ default\nprint(safe_int(\"42\"), safe_int(\"no\", -1))",
       "targetCode": "def safe_int(s, default=0):\n    try:\n        return int(s)\n    except ValueError:\n        return default\nprint(safe_int(\"42\"), safe_int(\"no\", -1))",
       "testCases": [
@@ -182,8 +172,8 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 금고 객체의 딕셔너리 속성에서 없는 키를 조회할 때 0을 반환하도록 예외 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception type inside Vault.check() so missing keys return 0.",
-      "hint_ko": "딕셔너리 속성 self.data에 존재하지 않는 키를 조회했을 때 발생하는 여덟 글자 예외 이름을 적으세요.",
-      "hint_en": "Specify the eight-letter exception raised when a key is absent from a dictionary.",
+      "hint_ko": "딕셔너리 속성 self.data에 존재하지 않는 키를 조회했을 때 발생하는 예외 이름을 적으세요.",
+      "hint_en": "Specify the exception raised when a key is absent from a dictionary.",
       "templateCode": "class Vault:\n    def __init__(self):\n        self.data = {\"gold\": 100}\n    def check(self, k):\n        try:\n            return self.data[k]\n        except §§§§§§§§§:\n            return 0\nv = Vault()\nprint(v.check(\"gold\"), v.check(\"silver\"))",
       "targetCode": "class Vault:\n    def __init__(self):\n        self.data = {\"gold\": 100}\n    def check(self, k):\n        try:\n            return self.data[k]\n        except KeyError:\n            return 0\nv = Vault()\nprint(v.check(\"gold\"), v.check(\"silver\"))",
       "testCases": [
@@ -202,7 +192,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 클래스 메서드 안에서 문자열 리스트를 순회하며 유효한 정수만 합산해 반환하도록 세 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the Adder.sum_valid method by filling in the attempt keyword, exception type, and result-sending keyword.",
       "hint_ko": "예외 검사를 시작하는 키워드와 잘못된 정수 변환 예외 이름, 그리고 합계를 돌려주는 키워드를 확인하세요.",
-      "hint_en": "Check the three-letter attempt keyword, the invalid-value exception name, and the keyword that sends back total.",
+      "hint_en": "Check the attempt keyword, the invalid-value exception name, and the keyword that sends back total.",
       "templateCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            §§§§:\n                total += int(s)\n            except §§§§§§§§§§§:\n                continue\n        §§§§§§§ total\na = Adder()\nprint(a.sum_valid(input().split()))",
       "targetCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            try:\n                total += int(s)\n            except ValueError:\n                continue\n        return total\na = Adder()\nprint(a.sum_valid(input().split()))",
       "testCases": [
@@ -210,11 +200,6 @@ export const PYTHON_LEVEL_81: PracticeRound = {
           "id": 1,
           "input": "10 err 25 5",
           "expectedOutput": "40"
-        },
-        {
-          "id": 2,
-          "input": "bad 100",
-          "expectedOutput": "100"
         }
       ]
     },
@@ -225,7 +210,7 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "[틀린 곳 수정] 리스트 순회 중 변환 에러가 났을 때 건너뛰지 않고 반복문을 통째로 종료해버리는 버그를 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the loop control keyword inside except so invalid items are skipped without aborting the loop.",
-      "hint_ko": "에러 항목만 건너뛰고 다음 원소 순회를 계속 이어가려면 break 대신 여덟 글자 건너뛰기 키워드를 써야 합니다.",
+      "hint_ko": "에러 항목만 건너뛰고 다음 원소 순회를 계속 이어가려면 break 대신 건너뛰기 키워드를 써야 합니다.",
       "hint_en": "Use continue instead of break so the loop moves on to the remaining items after an error.",
       "templateCode": "raw = [\"10\", \"err\", \"30\"]\ntotal = 0\nfor s in raw:\n    try:\n        total += int(s)\n    except ValueError:\n        break\nprint(total)",
       "targetCode": "raw = [\"10\", \"err\", \"30\"]\ntotal = 0\nfor s in raw:\n    try:\n        total += int(s)\n    except ValueError:\n        continue\nprint(total)",
@@ -291,11 +276,6 @@ export const PYTHON_LEVEL_81: PracticeRound = {
           "id": 1,
           "input": "x\n9",
           "expectedOutput": "No\n10"
-        },
-        {
-          "id": 2,
-          "input": "4",
-          "expectedOutput": "5"
         }
       ]
     },

@@ -60,8 +60,8 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 상품의 단가와 수량을 곱한 총액을 호출부로 돌려주도록 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the keyword that sends the computed total price back to the caller.",
-      "hint_ko": "함수나 메서드에서 계산한 결과값을 호출한 자리로 되돌려주는 여섯 글자 키워드를 적으세요.",
-      "hint_en": "Use the six-letter keyword that sends a result value back from a function or method.",
+      "hint_ko": "함수나 메서드에서 계산한 결과값을 호출한 자리로 되돌려주는 키워드를 적으세요.",
+      "hint_en": "Use the keyword that sends a result value back from a function or method.",
       "templateCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        §§§§§§§ self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
       "targetCode": "class Item:\n    def __init__(self, price, qty):\n        self.price = price\n        self.qty = qty\n    def total(self):\n        return self.price * self.qty\nit = Item(1200, 3)\nprint(it.total())",
       "testCases": [

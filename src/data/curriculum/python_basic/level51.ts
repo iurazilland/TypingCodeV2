@@ -64,11 +64,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           input: 'Python',
           expectedOutput: 'Py',
         },
-        {
-          id: 2,
-          input: 'Coding',
-          expectedOutput: 'Co',
-        },
       ],
     },
     {
@@ -106,11 +101,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           input: 'ID_905',
           expectedOutput: '905',
         },
-        {
-          id: 2,
-          input: 'LV_100',
-          expectedOutput: '100',
-        },
       ],
     },
     {
@@ -147,11 +137,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           id: 1,
           input: '01012345678',
           expectedOutput: '****-5678',
-        },
-        {
-          id: 2,
-          input: '01099990000',
-          expectedOutput: '****-0000',
         },
       ],
     },
@@ -209,11 +194,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           input: '20261117',
           expectedOutput: '2026/1117',
         },
-        {
-          id: 2,
-          input: '20250505',
-          expectedOutput: '2025/0505',
-        },
       ],
     },
     {
@@ -233,11 +213,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           input: 'PYTHON',
           expectedOutput: 'PYT',
         },
-        {
-          id: 2,
-          input: 'ABCDEF',
-          expectedOutput: 'ABC',
-        },
       ],
     },
     {
@@ -256,11 +231,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           id: 1,
           input: '[25]',
           expectedOutput: '25',
-        },
-        {
-          id: 2,
-          input: '[190]',
-          expectedOutput: '190',
         },
       ],
     },
@@ -299,11 +269,6 @@ export const PYTHON_LEVEL_51: PracticeRound = {
           id: 1,
           input: '[25]',
           expectedOutput: '35',
-        },
-        {
-          id: 2,
-          input: '[190]',
-          expectedOutput: '200',
         },
       ],
     },

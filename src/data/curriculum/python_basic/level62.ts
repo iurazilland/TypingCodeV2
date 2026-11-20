@@ -94,8 +94,8 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 집합 tags에 문자열 "py"를 추가하는 메서드를 채워 길이 2를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the set method that adds "py" to tags so its length becomes 2.',
-      hint_ko: '리스트의 append 대신 집합에 요소 하나를 더할 때 쓰는 세 글자 메서드 이름을 적으세요.',
-      hint_en: 'Write the three-letter method name used to insert an element into a set.',
+      hint_ko: '리스트의 append 대신 집합에 요소 하나를 더할 때 쓰는 메서드 이름을 적으세요.',
+      hint_en: 'Write the method name used to insert an element into a set.',
       templateCode: 'tags = set()\ntags.§§§§("py")\ntags.add("js")\nprint(len(tags))',
       targetCode: 'tags = set()\ntags.add("py")\ntags.add("js")\nprint(len(tags))',
       testCases: [
@@ -225,8 +225,8 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '[틀린 곳 수정] 집합에 리스트용 추가 메서드를 사용해 발생한 AttributeError를 올바른 집합 메서드로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the AttributeError caused by calling a list method on set s to insert 3.',
-      hint_ko: '집합에 요소를 추가할 때는 리스트의 append 대신 집합 전용 세 글자 메서드를 사용합니다.',
-      hint_en: 'Replace the list method with the three-letter method used to add an element to a set.',
+      hint_ko: '집합에 요소를 추가할 때는 리스트의 append 대신 집합 전용 메서드를 사용합니다.',
+      hint_en: 'Replace the list method with the method used to add an element to a set.',
       templateCode: 's = {1, 2}\ns.append(3)\nprint(len(s), sum(s))',
       targetCode: 's = {1, 2}\ns.add(3)\nprint(len(s), sum(s))',
       testCases: [

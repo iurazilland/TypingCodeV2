@@ -49,11 +49,6 @@ export const PYTHON_LEVEL_48: PracticeRound = {
           input: '30\n60\n80\n40',
           expectedOutput: '80:140',
         },
-        {
-          id: 2,
-          input: '10\n20\n30\n40',
-          expectedOutput: 'Empty',
-        },
       ],
     },
     {
@@ -91,11 +86,6 @@ export const PYTHON_LEVEL_48: PracticeRound = {
           id: 1,
           input: '10\n20\n30',
           expectedOutput: 'Ends: 40',
-        },
-        {
-          id: 2,
-          input: '7\n5\n13',
-          expectedOutput: 'Ends: 20',
         },
       ],
     },

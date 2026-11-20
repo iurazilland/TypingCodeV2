@@ -59,8 +59,8 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 함수 안에서 지역변수 hp에 200을 대입해 함수 안에서는 200, 바깥에서는 100이 출력되게 해보세요.',
       prompt_en: '[Fill Blank] Assign 200 to local variable hp inside temp_buff() so 200 and 100 are printed.',
-      hint_ko: '함수 안의 print문에서 출력하고 있는 두 글자 변수 이름을 등호 왼쪽에 적으세요.',
-      hint_en: 'Write the two-letter variable name printed on the next line.',
+      hint_ko: '함수 안의 print문에서 출력하고 있는 변수 이름을 등호 왼쪽에 적으세요.',
+      hint_en: 'Write the variable name printed on the next line.',
       templateCode: 'hp = 100\ndef temp_buff():\n    §§§ = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
       targetCode: 'hp = 100\ndef temp_buff():\n    hp = 200\n    print(hp)\ntemp_buff()\nprint(hp)',
       testCases: [
@@ -96,8 +96,8 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 함수 안에서 바깥에 선언된 전역변수 bonus를 더해 130을 반환해보세요.',
       prompt_en: '[Fill Blank] Reference the outer global variable bonus inside total_score(s) to return 130.',
-      hint_ko: '첫째 줄에서 선언된 다섯 글자 전역변수 이름을 덧셈 기호 뒤에 적으세요.',
-      hint_en: 'Write the five-letter global variable name declared on line 1.',
+      hint_ko: '첫째 줄에서 선언된 전역변수 이름을 덧셈 기호 뒤에 적으세요.',
+      hint_en: 'Write the global variable name declared on line 1.',
       templateCode: 'bonus = 50\ndef total_score(s):\n    return s + §§§§§§\nprint(total_score(80))',
       targetCode: 'bonus = 50\ndef total_score(s):\n    return s + bonus\nprint(total_score(80))',
       testCases: [
@@ -170,8 +170,8 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 함수 안에서 바깥 전역변수 gold를 직접 수정할 수 있도록 키워드를 채워 150을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the keyword that allows earn(n) to modify the outer variable gold.',
-      hint_ko: '이 변수가 지역변수가 아니라 바깥의 전역변수임을 알려주는 여섯 글자 키워드를 적으세요.',
-      hint_en: 'Type the six-letter keyword that binds gold to the global scope.',
+      hint_ko: '이 변수가 지역변수가 아니라 바깥의 전역변수임을 알려주는 키워드를 적으세요.',
+      hint_en: 'Type the keyword that binds gold to the global scope.',
       templateCode: 'gold = 100\ndef earn(n):\n    §§§§§§§ gold\n    gold += n\nearn(50)\nprint(gold)',
       targetCode: 'gold = 100\ndef earn(n):\n    global gold\n    gold += n\nearn(50)\nprint(gold)',
       testCases: [

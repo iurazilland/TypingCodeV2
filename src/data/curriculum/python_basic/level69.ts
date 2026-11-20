@@ -117,12 +117,12 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       prompt_en: '[Block] Call greet using keyword arguments msg="Hi" and name="Kim".',
       hint_ko: '키워드 인자로 이름을 지정해 전달하면 선언 순서와 달라도 정확한 매개변수에 값이 들어갑니다.',
       hint_en: 'Keyword arguments match parameters by name, regardless of their position.',
-      targetCode: 'def greet(name, msg):\n    print(f"{msg}, {name}!")\ngreet(msg="Hi", name="Kim")',
+      targetCode: 'def greet(name, msg):\n    print(f"{msg}:{name}!")\ngreet(msg="Hi", name="Kim")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Hi, Kim!',
+          expectedOutput: 'Hi:Kim!',
         },
       ],
     },

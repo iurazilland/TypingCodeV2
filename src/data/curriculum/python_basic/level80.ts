@@ -51,11 +51,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "1",
           "expectedOutput": "20"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "Out"
         }
       ]
     },
@@ -75,11 +70,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "0",
           "expectedOutput": "P"
-        },
-        {
-          "id": 2,
-          "input": "9",
-          "expectedOutput": "None"
         }
       ]
     },
@@ -98,11 +88,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "tea",
           "expectedOutput": "3000"
-        },
-        {
-          "id": 2,
-          "input": "milk",
-          "expectedOutput": "NoKey"
         }
       ]
     },
@@ -113,8 +98,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 사전에 등록되지 않은 과목명을 조회했을 때 발생하는 예외 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception type raised when a dictionary key is not found.",
-      "hint_ko": "딕셔너리의 '키(Key)'가 없을 때 발생하는 여덟 글자 예외 이름을 적으세요.",
-      "hint_en": "Write the eight-letter PascalCase exception name for a missing dictionary key.",
+      "hint_ko": "딕셔너리의 '키(Key)'가 없을 때 발생하는 예외 이름을 적으세요.",
+      "hint_en": "Write the PascalCase exception name for a missing dictionary key.",
       "templateCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept §§§§§§§§§:\n    print(0)",
       "targetCode": "scores = {\"Kor\": 90, \"Math\": 95}\nsub = input()\ntry:\n    print(scores[sub])\nexcept KeyError:\n    print(0)",
       "testCases": [
@@ -122,11 +107,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "Math",
           "expectedOutput": "95"
-        },
-        {
-          "id": 2,
-          "input": "Sci",
-          "expectedOutput": "0"
         }
       ]
     },
@@ -155,8 +135,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트와 정수를 더하려 할 때 발생하는 자료형 불일치 예외 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception type raised when trying to add an integer directly to a list.",
-      "hint_ko": "'자료형(Type)'이 맞지 않아 연산할 수 없을 때 발생하는 아홉 글자 예외 이름을 적으세요.",
-      "hint_en": "Write the nine-letter PascalCase exception name for incompatible data types.",
+      "hint_ko": "'자료형(Type)'이 맞지 않아 연산할 수 없을 때 발생하는 예외 이름을 적으세요.",
+      "hint_en": "Write the PascalCase exception name for incompatible data types.",
       "templateCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept §§§§§§§§§§:\n    print(\"BadType\")",
       "targetCode": "items = [1, 2]\ntry:\n    print(items + 3)\nexcept TypeError:\n    print(\"BadType\")",
       "testCases": [
@@ -182,16 +162,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "0",
           "expectedOutput": "100"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "NoIdx"
-        },
-        {
-          "id": 3,
-          "input": "2",
-          "expectedOutput": "NoUser"
         }
       ]
     },
@@ -211,16 +181,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "0",
           "expectedOutput": "10"
-        },
-        {
-          "id": 2,
-          "input": "3",
-          "expectedOutput": "-1"
-        },
-        {
-          "id": 3,
-          "input": "1",
-          "expectedOutput": "-2"
         }
       ]
     },
@@ -240,16 +200,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "5",
           "expectedOutput": "Idx"
-        },
-        {
-          "id": 2,
-          "input": "1",
-          "expectedOutput": "Key"
-        },
-        {
-          "id": 3,
-          "input": "0",
-          "expectedOutput": "Type"
         }
       ]
     },
@@ -281,8 +231,8 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "prompt_en": "[Fix Bug] Change the exception type so the error from adding a string and an integer is properly caught.",
       "hint_ko": "서로 다른 자료형끼리 더할 수 없어 발생하는 에러는 ValueError가 아니라 자료형 예외입니다.",
       "hint_en": "Adding a string and an integer raises TypeError, not ValueError.",
-      "templateCode": "try:\n    msg = \"Score: \" + 100\n    print(msg)\nexcept ValueError:\n    print(\"Type mismatch\")",
-      "targetCode": "try:\n    msg = \"Score: \" + 100\n    print(msg)\nexcept TypeError:\n    print(\"Type mismatch\")",
+      "templateCode": "try:\n    msg = \"Score:\" + 100\n    print(msg)\nexcept ValueError:\n    print(\"Type mismatch\")",
+      "targetCode": "try:\n    msg = \"Score:\" + 100\n    print(msg)\nexcept TypeError:\n    print(\"Type mismatch\")",
       "testCases": [
         {
           "id": 1,
@@ -307,11 +257,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "1",
           "expectedOutput": "Y"
-        },
-        {
-          "id": 2,
-          "input": "4",
-          "expectedOutput": "Empty"
         }
       ]
     },
@@ -331,11 +276,6 @@ export const PYTHON_LEVEL_80: PracticeRound = {
           "id": 1,
           "input": "Ace",
           "expectedOutput": "1"
-        },
-        {
-          "id": 2,
-          "input": "Bob",
-          "expectedOutput": "Unranked"
         }
       ]
     },

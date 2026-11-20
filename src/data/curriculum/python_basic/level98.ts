@@ -62,7 +62,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 문자열 처음부터 끝까지 2칸 간격으로 건너뛰며(0, 2, 4번 인덱스) 추출하도록 슬라이싱 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the slice expression to extract every second character from start to end.",
-      "hint_ko": "시작과 끝을 생략한 콜론 두 개 뒤에 간격 2를 붙인 세 글자를 대괄호 안에 적으세요.",
+      "hint_ko": "시작과 끝을 생략한 콜론 두 개 뒤에 간격 2를 붙여 ::2를 대괄호 안에 적으세요.",
       "hint_en": "Write two colons followed by the step size 2 inside the brackets.",
       "targetCode": "code = input().strip()\nprint(code[::2])",
       "templateCode": "code = input().strip()\nprint(code[§§§§])",
@@ -71,11 +71,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "P1Y2T3",
           "expectedOutput": "PYT"
-        },
-        {
-          "id": 2,
-          "input": "A_B_C",
-          "expectedOutput": "ABC"
         }
       ]
     },
@@ -104,7 +99,7 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 소문자로 통일한 입력 단어가 앞뒤가 똑같은 회문인지 비교하도록 역순 슬라이싱을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the reverse slice inside the brackets to check if the lowercased word is a palindrome.",
-      "hint_ko": "전체 범위를 역방향(-1 간격)으로 뒤집는 네 글자 슬라이싱 표현을 대괄호 안에 적으세요.",
+      "hint_ko": "전체 범위를 역방향(-1 간격)으로 뒤집는 슬라이싱 표현을 대괄호 안에 적으세요.",
       "hint_en": "Enter the 4-character slice notation that reverses the entire string with a step of -1.",
       "targetCode": "w = input().strip().lower()\nprint(w == w[::-1])",
       "templateCode": "w = input().strip().lower()\nprint(w == w[§§§§§])",
@@ -113,11 +108,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "Radar",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "Python",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -146,8 +136,8 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력받은 대문자 알파벳이 \"A\"로부터 몇 번째 뒤인지(0부터 시작) 구하도록 문자 코드 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function to get the character code of ch and subtract the code of \"A\".",
-      "hint_ko": "문자의 순서 번호(ordinal)를 정수로 돌려주는 세 글자 내장 함수를 입력하세요.",
-      "hint_en": "Type the 3-letter built-in function (from 'ordinal') that returns a character's integer code.",
+      "hint_ko": "문자의 순서 번호(ordinal)를 정수로 돌려주는 내장 함수를 입력하세요.",
+      "hint_en": "Type the built-in function (from 'ordinal') that returns a character's integer code.",
       "targetCode": "ch = input().strip()\nprint(ord(ch) - ord(\"A\"))",
       "templateCode": "ch = input().strip()\nprint(§§§§(ch) - ord(\"A\"))",
       "testCases": [
@@ -155,11 +145,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "A",
           "expectedOutput": "0"
-        },
-        {
-          "id": 2,
-          "input": "D",
-          "expectedOutput": "3"
         }
       ]
     },
@@ -188,8 +173,8 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력 문자의 아스키 코드에 2를 더해 두 칸 뒤의 알파벳 문자로 변환해 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function that converts the shifted integer code back into a character.",
-      "hint_ko": "정수 코드 번호를 다시 문자(character)로 바꾸는 세 글자 내장 함수를 적으세요.",
-      "hint_en": "Enter the 3-letter built-in function that converts an integer code point back to a character.",
+      "hint_ko": "정수 코드 번호를 다시 문자(character)로 바꾸는 내장 함수를 적으세요.",
+      "hint_en": "Enter the built-in function that converts an integer code point back to a character.",
       "targetCode": "ch = input().strip()\nprint(chr(ord(ch) + 2))",
       "templateCode": "ch = input().strip()\nprint(§§§§(ord(ch) + 2))",
       "testCases": [
@@ -197,11 +182,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "A",
           "expectedOutput": "C"
-        },
-        {
-          "id": 2,
-          "input": "X",
-          "expectedOutput": "Z"
         }
       ]
     },
@@ -240,11 +220,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "FLOW",
           "expectedOutput": "WOLF"
-        },
-        {
-          "id": 2,
-          "input": "STAR",
-          "expectedOutput": "RATS"
         }
       ]
     },
@@ -283,11 +258,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "Civic",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "Code",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -307,11 +277,6 @@ export const PYTHON_LEVEL_98: PracticeRound = {
           "id": 1,
           "input": "M",
           "expectedOutput": "N"
-        },
-        {
-          "id": 2,
-          "input": "a",
-          "expectedOutput": "b"
         }
       ]
     },

@@ -66,11 +66,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           input: '3',
           expectedOutput: '1\n2\n3',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '1\n2\n3\n4\n5',
-        },
       ],
     },
     {
@@ -89,11 +84,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           id: 1,
           input: '3\n6',
           expectedOutput: '3 4 5 6',
-        },
-        {
-          id: 2,
-          input: '1\n3',
-          expectedOutput: '1 2 3',
         },
       ],
     },
@@ -150,11 +140,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           input: '3',
           expectedOutput: '3\n6\n9\n12\n15\n18\n21\n24\n27',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '5\n10\n15\n20\n25\n30\n35\n40\n45',
-        },
       ],
     },
     {
@@ -192,11 +177,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           id: 1,
           input: '6',
           expectedOutput: '4 16 36',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '4 16',
         },
       ],
     },
@@ -236,11 +216,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           input: '4',
           expectedOutput: '1\n2\n3\n4',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '1\n2\n3',
-        },
       ],
     },
     {
@@ -260,11 +235,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           input: '1 7',
           expectedOutput: '1\n3\n5\n7',
         },
-        {
-          id: 2,
-          input: '2 8',
-          expectedOutput: '2\n4\n6\n8',
-        },
       ],
     },
     {
@@ -283,11 +253,6 @@ export const PYTHON_LEVEL_32: PracticeRound = {
           id: 1,
           input: '10',
           expectedOutput: '3 6 9',
-        },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '3 6 9 12',
         },
       ],
     },

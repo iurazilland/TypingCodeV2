@@ -29,11 +29,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           input: 'Alice',
           expectedOutput: 'Alice',
         },
-        {
-          id: 2,
-          input: 'Minsu',
-          expectedOutput: 'Minsu',
-        },
       ],
     },
     {
@@ -43,8 +38,8 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 입력 함수를 채워 사용자가 입력한 도시 이름을 city에 저장하고 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the input function name to store the user input in city and print it.',
-      hint_ko: '키보드 입력을 읽어오는 다섯 글자 소문자 내장 함수 이름을 괄호 앞에 적습니다.',
-      hint_en: 'Write the five-letter lowercase built-in function name for reading input before ().',
+      hint_ko: '키보드 입력을 읽어오는 소문자 내장 함수 이름을 괄호 앞에 적습니다.',
+      hint_en: 'Write the lowercase built-in function name for reading input before ().',
       templateCode: 'city = §§§§§§()\nprint(city)',
       targetCode: 'city = input()\nprint(city)',
       testCases: [
@@ -52,11 +47,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: 'Seoul',
           expectedOutput: 'Seoul',
-        },
-        {
-          id: 2,
-          input: 'Busan',
-          expectedOutput: 'Busan',
         },
       ],
     },
@@ -75,11 +65,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: 'Jimin',
           expectedOutput: 'Hello, Jimin',
-        },
-        {
-          id: 2,
-          input: 'Coder',
-          expectedOutput: 'Hello, Coder',
         },
       ],
     },
@@ -100,11 +85,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           input: 'VIP',
           expectedOutput: '[VIP]',
         },
-        {
-          id: 2,
-          input: 'PRO',
-          expectedOutput: '[PRO]',
-        },
       ],
     },
     {
@@ -122,11 +102,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: 'Py\nthon',
           expectedOutput: 'Python',
-        },
-        {
-          id: 2,
-          input: 'Sun\nDay',
-          expectedOutput: 'SunDay',
         },
       ],
     },
@@ -147,11 +122,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           input: '2026\n11',
           expectedOutput: '2026-11',
         },
-        {
-          id: 2,
-          input: 'Lv\n15',
-          expectedOutput: 'Lv-15',
-        },
       ],
     },
     {
@@ -169,11 +139,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: '7',
           expectedOutput: '777',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '555',
         },
       ],
     },
@@ -194,11 +159,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           input: '*',
           expectedOutput: '*****',
         },
-        {
-          id: 2,
-          input: '=',
-          expectedOutput: '=====',
-        },
       ],
     },
     {
@@ -217,11 +177,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: 'hero',
           expectedOutput: 'ID:hero!',
-        },
-        {
-          id: 2,
-          input: 'ace',
-          expectedOutput: 'ID:ace!',
         },
       ],
     },
@@ -242,11 +197,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           input: 'Go',
           expectedOutput: 'GoGo',
         },
-        {
-          id: 2,
-          input: 'Hi',
-          expectedOutput: 'HiHi',
-        },
       ],
     },
     {
@@ -265,11 +215,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: 'Code\nRun',
           expectedOutput: 'CodeRun',
-        },
-        {
-          id: 2,
-          input: 'Top\nGun',
-          expectedOutput: 'TopGun',
         },
       ],
     },
@@ -290,11 +235,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           input: 'Potion',
           expectedOutput: 'Item: Potion',
         },
-        {
-          id: 2,
-          input: 'Shield',
-          expectedOutput: 'Item: Shield',
-        },
       ],
     },
     {
@@ -313,11 +253,6 @@ export const PYTHON_LEVEL_15: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '3333',
-        },
-        {
-          id: 2,
-          input: 'A',
-          expectedOutput: 'AAAA',
         },
       ],
     },

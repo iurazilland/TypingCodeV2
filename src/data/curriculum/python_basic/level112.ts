@@ -65,8 +65,8 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 객체 리스트 items에서 각 객체의 가격 속성을 꺼내 리스트로 만들도록 속성 접근 식을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the attribute name in the list comprehension to collect each item's cost attribute.",
-      "hint_ko": "반복 변수 p 뒤에 점(.)을 찍고 다섯 글자 가격 속성 이름을 적으세요.",
-      "hint_en": "Write p. followed by the 5-letter price attribute name.",
+      "hint_ko": "반복 변수 p 뒤에 점(.)을 찍고 가격 속성 이름을 적으세요.",
+      "hint_en": "Write p. followed by the price attribute name.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Note\", 3000), Product(\"Mug\", 7000)]\nvals = [p.price for p in items]\nprint(sum(vals))",
       "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Note\", 3000), Product(\"Mug\", 7000)]\nvals = [p.§§§§§§ for p in items]\nprint(sum(vals))",
       "testCases": [
@@ -82,16 +82,16 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "step": 3,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 객체 리스트에서 점수가 80 이상인 학생의 이름만 조건부 컴프리헨션으로 추려 \", \".join()으로 출력해보세요.",
-      "prompt_en": "[Block] Filter names of users with u.score >= 80 using a list comprehension and combine them with \", \".join().",
+      "prompt_ko": "[블록 조립] 객체 리스트에서 점수가 80 이상인 학생의 이름만 조건부 컴프리헨션으로 추려 \",\".join()으로 출력해보세요.",
+      "prompt_en": "[Block] Filter names of users with u.score >= 80 using a list comprehension and combine them with \",\".join().",
       "hint_ko": "if u.score >= 80 조건을 통과한 객체에서 u.name(문자열)만 꺼내므로 바로 .join()에 넣을 수 있습니다.",
       "hint_en": "Extracting u.name for objects where u.score >= 80 produces a list of strings ready for .join().",
-      "targetCode": "class User:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\nusers = [User(\"Kim\", 85), User(\"Lee\", 72), User(\"Park\", 94)]\npassed = [u.name for u in users if u.score >= 80]\nprint(\", \".join(passed))",
+      "targetCode": "class User:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\nusers = [User(\"Kim\", 85), User(\"Lee\", 72), User(\"Park\", 94)]\npassed = [u.name for u in users if u.score >= 80]\nprint(\",\".join(passed))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Kim, Park"
+          "expectedOutput": "Kim,Park"
         }
       ]
     },
@@ -102,8 +102,8 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 가격이 5000 이상인 상품의 이름(p.name)만 추려내는 조건부 컴프리헨션의 조건 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the filtering keyword in the list comprehension to keep products with p.price >= 5000.",
-      "hint_ko": "컴프리헨션 뒤쪽에서 조건을 걸러내는 두 글자 키워드를 입력하세요.",
-      "hint_en": "Type the 2-letter condition keyword at the end of the list comprehension.",
+      "hint_ko": "컴프리헨션 뒤쪽에서 조건을 걸러내는 키워드를 입력하세요.",
+      "hint_en": "Type the condition keyword at the end of the list comprehension.",
       "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Book\", 12000), Product(\"Pen\", 1500), Product(\"Bag\", 25000)]\npicks = [p.name for p in items if p.price >= 5000]\nprint(picks)",
       "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = [Product(\"Book\", 12000), Product(\"Pen\", 1500), Product(\"Bag\", 25000)]\npicks = [p.name for p in items §§§ p.price >= 5000]\nprint(picks)",
       "testCases": [
@@ -139,15 +139,15 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 상품 객체 리스트를 가격(p.price) 오름차순으로 정렬하도록 익명 함수 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the anonymous function keyword to sort Product objects by p.price.",
-      "hint_ko": "정렬 기준 함수를 즉석에서 정의하는 여섯 글자 키워드를 입력하세요.",
-      "hint_en": "Enter the 6-letter keyword for an inline anonymous function.",
-      "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=lambda p: p.price)\nprint(\", \".join([str(p) for p in res]))",
-      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=§§§§§§§ p: p.price)\nprint(\", \".join([str(p) for p in res]))",
+      "hint_ko": "정렬 기준 함수를 즉석에서 정의하는 키워드를 입력하세요.",
+      "hint_en": "Enter the keyword for an inline anonymous function.",
+      "targetCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=lambda p: p.price)\nprint(\",\".join([str(p) for p in res]))",
+      "templateCode": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def __str__(self):\n        return f\"{self.name}({self.price})\"\n\nps = [Product(\"Bag\", 9000), Product(\"Pen\", 1200)]\nres = sorted(ps, key=§§§§§§§ p: p.price)\nprint(\",\".join([str(p) for p in res]))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Pen(1200), Bag(9000)"
+          "expectedOutput": "Pen(1200),Bag(9000)"
         }
       ]
     },
@@ -176,8 +176,8 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 점수 내림차순으로 정렬한 학생 객체들을 1위부터 번호와 함께 출력하도록 열거 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in numbering function to iterate over the sorted objects starting from rank 1.",
-      "hint_ko": "1번부터 순위 번호와 객체를 동시에 꺼내는 아홉 글자 내장 함수를 적으세요.",
-      "hint_en": "Write the 9-letter built-in function that pairs each item with its 1-based rank.",
+      "hint_ko": "1번부터 순위 번호와 객체를 동시에 꺼내는 내장 함수를 적으세요.",
+      "hint_en": "Write the built-in function that pairs each item with its 1-based rank.",
       "targetCode": "class Student:\n    def __init__(self, name, avg):\n        self.name = name\n        self.avg = avg\n\n    def __str__(self):\n        return f\"{self.name}({self.avg:.1f})\"\n\nst = [Student(\"Jin\", 88.5), Student(\"Ara\", 95.2)]\ntop = sorted(st, key=lambda s: s.avg, reverse=True)\nfor idx, obj in enumerate(top, 1):\n    print(f\"#{idx} {obj}\")",
       "templateCode": "class Student:\n    def __init__(self, name, avg):\n        self.name = name\n        self.avg = avg\n\n    def __str__(self):\n        return f\"{self.name}({self.avg:.1f})\"\n\nst = [Student(\"Jin\", 88.5), Student(\"Ara\", 95.2)]\ntop = sorted(st, key=lambda s: s.avg, reverse=True)\nfor idx, obj in §§§§§§§§§§(top, 1):\n    print(f\"#{idx} {obj}\")",
       "testCases": [
@@ -292,9 +292,9 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "prompt_en": "[Predict Output] Select the exact output produced by filtering >= 80, sorting descending, and enumerating from 1.",
       "hint_ko": "80점 이상인 Ara(95)와 Leo(85)만 객체로 생성되어 내림차순 정렬된 뒤 1번부터 순위가 붙습니다.",
       "hint_en": "Filter >= 80 (Ara:95, Leo:85), sort descending, and format with 1-based ranks joined by \" / \".",
-      "targetCode": "class Score:\n    def __init__(self, user, pt):\n        self.user = user\n        self.pt = pt\n\n    def __str__(self):\n        return f\"{self.user}:{self.pt}\"\n\nraw = [(\"Min\", 70), (\"Ara\", 95), (\"Leo\", 85)]\nobjs = [Score(u, p) for u, p in raw if p >= 80]\ns = sorted(objs, key=lambda x: x.pt, reverse=True)\nout = [f\"{i}.{x}\" for i, x in enumerate(s, 1)]\nprint(\" / \".join(out))",
+      "targetCode": "class Score:\n    def __init__(self, user, pt):\n        self.user = user\n        self.pt = pt\n\n    def __str__(self):\n        return f\"{self.user}:{self.pt}\"\n\nraw = [(\"Min\", 70), (\"Ara\", 95), (\"Leo\", 85)]\nobjs = [Score(u, p) for u, p in raw if p >= 80]\ns = sorted(objs, key=lambda x: x.pt, reverse=True)\nout = [f\"{i}.{x}\" for i, x in enumerate(s, 1)]\nprint(\"/\".join(out))",
       "choices": [
-        "1.Ara:95 / 2.Leo:85",
+        "1.Ara:95/2.Leo:85",
         "1.Leo:85 / 2.Ara:95",
         "1.Ara:95 / 2.Leo:85 / 3.Min:70",
         "0.Ara:95 / 1.Leo:85"
@@ -304,7 +304,7 @@ export const PYTHON_LEVEL_112: PracticeRound = {
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "1.Ara:95 / 2.Leo:85"
+          "expectedOutput": "1.Ara:95/2.Leo:85"
         }
       ]
     },

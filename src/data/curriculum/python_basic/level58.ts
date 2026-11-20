@@ -55,8 +55,8 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 변수 res에 아무 값도 없음을 뜻하는 파이썬 상수를 넣어 출력해보세요.',
       prompt_en: '[Fill Blank] Assign the Python constant representing no value to res and print it with its type.',
-      hint_ko: '첫 글자만 대문자로 적는 네 글자 빈 값 예약어를 빈칸에 입력하세요.',
-      hint_en: 'Type the four-letter capitalized constant representing an empty value.',
+      hint_ko: '첫 글자만 대문자로 적는 빈 값 예약어를 빈칸에 입력하세요.',
+      hint_en: 'Type the capitalized constant representing an empty value.',
       templateCode: 'res = §§§§§\nprint(res, type(res))',
       targetCode: 'res = None\nprint(res, type(res))',
       testCases: [
@@ -92,8 +92,8 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 변수 nick이 비어 있는지 검사하여 기본 이름 "Guest"를 대입해 출력해보세요.',
       prompt_en: '[Fill Blank] Check whether nick is empty so it defaults to "Guest" and prints.',
-      hint_ko: '객체 동일성을 확인하는 두 글자 키워드와 빈 값 상수를 공백으로 이어 적으세요.',
-      hint_en: 'Combine the two-letter identity keyword with the four-letter null constant.',
+      hint_ko: '객체 동일성을 확인하는 키워드와 빈 값 상수를 공백으로 이어 적으세요.',
+      hint_en: 'Combine the identity keyword with the null constant.',
       templateCode: 'nick = None\nif nick §§§§§§§§:\n    nick = "Guest"\nprint(nick)',
       targetCode: 'nick = None\nif nick is None:\n    nick = "Guest"\nprint(nick)',
       testCases: [
@@ -261,8 +261,8 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '[한 줄 완성] 반복문 탐색 전에 결과 변수 found를 빈 값 상수로 초기화하는 한 줄을 작성해보세요.',
       prompt_en: '[Complete Line] Write the line that initializes variable found to the empty constant before the loop.',
-      hint_ko: '변수 found에 아직 찾은 값이 없음을 뜻하는 네 글자 상수를 대입하세요.',
-      hint_en: 'Assign the four-letter null constant to variable found.',
+      hint_ko: '변수 found에 아직 찾은 값이 없음을 뜻하는 상수를 대입하세요.',
+      hint_en: 'Assign the null constant to variable found.',
       templateCode: 'nums = [3, 8, 5]\n§§§§§§§§§§§§§\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
       targetCode: 'nums = [3, 8, 5]\nfound = None\nfor n in nums:\n    if n % 2 == 0:\n        found = n\n        break\nprint(found)',
       testCases: [

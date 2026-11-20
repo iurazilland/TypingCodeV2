@@ -60,7 +60,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 스탬프 객체의 찍기 메서드를 호출할 때마다 개수가 1씩 늘어나도록 복합 대입 연산자를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the compound assignment operator so each call to punch() increments self.cnt by 1.",
-      "hint_ko": "기존 속성값에 오른쪽 숫자를 더해서 다시 같은 속성에 저장하는 두 글자 복합 대입 연산자를 적으세요.",
+      "hint_ko": "기존 속성값에 오른쪽 숫자를 더해서 다시 같은 속성에 저장하는 복합 대입 연산자를 적으세요.",
       "hint_en": "Use the two-character compound operator that adds to the existing attribute value.",
       "templateCode": "class Stamp:\n    def __init__(self):\n        self.cnt = 0\n    def punch(self):\n        self.cnt §§§ 1\ns = Stamp()\ns.punch()\ns.punch()\nprint(s.cnt)",
       "targetCode": "class Stamp:\n    def __init__(self):\n        self.cnt = 0\n    def punch(self):\n        self.cnt += 1\ns = Stamp()\ns.punch()\ns.punch()\nprint(s.cnt)",
@@ -199,11 +199,6 @@ export const PYTHON_LEVEL_74: PracticeRound = {
           "id": 1,
           "input": "400",
           "expectedOutput": "1100"
-        },
-        {
-          "id": 2,
-          "input": "2000",
-          "expectedOutput": "1500"
         }
       ]
     },
@@ -250,7 +245,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "step": 12,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 메서드 내부에서 self.score에 pt를 곱한 뒤 더하는 한 줄을 작성해보세요.",
+      "prompt_ko": "[한 줄 완성] 메서드 내부에서 self.score에 pt * 10을 복합 대입(+=)으로 누적하는 한 줄을 작성해보세요.",
       "prompt_en": "[Complete Line] Write the line inside add_win that adds pt * 10 to self.score using +=.",
       "hint_ko": "들여쓰기 위치에 맞춰 자기 자신의 score 속성에 pt * 10을 복합 대입으로 누적하세요.",
       "hint_en": "Use += on self.score to add pt * 10.",

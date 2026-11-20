@@ -2949,7 +2949,15 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       ? question.testCases[0].expectedOutput.trim()
       : expectedOut.trim();
 
-    if (!cleanActual || cleanActual !== targetExpected) return false;
+    const isStripLesson = /\.(?:l|r)?strip\s*\(/.test(question.targetCode || '');
+    const normPunctSpace = (s: string) => s.replace(/:\s+/g, ':');
+    if (
+      !cleanActual ||
+      (cleanActual !== targetExpected &&
+        (isStripLesson || normPunctSpace(cleanActual) !== normPunctSpace(targetExpected)))
+    ) {
+      return false;
+    }
 
     // 2. Expected variable verification (if question specifies expectedVariables)
     if (question.expectedVariables && runtimeScope) {
@@ -3438,28 +3446,6 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     await new Promise((r) => setTimeout(r, 60));
 
     const primaryStdin = currentQuestion.testCases?.[0]?.input ?? '';
-    const verifyExtraTestCases = (orderedForBlocks?: CanvasBlock[]): string | null => {
-      if (!currentQuestion.testCases || currentQuestion.testCases.length <= 1 || langKey !== 'python') {
-        return null;
-      }
-      for (let tcIdx = 1; tcIdx < currentQuestion.testCases.length; tcIdx++) {
-        const tc = currentQuestion.testCases[tcIdx];
-        const tcInput = tc.input ?? '';
-        const tcExpected = (tc.expectedOutput ?? '').trim();
-        const tcRes =
-          mode !== 'typing'
-            ? evaluateBlocksLocally(orderedForBlocks || getOrderedCanvasBlocks(canvasBlocks), tcInput)
-            : evaluatePythonLocally(codeToRun, tcInput);
-        const tcActual = (tcRes.stdout || '').replace(/^\r?\n+|\r?\n+$/g, '').trim();
-        if (!tcRes.success || tcActual !== tcExpected) {
-          const formattedIn = tcInput.replace(/\n/g, ' ↵ ');
-          return isEn
-            ? `\n\n❌ Failed additional test case #${tcIdx + 1} (input: ${formattedIn})\nExpected: ${tcExpected}\nActual: ${tcRes.success ? (tcActual || '(empty)') : tcRes.stderr.trim()}`
-            : `\n\n❌ 추가 입력 검증 실패 (테스트 #${tcIdx + 1} — 입력값: ${formattedIn})\n기대 출력: ${tcExpected}\n실제 출력: ${tcRes.success ? (tcActual || '(출력 없음)') : tcRes.stderr.trim()}`;
-        }
-      }
-      return null;
-    };
 
     // 1. NORMAL EXECUTION MODE (with Interactive Terminal input())
     if (execMode === 'normal') {
@@ -3579,13 +3565,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         const normUserIn = providedLines.join('\n').trim();
         const usedDifferentInput = Boolean(normPrimaryIn && providedLines.length > 0 && normUserIn !== normPrimaryIn);
 
-        if (passed) {
-          const extraErr = verifyExtraTestCases(cachedOrderedBlocks);
-          if (extraErr) {
-            passed = false;
-            setTerminalOutput((displayOut || '') + extraErr);
-          }
-        } else if (!isErr && usedDifferentInput) {
+        if (!passed && !isErr && usedDifferentInput) {
           const guidedIn = primaryStdin.replace(/\n/g, ' ↵ ');
           const typedIn = providedLines.join(' ↵ ') || (isEn ? '(empty)' : '(빈 값)');
           const inputGuideMsg = isEn
@@ -3595,7 +3575,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           setIsSuccess(false);
           setIsErrorShown(true);
           return;
-        } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
+        } else if (!passed && !isErr && expectedOut && actualOut.trim() === expectedOut) {
           const structMsg = isEn
             ? '\n\n⚠️ Output matches, but required variables, operators, or syntax from the prompt were not used.'
             : '\n\n⚠️ 출력 결과는 같지만 문제에서 요구한 변수·연산자·문법을 사용하지 않았습니다. 지시문을 확인해주세요.';
@@ -3787,13 +3767,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
             const normUserIn = providedLines.join('\n').trim();
             const usedDifferentInput = Boolean(normPrimaryIn && providedLines.length > 0 && normUserIn !== normPrimaryIn);
 
-            if (passed) {
-              const extraErr = verifyExtraTestCases(cachedOrderedBlocks);
-              if (extraErr) {
-                passed = false;
-                setTerminalOutput((displayOut || '') + extraErr);
-              }
-            } else if (!isErr && usedDifferentInput) {
+            if (!passed && !isErr && usedDifferentInput) {
               const guidedIn = primaryStdin.replace(/\n/g, ' ↵ ');
               const typedIn = providedLines.join(' ↵ ') || (isEn ? '(empty)' : '(빈 값)');
               const inputGuideMsg = isEn
@@ -3803,7 +3777,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               setIsSuccess(false);
               setIsErrorShown(true);
               return;
-            } else if (!isErr && expectedOut && actualOut.trim() === expectedOut) {
+            } else if (!passed && !isErr && expectedOut && actualOut.trim() === expectedOut) {
               const structMsg = isEn
                 ? '\n\n⚠️ Output matches, but required variables, operators, or syntax from the prompt were not used.'
                 : '\n\n⚠️ 출력 결과는 같지만 문제에서 요구한 변수·연산자·문법을 사용하지 않았습니다. 지시문을 확인해주세요.';

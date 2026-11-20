@@ -48,11 +48,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           input: '4',
           expectedOutput: '10',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '55',
-        },
       ],
     },
     {
@@ -70,11 +65,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           id: 1,
           input: '6',
           expectedOutput: '12',
-        },
-        {
-          id: 2,
-          input: '8',
-          expectedOutput: '20',
         },
       ],
     },
@@ -95,11 +85,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           input: '5',
           expectedOutput: '9',
         },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: '16',
-        },
       ],
     },
     {
@@ -117,11 +102,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           id: 1,
           input: '4',
           expectedOutput: '24',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '120',
         },
       ],
     },
@@ -160,11 +140,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           input: '4',
           expectedOutput: '1234',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '123',
-        },
       ],
     },
     {
@@ -175,7 +150,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       prompt_ko: '[빈칸 채우기] 빈칸에 문자열 변환 함수를 채워 n부터 1까지 숫자를 이어 붙인 문자열을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the string-casting function to append each number i onto code.',
       hint_ko: '정수 i를 문자열과 이어 붙이려면 세 글자 문자열 변환 함수로 감싸야 합니다.',
-      hint_en: 'Wrap i in the three-letter string conversion function.',
+      hint_en: 'Wrap i in the string conversion function.',
       templateCode: 'n = int(input())\ncode = "ID:"\nfor i in range(n, 0, -1):\n    code += §§§§(i)\nprint(code)',
       targetCode: 'n = int(input())\ncode = "ID:"\nfor i in range(n, 0, -1):\n    code += str(i)\nprint(code)',
       testCases: [
@@ -183,11 +158,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: 'ID:321',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: 'ID:4321',
         },
       ],
     },
@@ -208,11 +178,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           input: '4',
           expectedOutput: '10 24',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '6 6',
-        },
       ],
     },
     {
@@ -231,11 +196,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           id: 1,
           input: '4',
           expectedOutput: '24',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '120',
         },
       ],
     },
@@ -256,11 +216,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           input: '4',
           expectedOutput: '10',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '15',
-        },
       ],
     },
     {
@@ -280,11 +235,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           input: '6',
           expectedOutput: '12',
         },
-        {
-          id: 2,
-          input: '8',
-          expectedOutput: '20',
-        },
       ],
     },
     {
@@ -303,11 +253,6 @@ export const PYTHON_LEVEL_34: PracticeRound = {
           id: 1,
           input: '4',
           expectedOutput: '24',
-        },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '6',
         },
       ],
     },

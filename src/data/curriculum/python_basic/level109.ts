@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 자식 클래스 Bike가 위에 정의된 부모 클래스의 생성자와 move 메서드를 물려받도록 괄호 안을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the parent class name inside the parentheses so Bike inherits from the base class above.",
-      "hint_ko": "맨 위에 정의된 일곱 글자 부모 클래스 이름을 그대로 적으세요.",
-      "hint_en": "Enter the 7-letter parent class name defined at the top.",
+      "hint_ko": "맨 위에 정의된 부모 클래스 이름을 그대로 적으세요.",
+      "hint_en": "Enter the parent class name defined at the top.",
       "targetCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(Vehicle):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move(), b.ring())",
       "templateCode": "class Vehicle:\n    def __init__(self, model):\n        self.model = model\n\n    def move(self):\n        return f\"{self.model} moves\"\n\nclass Bike(§§§§§§§§):\n    def ring(self):\n        return \"Ring!\"\n\nb = Bike(\"Road\")\nprint(b.move(), b.ring())",
       "testCases": [
@@ -101,8 +101,8 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] Delivery를 상속받은 Express에서 요금 메서드를 6000원으로 오버라이딩하도록 메서드 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name in Express to override the parent's pricing method.",
-      "hint_ko": "부모 클래스에 정의된 세 글자 메서드 이름과 똑같이 적어야 오버라이딩됩니다.",
-      "hint_en": "Use the exact same 3-letter method name defined in the parent class.",
+      "hint_ko": "부모 클래스에 정의된 메서드 이름과 똑같이 적어야 오버라이딩됩니다.",
+      "hint_en": "Use the exact same method name defined in the parent class.",
       "targetCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(Delivery):\n    def fee(self):\n        return 6000\n\nd = Express()\nprint(d.fee())",
       "templateCode": "class Delivery:\n    def fee(self):\n        return 3000\n\nclass Express(Delivery):\n    def §§§§(self):\n        return 6000\n\nd = Express()\nprint(d.fee())",
       "testCases": [
@@ -138,8 +138,8 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 자식 생성자 안에서 부모 클래스를 가리키는 내장 함수를 호출해 부모의 __init__을 실행해보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in call that references the parent class so its __init__(name) runs.",
-      "hint_ko": "부모(super) 클래스를 돌려주는 다섯 글자 이름 뒤에 빈 괄호 ()를 붙인 일곱 글자를 적으세요.",
-      "hint_en": "Write the 5-letter built-in name followed by empty parentheses (7 characters total).",
+      "hint_ko": "부모 클래스를 가리키는 super 뒤에 빈 괄호 ()를 붙여 super()를 적으세요.",
+      "hint_en": "Write the built-in name followed by empty parentheses (7 characters total).",
       "targetCode": "class Member:\n    def __init__(self, name):\n        self.name = name\n\nclass VIP(Member):\n    def __init__(self, name, bonus):\n        super().__init__(name)\n        self.bonus = bonus\n\nv = VIP(\"Ara\", 500)\nprint(v.name, v.bonus)",
       "templateCode": "class Member:\n    def __init__(self, name):\n        self.name = name\n\nclass VIP(Member):\n    def __init__(self, name, bonus):\n        §§§§§§§§.__init__(name)\n        self.bonus = bonus\n\nv = VIP(\"Ara\", 500)\nprint(v.name, v.bonus)",
       "testCases": [
@@ -175,8 +175,8 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 자식 객체 c가 부모 클래스 Animal의 인스턴스인지 판별하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function to check whether Cat instance c belongs to the parent class Animal.",
-      "hint_ko": "객체가 해당 클래스(또는 부모 클래스)의 인스턴스인지 확인하는 열 글자 내장 함수를 적으세요.",
-      "hint_en": "Enter the 10-letter built-in function that checks class membership.",
+      "hint_ko": "객체가 해당 클래스(또는 부모 클래스)의 인스턴스인지 확인하는 내장 함수를 적으세요.",
+      "hint_en": "Enter the built-in function that checks class membership.",
       "targetCode": "class Animal:\n    pass\n\nclass Cat(Animal):\n    pass\n\nc = Cat()\nprint(isinstance(c, Animal))",
       "templateCode": "class Animal:\n    pass\n\nclass Cat(Animal):\n    pass\n\nc = Cat()\nprint(§§§§§§§§§§§(c, Animal))",
       "testCases": [

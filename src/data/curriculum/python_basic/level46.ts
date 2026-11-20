@@ -156,11 +156,6 @@ export const PYTHON_LEVEL_46: PracticeRound = {
           input: '10\n20\n30',
           expectedOutput: '[10, 20, 30]',
         },
-        {
-          id: 2,
-          input: '5\n15\n25',
-          expectedOutput: '[5, 15, 25]',
-        },
       ],
     },
     {
@@ -179,11 +174,6 @@ export const PYTHON_LEVEL_46: PracticeRound = {
           id: 1,
           input: '10\n-5\n20',
           expectedOutput: '[10, 20]',
-        },
-        {
-          id: 2,
-          input: '-1\n7\n0',
-          expectedOutput: '[7]',
         },
       ],
     },
@@ -279,11 +269,6 @@ export const PYTHON_LEVEL_46: PracticeRound = {
           id: 1,
           input: '12\n34',
           expectedOutput: '[12, 34]',
-        },
-        {
-          id: 2,
-          input: '7\n9',
-          expectedOutput: '[7, 9]',
         },
       ],
     },

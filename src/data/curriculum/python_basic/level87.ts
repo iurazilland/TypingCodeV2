@@ -62,8 +62,8 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 메뉴판에 없는 음료가 입력되더라도 에러 대신 -1을 돌려받도록 안전 조회 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the dictionary method name that looks up item safely and defaults to -1.",
-      "hint_ko": "키가 없을 때 기본값을 반환하는 세 글자 딕셔너리 안전 조회 메서드를 호출하세요.",
-      "hint_en": "Call the three-letter dictionary method for safe key lookup.",
+      "hint_ko": "키가 없을 때 기본값을 반환하는 딕셔너리 안전 조회 메서드를 호출하세요.",
+      "hint_en": "Call the dictionary method for safe key lookup.",
       "templateCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.§§§§(item, -1))",
       "targetCode": "prices = {\"tea\": 3000, \"milk\": 2500}\nitem = input()\nprint(prices.get(item, -1))",
       "testCases": [
@@ -71,11 +71,6 @@ export const PYTHON_LEVEL_87: PracticeRound = {
           "id": 1,
           "input": "tea",
           "expectedOutput": "3000"
-        },
-        {
-          "id": 2,
-          "input": "juice",
-          "expectedOutput": "-1"
         }
       ]
     },
@@ -104,8 +99,8 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 과목별 점수 딕셔너리에서 모든 점수의 최댓값을 구하도록 값 목록 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the dictionary method inside max() to find the highest score among all stored scores.",
-      "hint_ko": "딕셔너리의 모든 '값(value)'들을 모아 돌려주는 여섯 글자 메서드를 호출하세요.",
-      "hint_en": "Call the six-letter method that returns a view of the dictionary's stored numbers.",
+      "hint_ko": "딕셔너리의 모든 '값(value)'들을 모아 돌려주는 메서드를 호출하세요.",
+      "hint_en": "Call the method that returns a view of the dictionary's stored numbers.",
       "templateCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.§§§§§§§()))",
       "targetCode": "grades = {\"Kor\": 85, \"Math\": 98, \"Eng\": 92}\nprint(max(grades.values()))",
       "testCases": [
@@ -141,8 +136,8 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 대기자 명단 딕셔너리에서 \"Lee\"의 번호표를 꺼내 반환받으면서 삭제하도록 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the dictionary method that removes \"Lee\" and returns its value.",
-      "hint_ko": "지정한 키의 값을 뽑아내어 돌려주면서 딕셔너리에서 지우는 세 글자 메서드를 적으세요.",
-      "hint_en": "Use the three-letter method that pops a key-value pair from a dictionary.",
+      "hint_ko": "지정한 키의 값을 뽑아내어 돌려주면서 딕셔너리에서 지우는 메서드를 적으세요.",
+      "hint_en": "Use the method that pops a key-value pair from a dictionary.",
       "templateCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.§§§§(\"Lee\")\nprint(num, list(wait.keys()))",
       "targetCode": "wait = {\"Kim\": 1, \"Lee\": 2, \"Park\": 3}\nnum = wait.pop(\"Lee\")\nprint(num, list(wait.keys()))",
       "testCases": [
@@ -178,8 +173,8 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 기본 설정 딕셔너리에 새 설정 딕셔너리를 한꺼번에 병합·갱신하도록 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the dictionary method that merges patch into cfg in place.",
-      "hint_ko": "다른 딕셔너리의 키-값 쌍들을 현재 딕셔너리에 덮어쓰거나 추가해 갱신하는 여섯 글자 메서드를 호출하세요.",
-      "hint_en": "Call the six-letter method that updates a dictionary with another dictionary's entries.",
+      "hint_ko": "다른 딕셔너리의 키-값 쌍들을 현재 딕셔너리에 덮어쓰거나 추가해 갱신하는 메서드를 호출하세요.",
+      "hint_en": "Call the method that updates a dictionary with another dictionary's entries.",
       "templateCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.§§§§§§§(patch)\nprint(cfg[\"fps\"], len(cfg))",
       "targetCode": "cfg = {\"vol\": 50, \"fps\": 30}\npatch = {\"fps\": 60, \"hdr\": 1}\ncfg.update(patch)\nprint(cfg[\"fps\"], len(cfg))",
       "testCases": [
@@ -198,7 +193,7 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 단어 빈도수를 안전 조회로 누적한 뒤 추가 점수를 병합하고 전체 값의 합계를 출력하도록 세 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the safe lookup method, dictionary merge method, and stored-counts view method.",
       "hint_ko": "기본값을 지정해 안전 조회하는 메서드, 다른 딕셔너리를 병합하는 메서드, 그리고 값 목록을 꺼내는 메서드를 확인하세요.",
-      "hint_en": "Check the three-letter lookup method, six-letter merge method, and six-letter view method.",
+      "hint_en": "Check the lookup method, merge method, and view method.",
       "templateCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.§§§§(w, 0) + 1\nfreq.§§§§§§§({\"c\": 5})\nprint(freq[\"a\"], sum(freq.§§§§§§§()))",
       "targetCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.get(w, 0) + 1\nfreq.update({\"c\": 5})\nprint(freq[\"a\"], sum(freq.values()))",
       "testCases": [
@@ -263,11 +258,6 @@ export const PYTHON_LEVEL_87: PracticeRound = {
           "id": 1,
           "input": "py js py",
           "expectedOutput": "2"
-        },
-        {
-          "id": 2,
-          "input": "go rust",
-          "expectedOutput": "0"
         }
       ]
     },

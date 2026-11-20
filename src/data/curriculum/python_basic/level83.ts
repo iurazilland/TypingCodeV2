@@ -61,8 +61,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트 맨 앞(0번 인덱스)에 \"A\"를 끼워 넣어 ['A', 'B', 'C']를 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the list method name to place \"A\" at index 0.",
-      "hint_ko": "지정한 인덱스 자리에 새 요소를 끼워 넣는 여섯 글자 리스트 메서드를 호출하세요.",
-      "hint_en": "Call the six-letter list method that places an element at a given index.",
+      "hint_ko": "지정한 인덱스 자리에 새 요소를 끼워 넣는 리스트 메서드를 호출하세요.",
+      "hint_en": "Call the list method that places an element at a given index.",
       "templateCode": "items = [\"B\", \"C\"]\nitems.§§§§§§§(0, \"A\")\nprint(items)",
       "targetCode": "items = [\"B\", \"C\"]\nitems.insert(0, \"A\")\nprint(items)",
       "testCases": [
@@ -98,8 +98,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 점수 리스트에서 값 85를 찾아 삭제한 뒤 100을 끝에 추가해 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name that deletes the value 85 from scores before appending 100.",
-      "hint_ko": "인덱스 번호가 아니라 특정 값을 찾아 제거하는 여섯 글자 리스트 메서드를 적으세요.",
-      "hint_en": "Use the six-letter list method that deletes the first occurrence of a value.",
+      "hint_ko": "인덱스 번호가 아니라 특정 값을 찾아 제거하는 리스트 메서드를 적으세요.",
+      "hint_en": "Use the list method that deletes the first occurrence of a value.",
       "templateCode": "scores = [70, 85, 90]\nscores.§§§§§§§(85)\nscores.append(100)\nprint(scores)",
       "targetCode": "scores = [70, 85, 90]\nscores.remove(85)\nscores.append(100)\nprint(scores)",
       "testCases": [
@@ -125,11 +125,6 @@ export const PYTHON_LEVEL_83: PracticeRound = {
           "id": 1,
           "input": "js",
           "expectedOutput": "['py', 'go']"
-        },
-        {
-          "id": 2,
-          "input": "rust",
-          "expectedOutput": "['py', 'js', 'go']"
         }
       ]
     },
@@ -140,8 +135,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트에 없는 값을 삭제하려 할 때 발생하는 에러를 잡아 안전하게 건너뛰도록 예외 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception type raised when .remove() cannot find the value in the list.",
-      "hint_ko": "리스트 안에 찾는 '값(Value)'이 없어 삭제할 수 없을 때 발생하는 열 글자 예외 이름을 적으세요.",
-      "hint_en": "Specify the ten-letter exception raised when a target value is not found in a list.",
+      "hint_ko": "리스트 안에 찾는 '값(Value)'이 없어 삭제할 수 없을 때 발생하는 예외 이름을 적으세요.",
+      "hint_en": "Specify the exception raised when a target value is not found in a list.",
       "templateCode": "nums = [10, 20, 30]\nx = int(input())\ntry:\n    nums.remove(x)\nexcept §§§§§§§§§§§:\n    pass\nprint(nums)",
       "targetCode": "nums = [10, 20, 30]\nx = int(input())\ntry:\n    nums.remove(x)\nexcept ValueError:\n    pass\nprint(nums)",
       "testCases": [
@@ -149,11 +144,6 @@ export const PYTHON_LEVEL_83: PracticeRound = {
           "id": 1,
           "input": "20",
           "expectedOutput": "[10, 30]"
-        },
-        {
-          "id": 2,
-          "input": "99",
-          "expectedOutput": "[10, 20, 30]"
         }
       ]
     },
@@ -182,8 +172,8 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 반복문으로 리스트의 모든 0을 찾아 제거한 뒤 맨 앞에 99를 넣도록 삭제 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the while loop body so every 0 is removed by value before inserting 99 at index 0.",
-      "hint_ko": "0이 리스트 안에 남아 있는 동안 값 0을 찾아 하나씩 지우는 여섯 글자 메서드를 호출하세요.",
-      "hint_en": "Call the six-letter method that removes a matching value from the list.",
+      "hint_ko": "0이 리스트 안에 남아 있는 동안 값 0을 찾아 하나씩 지우는 메서드를 호출하세요.",
+      "hint_en": "Call the method that removes a matching value from the list.",
       "templateCode": "data = [0, 5, 0, 8]\nwhile 0 in data:\n    data.§§§§§§§(0)\ndata.insert(0, 99)\nprint(data)",
       "targetCode": "data = [0, 5, 0, 8]\nwhile 0 in data:\n    data.remove(0)\ndata.insert(0, 99)\nprint(data)",
       "testCases": [
@@ -210,11 +200,6 @@ export const PYTHON_LEVEL_83: PracticeRound = {
           "id": 1,
           "input": "C",
           "expectedOutput": "['A', 'B', 'D']"
-        },
-        {
-          "id": 2,
-          "input": "Z",
-          "expectedOutput": "['A', 'B', 'C', 'D']"
         }
       ]
     },

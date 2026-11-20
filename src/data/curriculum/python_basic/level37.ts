@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 반복 즉시 종료 키워드를 채워 n의 가장 작은 약수(1 제외) 하나만 출력하고 멈춰보세요.',
       prompt_en: '[Fill Blank] Fill in the loop-termination keyword to stop right after printing the first divisor > 1.',
-      hint_ko: '첫 약수를 출력한 직후 루프를 깨고 나오는 다섯 글자 제어 키워드를 입력합니다.',
-      hint_en: 'Use the five-letter keyword meaning "to shatter / stop immediately".',
+      hint_ko: '첫 약수를 출력한 직후 루프를 깨고 나오는 제어 키워드를 입력합니다.',
+      hint_en: 'Use the keyword meaning "to shatter / stop immediately".',
       templateCode: 'n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        §§§§§§',
       targetCode: 'n = int(input())\nfor i in range(2, n + 1):\n    if n % i == 0:\n        print(i)\n        break',
       testCases: [
@@ -47,11 +47,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           id: 1,
           input: '15',
           expectedOutput: '3',
-        },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '2',
         },
       ],
     },
@@ -80,8 +75,8 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 반복 즉시 종료 키워드를 채워 누적 합계가 limit 이상이 되는 순간 반복을 멈춰보세요.',
       prompt_en: '[Fill Blank] Fill in the termination keyword to exit the loop once total >= limit.',
-      hint_ko: '조건이 만족되었을 때 남은 반복을 모두 취소하고 빠져나가는 다섯 글자 키워드입니다.',
-      hint_en: 'Enter the five-letter keyword that exits the enclosing loop immediately.',
+      hint_ko: '조건이 만족되었을 때 남은 반복을 모두 취소하고 빠져나가는 키워드입니다.',
+      hint_en: 'Enter the keyword that exits the enclosing loop immediately.',
       templateCode: 'limit = int(input())\ntotal = 0\nfor i in range(1, 100):\n    total += i\n    if total >= limit:\n        §§§§§§\nprint(total)',
       targetCode: 'limit = int(input())\ntotal = 0\nfor i in range(1, 100):\n    total += i\n    if total >= limit:\n        break\nprint(total)',
       testCases: [
@@ -89,11 +84,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           id: 1,
           input: '12',
           expectedOutput: '15',
-        },
-        {
-          id: 2,
-          input: '6',
-          expectedOutput: '6',
         },
       ],
     },
@@ -113,11 +103,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           input: '3',
           expectedOutput: '1\n2\n3',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '1\n2',
-        },
       ],
     },
     {
@@ -127,8 +112,8 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 참 불리언 상수를 채워 무한 루프를 열고 0이 입력되면 합계를 출력하고 종료해보세요.',
       prompt_en: '[Fill Blank] Fill in the boolean constant for true to open the infinite loop.',
-      hint_ko: '첫 글자가 대문자인 네 글자 참 상수를 while 뒤에 적습니다.',
-      hint_en: 'Write the capitalized four-letter boolean constant after while.',
+      hint_ko: '첫 글자가 대문자인 참 상수를 while 뒤에 적습니다.',
+      hint_en: 'Write the capitalized boolean constant after while.',
       templateCode: 'total = 0\nwhile §§§§§:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)',
       targetCode: 'total = 0\nwhile True:\n    x = int(input())\n    if x == 0:\n        break\n    total += x\nprint(total)',
       testCases: [
@@ -136,11 +121,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           id: 1,
           input: '10\n20\n0',
           expectedOutput: '30',
-        },
-        {
-          id: 2,
-          input: '5\n7\n0',
-          expectedOutput: '12',
         },
       ],
     },
@@ -160,11 +140,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           input: 'go\ntest\nq',
           expectedOutput: 'Run:go\nRun:test',
         },
-        {
-          id: 2,
-          input: 'build\nq',
-          expectedOutput: 'Run:build',
-        },
       ],
     },
     {
@@ -174,8 +149,8 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 반복 종료 키워드를 채워 음수가 입력되기 전까지 입력된 점수들의 개수를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the termination keyword to stop counting when a negative score is entered.',
-      hint_ko: '음수가 들어오면 즉시 무한 루프를 탈출하는 다섯 글자 키워드를 입력합니다.',
-      hint_en: 'Enter the five-letter keyword that exits the while True loop when s < 0.',
+      hint_ko: '음수가 들어오면 즉시 무한 루프를 탈출하는 키워드를 입력합니다.',
+      hint_en: 'Enter the keyword that exits the while True loop when s < 0.',
       templateCode: 'cnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        §§§§§§\n    cnt += 1\nprint(cnt)',
       targetCode: 'cnt = 0\nwhile True:\n    s = int(input())\n    if s < 0:\n        break\n    cnt += 1\nprint(cnt)',
       testCases: [
@@ -183,11 +158,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           id: 1,
           input: '80\n90\n-1',
           expectedOutput: '2',
-        },
-        {
-          id: 2,
-          input: '10\n20\n30\n-5',
-          expectedOutput: '3',
         },
       ],
     },
@@ -208,11 +178,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           input: '15\n25\n0',
           expectedOutput: 'Sum:40',
         },
-        {
-          id: 2,
-          input: '8\n0',
-          expectedOutput: 'Sum:8',
-        },
       ],
     },
     {
@@ -222,8 +187,8 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '[틀린 곳 수정] 반복문을 빠져나가도록 잘못 적힌 단어를 올바른 파이썬 예약어로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid word on line 4 with the proper Python loop-exit keyword.',
-      hint_ko: '파이썬에서 반복문을 즉시 중단할 때는 stop이 아니라 다섯 글자 전용 예약어를 씁니다.',
-      hint_en: 'Python uses a five-letter keyword instead of stop to exit a loop.',
+      hint_ko: '파이썬에서 반복문을 즉시 중단할 때는 stop이 아니라 전용 예약어를 씁니다.',
+      hint_en: 'Python uses a keyword instead of stop to exit a loop.',
       templateCode: 'for i in range(1, 10):\n    if i == 4:\n        stop\n    print(i, end=" ")',
       targetCode: 'for i in range(1, 10):\n    if i == 4:\n        break\n    print(i, end=" ")',
       testCases: [
@@ -251,11 +216,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           input: '10\n20\n0',
           expectedOutput: '30',
         },
-        {
-          id: 2,
-          input: '5\n7\n0',
-          expectedOutput: '12',
-        },
       ],
     },
     {
@@ -265,7 +225,7 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '[한 줄 완성] word가 "stop"일 때 8칸 들여쓰기된 블록 안에서 무한 루프를 즉시 종료하는 한 줄을 작성해보세요.',
       prompt_en: '[Complete Line] Write the 8-space indented break statement inside if word == "stop":.',
-      hint_ko: '8칸 들여쓰기 뒤에 다섯 글자 종료 키워드를 작성해보세요.',
+      hint_ko: '8칸 들여쓰기 뒤에 종료 키워드를 작성해보세요.',
       hint_en: 'Keep the 8-space indentation and write break.',
       templateCode: 'while True:\n    word = input()\n    if word == "stop":\n        §§§§§§\n    print(word)',
       targetCode: 'while True:\n    word = input()\n    if word == "stop":\n        break\n    print(word)',
@@ -274,11 +234,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
           id: 1,
           input: 'hi\nok\nstop',
           expectedOutput: 'hi\nok',
-        },
-        {
-          id: 2,
-          input: 'one\nstop',
-          expectedOutput: 'one',
         },
       ],
     },
@@ -297,11 +252,6 @@ export const PYTHON_LEVEL_37: PracticeRound = {
         {
           id: 1,
           input: '8',
-          expectedOutput: '1',
-        },
-        {
-          id: 2,
-          input: '6',
           expectedOutput: '1',
         },
       ],

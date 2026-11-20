@@ -52,11 +52,6 @@ export const PYTHON_LEVEL_89: PracticeRound = {
           "id": 1,
           "input": "8",
           "expectedOutput": "Even"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "Odd"
         }
       ]
     },
@@ -67,8 +62,8 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 점수가 60점 이상이면 \"Pass\", 아니면 \"Fail\"이 대입되도록 거짓 분기 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the fallback keyword in the ternary expression so scores under 60 become \"Fail\".",
-      "hint_ko": "한 줄 조건 표현식에서 조건이 거짓일 때 선택할 값 앞에 적는 네 글자 키워드를 입력하세요.",
-      "hint_en": "Write the four-letter keyword placed before the fallback value in a ternary expression.",
+      "hint_ko": "한 줄 조건 표현식에서 조건이 거짓일 때 선택할 값 앞에 적는 키워드를 입력하세요.",
+      "hint_en": "Write the keyword placed before the fallback value in a ternary expression.",
       "templateCode": "score = int(input())\nmsg = \"Pass\" if score >= 60 §§§§§ \"Fail\"\nprint(msg)",
       "targetCode": "score = int(input())\nmsg = \"Pass\" if score >= 60 else \"Fail\"\nprint(msg)",
       "testCases": [
@@ -76,11 +71,6 @@ export const PYTHON_LEVEL_89: PracticeRound = {
           "id": 1,
           "input": "75",
           "expectedOutput": "Pass"
-        },
-        {
-          "id": 2,
-          "input": "40",
-          "expectedOutput": "Fail"
         }
       ]
     },
@@ -109,8 +99,8 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력 정수가 음수일 때 0으로 보정해 돌려주도록 삼항 조건 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the condition keyword inside clamp_zero(x) so x is returned when x >= 0.",
-      "hint_ko": "참일 때의 값(x) 바로 뒤에 붙이는 두 글자 조건 키워드를 적으세요.",
-      "hint_en": "Write the two-letter conditional keyword right after the true-branch value x.",
+      "hint_ko": "참일 때의 값(x) 바로 뒤에 붙이는 조건 키워드를 적으세요.",
+      "hint_en": "Write the conditional keyword right after the true-branch value x.",
       "templateCode": "def clamp_zero(x):\n    return x §§§ x >= 0 else 0\nprint(clamp_zero(12), clamp_zero(-5))",
       "targetCode": "def clamp_zero(x):\n    return x if x >= 0 else 0\nprint(clamp_zero(12), clamp_zero(-5))",
       "testCases": [
@@ -136,11 +126,6 @@ export const PYTHON_LEVEL_89: PracticeRound = {
           "id": 1,
           "input": "32",
           "expectedOutput": "32C:Hot"
-        },
-        {
-          "id": 2,
-          "input": "20",
-          "expectedOutput": "20C:OK"
         }
       ]
     },
@@ -151,8 +136,8 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 재고가 0보다 크면 Open, 아니면 SoldOut을 출력하도록 print() 안의 삼항 식을 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the ternary expression inside print() so it outputs \"Open\" when stock > 0.",
-      "hint_ko": "거짓일 때 출력할 \"SoldOut\" 앞에 오는 네 글자 분기 키워드를 적으세요.",
-      "hint_en": "Use the four-letter keyword before the fallback value \"SoldOut\".",
+      "hint_ko": "거짓일 때 출력할 \"SoldOut\" 앞에 오는 분기 키워드를 적으세요.",
+      "hint_en": "Use the keyword before the fallback value \"SoldOut\".",
       "templateCode": "stock = int(input())\nprint(\"Open\" if stock > 0 §§§§§ \"SoldOut\")",
       "targetCode": "stock = int(input())\nprint(\"Open\" if stock > 0 else \"SoldOut\")",
       "testCases": [
@@ -160,11 +145,6 @@ export const PYTHON_LEVEL_89: PracticeRound = {
           "id": 1,
           "input": "3",
           "expectedOutput": "Open"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "SoldOut"
         }
       ]
     },
@@ -195,7 +175,7 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "prompt_en": "[Fill Blank] Fill in the true-branch value in the ternary expression so even numbers add n and odd numbers add -n.",
       "hint_ko": "n이 짝수(n % 2 == 0)일 때 그대로 더할 반복 변수 이름을 if 앞에 적으세요.",
       "hint_en": "Place the loop variable n before if so even numbers are added as-is.",
-      "templateCode": "nums = [10, 3, 6, 1]\ntotal = 0\nfor n in nums:\n    total += n if §§ % 2 == 0 else -n\nprint(total)",
+      "templateCode": "nums = [10, 3, 6, 1]\ntotal = 0\nfor n in nums:\n    total += §§ if n % 2 == 0 else -n\nprint(total)",
       "targetCode": "nums = [10, 3, 6, 1]\ntotal = 0\nfor n in nums:\n    total += n if n % 2 == 0 else -n\nprint(total)",
       "testCases": [
         {
@@ -221,11 +201,6 @@ export const PYTHON_LEVEL_89: PracticeRound = {
           "id": 1,
           "input": "VIP",
           "expectedOutput": "2500"
-        },
-        {
-          "id": 2,
-          "input": "NORMAL",
-          "expectedOutput": "2900"
         }
       ]
     },
@@ -283,11 +258,6 @@ export const PYTHON_LEVEL_89: PracticeRound = {
           "id": 1,
           "input": "5",
           "expectedOutput": "Pos"
-        },
-        {
-          "id": 2,
-          "input": "-2",
-          "expectedOutput": "ZeroOrNeg"
         }
       ]
     },

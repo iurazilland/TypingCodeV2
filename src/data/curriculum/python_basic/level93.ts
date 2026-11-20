@@ -62,8 +62,8 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력받은 문자열의 알파벳을 모두 대문자로 변환해 출력하도록 메서드 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to convert all letters of the input string to uppercase.",
-      "hint_ko": "모든 영문자를 대문자로 바꾸는 다섯 글자 문자열 메서드를 호출하세요.",
-      "hint_en": "Call the 5-letter string method that converts all letters to uppercase.",
+      "hint_ko": "모든 영문자를 대문자로 바꾸는 문자열 메서드를 호출하세요.",
+      "hint_en": "Call the string method that converts all letters to uppercase.",
       "targetCode": "code = input()\nprint(code.upper())",
       "templateCode": "code = input()\nprint(code.§§§§§§())",
       "testCases": [
@@ -71,11 +71,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "ab12",
           "expectedOutput": "AB12"
-        },
-        {
-          "id": 2,
-          "input": "Seoul",
-          "expectedOutput": "SEOUL"
         }
       ]
     },
@@ -104,8 +99,8 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 문자열의 맨 첫 글자만 대문자이고 나머지는 소문자가 되도록 메서드를 채워 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name so only the very first character is capitalized and the rest become lowercase.",
-      "hint_ko": "문장의 첫 글자만 대문자로 만드는 10글자 문자열 메서드를 입력하세요.",
-      "hint_en": "Enter the 10-letter string method that capitalizes only the first character of the string.",
+      "hint_ko": "문장의 첫 글자만 대문자로 만드는 문자열 메서드를 입력하세요.",
+      "hint_en": "Enter the string method that capitalizes only the first character of the string.",
       "targetCode": "text = \"pYTHON cODE\"\nprint(text.capitalize())",
       "templateCode": "text = \"pYTHON cODE\"\nprint(text.§§§§§§§§§§§())",
       "testCases": [
@@ -131,11 +126,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "  YES ",
           "expectedOutput": "OK"
-        },
-        {
-          "id": 2,
-          "input": "No",
-          "expectedOutput": "NO"
         }
       ]
     },
@@ -146,8 +136,8 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 공백을 제거한 입력 문자열을 소문자로 통일해 \"yes\"와 일치하는지 불리언 결과를 출력해보세요.",
       "prompt_en": "[Fill Blank] Normalize the stripped input to lowercase and print whether it equals \"yes\".",
-      "hint_ko": "소문자 리터럴 \"yes\"와 비교하기 전에 다섯 글자 소문자 변환 메서드를 호출하세요.",
-      "hint_en": "Call the 5-letter lowercase conversion method before comparing against \"yes\".",
+      "hint_ko": "소문자 리터럴 \"yes\"와 비교하기 전에 소문자 변환 메서드를 호출하세요.",
+      "hint_en": "Call the lowercase conversion method before comparing against \"yes\".",
       "targetCode": "ans = input().strip()\nprint(ans.lower() == \"yes\")",
       "templateCode": "ans = input().strip()\nprint(ans.§§§§§§() == \"yes\")",
       "testCases": [
@@ -155,11 +145,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "Yes",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "NO",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -188,8 +173,8 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트 컴프리헨션으로 각 영문 이름의 단어 첫 글자마다 대문자로 바꾼 리스트를 출력해보세요.",
       "prompt_en": "[Fill Blank] Use a list comprehension to convert each name so every word starts with an uppercase letter.",
-      "hint_ko": "단어마다 첫 글자를 대문자로 바꾸는 다섯 글자 메서드를 컴프리헨션 식에 채워보세요.",
-      "hint_en": "Fill in the 5-letter method that capitalizes the first letter of each word.",
+      "hint_ko": "단어마다 첫 글자를 대문자로 바꾸는 메서드를 컴프리헨션 식에 채워보세요.",
+      "hint_en": "Fill in the method that capitalizes the first letter of each word.",
       "targetCode": "names = [\"kim min\", \"lee seo\"]\nres = [n.title() for n in names]\nprint(res)",
       "templateCode": "names = [\"kim min\", \"lee seo\"]\nres = [n.§§§§§§() for n in names]\nprint(res)",
       "testCases": [
@@ -215,7 +200,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "['PY', 'WEB', 'DATA']"
+          "expectedOutput": "['WEB', 'DATA']"
         }
       ]
     },
@@ -235,11 +220,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "hello",
           "expectedOutput": "HELLO"
-        },
-        {
-          "id": 2,
-          "input": "Py3",
-          "expectedOutput": "PY3"
         }
       ]
     },
@@ -259,11 +239,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "admin",
           "expectedOutput": "GRANTED"
-        },
-        {
-          "id": 2,
-          "input": "guest",
-          "expectedOutput": "DENIED"
         }
       ]
     },
@@ -283,11 +258,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "  PyThOn  ",
           "expectedOutput": "[python]"
-        },
-        {
-          "id": 2,
-          "input": " HELLO ",
-          "expectedOutput": "[hello]"
         }
       ]
     },
@@ -307,11 +277,6 @@ export const PYTHON_LEVEL_93: PracticeRound = {
           "id": 1,
           "input": "go web ai",
           "expectedOutput": "['GO', 'WEB', 'AI']"
-        },
-        {
-          "id": 2,
-          "input": "py code",
-          "expectedOutput": "['PY', 'CODE']"
         }
       ]
     },

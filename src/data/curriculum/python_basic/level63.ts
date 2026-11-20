@@ -57,8 +57,8 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] range(1, 4) 구간을 리스트로 변환하여 [1, 2, 3]을 출력해보세요.',
       prompt_en: '[Fill Blank] Convert range(1, 4) into a list so [1, 2, 3] is printed.',
-      hint_ko: 'range 객체를 대괄호 리스트로 만들어 주는 네 글자 형변환 함수를 적으세요.',
-      hint_en: 'Write the four-letter type conversion function that builds a list.',
+      hint_ko: 'range 객체를 대괄호 리스트로 만들어 주는 형변환 함수를 적으세요.',
+      hint_en: 'Write the type conversion function that builds a list.',
       templateCode: 'nums = §§§§§(range(1, 4))\nprint(nums)',
       targetCode: 'nums = list(range(1, 4))\nprint(nums)',
       testCases: [
@@ -94,8 +94,8 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 튜플을 리스트로 바꾸어 4를 추가한 뒤 다시 튜플로 변환해 출력해보세요.',
       prompt_en: '[Fill Blank] After converting the tuple to a list and appending 4, cast it back to a tuple.',
-      hint_ko: '수정이 끝난 리스트 arr를 다시 소괄호 튜플로 잠그는 다섯 글자 형변환 함수를 적으세요.',
-      hint_en: 'Use the five-letter constructor function that converts a sequence into a tuple.',
+      hint_ko: '수정이 끝난 리스트 arr를 다시 소괄호 튜플로 잠그는 형변환 함수를 적으세요.',
+      hint_en: 'Use the constructor function that converts a sequence into a tuple.',
       templateCode: 'tup = (1, 2, 3)\narr = list(tup)\narr.append(4)\ntup = §§§§§§(arr)\nprint(tup)',
       targetCode: 'tup = (1, 2, 3)\narr = list(tup)\narr.append(4)\ntup = tuple(arr)\nprint(tup)',
       testCases: [

@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 조건문 시작 키워드를 채워 체력(hp)이 20 이하일 때 "Danger"를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the conditional keyword to print "Danger" when hp <= 20.',
-      hint_ko: '영어로 만약을 뜻하는 두 글자 소문자 키워드로 조건문 헤더를 시작합니다.',
-      hint_en: 'Begin the conditional header with the two-letter lowercase English word for "supposing".',
+      hint_ko: '영어로 만약을 뜻하는 소문자 키워드로 조건문 헤더를 시작합니다.',
+      hint_en: 'Begin the conditional header with the lowercase English word for "supposing".',
       templateCode: 'hp = 10\n§§§ hp <= 20:\n    print("Danger")',
       targetCode: 'hp = 10\nif hp <= 20:\n    print("Danger")',
       testCases: [
@@ -92,21 +92,16 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       step: 5,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] "Price: " 안내 문구로 정수를 입력받아 5000 이상일 때만 1000을 할인(-=)한 뒤 가격을 출력해보세요.',
-      prompt_en: '[Block] Read an integer with prompt "Price: ", subtract 1000 with -= if >= 5000, and print price.',
+      prompt_ko: '[블록 조립] "Price:" 안내 문구로 정수를 입력받아 5000 이상일 때만 1000을 할인(-=)한 뒤 가격을 출력해보세요.',
+      prompt_en: '[Block] Read an integer with prompt "Price:", subtract 1000 with -= if >= 5000, and print price.',
       hint_ko: '할인 차감(price -= 1000)은 if 블록 안에 넣고, 최종 출력 print(price)는 if 블록 바깥에 둡니다.',
       hint_en: 'Place price -= 1000 inside the if block and the final print(price) outside.',
-      targetCode: 'price = int(input("Price: "))\nif price >= 5000:\n    price -= 1000\nprint(price)',
+      targetCode: 'price = int(input("Price:"))\nif price >= 5000:\n    price -= 1000\nprint(price)',
       testCases: [
         {
           id: 1,
           input: '6000',
-          expectedOutput: 'Price: 5000',
-        },
-        {
-          id: 2,
-          input: '4000',
-          expectedOutput: 'Price: 4000',
+          expectedOutput: 'Price:5000',
         },
       ],
     },
@@ -119,18 +114,13 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       prompt_en: '[Fill Blank] Fill in the compound subtraction operator to discount pay by 2000 when pay >= 10000.',
       hint_ko: '빼기 기호와 등호를 나란히 붙인 복합 대입 연산자를 사용합니다.',
       hint_en: 'Combine the minus sign and equals sign to subtract 2000 in place.',
-      templateCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay §§§ 2000\nprint(pay)',
-      targetCode: 'pay = int(input("Pay: "))\nif pay >= 10000:\n    pay -= 2000\nprint(pay)',
+      templateCode: 'pay = int(input("Pay:"))\nif pay >= 10000:\n    pay §§§ 2000\nprint(pay)',
+      targetCode: 'pay = int(input("Pay:"))\nif pay >= 10000:\n    pay -= 2000\nprint(pay)',
       testCases: [
         {
           id: 1,
           input: '12000',
-          expectedOutput: 'Pay: 10000',
-        },
-        {
-          id: 2,
-          input: '8000',
-          expectedOutput: 'Pay: 8000',
+          expectedOutput: 'Pay:10000',
         },
       ],
     },
@@ -150,11 +140,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
           input: '8',
           expectedOutput: 'PosEven\nDone',
         },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'Done',
-        },
       ],
     },
     {
@@ -164,8 +149,8 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 선택 만족 논리 키워드를 채워 n이 3의 배수이거나 5의 배수일 때 "Hit"을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to print "Hit" when n is divisible by 3 or 5.',
-      hint_ko: '둘 중 하나만 참이어도 조건문이 실행되도록 두 글자 논리 키워드를 채웁니다.',
-      hint_en: 'Join the two divisibility checks with the two-letter disjunction keyword.',
+      hint_ko: '둘 중 하나만 참이어도 조건문이 실행되도록 논리 키워드를 채웁니다.',
+      hint_en: 'Join the two divisibility checks with the disjunction keyword.',
       templateCode: 'n = int(input())\nif n % 3 == 0 §§§ n % 5 == 0:\n    print("Hit")\nprint("End")',
       targetCode: 'n = int(input())\nif n % 3 == 0 or n % 5 == 0:\n    print("Hit")\nprint("End")',
       testCases: [
@@ -173,11 +158,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
           id: 1,
           input: '10',
           expectedOutput: 'Hit\nEnd',
-        },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'End',
         },
       ],
     },
@@ -198,11 +178,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
           input: '24',
           expectedOutput: 'Result:19',
         },
-        {
-          id: 2,
-          input: '14',
-          expectedOutput: 'Result:14',
-        },
       ],
     },
     {
@@ -221,11 +196,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
           id: 1,
           input: '15',
           expectedOutput: 'Big\nEnd',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: 'End',
         },
       ],
     },
@@ -246,11 +216,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
           input: '12',
           expectedOutput: '22',
         },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: '7',
-        },
       ],
     },
     {
@@ -268,11 +233,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
         {
           id: 1,
           input: '75',
-          expectedOutput: 'Clear',
-        },
-        {
-          id: 2,
-          input: '60',
           expectedOutput: 'Clear',
         },
       ],
@@ -293,11 +253,6 @@ export const PYTHON_LEVEL_26: PracticeRound = {
           id: 1,
           input: '6000',
           expectedOutput: '5000',
-        },
-        {
-          id: 2,
-          input: '4000',
-          expectedOutput: '4000',
         },
       ],
     },

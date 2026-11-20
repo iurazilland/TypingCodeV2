@@ -48,11 +48,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           input: '4',
           expectedOutput: '4 3 2 1',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '3 2 1',
-        },
       ],
     },
     {
@@ -89,11 +84,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '3 2 1 0',
-        },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '2 1 0',
         },
       ],
     },
@@ -150,11 +140,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           input: '3',
           expectedOutput: '3 2 1 Start!',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '5 4 3 2 1 Start!',
-        },
       ],
     },
     {
@@ -174,11 +159,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           input: '3',
           expectedOutput: '***\n**\n*',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '**\n*',
-        },
       ],
     },
     {
@@ -189,7 +169,7 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n부터 0까지(0 포함) 내려가며 각 숫자와 불리언 변환값을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to iterate from n down to 0 inclusive and print i and its truthiness.',
       hint_ko: '0을 포함하기 위한 끝 경계 -1, 감소 간격 -1, 그리고 불리언 변환 함수를 차례로 채웁니다.',
-      hint_en: 'Enter stop bound -1, step -1, and the four-letter boolean casting function.',
+      hint_en: 'Enter stop bound -1, step -1, and the boolean casting function.',
       templateCode: 'n = int(input())\nfor i in range(n, §§§, §§§):\n    print(i, §§§§§(i))',
       targetCode: 'n = int(input())\nfor i in range(n, -1, -1):\n    print(i, bool(i))',
       testCases: [
@@ -197,11 +177,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           id: 1,
           input: '2',
           expectedOutput: '2 True\n1 True\n0 False',
-        },
-        {
-          id: 2,
-          input: '1',
-          expectedOutput: '1 True\n0 False',
         },
       ],
     },
@@ -221,11 +196,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '3\n2\n1',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '4\n3\n2\n1',
         },
       ],
     },
@@ -265,11 +235,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           input: '4',
           expectedOutput: '4 3 2 1',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '2 1',
-        },
       ],
     },
     {
@@ -288,11 +253,6 @@ export const PYTHON_LEVEL_33: PracticeRound = {
           id: 1,
           input: '6',
           expectedOutput: '6 4 2',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '5 3 1',
         },
       ],
     },

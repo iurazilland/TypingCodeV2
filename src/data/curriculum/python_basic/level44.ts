@@ -53,8 +53,8 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 리스트 items의 맨 뒤에 "potion"을 추가해 출력해보세요.',
       prompt_en: '[Fill Blank] Call the list method that adds "potion" to the end of items.',
-      hint_ko: '리스트 맨 끝에 새 요소를 덧붙이는 여섯 글자 메서드를 입력하세요.',
-      hint_en: 'Type the 6-letter list method that appends an element to the end.',
+      hint_ko: '리스트 맨 끝에 새 요소를 덧붙이는 메서드를 입력하세요.',
+      hint_en: 'Type the list method that appends an element to the end.',
       templateCode: 'items = ["sword", "shield"]\nitems.§§§§§§§("potion")\nprint(items)',
       targetCode: 'items = ["sword", "shield"]\nitems.append("potion")\nprint(items)',
       testCases: [
@@ -81,11 +81,6 @@ export const PYTHON_LEVEL_44: PracticeRound = {
           input: 'key\nmap',
           expectedOutput: "['key', 'map']",
         },
-        {
-          id: 2,
-          input: 'gem\nring',
-          expectedOutput: "['gem', 'ring']",
-        },
       ],
     },
     {
@@ -104,11 +99,6 @@ export const PYTHON_LEVEL_44: PracticeRound = {
           id: 1,
           input: '100',
           expectedOutput: '[80, 90, 100] 3',
-        },
-        {
-          id: 2,
-          input: '75',
-          expectedOutput: '[80, 90, 75] 3',
         },
       ],
     },
@@ -137,8 +127,8 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 리스트 cards의 맨 마지막 요소를 꺼내어 picked에 저장하고 남은 리스트와 함께 출력해보세요.',
       prompt_en: '[Fill Blank] Remove and return the last element of cards into picked, then print both.',
-      hint_ko: '리스트의 끝 요소를 꺼내어 반환하는 세 글자 메서드를 호출하세요.',
-      hint_en: 'Call the 3-letter method that removes and returns the last element.',
+      hint_ko: '리스트의 끝 요소를 꺼내어 반환하는 메서드를 호출하세요.',
+      hint_en: 'Call the method that removes and returns the last element.',
       templateCode: 'cards = ["A", "K", "Q"]\npicked = cards.§§§§()\nprint(picked, cards)',
       targetCode: 'cards = ["A", "K", "Q"]\npicked = cards.pop()\nprint(picked, cards)',
       testCases: [

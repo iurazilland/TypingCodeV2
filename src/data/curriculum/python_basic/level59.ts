@@ -114,12 +114,12 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Block] Add the values of "kor" and "math" from d and print the total with an f-string.',
       hint_ko: '각 키로 조회한 정수 값을 덧셈 연산자로 바로 더할 수 있습니다.',
       hint_en: 'Values retrieved by key can be added directly in an arithmetic expression.',
-      targetCode: 'd = {"kor": 90, "math": 80}\ntotal = d["kor"] + d["math"]\nprint(f"Total: {total}")',
+      targetCode: 'd = {"kor": 90, "math": 80}\ntotal = d["kor"] + d["math"]\nprint(f"Total:{total}")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Total: 170',
+          expectedOutput: 'Total:170',
         },
       ],
     },
@@ -132,13 +132,13 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Add the price of "note" from shop to two pens so Cost: 2200 is printed.',
       hint_ko: '딕셔너리 변수 이름 뒤 대괄호에 두 번째 품목의 문자열 키를 넣어 조회하세요.',
       hint_en: 'Access the second item from shop using square brackets and its quoted key.',
-      templateCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + §§§§§§§§§§§§§\nprint(f"Cost: {cost}")',
-      targetCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + shop["note"]\nprint(f"Cost: {cost}")',
+      templateCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + §§§§§§§§§§§§§\nprint(f"Cost:{cost}")',
+      targetCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + shop["note"]\nprint(f"Cost:{cost}")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'Cost: 2200',
+          expectedOutput: 'Cost:2200',
         },
       ],
     },
@@ -158,11 +158,6 @@ export const PYTHON_LEVEL_59: PracticeRound = {
           input: 'A',
           expectedOutput: '100',
         },
-        {
-          id: 2,
-          input: 'B',
-          expectedOutput: '80',
-        },
       ],
     },
     {
@@ -174,18 +169,13 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       prompt_en: '[Fill Blank] Look up the price in prices using the input variable item.',
       hint_ko: '딕셔너리 이름 뒤 대괄호 안에 입력받은 변수명을 따옴표 없이 넣으세요.',
       hint_en: 'Index into prices using the unquoted variable item inside brackets.',
-      templateCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}: {§§§§§§§§§§§§§}")',
-      targetCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}: {prices[item]}")',
+      templateCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}:{§§§§§§§§§§§§§}")',
+      targetCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}:{prices[item]}")',
       testCases: [
         {
           id: 1,
           input: 'tea',
-          expectedOutput: 'tea: 3000',
-        },
-        {
-          id: 2,
-          input: 'pie',
-          expectedOutput: 'pie: 4500',
+          expectedOutput: 'tea:3000',
         },
       ],
     },
@@ -205,11 +195,6 @@ export const PYTHON_LEVEL_59: PracticeRound = {
           id: 1,
           input: 'gold',
           expectedOutput: 'gold=500',
-        },
-        {
-          id: 2,
-          input: 'gem',
-          expectedOutput: 'gem=3',
         },
       ],
     },

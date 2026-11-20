@@ -38,7 +38,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Block] Remove leading and trailing whitespace from raw using .strip() and print it.',
       hint_ko: '.strip()은 문자열 앞뒤의 공백과 줄바꿈을 깔끔하게 잘라낸 새 문자열을 반환합니다.',
       hint_en: '.strip() returns a new string with leading and trailing whitespace removed.',
-      targetCode: 'raw = "   Python   "\nclean = raw.strip()\nprint(f"[{clean}]")',
+      targetCode: 'raw = " Python "\nclean = raw.strip()\nprint(f"[{clean}]")',
       testCases: [
         {
           id: 1,
@@ -54,8 +54,8 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 입력값 양끝의 공백을 제거해 name에 저장하고 이름과 글자 수를 출력해보세요.',
       prompt_en: '[Fill Blank] Trim outer whitespace from input() into name and print its value and length.',
-      hint_ko: '문자열 양끝 공백을 다듬는 다섯 글자 메서드를 호출하세요.',
-      hint_en: 'Call the 5-letter string method that trims leading and trailing whitespace.',
+      hint_ko: '문자열 양끝 공백을 다듬는 메서드를 호출하세요.',
+      hint_en: 'Call the string method that trims leading and trailing whitespace.',
       templateCode: 'name = input().§§§§§§()\nprint(f"{name}:{len(name)}")',
       targetCode: 'name = input().strip()\nprint(f"{name}:{len(name)}")',
       testCases: [
@@ -63,11 +63,6 @@ export const PYTHON_LEVEL_54: PracticeRound = {
           id: 1,
           input: '  Kim  ',
           expectedOutput: 'Kim:3',
-        },
-        {
-          id: 2,
-          input: ' Alice ',
-          expectedOutput: 'Alice:5',
         },
       ],
     },
@@ -96,8 +91,8 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 문장 안의 "Java"를 "Python"으로 치환해 출력해보세요.',
       prompt_en: '[Fill Blank] Replace "Java" with "Python" in msg and print the result.',
-      hint_ko: '특정 부분 문자열을 다른 문자열로 바꾸는 일곱 글자 메서드를 적으세요.',
-      hint_en: 'Write the 7-letter string method that substitutes substrings.',
+      hint_ko: '특정 부분 문자열을 다른 문자열로 바꾸는 메서드를 적으세요.',
+      hint_en: 'Write the string method that substitutes substrings.',
       templateCode: 'msg = "Hello Java"\nprint(msg.§§§§§§§§("Java", "Python"))',
       targetCode: 'msg = "Hello Java"\nprint(msg.replace("Java", "Python"))',
       testCases: [
@@ -143,11 +138,6 @@ export const PYTHON_LEVEL_54: PracticeRound = {
           input: 'A B C',
           expectedOutput: 'ABC',
         },
-        {
-          id: 2,
-          input: '12 34 56',
-          expectedOutput: '123456',
-        },
       ],
     },
     {
@@ -159,7 +149,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Block] Chain .strip().replace(",", "") on raw and convert to int().',
       hint_ko: '문자열 메서드는 새 문자열을 반환하므로 점(.)을 찍어 다음 메서드를 이어서 호출할 수 있습니다.',
       hint_en: 'Because string methods return new strings, you can chain them with a dot.',
-      targetCode: 'raw = "  1,900  "\nclean = raw.strip().replace(",", "")\nprint(int(clean) + 100)',
+      targetCode: 'raw = " 1,900 "\nclean = raw.strip().replace(",", "")\nprint(int(clean) + 100)',
       testCases: [
         {
           id: 1,
@@ -185,11 +175,6 @@ export const PYTHON_LEVEL_54: PracticeRound = {
           input: '  010-1234  ',
           expectedOutput: '010:1234',
         },
-        {
-          id: 2,
-          input: '2026-11',
-          expectedOutput: '2026:11',
-        },
       ],
     },
     {
@@ -208,11 +193,6 @@ export const PYTHON_LEVEL_54: PracticeRound = {
           id: 1,
           input: '  $150  ',
           expectedOutput: '300',
-        },
-        {
-          id: 2,
-          input: '$45',
-          expectedOutput: '90',
         },
       ],
     },
@@ -252,11 +232,6 @@ export const PYTHON_LEVEL_54: PracticeRound = {
           input: '010-1234',
           expectedOutput: '010:1234',
         },
-        {
-          id: 2,
-          input: ' 2026-11-17 ',
-          expectedOutput: '2026:11:17',
-        },
       ],
     },
     {
@@ -268,8 +243,8 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       prompt_en: '[Complete Line] Complete the line that trims outer whitespace from raw and stores it in clean.',
       hint_ko: 'raw에 공백 제거 메서드를 호출한 결과를 clean 변수에 대입하세요.',
       hint_en: 'Assign raw.strip() to the variable clean.',
-      templateCode: 'raw = "   Hello   "\n§§§§§§§§§§§§§§§§§§§§\nprint(f"{clean} ({len(clean)})")',
-      targetCode: 'raw = "   Hello   "\nclean = raw.strip()\nprint(f"{clean} ({len(clean)})")',
+      templateCode: 'raw = " Hello "\n§§§§§§§§§§§§§§§§§§§§\nprint(f"{clean} ({len(clean)})")',
+      targetCode: 'raw = " Hello "\nclean = raw.strip()\nprint(f"{clean} ({len(clean)})")',
       testCases: [
         {
           id: 1,

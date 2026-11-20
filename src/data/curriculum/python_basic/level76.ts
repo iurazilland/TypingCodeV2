@@ -60,8 +60,8 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 장바구니 객체의 리스트 속성 끝에 새 상품을 추가하도록 메서드 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the list method name inside put() to add an item to the end of self.cart.",
-      "hint_ko": "리스트 속성도 일반 리스트와 동일하게 맨 뒤에 원소를 덧붙이는 여섯 글자 메서드를 사용합니다.",
-      "hint_en": "Use the six-letter list method that attaches a new element to the end of a list.",
+      "hint_ko": "리스트 속성도 일반 리스트와 동일하게 맨 뒤에 원소를 덧붙이는 메서드를 사용합니다.",
+      "hint_en": "Use the list method that attaches a new element to the end of a list.",
       "templateCode": "class Cart:\n    def __init__(self):\n        self.cart = []\n    def put(self, item):\n        self.cart.§§§§§§§(item)\nc = Cart()\nc.put(\"Milk\")\nc.put(\"Bread\")\nprint(len(c.cart), c.cart[0])",
       "targetCode": "class Cart:\n    def __init__(self):\n        self.cart = []\n    def put(self, item):\n        self.cart.append(item)\nc = Cart()\nc.put(\"Milk\")\nc.put(\"Bread\")\nprint(len(c.cart), c.cart[0])",
       "testCases": [
@@ -97,8 +97,8 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 기록된 온도 리스트에서 가장 높은 온도를 반환하도록 내장 함수 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function name in highest() to return the maximum value in self.temps.",
-      "hint_ko": "숫자 리스트에서 가장 큰 최댓값을 구하는 세 글자 내장 함수를 호출하세요.",
-      "hint_en": "Call the three-letter built-in function that returns the largest item in a list.",
+      "hint_ko": "숫자 리스트에서 가장 큰 최댓값을 구하는 내장 함수를 호출하세요.",
+      "hint_en": "Call the built-in function that returns the largest item in a list.",
       "templateCode": "class Tracker:\n    def __init__(self):\n        self.temps = []\n    def record(self, t):\n        self.temps.append(t)\n    def highest(self):\n        return §§§§(self.temps)\ntr = Tracker()\ntr.record(18)\ntr.record(27)\ntr.record(23)\nprint(tr.highest())",
       "targetCode": "class Tracker:\n    def __init__(self):\n        self.temps = []\n    def record(self, t):\n        self.temps.append(t)\n    def highest(self):\n        return max(self.temps)\ntr = Tracker()\ntr.record(18)\ntr.record(27)\ntr.record(23)\nprint(tr.highest())",
       "testCases": [

@@ -60,6 +60,8 @@
   padding: 0;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 
 /* Sleek Dark Scrollbars for IDE Editor, Terminal & Toolbox */

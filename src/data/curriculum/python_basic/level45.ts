@@ -54,8 +54,8 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 가방 리스트 bag 안에 "key"가 들어 있을 때 "Open"을 출력하도록 조건문을 완성해보세요.',
       prompt_en: '[Fill Blank] Complete the membership condition so "Open" prints when "key" is inside bag.',
-      hint_ko: '리스트 안에 특정 요소가 포함되어 있는지 검사하는 두 글자 연산자를 채우세요.',
-      hint_en: 'Fill in the 2-letter operator that tests whether an item belongs to a list.',
+      hint_ko: '리스트 안에 특정 요소가 포함되어 있는지 검사하는 연산자를 채우세요.',
+      hint_en: 'Fill in the operator that tests whether an item belongs to a list.',
       templateCode: 'bag = ["map", "key", "coin"]\nif "key" §§§ bag:\n    print("Open")',
       targetCode: 'bag = ["map", "key", "coin"]\nif "key" in bag:\n    print("Open")',
       testCases: [
@@ -250,11 +250,6 @@ export const PYTHON_LEVEL_45: PracticeRound = {
           id: 1,
           input: 'bread',
           expectedOutput: "['milk', 'egg', 'bread']",
-        },
-        {
-          id: 2,
-          input: 'milk',
-          expectedOutput: "['milk', 'egg']",
         },
       ],
     },

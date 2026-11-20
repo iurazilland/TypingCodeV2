@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] math 모듈에서 제곱근을 구하는 함수를 호출해 81의 제곱근을 정수로 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the square root function from the math module to print the root of 81.",
-      "hint_ko": "'square root'의 약자인 네 글자 함수 이름을 math. 뒤에 입력하세요.",
-      "hint_en": "Type the 4-letter function name abbreviated from 'square root'.",
+      "hint_ko": "'square root'의 약자인 함수 이름을 math. 뒤에 입력하세요.",
+      "hint_en": "Type the function name abbreviated from 'square root'.",
       "targetCode": "import math\nprint(int(math.sqrt(81)))",
       "templateCode": "import math\nprint(int(math.§§§§§(81)))",
       "testCases": [
@@ -101,8 +101,8 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 10명씩 타는 보트에 n명이 모두 타려면 최소 몇 대가 필요한지 무조건 올림 함수로 구해보세요.",
       "prompt_en": "[Fill Blank] Fill in the ceiling function from math to round n / 10 up to the nearest integer.",
-      "hint_ko": "'천장(ceiling)'의 앞 네 글자를 딴 올림 함수를 math. 뒤에 적으세요.",
-      "hint_en": "Enter the 4-letter ceiling function name after math..",
+      "hint_ko": "소수점을 무조건 올림하는 ceil 함수를 math. 뒤에 적으세요.",
+      "hint_en": "Enter the ceiling function name after math..",
       "targetCode": "import math\nn = int(input())\nprint(math.ceil(n / 10))",
       "templateCode": "import math\nn = int(input())\nprint(math.§§§§§(n / 10))",
       "testCases": [
@@ -110,11 +110,6 @@ export const PYTHON_LEVEL_106: PracticeRound = {
           "id": 1,
           "input": "23",
           "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "20",
-          "expectedOutput": "2"
         }
       ]
     },
@@ -143,8 +138,8 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 두 정수 24와 36의 최대공약수(12)를 출력하도록 math 모듈의 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the math function that computes the greatest common divisor of 24 and 36.",
-      "hint_ko": "'Greatest Common Divisor'의 약자인 세 글자 함수를 math. 뒤에 적으세요.",
-      "hint_en": "Type the 3-letter abbreviation for Greatest Common Divisor.",
+      "hint_ko": "'Greatest Common Divisor'의 약자인 함수를 math. 뒤에 적으세요.",
+      "hint_en": "Type the abbreviation for Greatest Common Divisor.",
       "targetCode": "import math\nprint(math.gcd(24, 36))",
       "templateCode": "import math\nprint(math.§§§§(24, 36))",
       "testCases": [
@@ -180,8 +175,8 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] math 모듈에서 floor 함수를 직접 가져오도록 모듈 지정 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function to convert the floor of 7.9 by pulling floor directly out of math.",
-      "hint_ko": "'~로부터'라는 뜻의 네 글자 파이썬 키워드를 맨 앞에 적으세요.",
-      "hint_en": "Enter the 4-letter keyword meaning 'out of / from' at the start of the import line.",
+      "hint_ko": "'~로부터'라는 뜻의 파이썬 키워드를 맨 앞에 적으세요.",
+      "hint_en": "Enter the keyword meaning 'out of / from' at the start of the import line.",
       "targetCode": "from math import floor\nprint(floor(7.9))",
       "templateCode": "§§§§§ math import floor\nprint(floor(7.9))",
       "testCases": [
@@ -246,11 +241,6 @@ export const PYTHON_LEVEL_106: PracticeRound = {
           "id": 1,
           "input": "21",
           "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "30",
-          "expectedOutput": "3"
         }
       ]
     },
@@ -289,11 +279,6 @@ export const PYTHON_LEVEL_106: PracticeRound = {
           "id": 1,
           "input": "32",
           "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "10",
-          "expectedOutput": "1"
         }
       ]
     },

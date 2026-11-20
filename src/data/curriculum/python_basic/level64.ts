@@ -18,7 +18,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       step: 1,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 튜플 리스트를 언패킹 순회하며 두 번째 값이 비어 있지 않을 때만 곱을 누적해 28을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 튜플 리스트를 x, y로 언패킹 순회하며 두 번째 값이 비어 있지 않을 때만 곱을 누적해 28을 출력해보세요.',
       prompt_en: '[Fill Blank] Unpack each tuple in pts and add x * y to total only when y is not empty.',
       hint_ko: '두 좌표 변수 언패킹, 빈 값이 아님을 검사하는 조건, 복합 덧셈 연산자를 차례로 채우세요.',
       hint_en: 'Fill in the two unpacked loop variables, the non-null identity check, and the compound addition operator.',

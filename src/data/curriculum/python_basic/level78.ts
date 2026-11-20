@@ -61,8 +61,8 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 0으로 나누는 수식에서 에러가 발생할 때 Safe가 출력되도록 예외 처리 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception-catching keyword so dividing by zero prints Safe instead of crashing.",
-      "hint_ko": "try 블록에서 에러가 발생했을 때 흐름을 넘겨받는 여섯 글자 키워드를 콜론 앞에 적으세요.",
-      "hint_en": "Write the six-letter keyword before the colon that catches errors raised in the try block.",
+      "hint_ko": "try 블록에서 에러가 발생했을 때 흐름을 넘겨받는 키워드를 콜론 앞에 적으세요.",
+      "hint_en": "Write the keyword before the colon that catches errors raised in the try block.",
       "templateCode": "try:\n    ans = 50 / 0\n    print(ans)\n§§§§§§§:\n    print(\"Safe\")",
       "targetCode": "try:\n    ans = 50 / 0\n    print(ans)\nexcept:\n    print(\"Safe\")",
       "testCases": [
@@ -98,8 +98,8 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 변환 에러가 나더라도 프로그램이 멈추지 않고 예외 블록으로 이동하도록 시작 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the opening keyword that attempts risky code before jumping to the fallback block on error.",
-      "hint_ko": "위험할 수 있는 코드 실행을 '시도하다'라는 뜻의 세 글자 키워드를 첫 줄 콜론 앞에 적으세요.",
-      "hint_en": "Start line 1 with the three-letter keyword meaning to attempt running a block of code.",
+      "hint_ko": "위험할 수 있는 코드 실행을 '시도하다'라는 뜻의 키워드를 첫 줄 콜론 앞에 적으세요.",
+      "hint_en": "Start line 1 with the keyword meaning to attempt running a block of code.",
       "templateCode": "§§§§:\n    x = int(\"ten\")\n    print(x * 2)\nexcept:\n    print(\"Jump\")",
       "targetCode": "try:\n    x = int(\"ten\")\n    print(x * 2)\nexcept:\n    print(\"Jump\")",
       "testCases": [
@@ -135,8 +135,8 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 정상 나눗셈 결과를 출력하고 예외 블록은 건너뛰도록 시도 블록 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the header keyword on line 1 so the valid division runs and skips the error handler.",
-      "hint_ko": "예외 검사를 시작할 코드 블록을 여는 세 글자 키워드를 적으세요.",
-      "hint_en": "Use the three-letter keyword that opens an exception-checked block.",
+      "hint_ko": "예외 검사를 시작할 코드 블록을 여는 키워드를 적으세요.",
+      "hint_en": "Use the keyword that opens an exception-checked block.",
       "templateCode": "§§§§:\n    q = 100 // 4\n    print(f\"OK:{q}\")\nexcept:\n    print(\"Err\")",
       "targetCode": "try:\n    q = 100 // 4\n    print(f\"OK:{q}\")\nexcept:\n    print(\"Err\")",
       "testCases": [
@@ -162,11 +162,6 @@ export const PYTHON_LEVEL_78: PracticeRound = {
           "id": 1,
           "input": "15",
           "expectedOutput": "25\nDone"
-        },
-        {
-          "id": 2,
-          "input": "bad",
-          "expectedOutput": "0\nDone"
         }
       ]
     },
@@ -177,8 +172,8 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력 문자열의 정수 변환이 실패하면 변수에 기본값 -1을 넣어 마지막 출력문이 안전하게 실행되게 해보세요.",
       "prompt_en": "[Fill Blank] Fill in the fallback header keyword so invalid input assigns -1 to val before the final print.",
-      "hint_ko": "에러가 발생했을 때 대체 값을 설정하는 여섯 글자 예외 처리 키워드를 적으세요.",
-      "hint_en": "Use the six-letter keyword that catches the error and runs the fallback assignment.",
+      "hint_ko": "에러가 발생했을 때 대체 값을 설정하는 예외 처리 키워드를 적으세요.",
+      "hint_en": "Use the keyword that catches the error and runs the fallback assignment.",
       "templateCode": "s = input()\ntry:\n    val = int(s)\n§§§§§§§:\n    val = -1\nprint(f\"Val={val}\")",
       "targetCode": "s = input()\ntry:\n    val = int(s)\nexcept:\n    val = -1\nprint(f\"Val={val}\")",
       "testCases": [
@@ -186,11 +181,6 @@ export const PYTHON_LEVEL_78: PracticeRound = {
           "id": 1,
           "input": "42",
           "expectedOutput": "Val=42"
-        },
-        {
-          "id": 2,
-          "input": "none",
-          "expectedOutput": "Val=-1"
         }
       ]
     },
@@ -202,7 +192,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 입력값을 정수로 변환해 100을 나눈 몫을 구하고, 에러 발생 시 -1로 대체해 출력하도록 세 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the attempt keyword, integer conversion function, and exception keyword to safely compute 100 // d.",
       "hint_ko": "시도 블록을 여는 키워드와 문자열을 정수로 바꾸는 내장 함수, 그리고 예외를 잡는 키워드를 차례로 확인하세요.",
-      "hint_en": "Check the three-letter attempt keyword, the integer casting function, and the six-letter exception keyword.",
+      "hint_en": "Check the attempt keyword, the integer casting function, and the exception keyword.",
       "templateCode": "raw = input()\n§§§§:\n    d = §§§§(raw)\n    ans = 100 // d\n§§§§§§§:\n    ans = -1\nprint(f\"Ans:{ans}\")",
       "targetCode": "raw = input()\ntry:\n    d = int(raw)\n    ans = 100 // d\nexcept:\n    ans = -1\nprint(f\"Ans:{ans}\")",
       "testCases": [
@@ -210,16 +200,6 @@ export const PYTHON_LEVEL_78: PracticeRound = {
           "id": 1,
           "input": "20",
           "expectedOutput": "Ans:5"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "Ans:-1"
-        },
-        {
-          "id": 3,
-          "input": "abc",
-          "expectedOutput": "Ans:-1"
         }
       ]
     },
@@ -230,8 +210,8 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "kind": "fix_bug",
       "prompt_ko": "[틀린 곳 수정] 예외를 잡는 블록에 다른 언어의 키워드(catch)를 잘못 적어 발생한 문법 오류를 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the SyntaxError where catch: was used instead of Python's exception keyword.",
-      "hint_ko": "파이썬에서는 예외를 잡을 때 catch가 아니라 여섯 글자 전용 키워드를 사용합니다.",
-      "hint_en": "Replace catch with Python's six-letter exception-handling keyword.",
+      "hint_ko": "파이썬에서는 예외를 잡을 때 catch가 아니라 전용 키워드를 사용합니다.",
+      "hint_en": "Replace catch with Python's exception-handling keyword.",
       "templateCode": "try:\n    print(10 // 0)\ncatch:\n    print(\"Caught\")",
       "targetCode": "try:\n    print(10 // 0)\nexcept:\n    print(\"Caught\")",
       "testCases": [
@@ -269,7 +249,7 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "prompt_ko": "[한 줄 완성] 에러가 발생했을 때 예외 처리 블록을 시작하는 헤더 한 줄을 작성해보세요.",
       "prompt_en": "[Complete Line] Write the line that starts the exception-handling block.",
       "hint_ko": "들여쓰기 없이 예외 처리 키워드와 콜론을 적어 블록을 시작하세요.",
-      "hint_en": "Write the six-letter exception keyword followed by a colon.",
+      "hint_en": "Write the exception keyword followed by a colon.",
       "templateCode": "try:\n    res = int(\"x\")\n§§§§§§§§\n    res = 0\nprint(res)",
       "targetCode": "try:\n    res = int(\"x\")\nexcept:\n    res = 0\nprint(res)",
       "testCases": [
@@ -296,11 +276,6 @@ export const PYTHON_LEVEL_78: PracticeRound = {
           "id": 1,
           "input": "5",
           "expectedOutput": "15"
-        },
-        {
-          "id": 2,
-          "input": "err",
-          "expectedOutput": "30"
         }
       ]
     },

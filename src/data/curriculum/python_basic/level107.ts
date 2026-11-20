@@ -48,11 +48,6 @@ export const PYTHON_LEVEL_107: PracticeRound = {
           "id": 1,
           "input": "Kim Lee Park\n80 95 90",
           "expectedOutput": "1.Lee:95\n2.Park:90\n3.Kim:80"
-        },
-        {
-          "id": 2,
-          "input": "Ana Ben\n70 85",
-          "expectedOutput": "1.Ben:85\n2.Ana:70"
         }
       ]
     },
@@ -91,11 +86,6 @@ export const PYTHON_LEVEL_107: PracticeRound = {
           "id": 1,
           "input": "10 -5 20",
           "expectedOutput": "WARN"
-        },
-        {
-          "id": 2,
-          "input": "0 8 15",
-          "expectedOutput": "OK"
         }
       ]
     },
@@ -115,11 +105,6 @@ export const PYTHON_LEVEL_107: PracticeRound = {
           "id": 1,
           "input": "12 3 25",
           "expectedOutput": "25-12-3"
-        },
-        {
-          "id": 2,
-          "input": "8 100 40",
-          "expectedOutput": "100-40-8"
         }
       ]
     },

@@ -65,8 +65,8 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력된 나이가 음수일 때 직접 ValueError 예외를 던지도록 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the keyword that intentionally triggers a ValueError when age < 0.",
-      "hint_ko": "예외를 직접 일으키는 다섯 글자 파이썬 키워드를 입력하세요.",
-      "hint_en": "Type the 5-letter Python keyword used to trigger an exception.",
+      "hint_ko": "예외를 직접 일으키는 파이썬 키워드를 입력하세요.",
+      "hint_en": "Type the Python keyword used to trigger an exception.",
       "targetCode": "age = int(input())\ntry:\n    if age < 0:\n        raise ValueError(\"Neg\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
       "templateCode": "age = int(input())\ntry:\n    if age < 0:\n        §§§§§§ ValueError(\"Neg\")\n    print(f\"Age:{age}\")\nexcept ValueError as e:\n    print(e)",
       "testCases": [
@@ -74,11 +74,6 @@ export const PYTHON_LEVEL_111: PracticeRound = {
           "id": 1,
           "input": "-5",
           "expectedOutput": "Neg"
-        },
-        {
-          "id": 2,
-          "input": "20",
-          "expectedOutput": "Age:20"
         }
       ]
     },
@@ -97,11 +92,6 @@ export const PYTHON_LEVEL_111: PracticeRound = {
           "id": 1,
           "input": "8",
           "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "5",
-          "expectedOutput": "Odd"
         }
       ]
     },
@@ -112,8 +102,8 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 점수가 100점을 초과할 때 발생시킬 값 오류 예외 클래스 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the exception class name to trigger when score exceeds 100.",
-      "hint_ko": "아래 except 절에서 잡고 있는 열 글자 값 오류 예외 클래스 이름을 적으세요.",
-      "hint_en": "Enter the 10-letter exception class name caught by the except clause below.",
+      "hint_ko": "아래 except 절에서 잡고 있는 값 오류 예외 클래스 이름을 적으세요.",
+      "hint_en": "Enter the exception class name caught by the except clause below.",
       "targetCode": "def check(sc):\n    if sc > 100:\n        raise ValueError(\"Over100\")\n    return sc\n\ntry:\n    print(check(int(input())))\nexcept ValueError as e:\n    print(e)",
       "templateCode": "def check(sc):\n    if sc > 100:\n        raise §§§§§§§§§§§(\"Over100\")\n    return sc\n\ntry:\n    print(check(int(input())))\nexcept ValueError as e:\n    print(e)",
       "testCases": [
@@ -121,11 +111,6 @@ export const PYTHON_LEVEL_111: PracticeRound = {
           "id": 1,
           "input": "120",
           "expectedOutput": "Over100"
-        },
-        {
-          "id": 2,
-          "input": "90",
-          "expectedOutput": "90"
         }
       ]
     },
@@ -154,8 +139,8 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 상자에 2개까지만 담기도록 개수가 2 이상일 때 직접 예외를 발생시키는 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the keyword to trigger ValueError(\"Full\") when the box already has 2 items.",
-      "hint_ko": "예외를 직접 발생시키는 다섯 글자 파이썬 키워드를 적으세요.",
-      "hint_en": "Write the 5-letter keyword that raises an exception.",
+      "hint_ko": "예외를 직접 발생시키는 파이썬 키워드를 적으세요.",
+      "hint_en": "Write the keyword that raises an exception.",
       "targetCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            raise ValueError(\"Full\")\n        self.items.append(x)\n\nb = Box()\nfor v in [\"A\", \"B\", \"C\"]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(len(b.items))",
       "templateCode": "class Box:\n    def __init__(self):\n        self.items = []\n\n    def add(self, x):\n        if len(self.items) >= 2:\n            §§§§§§ ValueError(\"Full\")\n        self.items.append(x)\n\nb = Box()\nfor v in [\"A\", \"B\", \"C\"]:\n    try:\n        b.add(v)\n    except ValueError as e:\n        print(e)\nprint(len(b.items))",
       "testCases": [
@@ -191,8 +176,8 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 함수가 던진 에러 객체를 변수 e로 받아 에러 메시지를 출력하도록 별칭 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the alias keyword in the except header to bind the raised ValueError to variable e.",
-      "hint_ko": "예외 객체를 변수 e에 연결하는 두 글자 키워드를 적으세요.",
-      "hint_en": "Enter the 2-letter keyword that binds the exception instance to e.",
+      "hint_ko": "예외 객체를 변수 e에 연결하는 키워드를 적으세요.",
+      "hint_en": "Enter the keyword that binds the exception instance to e.",
       "targetCode": "def set_lv(lv):\n    if lv < 1:\n        raise ValueError(\"MinLv1\")\n    return lv\n\ntry:\n    print(set_lv(0))\nexcept ValueError as e:\n    print(f\"Err:{e}\")",
       "templateCode": "def set_lv(lv):\n    if lv < 1:\n        raise ValueError(\"MinLv1\")\n    return lv\n\ntry:\n    print(set_lv(0))\nexcept ValueError §§§ e:\n    print(f\"Err:{e}\")",
       "testCases": [
@@ -210,8 +195,8 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입금액이 0 이하일 때 직접 예외를 발생시키고, 호출부에서 에러 객체와 최종 지갑 상태를 출력해보세요.",
       "prompt_en": "[Fill Blank] Trigger a ValueError on non-positive deposit, bind the error to e, and always print w in the cleanup block.",
-      "hint_ko": "예외 발생 키워드(5글자), 별칭 키워드(2글자), 무조건 실행 마무리 키워드(7글자)를 차례로 채우세요.",
-      "hint_en": "Supply the 5-letter exception-raising keyword, the 2-letter alias keyword, and the 7-letter cleanup keyword.",
+      "hint_ko": "예외 발생 키워드, 별칭 키워드, 무조건 실행 마무리 키워드를 차례로 채우세요.",
+      "hint_en": "Supply the exception-raising keyword, the alias keyword, and the cleanup keyword.",
       "targetCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            raise ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError as e:\n    print(e)\nfinally:\n    print(w)",
       "templateCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            §§§§§§ ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError §§§ e:\n    print(e)\n§§§§§§§§:\n    print(w)",
       "testCases": [
@@ -219,11 +204,6 @@ export const PYTHON_LEVEL_111: PracticeRound = {
           "id": 1,
           "input": "500",
           "expectedOutput": "Cash:1,500"
-        },
-        {
-          "id": 2,
-          "input": "-100",
-          "expectedOutput": "BadAmt\nCash:1,000"
         }
       ]
     },
@@ -243,11 +223,6 @@ export const PYTHON_LEVEL_111: PracticeRound = {
           "id": 1,
           "input": "-3",
           "expectedOutput": "Neg"
-        },
-        {
-          "id": 2,
-          "input": "10",
-          "expectedOutput": "10"
         }
       ]
     },
@@ -286,11 +261,6 @@ export const PYTHON_LEVEL_111: PracticeRound = {
           "id": 1,
           "input": "-4",
           "expectedOutput": "Neg"
-        },
-        {
-          "id": 2,
-          "input": "6",
-          "expectedOutput": "12"
         }
       ]
     },

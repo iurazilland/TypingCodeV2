@@ -56,7 +56,7 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       step: 3,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 수량(qty) 기본값을 1로 지정하고 전역변수 total에 금액을 누적해 2500을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 수량 기본값 매개변수(qty=1), 전역변수 선언, 그리고 두 번째 호출의 키워드 인자(qty=3)를 채워 2500을 출력해보세요.',
       prompt_en: '[Fill Blank] Set the default quantity to 1, bind total to the outer scope, and pass quantity 3 by keyword on the second call.',
       hint_ko: '수량 기본값 1 선언, 전역변수 지정 키워드, 그리고 두 번째 호출의 수량 3 키워드 인자를 채우세요.',
       hint_en: 'Fill in the default parameter qty=1, the global keyword, and the keyword argument qty=3.',

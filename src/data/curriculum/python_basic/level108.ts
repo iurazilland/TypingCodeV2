@@ -64,7 +64,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] Badge 객체 b를 그대로 print(b)에 넣었을 때 문자열이 출력되도록 매직 메서드 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the magic method name so printing Badge instance b outputs \"[Gold] Min\".",
-      "hint_ko": "문자열(str) 양옆에 밑줄 두 개씩을 붙인 일곱 글자 매직 메서드 이름을 적으세요.",
+      "hint_ko": "문자열(str) 양옆에 밑줄 두 개씩을 붙인 매직 메서드 이름을 적으세요.",
       "hint_en": "Write the 7-character dunder method name formed by surrounding str with double underscores.",
       "targetCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def __str__(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
       "templateCode": "class Badge:\n    def __init__(self, owner, grade):\n        self.owner = owner\n        self.grade = grade\n\n    def §§§§§§§§(self):\n        return f\"[{self.grade}] {self.owner}\"\n\nb = Badge(\"Min\", \"Gold\")\nprint(b)",
@@ -85,12 +85,12 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "prompt_en": "[Block] Format len(self.scores) and sum(self.scores) inside Student.__str__ and print the student object.",
       "hint_ko": "self.scores가 리스트이므로 __str__ 안에서 len()과 sum()으로 즉시 집계해 문자열로 반환할 수 있습니다.",
       "hint_en": "Inside __str__, you can call len(self.scores) and sum(self.scores) inside the returned f-string.",
-      "targetCode": "class Student:\n    def __init__(self, name, scores):\n        self.name = name\n        self.scores = scores\n\n    def __str__(self):\n        return f\"{self.name}: {len(self.scores)}과목 총점 {sum(self.scores)}\"\n\ns = Student(\"Kim\", [80, 90, 85])\nprint(s)",
+      "targetCode": "class Student:\n    def __init__(self, name, scores):\n        self.name = name\n        self.scores = scores\n\n    def __str__(self):\n        return f\"{self.name}:{len(self.scores)}과목/{sum(self.scores)}점\"\n\ns = Student(\"Kim\", [80, 90, 85])\nprint(s)",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Kim: 3과목 총점 255"
+          "expectedOutput": "Kim:3과목/255점"
         }
       ]
     },
@@ -101,8 +101,8 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 장바구니 객체의 __str__ 메서드 안에서 담긴 상품 리스트(self.items)의 개수를 반환하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function inside __str__ to format the number of items in self.items.",
-      "hint_ko": "리스트의 길이를 구하는 세 글자 내장 함수를 중괄호 안에 적으세요.",
-      "hint_en": "Enter the 3-letter built-in function that returns the length of a list.",
+      "hint_ko": "리스트의 길이를 구하는 내장 함수를 중괄호 안에 적으세요.",
+      "hint_en": "Enter the built-in function that returns the length of a list.",
       "targetCode": "class Cart:\n    def __init__(self):\n        self.items = [\"pen\", \"book\"]\n\n    def __str__(self):\n        return f\"Cart({len(self.items)})\"\n\nc = Cart()\nprint(c)",
       "templateCode": "class Cart:\n    def __init__(self):\n        self.items = [\"pen\", \"book\"]\n\n    def __str__(self):\n        return f\"Cart({§§§§(self.items)})\"\n\nc = Cart()\nprint(c)",
       "testCases": [
@@ -138,8 +138,8 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] Point 객체를 문자열로 변환하는 내장 함수를 호출해 변수 text에 저장하고 출력해보세요.",
       "prompt_en": "[Fill Blank] Call the built-in conversion function on Point instance p to store its formatted text.",
-      "hint_ko": "객체의 __str__을 호출해 문자열로 바꾸는 세 글자 형변환 함수를 적으세요.",
-      "hint_en": "Write the 3-letter built-in function that converts an object into a string.",
+      "hint_ko": "객체의 __str__을 호출해 문자열로 바꾸는 형변환 함수를 적으세요.",
+      "hint_en": "Write the built-in function that converts an object into a string.",
       "targetCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = str(p)\nprint(f\"Pos:{text}\")",
       "templateCode": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x},{self.y})\"\n\np = Point(3, 7)\ntext = §§§§(p)\nprint(f\"Pos:{text}\")",
       "testCases": [
@@ -155,16 +155,16 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "step": 7,
       "type": "block",
       "kind": "standard",
-      "prompt_ko": "[블록 조립] 객체 리스트 objs의 각 객체를 [str(x) for x in objs]로 문자열화한 뒤 \", \".join()으로 한 줄에 출력해보세요.",
-      "prompt_en": "[Block] Convert each object in objs with [str(x) for x in objs] and combine them on one line with \", \".join().",
+      "prompt_ko": "[블록 조립] 객체 리스트 objs의 각 객체를 [str(x) for x in objs]로 문자열화한 뒤 \",\".join()으로 한 줄에 출력해보세요.",
+      "prompt_en": "[Block] Convert each object in objs with [str(x) for x in objs] and combine them on one line with \",\".join().",
       "hint_ko": ".join()은 문자열만 받을 수 있으므로 컴프리헨션 안에서 str(x)를 호출해 각 객체의 __str__ 문자열을 꺼냅니다.",
       "hint_en": "Call str(x) inside the list comprehension so .join() receives the string returned by each object's __str__.",
-      "targetCode": "class Tag:\n    def __init__(self, label):\n        self.label = label\n\n    def __str__(self):\n        return f\"#{self.label}\"\n\nobjs = [Tag(\"py\"), Tag(\"ai\"), Tag(\"web\")]\nprint(\", \".join([str(x) for x in objs]))",
+      "targetCode": "class Tag:\n    def __init__(self, label):\n        self.label = label\n\n    def __str__(self):\n        return f\"#{self.label}\"\n\nobjs = [Tag(\"py\"), Tag(\"ai\"), Tag(\"web\")]\nprint(\",\".join([str(x) for x in objs]))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "#py, #ai, #web"
+          "expectedOutput": "#py,#ai,#web"
         }
       ]
     },
@@ -173,17 +173,17 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 객체 리스트를 문자열 리스트로 변환한 뒤 슬래시(\" / \")로 하나로 합쳐 출력하도록 결합 메서드를 채워보세요.",
-      "prompt_en": "[Fill Blank] Fill in the string combining method to concatenate the converted object strings with \" / \".",
-      "hint_ko": "구분자 문자열 뒤에서 리스트 요소들을 이어 붙이는 네 글자 메서드를 입력하세요.",
-      "hint_en": "Enter the 4-letter string method that concatenates a list of strings.",
-      "targetCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\" / \".join([str(u) for u in us]))",
-      "templateCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\" / \".§§§§§([str(u) for u in us]))",
+      "prompt_ko": "[빈칸 채우기] 객체 리스트를 문자열 리스트로 변환한 뒤 슬래시(\"/\")로 하나로 합쳐 출력하도록 결합 메서드를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the string combining method to concatenate the converted object strings with \"/\".",
+      "hint_ko": "구분자 문자열 뒤에서 리스트 요소들을 이어 붙이는 메서드를 입력하세요.",
+      "hint_en": "Enter the string method that concatenates a list of strings.",
+      "targetCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\"/\".join([str(u) for u in us]))",
+      "templateCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f\"@{self.name}\"\n\nus = [User(\"kim\"), User(\"lee\")]\nprint(\"/\".§§§§§([str(u) for u in us]))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "@kim / @lee"
+          "expectedOutput": "@kim/@lee"
         }
       ]
     },
@@ -315,10 +315,10 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "prompt_ko": "[출력 결과 예측] 리스트 속성을 가진 객체들의 __str__과 리스트 컴프리헨션, .join()이 결합된 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of joining the string representations of Team objects.",
       "hint_ko": "각 팀 객체의 __str__은 팀 이름을 대문자로 바꾸고 멤버들의 점수를 합산해 반환합니다.",
-      "hint_en": "Each Team's __str__ uppercases the team name and sums its pts list before \" | \".join() combines them.",
-      "targetCode": "class Team:\n    def __init__(self, name, pts):\n        self.name = name\n        self.pts = pts\n\n    def __str__(self):\n        return f\"{self.name.upper()}:{sum(self.pts)}\"\n\nts = [Team(\"red\", [10, 20]), Team(\"blue\", [15, 25, 5])]\nprint(\" | \".join([str(t) for t in ts]))",
+      "hint_en": "Each Team's __str__ uppercases the team name and sums its pts list before \"|\".join() combines them.",
+      "targetCode": "class Team:\n    def __init__(self, name, pts):\n        self.name = name\n        self.pts = pts\n\n    def __str__(self):\n        return f\"{self.name.upper()}:{sum(self.pts)}\"\n\nts = [Team(\"red\", [10, 20]), Team(\"blue\", [15, 25, 5])]\nprint(\"|\".join([str(t) for t in ts]))",
       "choices": [
-        "RED:30 | BLUE:45",
+        "RED:30|BLUE:45",
         "red:30 | blue:45",
         "RED:2 | BLUE:3",
         "RED:30, BLUE:45"
@@ -328,7 +328,7 @@ export const PYTHON_LEVEL_108: PracticeRound = {
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "RED:30 | BLUE:45"
+          "expectedOutput": "RED:30|BLUE:45"
         }
       ]
     }

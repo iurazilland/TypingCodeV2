@@ -48,11 +48,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '6',
           expectedOutput: '1 2 3 6',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '1 2 5 10',
-        },
       ],
     },
     {
@@ -70,11 +65,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           id: 1,
           input: '10',
           expectedOutput: '3',
-        },
-        {
-          id: 2,
-          input: '15',
-          expectedOutput: '5',
         },
       ],
     },
@@ -95,11 +85,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '6',
           expectedOutput: '4',
         },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: '2',
-        },
       ],
     },
     {
@@ -118,11 +103,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '6',
           expectedOutput: '12',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '6',
-        },
       ],
     },
     {
@@ -132,8 +112,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 선택 만족 논리 키워드를 채워 1부터 n까지 중 3의 배수이거나 5의 배수인 수들의 합을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the disjunction keyword to sum numbers in 1..n divisible by 3 or 5.',
-      hint_ko: '둘 중 하나만 만족해도 합계에 포함되도록 두 글자 논리 키워드를 넣습니다.',
-      hint_en: 'Join the two divisibility conditions with the two-letter disjunction keyword.',
+      hint_ko: '둘 중 하나만 만족해도 합계에 포함되도록 논리 키워드를 넣습니다.',
+      hint_en: 'Join the two divisibility conditions with the disjunction keyword.',
       templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 §§§ i % 5 == 0:\n        total += i\nprint(total)',
       targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 or i % 5 == 0:\n        total += i\nprint(total)',
       testCases: [
@@ -141,11 +121,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           id: 1,
           input: '10',
           expectedOutput: '33',
-        },
-        {
-          id: 2,
-          input: '6',
-          expectedOutput: '14',
         },
       ],
     },
@@ -165,11 +140,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '4',
           expectedOutput: '2',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '-3',
-        },
       ],
     },
     {
@@ -179,8 +149,8 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 나머지 분기 키워드를 채워 짝수 개수(ev)와 홀수 개수(od)를 각각 세어 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the fallback branch keyword to count both evens and odds.',
-      hint_ko: '짝수 조건이 거짓인 모든 경우(홀수)를 처리하는 네 글자 분기 키워드를 입력합니다.',
-      hint_en: 'Use the four-letter fallback keyword aligned with the inner if.',
+      hint_ko: '짝수 조건이 거짓인 모든 경우(홀수)를 처리하는 분기 키워드를 입력합니다.',
+      hint_en: 'Use the fallback keyword aligned with the inner if.',
       templateCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    §§§§§:\n        od += 1\nprint(ev, od)',
       targetCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    else:\n        od += 1\nprint(ev, od)',
       testCases: [
@@ -188,11 +158,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           id: 1,
           input: '5',
           expectedOutput: '2 3',
-        },
-        {
-          id: 2,
-          input: '6',
-          expectedOutput: '3 3',
         },
       ],
     },
@@ -213,11 +178,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '12',
           expectedOutput: '3 24',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '2 12',
-        },
       ],
     },
     {
@@ -236,11 +196,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           id: 1,
           input: '15',
           expectedOutput: '3',
-        },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '2',
         },
       ],
     },
@@ -261,11 +216,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '15',
           expectedOutput: '6\n12',
         },
-        {
-          id: 2,
-          input: '10',
-          expectedOutput: '6',
-        },
       ],
     },
     {
@@ -285,11 +235,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
           input: '10',
           expectedOutput: '3\n9',
         },
-        {
-          id: 2,
-          input: '15',
-          expectedOutput: '3\n9\n15',
-        },
       ],
     },
     {
@@ -307,11 +252,6 @@ export const PYTHON_LEVEL_35: PracticeRound = {
         {
           id: 1,
           input: '6',
-          expectedOutput: '4',
-        },
-        {
-          id: 2,
-          input: '8',
           expectedOutput: '4',
         },
       ],

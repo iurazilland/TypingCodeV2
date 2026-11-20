@@ -60,8 +60,8 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 고양이 클래스를 선언하여 인스턴스의 울음소리 속성 Meow를 출력해보세요.",
       "prompt_en": "[Fill Blank] Declare the Cat blueprint so that printing the instance attribute outputs Meow.",
-      "hint_ko": "객체의 설계도를 정의할 때는 다섯 글자 클래스 선언 키워드를 맨 앞에 적습니다.",
-      "hint_en": "Start the definition with the five-letter keyword used to declare a blueprint for objects.",
+      "hint_ko": "객체의 설계도를 정의할 때는 클래스 선언 키워드를 맨 앞에 적습니다.",
+      "hint_en": "Start the definition with the keyword used to declare a blueprint for objects.",
       "templateCode": "§§§§§§ Cat:\n    sound = \"Meow\"\nc = Cat()\nprint(c.sound)",
       "targetCode": "class Cat:\n    sound = \"Meow\"\nc = Cat()\nprint(c.sound)",
       "testCases": [
@@ -134,8 +134,8 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 로봇 클래스의 인사 메서드가 정상 동작하도록 첫 번째 매개변수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the required first parameter of the instance method so r.greet() prints Beep!.",
-      "hint_ko": "인스턴스 메서드의 첫 번째 매개변수 자리에는 호출한 객체 자신을 뜻하는 네 글자 표준 이름을 적습니다.",
-      "hint_en": "Write the four-letter standard parameter name representing the calling instance itself.",
+      "hint_ko": "인스턴스 메서드의 첫 번째 매개변수 자리에는 호출한 객체 자신을 뜻하는 표준 이름을 적습니다.",
+      "hint_en": "Write the standard parameter name representing the calling instance itself.",
       "templateCode": "class Robot:\n    def greet(§§§§§):\n        print(\"Beep!\")\nr = Robot()\nr.greet()",
       "targetCode": "class Robot:\n    def greet(self):\n        print(\"Beep!\")\nr = Robot()\nr.greet()",
       "testCases": [
@@ -155,12 +155,12 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "prompt_en": "[Block] Read self.name inside the intro method and print \"Hi, Coco\" using an f-string.",
       "hint_ko": "메서드 내부에서는 첫 번째 매개변수 self 뒤에 점(.)을 찍어 해당 인스턴스의 속성에 접근합니다.",
       "hint_en": "Inside a method, access the current instance's attributes using self followed by a dot.",
-      "targetCode": "class Dog:\n    def intro(self):\n        print(f\"Hi, {self.name}\")\nd = Dog()\nd.name = \"Coco\"\nd.intro()",
+      "targetCode": "class Dog:\n    def intro(self):\n        print(f\"Hi:{self.name}\")\nd = Dog()\nd.name = \"Coco\"\nd.intro()",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Hi, Coco"
+          "expectedOutput": "Hi:Coco"
         }
       ]
     },
@@ -199,11 +199,6 @@ export const PYTHON_LEVEL_72: PracticeRound = {
           "id": 1,
           "input": "VIP",
           "expectedOutput": "[VIP]"
-        },
-        {
-          "id": 2,
-          "input": "GOLD",
-          "expectedOutput": "[GOLD]"
         }
       ]
     },

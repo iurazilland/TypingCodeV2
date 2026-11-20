@@ -59,8 +59,8 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 가로와 세로를 곱한 값을 호출부로 돌려주도록 반환 키워드를 채워보세요.',
       prompt_en: '[Fill Blank] Fill in the keyword that returns w * h to the caller.',
-      hint_ko: '함수 안에서 계산한 값을 호출한 자리로 되돌려주는 여섯 글자 파이썬 키워드를 적으세요.',
-      hint_en: 'Type the six-letter keyword used to send a result back from a function.',
+      hint_ko: '함수 안에서 계산한 값을 호출한 자리로 되돌려주는 파이썬 키워드를 적으세요.',
+      hint_en: 'Type the keyword used to send a result back from a function.',
       templateCode: 'def area(w, h):\n    §§§§§§§ w * h\nans = area(5, 4)\nprint(ans)',
       targetCode: 'def area(w, h):\n    return w * h\nans = area(5, 4)\nprint(ans)',
       testCases: [
@@ -133,8 +133,8 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 첫째 줄에서 n + 1을 바로 반환해 아래쪽 줄이 실행되지 않도록 키워드를 채워보세요.',
       prompt_en: '[Fill Blank] Return n + 1 on the first line of the function so it exits immediately with 6.',
-      hint_ko: '값을 돌려주며 함수를 즉시 끝내는 여섯 글자 키워드를 입력하세요.',
-      hint_en: 'Type the six-letter keyword that returns a value and terminates the function.',
+      hint_ko: '값을 돌려주며 함수를 즉시 끝내는 키워드를 입력하세요.',
+      hint_en: 'Type the keyword that returns a value and terminates the function.',
       templateCode: 'def stop_at(n):\n    §§§§§§§ n + 1\n    return n + 100\nprint(stop_at(5))',
       targetCode: 'def stop_at(n):\n    return n + 1\n    return n + 100\nprint(stop_at(5))',
       testCases: [

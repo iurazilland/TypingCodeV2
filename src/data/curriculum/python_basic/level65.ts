@@ -58,8 +58,8 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 함수를 정의하는 키워드를 채워 start() 함수가 Ready를 출력하도록 완성해보세요.',
       prompt_en: '[Fill Blank] Fill in the keyword used to define function start().',
-      hint_ko: '파이썬에서 새로운 함수를 선언할 때 맨 앞에 적는 세 글자 키워드를 입력하세요.',
-      hint_en: 'Type the three-letter Python keyword that starts a function definition.',
+      hint_ko: '파이썬에서 새로운 함수를 선언할 때 맨 앞에 적는 키워드를 입력하세요.',
+      hint_en: 'Type the Python keyword that starts a function definition.',
       templateCode: '§§§§ start():\n    print("Ready")\nstart()',
       targetCode: 'def start():\n    print("Ready")\nstart()',
       testCases: [
@@ -132,8 +132,8 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] Open과 Close 사이에서 bell 함수를 호출해 Ring!이 가운데 출력되게 해보세요.',
       prompt_en: '[Fill Blank] Call bell between Open and Close so Ring! prints in the middle.',
-      hint_ko: '위에서 정의한 네 글자 함수 이름 뒤에 호출용 소괄호를 붙여 적으세요.',
-      hint_en: 'Invoke the four-letter function defined above using empty parentheses.',
+      hint_ko: '위에서 정의한 함수 이름 뒤에 호출용 소괄호를 붙여 적으세요.',
+      hint_en: 'Invoke the function defined above using empty parentheses.',
       templateCode: 'def bell():\n    print("Ring!")\nprint("Open")\n§§§§§§§\nprint("Close")',
       targetCode: 'def bell():\n    print("Ring!")\nprint("Open")\nbell()\nprint("Close")',
       testCases: [

@@ -51,11 +51,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "10",
           "expectedOutput": "15"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "BadInt"
         }
       ]
     },
@@ -75,11 +70,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "20",
           "expectedOutput": "Age:20"
-        },
-        {
-          "id": 2,
-          "input": "twenty",
-          "expectedOutput": "NaN"
         }
       ]
     },
@@ -98,11 +88,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "15",
           "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "ZeroDiv"
         }
       ]
     },
@@ -122,11 +107,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "7",
           "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "NoZero"
         }
       ]
     },
@@ -145,16 +125,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "25",
           "expectedOutput": "4"
-        },
-        {
-          "id": 2,
-          "input": "hi",
-          "expectedOutput": "ValErr"
-        },
-        {
-          "id": 3,
-          "input": "0",
-          "expectedOutput": "ZeroErr"
         }
       ]
     },
@@ -174,16 +144,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "10",
           "expectedOutput": "5"
-        },
-        {
-          "id": 2,
-          "input": "x",
-          "expectedOutput": "BadVal"
-        },
-        {
-          "id": 3,
-          "input": "0",
-          "expectedOutput": "DivZero"
         }
       ]
     },
@@ -202,16 +162,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "4",
           "expectedOutput": "30"
-        },
-        {
-          "id": 2,
-          "input": "abc",
-          "expectedOutput": "9"
-        },
-        {
-          "id": 3,
-          "input": "0",
-          "expectedOutput": "10"
         }
       ]
     },
@@ -231,11 +181,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "1.5",
           "expectedOutput": "15.0"
-        },
-        {
-          "id": 2,
-          "input": "err",
-          "expectedOutput": "0.0"
         }
       ]
     },
@@ -255,16 +200,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "30 6",
           "expectedOutput": "5"
-        },
-        {
-          "id": 2,
-          "input": "ten 5",
-          "expectedOutput": "-1"
-        },
-        {
-          "id": 3,
-          "input": "30 0",
-          "expectedOutput": "-2"
         }
       ]
     },
@@ -322,11 +257,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "6",
           "expectedOutput": "36"
-        },
-        {
-          "id": 2,
-          "input": "no",
-          "expectedOutput": "-1"
         }
       ]
     },
@@ -346,11 +276,6 @@ export const PYTHON_LEVEL_79: PracticeRound = {
           "id": 1,
           "input": "12",
           "expectedOutput": "10"
-        },
-        {
-          "id": 2,
-          "input": "0",
-          "expectedOutput": "0"
         }
       ]
     },

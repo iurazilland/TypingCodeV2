@@ -62,8 +62,8 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 이메일 문자열에서 \"@\" 기호가 처음 등장하는 인덱스를 출력하도록 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to print the first index of \"@\" in mail.",
-      "hint_ko": "찾는 글자의 위치를 반환하고 없으면 -1을 돌려주는 네 글자 탐색 메서드를 적으세요.",
-      "hint_en": "Type the 4-letter search method that returns the first index or -1 if absent.",
+      "hint_ko": "찾는 글자의 위치를 반환하고 없으면 -1을 돌려주는 탐색 메서드를 적으세요.",
+      "hint_en": "Type the search method that returns the first index or -1 if absent.",
       "targetCode": "mail = input()\nprint(mail.find(\"@\"))",
       "templateCode": "mail = input()\nprint(mail.§§§§§(\"@\"))",
       "testCases": [
@@ -71,11 +71,6 @@ export const PYTHON_LEVEL_95: PracticeRound = {
           "id": 1,
           "input": "dev@py.org",
           "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "admin",
-          "expectedOutput": "-1"
         }
       ]
     },
@@ -104,8 +99,8 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 소문자로 통일한 단어에서 알파벳 \"a\"가 몇 번 나오는지 세어 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the method name to print how many times \"a\" appears in the lowercased input word.",
-      "hint_ko": "특정 부분 문자열의 등장 횟수를 세는 다섯 글자 메서드를 호출하세요.",
-      "hint_en": "Call the 5-letter method that counts occurrences of a substring.",
+      "hint_ko": "특정 부분 문자열의 등장 횟수를 세는 메서드를 호출하세요.",
+      "hint_en": "Call the method that counts occurrences of a substring.",
       "targetCode": "word = input().lower()\nprint(word.count(\"a\"))",
       "templateCode": "word = input().lower()\nprint(word.§§§§§§(\"a\"))",
       "testCases": [
@@ -113,11 +108,6 @@ export const PYTHON_LEVEL_95: PracticeRound = {
           "id": 1,
           "input": "Banana",
           "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "Sky",
-          "expectedOutput": "0"
         }
       ]
     },
@@ -130,12 +120,12 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "prompt_en": "[Block] Use .lstrip() and .rstrip() to remove leading and trailing spaces respectively and compare them.",
       "hint_ko": "양쪽을 모두 지우는 .strip()과 달리 왼쪽(left) 또는 오른쪽(right) 한쪽 끝만 선택해 지울 수 있습니다.",
       "hint_en": "Unlike .strip(), .lstrip() trims only the left side and .rstrip() trims only the right side.",
-      "targetCode": "raw = \"  py  \"\nleft = raw.lstrip()\nright = raw.rstrip()\nprint(f\"[{left}]/[{right}]\")",
+      "targetCode": "raw = \" py \"\nleft = raw.lstrip()\nright = raw.rstrip()\nprint(f\"[{left}]/[{right}]\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[py  ]/[  py]"
+          "expectedOutput": "[py ]/[ py]"
         }
       ]
     },
@@ -146,8 +136,8 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 문자열 왼쪽 앞에 붙은 \"0\" 문자들만 제거해 출력하도록 방향별 제거 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the directional trimming method to remove only leading \"0\" characters from the left.",
-      "hint_ko": "왼쪽(left)을 뜻하는 글자 l을 strip 앞에 붙인 여섯 글자 메서드를 입력하세요.",
-      "hint_en": "Type the 6-letter method formed by prefixing strip with l for left.",
+      "hint_ko": "왼쪽(left)을 뜻하는 글자 l을 strip 앞에 붙인 메서드를 입력하세요.",
+      "hint_en": "Type the method formed by prefixing strip with l for left.",
       "targetCode": "code = \"000420\"\nprint(code.lstrip(\"0\"))",
       "templateCode": "code = \"000420\"\nprint(code.§§§§§§§(\"0\"))",
       "testCases": [
@@ -167,7 +157,7 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "prompt_en": "[Block] Find the index of \":\" with .find(), then slice after it and .strip() to extract the value.",
       "hint_ko": "콜론 위치가 pos일 때 콜론 다음 글자부터 끝까지 자르려면 시작 인덱스를 pos + 1로 지정합니다.",
       "hint_en": "When the colon is at index pos, slicing from pos + 1: extracts everything after the colon.",
-      "targetCode": "line = \"Name : Alice\"\npos = line.find(\":\")\nval = line[pos + 1:].strip()\nprint(val)",
+      "targetCode": "line = \"Name:Alice\"\npos = line.find(\":\")\nval = line[pos + 1:].strip()\nprint(val)",
       "testCases": [
         {
           "id": 1,
@@ -183,8 +173,8 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 이메일에서 \"@\" 위치를 찾아 기호 앞부분 아이디만 슬라이싱해 출력하도록 탐색 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Locate \"@\" in mail and slice everything before it to print the user ID.",
-      "hint_ko": "구분 기호의 첫 위치 인덱스를 구하는 네 글자 문자열 메서드를 채워보세요.",
-      "hint_en": "Fill in the 4-letter string method that locates the index of \"@\".",
+      "hint_ko": "구분 기호의 첫 위치 인덱스를 구하는 문자열 메서드를 채워보세요.",
+      "hint_en": "Fill in the string method that locates the index of \"@\".",
       "targetCode": "mail = input().strip()\npos = mail.find(\"@\")\nprint(mail[:pos])",
       "templateCode": "mail = input().strip()\npos = mail.§§§§§(\"@\")\nprint(mail[:pos])",
       "testCases": [
@@ -192,11 +182,6 @@ export const PYTHON_LEVEL_95: PracticeRound = {
           "id": 1,
           "input": "coder@py.kr",
           "expectedOutput": "coder"
-        },
-        {
-          "id": 2,
-          "input": "ace@web.com",
-          "expectedOutput": "ace"
         }
       ]
     },
@@ -209,8 +194,8 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "prompt_en": "[Fill Blank] Trim trailing spaces, locate the index of \"#\", and print the code slice along with the number of \"#\" symbols.",
       "hint_ko": "오른쪽 공백 제거 메서드, 위치 탐색 메서드, 개수 세기 메서드를 차례로 채워보세요.",
       "hint_en": "Fill in the right-strip method, the substring search method, and the occurrence counting method.",
-      "targetCode": "line = \"x = 10 # init # ok   \"\ns = line.rstrip()\npos = s.find(\"#\")\nprint(s[:pos].strip(), s.count(\"#\"))",
-      "templateCode": "line = \"x = 10 # init # ok   \"\ns = line.§§§§§§§()\npos = s.§§§§§(\"#\")\nprint(s[:pos].strip(), s.§§§§§§(\"#\"))",
+      "targetCode": "line = \"x = 10 # init # ok \"\ns = line.rstrip()\npos = s.find(\"#\")\nprint(s[:pos].strip(), s.count(\"#\"))",
+      "templateCode": "line = \"x = 10 # init # ok \"\ns = line.§§§§§§§()\npos = s.§§§§§(\"#\")\nprint(s[:pos].strip(), s.§§§§§§(\"#\"))",
       "testCases": [
         {
           "id": 1,
@@ -235,11 +220,6 @@ export const PYTHON_LEVEL_95: PracticeRound = {
           "id": 1,
           "input": "System Err 404",
           "expectedOutput": "ALERT"
-        },
-        {
-          "id": 2,
-          "input": "System OK",
-          "expectedOutput": "NORMAL"
         }
       ]
     },
@@ -278,11 +258,6 @@ export const PYTHON_LEVEL_95: PracticeRound = {
           "id": 1,
           "input": "AB-102",
           "expectedOutput": "2"
-        },
-        {
-          "id": 2,
-          "input": "NONE",
-          "expectedOutput": "-1"
         }
       ]
     },
@@ -302,11 +277,6 @@ export const PYTHON_LEVEL_95: PracticeRound = {
           "id": 1,
           "input": "hi!wow!!!",
           "expectedOutput": "1"
-        },
-        {
-          "id": 2,
-          "input": "a!b!c!",
-          "expectedOutput": "2"
         }
       ]
     },

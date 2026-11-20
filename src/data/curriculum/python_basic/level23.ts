@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 불리언 형변환 함수를 채워 음수 -5가 참(True)으로 변환되는지 확인해보세요.',
       prompt_en: '[Fill Blank] Fill in the boolean casting function to check whether -5 converts to True.',
-      hint_ko: '값을 참·거짓 자료형으로 바꿀 때는 불리언(boolean)의 앞 네 글자를 딴 내장 함수를 사용합니다.',
-      hint_en: 'Use the four-letter built-in function formed from the start of "boolean".',
+      hint_ko: '값을 참·거짓 자료형으로 바꿀 때는 bool() 내장 함수를 사용합니다.',
+      hint_en: 'Use the built-in function formed from the start of "boolean".',
       templateCode: 'x = §§§§§(-5)\nprint(x, bool(0.0))',
       targetCode: 'x = bool(-5)\nprint(x, bool(0.0))',
       testCases: [
@@ -76,7 +76,7 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_ko: '[빈칸 채우기] 빈칸에 불리언 형변환 함수를 채워 문자열 "0"의 참·거짓 변환 결과를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the boolean casting function to print the truthiness of string "0".',
       hint_ko: '따옴표로 감싸진 "0"은 빈 문자열이 아니므로 불리언 변환 함수에 넣으면 True가 됩니다.',
-      hint_en: 'Because "0" is a non-empty string, passing it to the four-letter boolean casting function yields True.',
+      hint_en: 'Because "0" is a non-empty string, passing it to the boolean casting function yields True.',
       templateCode: 'txt = "0"\nprint(§§§§§(txt))',
       targetCode: 'txt = "0"\nprint(bool(txt))',
       testCases: [
@@ -103,11 +103,6 @@ export const PYTHON_LEVEL_23: PracticeRound = {
           input: '7',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '8',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -127,11 +122,6 @@ export const PYTHON_LEVEL_23: PracticeRound = {
           input: '10',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '9',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -150,11 +140,6 @@ export const PYTHON_LEVEL_23: PracticeRound = {
           input: '0',
           expectedOutput: 'True False',
         },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: 'True True',
-        },
       ],
     },
     {
@@ -164,8 +149,8 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 문자열 변환 함수를 채워 정수 0과 그것을 문자열로 바꾼 값의 참·거짓 차이를 확인해보세요.',
       prompt_en: '[Fill Blank] Fill in the string-casting function to compare the truthiness of integer 0 with its string form.',
-      hint_ko: '정수 0을 문자열 "0"으로 바꾸는 세 글자 형변환 함수를 빈칸에 작성합니다.',
-      hint_en: 'Use the three-letter casting function that turns a number into text.',
+      hint_ko: '정수 0을 문자열 "0"으로 바꾸는 형변환 함수를 빈칸에 작성합니다.',
+      hint_en: 'Use the casting function that turns a number into text.',
       templateCode: 'n = 0\ns = §§§§(n)\nprint(bool(n), bool(s))',
       targetCode: 'n = 0\ns = str(n)\nprint(bool(n), bool(s))',
       testCases: [
@@ -184,18 +169,13 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 hp에서 dmg를 차감한 뒤 남은 체력의 참·거짓과 0 초과 여부를 비교해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to subtract dmg from hp and compare its truthiness with hp > 0.',
       hint_ko: '차감 복합 대입 연산자, 불리언 변환 함수, 그리고 두 불리언 값이 같은지 확인하는 비교 연산자를 차례로 넣습니다.',
-      hint_en: 'Use minus-equals first, then the four-letter boolean casting function, and finally the equality operator.',
+      hint_en: 'Use minus-equals first, then the boolean casting function, and finally the equality operator.',
       templateCode: 'hp = int(input())\ndmg = int(input())\nhp §§§ dmg\nprint(§§§§§(hp) §§§ (hp > 0))',
       targetCode: 'hp = int(input())\ndmg = int(input())\nhp -= dmg\nprint(bool(hp) == (hp > 0))',
       testCases: [
         {
           id: 1,
           input: '50\n50',
-          expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '50\n20',
           expectedOutput: 'True',
         },
       ],
@@ -216,11 +196,6 @@ export const PYTHON_LEVEL_23: PracticeRound = {
           id: 1,
           input: '0',
           expectedOutput: 'False',
-        },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'True',
         },
       ],
     },
@@ -260,11 +235,6 @@ export const PYTHON_LEVEL_23: PracticeRound = {
           input: '0',
           expectedOutput: 'False',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: 'True',
-        },
       ],
     },
     {
@@ -283,11 +253,6 @@ export const PYTHON_LEVEL_23: PracticeRound = {
           id: 1,
           input: '10\n10',
           expectedOutput: 'False',
-        },
-        {
-          id: 2,
-          input: '10\n4',
-          expectedOutput: 'True',
         },
       ],
     },

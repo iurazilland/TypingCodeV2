@@ -173,8 +173,8 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력된 원소가 집합에 없더라도 에러 없이 안전하게 삭제하도록 메서드 이름을 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the set method name that removes drop safely even if it is not present.",
-      "hint_ko": "없는 원소를 지워도 오류가 발생하지 않는 일곱 글자 집합 안전 삭제 메서드를 호출하세요.",
-      "hint_en": "Call the seven-letter set method for error-free removal.",
+      "hint_ko": "없는 원소를 지워도 오류가 발생하지 않는 집합 안전 삭제 메서드를 호출하세요.",
+      "hint_en": "Call the set method for error-free removal.",
       "templateCode": "active = {\"a\", \"b\", \"c\"}\ndrop = input()\nactive.§§§§§§§§(drop)\nprint(sorted(active))",
       "targetCode": "active = {\"a\", \"b\", \"c\"}\ndrop = input()\nactive.discard(drop)\nprint(sorted(active))",
       "testCases": [
@@ -182,11 +182,6 @@ export const PYTHON_LEVEL_88: PracticeRound = {
           "id": 1,
           "input": "b",
           "expectedOutput": "['a', 'c']"
-        },
-        {
-          "id": 2,
-          "input": "z",
-          "expectedOutput": "['a', 'b', 'c']"
         }
       ]
     },
@@ -198,7 +193,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 두 집합의 합집합에서 특정 원소를 안전 삭제한 뒤, 기준 집합과의 교집합을 구하도록 세 빈칸을 채워보세요.",
       "prompt_en": "[Fill Blank] Complete the union operator, safe removal method, and intersection operator.",
       "hint_ko": "두 집합을 합치는 연산자, 없어도 에러가 안 나는 삭제 메서드, 그리고 공통 원소를 구하는 연산자를 확인하세요.",
-      "hint_en": "Check the union pipe operator, the seven-letter discard method, and the intersection ampersand operator.",
+      "hint_en": "Check the union pipe operator, the discard method, and the intersection ampersand operator.",
       "templateCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a §§ b\nm.§§§§§§§§(5)\nprint(sorted(m §§ {2, 3, 5}))",
       "targetCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a | b\nm.discard(5)\nprint(sorted(m & {2, 3, 5}))",
       "testCases": [

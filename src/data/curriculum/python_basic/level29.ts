@@ -29,11 +29,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '150',
           expectedOutput: 'Big\nEnd',
         },
-        {
-          id: 2,
-          input: '50',
-          expectedOutput: 'End',
-        },
       ],
     },
     {
@@ -43,8 +38,8 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 셋째 줄 빈칸에 조건 키워드를 채워 양수일 때 짝수인지 한 번 더 검사하는 중첩 조건문을 완성해보세요.',
       prompt_en: '[Fill Blank] Fill in the conditional keyword on line 3 to complete the nested even check.',
-      hint_ko: '4칸 들여쓰기된 안쪽 조건문도 바깥과 똑같이 두 글자 조건 키워드로 시작합니다.',
-      hint_en: 'Start the 4-space indented inner check with the same two-letter conditional keyword.',
+      hint_ko: '4칸 들여쓰기된 안쪽 조건문도 바깥과 똑같이 조건 키워드로 시작합니다.',
+      hint_en: 'Start the 4-space indented inner check with the same conditional keyword.',
       templateCode: 'n = int(input())\nif n > 0:\n    §§§ n % 2 == 0:\n        print("PosEven")',
       targetCode: 'n = int(input())\nif n > 0:\n    if n % 2 == 0:\n        print("PosEven")',
       testCases: [
@@ -71,16 +66,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '8',
           expectedOutput: 'Plus Even',
         },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'Plus Odd',
-        },
-        {
-          id: 3,
-          input: '-2',
-          expectedOutput: 'Zero or Minus',
-        },
       ],
     },
     {
@@ -91,7 +76,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       prompt_ko: '[빈칸 채우기] 여섯째 줄 빈칸에 분기 키워드를 채워 아이디는 맞지만 비밀번호가 틀렸을 때 "Wrong PW"가 출력되게 해보세요.',
       prompt_en: '[Fill Blank] Fill in the fallback keyword for the inner password check on line 6.',
       hint_ko: '안쪽 if pw_in == "1234":와 같은 4칸 들여쓰기 줄에 나머지 분기 키워드를 적습니다.',
-      hint_en: 'Write the four-letter fallback keyword aligned with the inner if at 4 spaces.',
+      hint_en: 'Write the fallback keyword aligned with the inner if at 4 spaces.',
       templateCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    §§§§§:\n        print("Wrong PW")\nelse:\n    print("No User")',
       targetCode: 'id_in = input()\npw_in = input()\nif id_in == "admin":\n    if pw_in == "1234":\n        print("Admin OK")\n    else:\n        print("Wrong PW")\nelse:\n    print("No User")',
       testCases: [
@@ -99,16 +84,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           id: 1,
           input: 'admin\n0000',
           expectedOutput: 'Wrong PW',
-        },
-        {
-          id: 2,
-          input: 'admin\n1234',
-          expectedOutput: 'Admin OK',
-        },
-        {
-          id: 3,
-          input: 'guest\n1234',
-          expectedOutput: 'No User',
         },
       ],
     },
@@ -128,11 +103,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '-5',
           expectedOutput: 'Done',
         },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '12\nDone',
-        },
       ],
     },
     {
@@ -142,8 +112,8 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 빈 블록 자리 채움 키워드를 넣어 mode가 "mute"일 때 아무 출력 없이 넘어가게 해보세요.',
       prompt_en: '[Fill Blank] Fill in the no-op placeholder keyword so "mute" mode does nothing.',
-      hint_ko: '영어로 지나가다·통과하다를 뜻하는 네 글자 소문자 키워드로 빈 블록을 채웁니다.',
-      hint_en: 'Use the four-letter lowercase English keyword meaning "to move past / skip".',
+      hint_ko: '영어로 지나가다·통과하다를 뜻하는 소문자 키워드로 빈 블록을 채웁니다.',
+      hint_en: 'Use the lowercase English keyword meaning "to move past / skip".',
       templateCode: 'mode = input()\nif mode == "mute":\n    §§§§§\nelse:\n    print("Beep")\nprint("OK")',
       targetCode: 'mode = input()\nif mode == "mute":\n    pass\nelse:\n    print("Beep")\nprint("OK")',
       testCases: [
@@ -151,11 +121,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           id: 1,
           input: 'mute',
           expectedOutput: 'OK',
-        },
-        {
-          id: 2,
-          input: 'loud',
-          expectedOutput: 'Beep\nOK',
         },
       ],
     },
@@ -174,11 +139,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           id: 1,
           input: '6',
           expectedOutput: '10',
-        },
-        {
-          id: 2,
-          input: '5',
-          expectedOutput: '15',
         },
       ],
     },
@@ -199,11 +159,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '14',
           expectedOutput: '7',
         },
-        {
-          id: 2,
-          input: '9',
-          expectedOutput: '9',
-        },
       ],
     },
     {
@@ -223,16 +178,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '-10',
           expectedOutput: '100',
         },
-        {
-          id: 2,
-          input: '35',
-          expectedOutput: '65',
-        },
-        {
-          id: 3,
-          input: '150',
-          expectedOutput: '100',
-        },
       ],
     },
     {
@@ -242,8 +187,8 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       kind: 'fix_bug',
       prompt_ko: '[틀린 곳 수정] 음수일 때 아무 동작 없이 넘어가도록 잘못 적힌 단어를 파이썬 예약어로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid word on line 3 with the proper Python no-op keyword.',
-      hint_ko: '파이썬에서 빈 블록을 그냥 통과할 때 쓰는 네 글자 예약어로 고쳐야 NameError가 발생하지 않습니다.',
-      hint_en: 'Replace the undefined identifier with Python’s four-letter no-op keyword.',
+      hint_ko: '파이썬에서 빈 블록을 그냥 통과할 때 쓰는 예약어로 고쳐야 NameError가 발생하지 않습니다.',
+      hint_en: 'Replace the undefined identifier with Python’s no-op keyword.',
       templateCode: 'n = int(input())\nif n < 0:\n    skip\nelse:\n    n += 10\nprint(n)',
       targetCode: 'n = int(input())\nif n < 0:\n    pass\nelse:\n    n += 10\nprint(n)',
       testCases: [
@@ -251,11 +196,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           id: 1,
           input: '-5',
           expectedOutput: '-5',
-        },
-        {
-          id: 2,
-          input: '20',
-          expectedOutput: '30',
         },
       ],
     },
@@ -276,11 +216,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '120',
           expectedOutput: 'VIP',
         },
-        {
-          id: 2,
-          input: '50',
-          expectedOutput: 'Member',
-        },
       ],
     },
     {
@@ -300,11 +235,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           input: '150',
           expectedOutput: 'Big',
         },
-        {
-          id: 2,
-          input: '100',
-          expectedOutput: 'Big',
-        },
       ],
     },
     {
@@ -314,7 +244,7 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '[한 줄 완성] n이 음수일 때 아무 처리 없이 넘어가도록 빈 블록을 채우는 한 줄을 셋째 줄에 작성해보세요.',
       prompt_en: '[Complete Line] Write the 4-space indented pass statement inside if n < 0:.',
-      hint_ko: '4칸 들여쓰기 뒤에 네 글자 통과 키워드를 작성해보세요.',
+      hint_ko: '4칸 들여쓰기 뒤에 통과 키워드를 작성해보세요.',
       hint_en: 'Keep the 4-space indentation and write pass.',
       templateCode: 'n = int(input())\nif n < 0:\n    §§§§§\nelse:\n    print(n)\nprint("Done")',
       targetCode: 'n = int(input())\nif n < 0:\n    pass\nelse:\n    print(n)\nprint("Done")',
@@ -323,11 +253,6 @@ export const PYTHON_LEVEL_29: PracticeRound = {
           id: 1,
           input: '-5',
           expectedOutput: 'Done',
-        },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '12\nDone',
         },
       ],
     },

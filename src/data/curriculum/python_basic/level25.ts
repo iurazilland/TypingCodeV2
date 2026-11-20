@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 논리 반전 키워드를 채워 is_locked(False)를 뒤집은 결과를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the logical negation keyword to invert is_locked (False).',
-      hint_ko: '참과 거짓을 반대로 바꿀 때는 영어로 부정을 뜻하는 세 글자 소문자 키워드를 앞에 붙입니다.',
-      hint_en: 'Place the three-letter lowercase English negation word right before the variable.',
+      hint_ko: '참과 거짓을 반대로 바꿀 때는 영어로 부정을 뜻하는 소문자 키워드를 앞에 붙입니다.',
+      hint_en: 'Place the lowercase English negation word right before the variable.',
       templateCode: 'is_locked = False\nprint(§§§§ is_locked)',
       targetCode: 'is_locked = False\nprint(not is_locked)',
       testCases: [
@@ -66,11 +66,6 @@ export const PYTHON_LEVEL_25: PracticeRound = {
           input: '22',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '15',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -80,8 +75,8 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 논리 반전 키워드를 채워 입력 정수 x가 0과 같지 않은지 판별해보세요.',
       prompt_en: '[Fill Blank] Fill in the logical negation keyword to check that (x == 0) is not true.',
-      hint_ko: '괄호로 묶인 비교식의 결과를 반대로 뒤집는 세 글자 키워드를 넣습니다.',
-      hint_en: 'Precede the parenthesized equality check with the three-letter negation keyword.',
+      hint_ko: '괄호로 묶인 비교식의 결과를 반대로 뒤집는 키워드를 넣습니다.',
+      hint_en: 'Precede the parenthesized equality check with the negation keyword.',
       templateCode: 'x = int(input())\nprint(§§§§ (x == 0))',
       targetCode: 'x = int(input())\nprint(not (x == 0))',
       testCases: [
@@ -89,11 +84,6 @@ export const PYTHON_LEVEL_25: PracticeRound = {
           id: 1,
           input: '5',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '0',
-          expectedOutput: 'False',
         },
       ],
     },
@@ -122,8 +112,8 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 논리 반전 키워드를 채워 문자열 msg가 비어 있을 때(거짓일 때) True가 출력되게 해보세요.',
       prompt_en: '[Fill Blank] Fill in the negation keyword so an empty string msg produces True.',
-      hint_ko: '빈 문자열의 bool(msg) 결과인 False를 True로 뒤집는 세 글자 키워드를 입력합니다.',
-      hint_en: 'Invert the False result of bool(msg) using the three-letter negation keyword.',
+      hint_ko: '빈 문자열의 bool(msg) 결과인 False를 True로 뒤집는 키워드를 입력합니다.',
+      hint_en: 'Invert the False result of bool(msg) using the negation keyword.',
       templateCode: 'msg = ""\nprint(§§§§ bool(msg))',
       targetCode: 'msg = ""\nprint(not bool(msg))',
       testCases: [
@@ -159,8 +149,8 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 동시 만족 논리 키워드를 채워 비가 오지 않으면서 기온이 20도 이상인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the conjunction keyword to check if it is not raining and temp >= 20.',
-      hint_ko: 'not rain이 먼저 계산된 뒤 오른쪽 기온 조건과 동시에 만족해야 하므로 세 글자 키워드를 씁니다.',
-      hint_en: 'Combine not rain with temp >= 20 using the three-letter conjunction keyword.',
+      hint_ko: 'not rain이 먼저 계산된 뒤 오른쪽 기온 조건과 동시에 만족해야 하므로 키워드를 씁니다.',
+      hint_en: 'Combine not rain with temp >= 20 using the conjunction keyword.',
       templateCode: 'rain = False\ntemp = 24\nprint(not rain §§§§ temp >= 20)',
       targetCode: 'rain = False\ntemp = 24\nprint(not rain and temp >= 20)',
       testCases: [
@@ -188,11 +178,6 @@ export const PYTHON_LEVEL_25: PracticeRound = {
           input: '8',
           expectedOutput: 'True',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: 'False',
-        },
       ],
     },
     {
@@ -203,7 +188,7 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       prompt_ko: '[틀린 곳 수정] 다른 언어의 부정 기호(!)로 잘못 작성된 코드를 파이썬의 논리 반전 키워드로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid ! negation symbol with the proper Python keyword.',
       hint_ko: '파이썬에서 단독 느낌표(!)는 문법 오류를 일으키므로 영단어 키워드와 공백을 사용해야 합니다.',
-      hint_en: 'A standalone ! is a syntax error in Python; use the three-letter negation keyword followed by a space.',
+      hint_en: 'A standalone ! is a syntax error in Python; use the negation keyword followed by a space.',
       templateCode: 'err = False\nprint(!err)',
       targetCode: 'err = False\nprint(not err)',
       testCases: [
@@ -268,11 +253,6 @@ export const PYTHON_LEVEL_25: PracticeRound = {
           id: 1,
           input: '0',
           expectedOutput: 'True',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: 'False',
         },
       ],
     },

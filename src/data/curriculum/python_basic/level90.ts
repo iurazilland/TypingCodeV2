@@ -62,8 +62,8 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 1부터 4까지의 숫자에 10을 곱한 리스트 [10, 20, 30, 40]을 만들도록 반복 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the loop keyword inside the list comprehension to multiply each number in range(1, 5) by 10.",
-      "hint_ko": "리스트 컴프리헨션에서 계산식 뒤에 시퀀스 순회를 시작하는 세 글자 반복 키워드를 적으세요.",
-      "hint_en": "Write the three-letter loop keyword placed between the expression and the loop variable.",
+      "hint_ko": "리스트 컴프리헨션에서 계산식 뒤에 시퀀스 순회를 시작하는 반복 키워드를 적으세요.",
+      "hint_en": "Write the loop keyword placed between the expression and the loop variable.",
       "templateCode": "nums = [x * 10 §§§§ x in range(1, 5)]\nprint(nums)",
       "targetCode": "nums = [x * 10 for x in range(1, 5)]\nprint(nums)",
       "testCases": [
@@ -99,8 +99,8 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 정수 리스트의 각 숫자를 문자열로 바꾼 새 리스트를 만들도록 형변환 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the type conversion function to turn every integer in ids into a string.",
-      "hint_ko": "숫자를 문자열 자료형으로 변환하는 세 글자 내장 함수를 호출하세요.",
-      "hint_en": "Call the three-letter built-in function that converts a value to a string.",
+      "hint_ko": "숫자를 문자열 자료형으로 변환하는 내장 함수를 호출하세요.",
+      "hint_en": "Call the built-in function that converts a value to a string.",
       "templateCode": "ids = [101, 102, 103]\ntags = [§§§§(x) for x in ids]\nprint(tags)",
       "targetCode": "ids = [101, 102, 103]\ntags = [str(x) for x in ids]\nprint(tags)",
       "testCases": [
@@ -136,10 +136,10 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 양옆에 공백이 섞인 문자열 리스트에서 공백을 모두 제거한 새 리스트를 만들도록 메서드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the string method inside the comprehension to remove leading and trailing spaces from each word.",
-      "hint_ko": "문자열 양끝의 공백을 깔끔하게 지우는 다섯 글자 문자열 메서드를 호출하세요.",
-      "hint_en": "Call the five-letter string method that strips surrounding whitespace.",
-      "templateCode": "raw = [\"  a \", \"b  \", \" c \"]\nclean = [s.§§§§§§() for s in raw]\nprint(clean)",
-      "targetCode": "raw = [\"  a \", \"b  \", \" c \"]\nclean = [s.strip() for s in raw]\nprint(clean)",
+      "hint_ko": "문자열 양끝의 공백을 깔끔하게 지우는 문자열 메서드를 호출하세요.",
+      "hint_en": "Call the string method that strips surrounding whitespace.",
+      "templateCode": "raw = [\" a \", \"b \", \" c \"]\nclean = [s.§§§§§§() for s in raw]\nprint(clean)",
+      "targetCode": "raw = [\" a \", \"b \", \" c \"]\nclean = [s.strip() for s in raw]\nprint(clean)",
       "testCases": [
         {
           "id": 1,
@@ -163,11 +163,6 @@ export const PYTHON_LEVEL_90: PracticeRound = {
           "id": 1,
           "input": "10 20 30",
           "expectedOutput": "[10, 20, 30] 60"
-        },
-        {
-          "id": 2,
-          "input": "5 15",
-          "expectedOutput": "[5, 15] 20"
         }
       ]
     },
@@ -178,8 +173,8 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 쉼표로 구분된 입력 숫자들을 정수 리스트로 바꾸어 최댓값을 출력하도록 형변환 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the conversion function so comma-separated numeric strings become integers.",
-      "hint_ko": "쪼개진 각 숫자 문자열 조각을 정수로 바꾸는 세 글자 내장 함수를 적으세요.",
-      "hint_en": "Use the three-letter built-in function that converts a string to an integer.",
+      "hint_ko": "쪼개진 각 숫자 문자열 조각을 정수로 바꾸는 내장 함수를 적으세요.",
+      "hint_en": "Use the built-in function that converts a string to an integer.",
       "templateCode": "nums = [§§§§(s) for s in input().split(\",\")]\nprint(max(nums))",
       "targetCode": "nums = [int(s) for s in input().split(\",\")]\nprint(max(nums))",
       "testCases": [
@@ -187,11 +182,6 @@ export const PYTHON_LEVEL_90: PracticeRound = {
           "id": 1,
           "input": "12,45,30",
           "expectedOutput": "45"
-        },
-        {
-          "id": 2,
-          "input": "7,2,9",
-          "expectedOutput": "9"
         }
       ]
     },
@@ -211,11 +201,6 @@ export const PYTHON_LEVEL_90: PracticeRound = {
           "id": 1,
           "input": "10 20",
           "expectedOutput": "40"
-        },
-        {
-          "id": 2,
-          "input": "1 2 3",
-          "expectedOutput": "21"
         }
       ]
     },

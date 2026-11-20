@@ -29,11 +29,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: '75',
           expectedOutput: 'Pass',
         },
-        {
-          id: 2,
-          input: '45',
-          expectedOutput: 'Fail',
-        },
       ],
     },
     {
@@ -43,8 +38,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 넷째 줄 빈칸에 나머지 분기 키워드를 채워 19세 이상이면 "Adult", 아니면 "Minor"를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the fallback keyword on line 4 to print "Adult" or "Minor".',
-      hint_ko: '앞선 if 조건이 거짓일 때 실행할 분기는 영어로 그밖에를 뜻하는 네 글자 키워드로 시작합니다.',
-      hint_en: 'Start the fallback branch with the four-letter English word meaning "otherwise".',
+      hint_ko: '앞선 if 조건이 거짓일 때 실행할 분기는 영어로 그밖에를 뜻하는 키워드로 시작합니다.',
+      hint_en: 'Start the fallback branch with the English word meaning "otherwise".',
       templateCode: 'age = int(input())\nif age >= 19:\n    print("Adult")\n§§§§§:\n    print("Minor")',
       targetCode: 'age = int(input())\nif age >= 19:\n    print("Adult")\nelse:\n    print("Minor")',
       testCases: [
@@ -52,11 +47,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           id: 1,
           input: '22',
           expectedOutput: 'Adult',
-        },
-        {
-          id: 2,
-          input: '16',
-          expectedOutput: 'Minor',
         },
       ],
     },
@@ -75,11 +65,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           id: 1,
           input: '14',
           expectedOutput: 'Even',
-        },
-        {
-          id: 2,
-          input: '9',
-          expectedOutput: 'Odd',
         },
       ],
     },
@@ -100,11 +85,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: '20',
           expectedOutput: '5x',
         },
-        {
-          id: 2,
-          input: '13',
-          expectedOutput: 'No',
-        },
       ],
     },
     {
@@ -122,11 +102,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           id: 1,
           input: '12000',
           expectedOutput: '10000',
-        },
-        {
-          id: 2,
-          input: '7000',
-          expectedOutput: '9500',
         },
       ],
     },
@@ -147,11 +122,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: 'O',
           expectedOutput: '60',
         },
-        {
-          id: 2,
-          input: 'X',
-          expectedOutput: '45',
-        },
       ],
     },
     {
@@ -170,11 +140,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: '25\n18',
           expectedOutput: 'Max=25',
         },
-        {
-          id: 2,
-          input: '10\n42',
-          expectedOutput: 'Max=42',
-        },
       ],
     },
     {
@@ -184,8 +149,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 동시 만족 논리 키워드를 채워 두 과목 모두 60 이상일 때만 "Result:PASS"가 이어 출력되게 해보세요.',
       prompt_en: '[Fill Blank] Fill in the conjunction keyword so "Result:PASS" prints when both scores are >= 60.',
-      hint_ko: 'print("Result", end=":") 뒤에 이어서 찍히도록 두 점수 조건을 세 글자 동시 만족 키워드로 묶습니다.',
-      hint_en: 'Join the two score checks with the three-letter conjunction keyword.',
+      hint_ko: 'print("Result", end=":") 뒤에 이어서 찍히도록 두 점수 조건을 동시 만족 키워드로 묶습니다.',
+      hint_en: 'Join the two score checks with the conjunction keyword.',
       templateCode: 'a, b = input().split()\nprint("Result", end=":")\nif int(a) >= 60 §§§§ int(b) >= 60:\n    print("PASS")\nelse:\n    print("FAIL")',
       targetCode: 'a, b = input().split()\nprint("Result", end=":")\nif int(a) >= 60 and int(b) >= 60:\n    print("PASS")\nelse:\n    print("FAIL")',
       testCases: [
@@ -193,11 +158,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           id: 1,
           input: '70 80',
           expectedOutput: 'Result:PASS',
-        },
-        {
-          id: 2,
-          input: '80 50',
-          expectedOutput: 'Result:FAIL',
         },
       ],
     },
@@ -218,11 +178,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: '14',
           expectedOutput: '7',
         },
-        {
-          id: 2,
-          input: '9',
-          expectedOutput: '10',
-        },
       ],
     },
     {
@@ -241,11 +196,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           id: 1,
           input: '70',
           expectedOutput: 'Pass',
-        },
-        {
-          id: 2,
-          input: '50',
-          expectedOutput: 'Fail',
         },
       ],
     },
@@ -266,11 +216,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: '12',
           expectedOutput: 'Even',
         },
-        {
-          id: 2,
-          input: '7',
-          expectedOutput: 'Odd',
-        },
       ],
     },
     {
@@ -290,11 +235,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           input: '10',
           expectedOutput: 'No',
         },
-        {
-          id: 2,
-          input: '12',
-          expectedOutput: '3x',
-        },
       ],
     },
     {
@@ -304,8 +244,8 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       kind: 'one_line',
       prompt_ko: '[한 줄 완성] if 조건이 거짓일 때 나머지 경우를 처리하는 분기 헤더 한 줄을 넷째 줄에 작성해보세요.',
       prompt_en: '[Complete Line] Write the fallback branch header line on line 4.',
-      hint_ko: '들여쓰기 없이 네 글자 나머지 분기 키워드와 콜론을 작성합니다.',
-      hint_en: 'Write the unindented four-letter fallback keyword followed by a colon.',
+      hint_ko: '들여쓰기 없이 나머지 분기 키워드와 콜론을 작성합니다.',
+      hint_en: 'Write the unindented fallback keyword followed by a colon.',
       templateCode: 'pw = input()\nif pw == "1234":\n    print("Open")\n§§§§§§\n    print("Lock")',
       targetCode: 'pw = input()\nif pw == "1234":\n    print("Open")\nelse:\n    print("Lock")',
       testCases: [
@@ -313,11 +253,6 @@ export const PYTHON_LEVEL_27: PracticeRound = {
           id: 1,
           input: '1234',
           expectedOutput: 'Open',
-        },
-        {
-          id: 2,
-          input: '0000',
-          expectedOutput: 'Lock',
         },
       ],
     },

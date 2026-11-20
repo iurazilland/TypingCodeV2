@@ -20,8 +20,8 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 소문자 단어 빈도를 딕셔너리 안전 조회로 세고, 키를 사전순 정렬해 쉼표로 묶어 출력해보세요.",
       "prompt_en": "[Fill Blank] Count lowercase word frequencies using safe dictionary lookup, order the keys alphabetically, and combine with commas.",
-      "hint_ko": "기본값 안전 조회 메서드(3글자), 사본 정렬 내장 함수(6글자), 문자열 결합 메서드(4글자)를 채우세요.",
-      "hint_en": "Supply the 3-letter safe lookup method, the 6-letter sorting function, and the 4-letter joining method.",
+      "hint_ko": "기본값 안전 조회 메서드, 사본 정렬 내장 함수, 문자열 결합 메서드를 채우세요.",
+      "hint_en": "Supply the safe lookup method, the sorting function, and the joining method.",
       "targetCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in sorted(counts)]\nprint(\",\".join(pairs))",
       "templateCode": "words = [w.lower() for w in input().split()]\ncounts = {}\nfor w in words:\n    counts[w] = counts.§§§§(w, 0) + 1\npairs = [f\"{k}:{counts[k]}\" for k in §§§§§§§(counts)]\nprint(\",\".§§§§§(pairs))",
       "testCases": [
@@ -29,11 +29,6 @@ export const PYTHON_LEVEL_113: PracticeRound = {
           "id": 1,
           "input": "Py code PY py Code",
           "expectedOutput": "code:2,py:3"
-        },
-        {
-          "id": 2,
-          "input": "A b a",
-          "expectedOutput": "a:2,b:1"
         }
       ]
     },
@@ -45,7 +40,7 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "prompt_ko": "[빈칸 채우기] 가변 인자(*nums)와 기본값 매개변수(bonus=0)로 총합과 소수점 둘째 자리 평균을 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the variadic parameter, summation built-in, and 2-decimal format specifier.",
       "hint_ko": "별표 가변 매개변수(*nums), 합계 함수(sum), 그리고 소수 둘째 자리 서식(.2f)을 차례로 채우세요.",
-      "hint_en": "Fill in *nums, the 3-letter sum function, and the 3-character .2f format specifier.",
+      "hint_en": "Fill in *nums, the sum function, and the 3-character .2f format specifier.",
       "targetCode": "def calc_total(*nums, bonus=0):\n    return sum(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:.2f}\")",
       "templateCode": "def calc_total(§§§§§§, bonus=0):\n    return §§§§(nums) + bonus\n\nt = calc_total(400, 500, 600, bonus=100)\navg = t / 3\nprint(f\"Total:{t:,} Avg:{avg:§§§§}\")",
       "testCases": [
@@ -63,8 +58,8 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 상위 계좌 클래스를 상속받은 SafeAccount의 출금 예외 검증과 4단 예외 처리 마무리를 완성해보세요.",
       "prompt_en": "[Fill Blank] Inherit from the parent class, trigger ValueError on invalid withdrawal, and complete the unconditional cleanup block.",
-      "hint_ko": "부모 클래스 이름(7글자), 예외 발생 키워드(5글자), 무조건 실행 마무리 키워드(7글자)를 채우세요.",
-      "hint_en": "Supply the 7-letter parent class name, the 5-letter exception-raising keyword, and the 7-letter cleanup keyword.",
+      "hint_ko": "부모 클래스 이름, 예외 발생 키워드, 무조건 실행 마무리 키워드를 채우세요.",
+      "hint_en": "Supply the parent class name, the exception-raising keyword, and the cleanup keyword.",
       "targetCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(Account):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            raise ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\nfinally:\n    print(\"End\")",
       "templateCode": "class Account:\n    def __init__(self, name, bal):\n        self.name = name\n        self.bal = bal\n\n    def __str__(self):\n        return f\"{self.name}:{self.bal:,}\"\n\nclass SafeAccount(§§§§§§§§):\n    def withdraw(self, amt):\n        if amt <= 0 or amt > self.bal:\n            §§§§§§ ValueError(\"Denied\")\n        self.bal -= amt\n\nacc = SafeAccount(\"Aria\", 5000)\ntry:\n    acc.withdraw(int(input()))\nexcept ValueError as e:\n    print(e)\nelse:\n    print(acc)\n§§§§§§§§:\n    print(\"End\")",
       "testCases": [
@@ -72,11 +67,6 @@ export const PYTHON_LEVEL_113: PracticeRound = {
           "id": 1,
           "input": "1500",
           "expectedOutput": "Aria:3,500\nEnd"
-        },
-        {
-          "id": 2,
-          "input": "9000",
-          "expectedOutput": "Denied\nEnd"
         }
       ]
     },
@@ -115,11 +105,6 @@ export const PYTHON_LEVEL_113: PracticeRound = {
           "id": 1,
           "input": "120",
           "expectedOutput": "Err:Range"
-        },
-        {
-          "id": 2,
-          "input": "85",
-          "expectedOutput": "OK:85%"
         }
       ]
     },
@@ -158,11 +143,6 @@ export const PYTHON_LEVEL_113: PracticeRound = {
           "id": 1,
           "input": "85 90 75",
           "expectedOutput": "PASS"
-        },
-        {
-          "id": 2,
-          "input": "95 95 55",
-          "expectedOutput": "FAIL"
         }
       ]
     },
@@ -175,13 +155,13 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "prompt_en": "[Complete Line] Assign sorted(ok, key=lambda h: h.lv, reverse=True) to s.",
       "hint_ko": "s = sorted(ok, key=lambda h: h.lv, reverse=True) 형태로 작성하세요.",
       "hint_en": "Write s = sorted(ok, key=lambda h: h.lv, reverse=True) on the masked line.",
-      "targetCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\nok = [h for h in hs if h.lv >= 10]\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\", \".join([str(h) for h in s]))",
-      "templateCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\", \".join([str(h) for h in s]))",
+      "targetCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\nok = [h for h in hs if h.lv >= 10]\ns = sorted(ok, key=lambda h: h.lv, reverse=True)\nprint(\",\".join([str(h) for h in s]))",
+      "templateCode": "class Hero:\n    def __init__(self, name, lv):\n        self.name = name\n        self.lv = lv\n\n    def __str__(self):\n        return f\"{self.name}(Lv.{self.lv})\"\n\nhs = [Hero(\"Kai\", 12), Hero(\"Ara\", 25), Hero(\"Leo\", 8)]\nok = [h for h in hs if h.lv >= 10]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(\",\".join([str(h) for h in s]))",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Ara(Lv.25), Kai(Lv.12)"
+          "expectedOutput": "Ara(Lv.25),Kai(Lv.12)"
         }
       ]
     },

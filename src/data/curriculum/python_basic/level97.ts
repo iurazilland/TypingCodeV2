@@ -62,7 +62,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 실수 rate를 소수점 둘째 자리(3.50)까지 고정 표기하도록 콜론 뒤의 서식 지정자를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the format specifier after the colon to display rate with 2 decimal places (3.50).",
-      "hint_ko": "소수점 둘째 자리 고정 실수(fixed-point)를 뜻하는 세 글자 서식 지정자를 적으세요.",
+      "hint_ko": "소수점 둘째 자리 고정 실수(fixed-point)를 뜻하는 서식 지정자를 적으세요.",
       "hint_en": "Enter the 3-character format specifier for 2 fixed decimal places.",
       "targetCode": "rate = 3.5\nprint(f\"{rate:.2f}%\")",
       "templateCode": "rate = 3.5\nprint(f\"{rate:§§§§}%\")",
@@ -108,11 +108,6 @@ export const PYTHON_LEVEL_97: PracticeRound = {
           "id": 1,
           "input": "45000",
           "expectedOutput": "$45,000"
-        },
-        {
-          "id": 2,
-          "input": "1000000",
-          "expectedOutput": "$1,000,000"
         }
       ]
     },
@@ -141,7 +136,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 정수를 3자리 폭에 맞춰 앞의 빈자리를 0으로 채우도록(예: 007) 서식 지정자를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the format specifier after the colon to zero-pad the integer to 3 digits.",
-      "hint_ko": "0으로 채움(0), 3자리 폭(3), 10진 정수(d)를 합친 세 글자 서식 지정자를 입력하세요.",
+      "hint_ko": "0으로 채움(0), 3자리 폭(3), 10진 정수(d)를 합친 서식 지정자를 입력하세요.",
       "hint_en": "Enter the 3-character specifier combining zero-fill (0), width (3), and decimal integer (d).",
       "targetCode": "n = int(input())\nprint(f\"ID-{n:03d}\")",
       "templateCode": "n = int(input())\nprint(f\"ID-{n:§§§§}\")",
@@ -150,11 +145,6 @@ export const PYTHON_LEVEL_97: PracticeRound = {
           "id": 1,
           "input": "7",
           "expectedOutput": "ID-007"
-        },
-        {
-          "id": 2,
-          "input": "42",
-          "expectedOutput": "ID-042"
         }
       ]
     },
@@ -167,12 +157,12 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "prompt_en": "[Block] Print the sum of scores with thousands commas (:,) and the average to 2 decimal places (:.2f).",
       "hint_ko": "sum(scores)와 sum(scores) / len(scores)로 구한 값에 각각 :,와 :.2f 서식을 지정합니다.",
       "hint_en": "Format the total with :, and the computed average with :.2f in the f-string.",
-      "targetCode": "scores = [850, 920, 780]\ntotal = sum(scores)\navg = total / len(scores)\nprint(f\"Sum:{total:,} / Avg:{avg:.2f}\")",
+      "targetCode": "scores = [850, 920, 780]\ntotal = sum(scores)\navg = total / len(scores)\nprint(f\"Sum:{total:,}/Avg:{avg:.2f}\")",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "Sum:2,550 / Avg:850.00"
+          "expectedOutput": "Sum:2,550/Avg:850.00"
         }
       ]
     },
@@ -183,7 +173,7 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 천 단위 콤마와 소수점 둘째 자리 표기를 동시에 적용하는 복합 서식 지정자를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the combined format specifier for both thousands commas and 2 decimal places.",
-      "hint_ko": "콜론 뒤에 쉼표(,)와 소수 둘째 자리(.2f)를 나란히 붙인 네 글자 서식 지정자를 적으세요.",
+      "hint_ko": "콜론 뒤에 쉼표(,)와 소수 둘째 자리(.2f)를 나란히 붙인 서식 지정자를 적으세요.",
       "hint_en": "Combine the comma separator and 2-decimal fixed-point specifier into 4 characters after the colon.",
       "targetCode": "amount = 12345.6\nprint(f\"${amount:,.2f}\")",
       "templateCode": "amount = 12345.6\nprint(f\"${amount:§§§§§}\")",

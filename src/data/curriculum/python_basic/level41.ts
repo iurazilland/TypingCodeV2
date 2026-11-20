@@ -89,8 +89,8 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] colors 리스트에 들어 있는 색상 요소의 전체 개수를 구해 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the built-in function to print the number of items in colors.',
-      hint_ko: '컬렉션의 길이를 구하는 세 글자 내장 함수를 호출하세요.',
-      hint_en: 'Call the 3-letter built-in function that returns the length of a collection.',
+      hint_ko: '컬렉션의 길이를 구하는 내장 함수를 호출하세요.',
+      hint_en: 'Call the built-in function that returns the length of a collection.',
       templateCode: 'colors = ["red", "green", "blue"]\nprint("Count:", §§§§(colors))',
       targetCode: 'colors = ["red", "green", "blue"]\nprint("Count:", len(colors))',
       testCases: [

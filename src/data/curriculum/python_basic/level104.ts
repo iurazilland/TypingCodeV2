@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 리스트의 모든 숫자가 양수(> 0)인지 일괄 검사해 불리언을 출력하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the universal quantifier built-in to check if every number in nums is positive.",
-      "hint_ko": "'모두' 참인지 확인하는 세 글자 내장 함수를 입력하세요.",
-      "hint_en": "Type the 3-letter built-in function that checks whether every item is True.",
+      "hint_ko": "'모두' 참인지 확인하는 내장 함수를 입력하세요.",
+      "hint_en": "Type the built-in function that checks whether every item is True.",
       "targetCode": "nums = [10, 5, 8]\nprint(all([n > 0 for n in nums]))",
       "templateCode": "nums = [10, 5, 8]\nprint(§§§§([n > 0 for n in nums]))",
       "testCases": [
@@ -101,8 +101,8 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 입력된 비밀번호 문자열에 숫자 글자가 하나라도 포함되어 있는지 확인하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the existential quantifier built-in to test if at least one character in pw is a digit.",
-      "hint_ko": "'어느 하나라도' 참인지 확인하는 세 글자 내장 함수를 적으세요.",
-      "hint_en": "Enter the 3-letter built-in function that checks if at least one item is True.",
+      "hint_ko": "'어느 하나라도' 참인지 확인하는 내장 함수를 적으세요.",
+      "hint_en": "Enter the built-in function that checks if at least one item is True.",
       "targetCode": "pw = input().strip()\nprint(any([c.isdigit() for c in pw]))",
       "templateCode": "pw = input().strip()\nprint(§§§§([c.isdigit() for c in pw]))",
       "testCases": [
@@ -110,11 +110,6 @@ export const PYTHON_LEVEL_104: PracticeRound = {
           "id": 1,
           "input": "py2026",
           "expectedOutput": "True"
-        },
-        {
-          "id": 2,
-          "input": "secret",
-          "expectedOutput": "False"
         }
       ]
     },
@@ -143,8 +138,8 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 변수 val이 정수(int) 자료형인지 판별해 True를 출력하도록 타입 확인 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in type-checking function to verify whether val is an integer.",
-      "hint_ko": "객체가 특정 타입의 인스턴스인지 묻는 열 글자 내장 함수를 입력하세요.",
-      "hint_en": "Type the 10-letter built-in function that checks if an object is an instance of a type.",
+      "hint_ko": "객체가 특정 타입의 인스턴스인지 묻는 내장 함수를 입력하세요.",
+      "hint_en": "Type the built-in function that checks if an object is an instance of a type.",
       "targetCode": "val = 100\nprint(isinstance(val, int))",
       "templateCode": "val = 100\nprint(§§§§§§§§§§§(val, int))",
       "testCases": [
@@ -180,8 +175,8 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 혼합 리스트에서 문자열 원소만 골라내는 리스트 컴프리헨션의 두 번째 타입 인자를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the second argument of isinstance() to filter only string elements from mixed.",
-      "hint_ko": "문자열 자료형을 뜻하는 세 글자 타입 이름을 적으세요.",
-      "hint_en": "Write the 3-letter type name for strings.",
+      "hint_ko": "문자열 자료형을 뜻하는 타입 이름을 적으세요.",
+      "hint_en": "Write the type name for strings.",
       "targetCode": "mixed = [\"py\", 10, \"ai\", 20]\nwords = [x for x in mixed if isinstance(x, str)]\nprint(\"-\".join(words))",
       "templateCode": "mixed = [\"py\", 10, \"ai\", 20]\nwords = [x for x in mixed if isinstance(x, §§§§)]\nprint(\"-\".join(words))",
       "testCases": [

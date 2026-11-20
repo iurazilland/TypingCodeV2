@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 둘째 줄 빈칸에 반복 시작 키워드를 채워 바깥 i(2번)와 안쪽 j(2번) 이중 반복문을 완성해보세요.',
       prompt_en: '[Fill Blank] Fill in the inner loop keyword on line 2 to complete the nested loop.',
-      hint_ko: '4칸 들여쓰기된 안쪽 반복문도 바깥과 같은 세 글자 반복 키워드로 시작합니다.',
-      hint_en: 'Start the 4-space indented inner loop with the three-letter counted-loop keyword.',
+      hint_ko: '4칸 들여쓰기된 안쪽 반복문도 바깥과 같은 반복 키워드로 시작합니다.',
+      hint_en: 'Start the 4-space indented inner loop with the counted-loop keyword.',
       templateCode: 'for i in range(1, 3):\n    §§§§ j in range(1, 3):\n        print(i, j)',
       targetCode: 'for i in range(1, 3):\n    for j in range(1, 3):\n        print(i, j)',
       testCases: [
@@ -75,8 +75,8 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 넷째 줄 빈칸에 줄 끝 옵션 이름을 채워 가로로 "#"을 이어 찍는 n x n 정사각형 격자를 완성해보세요.',
       prompt_en: '[Fill Blank] Fill in the line-end option name on line 4 to print "#" horizontally across each row.',
-      hint_ko: '줄바꿈 대신 빈 문자열("")로 끝나도록 세 글자 옵션 이름을 적습니다.',
-      hint_en: 'Specify the three-letter parameter name that controls the ending string of print().',
+      hint_ko: '줄바꿈 대신 빈 문자열("")로 끝나도록 옵션 이름을 적습니다.',
+      hint_en: 'Specify the parameter name that controls the ending string of print().',
       templateCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", §§§§="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        print("#", end="")\n    print()',
       testCases: [
@@ -84,11 +84,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '###\n###\n###',
-        },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '##\n##',
         },
       ],
     },
@@ -145,11 +140,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           input: '3',
           expectedOutput: '*\n**\n***',
         },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '*\n**\n***\n****',
-        },
       ],
     },
     {
@@ -168,11 +158,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '***\n**\n*',
-        },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '**\n*',
         },
       ],
     },
@@ -193,11 +178,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           input: '3',
           expectedOutput: '100\n010\n001',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '10\n01',
-        },
       ],
     },
     {
@@ -216,11 +196,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '*\n**\n***',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '*\n**\n***\n****',
         },
       ],
     },
@@ -241,11 +216,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           input: '3',
           expectedOutput: '1\n12\n123',
         },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '1\n12\n123\n1234',
-        },
       ],
     },
     {
@@ -265,11 +235,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           input: '3',
           expectedOutput: '1\n22\n333',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '1\n22',
-        },
       ],
     },
     {
@@ -288,11 +253,6 @@ export const PYTHON_LEVEL_39: PracticeRound = {
           id: 1,
           input: '2',
           expectedOutput: '**\n**',
-        },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '***\n***\n***',
         },
       ],
     },

@@ -138,8 +138,8 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 숫자 x의 제곱(x ** 2)을 반환하는 한 줄 익명 함수를 만들도록 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the keyword to define an anonymous inline function that squares x.",
-      "hint_ko": "이름 없는 한 줄 함수를 정의하는 여섯 글자 파이썬 키워드를 입력하세요.",
-      "hint_en": "Type the 6-letter Python keyword used to create an anonymous function.",
+      "hint_ko": "이름 없는 한 줄 함수를 정의하는 파이썬 키워드를 입력하세요.",
+      "hint_en": "Type the Python keyword used to create an anonymous function.",
       "targetCode": "sq = lambda x: x ** 2\nprint(sq(6))",
       "templateCode": "sq = §§§§§§§ x: x ** 2\nprint(sq(6))",
       "testCases": [
@@ -175,8 +175,8 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] (상품명, 가격) 튜플 리스트를 가격(x[1]) 기준 오름차순으로 정렬하도록 익명 함수 키워드를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the anonymous function keyword so items are sorted by their second element x[1].",
-      "hint_ko": "정렬 기준 함수를 즉석에서 작성하는 여섯 글자 키워드를 입력하세요.",
-      "hint_en": "Enter the 6-letter keyword for an inline anonymous function.",
+      "hint_ko": "정렬 기준 함수를 즉석에서 작성하는 키워드를 입력하세요.",
+      "hint_en": "Enter the keyword for an inline anonymous function.",
       "targetCode": "items = [(\"pen\", 800), (\"bag\", 500)]\ns = sorted(items, key=lambda x: x[1])\nprint(s[0][0])",
       "templateCode": "items = [(\"pen\", 800), (\"bag\", 500)]\ns = sorted(items, key=§§§§§§§ x: x[1])\nprint(s[0][0])",
       "testCases": [

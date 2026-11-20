@@ -77,12 +77,12 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       prompt_en: '[Block] Unpack keys and values simultaneously using d.items() and print them with an f-string.',
       hint_ko: '.items() 메서드는 (키, 값) 쌍을 돌려주므로 두 변수 k, v로 바로 언패킹할 수 있습니다.',
       hint_en: 'The .items() method yields (key, value) pairs that unpack directly into k and v.',
-      targetCode: 'd = {"kor": 90, "math": 95}\nfor k, v in d.items():\n    print(f"{k}: {v}")',
+      targetCode: 'd = {"kor": 90, "math": 95}\nfor k, v in d.items():\n    print(f"{k}:{v}")',
       testCases: [
         {
           id: 1,
           input: '',
-          expectedOutput: 'kor: 90\nmath: 95',
+          expectedOutput: 'kor:90\nmath:95',
         },
       ],
     },
@@ -128,7 +128,7 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] scores.items()의 키와 값을 두 변수로 언패킹하여 값의 총합 120을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] scores.items()의 키와 값을 두 변수 k, v로 언패킹하여 값의 총합 120을 출력해보세요.',
       prompt_en: '[Fill Blank] Unpack each key-value pair from scores.items() so the sum 120 is printed.',
       hint_ko: '반복문 본문에서 값을 v로 더하고 있으므로 키와 값 두 변수를 쉼표로 나란히 적으세요.',
       hint_en: 'Write the two single-letter loop variables for key and value separated by a comma and space.',

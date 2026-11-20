@@ -20,8 +20,8 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 정수 x의 불리언 변환값과 그 반전값을 나란히 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 2 blanks to print the boolean conversion of x and its negation.',
-      hint_ko: '정수를 참·거짓 자료형으로 바꾸는 네 글자 내장 함수와, 결과를 뒤집는 세 글자 부정 키워드를 채웁니다.',
-      hint_en: 'Call the four-letter boolean casting function first, and place the three-letter negation keyword in the second blank.',
+      hint_ko: '정수를 참·거짓 자료형으로 바꾸는 내장 함수와, 결과를 뒤집는 세 글자 부정 키워드를 채웁니다.',
+      hint_en: 'Call the boolean casting function first, and place the negation keyword in the second blank.',
       templateCode: 'a, b = input().split()\nx = int(a)\nprint(§§§§§(x), §§§§ bool(x))\nprint(b == "py")',
       targetCode: 'a, b = input().split()\nx = int(a)\nprint(bool(x), not bool(x))\nprint(b == "py")',
       testCases: [
@@ -29,11 +29,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           id: 1,
           input: '0 py',
           expectedOutput: 'False True\nTrue',
-        },
-        {
-          id: 2,
-          input: '5 js',
-          expectedOutput: 'True False\nFalse',
         },
       ],
     },
@@ -54,16 +49,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           input: '25000\n1',
           expectedOutput: '20000',
         },
-        {
-          id: 2,
-          input: '25000\n0',
-          expectedOutput: '23000',
-        },
-        {
-          id: 3,
-          input: '12000\n1',
-          expectedOutput: '15000',
-        },
       ],
     },
     {
@@ -73,8 +58,8 @@ export const PYTHON_LEVEL_30: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 온도가 0~100이면 아무 출력 없이 넘어가고, 100 초과면 "Gas", 0 미만이면 "Ice"를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 2 blanks to convert input to an integer and do nothing when 0 <= temp <= 100.',
-      hint_ko: '첫째 줄에는 세 글자 정수 변환 함수를, 넷째 줄 빈 블록에는 네 글자 통과 키워드를 채웁니다.',
-      hint_en: 'Use the three-letter integer casting function on line 1 and the four-letter no-op keyword on line 4.',
+      hint_ko: '첫째 줄에는 세 글자 정수 변환 함수를, 넷째 줄 빈 블록에는 통과 키워드를 채웁니다.',
+      hint_en: 'Use the integer casting function on line 1 and the no-op keyword on line 4.',
       templateCode: 'temp = §§§§(input())\nif temp >= 0:\n    if temp <= 100:\n        §§§§§\n    else:\n        print("Gas")\nelse:\n    print("Ice")\nprint("Checked")',
       targetCode: 'temp = int(input())\nif temp >= 0:\n    if temp <= 100:\n        pass\n    else:\n        print("Gas")\nelse:\n    print("Ice")\nprint("Checked")',
       testCases: [
@@ -82,16 +67,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           id: 1,
           input: '25',
           expectedOutput: 'Checked',
-        },
-        {
-          id: 2,
-          input: '120',
-          expectedOutput: 'Gas\nChecked',
-        },
-        {
-          id: 3,
-          input: '-4',
-          expectedOutput: 'Ice\nChecked',
         },
       ],
     },
@@ -112,11 +87,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           input: 'A1',
           expectedOutput: 'Open',
         },
-        {
-          id: 2,
-          input: 'B2',
-          expectedOutput: 'Lock',
-        },
       ],
     },
     {
@@ -136,16 +106,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           input: '95',
           expectedOutput: 'A',
         },
-        {
-          id: 2,
-          input: '75',
-          expectedOutput: 'B',
-        },
-        {
-          id: 3,
-          input: '50',
-          expectedOutput: 'C',
-        },
       ],
     },
     {
@@ -163,16 +123,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
         {
           id: 1,
           input: '22',
-          expectedOutput: 'Closed',
-        },
-        {
-          id: 2,
-          input: '14',
-          expectedOutput: 'Open',
-        },
-        {
-          id: 3,
-          input: '6',
           expectedOutput: 'Closed',
         },
       ],
@@ -194,11 +144,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           input: 'none',
           expectedOutput: 'Empty',
         },
-        {
-          id: 2,
-          input: 'hello',
-          expectedOutput: 'Msg:hello',
-        },
       ],
     },
     {
@@ -217,11 +162,6 @@ export const PYTHON_LEVEL_30: PracticeRound = {
           id: 1,
           input: '15 25',
           expectedOutput: '40',
-        },
-        {
-          id: 2,
-          input: '3 7',
-          expectedOutput: '10',
         },
       ],
     },

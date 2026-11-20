@@ -64,8 +64,8 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 두 리스트 names와 scores를 병렬로 짝지은 튜플 리스트를 만들도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the parallel-pairing built-in function to combine names and scores into tuples.",
-      "hint_ko": "지퍼(zipper)처럼 양쪽 리스트를 맞물려 묶어주는 세 글자 내장 함수를 적으세요.",
-      "hint_en": "Type the 3-letter built-in function that pairs elements like a zipper.",
+      "hint_ko": "지퍼(zipper)처럼 양쪽 리스트를 맞물려 묶어주는 내장 함수를 적으세요.",
+      "hint_en": "Type the built-in function that pairs elements like a zipper.",
       "targetCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\nprint(list(zip(names, scores)))",
       "templateCode": "names = [\"Amy\", \"Bob\"]\nscores = [95, 88]\nprint(list(§§§§(names, scores)))",
       "testCases": [
@@ -101,8 +101,8 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] zip(keys, vals)로 묶은 쌍들을 딕셔너리 자료형으로 변환하도록 바깥쪽 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the dictionary constructor to turn the zipped pairs into a dictionary.",
-      "hint_ko": "사전(dictionary)을 생성하는 네 글자 내장 함수를 입력하세요.",
-      "hint_en": "Enter the 4-letter built-in constructor for a dictionary.",
+      "hint_ko": "사전(dictionary)을 생성하는 내장 함수를 입력하세요.",
+      "hint_en": "Enter the built-in constructor for a dictionary.",
       "targetCode": "keys = [\"a\", \"b\"]\nvals = [10, 20]\nd = dict(zip(keys, vals))\nprint(d[\"a\"], d[\"b\"])",
       "templateCode": "keys = [\"a\", \"b\"]\nvals = [10, 20]\nd = §§§§§(zip(keys, vals))\nprint(d[\"a\"], d[\"b\"])",
       "testCases": [
@@ -138,8 +138,8 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 로그 리스트를 마지막 항목부터 역순으로 순회하며 출력하도록 내장 함수를 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the built-in function to iterate over logs from back to front.",
-      "hint_ko": "시퀀스를 역순으로 순회하는 여덟 글자 내장 함수를 적으세요.",
-      "hint_en": "Write the 8-letter built-in function that iterates over a sequence in reverse.",
+      "hint_ko": "시퀀스를 역순으로 순회하는 내장 함수를 적으세요.",
+      "hint_en": "Write the built-in function that iterates over a sequence in reverse.",
       "targetCode": "logs = [\"open\", \"edit\", \"save\"]\nfor x in reversed(logs):\n    print(x)",
       "templateCode": "logs = [\"open\", \"edit\", \"save\"]\nfor x in §§§§§§§§§(logs):\n    print(x)",
       "testCases": [
@@ -175,8 +175,8 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "kind": "fill_blank",
       "prompt_ko": "[빈칸 채우기] 두 리스트 a, b의 같은 위치 원소끼리 더한 리스트 컴프리헨션을 완성해보세요.",
       "prompt_en": "[Fill Blank] Fill in the pairing function in the list comprehension to add corresponding elements of a and b.",
-      "hint_ko": "두 시퀀스를 나란히 묶어주는 세 글자 내장 함수를 입력하세요.",
-      "hint_en": "Enter the 3-letter built-in function that pairs elements from two sequences.",
+      "hint_ko": "두 시퀀스를 나란히 묶어주는 내장 함수를 입력하세요.",
+      "hint_en": "Enter the built-in function that pairs elements from two sequences.",
       "targetCode": "a = [1, 2, 3]\nb = [10, 20, 30]\nprint([x + y for x, y in zip(a, b)])",
       "templateCode": "a = [1, 2, 3]\nb = [10, 20, 30]\nprint([x + y for x, y in §§§§(a, b)])",
       "testCases": [

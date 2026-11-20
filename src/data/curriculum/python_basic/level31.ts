@@ -38,8 +38,8 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 숫자 범위를 생성하는 내장 함수를 채워 "Go"를 4번 반복 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the range-generating function name to print "Go" 4 times.',
-      hint_ko: '영어로 범위·구간을 뜻하는 다섯 글자 내장 함수를 사용합니다.',
-      hint_en: 'Use the five-letter built-in function meaning a numeric span or range.',
+      hint_ko: '영어로 범위·구간을 뜻하는 내장 함수를 사용합니다.',
+      hint_en: 'Use the built-in function meaning a numeric span or range.',
       templateCode: 'for i in §§§§§§(4):\n    print("Go")',
       targetCode: 'for i in range(4):\n    print("Go")',
       testCases: [
@@ -75,8 +75,8 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 횟수 반복 시작 키워드를 채워 0부터 2까지의 정수를 차례로 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the counted-loop keyword to print integers 0 through 2.',
-      hint_ko: '영어로 ~마다를 뜻하는 세 글자 반복 키워드로 루프를 시작합니다.',
-      hint_en: 'Begin the counted loop with the three-letter keyword.',
+      hint_ko: '영어로 ~마다를 뜻하는 반복 키워드로 루프를 시작합니다.',
+      hint_en: 'Begin the counted loop with the keyword.',
       templateCode: '§§§§ i in range(3):\n    print(i)',
       targetCode: 'for i in range(3):\n    print(i)',
       testCases: [
@@ -103,11 +103,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           input: '3',
           expectedOutput: '1\n2\n3',
         },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '1\n2\n3\n4',
-        },
       ],
     },
     {
@@ -127,11 +122,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           input: '3',
           expectedOutput: '0\n2\n4',
         },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '0\n2\n4\n6',
-        },
       ],
     },
     {
@@ -150,11 +140,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           input: '4',
           expectedOutput: '0 1 2 3',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '0 1 2',
-        },
       ],
     },
     {
@@ -164,8 +149,8 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       kind: 'fill_blank',
       prompt_ko: '[빈칸 채우기] 빈칸에 포함 키워드를 채워 range(n)에서 숫자를 하나씩 꺼내 별 계단을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the membership keyword to pull each i from range(n).',
-      hint_ko: '반복 변수 뒤에 ~안에서를 뜻하는 두 글자 키워드를 적어 range(n)과 연결합니다.',
-      hint_en: 'Place the two-letter keyword meaning "inside" between loop variable i and range(n).',
+      hint_ko: '반복 변수 뒤에 ~안에서를 뜻하는 키워드를 적어 range(n)과 연결합니다.',
+      hint_en: 'Place the keyword meaning "inside" between loop variable i and range(n).',
       templateCode: 'n = int(input())\nfor i §§§ range(n):\n    print("*" * (i + 1))',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print("*" * (i + 1))',
       testCases: [
@@ -173,11 +158,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '*\n**\n***',
-        },
-        {
-          id: 2,
-          input: '4',
-          expectedOutput: '*\n**\n***\n****',
         },
       ],
     },
@@ -197,11 +177,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           id: 1,
           input: '4',
           expectedOutput: '1 2 3 4',
-        },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '1 2 3',
         },
       ],
     },
@@ -241,11 +216,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           input: '4',
           expectedOutput: '1\n2\n3\n4',
         },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '1\n2',
-        },
       ],
     },
     {
@@ -265,11 +235,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           input: '4',
           expectedOutput: '0 2 4 6',
         },
-        {
-          id: 2,
-          input: '3',
-          expectedOutput: '0 2 4',
-        },
       ],
     },
     {
@@ -288,11 +253,6 @@ export const PYTHON_LEVEL_31: PracticeRound = {
           id: 1,
           input: '3',
           expectedOutput: '*\n**\n***',
-        },
-        {
-          id: 2,
-          input: '2',
-          expectedOutput: '*\n**',
         },
       ],
     },

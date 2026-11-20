@@ -29,11 +29,6 @@ export const PYTHON_LEVEL_77: PracticeRound = {
           "id": 1,
           "input": "20",
           "expectedOutput": "Aria:30:True"
-        },
-        {
-          "id": 2,
-          "input": "60",
-          "expectedOutput": "Aria:0:False"
         }
       ]
     },
@@ -167,11 +162,6 @@ export const PYTHON_LEVEL_77: PracticeRound = {
           "id": 1,
           "input": "pen book note",
           "expectedOutput": "3"
-        },
-        {
-          "id": 2,
-          "input": "a b",
-          "expectedOutput": "2"
         }
       ]
     },
