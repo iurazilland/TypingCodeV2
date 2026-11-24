@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 콤마로 구분된 점수 문자열을 쪼개어 첫 점수와 마지막 점수의 정수 합을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 콤마로 구분된 점수 문자열을 쪼갠 뒤 첫 점수와 마지막 점수의 합을 출력해보세요.',
       prompt_en: '[Fill Blank] Split raw on ",", and print the integer sum of the first and last elements.',
-      hint_ko: '문자열 분리 메서드, 첫 번째 인덱스, 정수 변환 함수를 차례로 채우세요.',
+      hint_ko: '문자열 분리 메서드(split)와 첫 번째 요소를 가리키는 인덱스(0)를 차례로 채우세요.',
       hint_en: 'Fill in the split method, index 0, and int() conversion function.',
-      templateCode: 'raw = input().strip()\npts = raw.§§§§§§(",")\ntotal = int(pts[§§]) + §§§§(pts[-1])\nprint(f"Ends:{total}")',
+      templateCode: 'raw = input().strip()\npts = raw.§§§§§§(",")\ntotal = int(pts[§§]) + int(pts[-1])\nprint(f"Ends:{total}")',
       targetCode: 'raw = input().strip()\npts = raw.split(",")\ntotal = int(pts[0]) + int(pts[-1])\nprint(f"Ends:{total}")',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_55: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 콤마로 연결된 문자열 "10,20,30"을 쪼개려다 구분자를 생략해 분리되지 않는 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 콤마로 연결된 문자열 "10,20,30"을 올바르게 쪼개도록 .split() 안의 잘못된 구분자(".")를 콤마(",")로 수정해보세요.',
       prompt_en: '[Fix Bug] Pass the comma delimiter "," to .split() so the three numbers are separated properly.',
-      hint_ko: '공백이 아닌 콤마로 이어진 문자열을 나눌 때는 괄호 안에 ","를 지정해야 합니다.',
+      hint_ko: '콤마로 이어진 문자열을 나눌 때는 괄호 안에 ","를 지정해야 합니다.',
       hint_en: 'Specify "," inside .split(",") when the string is comma-separated.',
-      templateCode: 's = "10,20,30"\nparts = s.split()\nprint(len(parts), parts[0])',
+      templateCode: 's = "10,20,30"\nparts = s.split(".")\nprint(len(parts), parts[0])',
       targetCode: 's = "10,20,30"\nparts = s.split(",")\nprint(len(parts), parts[0])',
       testCases: [
         {

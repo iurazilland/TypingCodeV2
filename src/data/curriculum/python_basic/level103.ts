@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 키 리스트와 역순으로 뒤집은 값 리스트를 짝지어 딕셔너리로 만들어 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 셋째 줄의 빈칸에 병렬 묶기 함수를 채워 키 리스트와 역순 값 리스트를 짝지은 딕셔너리를 출력해보세요.",
       "prompt_en": "[Fill Blank] Pair keys with the backward values list and convert the pairs into a dictionary.",
-      "hint_ko": "사전 생성 함수, 병렬 묶기 함수, 역순 순회 함수를 차례로 채워보세요.",
+      "hint_ko": "두 시퀀스의 같은 위치 요소들을 짝지어 묶어주는 내장 함수(zip)를 채우세요.",
       "hint_en": "Fill in the dictionary constructor, the parallel-pairing function, and the reverse iterator function.",
       "targetCode": "keys = [\"first\", \"second\", \"third\"]\nvals = [10, 20, 30]\nres = dict(zip(keys, reversed(vals)))\nprint(res)",
-      "templateCode": "keys = [\"first\", \"second\", \"third\"]\nvals = [10, 20, 30]\nres = §§§§§(§§§§(keys, §§§§§§§§§(vals)))\nprint(res)",
+      "templateCode": "keys = [\"first\", \"second\", \"third\"]\nvals = [10, 20, 30]\nres = dict(§§§§(keys, reversed(vals)))\nprint(res)",
       "testCases": [
         {
           "id": 1,
@@ -230,11 +230,11 @@ export const PYTHON_LEVEL_103: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] reversed() 반복자를 list()로 감싸지 않고 바로 인덱싱해 발생한 TypeError를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] reversed(nums) 반복자를 리스트로 감싸 rev[0] 인덱싱이 동작하도록 잘못된 변환 함수(dict)를 list로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the TypeError caused by indexing a reversed iterator directly without converting it to a list.",
-      "hint_ko": "reversed()는 리스트가 아니라 반복자 객체를 반환하므로 인덱싱하려면 list(reversed(nums))로 변환해야 합니다.",
+      "hint_ko": "역순 반복자를 리스트로 만들려면 list(reversed(nums))로 변환해야 합니다.",
       "hint_en": "Wrap reversed(nums) in list(...) before indexing [0].",
-      "templateCode": "nums = [10, 20, 30]\nrev = reversed(nums)\nprint(rev[0])",
+      "templateCode": "nums = [10, 20, 30]\nrev = dict(reversed(nums))\nprint(rev[0])",
       "targetCode": "nums = [10, 20, 30]\nrev = list(reversed(nums))\nprint(rev[0])",
       "testCases": [
         {

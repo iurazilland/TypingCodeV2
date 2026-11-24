@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] raw 리스트를 순회하며 seen에 아직 없는 숫자만 추가하고 그 합계를 누적해 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 raw 리스트를 순회하며 seen에 아직 없는 숫자만 추가하고 그 합계를 출력해보세요.',
       prompt_en: '[Fill Blank] Iterate over raw, append unseen numbers to seen, and accumulate their sum into total.',
-      hint_ko: '순회 키워드, 불포함 검사 연산자, 누적 덧셈 연산자를 차례로 채워보세요.',
+      hint_ko: '리스트 순회 키워드(in)와 불포함 검사 연산자(not in)를 차례로 채워보세요.',
       hint_en: 'Fill in the iteration keyword, non-membership operator, and compound addition operator.',
-      templateCode: 'raw = [10, 20, 10, 30]\nseen = []\ntotal = 0\nfor x §§§ raw:\n    if x §§§§§§§ seen:\n        seen.append(x)\n        total §§§ x\nprint(seen, total)',
+      templateCode: 'raw = [10, 20, 10, 30]\nseen = []\ntotal = 0\nfor x §§§ raw:\n    if x §§§§§§§ seen:\n        seen.append(x)\n        total += x\nprint(seen, total)',
       targetCode: 'raw = [10, 20, 10, 30]\nseen = []\ntotal = 0\nfor x in raw:\n    if x not in seen:\n        seen.append(x)\n        total += x\nprint(seen, total)',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 정수를 바로 순회하려 해 TypeError가 발생하는 for문 헤더를 수정해 리스트 요소를 출력해보세요.',
+      prompt_ko: '[틀린 곳 수정] 정의되지 않은 잘못된 이름(item)을 순회하려 해 발생한 에러를 리스트 변수(nums)로 수정해 요소를 출력해보세요.',
       prompt_en: '[Fix Bug] Fix the TypeError in the for-loop header so it iterates directly over the elements of nums.',
-      hint_ko: '요소를 직접 꺼낼 때는 길이 함수 없이 리스트 변수 자체를 in 뒤에 두어야 합니다.',
+      hint_ko: '첫째 줄에 선언한 리스트 변수 이름 nums를 in 뒤에 적어야 합니다.',
       hint_en: 'Place the list variable itself after in instead of calling len() on it.',
-      templateCode: 'nums = [10, 20, 30]\nfor x in len(nums):\n    print(x)',
+      templateCode: 'nums = [10, 20, 30]\nfor x in item:\n    print(x)',
       targetCode: 'nums = [10, 20, 30]\nfor x in nums:\n    print(x)',
       testCases: [
         {
@@ -220,11 +220,11 @@ export const PYTHON_LEVEL_45: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 금지 목록(bans)에 없는 정상 단어의 개수를 세려다 포함 조건과 누적값이 잘못된 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 금지 목록(bans)에 없는 정상 단어의 개수를 1씩 세도록 잘못된 불포함 연산자(and in)와 누적값(2)을 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the membership operator and counter increment so allowed words are counted properly.',
-      hint_ko: '금지 목록에 포함되지 않을 때 참이 되어야 하며, 개수는 1씩 증가시켜야 합니다.',
+      hint_ko: '금지 목록에 포함되지 않을 때는 not in을 쓰고, 개수는 1씩 증가시켜야 합니다.',
       hint_en: 'Check non-membership against bans and increment cnt by 1.',
-      templateCode: 'words = ["ok", "spam", "run", "ad", "go"]\nbans = ["spam", "ad"]\ncnt = 0\nfor w in words:\n    if w in bans:\n        cnt += 2\nprint("Valid:", cnt)',
+      templateCode: 'words = ["ok", "spam", "run", "ad", "go"]\nbans = ["spam", "ad"]\ncnt = 0\nfor w in words:\n    if w and in bans:\n        cnt += 2\nprint("Valid:", cnt)',
       targetCode: 'words = ["ok", "spam", "run", "ad", "go"]\nbans = ["spam", "ad"]\ncnt = 0\nfor w in words:\n    if w not in bans:\n        cnt += 1\nprint("Valid:", cnt)',
       testCases: [
         {

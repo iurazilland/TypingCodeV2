@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n에 4를 더한 뒤 홀수가 아니면서(짝수이면서) 10 이상이거나 0인지 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 마지막 줄의 빈칸에 논리 반전 키워드를 채워 n에 4를 더한 값이 홀수가 아니면서 10 이상이거나 0인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to add 4 to n, then check that it is not odd and is either at least 10 or equal to 0.',
-      hint_ko: '논리 반전 키워드, 동시 만족 키워드, 선택 만족 키워드를 순서대로 채워 복합 논리식을 완성합니다.',
+      hint_ko: '불리언 결과를 반대로 뒤집는 논리 반전 키워드(not)를 빈칸에 채웁니다.',
       hint_en: 'Fill in the negation keyword, conjunction keyword, and disjunction keyword in order.',
-      templateCode: 'n = int(input())\nn += 4\nprint(§§§§ bool(n % 2) §§§§ (n >= 10 §§§ n == 0))',
+      templateCode: 'n = int(input())\nn += 4\nprint(§§§§ bool(n % 2) and (n >= 10 or n == 0))',
       targetCode: 'n = int(input())\nn += 4\nprint(not bool(n % 2) and (n >= 10 or n == 0))',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 다른 언어의 부정 기호(!)로 잘못 작성된 코드를 파이썬의 논리 반전 키워드로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 변수 err의 참·거짓을 반대로 뒤집도록 잘못 적힌 논리 키워드(and)를 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid ! negation symbol with the proper Python keyword.',
-      hint_ko: '파이썬에서 단독 느낌표(!)는 문법 오류를 일으키므로 영단어 키워드와 공백을 사용해야 합니다.',
+      hint_ko: '단일 불리언 값을 반대로 뒤집을 때는 논리 반전 키워드(not)를 사용해야 합니다.',
       hint_en: 'A standalone ! is a syntax error in Python; use the negation keyword followed by a space.',
-      templateCode: 'err = False\nprint(!err)',
+      templateCode: 'err = False\nprint(and err)',
       targetCode: 'err = False\nprint(not err)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_25: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 두 값 a, b가 모두 False일 때 True가 출력되도록 잘못된 논리 연산자를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] a와 b 중 하나라도 참인지 먼저 묶어 반전하도록 괄호 안의 잘못된 연산자(==)를 논리 연산자(or)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the logical operator inside the parentheses so True prints only when neither a nor b is True.',
-      hint_ko: 'not (a or b)는 a와 b 둘 중 하나도 참이 아닐 때 참이 됩니다. 괄호 안의 연산자를 확인해보세요.',
+      hint_ko: 'not (a or b)가 되도록 괄호 안의 비교 기호(==)를 선택 만족 키워드(or)로 고쳐보세요.',
       hint_en: 'To check that neither a nor b is True, negate their disjunction inside the parentheses.',
-      templateCode: 'a = False\nb = True\nprint(not (a and b))',
+      templateCode: 'a = False\nb = True\nprint(not (a == b))',
       targetCode: 'a = False\nb = True\nprint(not (a or b))',
       testCases: [
         {

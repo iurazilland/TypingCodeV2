@@ -193,12 +193,12 @@ export const PYTHON_LEVEL_111: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입금액이 0 이하일 때 직접 예외를 발생시키고, 호출부에서 에러 객체와 최종 지갑 상태를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 입금액이 0 이하일 때 직접 예외를 발생시키고, 호출부에서 에러 객체를 받아 출력해보세요.",
       "prompt_en": "[Fill Blank] Trigger a ValueError on non-positive deposit, bind the error to e, and always print w in the cleanup block.",
-      "hint_ko": "예외 발생 키워드, 별칭 키워드, 무조건 실행 마무리 키워드를 차례로 채우세요.",
+      "hint_ko": "직접 예외를 발생시키는 키워드(raise)와 에러 객체를 변수에 연결하는 키워드(as)를 차례로 채우세요.",
       "hint_en": "Supply the exception-raising keyword, the alias keyword, and the cleanup keyword.",
       "targetCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            raise ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError as e:\n    print(e)\nfinally:\n    print(w)",
-      "templateCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            §§§§§§ ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError §§§ e:\n    print(e)\n§§§§§§§§:\n    print(w)",
+      "templateCode": "class Wallet:\n    def __init__(self, cash):\n        self.cash = cash\n\n    def deposit(self, amt):\n        if amt <= 0:\n            §§§§§§ ValueError(\"BadAmt\")\n        self.cash += amt\n\n    def __str__(self):\n        return f\"Cash:{self.cash:,}\"\n\nw = Wallet(1000)\ntry:\n    w.deposit(int(input()))\nexcept ValueError §§§ e:\n    print(e)\nfinally:\n    print(w)",
       "testCases": [
         {
           "id": 1,

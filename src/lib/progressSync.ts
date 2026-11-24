@@ -74,6 +74,19 @@ function getTodayKstDateString(): string {
   return `${y}-${m}-${d}`;
 }
 
+const STREAK_EXPIRY_DAYS = 7;
+
+function isAttendanceStreakExpired(lastAttendedDate: string | null): boolean {
+  if (!lastAttendedDate) return true;
+  const m1 = /^(\d{4})-(\d{2})-(\d{2})/.exec(lastAttendedDate.trim());
+  const m2 = /^(\d{4})-(\d{2})-(\d{2})/.exec(getTodayKstDateString());
+  if (!m1 || !m2) return false;
+  const lastUtc = Date.UTC(Number(m1[1]), Number(m1[2]) - 1, Number(m1[3]));
+  const todayUtc = Date.UTC(Number(m2[1]), Number(m2[2]) - 1, Number(m2[3]));
+  const diffDays = Math.round((todayUtc - lastUtc) / 86400000);
+  return diffDays > STREAK_EXPIRY_DAYS;
+}
+
 export function deriveDisplayName(user: User): string {
   const meta = user.user_metadata || {};
   const raw =
@@ -167,9 +180,15 @@ export function normalizeProfileRow(
   const solved = Number(raw.solved_problems_count ?? 0) || 0;
   const totalDays = Number(raw.total_attendance_days ?? 0) || 0;
   const longestStreak = Number(raw.longest_streak ?? 0) || 0;
-  const computedScore =
-    Number(raw.activity_score ?? 0) ||
-    cleared * 100 + solved * 150 + totalDays * 30 + longestStreak * 50;
+  const lastAttendedDate =
+    typeof raw.last_attended_date === 'string' && raw.last_attended_date.trim()
+      ? raw.last_attended_date.trim()
+      : null;
+  const rawCurrentStreak = Number(raw.current_streak ?? 0) || 0;
+  const activeCurrentStreak = isAttendanceStreakExpired(lastAttendedDate)
+    ? 0
+    : rawCurrentStreak;
+  const computedScore = cleared * 100 + solved * 150;
 
   const rawRole = typeof raw.role === 'string' ? raw.role : 'student';
   const metaRole =
@@ -250,11 +269,10 @@ export function normalizeProfileRow(
     completed_tracks: completedTracks,
     cleared_levels_count: cleared,
     solved_problems_count: solved,
-    current_streak: Number(raw.current_streak ?? 0) || 0,
+    current_streak: activeCurrentStreak,
     longest_streak: longestStreak,
     total_attendance_days: totalDays,
-    last_attended_date:
-      typeof raw.last_attended_date === 'string' ? raw.last_attended_date : null,
+    last_attended_date: lastAttendedDate,
     activity_score: computedScore,
     best_typing_cpm: Number(raw.best_typing_cpm ?? raw.best_cpm ?? 0) || 0,
     best_typing_accuracy: Number(raw.best_typing_accuracy ?? raw.avg_accuracy ?? 0) || 0,

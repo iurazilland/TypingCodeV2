@@ -190,12 +190,12 @@ export const PYTHON_LEVEL_95: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 오른쪽 공백을 지운 줄에서 \"#\" 기호의 위치를 찾아 앞부분 코드와 \"#\" 기호 개수를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 오른쪽 공백을 지운 줄에서 첫 \"#\" 기호의 위치를 찾아 앞부분 코드와 \"#\" 개수를 출력해보세요.",
       "prompt_en": "[Fill Blank] Trim trailing spaces, locate the index of \"#\", and print the code slice along with the number of \"#\" symbols.",
-      "hint_ko": "오른쪽 공백 제거 메서드, 위치 탐색 메서드, 개수 세기 메서드를 차례로 채워보세요.",
+      "hint_ko": "오른쪽 공백 제거 메서드(rstrip)와 부분 문자열 위치 탐색 메서드(find)를 차례로 채워보세요.",
       "hint_en": "Fill in the right-strip method, the substring search method, and the occurrence counting method.",
       "targetCode": "line = \"x = 10 # init # ok \"\ns = line.rstrip()\npos = s.find(\"#\")\nprint(s[:pos].strip(), s.count(\"#\"))",
-      "templateCode": "line = \"x = 10 # init # ok \"\ns = line.§§§§§§§()\npos = s.§§§§§(\"#\")\nprint(s[:pos].strip(), s.§§§§§§(\"#\"))",
+      "templateCode": "line = \"x = 10 # init # ok \"\ns = line.§§§§§§§()\npos = s.§§§§§(\"#\")\nprint(s[:pos].strip(), s.count(\"#\"))",
       "testCases": [
         {
           "id": 1,

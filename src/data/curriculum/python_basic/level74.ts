@@ -188,11 +188,11 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 계좌 입금·출금 메서드의 매개변수와 복합 대입 연산자, 그리고 출금 호출식을 채워 최종 잔액을 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 입금 메서드의 첫 매개변수와 출금 메서드 호출을 완성해 최종 잔액을 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the parameter list, compound addition operator, and deduction method call on the Account instance.",
-      "hint_ko": "메서드 첫 매개변수와 잔액을 늘리는 연산자, 그리고 객체의 출금 메서드 호출 방식을 확인하세요.",
+      "hint_ko": "인스턴스 자신을 가리키는 첫 매개변수(self)와 출금 메서드 이름(withdraw)을 차례로 채우세요.",
       "hint_en": "Check the instance reference parameter, the compound addition operator, and how the deduction method is called on acc.",
-      "templateCode": "class Account:\n    def __init__(self, bal=1000):\n        self.bal = bal\n    def deposit(§§§§§, amt):\n        self.bal §§§ amt\n    def withdraw(self, amt):\n        if self.bal >= amt:\n            self.bal -= amt\nacc = Account()\nacc.deposit(500)\nacc.§§§§§§§§§(int(input()))\nprint(acc.bal)",
+      "templateCode": "class Account:\n    def __init__(self, bal=1000):\n        self.bal = bal\n    def deposit(§§§§§, amt):\n        self.bal += amt\n    def withdraw(self, amt):\n        if self.bal >= amt:\n            self.bal -= amt\nacc = Account()\nacc.deposit(500)\nacc.§§§§§§§§§(int(input()))\nprint(acc.bal)",
       "targetCode": "class Account:\n    def __init__(self, bal=1000):\n        self.bal = bal\n    def deposit(self, amt):\n        self.bal += amt\n    def withdraw(self, amt):\n        if self.bal >= amt:\n            self.bal -= amt\nacc = Account()\nacc.deposit(500)\nacc.withdraw(int(input()))\nprint(acc.bal)",
       "testCases": [
         {
@@ -207,11 +207,11 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 메서드 안에서 인스턴스 속성을 증가시키려다 지역변수 참조 에러가 발생한 곳을 수정해보세요.",
+      "prompt_ko": "[틀린 곳 수정] 메서드 안에서 인스턴스 속성을 증가시킬 때 잘못된 참조 이름(this.speed)을 쓴 다섯째 줄을 self.speed로 수정해보세요.",
       "prompt_en": "[Fix Bug] Fix the UnboundLocalError inside boost() when incrementing the speed attribute.",
-      "hint_ko": "메서드 안에서 인스턴스 속성을 읽거나 수정할 때는 반드시 객체 자신을 가리키는 참조 변수와 점을 앞에 붙여야 합니다.",
+      "hint_ko": "메서드 안에서 인스턴스 속성을 수정할 때는 self.speed 형태로 작성해야 합니다.",
       "hint_en": "Always prefix the attribute name with the instance reference and a dot when mutating it inside a method.",
-      "templateCode": "class Racer:\n    def __init__(self, speed=50):\n        self.speed = speed\n    def boost(self, plus):\n        speed += plus\nr = Racer()\nr.boost(20)\nprint(r.speed)",
+      "templateCode": "class Racer:\n    def __init__(self, speed=50):\n        self.speed = speed\n    def boost(self, plus):\n        this.speed += plus\nr = Racer()\nr.boost(20)\nprint(r.speed)",
       "targetCode": "class Racer:\n    def __init__(self, speed=50):\n        self.speed = speed\n    def boost(self, plus):\n        self.speed += plus\nr = Racer()\nr.boost(20)\nprint(r.speed)",
       "testCases": [
         {

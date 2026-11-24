@@ -187,11 +187,11 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 수량(qty) 기본값 1, 할인(disc) 기본값 0을 선언하고 두 번째 호출에서 키워드 인자로 200을 할인해 1000 800을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 할인 기본값 매개변수(disc=0)와 두 번째 호출의 키워드 인자(disc=200)를 채워 1000 800을 출력해보세요.',
       prompt_en: '[Fill Blank] Set default values for qty and disc, and pass 200 to disc by keyword in the second call.',
-      hint_ko: '수량 기본값 1, 할인 기본값 0 선언과, 두 번째 호출에서 할인 매개변수에 200을 지정하는 식을 채우세요.',
+      hint_ko: '첫째 줄의 할인 기본값 선언(disc=0)과 셋째 줄의 키워드 인자 지정(disc=200)을 차례로 채우세요.',
       hint_en: 'Complete the two default parameters in the header and the keyword argument for disc in the second call.',
-      templateCode: 'def pay(price, §§§§§§, §§§§§§§):\n    return price * qty - disc\nprint(pay(1000), pay(1000, §§§§§§§§§))',
+      templateCode: 'def pay(price, qty=1, §§§§§§§):\n    return price * qty - disc\nprint(pay(1000), pay(1000, §§§§§§§§§))',
       targetCode: 'def pay(price, qty=1, disc=0):\n    return price * qty - disc\nprint(pay(1000), pay(1000, disc=200))',
       testCases: [
         {
@@ -225,11 +225,11 @@ export const PYTHON_LEVEL_69: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 10을 2로 나눈 몫 5를 구하려다 인자 순서가 반대로 전달된 마지막 줄을 키워드 인자로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 10을 2로 나눈 몫 5가 나오도록 마지막 줄의 키워드 인자 이름(a=2, b=10)을 b=2, a=10으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the last line using keyword arguments for b and a in that order so div returns 5.',
-      hint_ko: '호출부의 숫자 2와 10 앞에 각각 b=와 a=를 붙여 키워드 인자로 지정하세요.',
+      hint_ko: 'a에 10, b에 2가 전달되어야 a // b가 5가 되므로 div(b=2, a=10)으로 고치세요.',
       hint_en: 'Label the two arguments explicitly as b=2, a=10 in the call.',
-      templateCode: 'def div(a, b):\n    return a // b\nprint(div(2, 10))',
+      templateCode: 'def div(a, b):\n    return a // b\nprint(div(a=2, b=10))',
       targetCode: 'def div(a, b):\n    return a // b\nprint(div(b=2, a=10))',
       testCases: [
         {

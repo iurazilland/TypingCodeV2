@@ -188,11 +188,11 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 생성자 이름, 수량 기본값 매개변수(cnt=2), 그리고 단가 속성 참조(self.price)를 채워 Gem=300을 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 생성자 이름(__init__)과 단가 속성 참조(self.price) 빈칸 2곳을 채워 Gem=300을 출력해보세요.",
       "prompt_en": "[Fill Blank] Fill in the initializer name, default parameter cnt=2, and attribute reference self.price to print Gem=300.",
-      "hint_ko": "객체 생성 시 자동 실행되는 특수 메서드 이름과 수량 기본값 지정, 그리고 메서드 내부의 단가 속성 접근 방식을 확인하세요.",
+      "hint_ko": "객체 생성 시 자동 실행되는 특수 메서드 이름(__init__)과 인스턴스 단가 속성 참조(self.price)를 차례로 채우세요.",
       "hint_en": "Check the double-underscore initializer name, the default parameter syntax, and how price is accessed on self.",
-      "templateCode": "class Item:\n    def §§§§§§§§§(self, name, price, §§§§§§):\n        self.name = name\n        self.price = price\n        self.cnt = cnt\n    def show(self):\n        print(f\"{self.name}={§§§§§§§§§§§ * self.cnt}\")\nit = Item(\"Gem\", 150)\nit.show()",
+      "templateCode": "class Item:\n    def §§§§§§§§§(self, name, price, cnt=2):\n        self.name = name\n        self.price = price\n        self.cnt = cnt\n    def show(self):\n        print(f\"{self.name}={§§§§§§§§§§§ * self.cnt}\")\nit = Item(\"Gem\", 150)\nit.show()",
       "targetCode": "class Item:\n    def __init__(self, name, price, cnt=2):\n        self.name = name\n        self.price = price\n        self.cnt = cnt\n    def show(self):\n        print(f\"{self.name}={self.price * self.cnt}\")\nit = Item(\"Gem\", 150)\nit.show()",
       "testCases": [
         {
@@ -207,11 +207,11 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 생성자 메서드 이름의 밑줄 개수가 잘못되어 초기 속성이 만들어지지 않는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 객체 생성 시 자동으로 실행되어야 하는 생성자 이름이 잘못 적힌 둘째 줄(__main__)을 __init__으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the typo in the initializer method name so Pet(\"Coco\") properly sets p.name.",
-      "hint_ko": "파이썬의 생성자 특수 메서드는 이름 앞뒤에 밑줄이 한 개가 아니라 두 개씩 들어가야 자동으로 실행됩니다.",
+      "hint_ko": "파이썬 클래스의 생성자 메서드 이름은 __init__입니다.",
       "hint_en": "Python's special initializer requires double underscores both before and after its name.",
-      "templateCode": "class Pet:\n    def _init_(self, name):\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
+      "templateCode": "class Pet:\n    def __main__(self, name):\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
       "targetCode": "class Pet:\n    def __init__(self, name):\n        self.name = name\np = Pet(\"Coco\")\nprint(p.name)",
       "testCases": [
         {
@@ -226,11 +226,11 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 생성자 안에서 전달받은 값을 인스턴스 속성이 아닌 지역변수에 대입해 속성이 사라지는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 생성자 안에서 인스턴스 속성을 저장할 때 잘못된 참조 이름(this.lv)을 적은 넷째 줄을 self.lv로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the bug inside __init__ where lv is assigned to a local variable instead of an instance attribute.",
-      "hint_ko": "생성자 안에서 self. 없이 변수 이름만 적으면 함수가 끝날 때 사라지는 지역변수가 되어 객체에서 꺼내 쓸 수 없습니다.",
+      "hint_ko": "파이썬에서는 객체 자신의 속성에 접근할 때 this가 아니라 self.속성명을 사용합니다.",
       "hint_en": "Assigning without the instance prefix creates a temporary local variable instead of saving the attribute on the object.",
-      "templateCode": "class Avatar:\n    def __init__(self, job, lv=10):\n        self.job = job\n        lv = lv\n    def tag(self):\n        print(f\"{self.job}/{self.lv}\")\na = Avatar(\"Mage\", 12)\na.tag()",
+      "templateCode": "class Avatar:\n    def __init__(self, job, lv=10):\n        self.job = job\n        this.lv = lv\n    def tag(self):\n        print(f\"{self.job}/{self.lv}\")\na = Avatar(\"Mage\", 12)\na.tag()",
       "targetCode": "class Avatar:\n    def __init__(self, job, lv=10):\n        self.job = job\n        self.lv = lv\n    def tag(self):\n        print(f\"{self.job}/{self.lv}\")\na = Avatar(\"Mage\", 12)\na.tag()",
       "testCases": [
         {

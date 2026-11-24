@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 딕셔너리 키 조회의 4단 예외 처리(에러 객체 받기, 정상 출력, 무조건 마무리) 빈칸 3곳을 완성해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 예외가 없을 때 실행되는 분기와 마지막에 무조건 실행되는 마무리 분기를 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the alias keyword, the no-error branch, and the cleanup branch for the dictionary lookup.",
-      "hint_ko": "에러 객체 연결 키워드, 정상 실행 분기, 마무리 분기를 차례로 채우세요.",
+      "hint_ko": "예외 미발생 시 정상 실행되는 분기(else)와 무조건 실행되는 마무리 분기(finally)를 차례로 채우세요.",
       "hint_en": "Fill in the alias keyword, the no-error keyword, and the cleanup keyword.",
       "targetCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError as e:\n    print(f\"NoKey:{e}\")\nelse:\n    print(f\"Score:{sc}\")\nfinally:\n    print(\"Closed\")",
-      "templateCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError §§§ e:\n    print(f\"NoKey:{e}\")\n§§§§§:\n    print(f\"Score:{sc}\")\n§§§§§§§§:\n    print(\"Closed\")",
+      "templateCode": "scores = {\"kim\": 90}\ntry:\n    sc = scores[input().strip()]\nexcept KeyError as e:\n    print(f\"NoKey:{e}\")\n§§§§§:\n    print(f\"Score:{sc}\")\n§§§§§§§§:\n    print(\"Closed\")",
       "testCases": [
         {
           "id": 1,
@@ -211,11 +211,11 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] finally 블록을 except 블록보다 위에 적어 발생한 SyntaxError 순서 오류를 올바르게 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 예외 발생 여부와 상관없이 맨 마지막에 무조건 실행되는 블록에 잘못 적힌 키워드(default:)를 finally:로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the SyntaxError caused by placing the finally block before the except block.",
-      "hint_ko": "예외 처리 구문에서 finally:는 항상 except: 뒤에(맨 마지막에) 와야 합니다.",
+      "hint_ko": "예외 처리 구문의 마지막 마무리 블록 키워드는 finally:입니다.",
       "hint_en": "Move the except block above the finally block so finally comes last.",
-      "templateCode": "try:\n    n = int(input())\nfinally:\n    print(\"End\")\nexcept ValueError:\n    print(\"Err\")",
+      "templateCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Err\")\ndefault:\n    print(\"End\")",
       "targetCode": "try:\n    n = int(input())\nexcept ValueError:\n    print(\"Err\")\nfinally:\n    print(\"End\")",
       "testCases": [
         {
@@ -230,11 +230,11 @@ export const PYTHON_LEVEL_110: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] else 블록을 except 블록보다 먼저 적어 발생한 SyntaxError 순서 오류를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] try 블록에서 에러가 발생하지 않았을 때만 실행되는 블록에 잘못 적힌 키워드(elif:)를 else:로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the SyntaxError caused by placing else: before except ValueError:.",
-      "hint_ko": "반드시 try -> except -> else 순서로 작성해야 합니다.",
+      "hint_ko": "예외가 없을 때 실행되는 분기는 try -> except 뒤에 오는 else: 블록입니다.",
       "hint_en": "Place the except ValueError: block before the else: block.",
-      "templateCode": "try:\n    x = int(\"10\")\nelse:\n    print(x)\nexcept ValueError:\n    print(\"Err\")",
+      "templateCode": "try:\n    x = int(\"10\")\nexcept ValueError:\n    print(\"Err\")\nelif:\n    print(x)",
       "targetCode": "try:\n    x = int(\"10\")\nexcept ValueError:\n    print(\"Err\")\nelse:\n    print(x)",
       "testCases": [
         {

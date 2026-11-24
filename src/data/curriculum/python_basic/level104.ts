@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_104: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 혼합 리스트에서 정수만 추려낸 뒤, 모두 양수인지와 50 이상이 하나라도 있는지 차례대로 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 혼합 리스트에서 정수만 추려낸 뒤, 모든 수가 양수인지와 50 이상이 하나라도 있는지 출력해보세요.",
       "prompt_en": "[Fill Blank] Filter integers from data, then print whether every integer is positive and whether at least one is >= 50.",
-      "hint_ko": "타입 확인 함수, 전체 참 검사 함수, 부분 참 검사 함수를 순서대로 채워보세요.",
+      "hint_ko": "자료형 확인 함수(isinstance)와 전체 참 검사 함수(all)를 순서대로 채워보세요.",
       "hint_en": "Supply the type-checking function, the universal quantifier, and the existential quantifier.",
       "targetCode": "data = [10, \"skip\", 60, 25]\nnums = [x for x in data if isinstance(x, int)]\nprint(all([n > 0 for n in nums]), any([n >= 50 for n in nums]))",
-      "templateCode": "data = [10, \"skip\", 60, 25]\nnums = [x for x in data if §§§§§§§§§§§(x, int)]\nprint(§§§§([n > 0 for n in nums]), §§§§([n >= 50 for n in nums]))",
+      "templateCode": "data = [10, \"skip\", 60, 25]\nnums = [x for x in data if §§§§§§§§§§§(x, int)]\nprint(§§§§([n > 0 for n in nums]), any([n >= 50 for n in nums]))",
       "testCases": [
         {
           "id": 1,

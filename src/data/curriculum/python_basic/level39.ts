@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_39: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 행과 열이 같은 대각선에는 "1", 나머지 위치에는 "0"을 찍는 n x n 격자를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 행과 열이 같은 대각선에는 "1", 나머지 위치에는 "0"을 찍는 n x n 격자를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print "1" on the diagonal where row and column match and "0" elsewhere.',
-      hint_ko: '안쪽 반복 시작 키워드, 행과 열이 같은지 확인하는 비교 기호, 그리고 줄 끝 옵션 이름을 채웁니다.',
+      hint_ko: '안쪽 반복문을 시작하는 키워드(for)와 줄바꿈 없이 이어 출력하는 줄 끝 옵션 이름(end)을 채웁니다.',
       hint_en: 'Enter for, the equality operator ==, and end in order.',
-      templateCode: 'n = int(input())\nfor r in range(n):\n    §§§§ c in range(n):\n        if r §§§ c:\n            print("1", §§§§="")\n        else:\n            print("0", end="")\n    print()',
+      templateCode: 'n = int(input())\nfor r in range(n):\n    §§§§ c in range(n):\n        if r == c:\n            print("1", §§§§="")\n        else:\n            print("0", end="")\n    print()',
       targetCode: 'n = int(input())\nfor r in range(n):\n    for c in range(n):\n        if r == c:\n            print("1", end="")\n        else:\n            print("0", end="")\n    print()',
       testCases: [
         {

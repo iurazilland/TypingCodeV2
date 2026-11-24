@@ -181,11 +181,11 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트 끝에 40을 추가한 뒤, 맨 앞 요소를 꺼내어 마지막 요소와 더한 값을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 리스트 끝에 40을 추가한 뒤, 맨 앞 요소를 꺼내어 마지막 요소와 더한 값을 출력해보세요.',
       prompt_en: '[Fill Blank] Append 40 to nums, pop the first element, and print its sum with the last element.',
-      hint_ko: '끝에 추가하는 메서드, 맨 앞 요소를 꺼내는 메서드 호출, 마지막 음수 인덱스를 차례로 채우세요.',
+      hint_ko: '끝에 요소를 추가하는 메서드(append)와 맨 앞 요소를 꺼내는 메서드 호출(pop(0))을 차례로 채우세요.',
       hint_en: 'Fill in the append method, front pop call, and negative index for the last item.',
-      templateCode: 'nums = [10, 20, 30]\nnums.§§§§§§§(40)\nfirst = nums.§§§§§§§\nprint(first + nums[§§§])',
+      templateCode: 'nums = [10, 20, 30]\nnums.§§§§§§§(40)\nfirst = nums.§§§§§§§\nprint(first + nums[-1])',
       targetCode: 'nums = [10, 20, 30]\nnums.append(40)\nfirst = nums.pop(0)\nprint(first + nums[-1])',
       testCases: [
         {
@@ -200,11 +200,11 @@ export const PYTHON_LEVEL_44: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 리스트 끝에 요소를 추가하려다 잘못된 메서드 이름을 사용해 발생한 에러를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 리스트 끝에 요소 30을 추가하려다 다른 메서드(insert)를 잘못 호출해 발생한 에러를 append로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the wrong method name so 30 is added to the end of nums.',
-      hint_ko: '파이썬 리스트에 요소를 한 개 덧붙일 때 사용하는 표준 메서드 이름을 확인하세요.',
+      hint_ko: '인자 1개만 전달해 리스트 맨 끝에 요소를 덧붙일 때는 append 메서드를 사용합니다.',
       hint_en: 'Use the standard Python list method for adding a single element to the end.',
-      templateCode: 'nums = [10, 20]\nnums.push(30)\nprint(nums)',
+      templateCode: 'nums = [10, 20]\nnums.insert(30)\nprint(nums)',
       targetCode: 'nums = [10, 20]\nnums.append(30)\nprint(nums)',
       testCases: [
         {

@@ -188,11 +188,11 @@ export const PYTHON_LEVEL_75: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 할인 적용 가격을 반환하는 메서드를 완성하고 두 상품 인스턴스의 결제 합계를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 할인 적용 가격을 반환하는 메서드를 완성하고 두 상품 인스턴스의 결제 합계를 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the discounted price method and add the net prices of both products.",
-      "hint_ko": "계산 결과를 돌려주는 키워드와 인스턴스 자신의 할인액 속성 참조, 그리고 두 번째 객체의 메서드 호출식을 확인하세요.",
+      "hint_ko": "메서드 계산 결과를 돌려주는 키워드(return)와 첫 번째 객체의 메서드 호출식(net_price())을 차례로 채우세요.",
       "hint_en": "Check the result-sending keyword, the discount attribute on self, and the method call on p2.",
-      "templateCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        §§§§§§§ self.price - §§§§§§§§§§\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.§§§§§§§§§§§§ + p2.net_price()\nprint(ans)",
+      "templateCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        §§§§§§§ self.price - self.disc\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.§§§§§§§§§§§§ + p2.net_price()\nprint(ans)",
       "targetCode": "class Product:\n    def __init__(self, price, disc=0):\n        self.price = price\n        self.disc = disc\n    def net_price(self):\n        return self.price - self.disc\np1 = Product(5000, 500)\np2 = Product(3000)\nans = p1.net_price() + p2.net_price()\nprint(ans)",
       "testCases": [
         {

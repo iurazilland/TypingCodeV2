@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 "ID:" 프롬프트로 입력받은 값 뒤에 "_OK"를 붙이고 User:hero_OK로 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 "ID:" 프롬프트로 입력받은 값 뒤에 "_OK"를 붙이고 User:hero_OK로 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to prompt with "ID:", append "_OK", and print User:hero_OK.',
-      hint_ko: '큰따옴표로 감싼 프롬프트 문자열, 문자열 복합 대입 연산자, 구분자 옵션 이름을 차례로 채웁니다.',
+      hint_ko: '큰따옴표로 감싼 프롬프트 문자열("ID:")과 문자열 복합 대입 연산자(+=)를 차례로 채웁니다.',
       hint_en: 'Enter the double-quoted prompt string, the += operator, and the sep option name in order.',
-      templateCode: 'uid = input(§§§§§§)\nuid §§§ "_OK"\nprint("User", uid, §§§§=":")',
+      templateCode: 'uid = input(§§§§§§)\nuid §§§ "_OK"\nprint("User", uid, sep=":")',
       targetCode: 'uid = input("ID:")\nuid += "_OK"\nprint("User", uid, sep=":")',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_16: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 안내 문구에 따옴표를 빠뜨려 발생한 문법 오류를 고쳐 "Job:"이 출력되게 해보세요.',
+      prompt_ko: '[틀린 곳 수정] 안내 문구의 양쪽 따옴표 종류가 달라 발생한 문법 오류("Job:\')를 큰따옴표로 통일해 고쳐보세요.',
       prompt_en: '[Fix Bug] Add quotes around the prompt message inside input() so "Job:" is displayed.',
-      hint_ko: 'input() 괄호 안의 안내 문구는 반드시 따옴표로 감싸 문자열로 전달해야 합니다.',
+      hint_ko: '큰따옴표로 시작한 안내 문구 문자열은 끝에도 큰따옴표(")로 닫아야 합니다.',
       hint_en: 'The prompt text inside input() must be enclosed in quotes as a string.',
-      templateCode: 'job = input(Job:)\nprint("Role:", job)',
+      templateCode: 'job = input("Job:\')\nprint("Role:", job)',
       targetCode: 'job = input("Job:")\nprint("Role:", job)',
       testCases: [
         {

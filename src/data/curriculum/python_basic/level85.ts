@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 최고점의 위치 번호와 80점의 등장 횟수, 그리고 내림차순 사본 리스트를 구하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 최고점(95)의 위치 번호와 내림차순 정렬된 사본 리스트를 구해보세요.",
       "prompt_en": "[Fill Blank] Complete the position lookup method, occurrence tallying method, and non-mutating sort function.",
-      "hint_ko": "값의 위치를 찾는 메서드, 개수를 세는 메서드, 그리고 정렬된 새 리스트를 반환하는 내장 함수를 차례로 확인하세요.",
+      "hint_ko": "값의 위치를 찾는 메서드(index)와 정렬된 새 리스트를 반환하는 내장 함수(sorted)를 차례로 채우세요.",
       "hint_en": "Check the position method, tally method, and sorting function.",
-      "templateCode": "pts = [80, 95, 80, 70]\npos = pts.§§§§§§(95)\ncnt = pts.§§§§§§(80)\nranked = §§§§§§§(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
+      "templateCode": "pts = [80, 95, 80, 70]\npos = pts.§§§§§§(95)\ncnt = pts.count(80)\nranked = §§§§§§§(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
       "targetCode": "pts = [80, 95, 80, 70]\npos = pts.index(95)\ncnt = pts.count(80)\nranked = sorted(pts, reverse=True)\nprint(pos, cnt, ranked[0])",
       "testCases": [
         {
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 수정이 불가능한 튜플에 리스트 전용 .sort() 메서드를 호출해 발생한 에러를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 튜플 tp의 원소들을 오름차순으로 정렬한 새 리스트를 반환하도록 잘못 적힌 함수 이름(sortby)을 sorted로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the AttributeError caused by calling .sort() on a tuple by using the built-in sorting function.",
-      "hint_ko": "튜플이나 집합에는 .sort() 메서드가 없으므로 어떤 시퀀스든 새 정렬 리스트로 만들어 주는 내장 함수를 써야 합니다.",
+      "hint_ko": "어떤 시퀀스든 정렬된 새 리스트로 만들어 반환하는 내장 함수는 sorted()입니다.",
       "hint_en": "Tuples do not have a .sort() method; pass the tuple to sorted() and assign the returned list.",
-      "templateCode": "tp = (30, 10, 20)\nans = tp.sort()\nprint(ans)",
+      "templateCode": "tp = (30, 10, 20)\nans = sortby(tp)\nprint(ans)",
       "targetCode": "tp = (30, 10, 20)\nans = sorted(tp)\nprint(ans)",
       "testCases": [
         {
@@ -228,11 +228,11 @@ export const PYTHON_LEVEL_85: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] sorted(nums)만 호출하고 반환값을 변수에 저장하지 않아 정렬되지 않은 원본이 출력되는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 정렬된 새 리스트가 nums에 덮어써져 출력되도록 둘째 줄의 좌변 변수 이름(temp)을 nums로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Capture the new list returned by sorted(nums) so printing ans outputs the sorted order.",
-      "hint_ko": "sorted()는 원본 리스트를 직접 바꾸지 않고 새 리스트를 반환하므로 반드시 변수에 대입해 받아야 합니다.",
+      "hint_ko": "마지막 줄에서 print(nums)를 출력하므로 sorted(nums)의 반환값을 nums에 다시 대입해야 합니다.",
       "hint_en": "Because sorted() does not mutate nums in place, assign its return value to nums.",
-      "templateCode": "nums = [50, 10, 40]\nsorted(nums)\nprint(nums)",
+      "templateCode": "nums = [50, 10, 40]\ntemp = sorted(nums)\nprint(nums)",
       "targetCode": "nums = [50, 10, 40]\nnums = sorted(nums)\nprint(nums)",
       "testCases": [
         {

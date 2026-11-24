@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 1부터 n까지의 자연수를 공백으로 이어 한 줄에 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 둘째 줄의 빈칸에 범위 생성 함수를 채워 1부터 n까지의 자연수를 공백으로 이어 한 줄에 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print 1 through n separated by spaces on one line.',
-      hint_ko: '반복 시작 키워드, 범위 생성 함수, 그리고 줄 끝 옵션 이름을 차례로 채웁니다.',
+      hint_ko: '0부터 n-1까지 숫자 시퀀스를 생성하는 내장 함수 이름(range)을 채웁니다.',
       hint_en: 'Enter the loop keyword, range function, and line-end parameter name in order.',
-      templateCode: 'n = int(input())\n§§§§ i in §§§§§§(n):\n    print(i + 1, §§§§=" ")',
+      templateCode: 'n = int(input())\nfor i in §§§§§§(n):\n    print(i + 1, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print(i + 1, end=" ")',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_31: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] for 반복문 헤더 줄 끝에 빠진 기호를 추가하여 문법 오류를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] for 반복문 헤더 줄 끝에 잘못 적힌 세미콜론(;)을 콜론(:)으로 수정하여 문법 오류를 고쳐보세요.',
       prompt_en: '[Fix Bug] Add the missing punctuation at the end of the for header line.',
-      hint_ko: 'if문과 마찬가지로 for 반복문 헤더 줄 끝에도 반드시 콜론이 있어야 합니다.',
+      hint_ko: 'if문과 마찬가지로 for 반복문 헤더 줄 끝에도 세미콜론(;)이 아니라 콜론(:)이 있어야 합니다.',
       hint_en: 'Just like if statements, a for loop header must end with a colon.',
-      templateCode: 'n = int(input())\nfor i in range(n)\n    print(i)',
+      templateCode: 'n = int(input())\nfor i in range(n);\n    print(i)',
       targetCode: 'n = int(input())\nfor i in range(n):\n    print(i)',
       testCases: [
         {

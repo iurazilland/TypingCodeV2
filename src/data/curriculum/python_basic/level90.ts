@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백 입력 숫자들을 정수 리스트로 변환한 뒤, 각 값에 5를 더한 새 리스트의 합계를 출력하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 공백 입력 숫자들을 정수 리스트 컴프리헨션으로 변환한 뒤 각 값에 5를 더한 합계를 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the integer conversion, string splitting method, and loop keyword in the two comprehensions.",
-      "hint_ko": "정수 변환 함수와 공백 분리 메서드, 그리고 컴프리헨션 반복 키워드를 차례로 확인하세요.",
+      "hint_ko": "첫째 줄 컴프리헨션의 정수 변환 함수(int)와 둘째 줄 컴프리헨션의 반복 키워드(for)를 차례로 채우세요.",
       "hint_en": "Check the int function, split method, and for keyword.",
-      "templateCode": "raw = [§§§§(s) for s in input().§§§§§§()]\nplus = [n + 5 §§§§ n in raw]\nprint(sum(plus))",
+      "templateCode": "raw = [§§§§(s) for s in input().split()]\nplus = [n + 5 §§§§ n in raw]\nprint(sum(plus))",
       "targetCode": "raw = [int(s) for s in input().split()]\nplus = [n + 5 for n in raw]\nprint(sum(plus))",
       "testCases": [
         {
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트 컴프리헨션에서 반복 절을 계산식보다 앞에 적고 콜론을 붙여서 발생한 문법 오류를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 리스트 컴프리헨션 안에서 시퀀스를 순회하도록 잘못 적힌 키워드(and)를 반복 키워드(for)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the SyntaxError in the list comprehension by placing the output expression before the loop clause without a colon.",
-      "hint_ko": "리스트 컴프리헨션은 콜론 없이 [계산식 for 변수 in 시퀀스] 순서로 작성해야 합니다.",
+      "hint_ko": "리스트 컴프리헨션은 [계산식 for 변수 in 시퀀스] 형태로 작성해야 합니다.",
       "hint_en": "Write the output expression x * 2 first, followed by for x in nums with no colon.",
-      "templateCode": "nums = [1, 2, 3]\ndoubled = [for x in nums: x * 2]\nprint(doubled)",
+      "templateCode": "nums = [1, 2, 3]\ndoubled = [x * 2 and x in nums]\nprint(doubled)",
       "targetCode": "nums = [1, 2, 3]\ndoubled = [x * 2 for x in nums]\nprint(doubled)",
       "testCases": [
         {
@@ -228,11 +228,11 @@ export const PYTHON_LEVEL_90: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력받은 숫자 문자열들을 정수로 바꾸지 않고 리스트에 담아 sum()에서 에러가 나는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 분리된 숫자 문자열들을 정수로 변환해 리스트에 담도록 컴프리헨션 앞쪽의 잘못된 함수(str)를 int로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Convert each token x to an integer inside the list comprehension so sum(nums) succeeds.",
-      "hint_ko": "input().split()의 결과는 문자열이므로 합계를 구하려면 컴프리헨션 앞쪽에서 int(x)로 변환해야 합니다.",
+      "hint_ko": "sum(nums)으로 합계를 구하려면 컴프리헨션 앞쪽에서 int(x)로 정수로 변환해야 합니다.",
       "hint_en": "Wrap x in int(x) at the front of the list comprehension so nums contains integers.",
-      "templateCode": "line = \"10 20 30\"\nnums = [x for x in line.split()]\nprint(sum(nums))",
+      "templateCode": "line = \"10 20 30\"\nnums = [str(x) for x in line.split()]\nprint(sum(nums))",
       "targetCode": "line = \"10 20 30\"\nnums = [int(x) for x in line.split()]\nprint(sum(nums))",
       "testCases": [
         {

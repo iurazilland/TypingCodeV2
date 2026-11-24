@@ -189,11 +189,11 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 클래스 메서드 안에서 문자열 리스트를 순회하며 유효한 정수만 합산해 반환하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 메서드 안에서 리스트를 순회하며 유효한 정수만 안전하게 합산해 반환해보세요.",
       "prompt_en": "[Fill Blank] Complete the Adder.sum_valid method by filling in the attempt keyword, exception type, and result-sending keyword.",
-      "hint_ko": "예외 검사를 시작하는 키워드와 잘못된 정수 변환 예외 이름, 그리고 합계를 돌려주는 키워드를 확인하세요.",
+      "hint_ko": "예외 검사를 시작하는 키워드(try)와 잘못된 정수 변환 예외 이름(ValueError)을 차례로 채우세요.",
       "hint_en": "Check the attempt keyword, the invalid-value exception name, and the keyword that sends back total.",
-      "templateCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            §§§§:\n                total += int(s)\n            except §§§§§§§§§§§:\n                continue\n        §§§§§§§ total\na = Adder()\nprint(a.sum_valid(input().split()))",
+      "templateCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            §§§§:\n                total += int(s)\n            except §§§§§§§§§§§:\n                continue\n        return total\na = Adder()\nprint(a.sum_valid(input().split()))",
       "targetCode": "class Adder:\n    def sum_valid(self, arr):\n        total = 0\n        for s in arr:\n            try:\n                total += int(s)\n            except ValueError:\n                continue\n        return total\na = Adder()\nprint(a.sum_valid(input().split()))",
       "testCases": [
         {
@@ -208,11 +208,11 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트 순회 중 변환 에러가 났을 때 건너뛰지 않고 반복문을 통째로 종료해버리는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 리스트 순회 중 변환 에러가 난 항목만 건너뛰고 다음 원소로 넘어가도록 잘못 적힌 단어(nextitem)를 continue로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the loop control keyword inside except so invalid items are skipped without aborting the loop.",
-      "hint_ko": "에러 항목만 건너뛰고 다음 원소 순회를 계속 이어가려면 break 대신 건너뛰기 키워드를 써야 합니다.",
+      "hint_ko": "에러가 난 현재 차례만 건너뛰고 다음 원소 순회를 이어가려면 continue 키워드를 써야 합니다.",
       "hint_en": "Use continue instead of break so the loop moves on to the remaining items after an error.",
-      "templateCode": "raw = [\"10\", \"err\", \"30\"]\ntotal = 0\nfor s in raw:\n    try:\n        total += int(s)\n    except ValueError:\n        break\nprint(total)",
+      "templateCode": "raw = [\"10\", \"err\", \"30\"]\ntotal = 0\nfor s in raw:\n    try:\n        total += int(s)\n    except ValueError:\n        nextitem\nprint(total)",
       "targetCode": "raw = [\"10\", \"err\", \"30\"]\ntotal = 0\nfor s in raw:\n    try:\n        total += int(s)\n    except ValueError:\n        continue\nprint(total)",
       "testCases": [
         {

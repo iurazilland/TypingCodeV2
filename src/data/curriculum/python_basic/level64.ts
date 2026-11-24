@@ -75,11 +75,11 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 단일 요소 튜플 base의 첫 요소를 꺼내 곱하려다 TypeError가 발생한 첫째 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 단일 요소 튜플 base를 만들려다 쉼표 대신 마침표(10.)를 적어 에러가 발생한 첫째 줄을 (10,)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 1 so base is a single-element tuple rather than an integer.',
-      hint_ko: '소괄호 안에 값이 하나뿐인 튜플을 만들 때는 값 뒤에 쉼표가 빠져서는 안 됩니다.',
+      hint_ko: '소괄호 안에 값이 하나뿐인 튜플을 만들 때는 값 뒤에 쉼표(,)가 있어야 합니다.',
       hint_en: 'Include a trailing comma inside the parentheses on line 1 to form a 1-element tuple.',
-      templateCode: 'base = (10)\npt = (3, 4)\nx, y = pt\nprint((x + y) * base[0])',
+      templateCode: 'base = (10.)\npt = (3, 4)\nx, y = pt\nprint((x + y) * base[0])',
       targetCode: 'base = (10,)\npt = (3, 4)\nx, y = pt\nprint((x + y) * base[0])',
       testCases: [
         {
@@ -94,11 +94,11 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       step: 5,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 딕셔너리 menu의 키와 값을 동시에 순회하려다 ValueError가 발생한 반복문 헤더를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 딕셔너리 menu의 키와 값을 동시에 순회하도록 반복문 헤더의 잘못된 메서드 이름(pairs)을 items로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the for loop header so both k and v unpack from dictionary menu.',
-      hint_ko: '딕셔너리에서 두 변수로 키와 값을 동시에 받으려면 쌍 반환 메서드를 호출해야 합니다.',
+      hint_ko: '딕셔너리에서 두 변수로 키와 값을 동시에 받으려면 .items() 메서드를 호출해야 합니다.',
       hint_en: 'Call the key-value pair method on menu in the for loop header.',
-      templateCode: 'menu = {"tea": 3000, "pie": 4500}\ntotal = 0\nfor k, v in menu:\n    total += v\nprint(total)',
+      templateCode: 'menu = {"tea": 3000, "pie": 4500}\ntotal = 0\nfor k, v in menu.pairs():\n    total += v\nprint(total)',
       targetCode: 'menu = {"tea": 3000, "pie": 4500}\ntotal = 0\nfor k, v in menu.items():\n    total += v\nprint(total)',
       testCases: [
         {
@@ -113,11 +113,11 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 빈 집합에 글자를 추가하려다 빈 딕셔너리로 초기화해 에러가 발생한 첫째 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 빈 집합에 글자를 추가하려다 잘못된 함수(int())로 초기화해 에러가 발생한 첫째 줄을 set()으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 1 so seen is initialized as an empty set instead of an empty dictionary.',
-      hint_ko: '빈 중괄호 대신 빈 집합 생성 함수를 사용해야 집합 전용 추가 메서드를 쓸 수 있습니다.',
+      hint_ko: '빈 집합을 생성할 때는 set() 함수를 사용해야 집합 전용 추가 메서드(.add())를 쓸 수 있습니다.',
       hint_en: 'Initialize seen with the empty set constructor on line 1.',
-      templateCode: 'seen = {}\nfor ch in "banana":\n    seen.add(ch)\nprint(len(seen))',
+      templateCode: 'seen = int()\nfor ch in "banana":\n    seen.add(ch)\nprint(len(seen))',
       targetCode: 'seen = set()\nfor ch in "banana":\n    seen.add(ch)\nprint(len(seen))',
       testCases: [
         {

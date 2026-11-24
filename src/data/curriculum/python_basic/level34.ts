@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 1부터 n까지의 합(total)과 곱(prod)을 구해 나란히 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳에 복합 대입 연산자를 채워 1부터 n까지의 합(total)과 곱(prod)을 구해 나란히 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to compute both the sum and product of 1 through n.',
-      hint_ko: '곱셈 누적 초기값 1, 합계 누적 연산자, 그리고 곱셈 누적 연산자를 순서대로 채웁니다.',
+      hint_ko: '합계를 누적하는 연산자(+=)와 곱을 누적하는 연산자(*=)를 순서대로 채웁니다.',
       hint_en: 'Enter initial value 1 for prod, then plus-equals and asterisk-equals inside the loop.',
-      templateCode: 'n = int(input())\ntotal = 0\nprod = §§\nfor i in range(1, n + 1):\n    total §§§ i\n    prod §§§ i\nprint(total, prod)',
+      templateCode: 'n = int(input())\ntotal = 0\nprod = 1\nfor i in range(1, n + 1):\n    total §§§ i\n    prod §§§ i\nprint(total, prod)',
       targetCode: 'n = int(input())\ntotal = 0\nprod = 1\nfor i in range(1, n + 1):\n    total += i\n    prod *= i\nprint(total, prod)',
       testCases: [
         {

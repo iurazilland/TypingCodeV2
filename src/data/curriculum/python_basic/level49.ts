@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트의 첫 번째 단어 길이가 5 이상이면 그 글자 수를 출력하도록 빈칸을 채워보세요.',
+      prompt_ko: '[빈칸 채우기] 둘째 줄의 빈칸에 길이 함수를 채워 첫 번째 단어 길이가 5 이상일 때 단어와 글자 수를 출력해보세요.',
       prompt_en: '[Fill Blank] If the first word in words has at least 5 characters, print that word and its character count.',
-      hint_ko: '길이 함수, 첫 번째 요소 인덱스, 이상 비교 연산자를 차례로 채워보세요.',
+      hint_ko: '문자열의 글자 수를 구하는 내장 함수 이름(len)을 채워보세요.',
       hint_en: 'Fill in the length function, first-element index, and >= operator.',
-      templateCode: 'words = ["apple", "pie"]\nif §§§§(words[§§]) §§§ 5:\n    print(words[0], len(words[0]))',
+      templateCode: 'words = ["apple", "pie"]\nif §§§§(words[0]) >= 5:\n    print(words[0], len(words[0]))',
       targetCode: 'words = ["apple", "pie"]\nif len(words[0]) >= 5:\n    print(words[0], len(words[0]))',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 일반 따옴표 하나로 여러 줄 문자열을 감싸 발생한 문법 오류를 삼중 따옴표로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 여러 줄 문자열을 감싸는 기호를 잘못 적은 문법 오류("**...**")를 삼중 큰따옴표("""...""")로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the syntax error by wrapping the multi-line string in triple quotes.',
-      hint_ko: '여러 줄에 걸친 문자열은 양끝을 큰따옴표 세 개로 감싸야 합니다.',
+      hint_ko: '여러 줄에 걸친 문자열은 양끝을 큰따옴표 세 개(""")로 감싸야 합니다.',
       hint_en: 'Use triple double-quotes at both ends of a multi-line string literal.',
-      templateCode: 'banner = "Step 1\nStep 2"\nprint(banner)',
+      templateCode: 'banner = "**Step 1\nStep 2**"\nprint(banner)',
       targetCode: 'banner = """Step 1\nStep 2"""\nprint(banner)',
       testCases: [
         {
@@ -220,11 +220,11 @@ export const PYTHON_LEVEL_49: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열 길이를 구하려다 존재하지 않는 메서드를 호출해 발생한 에러를 내장 함수 호출로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 문자열의 글자 수(6)를 출력하도록 둘째 줄에 잘못 적힌 내장 함수(max)를 길이 함수(len)로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid .len() method call with the built-in length function.',
-      hint_ko: '파이썬에서 문자열 길이는 점(.) 메서드가 아니라 내장 함수에 인자로 전달해 구합니다.',
+      hint_ko: '문자열의 길이를 구할 때는 len(word) 함수를 사용합니다.',
       hint_en: 'Pass word as an argument to the built-in length function instead of calling .len().',
-      templateCode: 'word = "Coding"\nprint(word.len())',
+      templateCode: 'word = "Coding"\nprint(max(word))',
       targetCode: 'word = "Coding"\nprint(len(word))',
       testCases: [
         {

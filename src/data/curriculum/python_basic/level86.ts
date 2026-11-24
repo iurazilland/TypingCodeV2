@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_86: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 함수 안에서 2차원 격자의 좌상단(0, 0) 칸을 보정하고 모든 칸의 합계를 반환하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 2차원 격자의 좌상단(0행 0열) 칸에 보너스를 더하고 모든 행의 합계를 구해보세요.",
       "prompt_en": "[Fill Blank] Complete the 2D index access, outer loop target, and row total expression inside total_grid.",
-      "hint_ko": "첫 번째 행·첫 번째 열 인덱스 번호와 바깥 루프 대상, 그리고 행 합계 내장 함수를 확인하세요.",
+      "hint_ko": "0행 0열 요소를 가리키는 2차원 인덱싱(grid[0][0])과 각 행의 합계를 구하는 식(sum(row))을 차례로 채우세요.",
       "hint_en": "Check the 0-based index for the top-left cell, the outer loop target, and sum(row).",
-      "templateCode": "def total_grid(grid, bonus):\n    §§§§§§§§§§§ += bonus\n    ans = 0\n    for row in §§§§§:\n        ans += §§§§§§§§§\n    return ans\nm = [[1, 2], [3, 4]]\nprint(total_grid(m, 10))",
+      "templateCode": "def total_grid(grid, bonus):\n    §§§§§§§§§§§ += bonus\n    ans = 0\n    for row in grid:\n        ans += §§§§§§§§§\n    return ans\nm = [[1, 2], [3, 4]]\nprint(total_grid(m, 10))",
       "targetCode": "def total_grid(grid, bonus):\n    grid[0][0] += bonus\n    ans = 0\n    for row in grid:\n        ans += sum(row)\n    return ans\nm = [[1, 2], [3, 4]]\nprint(total_grid(m, 10))",
       "testCases": [
         {

@@ -180,11 +180,11 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트의 앞 2개 요소와 [0]이 2번 반복된 패딩 리스트를 연결해 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 슬라이싱 빈칸을 채워 리스트의 앞 2개 요소와 [0, 0]을 연결한 결과를 출력해보세요.',
       prompt_en: '[Fill Blank] Slice the first 2 elements of nums and concatenate them with [0] repeated twice.',
-      hint_ko: '앞 두 요소를 자르는 슬라이싱, 리스트 연결 연산자, 리스트 반복 연산자를 차례로 채우세요.',
+      hint_ko: '처음부터 인덱스 2 직전까지 앞 두 요소를 잘라내는 슬라이싱(:2)을 채우세요.',
       hint_en: 'Fill in the 2-item prefix slice, concatenation operator, and repetition operator.',
-      templateCode: 'nums = [5, 10, 15, 20]\nres = nums[§§§] §§ [0] §§ 2\nprint(res)',
+      templateCode: 'nums = [5, 10, 15, 20]\nres = nums[§§§] + [0] * 2\nprint(res)',
       targetCode: 'nums = [5, 10, 15, 20]\nres = nums[:2] + [0] * 2\nprint(res)',
       testCases: [
         {
@@ -199,11 +199,11 @@ export const PYTHON_LEVEL_43: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 슬라이싱 구분 기호를 잘못 적어 발생하는 문법 에러를 수정해 [20, 30]을 출력해보세요.',
+      prompt_ko: '[틀린 곳 수정] 슬라이싱 구분 기호를 쉼표(1,3)로 잘못 적어 발생하는 에러를 콜론(1:3)으로 수정해 [20, 30]을 출력해보세요.',
       prompt_en: '[Fix Bug] Fix the slice separator syntax error so [20, 30] is printed.',
-      hint_ko: '슬라이싱의 시작과 끝 인덱스 사이는 쉼표가 아닌 다른 기호로 구분합니다.',
+      hint_ko: '슬라이싱의 시작과 끝 인덱스 사이는 쉼표(,)가 아니라 콜론(:)으로 구분합니다.',
       hint_en: 'Separate the start and stop indices of a slice with the proper punctuation mark.',
-      templateCode: 'nums = [10, 20, 30, 40]\nprint(nums[1, 3])',
+      templateCode: 'nums = [10, 20, 30, 40]\nprint(nums[1,3])',
       targetCode: 'nums = [10, 20, 30, 40]\nprint(nums[1:3])',
       testCases: [
         {

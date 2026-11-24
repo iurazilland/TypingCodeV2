@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 두 줄의 코드가 한 줄로 이어진 Lv3->100을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 첫째 줄의 줄 끝 옵션 빈칸을 채워 두 줄의 코드가 한 줄로 이어진 Lv3->100을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks so the two lines of code output Lv3 -> 100 on one line.',
-      hint_ko: '첫째 줄에는 구분자 옵션과 줄 끝 옵션 이름을, 둘째 줄에는 거듭제곱 연산자를 채웁니다.',
+      hint_ko: '줄바꿈 대신 화살표("->")로 다음 줄 출력을 이어주는 줄 끝 옵션 이름(end)을 채웁니다.',
       hint_en: 'Enter the separator option and line-end option names on line 1, and the power operator on line 2.',
-      templateCode: 'print("Lv", 1 + 2, §§§§="", §§§§="->")\nprint(10 §§§ 2)',
+      templateCode: 'print("Lv", 1 + 2, sep="", §§§§="->")\nprint(10 ** 2)',
       targetCode: 'print("Lv", 1 + 2, sep="", end="->")\nprint(10 ** 2)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_9: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 구분자 옵션을 지정하는 기호 오류를 고쳐 2026/11/17이 출력되게 해보세요.',
+      prompt_ko: '[틀린 곳 수정] 구분자 옵션을 지정하는 기호 오류(sep:"/")를 고쳐 2026/11/17이 출력되게 해보세요.',
       prompt_en: '[Fix Bug] Fix the syntax error in the separator option so that 2026/11/17 is printed.',
       hint_ko: 'print()의 옵션에 값을 지정할 때는 콜론(:)이 아니라 등호(=)를 사용해야 합니다.',
       hint_en: 'Keyword options in print() must be assigned with an equals sign (=) rather than a colon (:).',
-      templateCode: 'print(2026, 11, 17, sep: "/")',
+      templateCode: 'print(2026, 11, 17, sep:"/")',
       targetCode: 'print(2026, 11, 17, sep="/")',
       testCases: [
         {

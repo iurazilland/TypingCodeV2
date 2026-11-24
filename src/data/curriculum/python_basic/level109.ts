@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 위에 정의된 부모 클래스를 상속받은 SaleItem에서 부모 생성자를 호출해 초기화하고, 문자열 표현 매직 메서드를 오버라이딩해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 부모 클래스(Item)를 상속받은 SaleItem에서 부모 생성자를 호출해 초기화해보세요.",
       "prompt_en": "[Fill Blank] Inherit from the base class, invoke the parent initializer, and override the string representation magic method.",
-      "hint_ko": "부모 클래스 이름, 부모 참조 호출(괄호 포함), 문자열 표현 매직 메서드를 차례로 채워보세요.",
+      "hint_ko": "상속받을 부모 클래스 이름(Item)과 부모 참조 호출(super())을 차례로 채워보세요.",
       "hint_en": "Supply the parent class name, the parent proxy call with parentheses, and the string dunder method.",
       "targetCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nclass SaleItem(Item):\n    def __init__(self, name, price, disc):\n        super().__init__(name, price)\n        self.disc = disc\n\n    def __str__(self):\n        return f\"{self.name}:{self.price - self.disc}\"\n\nprint(SaleItem(\"Book\", 10000, 1500))",
-      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nclass SaleItem(§§§§§):\n    def __init__(self, name, price, disc):\n        §§§§§§§§.__init__(name, price)\n        self.disc = disc\n\n    def §§§§§§§§(self):\n        return f\"{self.name}:{self.price - self.disc}\"\n\nprint(SaleItem(\"Book\", 10000, 1500))",
+      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nclass SaleItem(§§§§§):\n    def __init__(self, name, price, disc):\n        §§§§§§§§.__init__(name, price)\n        self.disc = disc\n\n    def __str__(self):\n        return f\"{self.name}:{self.price - self.disc}\"\n\nprint(SaleItem(\"Book\", 10000, 1500))",
       "testCases": [
         {
           "id": 1,
@@ -211,11 +211,11 @@ export const PYTHON_LEVEL_109: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 부모 생성자를 호출할 때 super 뒤에 소괄호 ()를 빠뜨려 발생한 TypeError를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 부모 생성자를 호출할 때 super 뒤에 대괄호([])를 잘못 붙여 발생한 문법 오류를 소괄호(super())로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the TypeError caused by omitting the parentheses after super when calling __init__.",
       "hint_ko": "super는 함수처럼 소괄호를 붙여 super().__init__(name) 형태로 호출해야 합니다.",
       "hint_en": "Add parentheses after super so it reads super().__init__(name).",
-      "templateCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\nclass Admin(User):\n    def __init__(self, name, lv):\n        super.__init__(name)\n        self.lv = lv\n\na = Admin(\"Root\", 9)\nprint(a.name, a.lv)",
+      "templateCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\nclass Admin(User):\n    def __init__(self, name, lv):\n        super[].__init__(name)\n        self.lv = lv\n\na = Admin(\"Root\", 9)\nprint(a.name, a.lv)",
       "targetCode": "class User:\n    def __init__(self, name):\n        self.name = name\n\nclass Admin(User):\n    def __init__(self, name, lv):\n        super().__init__(name)\n        self.lv = lv\n\na = Admin(\"Root\", 9)\nprint(a.name, a.lv)",
       "testCases": [
         {

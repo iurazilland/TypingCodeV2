@@ -188,11 +188,11 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈 리스트 속성을 초기화하고, 양수만 골라 추가한 뒤 합계를 반환하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 빈 리스트 속성을 초기화하고, 양수만 골라 리스트 속성에 추가한 뒤 합계를 출력해보세요.",
       "prompt_en": "[Fill Blank] Initialize the empty list attribute, add positive numbers to it, and send back their total.",
-      "hint_ko": "빈 리스트 기호와 리스트 끝에 추가하는 메서드, 그리고 리스트 전체 합계를 구하는 내장 함수를 차례로 확인하세요.",
+      "hint_ko": "빈 리스트 기호([])와 리스트 속성에 원소를 추가하는 메서드(append)를 차례로 채우세요.",
       "hint_en": "Check the empty list literal, the list method for adding an element, and the built-in total function.",
-      "templateCode": "class Ledger:\n    def __init__(self):\n        self.logs = §§§\n    def add_pos(self, val):\n        if val > 0:\n            self.logs.§§§§§§§(val)\n    def total(self):\n        return §§§§(self.logs)\nlg = Ledger()\nfor n in [20, -5, 30, 0, 15]:\n    lg.add_pos(n)\nprint(lg.total(), len(lg.logs))",
+      "templateCode": "class Ledger:\n    def __init__(self):\n        self.logs = §§§\n    def add_pos(self, val):\n        if val > 0:\n            self.logs.§§§§§§§(val)\n    def total(self):\n        return sum(self.logs)\nlg = Ledger()\nfor n in [20, -5, 30, 0, 15]:\n    lg.add_pos(n)\nprint(lg.total(), len(lg.logs))",
       "targetCode": "class Ledger:\n    def __init__(self):\n        self.logs = []\n    def add_pos(self, val):\n        if val > 0:\n            self.logs.append(val)\n    def total(self):\n        return sum(self.logs)\nlg = Ledger()\nfor n in [20, -5, 30, 0, 15]:\n    lg.add_pos(n)\nprint(lg.total(), len(lg.logs))",
       "testCases": [
         {
@@ -207,11 +207,11 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 메서드 안에서 리스트 속성에 원소를 추가하려다 이름 에러(NameError)가 발생한 줄을 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 메서드 안에서 리스트 속성에 원소를 추가할 때 잘못된 객체 참조(this.history)를 쓴 다섯째 줄을 self.history로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the NameError inside push() when appending an item to the instance's list attribute.",
-      "hint_ko": "생성자에서 self.history에 리스트를 만들었으므로 메서드에서도 반드시 self.를 붙여 접근해야 합니다.",
+      "hint_ko": "생성자에서 self.history에 리스트를 만들었으므로 메서드에서도 반드시 self.history로 접근해야 합니다.",
       "hint_en": "Because history is an attribute on the instance, prefix it with self. inside the method.",
-      "templateCode": "class Browser:\n    def __init__(self):\n        self.history = []\n    def visit(self, page):\n        history.append(page)\nb = Browser()\nb.visit(\"home\")\nb.visit(\"docs\")\nprint(b.history)",
+      "templateCode": "class Browser:\n    def __init__(self):\n        self.history = []\n    def visit(self, page):\n        this.history.append(page)\nb = Browser()\nb.visit(\"home\")\nb.visit(\"docs\")\nprint(b.history)",
       "targetCode": "class Browser:\n    def __init__(self):\n        self.history = []\n    def visit(self, page):\n        self.history.append(page)\nb = Browser()\nb.visit(\"home\")\nb.visit(\"docs\")\nprint(b.history)",
       "testCases": [
         {
@@ -226,11 +226,11 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 딕셔너리 속성에 이미 있는 상품이면 수량을 더해야 하는데 덮어써버리는 버그를 복합 대입으로 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리 속성에 이미 있는 상품이면 수량을 누적해 더하도록 여섯째 줄의 잘못된 연산자(-=)를 +=로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the bug in add_stock() where existing item quantities are overwritten instead of incremented.",
-      "hint_ko": "이미 키가 존재할 때는 기존 값에 새 수량을 누적해서 더해야 하므로 대입 연산자를 복합 대입으로 수정하세요.",
+      "hint_ko": "이미 키가 존재할 때는 기존 값에 새 수량을 더해야 하므로 += 연산자를 사용하세요.",
       "hint_en": "When the key already exists in self.box, use += instead of = to accumulate the quantity.",
-      "templateCode": "class Warehouse:\n    def __init__(self):\n        self.box = {}\n    def add_stock(self, k, v):\n        if k in self.box:\n            self.box[k] = v\n        else:\n            self.box[k] = v\nw = Warehouse()\nw.add_stock(\"Apple\", 10)\nw.add_stock(\"Apple\", 5)\nprint(w.box[\"Apple\"])",
+      "templateCode": "class Warehouse:\n    def __init__(self):\n        self.box = {}\n    def add_stock(self, k, v):\n        if k in self.box:\n            self.box[k] -= v\n        else:\n            self.box[k] = v\nw = Warehouse()\nw.add_stock(\"Apple\", 10)\nw.add_stock(\"Apple\", 5)\nprint(w.box[\"Apple\"])",
       "targetCode": "class Warehouse:\n    def __init__(self):\n        self.box = {}\n    def add_stock(self, k, v):\n        if k in self.box:\n            self.box[k] += v\n        else:\n            self.box[k] = v\nw = Warehouse()\nw.add_stock(\"Apple\", 10)\nw.add_stock(\"Apple\", 5)\nprint(w.box[\"Apple\"])",
       "testCases": [
         {

@@ -121,7 +121,13 @@ function RankingPageContent() {
           setLearningLeaders(
             ((learningRes.data as Array<Record<string, unknown>>) || [])
               .map((r) => normalizeProfileRow(r))
-              .filter((p) => !isAdminUser(p))
+              .filter((p) => !isAdminUser(p) && p.activity_score > 0)
+              .sort(
+                (a, b) =>
+                  b.activity_score - a.activity_score ||
+                  b.cleared_levels_count - a.cleared_levels_count ||
+                  b.solved_problems_count - a.solved_problems_count
+              )
           );
 
           setSpeedLeaders(
@@ -157,7 +163,13 @@ function RankingPageContent() {
           setLearningLeaders(
             ((learningRes.data as Array<Record<string, unknown>>) || [])
               .map((r) => normalizeProfileRow(r))
-              .filter((p) => !isAdminUser(p))
+              .filter((p) => !isAdminUser(p) && p.activity_score > 0)
+              .sort(
+                (a, b) =>
+                  b.activity_score - a.activity_score ||
+                  b.cleared_levels_count - a.cleared_levels_count ||
+                  b.solved_problems_count - a.solved_problems_count
+              )
           );
 
           if (!langSpeedRes.error && langSpeedRes.data) {

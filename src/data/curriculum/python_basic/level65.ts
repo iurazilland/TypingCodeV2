@@ -186,11 +186,11 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] banner 함수를 정의하고 등호 4개 반복과 마지막 줄 함수 호출을 완성해 Go와 ====를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 banner 함수를 정의하고 마지막 줄에서 호출해 Go와 ====를 출력해보세요.',
       prompt_en: '[Fill Blank] Complete the function header, string repetition count 4, and final function call to print Go and ====.',
-      hint_ko: '함수 정의 키워드, 등호를 4번 반복할 숫자, 그리고 마지막 줄의 함수 호출식을 차례로 채우세요.',
+      hint_ko: '함수 정의 키워드(def)와 마지막 줄의 함수 호출식(banner())을 차례로 채우세요.',
       hint_en: 'Fill in the def keyword, the repetition count 4, and the banner() function call.',
-      templateCode: '§§§§ banner():\n    print("=" * §§)\nprint("Go")\n§§§§§§§§§',
+      templateCode: '§§§§ banner():\n    print("=" * 4)\nprint("Go")\n§§§§§§§§§',
       targetCode: 'def banner():\n    print("=" * 4)\nprint("Go")\nbanner()',
       testCases: [
         {
@@ -205,11 +205,11 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 함수를 호출할 때 소괄호를 빠뜨려 아무것도 출력되지 않는 마지막 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 함수를 호출할 때 대괄호(greet[])를 잘못 적어 발생한 에러를 소괄호(greet())로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the last line where missing parentheses prevented greet from running.',
-      hint_ko: '함수 이름만 적으면 실행되지 않으므로 이름 뒤에 빈 소괄호를 꼭 붙여야 합니다.',
+      hint_ko: '함수를 호출할 때는 이름 뒤에 빈 소괄호 ()를 붙여야 합니다.',
       hint_en: 'Add empty parentheses after greet on the last line to actually call the function.',
-      templateCode: 'def greet():\n    print("Welcome!")\ngreet',
+      templateCode: 'def greet():\n    print("Welcome!")\ngreet[]',
       targetCode: 'def greet():\n    print("Welcome!")\ngreet()',
       testCases: [
         {
@@ -224,11 +224,11 @@ export const PYTHON_LEVEL_65: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 함수를 정의하기 전에 먼저 호출해 NameError가 발생한 코드의 순서를 바르게 고쳐보세요.',
+      prompt_ko: '[틀린 곳 수정] 정의한 함수 이름(alarm)과 다른 이름(alert)으로 호출해 NameError가 발생한 마지막 줄을 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the NameError caused by calling alarm() before its def block.',
-      hint_ko: '파이썬은 위에서 아래로 코드를 읽으므로 함수를 먼저 정의한 뒤 아래에서 호출해야 합니다.',
+      hint_ko: '첫째 줄에서 def alarm():으로 정의했으므로 호출할 때도 alarm()으로 이름을 맞춰야 합니다.',
       hint_en: 'Define the function with def first, then place the alarm() call after the definition.',
-      templateCode: 'alarm()\ndef alarm():\n    print("Wake up!")',
+      templateCode: 'def alarm():\n    print("Wake up!")\nalert()',
       targetCode: 'def alarm():\n    print("Wake up!")\nalarm()',
       testCases: [
         {

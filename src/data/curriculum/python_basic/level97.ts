@@ -190,12 +190,12 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 주문 번호는 3자리 0 채우기, 총액은 천 단위 콤마, 할인가 평균은 소수 첫째 자리로 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 마지막 줄의 서식 지정자 빈칸을 채워 할인가 평균(unit)을 소수 첫째 자리까지 표시해 출력해보세요.",
       "prompt_en": "[Fill Blank] Format order id with 3-digit zero padding, total with commas, and unit price to 1 decimal place.",
-      "hint_ko": "3자리 0 채우기 정수 서식, 천 단위 쉼표 서식, 소수 첫째 자리 실수 서식을 차례로 채우세요.",
+      "hint_ko": "실수를 소수 첫째 자리까지 반올림해 표시하는 서식 지정자(.1f)를 채우세요.",
       "hint_en": "Supply the 3-digit zero-padded int spec, the comma spec, and the 1-decimal float spec in order.",
       "targetCode": "no = 5\ntotal = 15000\nunit = total / 4\nprint(f\"[{no:03d}] {total:,} ({unit:.1f})\")",
-      "templateCode": "no = 5\ntotal = 15000\nunit = total / 4\nprint(f\"[{no:§§§§}] {total:§§} ({unit:§§§§})\")",
+      "templateCode": "no = 5\ntotal = 15000\nunit = total / 4\nprint(f\"[{no:03d}] {total:,} ({unit:§§§§})\")",
       "testCases": [
         {
           "id": 1,
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] f-string에서 서식 구분 콜론(:)을 빠뜨려 발생한 문법/속성 오류를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] f-string에서 서식 구분 기호를 세미콜론(;)으로 잘못 적은 오류를 콜론(:)으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the error in the f-string caused by omitting the colon before the format specifier.",
-      "hint_ko": "f-string에서 변수명과 서식 지정자(.2f) 사이에는 반드시 콜론(:)이 들어가야 합니다.",
+      "hint_ko": "f-string에서 변수명과 서식 지정자(.2f) 사이에는 콜론(:)이 들어가야 합니다.",
       "hint_en": "Insert a colon (:) between the variable name val and the format specifier .2f.",
-      "templateCode": "val = 10 / 3\nprint(f\"{val.2f}\")",
+      "templateCode": "val = 10 / 3\nprint(f\"{val;.2f}\")",
       "targetCode": "val = 10 / 3\nprint(f\"{val:.2f}\")",
       "testCases": [
         {
@@ -228,11 +228,11 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 3자리 폭 앞자리에 공백 대신 0이 채워져 \"009\"가 출력되도록 서식 지정자를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 정수 n을 3자리 폭 앞자리 0 채우기(\"009\")로 출력하도록 잘못 적힌 실수 서식(.3f)을 정수 서식(03d)으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the format specifier so leading spaces are replaced with zeros to print \"009\".",
-      "hint_ko": "폭 숫자 3 앞에 0을 붙여야 빈칸 대신 0으로 채워집니다.",
+      "hint_ko": "3자리 폭의 빈 앞자리를 0으로 채우는 정수 서식 지정자는 03d입니다.",
       "hint_en": "Place a 0 before the width 3 in the format specifier so it pads with zeros instead of spaces.",
-      "templateCode": "n = 9\nprint(f\"{n:3d}\")",
+      "templateCode": "n = 9\nprint(f\"{n:.3f}\")",
       "targetCode": "n = 9\nprint(f\"{n:03d}\")",
       "testCases": [
         {

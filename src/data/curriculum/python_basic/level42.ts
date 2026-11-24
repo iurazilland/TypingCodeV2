@@ -180,11 +180,11 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 첫 번째 요소를 지운 뒤, 새로 첫 번째가 된 요소에 5를 누적해 더하고 길이와 함께 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 첫 번째 요소를 지운 뒤, 새로 첫 번째가 된 요소에 5를 누적해 더하고 길이와 함께 출력해보세요.',
       prompt_en: '[Fill Blank] Delete the first element, add 5 to the new first element, and print the list with its length.',
-      hint_ko: '삭제 키워드, 누적 덧셈 연산자, 길이 함수를 순서대로 채워보세요.',
+      hint_ko: '요소 삭제 키워드(del)와 누적 덧셈 연산자(+=)를 순서대로 채워보세요.',
       hint_en: 'Fill in the deletion keyword, compound addition operator, and length function in order.',
-      templateCode: 'nums = [99, 10, 20, 30]\n§§§§ nums[0]\nnums[0] §§§ 5\nprint(nums, §§§§(nums))',
+      templateCode: 'nums = [99, 10, 20, 30]\n§§§§ nums[0]\nnums[0] §§§ 5\nprint(nums, len(nums))',
       targetCode: 'nums = [99, 10, 20, 30]\ndel nums[0]\nnums[0] += 5\nprint(nums, len(nums))',
       testCases: [
         {
@@ -218,11 +218,11 @@ export const PYTHON_LEVEL_42: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 잘못된 삭제 키워드로 인해 문법 에러가 발생하는 코드를 올바르게 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 인덱스로 리스트 요소를 삭제하는 셋째 줄의 잘못된 키워드(pop)를 삭제 예약어(del)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the invalid deletion keyword so the last element is removed when len(bag) > 2.',
-      hint_ko: '파이썬에서 리스트 요소를 인덱스로 지울 때는 축약 키워드를 사용합니다.',
+      hint_ko: 'del 리스트[인덱스] 형태로 작성해야 해당 위치의 요소를 삭제할 수 있습니다.',
       hint_en: 'Use the keyword for deleting an element by index in Python.',
-      templateCode: 'bag = ["potion", "key", "trash"]\nif len(bag) > 2:\n    delete bag[-1]\nprint(bag)',
+      templateCode: 'bag = ["potion", "key", "trash"]\nif len(bag) > 2:\n    pop bag[-1]\nprint(bag)',
       targetCode: 'bag = ["potion", "key", "trash"]\nif len(bag) > 2:\n    del bag[-1]\nprint(bag)',
       testCases: [
         {

@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 문자열 s를 순회하며 숫자 글자("0123456789")만 골라 정수로 변환해 합계를 구해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 문자열 s를 한 글자씩 순회하며 숫자 글자("0123456789")만 골라 합계를 구해보세요.',
       prompt_en: '[Fill Blank] Iterate through s, check if ch belongs to "0123456789", and add its numeric value to total.',
-      hint_ko: '순회 키워드, 포함 연산자, 정수 형변환 함수를 순서대로 채워보세요.',
+      hint_ko: '문자열 순회 키워드(in)와 부분 문자열 포함 검사 연산자(in)를 순서대로 채워보세요.',
       hint_en: 'Fill in the iteration keyword, membership operator, and integer conversion function.',
-      templateCode: 's = input()\ntotal = 0\nfor ch §§§ s:\n    if ch §§§ "0123456789":\n        total += §§§§(ch)\nprint(total)',
+      templateCode: 's = input()\ntotal = 0\nfor ch §§§ s:\n    if ch §§§ "0123456789":\n        total += int(ch)\nprint(total)',
       targetCode: 's = input()\ntotal = 0\nfor ch in s:\n    if ch in "0123456789":\n        total += int(ch)\nprint(total)',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 금지 문자 "X"가 없을 때 "Pass", 있을 때 "Fail"이 출력되도록 잘못된 조건 연산자를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 금지 문자 "X"가 없을 때 "Pass"가 출력되도록 잘못 적힌 불포함 연산자(and in)를 not in으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the membership condition so "Pass" prints when "X" is absent from code.',
-      hint_ko: '"X"가 포함되어 있지 않을 때 첫 번째 분기가 실행되도록 조건을 수정하세요.',
+      hint_ko: '특정 문자가 포함되어 있지 않은지 검사할 때는 not in 연산자를 사용합니다.',
       hint_en: 'Use the non-membership operator so the first branch runs when "X" is absent.',
-      templateCode: 'code = input()\nif "X" in code:\n    print("Pass")\nelse:\n    print("Fail")',
+      templateCode: 'code = input()\nif "X" and in code:\n    print("Pass")\nelse:\n    print("Fail")',
       targetCode: 'code = input()\nif "X" not in code:\n    print("Pass")\nelse:\n    print("Fail")',
       testCases: [
         {
@@ -220,11 +220,11 @@ export const PYTHON_LEVEL_52: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열에서 밑줄("_")만 건너뛰고 나머지 글자를 모으려다 반복문이 아예 종료되는 제어문 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 문자열에서 밑줄("_")만 건너뛰고 다음 글자로 넘어가도록 잘못 적힌 단어(nextchar)를 파이썬 예약어(continue)로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the loop-exiting keyword so "_" is skipped instead of terminating the loop.',
-      hint_ko: '반복을 끝내지 않고 현재 글자만 건너뛰어 다음 글자로 넘어가는 키워드로 바꾸세요.',
+      hint_ko: '현재 글자만 건너뛰어 다음 반복 차례로 넘어가는 키워드는 continue입니다.',
       hint_en: 'Use the keyword that skips to the next iteration instead of exiting the loop.',
-      templateCode: 's = input()\nout = ""\nfor ch in s:\n    if ch == "_":\n        break\n    out += ch\nprint(out)',
+      templateCode: 's = input()\nout = ""\nfor ch in s:\n    if ch == "_":\n        nextchar\n    out += ch\nprint(out)',
       targetCode: 's = input()\nout = ""\nfor ch in s:\n    if ch == "_":\n        continue\n    out += ch\nprint(out)',
       testCases: [
         {

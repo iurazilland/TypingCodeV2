@@ -183,11 +183,11 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 점수를 내림차순 정렬한 뒤 상위 2개를 잘라 그 합계와 정수 평균(//)을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 점수를 내림차순 정렬한 뒤 상위 2개의 합계와 정수 평균을 출력해보세요.',
       prompt_en: '[Fill Blank] Order scores descending, slice the top 2, and print their total and integer average.',
-      hint_ko: '정렬 메서드, 합계 함수, 길이 함수를 차례로 채워보세요.',
+      hint_ko: '리스트 정렬 메서드(sort)와 합계 내장 함수(sum)를 차례로 채워보세요.',
       hint_en: 'Fill in the sort method, sum function, and length function in order.',
-      templateCode: 'scores = [70, 95, 85, 60]\nscores.§§§§§(reverse=True)\ntop2 = scores[:2]\nprint(§§§§(top2), sum(top2) // §§§§(top2))',
+      templateCode: 'scores = [70, 95, 85, 60]\nscores.§§§§§(reverse=True)\ntop2 = scores[:2]\nprint(§§§§(top2), sum(top2) // len(top2))',
       targetCode: 'scores = [70, 95, 85, 60]\nscores.sort(reverse=True)\ntop2 = scores[:2]\nprint(sum(top2), sum(top2) // len(top2))',
       testCases: [
         {
@@ -202,11 +202,11 @@ export const PYTHON_LEVEL_47: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 정렬된 리스트를 출력하려다 print() 안에서 정렬 메서드를 바로 호출해 None이 출력되는 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 리스트를 오름차순으로 정렬하도록 셋째 줄의 잘못된 메서드 이름(sums)을 정렬 메서드(sort)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the bug where printing the return value of .sort() outputs None instead of the sorted list.',
-      hint_ko: '원본 정렬 메서드는 단독 줄에서 먼저 호출하고, 다음 줄에서 리스트 변수를 출력해야 합니다.',
+      hint_ko: '리스트 원본을 오름차순으로 정렬하는 메서드는 sort()입니다.',
       hint_en: 'Call .sort() on its own line first, then pass nums to print() on the next line.',
-      templateCode: 'nums = [30, 10, 20]\nnums.append(5)\nprint(nums.sort())',
+      templateCode: 'nums = [30, 10, 20]\nnums.append(5)\nnums.sums()\nprint(nums)',
       targetCode: 'nums = [30, 10, 20]\nnums.append(5)\nnums.sort()\nprint(nums)',
       testCases: [
         {

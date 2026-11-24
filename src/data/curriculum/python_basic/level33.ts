@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_33: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n부터 0까지(0 포함) 내려가며 각 숫자와 불리언 변환값을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] range()의 감소 간격 빈칸을 채워 n부터 0까지 1씩 줄어들며 각 숫자와 불리언 변환값을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to iterate from n down to 0 inclusive and print i and its truthiness.',
-      hint_ko: '0을 포함하기 위한 끝 경계 -1, 감소 간격 -1, 그리고 불리언 변환 함수를 차례로 채웁니다.',
+      hint_ko: '숫자가 1씩 역순으로 감소하도록 음수 간격(-1)을 채웁니다.',
       hint_en: 'Enter stop bound -1, step -1, and the boolean casting function.',
-      templateCode: 'n = int(input())\nfor i in range(n, §§§, §§§):\n    print(i, §§§§§(i))',
+      templateCode: 'n = int(input())\nfor i in range(n, -1, §§§):\n    print(i, bool(i))',
       targetCode: 'n = int(input())\nfor i in range(n, -1, -1):\n    print(i, bool(i))',
       testCases: [
         {

@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_5: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 문자열 라벨 Div: 와 20을 3으로 나눈 몫(6), 나머지(2)를 한 줄에 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸에 문자열 라벨 "Div:"를 채워 20을 3으로 나눈 몫(6), 나머지(2)와 함께 한 줄에 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the label Div: followed by the quotient (6) and remainder (2) of 20 by 3.',
-      hint_ko: '큰따옴표로 감싼 라벨 문자열, 정수 몫 연산자, 나머지 연산자를 차례대로 채웁니다.',
+      hint_ko: '큰따옴표로 감싼 라벨 문자열 "Div:"를 빈칸에 채웁니다.',
       hint_en: 'Enter the double-quoted label string, the floor division operator, and the modulo operator in order.',
-      templateCode: 'print(§§§§§§§, 20 §§§ 3, 20 §§ 3)',
+      templateCode: 'print(§§§§§§§, 20 // 3, 20 % 3)',
       targetCode: 'print("Div:", 20 // 3, 20 % 3)',
       testCases: [
         {

@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n에 5를 더한 뒤 3의 배수인지와 0이 아닌지를 공백으로 구분해 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 셋째 줄의 빈칸에 같음 비교 연산자를 채워 n에 5를 더한 값이 3의 배수인지와 0이 아닌지를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to add 5 to n, then check if it is a multiple of 3 and non-zero.',
-      hint_ko: '누적 덧셈 복합 대입 연산자, 나머지가 0인지 확인하는 같음 기호, 0과 다른지 확인하는 다름 기호를 차례로 채웁니다.',
+      hint_ko: '3으로 나눈 나머지가 0과 같은지 비교하는 연산자(==)를 채웁니다.',
       hint_en: 'Use compound addition first, then the equality operator for remainder 0, and the inequality operator for non-zero.',
-      templateCode: 'n = int(input())\nn §§§ 5\nprint(n % 3 §§§ 0, n §§§ 0)',
+      templateCode: 'n = int(input())\nn += 5\nprint(n % 3 §§§ 0, n != 0)',
       targetCode: 'n = int(input())\nn += 5\nprint(n % 3 == 0, n != 0)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_21: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] print() 안의 잘못된 기호를 고쳐 x와 y의 값이 같은지 비교한 결과를 출력해보세요.',
+      prompt_ko: '[틀린 곳 수정] print() 안의 비교 연산자(!=)를 고쳐 x와 y의 값이 같은지 비교한 결과를 출력해보세요.',
       prompt_en: '[Fix Bug] Fix the operator inside print() so it compares whether x and y are equal.',
-      hint_ko: 'print() 안에서 변수에 값을 대입하는 기호 대신 양쪽 값이 같은지 확인하는 비교 연산자를 써야 합니다.',
+      hint_ko: '다름 비교 연산자(!=) 대신 양쪽 값이 같은지 확인하는 같음 비교 연산자(==)를 써야 합니다.',
       hint_en: 'Replace the single assignment sign inside print() with the two-character equality operator.',
-      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x = y)',
+      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x != y)',
       targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x == y)',
       testCases: [
         {

@@ -187,11 +187,11 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 전역변수 선언과 복합 덧셈, 함수 호출을 완성하여 25를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 전역변수 선언과 함수 호출을 완성하여 25를 출력해보세요.',
       prompt_en: '[Fill Blank] Complete the outer variable scope declaration, compound addition, and function call to print 25.',
-      hint_ko: '전역변수 지정 키워드, 누적 덧셈 연산자, 그리고 호출할 함수 이름을 차례로 채우세요.',
+      hint_ko: '전역변수 지정 키워드(global)와 호출할 함수 이름(add_pt)을 차례로 채우세요.',
       hint_en: 'Fill in the global keyword, the += operator, and the function name add_pt.',
-      templateCode: 'score = 10\ndef add_pt(pt):\n    §§§§§§§ score\n    score §§§ pt\n§§§§§§§(15)\nprint(score)',
+      templateCode: 'score = 10\ndef add_pt(pt):\n    §§§§§§§ score\n    score += pt\n§§§§§§§(15)\nprint(score)',
       targetCode: 'score = 10\ndef add_pt(pt):\n    global score\n    score += pt\nadd_pt(15)\nprint(score)',
       testCases: [
         {
@@ -206,11 +206,11 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 함수 안에서 전역변수 선언 없이 count += 1을 실행해 발생한 UnboundLocalError를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 함수 안에서 전역변수 count를 수정할 수 있도록 셋째 줄에 잘못 적힌 키워드(locals)를 global로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the UnboundLocalError inside step() by declaring count as global before incrementing it.',
-      hint_ko: '함수 본문 첫 줄에 count가 전역변수임을 알리는 선언문을 추가하세요.',
+      hint_ko: '함수 안에서 전역변수를 직접 수정할 때는 global 변수명 형태로 선언해야 합니다.',
       hint_en: 'Add global count as the first line inside step().',
-      templateCode: 'count = 0\ndef step():\n    count += 1\nstep()\nprint(count)',
+      templateCode: 'count = 0\ndef step():\n    locals count\n    count += 1\nstep()\nprint(count)',
       targetCode: 'count = 0\ndef step():\n    global count\n    count += 1\nstep()\nprint(count)',
       testCases: [
         {
@@ -225,11 +225,11 @@ export const PYTHON_LEVEL_70: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 함수를 호출만 하고 반환값을 다시 hp에 저장하지 않아 50이 그대로 출력되는 넷째 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] heal(hp)의 반환값을 엉뚱한 변수(mp)에 저장해 hp가 그대로 50으로 출력되는 넷째 줄을 hp = heal(hp)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 4 by assigning the return value of heal(hp) back to variable hp.',
-      hint_ko: '반환된 새 체력 값으로 기존 변수를 덮어쓰도록 hp = 를 앞에 붙이세요.',
+      hint_ko: '반환된 새 체력 값으로 기존 hp 변수를 덮어쓰도록 좌변 변수를 hp로 고치세요.',
       hint_en: 'Assign the result of heal(hp) back to hp on line 4.',
-      templateCode: 'def heal(hp):\n    return hp + 30\nhp = 50\nheal(hp)\nprint(hp)',
+      templateCode: 'def heal(hp):\n    return hp + 30\nhp = 50\nmp = heal(hp)\nprint(hp)',
       targetCode: 'def heal(hp):\n    return hp + 30\nhp = 50\nhp = heal(hp)\nprint(hp)',
       testCases: [
         {

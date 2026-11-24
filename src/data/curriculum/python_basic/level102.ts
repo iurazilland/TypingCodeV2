@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백 입력 숫자들을 정수로 변환한 뒤 1번부터 (순서 번호 * 값)을 누적해 합계를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 셋째 줄의 빈칸에 열거 함수를 채워 1번부터 시작하는 순서 번호(idx)와 값(n)의 곱을 누적해 출력해보세요.",
       "prompt_en": "[Fill Blank] Convert the input to integers, iterate with 1-based numbering, and sum (index * value).",
-      "hint_ko": "일괄 매핑 함수, 인덱스·값 열거 함수, 그리고 시작 번호 1을 차례로 채워보세요.",
+      "hint_ko": "순서 번호(인덱스)와 값을 쌍으로 꺼내주는 내장 함수(enumerate)를 채우세요.",
       "hint_en": "Fill in the batch-mapping function, the numbering iterator, and the starting index 1.",
       "targetCode": "nums = list(map(int, input().split()))\ntotal = 0\nfor idx, n in enumerate(nums, 1):\n    total += idx * n\nprint(total)",
-      "templateCode": "nums = list(§§§§(int, input().split()))\ntotal = 0\nfor idx, n in §§§§§§§§§§(nums, §§):\n    total += idx * n\nprint(total)",
+      "templateCode": "nums = list(map(int, input().split()))\ntotal = 0\nfor idx, n in §§§§§§§§§§(nums, 1):\n    total += idx * n\nprint(total)",
       "testCases": [
         {
           "id": 1,

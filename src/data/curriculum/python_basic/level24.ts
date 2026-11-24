@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 정수 n이 2와 3의 공배수인지, 그리고 10으로 나눈 몫이 5 이상이거나 0인지 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳에 논리 연산자를 채워 정수 n이 2와 3의 공배수인지, 그리고 10으로 나눈 몫이 5 이상이거나 0인지 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to check if n is a multiple of both 2 and 3, and if its quotient by 10 is at least 5 or n is 0.',
-      hint_ko: '첫째 줄 출력에는 동시 만족 키워드를, 둘째 줄 출력에는 정수 몫 연산자와 선택 만족 키워드를 차례로 넣습니다.',
+      hint_ko: '첫째 출력줄에는 동시 만족 키워드(and)를, 둘째 출력줄에는 하나 이상 만족 키워드(or)를 채웁니다.',
       hint_en: 'Use the conjunction keyword on line 2, then floor division and the disjunction keyword on line 3.',
-      templateCode: 'n = int(input())\nprint(n % 2 == 0 §§§§ n % 3 == 0)\nprint(n §§§ 10 >= 5 §§§ n == 0)',
+      templateCode: 'n = int(input())\nprint(n % 2 == 0 §§§§ n % 3 == 0)\nprint(n // 10 >= 5 §§§ n == 0)',
       targetCode: 'n = int(input())\nprint(n % 2 == 0 and n % 3 == 0)\nprint(n // 10 >= 5 or n == 0)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_24: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 다른 언어의 기호(&&)로 잘못 작성된 논리 연산자를 파이썬 문법에 맞게 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 두 조건을 동시에 만족하는지 검사하도록 잘못 적힌 논리 키워드(not)를 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid && symbol with the proper Python logical conjunction keyword.',
-      hint_ko: '파이썬에서는 기호 && 대신 영단어 키워드로 동시 만족을 표현합니다.',
+      hint_ko: '양쪽 조건이 모두 참인지 확인할 때는 not 대신 동시 만족 키워드(and)를 사용합니다.',
       hint_en: 'Python uses the English word keyword instead of && for logical conjunction.',
-      templateCode: 'x = int(input())\nprint(x > 0 && x < 100)',
+      templateCode: 'x = int(input())\nprint(x > 0 not x < 100)',
       targetCode: 'x = int(input())\nprint(x > 0 and x < 100)',
       testCases: [
         {

@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_29: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 출금액(amt)이 0 이하면 넘어가고, 잔액(bal) 이하면 차감해 최종 잔액을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 출금액(amt)이 0 이하면 아무 작업 없이 넘어가고, 잔액(bal) 이하면 차감해 최종 잔액을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks so non-positive amounts do nothing, valid amounts subtract from bal, and excess amounts do nothing.',
-      hint_ko: '빈 블록 통과 키워드, 다중 조건 분기 키워드, 그리고 차감 복합 대입 연산자를 차례로 채웁니다.',
+      hint_ko: '빈 블록을 통과시키는 키워드(pass)와 다중 조건 분기 키워드(elif)를 차례로 채웁니다.',
       hint_en: 'Enter the no-op keyword, the else-if keyword, and the compound subtraction operator in order.',
-      templateCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§§\n§§§§§ amt <= bal:\n    bal §§§ amt\nelse:\n    pass\nprint(bal)',
+      templateCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    §§§§§\n§§§§§ amt <= bal:\n    bal -= amt\nelse:\n    pass\nprint(bal)',
       targetCode: 'bal = 100\namt = int(input())\nif amt <= 0:\n    pass\nelif amt <= bal:\n    bal -= amt\nelse:\n    pass\nprint(bal)',
       testCases: [
         {

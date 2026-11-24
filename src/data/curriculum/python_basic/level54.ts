@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 양끝 공백과 달러 기호("$")를 차례로 제거한 뒤 정수로 바꾸어 2배 값을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 둘째 줄의 메서드 빈칸을 채워 양끝 공백을 지운 문자열에서 달러 기호("$")를 제거한 뒤 2배 값을 출력해보세요.',
       prompt_en: '[Fill Blank] Strip whitespace, remove "$", and convert clean to an integer to print double its value.',
-      hint_ko: '공백 제거 메서드, 문자열 치환 메서드, 정수 변환 함수를 순서대로 채우세요.',
+      hint_ko: '특정 문자를 다른 문자열로 치환하는 메서드 이름(replace)을 채우세요.',
       hint_en: 'Fill in the strip method, replace method, and int conversion function.',
-      templateCode: 'raw = input()\nclean = raw.§§§§§§().§§§§§§§§("$", "")\nprint(§§§§(clean) * 2)',
+      templateCode: 'raw = input()\nclean = raw.strip().§§§§§§§§("$", "")\nprint(int(clean) * 2)',
       targetCode: 'raw = input()\nclean = raw.strip().replace("$", "")\nprint(int(clean) * 2)',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] .replace()를 호출했지만 원본 문자열이 그대로 출력되는 불변성 함정 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 하이픈("-")을 빈 문자열("")로 치환하도록 둘째 줄에 잘못 적힌 메서드 이름(removes)을 replace로 수정해보세요.',
       prompt_en: '[Fix Bug] Assign the result of s.replace("-", "") back to s so the modified string is printed.',
-      hint_ko: '문자열 메서드는 원본을 직접 바꾸지 않으므로 반환된 새 문자열을 변수에 다시 대입해야 합니다.',
+      hint_ko: '문자열 안의 특정 글자를 다른 글자로 바꿀 때는 replace 메서드를 사용합니다.',
       hint_en: 'Reassign s = s.replace("-", "") because strings are immutable.',
-      templateCode: 's = "010-1234-5678"\ns.replace("-", "")\nprint(s)',
+      templateCode: 's = "010-1234-5678"\ns = s.removes("-", "")\nprint(s)',
       targetCode: 's = "010-1234-5678"\ns = s.replace("-", "")\nprint(s)',
       testCases: [
         {

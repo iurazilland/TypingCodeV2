@@ -76,11 +76,11 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 입력받은 가격에 500을 더한 뒤 문자열과 결합할 때 발생하는 형변환 오류를 모두 고쳐보세요.',
+      prompt_ko: '[틀린 곳 수정] 첫째 줄과 셋째 줄에 서로 반대로 적힌 형변환 함수(str, int)를 모두 고쳐 올바른 결과가 출력되게 해보세요.',
       prompt_en: '[Fix Bug] Fix the type conversion bugs on lines 1 and 3 so "Total: 2500won" is printed.',
       hint_ko: '첫째 줄의 input()은 int()로 감싸 숫자로 계산하고, 셋째 줄의 price는 str()로 감싸 문자열과 합칩니다.',
       hint_en: 'Wrap input() in int() on line 1 for addition, and wrap price in str() on line 3 for concatenation.',
-      templateCode: 'price = input()\nprice += 500\nprint("Total:" + price + "won")',
+      templateCode: 'price = str(input())\nprice += 500\nprint("Total:" + int(price) + "won")',
       targetCode: 'price = int(input())\nprice += 500\nprint("Total:" + str(price) + "won")',
       testCases: [
         {
@@ -95,11 +95,11 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       step: 5,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] split 호출 괄호 누락과 평균 계산의 소괄호 누락을 모두 고쳐 올바른 평균을 출력해보세요.',
+      prompt_ko: '[틀린 곳 수정] split 호출 괄호 오류([])와 평균 계산의 소괄호 위치 오류를 모두 고쳐 올바른 평균을 출력해보세요.',
       prompt_en: '[Fix Bug] Fix the missing parentheses in split() on line 1 and in the average formula on line 2.',
-      hint_ko: 'split 뒤에 ()를 붙이고, 나눗셈 전에 두 정수의 합이 먼저 계산되도록 소괄호로 묶어줍니다.',
+      hint_ko: 'split 뒤에 ()를 붙이고, 나눗셈 전에 두 정수의 합 (int(a) + int(b))가 먼저 계산되도록 소괄호로 묶어줍니다.',
       hint_en: 'Add () to call split on line 1 and wrap int(a) + int(b) in parentheses on line 2.',
-      templateCode: 'a, b = input().split\navg = int(a) + int(b) / 2\nprint("Avg:", avg)',
+      templateCode: 'a, b = input().split[]\navg = int(a) + (int(b) / 2)\nprint("Avg:", avg)',
       targetCode: 'a, b = input().split()\navg = (int(a) + int(b)) / 2\nprint("Avg:", avg)',
       testCases: [
         {
@@ -114,11 +114,11 @@ export const PYTHON_LEVEL_20: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 잘못된 복합 대입 연산자를 고쳐 정수 몫 갱신(3)과 문자열 이어붙이기(Py!)가 동작하게 해보세요.',
+      prompt_ko: '[틀린 곳 수정] 잘못된 복합 대입 연산자(**=, -=)를 고쳐 정수 몫 갱신(3)과 문자열 이어붙이기(Py!)가 동작하게 해보세요.',
       prompt_en: '[Fix Bug] Fix the compound operators so n updates to its integer quotient (3) and s appends "!".',
       hint_ko: '정수 몫 갱신에는 //=를 사용하고, 문자열 이어붙이기에는 +=를 사용해야 합니다.',
       hint_en: 'Use //= for integer floor division on n and += for string concatenation on s.',
-      templateCode: 'n = 17\nn /= 5\ns = "Py"\ns -= "!"\nprint(s, n)',
+      templateCode: 'n = 17\nn **= 5\ns = "Py"\ns -= "!"\nprint(s, n)',
       targetCode: 'n = 17\nn //= 5\ns = "Py"\ns += "!"\nprint(s, n)',
       expectedVariables: { n: 3, s: 'Py!' },
       testCases: [

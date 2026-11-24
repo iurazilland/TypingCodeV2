@@ -193,12 +193,12 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 부모 클래스를 상속받은 SaleItem과 일반 객체를 실제 결제 금액(x.pay()) 오름차순으로 정렬해 이름을 쉼표로 묶어 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 부모 클래스를 상속받은 SaleItem과 일반 객체를 실제 결제 금액(x.pay()) 오름차순으로 정렬해 출력해보세요.",
       "prompt_en": "[Fill Blank] Inherit from the parent class, sort the objects ascending by x.pay(), and combine their names with commas.",
-      "hint_ko": "부모 클래스 이름, 익명 함수 키워드, 문자열 결합 메서드를 순서대로 채워보세요.",
+      "hint_ko": "상속할 부모 클래스 이름(Item)과 정렬 기준 익명 함수 키워드(lambda)를 순서대로 채워보세요.",
       "hint_en": "Supply the parent class name, the anonymous function keyword, and the string-joining method.",
       "targetCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\nclass SaleItem(Item):\n    def pay(self):\n        return self.price - 500\n\nbag = [SaleItem(\"Mug\", 3000), Item(\"Pen\", 1200)]\ns = sorted(bag, key=lambda x: x.pay())\nprint(\",\".join([x.name for x in s]))",
-      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\nclass SaleItem(§§§§§):\n    def pay(self):\n        return self.price - 500\n\nbag = [SaleItem(\"Mug\", 3000), Item(\"Pen\", 1200)]\ns = sorted(bag, key=§§§§§§§ x: x.pay())\nprint(\",\".§§§§§([x.name for x in s]))",
+      "templateCode": "class Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\n    def pay(self):\n        return self.price\n\nclass SaleItem(§§§§§):\n    def pay(self):\n        return self.price - 500\n\nbag = [SaleItem(\"Mug\", 3000), Item(\"Pen\", 1200)]\ns = sorted(bag, key=§§§§§§§ x: x.pay())\nprint(\",\".join([x.name for x in s]))",
       "testCases": [
         {
           "id": 1,
@@ -212,11 +212,11 @@ export const PYTHON_LEVEL_112: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 객체 정렬 기준에서 딕셔너리 키 조회 문법(x[\"score\"])을 잘못 써서 발생한 TypeError를 객체 속성 문법으로 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 객체 정렬 기준에서 인스턴스 속성에 접근할 때 쉼표(x,score)를 잘못 써서 발생한 에러를 점 연산자(x.score)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the TypeError in key=lambda by accessing score as an object attribute instead of a dictionary key.",
-      "hint_ko": "클래스 인스턴스의 속성에 접근할 때는 대괄호 대신 점(.) 연산자(x.score)를 써야 합니다.",
+      "hint_ko": "클래스 인스턴스의 속성에 접근할 때는 점(.) 연산자(x.score)를 써야 합니다.",
       "hint_en": "Replace x[\"score\"] with x.score inside the lambda.",
-      "templateCode": "class User:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\nus = [User(\"Kim\", 80), User(\"Lee\", 95)]\ns = sorted(us, key=lambda x: x[\"score\"], reverse=True)\nprint(s[0].name)",
+      "templateCode": "class User:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\nus = [User(\"Kim\", 80), User(\"Lee\", 95)]\ns = sorted(us, key=lambda x: x,score, reverse=True)\nprint(s[0].name)",
       "targetCode": "class User:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\nus = [User(\"Kim\", 80), User(\"Lee\", 95)]\ns = sorted(us, key=lambda x: x.score, reverse=True)\nprint(s[0].name)",
       "testCases": [
         {

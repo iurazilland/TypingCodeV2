@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 첫째 줄의 수식 문자열 "2 ** 4 ="과 연산자 빈칸들을 채워 2 ** 4 = 16과 17 % 5 = 2를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 첫째 줄의 수식 문자열 "2 ** 4 ="과 둘째 줄의 연산자 빈칸을 채워 2 ** 4 = 16과 17 % 5 = 2를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print 2 ** 4 = 16 on line 1 and 17 % 5 = 2 on line 2.',
-      hint_ko: '첫째 줄에는 큰따옴표 수식 문자열과 거듭제곱 연산자를, 둘째 줄에는 나머지 연산자를 채웁니다.',
+      hint_ko: '첫째 줄에는 큰따옴표 수식 문자열을, 둘째 줄에는 나머지 연산자(%)를 채웁니다.',
       hint_en: 'Fill in the double-quoted formula string and power operator on line 1, and the modulo operator on line 2.',
-      templateCode: 'print(§§§§§§§§§§§, 2 §§§ 4)\nprint("17 % 5 =", 17 §§ 5)',
+      templateCode: 'print(§§§§§§§§§§§, 2 ** 4)\nprint("17 % 5 =", 17 §§ 5)',
       targetCode: 'print("2 ** 4 =", 2 ** 4)\nprint("17 % 5 =", 17 % 5)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 쉼표 뒤의 수식이 글자 그대로 출력되지 않고 42로 계산되도록 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 쉼표 뒤의 수식이 글자("6*7") 그대로 출력되지 않고 42로 계산되도록 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the second argument so it evaluates to 42 instead of printing literal text.',
-      hint_ko: '실제 계산이 필요한 쉼표 뒤 수식에서는 양쪽 따옴표를 제거해야 합니다.',
+      hint_ko: '실제 계산이 필요한 쉼표 뒤 수식에서는 따옴표를 제거하고 6 * 7로 작성해야 합니다.',
       hint_en: 'Remove the quotes around the expression after the comma so Python calculates its value.',
-      templateCode: 'print("6 * 7 =", "6 * 7")',
+      templateCode: 'print("6 * 7 =", "6*7")',
       targetCode: 'print("6 * 7 =", 6 * 7)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 앞의 수식 라벨과 일치하는 결과 50이 출력되도록 쉼표 뒤 계산식을 고쳐보세요.',
+      prompt_ko: '[틀린 곳 수정] 앞의 수식 라벨과 일치하는 결과 50이 출력되도록 쉼표 뒤 계산식의 소괄호 위치를 고쳐보세요.',
       prompt_en: '[Fix Bug] Fix the calculation after the comma so it matches the formula label and prints 50.',
-      hint_ko: '쉼표 뒤 계산식에서도 덧셈이 곱셈보다 먼저 수행되도록 소괄호로 묶어주어야 합니다.',
+      hint_ko: '쉼표 뒤 계산식에서도 덧셈이 곱셈보다 먼저 수행되도록 (8 + 2)를 소괄호로 묶어주어야 합니다.',
       hint_en: 'Add parentheses around the addition after the comma so it runs before the multiplication.',
-      templateCode: 'print("(8 + 2) * 5 =", 8 + 2 * 5)',
+      templateCode: 'print("(8 + 2) * 5 =", 8 + (2 * 5))',
       targetCode: 'print("(8 + 2) * 5 =", (8 + 2) * 5)',
       testCases: [
         {

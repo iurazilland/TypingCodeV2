@@ -184,11 +184,11 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트 words를 순회하며 각 단어가 등장한 횟수를 cnts 딕셔너리에 세어 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 리스트 words를 순회하며 각 단어가 등장한 횟수를 cnts 딕셔너리에 누적해 출력해보세요.',
       prompt_en: '[Fill Blank] Count how many times each word in words appears using dictionary cnts.',
-      hint_ko: '이미 등록된 키인지 확인하는 연산자와 기존 횟수 1 증가, 처음 등장했을 때의 초기값을 차례로 채우세요.',
+      hint_ko: '이미 등록된 키인지 확인하는 연산자(in)와 기존 횟수를 1 증가시키는 연산자(+=)를 차례로 채우세요.',
       hint_en: 'Check key membership, increment existing counts by 1, and initialize new keys to 1.',
-      templateCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k §§§ cnts:\n        cnts[k] §§§ 1\n    else:\n        cnts[k] = §§\nprint(cnts["a"], cnts["b"])',
+      templateCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k §§§ cnts:\n        cnts[k] §§§ 1\n    else:\n        cnts[k] = 1\nprint(cnts["a"], cnts["b"])',
       targetCode: 'words = ["a", "b", "a"]\ncnts = {}\nfor k in words:\n    if k in cnts:\n        cnts[k] += 1\n    else:\n        cnts[k] = 1\nprint(cnts["a"], cnts["b"])',
       testCases: [
         {
@@ -203,11 +203,11 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 딕셔너리에서 키가 아닌 값(500)으로 포함 여부를 검사해 No가 출력되는 논리 오류를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 딕셔너리 d에 실제로 존재하는 키를 검사해 Yes가 출력되도록 잘못 적힌 키("item")를 "gold"로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the membership check so it tests for the key "gold" rather than the value 500.',
-      hint_ko: 'in 연산자는 항상 키를 기준으로 찾으므로 숫자 값 대신 문자열 키 이름을 적어야 합니다.',
+      hint_ko: '첫째 줄 딕셔너리에 등록된 키 이름인 "gold"로 검사해야 참이 됩니다.',
       hint_en: 'Test whether the string key "gold" is in d instead of checking the integer 500.',
-      templateCode: 'd = {"gold": 500}\nif 500 in d:\n    print("Yes")\nelse:\n    print("No")',
+      templateCode: 'd = {"gold": 500}\nif "item" in d:\n    print("Yes")\nelse:\n    print("No")',
       targetCode: 'd = {"gold": 500}\nif "gold" in d:\n    print("Yes")\nelse:\n    print("No")',
       testCases: [
         {
@@ -222,11 +222,11 @@ export const PYTHON_LEVEL_60: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 아직 존재하지 않는 키 "score"에 복합 덧셈을 바로 시도해 발생한 KeyError를 초기값 대입으로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 빈 딕셔너리에 새 키 "score"와 값 10을 등록할 때 소괄호를 잘못 쓴 문법 오류를 대괄호(user["score"] = 10)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the KeyError caused by using += on a non-existent key by assigning the initial value 10 directly.',
-      hint_ko: '빈 딕셔너리에 처음 키를 등록할 때는 누적 덧셈이 아니라 기본 대입 연산자를 써야 합니다.',
+      hint_ko: '딕셔너리에 새 키-값 쌍을 추가할 때는 대괄호 [] 안에 키를 적어야 합니다.',
       hint_en: 'Use simple assignment (=) when inserting a brand-new key into an empty dictionary.',
-      templateCode: 'user = {}\nuser["score"] += 10\nprint(user["score"])',
+      templateCode: 'user = {}\nuser("score") = 10\nprint(user["score"])',
       targetCode: 'user = {}\nuser["score"] = 10\nprint(user["score"])',
       testCases: [
         {

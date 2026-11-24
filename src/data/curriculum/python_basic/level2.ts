@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳에 알맞은 연산 기호를 채워 첫째 줄에 30, 둘째 줄에 5.0을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳에 알맞은 연산 기호를 채워 첫째 줄에 30, 둘째 줄에 5.0을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks with operators so line 1 prints 30 and line 2 prints 5.0.',
-      hint_ko: '첫째 줄은 괄호 안에서 10과 5를 더한 뒤 2를 곱하고, 둘째 줄은 30을 6으로 나눕니다.',
+      hint_ko: '첫째 줄은 괄호 안의 덧셈 결과에 2를 곱하고, 둘째 줄은 30을 6으로 나눕니다.',
       hint_en: 'Add 10 and 5 inside parentheses then multiply by 2 on line 1, and divide 30 by 6 on line 2.',
-      templateCode: 'print((10 §§ 5) §§ 2)\nprint(30 §§ 6)',
+      templateCode: 'print((10 + 5) §§ 2)\nprint(30 §§ 6)',
       targetCode: 'print((10 + 5) * 2)\nprint(30 / 6)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_2: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 10과 20의 평균인 15.0이 출력되도록 수식에 빠진 소괄호를 추가해보세요.',
+      prompt_ko: '[틀린 곳 수정] 10과 20을 먼저 더한 뒤 2로 나눈 평균 15.0이 출력되도록 잘못 묶인 소괄호 위치를 고쳐보세요.',
       prompt_en: '[Fix Bug] Add the missing parentheses so the expression prints the average of 10 and 20 (15.0).',
-      hint_ko: '나눗셈이 먼저 실행되지 않도록 두 수의 덧셈 부분을 소괄호로 감싸주어야 합니다.',
+      hint_ko: '나눗셈이 먼저 실행되지 않도록 (10 + 20)을 소괄호로 감싸주어야 합니다.',
       hint_en: 'Enclose the addition of the two numbers in parentheses so it runs before dividing by 2.',
-      templateCode: 'print(10 + 20 / 2)',
+      templateCode: 'print(10 + (20 / 2))',
       targetCode: 'print((10 + 20) / 2)',
       testCases: [
         {

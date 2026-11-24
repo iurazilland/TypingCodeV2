@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] nums의 중복을 제거해 리스트로 만들고 오름차순으로 정렬해 [1, 2, 4]를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 둘째 줄의 빈칸에 집합 변환 함수를 채워 nums의 중복을 제거한 리스트를 오름차순 정렬해 [1, 2, 4]를 출력해보세요.',
       prompt_en: '[Fill Blank] Deduplicate nums into a list and sort it in ascending order to print [1, 2, 4].',
-      hint_ko: '바깥쪽 리스트 변환 함수, 안쪽 집합 변환 함수, 리스트 정렬 메서드를 차례로 채우세요.',
+      hint_ko: '중복 요소를 제거하기 위해 안쪽에서 먼저 감싸는 집합 변환 함수(set)를 채우세요.',
       hint_en: 'Fill in the outer list cast, inner set cast, and the in-place sorting method.',
-      templateCode: 'nums = [4, 2, 4, 1, 2]\nuniq = §§§§§(§§§§(nums))\nuniq.§§§§§()\nprint(uniq)',
+      templateCode: 'nums = [4, 2, 4, 1, 2]\nuniq = list(§§§§(nums))\nuniq.sort()\nprint(uniq)',
       targetCode: 'nums = [4, 2, 4, 1, 2]\nuniq = list(set(nums))\nuniq.sort()\nprint(uniq)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 튜플에 요소를 추가하려다 또다시 튜플로 변환해 에러가 발생한 둘째 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 튜플 t를 리스트로 변환해 요소를 추가하도록 둘째 줄의 잘못된 변환 함수(dict)를 list로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 2 so tuple t is converted into a mutable list before calling .append(30).',
-      hint_ko: '.append()를 사용하려면 튜플이 아니라 수정 가능한 리스트로 형변환해야 합니다.',
+      hint_ko: '.append()를 사용하려면 튜플을 list(t)로 형변환해야 합니다.',
       hint_en: 'Convert t using the list constructor on line 2 so .append() works.',
-      templateCode: 't = (10, 20)\narr = tuple(t)\narr.append(30)\nprint(arr)',
+      templateCode: 't = (10, 20)\narr = dict(t)\narr.append(30)\nprint(arr)',
       targetCode: 't = (10, 20)\narr = list(t)\narr.append(30)\nprint(arr)',
       testCases: [
         {
@@ -223,11 +223,11 @@ export const PYTHON_LEVEL_63: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 집합 상태 그대로 .sort()를 호출해 발생한 에러를 리스트 변환을 거쳐 정렬하도록 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] nums의 중복을 제거한 뒤 리스트로 변환해 정렬하도록 안쪽의 잘못된 변환 함수(str)를 set으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 2 by converting the deduplicated set into a list so .sort() can be called on arr.',
-      hint_ko: '집합에는 순서와 정렬 메서드가 없으므로 집합을 다시 리스트로 감싸 대입하세요.',
+      hint_ko: '중복 요소를 제거하려면 list() 안쪽에서 set(nums)으로 먼저 변환해야 합니다.',
       hint_en: 'Wrap the set conversion inside the list constructor on line 2.',
-      templateCode: 'nums = [3, 1, 2, 1]\narr = set(nums)\narr.sort()\nprint(arr)',
+      templateCode: 'nums = [3, 1, 2, 1]\narr = list(str(nums))\narr.sort()\nprint(arr)',
       targetCode: 'nums = [3, 1, 2, 1]\narr = list(set(nums))\narr.sort()\nprint(arr)',
       testCases: [
         {

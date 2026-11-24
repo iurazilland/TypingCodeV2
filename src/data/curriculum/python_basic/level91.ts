@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_91: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 양수만 걸러내는 조건 키워드와 각 숫자를 키로, 2배를 값으로 하는(x: x * 2) 딕셔너리 컴프리헨션을 완성해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 양수만 걸러내는 조건부 리스트 컴프리헨션과 딕셔너리 컴프리헨션을 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the trailing filter keyword and the dictionary comprehension key-value separator and loop keyword.",
-      "hint_ko": "뒤쪽 필터 조건 키워드와 딕셔너리 컴프리헨션의 키:값 쌍, 그리고 반복 키워드를 확인하세요.",
-      "hint_en": "Check the trailing if keyword, the key: value expression, and the for keyword.",
-      "templateCode": "nums = [-2, 3, -1, 5]\npos = [x for x in nums §§§ x > 0]\ntable = {§§§§§§§§§ §§§§ x in pos}\nprint(pos, table[5])",
+      "hint_ko": "둘째 줄의 필터 조건 키워드(if)와 셋째 줄 딕셔너리 컴프리헨션의 반복 키워드(for)를 차례로 채우세요.",
+      "hint_en": "Check the trailing if keyword, the colon separating key and value, and the for keyword.",
+      "templateCode": "nums = [-2, 3, -1, 5]\npos = [x for x in nums §§§ x > 0]\ntable = {x: x * 2 §§§§ x in pos}\nprint(pos, table[5])",
       "targetCode": "nums = [-2, 3, -1, 5]\npos = [x for x in nums if x > 0]\ntable = {x: x * 2 for x in pos}\nprint(pos, table[5])",
       "testCases": [
         {

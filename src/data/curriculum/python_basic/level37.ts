@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 "0"이 입력될 때까지 입력받은 정수를 합산해 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 무한 루프 안에서 0이 입력될 때 반복을 즉시 종료하고 누적 합계를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to sum integer inputs in an infinite loop until 0 is entered.',
-      hint_ko: '무한 루프용 참 상수, 종료값 0인지 확인하는 같음 비교 기호, 그리고 탈출 키워드를 차례로 채웁니다.',
+      hint_ko: '무한 루프 조건용 참 상수(True)와 반복문을 즉시 탈출하는 키워드(break)를 차례로 채웁니다.',
       hint_en: 'Enter True, the equality operator ==, and break in order.',
-      templateCode: 'total = 0\nwhile §§§§§:\n    n = int(input())\n    if n §§§ 0:\n        §§§§§§\n    total += n\nprint("Sum", total, sep=":")',
+      templateCode: 'total = 0\nwhile §§§§§:\n    n = int(input())\n    if n == 0:\n        §§§§§§\n    total += n\nprint("Sum", total, sep=":")',
       targetCode: 'total = 0\nwhile True:\n    n = int(input())\n    if n == 0:\n        break\n    total += n\nprint("Sum", total, sep=":")',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_37: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 반복문을 빠져나가도록 잘못 적힌 단어를 올바른 파이썬 예약어로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 반복문을 즉시 빠져나가도록 잘못 적힌 단어(pause)를 올바른 파이썬 예약어(break)로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid word on line 4 with the proper Python loop-exit keyword.',
-      hint_ko: '파이썬에서 반복문을 즉시 중단할 때는 stop이 아니라 전용 예약어를 씁니다.',
+      hint_ko: '파이썬에서 반복문을 즉시 중단하고 탈출할 때는 pause가 아니라 break를 씁니다.',
       hint_en: 'Python uses a keyword instead of stop to exit a loop.',
-      templateCode: 'for i in range(1, 10):\n    if i == 4:\n        stop\n    print(i, end=" ")',
+      templateCode: 'for i in range(1, 10):\n    if i == 4:\n        pause\n    print(i, end=" ")',
       targetCode: 'for i in range(1, 10):\n    if i == 4:\n        break\n    print(i, end=" ")',
       testCases: [
         {

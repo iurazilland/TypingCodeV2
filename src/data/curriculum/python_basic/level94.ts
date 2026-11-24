@@ -190,12 +190,12 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백으로 나눈 단어들을 소문자로 바꾸고 사전순 정렬한 뒤 언더스코어(\"_\")로 결합해 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 공백으로 나눈 단어들을 소문자로 정렬한 뒤 언더스코어(\"_\")로 결합해 출력해보세요.",
       "prompt_en": "[Fill Blank] Separate the input by spaces, lowercase each word, order them alphabetically, and combine with \"_\".",
-      "hint_ko": "공백 분리 메서드, 사본 정렬 내장 함수, 문자열 결합 메서드를 순서대로 채워보세요.",
+      "hint_ko": "공백 분리 메서드(split)와 구분자 문자열 결합 메서드(join)를 순서대로 채워보세요.",
       "hint_en": "Fill in the splitting method, the copy-sorting built-in function, and the string joining method.",
       "targetCode": "raw = input().split()\nclean = sorted([w.lower() for w in raw])\nprint(\"_\".join(clean))",
-      "templateCode": "raw = input().§§§§§§()\nclean = §§§§§§§([w.lower() for w in raw])\nprint(\"_\".§§§§§(clean))",
+      "templateCode": "raw = input().§§§§§§()\nclean = sorted([w.lower() for w in raw])\nprint(\"_\".§§§§§(clean))",
       "testCases": [
         {
           "id": 1,
@@ -228,11 +228,11 @@ export const PYTHON_LEVEL_94: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 짝수 정수 리스트를 문자열 변환 없이 바로 결합하려다 발생한 TypeError를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] \"+\".join()으로 결합할 수 있도록 리스트 컴프리헨션 앞쪽의 잘못된 형변환 함수(int)를 문자열 변환(str)으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the TypeError caused by passing integers directly without converting them to strings.",
-      "hint_ko": "리스트 컴프리헨션의 앞쪽 식에서 숫자 n을 문자열로 형변환해 담아야 결합할 수 있습니다.",
+      "hint_ko": ".join()은 문자열 리스트만 결합할 수 있으므로 str(n)으로 변환해 담아야 합니다.",
       "hint_en": "Convert each integer n to a string using str(n) in the list comprehension before combining.",
-      "templateCode": "nums = [2, 4, 6]\nevens = [n for n in nums]\nprint(\"+\".join(evens))",
+      "templateCode": "nums = [2, 4, 6]\nevens = [int(n) for n in nums]\nprint(\"+\".join(evens))",
       "targetCode": "nums = [2, 4, 6]\nevens = [str(n) for n in nums]\nprint(\"+\".join(evens))",
       "testCases": [
         {

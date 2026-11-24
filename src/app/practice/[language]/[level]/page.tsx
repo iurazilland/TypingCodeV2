@@ -1614,6 +1614,117 @@ function getDescendantBlockIds(rootId: string, blocks: CanvasBlock[]): string[] 
 
 // evaluatePythonLocally and evaluateBlocksLocally are imported from @/lib/blockEvaluator
 
+function QuizCodeCanvas({ code }: { code: string }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const lines = (code || '').split('\n');
+    const lineHeight = 34;
+    const padY = 16;
+    const gutterWidth = 50;
+    const codeStartX = 70;
+    const fontStr = '600 19px "JetBrains Mono", Consolas, "Courier New", monospace';
+    const lineNumFontStr = '700 13.5px "JetBrains Mono", Consolas, "Courier New", monospace';
+
+    ctx.font = fontStr;
+    let maxLineWidth = 0;
+    for (const line of lines) {
+      const w = ctx.measureText(line).width;
+      if (w > maxLineWidth) maxLineWidth = w;
+    }
+
+    const logicalWidth = Math.max(680, Math.ceil(codeStartX + maxLineWidth + 28));
+    const logicalHeight = Math.max(68, lines.length * lineHeight + padY * 2);
+    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
+    canvas.width = logicalWidth * dpr;
+    canvas.height = logicalHeight * dpr;
+    canvas.style.width = `${logicalWidth}px`;
+    canvas.style.height = `${logicalHeight}px`;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, logicalWidth, logicalHeight);
+
+    lines.forEach((codeLine, lIdx) => {
+      const rowTop = padY + lIdx * lineHeight;
+      const rowCenterY = rowTop + lineHeight / 2;
+
+      // Gutter vertical divider line
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(gutterWidth, rowTop);
+      ctx.lineTo(gutterWidth, rowTop + lineHeight);
+      ctx.stroke();
+
+      // Line number (01, 02, ...)
+      ctx.font = lineNumFontStr;
+      ctx.fillStyle = '#64748b';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(lIdx + 1).padStart(2, '0'), gutterWidth - 14, rowCenterY);
+
+      // Syntax-highlighted tokens on canvas (zero DOM text nodes)
+      ctx.font = fontStr;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+
+      const tokens = tokenizePythonLine(codeLine);
+      let cursor = 0;
+      const drawSegment = (text: string, startCol: number, color: string) => {
+        if (!text) return;
+        const prefixWidth = ctx.measureText(codeLine.slice(0, startCol)).width;
+        ctx.fillStyle = color;
+        ctx.fillText(text, codeStartX + prefixWidth, rowCenterY);
+      };
+
+      for (const tok of tokens) {
+        if (tok.start > cursor) {
+          drawSegment(codeLine.slice(cursor, tok.start), cursor, VSCODE_DARK_PLUS.default);
+        }
+        drawSegment(tok.text, tok.start, VSCODE_DARK_PLUS[tok.type] || VSCODE_DARK_PLUS.default);
+        cursor = tok.end;
+      }
+      if (cursor < codeLine.length) {
+        drawSegment(codeLine.slice(cursor), cursor, VSCODE_DARK_PLUS.default);
+      }
+    });
+  }, [code]);
+
+  return (
+    <div
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      style={{
+        overflowX: 'auto',
+        userSelect: 'none',
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        className="capture-blur-target"
+        draggable={false}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        style={{
+          display: 'block',
+          userSelect: 'none',
+          pointerEvents: 'auto',
+        }}
+      />
+    </div>
+  );
+}
+
 export default function PracticePage(props: PracticePageProps) {
   const { language } = useLanguage();
   const isEn = language === 'en';
@@ -1771,8 +1882,187 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   }, [isAuthLoading, tourStorageKey, levelNum, currentStepIndex]);
 
   const [hearts, setHearts] = useState<number>(5);
+  const penalizedStepsRef = useRef<Set<number>>(new Set());
   const [showHint, setShowHint] = useState<boolean>(false);
+  const [isScreenBlurred, setIsScreenBlurred] = useState<boolean>(false);
+  const blurReleaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Clear any residual inline filter on prompt, hint, and outer canvas container
+    for (const clearId of ['tour-mission-prompt', 'tour-hint-box', 'tour-col-canvas']) {
+      const clearEl = document.getElementById(clearId);
+      if (clearEl) {
+        clearEl.style.filter = 'none';
+      }
+    }
+
+    const applyDomBlurSync = (blurred: boolean) => {
+      for (const clearId of ['tour-mission-prompt', 'tour-hint-box', 'tour-col-canvas']) {
+        const clearEl = document.getElementById(clearId);
+        if (clearEl) {
+          clearEl.style.filter = 'none';
+        }
+      }
+      const canvasCol = document.getElementById('tour-col-canvas');
+      if (canvasCol) {
+        canvasCol.classList.toggle('screen-blurred', blurred);
+      }
+      const targets = document.querySelectorAll<HTMLElement>('.capture-blur-target');
+      targets.forEach((el) => {
+        el.style.transition = blurred ? 'none' : 'filter 0.12s ease';
+        el.style.filter = blurred ? 'blur(6px)' : 'none';
+      });
+    };
+
+    const isMetaHeldRef = { current: false };
+    const captureLockUntilRef = { current: 0 };
+
+    const isCaptureLocked = () =>
+      isMetaHeldRef.current || Date.now() < captureLockUntilRef.current;
+
+    const deactivateBlur = () => {
+      if (isCaptureLocked() || !document.hasFocus()) return;
+      if (blurReleaseTimerRef.current) {
+        clearTimeout(blurReleaseTimerRef.current);
+        blurReleaseTimerRef.current = null;
+      }
+      applyDomBlurSync(false);
+      setIsScreenBlurred(false);
+    };
+
+    const triggerTemporaryCaptureMask = (lockDurationMs?: number) => {
+      if (blurReleaseTimerRef.current) {
+        clearTimeout(blurReleaseTimerRef.current);
+        blurReleaseTimerRef.current = null;
+      }
+      if (lockDurationMs && lockDurationMs > 0) {
+        captureLockUntilRef.current = Math.max(
+          captureLockUntilRef.current,
+          Date.now() + lockDurationMs
+        );
+      }
+      applyDomBlurSync(true);
+      setIsScreenBlurred(true);
+      if (lockDurationMs && lockDurationMs > 0) {
+        blurReleaseTimerRef.current = setTimeout(() => {
+          blurReleaseTimerRef.current = null;
+          if (!isCaptureLocked() && document.hasFocus()) {
+            applyDomBlurSync(false);
+            setIsScreenBlurred(false);
+          }
+        }, lockDurationMs + 20);
+      }
+    };
+
+    const handleKeyDownBlur = (e: KeyboardEvent) => {
+      if (
+        e.key === 'Meta' ||
+        e.key === 'OS' ||
+        e.code === 'MetaLeft' ||
+        e.code === 'MetaRight' ||
+        e.metaKey
+      ) {
+        isMetaHeldRef.current = true;
+        // Lock blur immediately and keep it locked while held + at least 2.5s
+        triggerTemporaryCaptureMask(2500);
+        return;
+      }
+      if (e.key === 'PrintScreen') {
+        triggerTemporaryCaptureMask(2500);
+        return;
+      }
+      if (
+        e.key === 'Shift' ||
+        e.key === 'Control' ||
+        e.key === 'Alt' ||
+        e.key === 's' ||
+        e.key === 'S' ||
+        e.code === 'KeyS'
+      ) {
+        // If S or Shift is pressed right after/during Win+Shift+S, extend the capture lock, never un-blur!
+        if (isCaptureLocked() || e.shiftKey) {
+          triggerTemporaryCaptureMask(2500);
+        }
+        return;
+      }
+      // Normal typing key (not part of Win+Shift+S): clear lock and un-blur if window has focus
+      isMetaHeldRef.current = false;
+      captureLockUntilRef.current = 0;
+      deactivateBlur();
+    };
+
+    const handleKeyUpBlur = (e: KeyboardEvent) => {
+      if (
+        e.key === 'Meta' ||
+        e.key === 'OS' ||
+        e.code === 'MetaLeft' ||
+        e.code === 'MetaRight'
+      ) {
+        isMetaHeldRef.current = false;
+        // Windows Snipping Tool (ScreenClippingHost.exe) takes 0.5s~1.5s AFTER Win+Shift+S keyup
+        // to freeze the screen and take focus. Keep blur locked for 2.5s after keyup so it never flickers off before capture!
+        triggerTemporaryCaptureMask(2500);
+        return;
+      }
+      if (e.key === 'PrintScreen') {
+        triggerTemporaryCaptureMask(2500);
+        try {
+          navigator.clipboard?.writeText('');
+        } catch {}
+      }
+    };
+
+    const handleWindowBlur = () => {
+      isMetaHeldRef.current = false;
+      triggerTemporaryCaptureMask();
+    };
+    const handleWindowFocus = () => {
+      isMetaHeldRef.current = false;
+      if (!isCaptureLocked()) deactivateBlur();
+    };
+    const handleMouseMove = () => {
+      if (document.hasFocus() && !isCaptureLocked()) {
+        deactivateBlur();
+      }
+    };
+    const handleMouseDown = () => {
+      isMetaHeldRef.current = false;
+      captureLockUntilRef.current = 0;
+      if (blurReleaseTimerRef.current) {
+        clearTimeout(blurReleaseTimerRef.current);
+        blurReleaseTimerRef.current = null;
+      }
+      applyDomBlurSync(false);
+      setIsScreenBlurred(false);
+    };
+
+    // If the page mounts/reloads while another window has focus, apply blur immediately
+    if (!document.hasFocus()) {
+      triggerTemporaryCaptureMask();
+    }
+
+    window.addEventListener('blur', handleWindowBlur);
+    window.addEventListener('focus', handleWindowFocus);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousedown', handleMouseDown, true);
+    window.addEventListener('keydown', handleKeyDownBlur, true);
+    window.addEventListener('keyup', handleKeyUpBlur, true);
+
+    return () => {
+      if (blurReleaseTimerRef.current) {
+        clearTimeout(blurReleaseTimerRef.current);
+      }
+      window.removeEventListener('blur', handleWindowBlur);
+      window.removeEventListener('focus', handleWindowFocus);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousedown', handleMouseDown, true);
+      window.removeEventListener('keydown', handleKeyDownBlur, true);
+      window.removeEventListener('keyup', handleKeyUpBlur, true);
+    };
+  }, []);
 
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isLevelAlreadyCleared, setIsLevelAlreadyCleared] = useState<boolean>(false);
@@ -1793,6 +2083,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       }
     };
     setHearts(5);
+    penalizedStepsRef.current.clear();
     setIsGameOver(false);
     setIsForcedReviewRun(false);
     setSessionMaxStep(0);
@@ -3209,8 +3500,18 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       if (target.tokens.has('raise') && !user.tokens.has('raise')) return false;
       if (target.tokens.has('class') && !user.tokens.has('class')) return false;
       if (target.tokens.has('lambda') && !user.tokens.has('lambda')) return false;
-      if (target.hasFString && !user.hasFString) return false;
-      if (target.hasCompoundOp && !user.hasCompoundOp) return false;
+      const promptText = `${question.prompt_ko || ''} ${question.prompt_en || ''}`;
+      const requiresFString =
+        levelNum === 53 ||
+        levelNum === 97 ||
+        /f-string|f"|포맷\s*문자열|서식\s*지정자/i.test(promptText);
+      const requiresCompoundOp =
+        levelNum === 13 ||
+        levelNum === 14 ||
+        /복합\s*대입|\+=|-=|\*=|\/=|\/\/=|%=/i.test(promptText);
+
+      if (requiresFString && target.hasFString && !user.hasFString) return false;
+      if (requiresCompoundOp && target.hasCompoundOp && !user.hasCompoundOp) return false;
       if (target.hasNewlineEscape && !user.hasNewlineEscape) return false;
       if (target.hasTabEscape && !user.hasTabEscape) return false;
 
@@ -3274,15 +3575,16 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
       if (k < keep.length) return false;
     }
 
-    // 4c. A print() of pure literals (no variables/expressions) must exist verbatim in targetCode
-    //     (blocks print("an" + "swer") hardcoding in blanks, bug lines, or added lines)
+    // 4c. A print() of pure constant literal (no variables and no operators) must exist in targetCode
+    //     (blocks print("answer") hardcoding while allowing equivalent arithmetic expressions like print(2 * (10 + 5)))
     {
       const targetNorm = new Set((question.targetCode || '').split('\n').map(normCodeLine));
       for (const l of trimmedUser.split('\n')) {
         const m = l.trim().match(/^print\s*\(([\s\S]*)\)$/);
         if (!m || /\b[fF]["']/.test(m[1])) continue;
         const withoutStrings = m[1].replace(/(["'])(?:\\.|(?!\1).)*\1/g, '');
-        if (!/[A-Za-z_]/.test(withoutStrings) && !targetNorm.has(normCodeLine(l))) return false;
+        const hasVarOrOp = /[A-Za-z_+\-*/%<>=!]/.test(withoutStrings);
+        if (!hasVarOrOp && !targetNorm.has(normCodeLine(l))) return false;
       }
     }
 
@@ -3299,7 +3601,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         return false;
       }
       for (let idx = 0; idx < tplLines.length; idx++) {
-        if (!tplLines[idx].includes('§') && userActiveLines[idx] !== tplLines[idx]) {
+        if (!tplLines[idx].includes('§') && normCodeLine(userActiveLines[idx]) !== normCodeLine(tplLines[idx])) {
           return false;
         }
       }
@@ -3386,6 +3688,9 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     const penalizeHeartOnError = () => {
       // Block mode is a guided learning stage: do not deduct hearts on errors or wrong outputs
       if (mode !== 'typing') return;
+      // Cap heart deduction to at most 1 heart per question (step) in a round run
+      if (penalizedStepsRef.current.has(stepIdxAtRun)) return;
+      penalizedStepsRef.current.add(stepIdxAtRun);
       setIsHeartShaking(true);
       setTimeout(() => setIsHeartShaking(false), 800);
       setHearts((prev) => {
@@ -3884,6 +4189,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
     }
     setSessionMaxStep(0);
     setHearts(5);
+    penalizedStepsRef.current.clear();
     setCurrentStepIndex(0);
     setIsGameOver(false);
     setCanvasBlocks(createInitialCanvasBlocks(round.questions[0]));
@@ -8029,7 +8335,15 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                 {isEn ? (currentQuestion.prompt_en || currentQuestion.prompt_ko) : currentQuestion.prompt_ko}
               </span>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <div
+                id="tour-hint-box"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  flexShrink: 0,
+                }}
+              >
                 {/* Hint Hover Button Container with Relative Anchor for Floating Popover */}
                 <div
                   style={{ position: 'relative' }}
@@ -8149,6 +8463,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
           {/* Main Canvas Workspace Area */}
           <div
             id="tour-col-canvas"
+            className={isScreenBlurred ? 'screen-blurred' : undefined}
             ref={workspaceRef}
             onClick={() => setActiveInputHelp(null)}
             onDragOver={handleCanvasDragOver}
@@ -8227,6 +8542,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                  BLOCK MODE: Free Draggable Blocks with Auto-Expanding Input
                  ============================================================ */
               <>
+                <div className="capture-blur-target">
                 {canvasBlocks
                   .filter((block) => {
                     // Do not render blocks that are attached horizontally to an argBlock (they render inside the arg slot)
@@ -8328,6 +8644,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                       handleInputClickSelect={handleInputClickSelect}
                     />
                   ))}
+                </div>
 
 
 
@@ -8461,72 +8778,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                     >
                       {isEn ? 'Python Code to Trace' : '실행할 파이썬 코드'}
                     </div>
-                    <div
-                      style={{
-                        padding: '16px 0',
-                        fontFamily: 'var(--font-mono), monospace',
-                        fontSize: '1.2rem',
-                        lineHeight: 1.8,
-                      }}
-                    >
-                      {(currentQuestion.targetCode || '').split('\n').map((codeLine, lIdx) => {
-                        const tokens = tokenizePythonLine(codeLine);
-                        const rendered: React.ReactNode[] = [];
-                        let cursor = 0;
-                        tokens.forEach((tok, tIdx) => {
-                          if (tok.start > cursor) {
-                            rendered.push(
-                              <span key={`ws-${tIdx}`} style={{ color: VSCODE_DARK_PLUS.default }}>
-                                {codeLine.slice(cursor, tok.start)}
-                              </span>
-                            );
-                          }
-                          rendered.push(
-                            <span
-                              key={`tk-${tIdx}`}
-                              style={{ color: VSCODE_DARK_PLUS[tok.type] || VSCODE_DARK_PLUS.default }}
-                            >
-                              {tok.text}
-                            </span>
-                          );
-                          cursor = tok.end;
-                        });
-                        if (cursor < codeLine.length) {
-                          rendered.push(
-                            <span key="ws-end" style={{ color: VSCODE_DARK_PLUS.default }}>
-                              {codeLine.slice(cursor)}
-                            </span>
-                          );
-                        }
-                        return (
-                          <div
-                            key={lIdx}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              minHeight: '34px',
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: '50px',
-                                minWidth: '50px',
-                                textAlign: 'right',
-                                paddingRight: '14px',
-                                color: '#64748b',
-                                fontSize: '0.84rem',
-                                fontWeight: 700,
-                                userSelect: 'none',
-                                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-                              }}
-                            >
-                              {String(lIdx + 1).padStart(2, '0')}
-                            </div>
-                            <div style={{ padding: '0 20px', whiteSpace: 'pre' }}>{rendered}</div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <QuizCodeCanvas code={currentQuestion.targetCode || ''} />
                   </div>
 
                   {/* Multiple-Choice Output Cards */}

@@ -94,11 +94,11 @@ export const PYTHON_LEVEL_71: PracticeRound = {
       step: 5,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 첫 번째 요소만 검사하고 바로 False로 끝나버리는 음수 탐색 함수의 위치 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 리스트에 음수(0보다 작은 수)가 있을 때 True를 조기 반환하도록 셋째 줄의 잘못된 비교 기호(>)를 <로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix has_neg(nums) so return False runs only after checking every element in the loop.',
-      hint_ko: 'else 분기를 제거하고 반복문이 끝난 바깥쪽에서 False를 반환하도록 들여쓰기를 맞추세요.',
+      hint_ko: '음수인지 판별하려면 0보다 작은지(x < 0) 검사해야 합니다.',
       hint_en: 'Remove else: and move return False outside the for loop.',
-      templateCode: 'def has_neg(nums):\n    for x in nums:\n        if x < 0:\n            return True\n        else:\n            return False\nprint(has_neg([5, -3, 8]))',
+      templateCode: 'def has_neg(nums):\n    for x in nums:\n        if x > 0:\n            return True\n    return False\nprint(has_neg([5, -3, 8]))',
       targetCode: 'def has_neg(nums):\n    for x in nums:\n        if x < 0:\n            return True\n    return False\nprint(has_neg([5, -3, 8]))',
       testCases: [
         {

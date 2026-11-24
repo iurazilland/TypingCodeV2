@@ -189,11 +189,11 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 대기열 맨 앞에 새 항목을 끼워 넣고, 지정한 값을 안전하게 찾아 삭제하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 리스트 메서드 빈칸 2곳을 채워 대기열 맨 앞에 \"A\"를 끼워 넣고, 입력받은 값을 찾아 삭제해보세요.",
       "prompt_en": "[Fill Blank] Complete the front-insertion method, membership check keyword, and value-removal method.",
-      "hint_ko": "원하는 위치에 삽입하는 메서드, 리스트 포함 여부를 확인하는 키워드, 그리고 값으로 삭제하는 메서드를 확인하세요.",
+      "hint_ko": "원하는 위치에 삽입하는 메서드(insert)와 값으로 삭제하는 메서드(remove)를 차례로 채우세요.",
       "hint_en": "Check the index-insertion method, the membership operator, and the value-removal method.",
-      "templateCode": "cards = [\"B\", \"C\", \"D\"]\ncards.§§§§§§§(0, \"A\")\ndrop = input()\nif drop §§§ cards:\n    cards.§§§§§§§(drop)\nprint(cards)",
+      "templateCode": "cards = [\"B\", \"C\", \"D\"]\ncards.§§§§§§§(0, \"A\")\ndrop = input()\nif drop in cards:\n    cards.§§§§§§§(drop)\nprint(cards)",
       "targetCode": "cards = [\"B\", \"C\", \"D\"]\ncards.insert(0, \"A\")\ndrop = input()\nif drop in cards:\n    cards.remove(drop)\nprint(cards)",
       "testCases": [
         {
@@ -227,11 +227,11 @@ export const PYTHON_LEVEL_83: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 리스트에서 값 50을 찾아 지우려다 인덱스 삭제 키워드(del)를 써서 범위 초과 에러가 난 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 리스트에서 값 50을 찾아 지우려다 존재하지 않는 메서드(delete)를 호출한 둘째 줄을 remove로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the IndexError caused by using del nums[50] when trying to delete the value 50 from the list.",
-      "hint_ko": "del 리스트[번호]는 인덱스로 삭제하므로, 값 자체를 찾아 지우려면 리스트의 값 삭제 메서드를 호출해야 합니다.",
+      "hint_ko": "리스트에서 특정 값을 찾아 삭제할 때는 .remove(값) 메서드를 호출해야 합니다.",
       "hint_en": "del deletes by index; call the list's value-removal method to delete the number 50 itself.",
-      "templateCode": "nums = [10, 50, 90]\ndel nums[50]\nprint(nums)",
+      "templateCode": "nums = [10, 50, 90]\nnums.delete(50)\nprint(nums)",
       "targetCode": "nums = [10, 50, 90]\nnums.remove(50)\nprint(nums)",
       "testCases": [
         {

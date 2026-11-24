@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_51: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 8자리 날짜 입력을 연도(앞 4자리)와 월일(뒤 4자리)로 슬라이싱해 슬래시("/") 구분자로 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 슬라이싱 빈칸 2곳을 채워 8자리 날짜 입력을 연도(앞 4자리)와 월일(뒤 4자리)로 나누어 출력해보세요.',
       prompt_en: '[Fill Blank] Slice 8-digit date d into year (first 4) and month-day (from 4 onward) and print separated by "/".',
-      hint_ko: '앞 4글자 슬라이싱 범위, 4번부터 끝까지 슬라이싱 범위, 구분자 옵션 이름을 차례로 채우세요.',
+      hint_ko: '앞 4글자 슬라이싱 범위(:4)와 4번 인덱스부터 끝까지 슬라이싱 범위(4:)를 차례로 채우세요.',
       hint_en: 'Fill in the first-4 slice range, from-4 slice range, and separator option keyword.',
-      templateCode: 'd = input()\nyr = d[§§§]\nmd = d[§§§]\nprint(yr, md, §§§§="/")',
+      templateCode: 'd = input()\nyr = d[§§§]\nmd = d[§§§]\nprint(yr, md, sep="/")',
       targetCode: 'd = input()\nyr = d[:4]\nmd = d[4:]\nprint(yr, md, sep="/")',
       testCases: [
         {

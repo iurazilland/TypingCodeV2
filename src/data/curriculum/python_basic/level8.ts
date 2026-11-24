@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_8: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 탭으로 정렬된 헤더, 하이픈 12개 구분선, 그리고 500 * 3 계산 결과를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 탭으로 정렬된 헤더, 하이픈 12개 구분선, 그리고 500 * 3 계산 결과를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the tab-aligned header, a 12-hyphen line, and 500 * 3.',
-      hint_ko: '탭 제어 문자, 문자열 반복 연산자, 숫자 곱셈 연산자를 각 줄의 빈칸에 차례로 채웁니다.',
+      hint_ko: '첫째 줄에는 탭 제어 문자(\\t)를, 둘째 줄에는 문자열 반복 연산자(*)를 차례로 채웁니다.',
       hint_en: 'Fill in the tab escape sequence on line 1, string repetition on line 2, and multiplication on line 3.',
-      templateCode: 'print("[Item]§§§[Price]")\nprint("-" §§ 12)\nprint("Pen\\t", 500 §§ 3)',
+      templateCode: 'print("[Item]§§§[Price]")\nprint("-" §§ 12)\nprint("Pen\\t", 500 * 3)',
       targetCode: 'print("[Item]\\t[Price]")\nprint("-" * 12)\nprint("Pen\\t", 500 * 3)',
       testCases: [
         {

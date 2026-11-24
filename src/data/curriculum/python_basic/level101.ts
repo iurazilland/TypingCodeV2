@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 쉼표로 구분된 입력을 정수 리스트로 변환해 오름차순 정렬한 뒤 공백으로 묶어 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 첫째 줄의 빈칸에 일괄 변환 함수를 채워 쉼표로 구분된 입력을 정수 리스트로 변환하고 오름차순으로 출력해보세요.",
       "prompt_en": "[Fill Blank] Convert comma-separated numbers into an integer list, order them, and combine them as strings with spaces.",
-      "hint_ko": "일괄 매핑 내장 함수, 정수 형변환 함수, 문자열 결합 메서드를 순서대로 채워보세요.",
+      "hint_ko": "분리된 문자열들에 int 함수를 일괄 적용하는 내장 함수(map)를 채우세요.",
       "hint_en": "Supply the batch-mapping function, the integer type, and the string-joining method.",
       "targetCode": "nums = list(map(int, input().split(\",\")))\ns = sorted(nums)\nprint(\" \".join(map(str, s)))",
-      "templateCode": "nums = list(§§§§(§§§§, input().split(\",\")))\ns = sorted(nums)\nprint(\" \".§§§§§(map(str, s)))",
+      "templateCode": "nums = list(§§§§(int, input().split(\",\")))\ns = sorted(nums)\nprint(\" \".join(map(str, s)))",
       "testCases": [
         {
           "id": 1,
@@ -211,11 +211,11 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] map()의 첫 번째 인자에 괄호를 붙여 호출해버려서 발생한 TypeError를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 입력받은 두 숫자의 정수 합이 출력되도록 map()의 첫 번째 인자에 잘못 전달된 함수(str)를 int로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the TypeError caused by calling int() with parentheses inside map() instead of passing the function itself.",
-      "hint_ko": "map()의 첫 번째 인자에는 함수 호출 결과(int())가 아니라 함수 이름 자체(int)를 넘겨야 합니다.",
+      "hint_ko": "문자열이 이어붙여지지 않고 정수 덧셈이 되도록 map(int, input().split())으로 수정해야 합니다.",
       "hint_en": "Pass the function object int without parentheses as the first argument to map().",
-      "templateCode": "a, b = map(int(), input().split())\nprint(a + b)",
+      "templateCode": "a, b = map(str, input().split())\nprint(a + b)",
       "targetCode": "a, b = map(int, input().split())\nprint(a + b)",
       "testCases": [
         {

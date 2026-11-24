@@ -189,11 +189,11 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트 인덱싱, 딕셔너리 조회, 문자열·숫자 연산에서 발생할 수 있는 세 가지 예외 이름을 순서대로 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 첫 번째와 두 번째 except 절의 예외 이름 빈칸 2곳을 채워 인덱스 초과와 딕셔너리 키 부재 에러를 각각 잡아내보세요.",
       "prompt_en": "[Fill Blank] Fill in the three exception types for out-of-range index, missing key, and incompatible type operations.",
-      "hint_ko": "리스트 순번 초과, 딕셔너리 키 부재, 자료형 불일치에 해당하는 각 예외 이름을 차례로 확인하세요.",
+      "hint_ko": "리스트 순번 초과 예외(IndexError)와 딕셔너리 키 부재 예외(KeyError) 이름을 차례로 채우세요.",
       "hint_en": "Check the exact exception names for index out of range, missing dictionary key, and wrong operand types.",
-      "templateCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept §§§§§§§§§§§:\n    print(\"Idx\")\nexcept §§§§§§§§§:\n    print(\"Key\")\nexcept §§§§§§§§§§:\n    print(\"Type\")",
+      "templateCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept §§§§§§§§§§§:\n    print(\"Idx\")\nexcept §§§§§§§§§:\n    print(\"Key\")\nexcept TypeError:\n    print(\"Type\")",
       "targetCode": "arr = [\"a\", \"b\"]\nd = {\"a\": 10}\ni = int(input())\ntry:\n    k = arr[i]\n    print(d[k] + \"pt\")\nexcept IndexError:\n    print(\"Idx\")\nexcept KeyError:\n    print(\"Key\")\nexcept TypeError:\n    print(\"Type\")",
       "testCases": [
         {
@@ -208,11 +208,11 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 딕셔너리에 없는 키를 조회할 때 발생하는 에러를 리스트 인덱스 예외로 잘못 적은 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리에 없는 키를 조회할 때 발생하는 에러를 잡도록 잘못 적힌 예외 이름(MapError)을 KeyError로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the uncaught exception when looking up a missing dictionary key by specifying the right error type.",
-      "hint_ko": "딕셔너리 중괄호 데이터에서 없는 키를 찾을 때는 IndexError가 아니라 키 예외가 발생합니다.",
+      "hint_ko": "딕셔너리에서 없는 키를 찾을 때 발생하는 표준 예외 이름은 KeyError입니다.",
       "hint_en": "Missing dictionary keys raise KeyError rather than IndexError.",
-      "templateCode": "bag = {\"gold\": 50}\ntry:\n    print(bag[\"gem\"])\nexcept IndexError:\n    print(0)",
+      "templateCode": "bag = {\"gold\": 50}\ntry:\n    print(bag[\"gem\"])\nexcept MapError:\n    print(0)",
       "targetCode": "bag = {\"gold\": 50}\ntry:\n    print(bag[\"gem\"])\nexcept KeyError:\n    print(0)",
       "testCases": [
         {
@@ -227,11 +227,11 @@ export const PYTHON_LEVEL_80: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 문자열과 정수를 더해서 난 에러를 값 변환 에러(ValueError)로 잘못 잡아 멈추는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 문자열과 정수를 더해서 난 에러를 잡아내도록 넷째 줄의 잘못된 예외 이름(NameError)을 TypeError로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Change the exception type so the error from adding a string and an integer is properly caught.",
-      "hint_ko": "서로 다른 자료형끼리 더할 수 없어 발생하는 에러는 ValueError가 아니라 자료형 예외입니다.",
+      "hint_ko": "서로 다른 자료형끼리 연산할 수 없을 때 발생하는 예외는 TypeError입니다.",
       "hint_en": "Adding a string and an integer raises TypeError, not ValueError.",
-      "templateCode": "try:\n    msg = \"Score:\" + 100\n    print(msg)\nexcept ValueError:\n    print(\"Type mismatch\")",
+      "templateCode": "try:\n    msg = \"Score:\" + 100\n    print(msg)\nexcept NameError:\n    print(\"Type mismatch\")",
       "targetCode": "try:\n    msg = \"Score:\" + 100\n    print(msg)\nexcept TypeError:\n    print(\"Type mismatch\")",
       "testCases": [
         {

@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트의 첫 점수와 마지막 점수, 그리고 두 점수의 합을 f-string 한 줄로 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] f-string 안의 빈칸을 채워 리스트의 첫 점수(s[0])와 마지막 점수, 그리고 두 점수의 합을 출력해보세요.',
       prompt_en: '[Fill Blank] Complete the f-string prefix and braced expressions for the first item and sum of ends.',
-      hint_ko: '포맷 문자열 접두사, 첫 번째 요소 중괄호 식, 마지막 요소 음수 인덱스 중괄호 식을 차례로 채우세요.',
+      hint_ko: 'f-string 안에서 첫 번째 요소 값을 삽입하도록 중괄호 식({s[0]})을 채우세요.',
       hint_en: 'Fill in the f prefix, braced first element, and braced last element.',
-      templateCode: 's = [70, 80, 90]\nprint(§§"§§§§§§§ + §§§§§§§§ = {s[0] + s[-1]}")',
+      templateCode: 's = [70, 80, 90]\nprint(f"§§§§§§§ + {s[-1]} = {s[0] + s[-1]}")',
       targetCode: 's = [70, 80, 90]\nprint(f"{s[0]} + {s[-1]} = {s[0] + s[-1]}")',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_53: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 중괄호 안의 변수가 치환되지 않고 글자 그대로 출력되는 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 중괄호 안의 변수가 값으로 치환되도록 따옴표 앞에 잘못 적힌 접두사(s)를 f-string 접두사(f)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the string literal so {name} and {pt} are interpolated instead of printed literally.',
-      hint_ko: '중괄호 보간이 동작하려면 여는 따옴표 바로 앞에 포맷 접두사가 있어야 합니다.',
+      hint_ko: '중괄호 보간이 동작하려면 여는 따옴표 바로 앞에 접두사 f를 붙여야 합니다.',
       hint_en: 'Prefix the opening quote so Python treats the string as an f-string.',
-      templateCode: 'name = input()\npt = int(input())\nprint("{name} scored {pt}")',
+      templateCode: 'name = input()\npt = int(input())\nprint(s"{name} scored {pt}")',
       targetCode: 'name = input()\npt = int(input())\nprint(f"{name} scored {pt}")',
       testCases: [
         {

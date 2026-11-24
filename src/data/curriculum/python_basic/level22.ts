@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n을 10으로 나눈 정수 몫 q가 1 이상 9 이하인지 연쇄 비교로 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 셋째 줄의 빈칸에 비교 연산자를 채워 몫 q가 1 이상 9 이하인지 연쇄 비교로 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to compute floor quotient q and test if q is between 1 and 9 inclusive.',
-      hint_ko: '정수 몫 연산자로 몫을 구한 뒤, 양쪽에 이하 비교 기호 두 개를 넣어 연쇄 비교식을 완성합니다.',
+      hint_ko: '1 이상 9 이하를 판별하는 연쇄 비교식이 되도록 이하 비교 기호(<=)를 넣습니다.',
       hint_en: 'Use floor division for q, then place the less-or-equal operator on both sides of q.',
-      templateCode: 'n = int(input())\nq = n §§§ 10\nprint(1 §§§ q §§§ 9)',
+      templateCode: 'n = int(input())\nq = n // 10\nprint(1 §§§ q <= 9)',
       targetCode: 'n = int(input())\nq = n // 10\nprint(1 <= q <= 9)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_22: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 경계값 20도 범위에 포함되도록(10 이상 20 이하) 오른쪽 비교 기호를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] x가 10 이상 20 이하인지 판별하도록 오른쪽에 잘못 적힌 비교 기호(>=)를 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the right-hand relational operator so the boundary value 20 is included in 10..20.',
-      hint_ko: '현재 오른쪽 기호가 미만으로 되어 있어 20일 때 거짓이 됩니다. 20 이하가 되도록 고쳐보세요.',
+      hint_ko: '오른쪽 기호가 이상(>=)으로 되어 있습니다. 20 이하가 되도록 <=로 고쳐보세요.',
       hint_en: 'The strict upper bound currently excludes 20; change it to include equality.',
-      templateCode: 'x = int(input())\nprint(10 <= x < 20)',
+      templateCode: 'x = int(input())\nprint(10 <= x >= 20)',
       targetCode: 'x = int(input())\nprint(10 <= x <= 20)',
       testCases: [
         {

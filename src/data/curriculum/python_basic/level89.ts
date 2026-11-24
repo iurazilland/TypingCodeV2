@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 회원 등급에 따라 할인율을 선택하는 삼항 표현식과 최종 결제 금액 반환문을 완성해보세요.",
+      "prompt_ko": "[빈칸 채우기] 둘째 줄의 빈칸에 조건 키워드를 채워 회원 등급에 따라 할인액을 선택하는 한 줄 조건 표현식을 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the ternary keywords and result-sending statement in calc_pay.",
-      "hint_ko": "참값 뒤의 조건 키워드, 거짓값 앞의 분기 키워드, 그리고 결과를 돌려주는 키워드를 차례로 확인하세요.",
+      "hint_ko": "삼항 조건 표현식에서 참값 바로 뒤에 오는 조건 키워드(if)를 채우세요.",
       "hint_en": "Check the condition keyword, the fallback keyword, and the keyword that sends back the result.",
-      "templateCode": "def calc_pay(price, grade):\n    off = 500 §§§ grade == \"VIP\" §§§§§ 100\n    §§§§§§§ price - off\nprint(calc_pay(3000, input()))",
+      "templateCode": "def calc_pay(price, grade):\n    off = 500 §§§ grade == \"VIP\" else 100\n    return price - off\nprint(calc_pay(3000, input()))",
       "targetCode": "def calc_pay(price, grade):\n    off = 500 if grade == \"VIP\" else 100\n    return price - off\nprint(calc_pay(3000, input()))",
       "testCases": [
         {
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 한 줄 조건 표현식 안에 일반 조건문처럼 콜론(:)을 잘못 넣어서 발생한 문법 오류를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 한 줄 조건 표현식에서 거짓일 때의 값(\"Small\") 앞에 잘못 적힌 키워드(elif)를 else로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Remove the invalid colons inside the inline conditional expression to fix the SyntaxError.",
-      "hint_ko": "한 줄로 쓰는 삼항 조건 표현식에서는 조건식 뒤나 else 뒤에 콜론(:)을 붙이지 않습니다.",
+      "hint_ko": "삼항 조건 표현식은 [참값 if 조건 else 거짓값] 형태로 작성합니다.",
       "hint_en": "Inline ternary expressions never use colons after the condition or after else.",
-      "templateCode": "n = 15\ntag = \"Big\" if n >= 10: else: \"Small\"\nprint(tag)",
+      "templateCode": "n = 15\ntag = \"Big\" if n >= 10 elif \"Small\"\nprint(tag)",
       "targetCode": "n = 15\ntag = \"Big\" if n >= 10 else \"Small\"\nprint(tag)",
       "testCases": [
         {

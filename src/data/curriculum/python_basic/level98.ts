@@ -190,12 +190,12 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 단어의 각 글자를 다음 알파벳(+1)으로 바꾼 뒤 전체 순서를 거꾸로 뒤집어 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 단어의 각 글자를 다음 알파벳(+1)으로 바꾼 뒤 전체 순서를 거꾸로 뒤집어 출력해보세요.",
       "prompt_en": "[Fill Blank] Shift each character in word forward by 1 using character code functions, join them, and print in reverse.",
-      "hint_ko": "번호를 문자로 바꾸는 함수, 문자를 번호로 바꾸는 함수, 그리고 역순 슬라이싱을 차례로 채우세요.",
+      "hint_ko": "문자를 아스키 코드 번호로 바꾸는 함수(ord)와 문자열 역순 슬라이싱(::-1)을 차례로 채우세요.",
       "hint_en": "Fill in the code-to-char function, the char-to-code function, and the reverse slice.",
       "targetCode": "word = \"ABC\"\nshifted = \"\".join([chr(ord(c) + 1) for c in word])\nprint(shifted[::-1])",
-      "templateCode": "word = \"ABC\"\nshifted = \"\".join([§§§§(§§§§(c) + 1) for c in word])\nprint(shifted[§§§§§])",
+      "templateCode": "word = \"ABC\"\nshifted = \"\".join([chr(§§§§(c) + 1) for c in word])\nprint(shifted[§§§§§])",
       "testCases": [
         {
           "id": 1,
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 문자열 전체를 거꾸로 뒤집으려다 콜론을 하나만 적어 마지막 한 글자만 잘려 나간 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 문자열 전체를 거꾸로 뒤집어 출력하도록 잘못된 슬라이싱(s[0:-1])을 역순 슬라이싱(s[::-1])으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the slice bug where [:-1] drops the last character instead of reversing the string.",
-      "hint_ko": "[:-1]은 마지막 요소 전까지 자르는 슬라이싱이며, 역순으로 뒤집으려면 콜론 두 개([::-1])를 써야 합니다.",
+      "hint_ko": "[0:-1]은 마지막 한 글자만 자르는 슬라이싱이며, 역순으로 뒤집으려면 [::-1]을 써야 합니다.",
       "hint_en": "Use two colons [::-1] to specify a step of -1 instead of the stop index [:-1].",
-      "templateCode": "s = input().strip()\nprint(s[:-1])",
+      "templateCode": "s = input().strip()\nprint(s[0:-1])",
       "targetCode": "s = input().strip()\nprint(s[::-1])",
       "testCases": [
         {

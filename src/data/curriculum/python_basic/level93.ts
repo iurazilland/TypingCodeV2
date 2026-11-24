@@ -190,12 +190,12 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 양쪽 공백을 지운 뒤 대문자로 바꾼 단어들 중 길이가 3 이상인 것만 추려 리스트로 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 둘째 줄의 메서드 빈칸을 채워 양쪽 공백을 지운 단어들을 대문자로 변환한 리스트를 출력해보세요.",
       "prompt_en": "[Fill Blank] Trim whitespace, convert to uppercase, and keep only words of length 3 or more in a list comprehension.",
-      "hint_ko": "양끝 공백 제거 메서드, 대문자 변환 메서드, 그리고 필터링 조건 키워드를 차례로 채워보세요.",
+      "hint_ko": "문자열의 알파벳을 모두 대문자로 변환하는 메서드 이름(upper)을 채우세요.",
       "hint_en": "Supply the whitespace-trimming method, the uppercase method, and the filtering condition keyword.",
       "targetCode": "raw = [\" py \", \" web \", \"c\", \" data \"]\nclean = [s.strip().upper() for s in raw if len(s.strip()) >= 3]\nprint(clean)",
-      "templateCode": "raw = [\" py \", \" web \", \"c\", \" data \"]\nclean = [s.§§§§§§().§§§§§§() for s in raw §§§ len(s.strip()) >= 3]\nprint(clean)",
+      "templateCode": "raw = [\" py \", \" web \", \"c\", \" data \"]\nclean = [s.strip().§§§§§§() for s in raw if len(s.strip()) >= 3]\nprint(clean)",
       "testCases": [
         {
           "id": 1,
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 입력 문자열을 모두 대문자로 출력하려다 내장 함수처럼 잘못 호출해 발생한 에러를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 입력 문자열을 모두 대문자로 변환해 출력하도록 잘못 호출된 소문자 메서드(lower)를 대문자 메서드(upper)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the NameError caused by calling the uppercase conversion as a standalone function instead of a string method.",
-      "hint_ko": "대소문자 변환은 내장 함수가 아니라 문자열 변수 뒤에 점(.)을 찍어 호출하는 메서드입니다.",
+      "hint_ko": "알파벳을 모두 대문자로 바꿀 때는 .upper() 메서드를 사용합니다.",
       "hint_en": "Case conversion must be called as a method on the string object using dot notation.",
-      "templateCode": "s = input().strip()\nprint(upper(s))",
+      "templateCode": "s = input().strip()\nprint(s.lower())",
       "targetCode": "s = input().strip()\nprint(s.upper())",
       "testCases": [
         {

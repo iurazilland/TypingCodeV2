@@ -184,11 +184,11 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 딕셔너리 생성 구문과 입력 키 조회, f-string 출력을 완성해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 딕셔너리 생성 구문과 입력받은 키(k) 조회를 완성해보세요.',
       prompt_en: '[Fill Blank] Complete the dictionary separator, dynamic key lookup, and f-string variable.',
-      hint_ko: '키와 값을 잇는 구분 기호, 입력받은 한 글자 키 변수, 조회 결과를 담은 변수명을 차례로 적으세요.',
+      hint_ko: '키와 값을 잇는 콜론(:)과 대괄호 안에 넣을 조회 키 변수(k)를 차례로 적으세요.',
       hint_en: 'Fill in the key-value separator, the key variable inside brackets, and the result variable in braces.',
-      templateCode: 'bag = {"gold"§§ 500, "gem": 3}\nk = input()\nval = bag[§§]\nprint(f"{k}={§§§§}")',
+      templateCode: 'bag = {"gold"§§ 500, "gem": 3}\nk = input()\nval = bag[§§]\nprint(f"{k}={val}")',
       targetCode: 'bag = {"gold": 500, "gem": 3}\nk = input()\nval = bag[k]\nprint(f"{k}={val}")',
       testCases: [
         {
@@ -203,11 +203,11 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 딕셔너리의 키와 값 사이를 등호(=)로 잘못 적은 문법 오류를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 딕셔너리의 키와 값 사이를 세미콜론(;)으로 잘못 적은 문법 오류를 콜론(:)으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the SyntaxError where = was used instead of the dictionary key-value separator.',
-      hint_ko: '중괄호 안에서 키와 값을 연결할 때는 등호가 아닌 콜론을 사용해야 합니다.',
+      hint_ko: '중괄호 안에서 키와 값을 연결할 때는 세미콜론(;)이 아닌 콜론(:)을 사용해야 합니다.',
       hint_en: 'Separate each key and value inside the dictionary with a colon rather than an equals sign.',
-      templateCode: 'menu = {"tea" = 2500, "cake" = 4000}\nprint(menu["tea"] + menu["cake"])',
+      templateCode: 'menu = {"tea"; 2500, "cake"; 4000}\nprint(menu["tea"] + menu["cake"])',
       targetCode: 'menu = {"tea": 2500, "cake": 4000}\nprint(menu["tea"] + menu["cake"])',
       testCases: [
         {
@@ -222,11 +222,11 @@ export const PYTHON_LEVEL_59: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열 키로 값을 조회할 때 따옴표를 빠뜨려 NameError가 발생한 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 딕셔너리 키로 값을 조회할 때 소괄호(d("apple"))를 잘못 써서 발생한 TypeError를 대괄호(d["apple"])로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the NameError caused by omitting quotes around the string key during lookup.',
-      hint_ko: '문자열 키를 직접 지정할 때는 변수와 혼동되지 않도록 따옴표로 감싸야 합니다.',
+      hint_ko: '딕셔너리에서 키로 값을 꺼낼 때는 소괄호가 아니라 대괄호 []를 사용해야 합니다.',
       hint_en: 'Wrap the literal key name inside the square brackets in double quotes.',
-      templateCode: 'd = {"apple": 1500}\nprint(d[apple])',
+      templateCode: 'd = {"apple": 1500}\nprint(d("apple"))',
       targetCode: 'd = {"apple": 1500}\nprint(d["apple"])',
       testCases: [
         {

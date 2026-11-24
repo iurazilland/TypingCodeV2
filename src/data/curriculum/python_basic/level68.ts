@@ -187,11 +187,11 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈 리스트면 0, 0을 조기 반환하고 아니면 합계와 길이를 다중 반환해 두 변수 s, c에 언패킹해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 합계와 길이를 다중 반환하고 호출부에서 두 변수 s, c에 언패킹해보세요.',
       prompt_en: '[Fill Blank] Return the sum and length of nums and unpack them into s and c.',
-      hint_ko: '반환 키워드, 길이를 구하는 함수, 그리고 호출부에서 언패킹할 두 변수를 차례로 채우세요.',
+      hint_ko: '다중 값을 돌려주는 반환 키워드(return)와 호출부에서 언패킹할 두 변수(s, c)를 차례로 채우세요.',
       hint_en: 'Fill in the return keyword, the length function name, and the two unpacked variables.',
-      templateCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    §§§§§§§ sum(nums), §§§§(nums)\n§§§§§ = sum_len([10, 20, 30])\nprint(s, c)',
+      templateCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    §§§§§§§ sum(nums), len(nums)\n§§§§§ = sum_len([10, 20, 30])\nprint(s, c)',
       targetCode: 'def sum_len(nums):\n    if len(nums) == 0:\n        return 0, 0\n    return sum(nums), len(nums)\ns, c = sum_len([10, 20, 30])\nprint(s, c)',
       testCases: [
         {
@@ -206,11 +206,11 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 첫 번째 요소만 검사하고 바로 else: return False로 끝나버리는 조기 반환 위치 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 찾는 값(target)과 일치할 때만 True를 조기 반환하도록 셋째 줄의 잘못된 비교 연산자(!=)를 ==로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the premature return False inside the loop so all elements are checked before returning False.',
-      hint_ko: 'else 블록을 없애고 모든 요소를 끝까지 확인한 뒤 반복문 바깥에서 False를 반환하도록 고치세요.',
+      hint_ko: '현재 요소 x가 target과 같을 때 True를 반환해야 하므로 if x == target:으로 고치세요.',
       hint_en: 'Remove else: and unindent return False so it runs only after the for loop finishes.',
-      templateCode: 'def has_target(nums, target):\n    for x in nums:\n        if x == target:\n            return True\n        else:\n            return False\nprint(has_target([3, 7, 9], 7))',
+      templateCode: 'def has_target(nums, target):\n    for x in nums:\n        if x != target:\n            return True\n    return False\nprint(has_target([3, 7, 9], 7))',
       targetCode: 'def has_target(nums, target):\n    for x in nums:\n        if x == target:\n            return True\n    return False\nprint(has_target([3, 7, 9], 7))',
       testCases: [
         {

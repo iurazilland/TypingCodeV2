@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 1부터 10까지 중 홀수는 건너뛰고 짝수만 더하다가 합계가 12 이상이면 즉시 멈춰보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳에 흐름 제어 키워드를 채워 홀수는 건너뛰고 짝수만 더하다가 합계가 12 이상이면 즉시 멈춰보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to skip odd numbers, add even numbers to s, and exit when s >= 12.',
-      hint_ko: '이번 차례 건너뛰기 키워드, 누적 덧셈 연산자, 그리고 루프 완전 종료 키워드를 순서대로 채웁니다.',
+      hint_ko: '이번 차례를 건너뛰는 키워드(continue)와 루프를 완전히 종료하는 키워드(break)를 순서대로 채웁니다.',
       hint_en: 'Enter continue, plus-equals (+=), and break in order.',
-      templateCode: 's = 0\nfor i in range(1, 11):\n    if i % 2 == 1:\n        §§§§§§§§§\n    s §§§ i\n    if s >= 12:\n        §§§§§§\nprint(s)',
+      templateCode: 's = 0\nfor i in range(1, 11):\n    if i % 2 == 1:\n        §§§§§§§§§\n    s += i\n    if s >= 12:\n        §§§§§§\nprint(s)',
       targetCode: 's = 0\nfor i in range(1, 11):\n    if i % 2 == 1:\n        continue\n    s += i\n    if s >= 12:\n        break\nprint(s)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_38: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] i == 2일 때 루프가 아예 끝나버리는 버그를 고쳐 2만 건너뛰고 1 3 4가 출력되게 해보세요.',
+      prompt_ko: '[틀린 곳 수정] i == 2일 때 현재 차례만 건너뛰고 1 3 4가 출력되도록 잘못 적힌 단어(nextstep)를 파이썬 예약어(continue)로 고쳐보세요.',
       prompt_en: '[Fix Bug] Replace the loop-exiting keyword with the iteration-skipping keyword so 3 and 4 still print.',
-      hint_ko: '루프 전체를 깨뜨리는 키워드 대신 현재 차례만 건너뛰는 키워드로 고쳐보세요.',
+      hint_ko: '현재 반복 차례만 건너뛰고 다음 차례로 넘어갈 때는 continue 키워드를 사용합니다.',
       hint_en: 'Replace break with continue so only i == 2 is skipped.',
-      templateCode: 'for i in range(1, 5):\n    if i == 2:\n        break\n    print(i, end=" ")',
+      templateCode: 'for i in range(1, 5):\n    if i == 2:\n        nextstep\n    print(i, end=" ")',
       targetCode: 'for i in range(1, 5):\n    if i == 2:\n        continue\n    print(i, end=" ")',
       testCases: [
         {

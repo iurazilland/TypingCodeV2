@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 문자열의 첫 글자와 마지막 글자를 +로 이어붙여 양끝 글자 조합을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 둘째 줄의 음수 인덱스 빈칸을 채워 문자열의 첫 글자와 마지막 글자를 이어붙인 결과를 출력해보세요.',
       prompt_en: '[Fill Blank] Concatenate the first character and last character of s into ends and print it.',
-      hint_ko: '첫 글자 인덱스, 문자열 결합 연산자, 마지막 글자 음수 인덱스를 차례로 채우세요.',
+      hint_ko: '문자열의 맨 마지막 글자를 가리키는 음수 인덱스(-1)를 채우세요.',
       hint_en: 'Fill in the first index, concatenation operator, and negative last index.',
-      templateCode: 's = input()\nends = s[§§] §§ s[§§§]\nprint("Ends:", ends)',
+      templateCode: 's = input()\nends = s[0] + s[§§§]\nprint("Ends:", ends)',
       targetCode: 's = input()\nends = s[0] + s[-1]\nprint("Ends:", ends)',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 불변 자료형인 문자열의 인덱스에 직접 값을 대입해 발생한 TypeError를 변수 전체 재할당으로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 첫 글자 "P"와 "ython"을 이어붙여 새 문자열을 재할당하도록 둘째 줄의 잘못된 연산자(*)를 덧셈(+)으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the TypeError caused by item assignment on a string by reassigning "P" + "ython" to word.',
-      hint_ko: '문자열은 특정 인덱스 칸에 직접 대입할 수 없으므로 변수 word 자체에 새 문자열을 대입하세요.',
+      hint_ko: '두 문자열을 하나로 이어붙여 재할당할 때는 + 연산자를 사용합니다.',
       hint_en: 'Assign "P" + "ython" to word instead of mutating word[0].',
-      templateCode: 'word = "Jython"\nword[0] = "P"\nprint(word)',
+      templateCode: 'word = "Jython"\nword = "P" * "ython"\nprint(word)',
       targetCode: 'word = "Jython"\nword = "P" + "ython"\nprint(word)',
       testCases: [
         {

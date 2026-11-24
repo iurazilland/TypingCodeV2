@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n이 짝수이면서 20 이상일 때 n에서 5를 빼고 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 조건문 시작 키워드를 빈칸에 채워 n이 짝수이면서 20 이상일 때 n에서 5를 빼고 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks so when n is even and at least 20, 5 is subtracted from n.',
-      hint_ko: '조건문 시작 키워드, 동시 만족 논리 키워드, 차감 복합 대입 연산자를 순서대로 입력합니다.',
+      hint_ko: '조건이 참일 때만 들여쓰기 블록을 실행하는 조건문 키워드(if)를 입력합니다.',
       hint_en: 'Enter the conditional keyword, the conjunction keyword, and the compound subtraction operator.',
-      templateCode: 'n = int(input())\n§§§ n % 2 == 0 §§§§ n >= 20:\n    n §§§ 5\nprint("Result", n, sep=":")',
+      templateCode: 'n = int(input())\n§§§ n % 2 == 0 and n >= 20:\n    n -= 5\nprint("Result", n, sep=":")',
       targetCode: 'n = int(input())\nif n % 2 == 0 and n >= 20:\n    n -= 5\nprint("Result", n, sep=":")',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] if 조건문 헤더 끝에 빠진 기호를 추가하여 문법 오류를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] if 조건문 헤더 끝에 잘못 적힌 세미콜론(;)을 올바른 파이썬 블록 시작 기호(:)로 수정해보세요.',
       prompt_en: '[Fix Bug] Add the missing punctuation at the end of the if header line to fix the syntax error.',
-      hint_ko: '파이썬의 모든 제어문 헤더 줄 맨 끝에는 블록 시작을 알리는 콜론이 반드시 있어야 합니다.',
+      hint_ko: '파이썬의 모든 제어문 헤더 줄 맨 끝에는 세미콜론(;)이 아니라 콜론(:)이 와야 합니다.',
       hint_en: 'Every control-flow header line in Python must end with a colon.',
-      templateCode: 'n = int(input())\nif n >= 10\n    print("Big")\nprint("End")',
+      templateCode: 'n = int(input())\nif n >= 10;\n    print("Big")\nprint("End")',
       targetCode: 'n = int(input())\nif n >= 10:\n    print("Big")\nprint("End")',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_26: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] if 조건식 안에서 대입 기호를 잘못 쓴 문법 오류를 같음 비교 연산자로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] n이 짝수(2로 나눈 나머지가 0)일 때 10을 더하도록 잘못된 비교 연산자(!=)를 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the syntax error in the if condition by replacing assignment with equality comparison.',
-      hint_ko: '조건식에서 나머지가 0과 같은지 확인할 때는 등호 한 개가 아니라 두 개를 써야 합니다.',
+      hint_ko: '나머지가 0과 같은지 확인할 때는 다름(!=)이 아니라 같음 비교 연산자(==)를 써야 합니다.',
       hint_en: 'Use two equals signs instead of one when testing equality inside an if condition.',
-      templateCode: 'n = int(input())\nif n % 2 = 0:\n    n += 10\nprint(n)',
+      templateCode: 'n = int(input())\nif n % 2 != 0:\n    n += 10\nprint(n)',
       targetCode: 'n = int(input())\nif n % 2 == 0:\n    n += 10\nprint(n)',
       testCases: [
         {

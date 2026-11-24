@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_108: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 생성자와 문자열 표현 매직 메서드를 완성해 객체 리스트를 쉼표로 연결해 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 매직 메서드 빈칸 2곳을 채워 생성자와 문자열 표현 메서드를 완성하고 객체 리스트를 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the initializer, the string representation magic method, and the output keyword.",
-      "hint_ko": "생성자 매직 메서드, 문자열 표현 매직 메서드, 그리고 값 반환 키워드를 차례로 채워보세요.",
+      "hint_ko": "생성자 매직 메서드(__init__)와 문자열 표현 매직 메서드(__str__)를 차례로 채워보세요.",
       "hint_en": "Supply the initializer dunder name, the string representation dunder name, and the return keyword.",
       "targetCode": "class Coin:\n    def __init__(self, sym, val):\n        self.sym = sym\n        self.val = val\n\n    def __str__(self):\n        return f\"{self.sym}:{self.val}\"\n\ncs = [Coin(\"BTC\", 90), Coin(\"ETH\", 30)]\nprint(\",\".join([str(c) for c in cs]))",
-      "templateCode": "class Coin:\n    def §§§§§§§§§(self, sym, val):\n        self.sym = sym\n        self.val = val\n\n    def §§§§§§§§(self):\n        §§§§§§§ f\"{self.sym}:{self.val}\"\n\ncs = [Coin(\"BTC\", 90), Coin(\"ETH\", 30)]\nprint(\",\".join([str(c) for c in cs]))",
+      "templateCode": "class Coin:\n    def §§§§§§§§§(self, sym, val):\n        self.sym = sym\n        self.val = val\n\n    def §§§§§§§§(self):\n        return f\"{self.sym}:{self.val}\"\n\ncs = [Coin(\"BTC\", 90), Coin(\"ETH\", 30)]\nprint(\",\".join([str(c) for c in cs]))",
       "testCases": [
         {
           "id": 1,

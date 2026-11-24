@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 단어 빈도수를 안전 조회로 누적한 뒤 추가 점수를 병합하고 전체 값의 합계를 출력하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 단어 빈도수를 안전 조회로 누적한 뒤 추가 점수 딕셔너리를 병합해보세요.",
       "prompt_en": "[Fill Blank] Complete the safe lookup method, dictionary merge method, and stored-counts view method.",
-      "hint_ko": "기본값을 지정해 안전 조회하는 메서드, 다른 딕셔너리를 병합하는 메서드, 그리고 값 목록을 꺼내는 메서드를 확인하세요.",
+      "hint_ko": "기본값을 지정해 안전 조회하는 메서드(get)와 다른 딕셔너리를 병합하는 메서드(update)를 차례로 채우세요.",
       "hint_en": "Check the lookup method, merge method, and view method.",
-      "templateCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.§§§§(w, 0) + 1\nfreq.§§§§§§§({\"c\": 5})\nprint(freq[\"a\"], sum(freq.§§§§§§§()))",
+      "templateCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.§§§§(w, 0) + 1\nfreq.§§§§§§§({\"c\": 5})\nprint(freq[\"a\"], sum(freq.values()))",
       "targetCode": "freq = {}\nfor w in [\"a\", \"b\", \"a\"]:\n    freq[w] = freq.get(w, 0) + 1\nfreq.update({\"c\": 5})\nprint(freq[\"a\"], sum(freq.values()))",
       "testCases": [
         {
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_87: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 딕셔너리에 없는 키 \"gold\"를 대괄호로 바로 조회해 발생한 KeyError를 기본값 0을 반환하는 안전 조회로 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리에 없는 키 \"gold\"를 조회할 때 기본값 0을 안전하게 반환하도록 잘못된 메서드 이름(key)을 get으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Replace the bracket lookup bag[\"gold\"] with a safe lookup returning 0 when the key is missing.",
-      "hint_ko": "없는 키를 조회할 때 에러 없이 기본값 0을 얻으려면 .get(\"gold\", 0) 메서드를 사용해야 합니다.",
+      "hint_ko": "없는 키를 조회할 때 에러 없이 기본값을 얻으려면 .get(\"gold\", 0) 메서드를 사용해야 합니다.",
       "hint_en": "Use bag.get(\"gold\", 0) instead of bag[\"gold\"] to avoid KeyError.",
-      "templateCode": "bag = {\"silver\": 10}\nprint(bag[\"gold\"])",
+      "templateCode": "bag = {\"silver\": 10}\nprint(bag.key(\"gold\", 0))",
       "targetCode": "bag = {\"silver\": 10}\nprint(bag.get(\"gold\", 0))",
       "testCases": [
         {

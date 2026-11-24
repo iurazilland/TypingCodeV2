@@ -189,11 +189,11 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 공백으로 입력된 두 값을 정수로 바꿔 나누되, 변환 실패와 0 나눗셈을 각각 잡아내도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 예외 이름 빈칸 2곳을 채워 정수 변환 실패와 0 나눗셈 에러를 각각 잡아내도록 완성해보세요.",
       "prompt_en": "[Fill Blank] Complete the integer conversion and the two specific exception types for parsing and dividing.",
-      "hint_ko": "문자열을 정수로 바꾸는 함수와 부적절한 값 예외, 그리고 0 나눗셈 예외 이름을 순서대로 확인하세요.",
+      "hint_ko": "변환 실패 예외(ValueError)와 0 나눗셈 예외(ZeroDivisionError) 이름을 순서대로 채우세요.",
       "hint_en": "Check the int() conversion function, the invalid-value exception, and the division-by-zero exception.",
-      "templateCode": "a, b = input().split()\ntry:\n    res = §§§§(a) // int(b)\nexcept §§§§§§§§§§§:\n    res = -1\nexcept §§§§§§§§§§§§§§§§§§:\n    res = -2\nprint(res)",
+      "templateCode": "a, b = input().split()\ntry:\n    res = int(a) // int(b)\nexcept §§§§§§§§§§§:\n    res = -1\nexcept §§§§§§§§§§§§§§§§§§:\n    res = -2\nprint(res)",
       "targetCode": "a, b = input().split()\ntry:\n    res = int(a) // int(b)\nexcept ValueError:\n    res = -1\nexcept ZeroDivisionError:\n    res = -2\nprint(res)",
       "testCases": [
         {
@@ -208,11 +208,11 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 문자열을 정수로 바꾸다 발생하는 에러를 엉뚱한 예외 이름으로 잡으려다 프로그램이 멈추는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 문자열 \"ten\"을 정수로 바꾸다 발생하는 에러를 잡아내도록 넷째 줄의 잘못된 예외 이름(IndexError)을 ValueError로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the wrong exception type in except so int(\"ten\") is properly caught.",
-      "hint_ko": "나눗셈이 전혀 없는 정수 변환 코드이므로 0 나눗셈 예외가 아니라 값 변환 예외를 지정해야 합니다.",
+      "hint_ko": "잘못된 문자열을 int()로 변환할 때 발생하는 예외는 ValueError입니다.",
       "hint_en": "Converting \"ten\" with int() raises an invalid-value error, not a division-by-zero error.",
-      "templateCode": "try:\n    n = int(\"ten\")\n    print(n)\nexcept ZeroDivisionError:\n    print(\"Invalid\")",
+      "templateCode": "try:\n    n = int(\"ten\")\n    print(n)\nexcept IndexError:\n    print(\"Invalid\")",
       "targetCode": "try:\n    n = int(\"ten\")\n    print(n)\nexcept ValueError:\n    print(\"Invalid\")",
       "testCases": [
         {
@@ -227,11 +227,11 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 0으로 나눈 나머지를 구할 때 발생하는 에러를 잡지 못해 멈추는 코드의 예외 이름을 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 0으로 나눈 나머지를 구할 때 발생하는 예외를 잡도록 넷째 줄에 잘못 적힌 예외 이름(ZeroMultiplyError)을 ZeroDivisionError로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Change the exception type so computing 45 % 0 is caught and prints ZeroMod.",
-      "hint_ko": "정수끼리 0으로 나눈 나머지(%)를 구할 때는 값 변환 에러가 아니라 0 나눗셈 에러가 발생합니다.",
+      "hint_ko": "0으로 나누거나 나머지를 구할 때 발생하는 파이썬 표준 예외 이름은 ZeroDivisionError입니다.",
       "hint_en": "Modulo by zero raises the division-by-zero exception rather than the invalid-value exception.",
-      "templateCode": "try:\n    r = 45 % 0\n    print(r)\nexcept ValueError:\n    print(\"ZeroMod\")",
+      "templateCode": "try:\n    r = 45 % 0\n    print(r)\nexcept ZeroMultiplyError:\n    print(\"ZeroMod\")",
       "targetCode": "try:\n    r = 45 % 0\n    print(r)\nexcept ZeroDivisionError:\n    print(\"ZeroMod\")",
       "testCases": [
         {

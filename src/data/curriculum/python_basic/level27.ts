@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 n이 짝수이면 2로 나눈 몫으로 바꾸고, 홀수이면 1을 더해 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 n이 짝수이면 2로 나눈 몫으로 바꾸고, 홀수이면 1을 더해 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to update n to its floor quotient by 2 when even, or add 1 otherwise.',
-      hint_ko: '나머지 연산자, 정수 몫 복합 대입 연산자, 나머지 분기 키워드를 순서대로 채웁니다.',
+      hint_ko: '짝수 판별용 나머지 연산자(%)와 조건이 거짓일 때 실행되는 분기 키워드(else)를 차례로 채웁니다.',
       hint_en: 'Enter the modulo operator, floor-division compound assignment, and the fallback branch keyword.',
-      templateCode: 'n = int(input())\nif n §§ 2 == 0:\n    n §§§§ 2\n§§§§§:\n    n += 1\nprint(n)',
+      templateCode: 'n = int(input())\nif n §§ 2 == 0:\n    n //= 2\n§§§§§:\n    n += 1\nprint(n)',
       targetCode: 'n = int(input())\nif n % 2 == 0:\n    n //= 2\nelse:\n    n += 1\nprint(n)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_27: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 넷째 줄에 불필요하게 적힌 조건식을 제거하여 올바른 양방향 분기문이 되도록 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 조건식 없이 나머지 경우를 처리하는 넷째 줄에 잘못 적힌 키워드(elif:)를 양방향 분기 키워드(else:)로 수정해보세요.',
       prompt_en: '[Fix Bug] Remove the invalid condition attached to the fallback branch on line 4.',
-      hint_ko: '양방향 분기의 나머지 블록 키워드 뒤에는 조건식을 쓰지 않고 바로 콜론만 붙입니다.',
+      hint_ko: '조건식 없이 바로 콜론(:)만 붙여 나머지 모든 경우를 처리할 때는 else:를 사용합니다.',
       hint_en: 'The fallback branch keyword cannot take a condition; follow it immediately with a colon.',
-      templateCode: 'n = int(input())\nif n >= 60:\n    print("Pass")\nelse n < 60:\n    print("Fail")',
+      templateCode: 'n = int(input())\nif n >= 60:\n    print("Pass")\nelif:\n    print("Fail")',
       targetCode: 'n = int(input())\nif n >= 60:\n    print("Pass")\nelse:\n    print("Fail")',
       testCases: [
         {

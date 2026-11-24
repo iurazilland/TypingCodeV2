@@ -183,11 +183,11 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 초기값을 빈 값으로 설정하고, 리스트에서 유효한 숫자만 누적해 None 25를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 초기값을 빈 값(None)으로 설정하고, 리스트에서 None이 아닌 숫자만 누적해 None 25를 출력해보세요.',
       prompt_en: '[Fill Blank] Initialize ans to the empty constant and sum only valid numbers in items to print None 25.',
-      hint_ko: '빈 값 상수, 유효한 값인지 묻는 정체성 부정 조건, 복합 덧셈 연산자를 순서대로 채우세요.',
+      hint_ko: '빈 값 상수(None)와 빈 값이 아닌지 확인하는 조건(is not None)을 순서대로 채우세요.',
       hint_en: 'Fill in the null constant, the three-word non-null check, and the compound addition operator.',
-      templateCode: 'items = [12, None, 8, 5]\nans = §§§§§\ntotal = 0\nfor x in items:\n    if x §§§§§§§§§§§§:\n        total §§§ x\nprint(ans, total)',
+      templateCode: 'items = [12, None, 8, 5]\nans = §§§§§\ntotal = 0\nfor x in items:\n    if x §§§§§§§§§§§§:\n        total += x\nprint(ans, total)',
       targetCode: 'items = [12, None, 8, 5]\nans = None\ntotal = 0\nfor x in items:\n    if x is not None:\n        total += x\nprint(ans, total)',
       testCases: [
         {
@@ -202,11 +202,11 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 변수 val을 빈 값으로 초기화하려다 문자열로 적어 Value가 출력되는 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 변수 val을 빈 값으로 초기화하려다 다른 언어의 키워드(null)를 적은 첫째 줄을 파이썬 예약어(None)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 1 where val was assigned a string instead of the actual null constant, so Empty prints.',
-      hint_ko: '따옴표로 감싸면 글자가 있는 문자열이 되므로 따옴표 없는 예약어로 고치세요.',
+      hint_ko: '파이썬에서 값이 없음을 나타내는 빈 값 예약어는 첫 글자가 대문자인 None입니다.',
       hint_en: 'Remove the quotation marks on line 1 so val holds the null constant rather than a string.',
-      templateCode: 'val = "None"\nif val is None:\n    print("Empty")\nelse:\n    print("Value")',
+      templateCode: 'val = null\nif val is None:\n    print("Empty")\nelse:\n    print("Value")',
       targetCode: 'val = None\nif val is None:\n    print("Empty")\nelse:\n    print("Value")',
       testCases: [
         {
@@ -221,11 +221,11 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 유효한 숫자만 더해야 하는데 조건이 반대로 적혀 에러가 발생하는 코드를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 요소가 None이 아닐 때만 합산하도록 넷째 줄의 잘못된 조건(is and None)을 is not None으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the condition inside the loop so only non-null numbers are added to total.',
-      hint_ko: '요소가 빈 값일 때가 아니라 빈 값이 아닐 때만 더하도록 조건문을 수정하세요.',
+      hint_ko: '빈 값이 아닌지 판별할 때는 is not None을 사용합니다.',
       hint_en: 'Negate the identity check so total += x runs only when x holds a number.',
-      templateCode: 'nums = [10, None, 20]\ntotal = 0\nfor x in nums:\n    if x is None:\n        total += x\nprint(total)',
+      templateCode: 'nums = [10, None, 20]\ntotal = 0\nfor x in nums:\n    if x is and None:\n        total += x\nprint(total)',
       targetCode: 'nums = [10, None, 20]\ntotal = 0\nfor x in nums:\n    if x is not None:\n        total += x\nprint(total)',
       testCases: [
         {

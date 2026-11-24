@@ -75,11 +75,11 @@ export const PYTHON_LEVEL_56: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열 안의 하이픈("-")을 제거하고 중괄호 변수 값을 출력하려다 재할당과 접두사를 빠뜨린 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 하이픈("-") 치환 메서드 오타(removes)와 포맷 문자열 접두사 오타(s)를 모두 고쳐 올바른 결과를 출력해보세요.',
       prompt_en: '[Fix Bug] Reassign the result of .replace() to code and add the f prefix so the cleaned string prints.',
-      hint_ko: '.replace() 결과를 변수에 다시 대입하고, print() 안의 따옴표 앞에 f를 붙이세요.',
+      hint_ko: '문자열 치환에는 replace를 쓰고, 중괄호 포맷 문자열 따옴표 앞에는 f를 붙이세요.',
       hint_en: 'Assign code = code.replace("-", "") and prefix the output string with f.',
-      templateCode: 'code = input().strip()\ncode.replace("-", "")\nprint("Clean:{code}")',
+      templateCode: 'code = input().strip()\ncode = code.removes("-", "")\nprint(s"Clean:{code}")',
       targetCode: 'code = input().strip()\ncode = code.replace("-", "")\nprint(f"Clean:{code}")',
       testCases: [
         {

@@ -75,11 +75,11 @@ export const PYTHON_LEVEL_113: PracticeRound = {
       "step": 4,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 원본 리스트 a를 보존하면서 사본 b에만 40을 추가하려다 참조 복사(b = a) 때문에 원본까지 바뀐 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 원본 리스트 a를 보존하면서 독립된 사본 b를 만들도록 둘째 줄에 잘못 호출한 메서드(sort)를 사본 복사 메서드(copy)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the aliasing bug so mutating b does not modify the original list a.",
-      "hint_ko": "b = a 대신 a.copy() 또는 a[:]로 독립된 사본을 만들어야 원본 a가 바뀌지 않습니다.",
+      "hint_ko": "a.copy()로 독립된 사본 리스트를 만들어야 원본 a가 바뀌지 않습니다.",
       "hint_en": "Use a.copy() instead of assigning a directly so b becomes an independent shallow copy.",
-      "templateCode": "a = [10, 20, 30]\nb = a\nb.append(40)\nprint(a, b)",
+      "templateCode": "a = [10, 20, 30]\nb = a.sort()\nb.append(40)\nprint(a, b)",
       "targetCode": "a = [10, 20, 30]\nb = a.copy()\nb.append(40)\nprint(a, b)",
       "testCases": [
         {

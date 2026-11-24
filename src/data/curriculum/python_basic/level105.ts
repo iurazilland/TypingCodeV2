@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 가변 인자로 받은 (이름, 점수) 튜플들을 점수(x[1]) 기준 내림차순으로 정렬해 최고 득점자 이름을 반환해보세요.",
+      "prompt_ko": "[빈칸 채우기] 가변 인자 매개변수(*rows)와 익명 함수 키워드(lambda) 빈칸 2곳을 채워 최고 득점자 이름을 반환해보세요.",
       "prompt_en": "[Fill Blank] Accept variadic tuples, sort them descending by score (x[1]), and return the top scorer's name.",
-      "hint_ko": "가변 인자 매개변수(*rows), 사본 정렬 함수, 익명 함수 키워드를 차례로 채워보세요.",
+      "hint_ko": "첫째 줄의 가변 인자 매개변수(*rows)와 둘째 줄 정렬 기준의 익명 함수 키워드(lambda)를 차례로 채우세요.",
       "hint_en": "Supply the variadic parameter *rows, the copy-sorting function, and the anonymous function keyword.",
       "targetCode": "def top_user(*rows):\n    s = sorted(rows, key=lambda x: x[1], reverse=True)\n    return s[0][0]\n\nprint(top_user((\"Kim\", 80), (\"Lee\", 95), (\"Park\", 88)))",
-      "templateCode": "def top_user(§§§§§§):\n    s = §§§§§§§(rows, key=§§§§§§§ x: x[1], reverse=True)\n    return s[0][0]\n\nprint(top_user((\"Kim\", 80), (\"Lee\", 95), (\"Park\", 88)))",
+      "templateCode": "def top_user(§§§§§§):\n    s = sorted(rows, key=§§§§§§§ x: x[1], reverse=True)\n    return s[0][0]\n\nprint(top_user((\"Kim\", 80), (\"Lee\", 95), (\"Park\", 88)))",
       "testCases": [
         {
           "id": 1,
@@ -211,11 +211,11 @@ export const PYTHON_LEVEL_105: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 익명 함수 안에 불필요한 반환 키워드를 적어 발생한 SyntaxError를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 익명 함수 lambda의 매개변수와 반환식 사이에 세미콜론(;)을 잘못 적은 문법 오류를 콜론(:)으로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the SyntaxError caused by writing a return statement inside a lambda expression.",
-      "hint_ko": "익명 함수 콜론(:) 뒤에는 반환 키워드를 쓰지 않고 계산식(x[1])만 바로 적어야 합니다.",
+      "hint_ko": "익명 함수는 lambda 매개변수: 반환식 형태로 콜론(:)을 사용해야 합니다.",
       "hint_en": "Remove the return keyword inside the lambda; the expression x[1] is returned automatically.",
-      "templateCode": "pairs = [(\"a\", 30), (\"b\", 10)]\nprint(sorted(pairs, key=lambda x: return x[1]))",
+      "templateCode": "pairs = [(\"a\", 30), (\"b\", 10)]\nprint(sorted(pairs, key=lambda x; x[1]))",
       "targetCode": "pairs = [(\"a\", 30), (\"b\", 10)]\nprint(sorted(pairs, key=lambda x: x[1]))",
       "testCases": [
         {

@@ -186,11 +186,11 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 두 매개변수 tag, cnt를 선언하고 호출 시 "Go", 3을 전달해 GoGoGo를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 두 번째 매개변수 cnt와 호출 인자 "Go", 3을 채워 GoGoGo를 출력해보세요.',
       prompt_en: '[Fill Blank] Declare the two parameters and call repeat_tag with "Go" and 3 to print GoGoGo.',
-      hint_ko: '본문에서 곱하고 있는 두 매개변수 이름과, 호출부에 전달할 문자열 "Go" 및 숫자 3을 채우세요.',
+      hint_ko: '첫째 줄의 두 번째 매개변수 이름(cnt)과 호출부에 전달할 인자("Go", 3)를 차례로 채우세요.',
       hint_en: 'Fill in the two parameter names used on line 2 and pass "Go", 3 in the function call.',
-      templateCode: 'def repeat_tag(§§§§, §§§§):\n    print(tag * cnt)\nrepeat_tag(§§§§§§§§)',
+      templateCode: 'def repeat_tag(tag, §§§§):\n    print(tag * cnt)\nrepeat_tag(§§§§§§§§)',
       targetCode: 'def repeat_tag(tag, cnt):\n    print(tag * cnt)\nrepeat_tag("Go", 3)',
       testCases: [
         {
@@ -205,11 +205,11 @@ export const PYTHON_LEVEL_66: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 매개변수가 2개인 함수에 인자를 1개만 전달해 발생한 TypeError를 두 번째 인자 8을 추가해 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 가로 5, 세로 8의 넓이인 40이 출력되도록 마지막 줄 함수 호출의 두 번째 인자를 8로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the TypeError on the last line by passing both arguments 5 and 8 to calc_area.',
-      hint_ko: '선언된 매개변수 개수와 호출할 때 전달하는 인자 개수가 일치해야 합니다.',
+      hint_ko: '두 번째 매개변수 h에 8이 전달되도록 calc_area(5, 8)로 수정하세요.',
       hint_en: 'Pass two comma-separated arguments (5, 8) to match the two parameters (w, h).',
-      templateCode: 'def calc_area(w, h):\n    print(w * h)\ncalc_area(5)',
+      templateCode: 'def calc_area(w, h):\n    print(w * h)\ncalc_area(5, 5)',
       targetCode: 'def calc_area(w, h):\n    print(w * h)\ncalc_area(5, 8)',
       testCases: [
         {

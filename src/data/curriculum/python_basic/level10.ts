@@ -75,11 +75,11 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: "[틀린 곳 수정] 따옴표 충돌과 수식 문자열 오류를 모두 고쳐 It's 3 + 4 = 7이 출력되게 해보세요.",
+      prompt_ko: "[틀린 곳 수정] 따옴표 충돌('It's')과 수식 문자열(\"3+4\") 오류를 모두 고쳐 It's 3 + 4 = 7이 출력되게 해보세요.",
       prompt_en: "[Fix Bug] Fix both the quote conflict and the quoted expression so It's 3 + 4 = 7 is printed.",
-      hint_ko: '작은따옴표가 들어간 첫 문자열은 큰따옴표로 감싸고, 마지막 덧셈 수식은 따옴표를 벗겨야 계산됩니다.',
+      hint_ko: '작은따옴표가 들어간 첫 문자열은 큰따옴표로 감싸고, 마지막 덧셈 수식은 따옴표를 벗겨 3 + 4로 적어야 계산됩니다.',
       hint_en: 'Wrap the first string in double quotes and remove quotes from the final addition expression.',
-      templateCode: "print('It's', \"3 + 4 =\", \"3 + 4\")",
+      templateCode: "print('It's', \"3 + 4 =\", \"3+4\")",
       targetCode: 'print("It\'s", "3 + 4 =", 3 + 4)',
       testCases: [
         {
@@ -113,11 +113,11 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 첫째 줄의 옵션 기호와 둘째 줄의 몫 연산자를 고쳐 Q:R->4:2가 출력되게 해보세요.',
+      prompt_ko: '[틀린 곳 수정] 첫째 줄의 옵션 기호(end:"->")와 둘째 줄의 몫 연산자(**)를 고쳐 Q:R->4:2가 출력되게 해보세요.',
       prompt_en: '[Fix Bug] Fix the option syntax on line 1 and the division operator on line 2 to print Q:R -> 4:2.',
-      hint_ko: '옵션 지정에는 등호(=)를 쓰고, 소수점 없는 정수 몫 4가 나오도록 정수 몫 연산자를 사용합니다.',
+      hint_ko: '옵션 지정에는 등호(=)를 쓰고, 소수점 없는 정수 몫 4가 나오도록 정수 몫 연산자(//)를 사용합니다.',
       hint_en: 'Use = for the end option on line 1 and the floor division operator on line 2.',
-      templateCode: 'print("Q", "R", sep=":", end: "->")\nprint(14 / 3, 14 % 3, sep=":")',
+      templateCode: 'print("Q", "R", sep=":", end:"->")\nprint(14 ** 3, 14 % 3, sep=":")',
       targetCode: 'print("Q", "R", sep=":", end="->")\nprint(14 // 3, 14 % 3, sep=":")',
       testCases: [
         {

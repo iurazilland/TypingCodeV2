@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_15: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 입력받은 아이디 뒤에 느낌표를 덧붙이고 ID:hero! 형태로 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 입력받은 아이디 뒤에 느낌표를 덧붙이고 ID:hero! 형태로 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to read user input, append "!", and print it as ID:hero!.',
-      hint_ko: '입력 함수 이름, 문자열 복합 대입 연산자, 구분자 옵션 이름을 차례로 채워 넣습니다.',
+      hint_ko: '입력 함수 이름(input)과 문자열 복합 대입 연산자(+=)를 차례로 채워 넣습니다.',
       hint_en: 'Fill in the input function name, the += operator, and the sep option name in order.',
-      templateCode: 'user = §§§§§§()\nuser §§§ "!"\nprint("ID", user, §§§§=":")',
+      templateCode: 'user = §§§§§§()\nuser §§§ "!"\nprint("ID", user, sep=":")',
       targetCode: 'user = input()\nuser += "!"\nprint("ID", user, sep=":")',
       testCases: [
         {

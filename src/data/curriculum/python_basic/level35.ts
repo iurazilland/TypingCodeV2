@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_35: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 1부터 n까지 중 4의 배수의 개수(count)와 합계(total)를 함께 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 1부터 n까지 중 4의 배수의 개수(count)와 합계(total)를 함께 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to count and sum all multiples of 4 from 1 through n.',
-      hint_ko: '반복 시작 키워드, 나머지를 구하는 연산자, 그리고 개수를 1씩 늘리는 복합 대입 연산자를 채웁니다.',
+      hint_ko: '4의 배수인지 판별하는 나머지 연산자(%)와 개수를 1씩 늘리는 복합 대입 연산자(+=)를 채웁니다.',
       hint_en: 'Enter the loop keyword, modulo operator, and plus-equals operator in order.',
-      templateCode: 'n = int(input())\ncount = 0\ntotal = 0\n§§§§ i in range(1, n + 1):\n    if i §§ 4 == 0:\n        count §§§ 1\n        total += i\nprint(count, total)',
+      templateCode: 'n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i §§ 4 == 0:\n        count §§§ 1\n        total += i\nprint(count, total)',
       targetCode: 'n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 4 == 0:\n        count += 1\n        total += i\nprint(count, total)',
       testCases: [
         {

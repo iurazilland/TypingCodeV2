@@ -189,11 +189,11 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 입력값을 정수로 변환해 100을 나눈 몫을 구하고, 에러 발생 시 -1로 대체해 출력하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 예외 처리 키워드 빈칸 2곳을 채워 100을 입력값으로 나눈 몫을 구하고 에러 발생 시 -1로 대체해 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the attempt keyword, integer conversion function, and exception keyword to safely compute 100 // d.",
-      "hint_ko": "시도 블록을 여는 키워드와 문자열을 정수로 바꾸는 내장 함수, 그리고 예외를 잡는 키워드를 차례로 확인하세요.",
+      "hint_ko": "시도 블록을 여는 키워드(try)와 예외를 잡아내는 키워드(except)를 차례로 채우세요.",
       "hint_en": "Check the attempt keyword, the integer casting function, and the exception keyword.",
-      "templateCode": "raw = input()\n§§§§:\n    d = §§§§(raw)\n    ans = 100 // d\n§§§§§§§:\n    ans = -1\nprint(f\"Ans:{ans}\")",
+      "templateCode": "raw = input()\n§§§§:\n    d = int(raw)\n    ans = 100 // d\n§§§§§§§:\n    ans = -1\nprint(f\"Ans:{ans}\")",
       "targetCode": "raw = input()\ntry:\n    d = int(raw)\n    ans = 100 // d\nexcept:\n    ans = -1\nprint(f\"Ans:{ans}\")",
       "testCases": [
         {
@@ -208,11 +208,11 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 예외를 잡는 블록에 다른 언어의 키워드(catch)를 잘못 적어 발생한 문법 오류를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 예외를 잡는 블록에 잘못 적힌 키워드(handle:)를 파이썬 예외 처리 예약어(except:)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the SyntaxError where catch: was used instead of Python's exception keyword.",
-      "hint_ko": "파이썬에서는 예외를 잡을 때 catch가 아니라 전용 키워드를 사용합니다.",
+      "hint_ko": "파이썬에서는 예외를 잡을 때 except: 키워드를 사용합니다.",
       "hint_en": "Replace catch with Python's exception-handling keyword.",
-      "templateCode": "try:\n    print(10 // 0)\ncatch:\n    print(\"Caught\")",
+      "templateCode": "try:\n    print(10 // 0)\nhandle:\n    print(\"Caught\")",
       "targetCode": "try:\n    print(10 // 0)\nexcept:\n    print(\"Caught\")",
       "testCases": [
         {
@@ -227,11 +227,11 @@ export const PYTHON_LEVEL_78: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 예외 시도 블록 헤더 끝에 필수 기호가 빠져 발생한 문법 오류를 수정해보세요.",
+      "prompt_ko": "[틀린 곳 수정] 예외 시도 블록 헤더 끝에 세미콜론(try;)을 잘못 적어 발생한 문법 오류를 콜론(try:)으로 수정해보세요.",
       "prompt_en": "[Fix Bug] Add the missing punctuation at the end of the block header line to fix the SyntaxError.",
-      "hint_ko": "if, for, def, class와 마찬가지로 예외 처리 블록을 시작하는 줄 끝에도 반드시 콜론이 있어야 합니다.",
+      "hint_ko": "예외 처리 블록을 시작하는 try 뒤에도 반드시 콜론(:)이 있어야 합니다.",
       "hint_en": "Like if and def headers, an exception block header must end with a colon.",
-      "templateCode": "s = \"99\"\ntry\n    n = int(s)\n    print(n + 1)\nexcept:\n    print(0)",
+      "templateCode": "s = \"99\"\ntry;\n    n = int(s)\n    print(n + 1)\nexcept:\n    print(0)",
       "targetCode": "s = \"99\"\ntry:\n    n = int(s)\n    print(n + 1)\nexcept:\n    print(0)",
       "testCases": [
         {

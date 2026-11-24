@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳에 연산자를 채워 130초를 60으로 나눈 몫(2), 나머지(10), 그리고 3의 3제곱(27)을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳에 연산자를 채워 130초를 60으로 나눈 몫(2), 나머지(10), 그리고 3의 3제곱(27)을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the quotient (2) and remainder (10) of 130 by 60, and 3 cubed (27).',
-      hint_ko: '첫째 줄에는 정수 몫 연산자, 둘째 줄에는 나머지 연산자, 셋째 줄에는 거듭제곱 연산자를 차례로 채웁니다.',
+      hint_ko: '첫째 줄에는 정수 몫 연산자(//)를, 셋째 줄에는 거듭제곱 연산자(**)를 차례로 채웁니다.',
       hint_en: 'Use floor division on line 1, modulo on line 2, and exponentiation on line 3.',
-      templateCode: 'print(130 §§§ 60)\nprint(130 §§ 60)\nprint(3 §§§ 3)',
+      templateCode: 'print(130 §§§ 60)\nprint(130 % 60)\nprint(3 §§§ 3)',
       targetCode: 'print(130 // 60)\nprint(130 % 60)\nprint(3 ** 3)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 25를 4로 나눈 정수 몫 6이 출력되도록 잘못된 나눗셈 연산자를 고쳐보세요.',
+      prompt_ko: '[틀린 곳 수정] 25를 4로 나눈 정수 몫 6이 출력되도록 잘못된 연산자(**)를 고쳐보세요.',
       prompt_en: '[Fix Bug] Fix the division operator so that the integer quotient 6 is printed instead of 6.25.',
-      hint_ko: '실수 나눗셈 기호 대신 소수점 아래를 버리는 정수 몫 연산자로 수정해야 합니다.',
+      hint_ko: '거듭제곱 연산자(**) 대신 소수점 아래를 버리는 정수 몫 연산자(//)로 수정해야 합니다.',
       hint_en: 'Replace the float division operator with the integer floor division operator.',
-      templateCode: 'print(25 / 4)',
+      templateCode: 'print(25 ** 4)',
       targetCode: 'print(25 // 4)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_3: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 10에 2의 4제곱(16)을 더한 결과 26이 출력되도록 연산 기호를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 10에 2의 4제곱(16)을 더한 결과 26이 출력되도록 잘못된 연산자(//)를 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the operator so that 10 plus 2 to the power of 4 prints 26.',
-      hint_ko: '2와 4 사이의 일반 곱셈 기호를 거듭제곱 연산자로 고쳐야 16이 더해집니다.',
+      hint_ko: '2와 4 사이의 정수 몫 연산자(//)를 거듭제곱 연산자(**)로 고쳐야 16이 더해집니다.',
       hint_en: 'Change the multiplication operator between 2 and 4 to the exponentiation operator.',
-      templateCode: 'print(10 + 2 * 4)',
+      templateCode: 'print(10 + 2 // 4)',
       targetCode: 'print(10 + 2 ** 4)',
       testCases: [
         {

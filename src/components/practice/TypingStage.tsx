@@ -376,10 +376,23 @@ function mapUserLineToSegments(
             continue;
           }
           const candNormLen = norm(candidate).length;
+          if (candNormLen === 0) {
+            continue;
+          }
           const nextChar = userLineText[idx];
 
           if (nextChar !== nextFixed[0]) {
             continue;
+          }
+
+          if (
+            nextChar === ')' ||
+            nextChar === ']' ||
+            nextChar === '}' ||
+            !targetBlank.includes(nextChar)
+          ) {
+            splitIdx = idx;
+            break;
           }
 
           if (candNormLen >= targetNormLen || candidate.length >= targetBlank.length) {
@@ -387,9 +400,12 @@ function mapUserLineToSegments(
             break;
           }
 
+          const trimmedCand = candidate.trimEnd();
+          const hasDanglingToken = /[,:+\-*/%]$/.test(trimmedCand);
           if (
-            (nextChar === ')' || nextChar === ']' || nextChar === '}' || nextChar === ':') &&
-            !targetBlank.includes(nextChar)
+            !hasDanglingToken &&
+            nextFixed.length >= 2 &&
+            userLineText.slice(idx).startsWith(nextFixed.slice(0, 2))
           ) {
             splitIdx = idx;
             break;
@@ -489,6 +505,34 @@ export default function TypingStage({
   const composingStartIndexRef = useRef<number | null>(null);
   const lastComposingLenRef = useRef<number>(0);
 
+  // Undo / Redo history tracking (Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y)
+  const undoStackRef = useRef<Array<{ code: string; cursor: number }>>([]);
+  const redoStackRef = useRef<Array<{ code: string; cursor: number }>>([]);
+  const lastHistoryActionRef = useRef<'insert' | 'delete' | 'other' | null>(null);
+  const lastHistoryTimeRef = useRef<number>(0);
+
+  const recordUndoSnapshot = (
+    action: 'insert' | 'delete' | 'other',
+    forceNewGroup = false
+  ) => {
+    const now = Date.now();
+    const shouldGroup =
+      !forceNewGroup &&
+      action !== 'other' &&
+      lastHistoryActionRef.current === action &&
+      now - lastHistoryTimeRef.current < 1200;
+
+    if (!shouldGroup) {
+      undoStackRef.current.push({ code: typedCode, cursor: cursorIndex });
+      if (undoStackRef.current.length > 100) {
+        undoStackRef.current.shift();
+      }
+    }
+    redoStackRef.current = [];
+    lastHistoryActionRef.current = action;
+    lastHistoryTimeRef.current = now;
+  };
+
   const onCodeChangeRef = useRef(onCodeChange);
   useEffect(() => {
     onCodeChangeRef.current = onCodeChange;
@@ -501,6 +545,10 @@ export default function TypingStage({
     setShowPasteNotice(false);
     composingStartIndexRef.current = null;
     lastComposingLenRef.current = 0;
+    undoStackRef.current = [];
+    redoStackRef.current = [];
+    lastHistoryActionRef.current = null;
+    lastHistoryTimeRef.current = 0;
     if (hiddenInputRef.current) {
       hiddenInputRef.current.value = '';
     }
@@ -519,6 +567,7 @@ export default function TypingStage({
   const handleStageClick = () => {
     composingStartIndexRef.current = null;
     lastComposingLenRef.current = 0;
+    lastHistoryActionRef.current = null;
     if (hiddenInputRef.current) {
       hiddenInputRef.current.value = '';
     }
@@ -527,6 +576,7 @@ export default function TypingStage({
 
   // IME Handlers: Support native Korean / multilingual character composition
   const handleCompositionStart = () => {
+    recordUndoSnapshot('insert', true);
     composingStartIndexRef.current = cursorIndex;
     lastComposingLenRef.current = 0;
   };
@@ -584,6 +634,7 @@ export default function TypingStage({
         triggerPasteBlockedNotice();
         return;
       }
+      recordUndoSnapshot('insert', /[\s()[\]{}:,.;=+\-*/%]/.test(val));
       setTypedCode((prev) => {
         const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
         return prev.slice(0, safeIdx) + val + prev.slice(safeIdx);
@@ -702,6 +753,61 @@ export default function TypingStage({
       return;
     }
 
+    // Undo (Ctrl+Z / Cmd+Z) and Redo (Ctrl+Shift+Z / Cmd+Shift+Z / Ctrl+Y / Cmd+Y)
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      !e.altKey &&
+      (e.key === 'z' || e.key === 'Z' || e.code === 'KeyZ')
+    ) {
+      e.preventDefault();
+      composingStartIndexRef.current = null;
+      lastComposingLenRef.current = 0;
+      lastHistoryActionRef.current = null;
+      if (hiddenInputRef.current) {
+        hiddenInputRef.current.value = '';
+      }
+
+      if (e.shiftKey) {
+        const nextSnap = redoStackRef.current.pop();
+        if (nextSnap) {
+          undoStackRef.current.push({ code: typedCode, cursor: cursorIndex });
+          setTypedCode(nextSnap.code);
+          setCursorIndex(nextSnap.cursor);
+        }
+      } else {
+        const prevSnap = undoStackRef.current.pop();
+        if (prevSnap) {
+          redoStackRef.current.push({ code: typedCode, cursor: cursorIndex });
+          setTypedCode(prevSnap.code);
+          setCursorIndex(prevSnap.cursor);
+        }
+      }
+      return;
+    }
+
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      !e.altKey &&
+      !e.shiftKey &&
+      (e.key === 'y' || e.key === 'Y' || e.code === 'KeyY')
+    ) {
+      e.preventDefault();
+      composingStartIndexRef.current = null;
+      lastComposingLenRef.current = 0;
+      lastHistoryActionRef.current = null;
+      if (hiddenInputRef.current) {
+        hiddenInputRef.current.value = '';
+      }
+
+      const nextSnap = redoStackRef.current.pop();
+      if (nextSnap) {
+        undoStackRef.current.push({ code: typedCode, cursor: cursorIndex });
+        setTypedCode(nextSnap.code);
+        setCursorIndex(nextSnap.cursor);
+      }
+      return;
+    }
+
     // While IME is actively composing (e.g. Korean / CJK), let browser IME handle it
     if (e.nativeEvent.isComposing || e.key === 'Process' || e.key === 'HangulMode') {
       return;
@@ -710,6 +816,7 @@ export default function TypingStage({
     // Arrow Left
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
+      lastHistoryActionRef.current = null;
       setCursorIndex((prev) => Math.max(0, prev - 1));
       return;
     }
@@ -717,6 +824,7 @@ export default function TypingStage({
     // Arrow Right
     if (e.key === 'ArrowRight') {
       e.preventDefault();
+      lastHistoryActionRef.current = null;
       setCursorIndex((prev) => Math.min(typedCode.length, prev + 1));
       return;
     }
@@ -724,6 +832,7 @@ export default function TypingStage({
     // Arrow Up
     if (e.key === 'ArrowUp') {
       e.preventDefault();
+      lastHistoryActionRef.current = null;
       if (cursorLine > 0) {
         setCursorIndex(getIndexFromLineAndCol(cursorLine - 1, cursorCol));
       } else {
@@ -735,6 +844,7 @@ export default function TypingStage({
     // Arrow Down
     if (e.key === 'ArrowDown') {
       e.preventDefault();
+      lastHistoryActionRef.current = null;
       const lines = typedCode.split('\n');
       if (cursorLine < lines.length - 1) {
         setCursorIndex(getIndexFromLineAndCol(cursorLine + 1, cursorCol));
@@ -747,6 +857,7 @@ export default function TypingStage({
     // Home
     if (e.key === 'Home') {
       e.preventDefault();
+      lastHistoryActionRef.current = null;
       setCursorIndex(getIndexFromLineAndCol(cursorLine, 0));
       return;
     }
@@ -754,6 +865,7 @@ export default function TypingStage({
     // End
     if (e.key === 'End') {
       e.preventDefault();
+      lastHistoryActionRef.current = null;
       const lines = typedCode.split('\n');
       const currentLineLen = lines[cursorLine] ? lines[cursorLine].length : 0;
       setCursorIndex(getIndexFromLineAndCol(cursorLine, currentLineLen));
@@ -763,6 +875,7 @@ export default function TypingStage({
     // Tab (4 spaces indentation at cursor)
     if (e.key === 'Tab') {
       e.preventDefault();
+      recordUndoSnapshot('other', true);
       setTypedCode((prev) => {
         const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
         return prev.slice(0, safeIdx) + '    ' + prev.slice(safeIdx);
@@ -782,6 +895,7 @@ export default function TypingStage({
     // Enter: newline insertion at cursor with Python-accurate auto-indent
     if (e.key === 'Enter') {
       e.preventDefault();
+      recordUndoSnapshot('other', true);
       const safeIdx = Math.max(0, Math.min(cursorIndex, typedCode.length));
       const beforeCursor = typedCode.slice(0, safeIdx);
       const afterCursor = typedCode.slice(safeIdx);
@@ -812,6 +926,7 @@ export default function TypingStage({
     if (e.key === 'Backspace') {
       e.preventDefault();
       if (cursorIndex > 0) {
+        recordUndoSnapshot('delete');
         const safeIdx = Math.max(0, Math.min(cursorIndex, typedCode.length));
         const beforeCursor = typedCode.slice(0, safeIdx);
         const afterCursor = typedCode.slice(safeIdx);
@@ -843,6 +958,7 @@ export default function TypingStage({
     if (e.key === 'Delete') {
       e.preventDefault();
       if (cursorIndex < typedCode.length) {
+        recordUndoSnapshot('delete');
         setTypedCode((prev) => {
           const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
           return prev.slice(0, safeIdx) + prev.slice(safeIdx + 1);
@@ -854,6 +970,7 @@ export default function TypingStage({
     // Normal printable character: insert at cursor
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
+      recordUndoSnapshot('insert', /[\s()[\]{}:,.;=+\-*/%]/.test(e.key));
       setTypedCode((prev) => {
         const safeIdx = Math.max(0, Math.min(cursorIndex, prev.length));
         return prev.slice(0, safeIdx) + e.key + prev.slice(safeIdx);
@@ -1062,6 +1179,7 @@ export default function TypingStage({
 
         {/* IDE Code Area */}
         <div
+          className="capture-blur-target"
           style={{
             flex: '1 1 auto',
             overflowY: 'auto',
@@ -1271,7 +1389,8 @@ export default function TypingStage({
                                 style={{
                                   display: 'inline-flex',
                                   alignItems: 'center',
-                                  justifyContent: isBlankSeg ? 'center' : 'flex-start',
+                                  justifyContent: 'flex-start',
+                                  paddingLeft: isBlankSeg ? '0.35ch' : undefined,
                                   width:
                                     sIdx === mappedSegments.length - 1 &&
                                     seg.userText.length > seg.widthCh

@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 점수 구간별로 보너스를 차등 반영(20 추가, 10 추가, 5 차감)한 최종 점수를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸에 다중 조건 분기 키워드를 채워 점수 구간별로 보너스를 차등 반영한 최종 점수를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to update pt across the three score tiers and print it.',
-      hint_ko: '다중 분기 키워드, 이상 비교 연산자, 그리고 차감 복합 대입 연산자를 순서대로 채웁니다.',
+      hint_ko: '앞선 if 조건이 거짓일 때 새로운 조건을 이어서 검사하는 다중 분기 키워드(elif)를 채웁니다.',
       hint_en: 'Enter the else-if keyword, greater-or-equal operator, and minus-equals operator in order.',
-      templateCode: 's = int(input())\npt = 100\nif s >= 90:\n    pt += 20\n§§§§§ s §§§ 70:\n    pt += 10\nelse:\n    pt §§§ 5\nprint("Pt:" + str(pt))',
+      templateCode: 's = int(input())\npt = 100\nif s >= 90:\n    pt += 20\n§§§§§ s >= 70:\n    pt += 10\nelse:\n    pt -= 5\nprint("Pt:" + str(pt))',
       targetCode: 's = int(input())\npt = 100\nif s >= 90:\n    pt += 20\nelif s >= 70:\n    pt += 10\nelse:\n    pt -= 5\nprint("Pt:" + str(pt))',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_28: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 넷째 줄에 잘못 적힌 else if를 파이썬의 추가 조건 분기 키워드로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 새로운 조건식(n == 0)을 검사하는 넷째 줄에 잘못 적힌 키워드(else)를 추가 조건 분기 키워드(elif)로 수정해보세요.',
       prompt_en: '[Fix Bug] Replace the invalid else if on line 4 with Python\'s additional branch keyword.',
-      hint_ko: '파이썬에서는 else if 대신 줄여 쓴 elif 키워드를 사용합니다.',
+      hint_ko: 'else 뒤에는 조건식을 적을 수 없으므로 추가 조건을 검사할 때는 elif 키워드를 사용합니다.',
       hint_en: 'Python uses a single keyword instead of two separate words.',
-      templateCode: 'n = int(input())\nif n > 0:\n    print("Plus")\nelse if n == 0:\n    print("Zero")\nelse:\n    print("Minus")',
+      templateCode: 'n = int(input())\nif n > 0:\n    print("Plus")\nelse n == 0:\n    print("Zero")\nelse:\n    print("Minus")',
       targetCode: 'n = int(input())\nif n > 0:\n    print("Plus")\nelif n == 0:\n    print("Zero")\nelse:\n    print("Minus")',
       testCases: [
         {

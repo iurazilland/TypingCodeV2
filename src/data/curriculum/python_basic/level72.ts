@@ -188,11 +188,11 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 배지 클래스를 선언하고, 자기 자신의 제목 속성을 대괄호 서식으로 출력하는 메서드를 완성한 뒤 호출해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 배지(Badge) 클래스를 선언하고 마지막 줄에서 인스턴스 메서드를 호출해보세요.",
       "prompt_en": "[Fill Blank] Complete the blueprint declaration, the instance attribute access in display(), and the method call.",
-      "hint_ko": "설계도 선언 키워드, 메서드 내부에서 객체 자신을 가리키는 참조 변수, 그리고 인스턴스 메서드 호출식을 차례로 확인하세요.",
+      "hint_ko": "클래스 선언 키워드(class)와 인스턴스 메서드 호출식(display())을 차례로 채우세요.",
       "hint_en": "Check the blueprint definition keyword, the instance self-reference inside the method, and the method call on the instance.",
-      "templateCode": "§§§§§§ Badge:\n    def display(self):\n        print(f\"[{§§§§§.title}]\")\nb = Badge()\nb.title = input()\nb.§§§§§§§§§§",
+      "templateCode": "§§§§§§ Badge:\n    def display(self):\n        print(f\"[{self.title}]\")\nb = Badge()\nb.title = input()\nb.§§§§§§§§§§",
       "targetCode": "class Badge:\n    def display(self):\n        print(f\"[{self.title}]\")\nb = Badge()\nb.title = input()\nb.display()",
       "testCases": [
         {
@@ -207,11 +207,11 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 클래스 내부 메서드를 호출했을 때 매개변수 개수가 맞지 않아 발생하는 에러를 수정해보세요.",
+      "prompt_ko": "[틀린 곳 수정] 클래스 메서드의 첫 번째 매개변수 자리에 잘못 적힌 예약어(None)를 인스턴스 참조 매개변수(self)로 수정해보세요.",
       "prompt_en": "[Fix Bug] Fix the method definition inside Alarm so calling a.ring() does not raise a TypeError.",
-      "hint_ko": "인스턴스를 통해 메서드를 호출하면 파이썬이 객체 자신을 첫 번째 인자로 자동 전달하므로 매개변수 선언이 필요합니다.",
+      "hint_ko": "인스턴스 메서드의 첫 번째 매개변수에는 객체 자신을 받는 self를 선언해야 합니다.",
       "hint_en": "Python automatically passes the instance as the first argument when calling a method, so the parameter list must accept it.",
-      "templateCode": "class Alarm:\n    def ring():\n        print(\"Wake up!\")\na = Alarm()\na.ring()",
+      "templateCode": "class Alarm:\n    def ring(None):\n        print(\"Wake up!\")\na = Alarm()\na.ring()",
       "targetCode": "class Alarm:\n    def ring(self):\n        print(\"Wake up!\")\na = Alarm()\na.ring()",
       "testCases": [
         {
@@ -226,11 +226,11 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 클래스로부터 실제 인스턴스를 생성하지 않고 설계도 자체를 대입해 메서드가 실행되지 않는 버그를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 클래스로부터 인스턴스를 생성할 때 대괄호(Lamp[])를 잘못 적은 다섯째 줄을 소괄호(Lamp())로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the bug where Lamp is assigned without instantiation so l.turn_on() works properly.",
-      "hint_ko": "클래스 이름만 적으면 설계도 자체를 가리키므로, 실제 인스턴스 객체를 생성하려면 호출 괄호가 있어야 합니다.",
+      "hint_ko": "클래스의 인스턴스 객체를 생성할 때는 클래스 이름 뒤에 소괄호 ()를 붙여야 합니다.",
       "hint_en": "Writing just the class name refers to the class itself; add parentheses to create an instance object.",
-      "templateCode": "class Lamp:\n    power = 10\n    def turn_on(self):\n        print(f\"ON:{self.power * 2}W\")\nl = Lamp\nl.turn_on()",
+      "templateCode": "class Lamp:\n    power = 10\n    def turn_on(self):\n        print(f\"ON:{self.power * 2}W\")\nl = Lamp[]\nl.turn_on()",
       "targetCode": "class Lamp:\n    power = 10\n    def turn_on(self):\n        print(f\"ON:{self.power * 2}W\")\nl = Lamp()\nl.turn_on()",
       "testCases": [
         {

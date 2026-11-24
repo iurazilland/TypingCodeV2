@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 150초를 60으로 나눈 분(2)과 초(30)를 한 줄에 나란히 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸에 다중 출력 구분 기호를 채워 150초를 60으로 나눈 분(2)과 초(30)를 한 줄에 나란히 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to convert 150 seconds into minutes (2) and seconds (30) on one line.',
-      hint_ko: '정수 몫 연산자, 값을 나열하는 구분 기호, 나머지 연산자를 순서대로 채워 넣습니다.',
+      hint_ko: 'print() 안에서 여러 값을 나란히 출력할 때 사용하는 쉼표(,) 기호를 채워 넣습니다.',
       hint_en: 'Fill in the floor division operator, the comma separator, and the modulo operator in order.',
-      templateCode: 'print(150 §§§ 60§§ 150 §§ 60)',
+      templateCode: 'print(150 // 60§§ 150 % 60)',
       targetCode: 'print(150 // 60, 150 % 60)',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_4: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 17을 5로 나눈 정수 몫과 나머지인 3 2가 출력되도록 잘못된 연산자를 고쳐보세요.',
+      prompt_ko: '[틀린 곳 수정] 17을 5로 나눈 정수 몫과 나머지인 3 2가 출력되도록 잘못된 연산자(**)를 고쳐보세요.',
       prompt_en: '[Fix Bug] Fix the division operator so the integer quotient and remainder 3 2 are printed.',
-      hint_ko: '첫 번째 수식이 소수점이 있는 3.4가 아니라 정수 3이 되도록 몫 연산자로 수정하세요.',
+      hint_ko: '첫 번째 수식이 거듭제곱(**)이 아니라 정수 몫(//)이 되도록 연산자를 수정하세요.',
       hint_en: 'Change the first division operator so it computes the integer quotient 3 instead of 3.4.',
-      templateCode: 'print(17 / 5, 17 % 5)',
+      templateCode: 'print(17 ** 5, 17 % 5)',
       targetCode: 'print(17 // 5, 17 % 5)',
       testCases: [
         {

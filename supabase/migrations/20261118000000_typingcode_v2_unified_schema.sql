@@ -544,7 +544,7 @@ begin
         user_id,
         run_len as cur_streak
       from streaks
-      where end_date >= (((now() at time zone 'Asia/Seoul')::date) - 1)
+      where end_date >= (((now() at time zone 'Asia/Seoul')::date) - 7)
       order by user_id, end_date desc
     ),
     summary as (
@@ -786,10 +786,14 @@ set
       )
     )
   ),
+  current_streak = case
+    when p.last_attended_date is not null
+     and p.last_attended_date >= (((now() at time zone 'Asia/Seoul')::date) - 7)
+      then p.current_streak
+    else 0
+  end,
   activity_score = (public.count_jsonb_cleared_levels(p.cleared_levels) * 100)
-                 + (coalesce((select count(*) from public.user_problem_solves s where s.user_id = p.id), 0) * 150)
-                 + (coalesce(p.total_attendance_days, 0) * 30)
-                 + (coalesce(p.longest_streak, 0) * 50),
+                 + (coalesce((select count(*) from public.user_problem_solves s where s.user_id = p.id), 0) * 150),
   primary_language = public.derive_primary_language_from_cleared(p.cleared_levels, p.primary_language);
 
 -- -----------------------------------------------------------------------------
@@ -881,9 +885,7 @@ begin
   new.cleared_levels_count := public.count_jsonb_cleared_levels(new.cleared_levels);
   new.completed_tracks := public.compute_completed_tracks(new.cleared_levels);
   new.activity_score := (new.cleared_levels_count * 100)
-                      + (coalesce(new.solved_problems_count, 0) * 150)
-                      + (coalesce(new.total_attendance_days, 0) * 30)
-                      + (coalesce(new.longest_streak, 0) * 50);
+                      + (coalesce(new.solved_problems_count, 0) * 150);
 
   if tg_op = 'UPDATE' then
     if old.username is not null and new.username is distinct from old.username then
@@ -1220,17 +1222,23 @@ begin
   update public.profiles p
   set
     current_streak = case
-      when p.last_attended_date = v_today then p.current_streak
-      when p.last_attended_date = (v_today - 1) then p.current_streak + 1
+      when p.last_attended_date = v_today then greatest(p.current_streak, 1)
+      when p.last_attended_date is not null
+       and p.last_attended_date >= (v_today - 7)
+       and p.last_attended_date < v_today
+        then p.current_streak + 1
       else 1
     end,
     longest_streak = case
-      when p.last_attended_date = v_today then p.longest_streak
-      when p.last_attended_date = (v_today - 1) then greatest(p.longest_streak, p.current_streak + 1)
+      when p.last_attended_date = v_today then greatest(p.longest_streak, p.current_streak, 1)
+      when p.last_attended_date is not null
+       and p.last_attended_date >= (v_today - 7)
+       and p.last_attended_date < v_today
+        then greatest(p.longest_streak, p.current_streak + 1)
       else greatest(p.longest_streak, 1)
     end,
     total_attendance_days = case
-      when p.last_attended_date = v_today then p.total_attendance_days
+      when p.last_attended_date = v_today then greatest(p.total_attendance_days, 1)
       else p.total_attendance_days + 1
     end,
     last_attended_date = v_today
@@ -1281,17 +1289,23 @@ begin
       p.primary_language
     ),
     current_streak = case
-      when p.last_attended_date = v_today then p.current_streak
-      when p.last_attended_date = (v_today - 1) then p.current_streak + 1
+      when p.last_attended_date = v_today then greatest(p.current_streak, 1)
+      when p.last_attended_date is not null
+       and p.last_attended_date >= (v_today - 7)
+       and p.last_attended_date < v_today
+        then p.current_streak + 1
       else 1
     end,
     longest_streak = case
-      when p.last_attended_date = v_today then p.longest_streak
-      when p.last_attended_date = (v_today - 1) then greatest(p.longest_streak, p.current_streak + 1)
+      when p.last_attended_date = v_today then greatest(p.longest_streak, p.current_streak, 1)
+      when p.last_attended_date is not null
+       and p.last_attended_date >= (v_today - 7)
+       and p.last_attended_date < v_today
+        then greatest(p.longest_streak, p.current_streak + 1)
       else greatest(p.longest_streak, 1)
     end,
     total_attendance_days = case
-      when p.last_attended_date = v_today then p.total_attendance_days
+      when p.last_attended_date = v_today then greatest(p.total_attendance_days, 1)
       else p.total_attendance_days + 1
     end,
     last_attended_date = v_today
@@ -1341,17 +1355,23 @@ begin
       p.primary_language
     ),
     current_streak = case
-      when p.last_attended_date = v_today then p.current_streak
-      when p.last_attended_date = (v_today - 1) then p.current_streak + 1
+      when p.last_attended_date = v_today then greatest(p.current_streak, 1)
+      when p.last_attended_date is not null
+       and p.last_attended_date >= (v_today - 7)
+       and p.last_attended_date < v_today
+        then p.current_streak + 1
       else 1
     end,
     longest_streak = case
-      when p.last_attended_date = v_today then p.longest_streak
-      when p.last_attended_date = (v_today - 1) then greatest(p.longest_streak, p.current_streak + 1)
+      when p.last_attended_date = v_today then greatest(p.longest_streak, p.current_streak, 1)
+      when p.last_attended_date is not null
+       and p.last_attended_date >= (v_today - 7)
+       and p.last_attended_date < v_today
+        then greatest(p.longest_streak, p.current_streak + 1)
       else greatest(p.longest_streak, 1)
     end,
     total_attendance_days = case
-      when p.last_attended_date = v_today then p.total_attendance_days
+      when p.last_attended_date = v_today then greatest(p.total_attendance_days, 1)
       else p.total_attendance_days + 1
     end,
     last_attended_date = v_today

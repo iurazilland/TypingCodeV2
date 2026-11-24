@@ -180,11 +180,11 @@ export const PYTHON_LEVEL_41: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트의 요소 개수가 4개 이상일 때 첫 요소와 마지막 요소의 합을 출력하도록 빈칸을 채워보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 리스트의 요소 개수가 4개 이상일 때 첫 요소와 마지막 요소의 합을 출력해보세요.',
       prompt_en: '[Fill Blank] Complete the condition and indexing expressions so the sum of the first and last elements prints when the list has at least 4 items.',
-      hint_ko: '리스트 길이 함수를 조건식에 넣고, 양끝 위치를 가리키는 양수·음수 인덱스를 차례로 작성하세요.',
+      hint_ko: '리스트 길이 함수(len)를 조건식에 넣고, 마지막 요소를 가리키는 음수 인덱스(-1)를 작성하세요.',
       hint_en: 'Check the list length in the condition, then index the first and last positions.',
-      templateCode: 'arr = [10, 20, 30, 40]\nif §§§§(arr) >= 4:\n    print(arr[§§] + arr[§§§])',
+      templateCode: 'arr = [10, 20, 30, 40]\nif §§§§(arr) >= 4:\n    print(arr[0] + arr[§§§])',
       targetCode: 'arr = [10, 20, 30, 40]\nif len(arr) >= 4:\n    print(arr[0] + arr[-1])',
       testCases: [
         {

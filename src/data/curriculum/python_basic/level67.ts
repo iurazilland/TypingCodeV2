@@ -187,11 +187,11 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트의 평균(몫)을 반환하는 함수를 완성하고 호출 결과를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 리스트의 평균(몫)을 반환하는 함수를 완성하고 호출 결과를 출력해보세요.',
       prompt_en: '[Fill Blank] Complete the function header, value return statement, and function call to print 20.',
-      hint_ko: '함수 정의 키워드, 결과 반환 키워드, 그리고 호출할 함수 이름을 순서대로 채우세요.',
+      hint_ko: '결과 반환 키워드(return)와 호출할 함수 이름(avg_sum)을 순서대로 채우세요.',
       hint_en: 'Fill in the def keyword, the return keyword, and the function name in the call.',
-      templateCode: '§§§§ avg_sum(nums):\n    §§§§§§§ sum(nums) // len(nums)\nans = §§§§§§§§([10, 20, 30])\nprint(ans)',
+      templateCode: 'def avg_sum(nums):\n    §§§§§§§ sum(nums) // len(nums)\nans = §§§§§§§§([10, 20, 30])\nprint(ans)',
       targetCode: 'def avg_sum(nums):\n    return sum(nums) // len(nums)\nans = avg_sum([10, 20, 30])\nprint(ans)',
       testCases: [
         {
@@ -225,11 +225,11 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 반복문이 돌기 전에 return이 먼저 실행되어 항상 0만 나오는 위치 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 함수가 계산한 합계를 호출부로 돌려주지 않고 print(total)만 실행해 None이 출력되는 다섯째 줄을 return total로 수정해보세요.',
       prompt_en: '[Fix Bug] Move the return statement after the for loop so sum_to(4) returns 10 instead of 0.',
-      hint_ko: '합계를 다 구한 뒤에 결과를 돌려주도록 return 줄을 반복문 아래쪽으로 옮기세요.',
+      hint_ko: '함수 밖의 print(sum_to(4))가 결과값을 받아 출력하려면 함수 끝에서 return total로 값을 반환해야 합니다.',
       hint_en: 'Place return total after the for loop finishes accumulating.',
-      templateCode: 'def sum_to(n):\n    total = 0\n    return total\n    for i in range(1, n + 1):\n        total += i\nprint(sum_to(4))',
+      templateCode: 'def sum_to(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    print(total)\nprint(sum_to(4))',
       targetCode: 'def sum_to(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\nprint(sum_to(4))',
       testCases: [
         {

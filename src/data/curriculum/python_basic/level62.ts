@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈 집합을 만들고 분리된 단어들을 하나씩 추가해 고유 단어 수 3을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 빈 집합을 만들고 분리된 단어들을 하나씩 추가해 고유 단어 수 3을 출력해보세요.',
       prompt_en: '[Fill Blank] Initialize an empty set, add each word from the list, and print the unique count 3.',
-      hint_ko: '빈 집합 생성식과 집합 요소 추가 메서드, 길이를 구하는 함수를 차례로 채우세요.',
+      hint_ko: '빈 집합 생성식(set())과 집합 요소 추가 메서드(add)를 차례로 채우세요.',
       hint_en: 'Fill in the empty set constructor, the element addition method, and the length function.',
-      templateCode: 'words = "go py go js py".split()\ns = §§§§§§\nfor w in words:\n    s.§§§§(w)\nprint(§§§§(s))',
+      templateCode: 'words = "go py go js py".split()\ns = §§§§§§\nfor w in words:\n    s.§§§§(w)\nprint(len(s))',
       targetCode: 'words = "go py go js py".split()\ns = set()\nfor w in words:\n    s.add(w)\nprint(len(s))',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 빈 집합을 만들려다 빈 딕셔너리({})로 선언해 .add()에서 에러가 난 첫째 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 빈 집합을 만들려다 잘못된 생성 함수(int())로 초기화해 에러가 난 첫째 줄을 set()으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 1 where {} created an empty dictionary instead of an empty set.',
-      hint_ko: '빈 중괄호는 딕셔너리가 되므로 빈 집합 생성 함수를 호출하도록 고치세요.',
+      hint_ko: '비어 있는 집합을 생성할 때는 set() 함수를 호출해야 합니다.',
       hint_en: 'Replace {} with the empty set constructor call on line 1.',
-      templateCode: 's = {}\ns.add(10)\ns.add(20)\nprint(len(s))',
+      templateCode: 's = int()\ns.add(10)\ns.add(20)\nprint(len(s))',
       targetCode: 's = set()\ns.add(10)\ns.add(20)\nprint(len(s))',
       testCases: [
         {
@@ -223,11 +223,11 @@ export const PYTHON_LEVEL_62: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 집합에 리스트용 추가 메서드를 사용해 발생한 AttributeError를 올바른 집합 메서드로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 집합에 요소 3을 추가하려다 존재하지 않는 메서드(put)를 사용해 발생한 에러를 집합 추가 메서드(add)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the AttributeError caused by calling a list method on set s to insert 3.',
-      hint_ko: '집합에 요소를 추가할 때는 리스트의 append 대신 집합 전용 메서드를 사용합니다.',
+      hint_ko: '집합(set)에 단일 요소를 추가할 때는 .add() 메서드를 사용합니다.',
       hint_en: 'Replace the list method with the method used to add an element to a set.',
-      templateCode: 's = {1, 2}\ns.append(3)\nprint(len(s), sum(s))',
+      templateCode: 's = {1, 2}\ns.put(3)\nprint(len(s), sum(s))',
       targetCode: 's = {1, 2}\ns.add(3)\nprint(len(s), sum(s))',
       testCases: [
         {

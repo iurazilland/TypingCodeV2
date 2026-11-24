@@ -169,11 +169,11 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 정수를 입력받고 10을 누적해 더한 뒤 3으로 나눈 정수 몫을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 정수를 입력받고 10을 누적해 더한 뒤 3으로 나눈 정수 몫을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to read an integer, add 10 in place, and print its floor quotient by 3.',
-      hint_ko: '정수 변환 함수 이름, 누적 덧셈 복합 대입 연산자, 정수 몫 연산자를 차례로 채웁니다.',
+      hint_ko: '정수 변환 함수 이름(int)과 누적 덧셈 복합 대입 연산자(+=)를 차례로 채웁니다.',
       hint_en: 'Enter the integer conversion function, compound addition operator, and floor division operator in order.',
-      templateCode: 'n = §§§§(input())\nn §§§ 10\nprint(n §§§ 3)',
+      templateCode: 'n = §§§§(input())\nn §§§ 10\nprint(n // 3)',
       targetCode: 'n = int(input())\nn += 10\nprint(n // 3)',
       testCases: [
         {
@@ -188,11 +188,11 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열 입력값에 바로 숫자를 더해 발생한 TypeError를 정수 변환으로 해결해보세요.',
+      prompt_ko: '[틀린 곳 수정] 입력값을 문자열(str)로 변환해 숫자 5와 더할 때 TypeError가 발생하는 첫째 줄을 정수 변환(int)으로 고쳐보세요.',
       prompt_en: '[Fix Bug] Fix the TypeError by converting the input to an integer so lv + 5 prints properly.',
-      hint_ko: 'input()이 반환한 문자열을 정수로 바꾸도록 첫째 줄의 입력 호출 전체를 정수 변환 함수로 감싸세요.',
+      hint_ko: '숫자 덧셈을 하려면 str()이 아니라 정수로 바꾸는 int() 함수로 감싸야 합니다.',
       hint_en: 'Wrap the input() call on line 1 inside the integer conversion function.',
-      templateCode: 'lv = input("Lv:")\nprint(lv + 5)',
+      templateCode: 'lv = str(input("Lv:"))\nprint(lv + 5)',
       targetCode: 'lv = int(input("Lv:"))\nprint(lv + 5)',
       testCases: [
         {
@@ -207,11 +207,11 @@ export const PYTHON_LEVEL_17: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 첫째 줄의 괄호 짝 불일치 문법 오류를 고쳐 입력 정수의 제곱이 출력되게 해보세요.',
+      prompt_ko: '[틀린 곳 수정] 첫째 줄에서 input 함수를 호출할 때 대괄호([])를 잘못 쓴 문법 오류를 소괄호(())로 고쳐보세요.',
       prompt_en: '[Fix Bug] Fix the missing closing parenthesis on line 1 so the square of n is printed.',
-      hint_ko: '함수 안에 함수를 중첩해 호출할 때는 여는 소괄호 개수만큼 닫는 소괄호도 맞춰 닫아야 합니다.',
+      hint_ko: '함수를 호출할 때는 대괄호가 아니라 소괄호 ()를 사용해야 합니다.',
       hint_en: 'When nesting function calls, make sure every opening parenthesis has a matching closing parenthesis.',
-      templateCode: 'n = int(input()\nprint(n ** 2)',
+      templateCode: 'n = int(input[])\nprint(n ** 2)',
       targetCode: 'n = int(input())\nprint(n ** 2)',
       testCases: [
         {

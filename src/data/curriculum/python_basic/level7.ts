@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳에 알맞은 연산자를 채워 첫째 줄에 [====], 둘째 줄에 105 100을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 첫째 줄의 빈칸에 문자열 반복 연산자를 채워 [====]와 105 100을 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks with operators so line 1 prints [====] and line 2 prints 105 100.',
-      hint_ko: '첫째 줄에는 문자열 결합과 반복 연산자를, 둘째 줄에는 거듭제곱 연산자를 채웁니다.',
+      hint_ko: '문자열 "="을 4번 반복하도록 문자열 반복 연산자(*)를 채웁니다.',
       hint_en: 'Use string concatenation and repetition on line 1, and the exponentiation operator on line 2.',
-      templateCode: 'print("[" §§ "=" §§ 4 + "]")\nprint("10" + "5", 10 §§§ 2)',
+      templateCode: 'print("[" + "=" §§ 4 + "]")\nprint("10" + "5", 10 ** 2)',
       targetCode: 'print("[" + "=" * 4 + "]")\nprint("10" + "5", 10 ** 2)',
       testCases: [
         {
@@ -185,11 +185,11 @@ export const PYTHON_LEVEL_7: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 문자열과 숫자를 +로 직접 더해 발생한 자료형 에러(TypeError)를 고쳐 Lv.1을 출력해보세요.',
+      prompt_ko: '[틀린 곳 수정] 두 문자열 "Lv."과 "1"을 이어붙여 Lv.1이 출력되도록 잘못된 연산자(*)를 고쳐보세요.',
       prompt_en: '[Fix Bug] Fix the TypeError caused by adding a string and an integer with + so Lv.1 is printed.',
-      hint_ko: '+ 연산자로 이어붙이려면 뒤의 숫자 1도 큰따옴표로 감싸 문자열로 만들어야 합니다.',
+      hint_ko: '문자열끼리 이어붙일 때는 곱셈(*)이 아니라 덧셈(+) 연산자를 사용해야 합니다.',
       hint_en: 'Wrap the number 1 in double quotes so both operands of + are strings.',
-      templateCode: 'print("Lv." + 1)',
+      templateCode: 'print("Lv." * "1")',
       targetCode: 'print("Lv." + "1")',
       testCases: [
         {

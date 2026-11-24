@@ -184,11 +184,11 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] menu의 키-값 쌍을 순회하며 가격이 3000 이상인 품목의 합계 8500을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 셋째 줄의 빈칸을 채워 menu의 키-값 쌍을 동시에 순회하며 가격이 3000 이상인 품목의 합계 8500을 출력해보세요.',
       prompt_en: '[Fill Blank] Iterate over key-value pairs of menu and sum prices of at least 3000.',
-      hint_ko: '쌍 순회 메서드 호출과 조건문 키워드, 복합 덧셈 연산자를 순서대로 채우세요.',
+      hint_ko: '딕셔너리의 키와 값을 쌍으로 꺼내는 메서드 호출(items())을 채우세요.',
       hint_en: 'Fill in the key-value pair method call, the conditional keyword, and the compound addition operator.',
-      templateCode: 'menu = {"tea": 3000, "cake": 5500, "milk": 2500}\ntotal = 0\nfor k, v in menu.§§§§§§§§:\n    §§§ v >= 3000:\n        total §§§ v\nprint(total)',
+      templateCode: 'menu = {"tea": 3000, "cake": 5500, "milk": 2500}\ntotal = 0\nfor k, v in menu.§§§§§§§§:\n    if v >= 3000:\n        total += v\nprint(total)',
       targetCode: 'menu = {"tea": 3000, "cake": 5500, "milk": 2500}\ntotal = 0\nfor k, v in menu.items():\n    if v >= 3000:\n        total += v\nprint(total)',
       testCases: [
         {
@@ -203,11 +203,11 @@ export const PYTHON_LEVEL_61: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 딕셔너리에서 키와 값을 동시에 꺼내려다 메서드를 빠뜨려 발생한 에러를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 딕셔너리에서 키와 값을 동시에 꺼내려다 잘못된 메서드 이름(pairs)을 적은 둘째 줄을 items로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the ValueError in the for header so both key and value unpack properly from d.',
-      hint_ko: '두 변수로 키와 값을 함께 언패킹하려면 딕셔너리 뒤에 쌍 반환 메서드를 붙여야 합니다.',
+      hint_ko: '딕셔너리의 키-값 쌍을 함께 순회할 때는 .items() 메서드를 호출해야 합니다.',
       hint_en: 'Call the dictionary method that returns key-value pairs in the for loop header.',
-      templateCode: 'd = {"a": 10, "b": 20}\nfor k, v in d:\n    print(k, v)',
+      templateCode: 'd = {"a": 10, "b": 20}\nfor k, v in d.pairs():\n    print(k, v)',
       targetCode: 'd = {"a": 10, "b": 20}\nfor k, v in d.items():\n    print(k, v)',
       testCases: [
         {

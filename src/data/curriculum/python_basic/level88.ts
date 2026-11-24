@@ -190,11 +190,11 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 집합의 합집합에서 특정 원소를 안전 삭제한 뒤, 기준 집합과의 교집합을 구하도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 두 집합의 합집합을 구하고 숫자 5를 안전 삭제한 뒤 교집합 결과를 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the union operator, safe removal method, and intersection operator.",
-      "hint_ko": "두 집합을 합치는 연산자, 없어도 에러가 안 나는 삭제 메서드, 그리고 공통 원소를 구하는 연산자를 확인하세요.",
+      "hint_ko": "두 집합을 합치는 합집합 연산자(|)와 원소가 없어도 에러가 나지 않는 삭제 메서드(discard)를 차례로 채우세요.",
       "hint_en": "Check the union pipe operator, the discard method, and the intersection ampersand operator.",
-      "templateCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a §§ b\nm.§§§§§§§§(5)\nprint(sorted(m §§ {2, 3, 5}))",
+      "templateCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a §§ b\nm.§§§§§§§§(5)\nprint(sorted(m & {2, 3, 5}))",
       "targetCode": "a = {1, 2, 3}\nb = {3, 4, 5}\nm = a | b\nm.discard(5)\nprint(sorted(m & {2, 3, 5}))",
       "testCases": [
         {
@@ -228,11 +228,11 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 집합에 없는 원소를 지울 때 에러가 나지 않도록 삭제 메서드를 안전 삭제 메서드로 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 집합에 없는 원소(99)를 지울 때 에러가 나지 않도록 잘못 적힌 메서드 이름(removes)을 안전 삭제 메서드(discard)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Replace .remove(99) with the safe removal method so missing elements do not raise KeyError.",
-      "hint_ko": "집합에 없는 값을 지워도 멈추지 않게 하려면 .discard() 메서드를 사용해야 합니다.",
+      "hint_ko": "집합에 없는 값을 지워도 에러가 나지 않게 하려면 .discard() 메서드를 사용해야 합니다.",
       "hint_en": "Use .discard(99) instead of .remove(99) to avoid KeyError on missing elements.",
-      "templateCode": "nums = {10, 20, 30}\nnums.remove(99)\nprint(sorted(nums))",
+      "templateCode": "nums = {10, 20, 30}\nnums.removes(99)\nprint(sorted(nums))",
       "targetCode": "nums = {10, 20, 30}\nnums.discard(99)\nprint(sorted(nums))",
       "testCases": [
         {

@@ -191,12 +191,12 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 절댓값 합계를 구해 10으로 나눈 몫과 나머지를 언패킹하고, 평균을 소수 첫째 자리로 반올림해 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 절댓값 합계를 구한 뒤 10으로 나눈 몫과 나머지를 동시에 언패킹해 출력해보세요.",
       "prompt_en": "[Fill Blank] Compute the sum of magnitudes, unpack quotient and remainder by 10, and smooth the mean to 1 decimal.",
-      "hint_ko": "절댓값 함수, 몫·나머지 동시 반환 함수, 반올림 함수를 차례로 채워보세요.",
+      "hint_ko": "절댓값 내장 함수(abs)와 몫·나머지 동시 반환 함수(divmod)를 차례로 채워보세요.",
       "hint_en": "Supply the absolute value function, the quotient-remainder function, and the rounding function.",
       "targetCode": "nums = [-14, 9, -12]\ntotal = sum([abs(n) for n in nums])\nq, r = divmod(total, 10)\nprint(q, r, round(total / len(nums), 1))",
-      "templateCode": "nums = [-14, 9, -12]\ntotal = sum([§§§§(n) for n in nums])\nq, r = §§§§§§§(total, 10)\nprint(q, r, §§§§§§(total / len(nums), 1))",
+      "templateCode": "nums = [-14, 9, -12]\ntotal = sum([§§§§(n) for n in nums])\nq, r = §§§§§§§(total, 10)\nprint(q, r, round(total / len(nums), 1))",
       "testCases": [
         {
           "id": 1,

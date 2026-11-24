@@ -189,11 +189,11 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 원본 리스트의 사본을 만든 뒤 추가 리스트를 이어 붙이고, 임시 리스트는 비우도록 세 빈칸을 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 원본 리스트의 독립 사본을 만든 뒤 추가 리스트(extra)의 원소들을 이어 붙여보세요.",
       "prompt_en": "[Fill Blank] Complete the duplicating method, list extension method, and list emptying method.",
-      "hint_ko": "독립 사본을 만드는 메서드, 다른 리스트 원소를 이어 붙이는 메서드, 그리고 리스트를 비우는 메서드를 차례로 확인하세요.",
+      "hint_ko": "독립 사본을 만드는 메서드(copy)와 다른 리스트 원소를 이어 붙이는 메서드(extend)를 차례로 채우세요.",
       "hint_en": "Check the duplicating method, extension method, and emptying method.",
-      "templateCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.§§§§§()\nwork.§§§§§§§(extra)\nextra.§§§§§§()\nprint(base, work, extra)",
+      "templateCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.§§§§§()\nwork.§§§§§§§(extra)\nextra.clear()\nprint(base, work, extra)",
       "targetCode": "base = [1, 2]\nextra = [3, 4]\nwork = base.copy()\nwork.extend(extra)\nextra.clear()\nprint(base, work, extra)",
       "testCases": [
         {
@@ -208,11 +208,11 @@ export const PYTHON_LEVEL_84: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 백업 본을 수정할 때 원본 리스트까지 함께 바뀌어 버리는 참조 공유 버그를 사본 복사로 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 원본 리스트를 보존하는 독립 사본을 만들도록 둘째 줄에 잘못 호출한 메서드(sort)를 사본 복사 메서드(copy)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the aliasing bug where modifying backup also mutates the original data list.",
-      "hint_ko": "단순 대입(= data)은 같은 리스트를 공유하므로 .copy() 메서드로 독립된 사본을 만들어야 합니다.",
+      "hint_ko": "리스트의 독립된 사본을 만들 때는 .copy() 메서드를 사용해야 합니다.",
       "hint_en": "Use data.copy() instead of assigning data directly so the original list remains untouched.",
-      "templateCode": "data = [10, 20, 30]\nbackup = data\nbackup.append(40)\nprint(len(data), len(backup))",
+      "templateCode": "data = [10, 20, 30]\nbackup = data.sort()\nbackup.append(40)\nprint(len(data), len(backup))",
       "targetCode": "data = [10, 20, 30]\nbackup = data.copy()\nbackup.append(40)\nprint(len(data), len(backup))",
       "testCases": [
         {

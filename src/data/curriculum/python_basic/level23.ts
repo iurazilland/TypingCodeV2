@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 hp에서 dmg를 차감한 뒤 남은 체력의 참·거짓과 0 초과 여부를 비교해보세요.',
+      prompt_ko: '[빈칸 채우기] 마지막 줄의 빈칸에 불리언 변환 함수를 채워 남은 체력의 참·거짓과 0 초과 여부를 비교해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to subtract dmg from hp and compare its truthiness with hp > 0.',
-      hint_ko: '차감 복합 대입 연산자, 불리언 변환 함수, 그리고 두 불리언 값이 같은지 확인하는 비교 연산자를 차례로 넣습니다.',
+      hint_ko: '체력 정수값을 참·거짓 불리언 값으로 변환하는 내장 함수 이름(bool)을 넣습니다.',
       hint_en: 'Use minus-equals first, then the boolean casting function, and finally the equality operator.',
-      templateCode: 'hp = int(input())\ndmg = int(input())\nhp §§§ dmg\nprint(§§§§§(hp) §§§ (hp > 0))',
+      templateCode: 'hp = int(input())\ndmg = int(input())\nhp -= dmg\nprint(§§§§§(hp) == (hp > 0))',
       targetCode: 'hp = int(input())\ndmg = int(input())\nhp -= dmg\nprint(bool(hp) == (hp > 0))',
       testCases: [
         {
@@ -204,11 +204,11 @@ export const PYTHON_LEVEL_23: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 변수 s가 거짓(False)으로 판정되도록 따옴표 안의 잘못된 문자열 값을 빈 문자열로 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 변수 s에 숫자 10 대신 빈 문자열("")을 대입해 bool(s)가 거짓(False)으로 출력되게 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the string literal assigned to s so bool(s) evaluates to False.',
-      hint_ko: '"False"라는 다섯 글자 문자열도 글자가 들어 있으므로 참이 됩니다. 따옴표 사이를 완전히 비워보세요.',
+      hint_ko: '글자가 하나도 없는 빈 문자열 ""은 bool() 변환 시 False가 됩니다.',
       hint_en: 'The 5-character string "False" is non-empty and therefore Truthy; make it an empty string "".',
-      templateCode: 's = "False"\nprint(bool(s))',
+      templateCode: 's = 10\nprint(bool(s))',
       targetCode: 's = ""\nprint(bool(s))',
       testCases: [
         {

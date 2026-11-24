@@ -183,11 +183,11 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 정수 5가 담긴 단일 요소 튜플, 좌표 변수 x, y 언패킹, 누적 덧셈을 완성해 Sum:50을 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 정수 5가 담긴 단일 요소 튜플과 좌표 변수 x, y 언패킹을 완성해 Sum:50을 출력해보세요.',
       prompt_en: '[Fill Blank] Complete the 1-element tuple containing 5, loop unpacking, and compound addition to print Sum:50.',
-      hint_ko: '단일 요소 튜플 표기, 반복문 내부에서 더하는 두 좌표 변수, 복합 덧셈 연산자를 순서대로 채우세요.',
+      hint_ko: '단일 요소 튜플 표기((5,))와 반복문에서 언패킹할 두 좌표 변수(x, y)를 순서대로 채우세요.',
       hint_en: 'Fill in the 1-element tuple with 5, the two loop variables, and the compound addition operator.',
-      templateCode: 'scale = §§§§§\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor §§§§§ in pts:\n    total §§§ (x + y) * scale[0]\nprint(f"Sum:{total}")',
+      templateCode: 'scale = §§§§§\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor §§§§§ in pts:\n    total += (x + y) * scale[0]\nprint(f"Sum:{total}")',
       targetCode: 'scale = (5,)\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor x, y in pts:\n    total += (x + y) * scale[0]\nprint(f"Sum:{total}")',
       testCases: [
         {
@@ -202,11 +202,11 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 요소가 1개인 튜플을 만들려다 일반 정수가 되어 에러가 발생한 첫째 줄을 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 요소가 1개인 튜플을 만들려다 쉼표 대신 마침표(5.)를 적어 실수가 된 첫째 줄을 (5,)로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix line 1 where missing a comma created an integer instead of a single-element tuple.',
-      hint_ko: '소괄호 안에 값이 하나뿐일 때는 값 뒤에 쉼표가 있어야 튜플로 인식됩니다.',
+      hint_ko: '소괄호 안에 값이 하나뿐일 때는 값 뒤에 쉼표(,)가 있어야 단일 요소 튜플로 인식됩니다.',
       hint_en: 'Add a trailing comma after the value inside the parentheses so Python creates a tuple.',
-      templateCode: 'one = (5)\nprint(len(one), one[0])',
+      templateCode: 'one = (5.)\nprint(len(one), one[0])',
       targetCode: 'one = (5,)\nprint(len(one), one[0])',
       testCases: [
         {
@@ -221,11 +221,11 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 불변 자료형인 튜플의 요소를 직접 수정하려 해 발생한 에러를 새 튜플 (90, 20) 재할당으로 고쳐보세요.',
+      prompt_ko: '[틀린 곳 수정] 합계가 110이 출력되도록 둘째 줄에서 재할당하는 새 튜플의 첫 번째 값을 90으로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the TypeError caused by mutating a tuple element by reassigning pt to a new tuple (90, 20).',
-      hint_ko: '튜플은 인덱스로 요소를 바꿀 수 없으므로 변수 pt 전체에 새 튜플을 다시 대입하세요.',
+      hint_ko: '변수 pt에 새 튜플 (90, 20)을 대입하면 언패킹된 x와 y의 합이 110이 됩니다.',
       hint_en: 'Since tuples cannot be modified in place, reassign variable pt to the new tuple (90, 20).',
-      templateCode: 'pt = (10, 20)\npt[0] = 90\nx, y = pt\nprint(f"{x + y}")',
+      templateCode: 'pt = (10, 20)\npt = (10, 20)\nx, y = pt\nprint(f"{x + y}")',
       targetCode: 'pt = (10, 20)\npt = (90, 20)\nx, y = pt\nprint(f"{x + y}")',
       testCases: [
         {

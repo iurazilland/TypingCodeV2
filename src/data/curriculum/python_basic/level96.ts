@@ -190,12 +190,12 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 코드가 \"ID-\"로 시작하고 뒷부분(s[3:])이 모두 숫자인 항목만 정수로 추출해 합계를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 둘째 줄의 메서드 빈칸을 채워 \"ID-\"로 시작하고 뒷부분이 숫자인 항목만 정수로 추출해 합계를 출력해보세요.",
       "prompt_en": "[Fill Blank] Filter strings that begin with \"ID-\" and have numeric suffixes, cast the suffixes to integers, and sum them.",
-      "hint_ko": "정수 변환 함수, 접두사 검사 메서드, 숫자 문자열 판별 메서드를 차례로 채워보세요.",
+      "hint_ko": "문자열이 특정 접두사로 시작하는지 검사하는 메서드 이름(startswith)을 채우세요.",
       "hint_en": "Fill in the integer conversion function, the prefix check method, and the digit check method.",
       "targetCode": "codes = [\"ID-10\", \"ID-ab\", \"NO-20\", \"ID-35\"]\nvals = [int(s[3:]) for s in codes if s.startswith(\"ID-\") and s[3:].isdigit()]\nprint(sum(vals))",
-      "templateCode": "codes = [\"ID-10\", \"ID-ab\", \"NO-20\", \"ID-35\"]\nvals = [§§§§(s[3:]) for s in codes if s.§§§§§§§§§§§(\"ID-\") and s[3:].§§§§§§§§()]\nprint(sum(vals))",
+      "templateCode": "codes = [\"ID-10\", \"ID-ab\", \"NO-20\", \"ID-35\"]\nvals = [int(s[3:]) for s in codes if s.§§§§§§§§§§§(\"ID-\") and s[3:].isdigit()]\nprint(sum(vals))",
       "testCases": [
         {
           "id": 1,
@@ -209,11 +209,11 @@ export const PYTHON_LEVEL_96: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 접두사 검사 메서드 이름에 s가 빠진 오타로 인해 발생한 AttributeError를 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 접두사 검사 메서드 이름에 밑줄이 잘못 들어간 오타(start_with)를 startswith로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the misspelled prefix-checking method name that causes an AttributeError.",
-      "hint_ko": "접두사·접미사 검사 메서드는 start와 end 뒤에 복수형 s가 붙어 startswith, endswith가 됩니다.",
+      "hint_ko": "접두사 검사 메서드는 밑줄 없이 startswith로 붙여 적어야 합니다.",
       "hint_en": "Remember the 's' in startswith() and endswith().",
-      "templateCode": "url = input().strip()\nif url.startwith(\"https://\"):\n    print(\"SECURE\")\nelse:\n    print(\"WARN\")",
+      "templateCode": "url = input().strip()\nif url.start_with(\"https://\"):\n    print(\"SECURE\")\nelse:\n    print(\"WARN\")",
       "targetCode": "url = input().strip()\nif url.startswith(\"https://\"):\n    print(\"SECURE\")\nelse:\n    print(\"WARN\")",
       "testCases": [
         {

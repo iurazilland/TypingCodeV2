@@ -192,12 +192,12 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 수학 모듈을 불러와 실수 x의 올림값, 내림값, 그리고 25의 제곱근 정수를 차례대로 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 수학 모듈을 불러오고 실수 x의 올림값, 내림값, 25의 제곱근 정수를 출력해보세요.",
       "prompt_en": "[Fill Blank] Load the math module and print the upward integer of x, the downward integer of x, and the integer square root of 25.",
-      "hint_ko": "모듈 불러오기 키워드, 올림 함수, 내림 함수를 순서대로 채워보세요.",
+      "hint_ko": "모듈 불러오기 키워드(import)와 올림 함수 이름(ceil)을 순서대로 채워보세요.",
       "hint_en": "Fill in the module import keyword, the ceiling function, and the floor function.",
       "targetCode": "import math\nx = 4.3\nprint(math.ceil(x), math.floor(x), int(math.sqrt(25)))",
-      "templateCode": "§§§§§§§ math\nx = 4.3\nprint(math.§§§§§(x), math.§§§§§§(x), int(math.sqrt(25)))",
+      "templateCode": "§§§§§§§ math\nx = 4.3\nprint(math.§§§§§(x), math.floor(x), int(math.sqrt(25)))",
       "testCases": [
         {
           "id": 1,
@@ -211,11 +211,11 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "step": 10,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] math 모듈을 불러오지 않고 math.sqrt()를 호출해 발생한 NameError를 첫 줄을 고쳐 해결해보세요.",
+      "prompt_ko": "[틀린 곳 수정] math 모듈을 불러오려다 잘못된 키워드(export)를 적은 첫째 줄을 import로 고쳐 해결해보세요.",
       "prompt_en": "[Fix Bug] Fix the first line so the math module is imported before calling math.sqrt().",
-      "hint_ko": "주석 대신 import math로 모듈을 먼저 불러와야 math.sqrt()를 사용할 수 있습니다.",
+      "hint_ko": "파이썬에서 표준 모듈을 불러올 때는 import 모듈명을 사용합니다.",
       "hint_en": "Replace the comment on line 1 with import math.",
-      "templateCode": "# math module\nprint(int(math.sqrt(64)))",
+      "templateCode": "export math\nprint(int(math.sqrt(64)))",
       "targetCode": "import math\nprint(int(math.sqrt(64)))",
       "testCases": [
         {
@@ -230,11 +230,11 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "step": 11,
       "type": "typing",
       "kind": "fix_bug",
-      "prompt_ko": "[틀린 곳 수정] 게시글 n개를 한 페이지에 10개씩 보여줄 때 남은 글도 표시되도록 내림 함수를 올림 함수로 고쳐보세요.",
+      "prompt_ko": "[틀린 곳 수정] 게시글 n개를 10개씩 묶을 때 남은 글도 한 페이지로 올림 계산되도록 잘못 적힌 함수(sqrt)를 올림 함수(ceil)로 고쳐보세요.",
       "prompt_en": "[Fix Bug] Fix the rounding function so leftover posts get an extra page by rounding up instead of down.",
-      "hint_ko": "나머지 게시글이 1개라도 있으면 페이지가 하나 더 필요하므로 floor 대신 올림 함수 ceil을 써야 합니다.",
+      "hint_ko": "소수점 이하가 있으면 위쪽 정수로 올리는 math 모듈 함수는 math.ceil()입니다.",
       "hint_en": "Use math.ceil(n / 10) instead of math.floor(n / 10) so partial pages round up.",
-      "templateCode": "import math\nn = int(input())\nprint(math.floor(n / 10))",
+      "templateCode": "import math\nn = int(input())\nprint(math.sqrt(n / 10))",
       "targetCode": "import math\nn = int(input())\nprint(math.ceil(n / 10))",
       "testCases": [
         {

@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_36: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 양의 정수 n의 각 자릿수를 떼어내 모두 더한 합계(s)를 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 양의 정수 n이 0보다 큰 동안 각 자릿수를 떼어내 모두 더한 합계(s)를 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to extract and sum every digit of positive integer n.',
-      hint_ko: '조건 반복 키워드, 10으로 나눈 나머지를 구하는 기호, 10으로 나눈 몫으로 갱신하는 연산자를 차례로 채웁니다.',
+      hint_ko: '조건 반복문 키워드(while)와 n을 10으로 나눈 몫으로 갱신하는 복합 대입 연산자(//=)를 차례로 채웁니다.',
       hint_en: 'Enter the while keyword, modulo operator %, and floor-division assignment //=.',
-      templateCode: 'n = int(input())\ns = 0\n§§§§§§ n > 0:\n    s += n §§ 10\n    n §§§§ 10\nprint(s)',
+      templateCode: 'n = int(input())\ns = 0\n§§§§§§ n > 0:\n    s += n % 10\n    n §§§§ 10\nprint(s)',
       targetCode: 'n = int(input())\ns = 0\nwhile n > 0:\n    s += n % 10\n    n //= 10\nprint(s)',
       testCases: [
         {

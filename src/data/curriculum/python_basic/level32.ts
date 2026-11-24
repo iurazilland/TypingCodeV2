@@ -166,11 +166,11 @@ export const PYTHON_LEVEL_32: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸 3곳을 채워 2부터 n까지 짝수 i의 제곱을 공백으로 이어 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] range()의 세 번째 인자(간격) 빈칸을 채워 2부터 n까지 짝수 i의 제곱을 공백으로 이어 출력해보세요.',
       prompt_en: '[Fill Blank] Fill in the 3 blanks to print the square of each even number i from 2 through n.',
-      hint_ko: '짝수 간격 숫자 2, 거듭제곱 연산자, 그리고 줄 끝 옵션 이름을 순서대로 채웁니다.',
+      hint_ko: '2씩 증가하며 짝수만 순회하도록 간격(step) 숫자 2를 채웁니다.',
       hint_en: 'Enter the step 2, the exponent operator, and the end keyword option.',
-      templateCode: 'n = int(input())\nfor i in range(2, n + 1, §§):\n    print(i §§§ 2, §§§§=" ")',
+      templateCode: 'n = int(input())\nfor i in range(2, n + 1, §§):\n    print(i ** 2, end=" ")',
       targetCode: 'n = int(input())\nfor i in range(2, n + 1, 2):\n    print(i ** 2, end=" ")',
       testCases: [
         {

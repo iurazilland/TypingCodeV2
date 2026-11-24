@@ -182,11 +182,11 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       step: 9,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈 리스트를 초기화하고, nums에서 3의 배수만 골라 10을 더한 값을 새 리스트에 담아 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸 2곳을 채워 빈 리스트를 초기화하고, nums에서 3의 배수만 골라 10을 더한 값을 새 리스트에 담아 출력해보세요.',
       prompt_en: '[Fill Blank] Initialize res as an empty list, filter multiples of 3 from nums, and store x + 10.',
-      hint_ko: '빈 리스트 기호, 순회 키워드, 리스트 추가 메서드를 순서대로 채우세요.',
+      hint_ko: '빈 리스트 기호([])와 리스트 요소 추가 메서드(append)를 순서대로 채우세요.',
       hint_en: 'Fill in the empty list literal, iteration keyword, and append method in order.',
-      templateCode: 'nums = [3, 5, 6, 8, 9]\nres = §§§\nfor x §§§ nums:\n    if x % 3 == 0:\n        res.§§§§§§§(x + 10)\nprint(res)',
+      templateCode: 'nums = [3, 5, 6, 8, 9]\nres = §§§\nfor x in nums:\n    if x % 3 == 0:\n        res.§§§§§§§(x + 10)\nprint(res)',
       targetCode: 'nums = [3, 5, 6, 8, 9]\nres = []\nfor x in nums:\n    if x % 3 == 0:\n        res.append(x + 10)\nprint(res)',
       testCases: [
         {
@@ -201,11 +201,11 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       step: 10,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 반복문 안에서 새 리스트에 값을 누적 추가하려다 매번 리스트를 덮어써 마지막 값만 남는 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 반복문 안에서 새 리스트 끝에 값을 누적 추가하도록 잘못 적힌 메서드(insert)를 append로 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the loop body so each squared number is appended to res instead of overwriting res.',
-      hint_ko: '등호(=)로 새 리스트를 다시 대입하면 이전 요소가 사라지므로 추가 메서드를 사용해야 합니다.',
+      hint_ko: '리스트 맨 끝에 계산된 값을 하나씩 추가할 때는 append 메서드를 사용해야 합니다.',
       hint_en: 'Use the list append method instead of reassigning res = [x * 10] each turn.',
-      templateCode: 'nums = [1, 2, 3]\nres = []\nfor x in nums:\n    res = [x * 10]\nprint(res)',
+      templateCode: 'nums = [1, 2, 3]\nres = []\nfor x in nums:\n    res.insert(x * 10)\nprint(res)',
       targetCode: 'nums = [1, 2, 3]\nres = []\nfor x in nums:\n    res.append(x * 10)\nprint(res)',
       testCases: [
         {
@@ -220,11 +220,11 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       step: 11,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 짝수만 골라 evens에 담으려다 홀수 조건을 검사하고 원본 리스트에 추가해 무한 루프 위험이 있는 버그를 수정해보세요.',
+      prompt_ko: '[틀린 곳 수정] 짝수만 골라 evens 리스트 끝에 담도록 홀수 판별식(== 1)과 잘못된 추가 메서드(insert)를 수정해보세요.',
       prompt_en: '[Fix Bug] Fix the modulo check and target list name so even numbers are appended to evens.',
-      hint_ko: '짝수는 2로 나눈 나머지가 0이며, 결과 리스트인 evens에 추가해야 합니다.',
+      hint_ko: '짝수는 2로 나눈 나머지가 0이며, 리스트 끝에 추가할 때는 append 메서드를 사용합니다.',
       hint_en: 'Check for remainder 0 when dividing by 2 and append to evens instead of nums.',
-      templateCode: 'nums = [2, 5, 8, 9]\nevens = []\nfor x in nums:\n    if x % 2 == 1:\n        nums.append(x)\nprint(evens)',
+      templateCode: 'nums = [2, 5, 8, 9]\nevens = []\nfor x in nums:\n    if x % 2 == 1:\n        evens.insert(x)\nprint(evens)',
       targetCode: 'nums = [2, 5, 8, 9]\nevens = []\nfor x in nums:\n    if x % 2 == 0:\n        evens.append(x)\nprint(evens)',
       testCases: [
         {
