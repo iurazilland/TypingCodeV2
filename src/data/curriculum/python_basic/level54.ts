@@ -163,7 +163,7 @@ export const PYTHON_LEVEL_54: PracticeRound = {
       step: 8,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 입력 문자열의 양끝 공백을 먼저 제거한 뒤 하이픈("-")을 콜론(":")으로 바꾸어 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 양끝 공백을 제거하는 strip() 호출을 빈칸에 채워 하이픈("-")을 콜론(":")으로 바꾸어 출력해보세요.',
       prompt_en: '[Fill Blank] Chain the trimming method before .replace("-", ":") on raw.',
       hint_ko: '양끝 공백을 제거하는 메서드 호출을 점(.) 앞에 완성하세요.',
       hint_en: 'Complete the whitespace-trimming method call before the second dot.',

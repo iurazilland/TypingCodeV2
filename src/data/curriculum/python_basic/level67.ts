@@ -131,7 +131,7 @@ export const PYTHON_LEVEL_67: PracticeRound = {
       step: 6,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 첫째 줄에서 n + 1을 바로 반환해 아래쪽 줄이 실행되지 않도록 키워드를 채워보세요.',
+      prompt_ko: '[빈칸 채우기] 함수 본문 첫 줄(둘째 줄)에서 n + 1을 바로 반환해 아래쪽 줄이 실행되지 않도록 키워드를 채워보세요.',
       prompt_en: '[Fill Blank] Return n + 1 on the first line of the function so it exits immediately with 6.',
       hint_ko: '값을 돌려주며 함수를 즉시 끝내는 키워드를 입력하세요.',
       hint_en: 'Type the keyword that returns a value and terminates the function.',

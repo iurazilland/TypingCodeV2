@@ -259,7 +259,7 @@ export const PYTHON_LEVEL_57: PracticeRound = {
       step: 13,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 튜플 리스트 pts를 순회하며 각 요소를 x와 y로 언패킹하는 for문 첫 줄을 작성해보세요.',
+      prompt_ko: '[한 줄 완성] 튜플 리스트 pts를 순회하며 각 요소를 x와 y로 언패킹하는 for문 헤더 한 줄을 셋째 줄에 작성해보세요.',
       prompt_en: '[Complete Line] Write the for loop header that iterates over pts and unpacks each tuple into x and y.',
       hint_ko: '반복문 헤더에서 두 변수 이름을 쉼표로 나란히 적어 리스트를 순회하세요.',
       hint_en: 'Write the for loop header unpacking x and y from pts, ending with a colon.',

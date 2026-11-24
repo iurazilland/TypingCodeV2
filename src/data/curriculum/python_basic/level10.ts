@@ -94,7 +94,7 @@ export const PYTHON_LEVEL_10: PracticeRound = {
       step: 5,
       type: 'typing',
       kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 잘못된 이스케이프 기호와 반복 연산자를 고쳐 탭 정렬된 헤더와 구분선을 출력해보세요.',
+      prompt_ko: '[틀린 곳 수정] 잘못된 탭 이스케이프(/t -> \\t)와 하이픈 10개 반복 연산자(+ -> *)를 고쳐 헤더와 구분선을 출력해보세요.',
       prompt_en: '[Fix Bug] Fix the escape sequence and repetition operator to print the tab-aligned header and divider.',
       hint_ko: '첫째 줄의 슬래시 방향을 역슬래시로 고치고, 둘째 줄의 문자열 반복에는 곱셈 기호를 사용합니다.',
       hint_en: 'Use a backslash for the tab escape on line 1 and the multiplication operator to repeat "-" on line 2.',

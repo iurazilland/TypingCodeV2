@@ -240,7 +240,7 @@ export const PYTHON_LEVEL_58: PracticeRound = {
       step: 12,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 변수 x가 빈 값인지 검사하는 if 조건문 첫 줄을 작성해보세요.',
+      prompt_ko: '[한 줄 완성] 변수 x가 빈 값(None)인지 is None으로 검사하는 if 조건문 헤더 한 줄을 둘째 줄에 작성해보세요.',
       prompt_en: '[Complete Line] Write the if statement header that checks whether variable x is empty.',
       hint_ko: 'if 키워드 뒤에 변수 x와 정체성 비교 구문, 콜론(:)을 붙여 한 줄을 완성하세요.',
       hint_en: 'Write the if condition testing x with the null identity check, ending with a colon.',

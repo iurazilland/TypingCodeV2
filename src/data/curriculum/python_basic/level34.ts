@@ -73,7 +73,7 @@ export const PYTHON_LEVEL_34: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 합계 초기값을 채워 1부터 n까지 홀수들의 합이 정확히 계산되게 해보세요.',
+      prompt_ko: '[빈칸 채우기] 빈칸에 합계 초기값(0)을 채워 1부터 n까지 홀수들의 합이 정확히 계산되게 해보세요.',
       prompt_en: '[Fill Blank] Fill in the initial value of total so the sum of odd numbers starts cleanly.',
       hint_ko: '덧셈 누적 변수는 더해도 값에 영향을 주지 않는 숫자에서 출발해야 합니다.',
       hint_en: 'Initialize a sum accumulator to the additive identity digit.',

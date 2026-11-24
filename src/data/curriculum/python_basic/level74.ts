@@ -169,7 +169,7 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 엘리베이터를 4층 올린 뒤 2층 내리는 메서드를 호출해 최종 층수를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 엘리베이터를 4층 올린 뒤 2층 내리는 down(2) 호출을 빈칸에 채워 최종 층수를 출력해보세요.",
       "prompt_en": "[Fill Blank] Call the method on elevator instance e that moves it 2 floors lower before printing.",
       "hint_ko": "윗줄에서 위로 올라가는 메서드를 호출한 것처럼, 내려가는 메서드 이름 뒤에 인자 2를 넣어 호출하세요.",
       "hint_en": "Invoke the method that decreases the floor with argument 2 on instance e.",

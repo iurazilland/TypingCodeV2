@@ -2011,7 +2011,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
         triggerTemporaryCaptureMask(2500);
         try {
           navigator.clipboard?.writeText('');
-        } catch {}
+        } catch { }
       }
     };
 
@@ -7145,7 +7145,7 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               gap: '6px',
               flexShrink: 0,
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, whiteSpace: 'nowrap' }}>
                 <TerminalIcon size={16} color="#38bdf8" />
                 <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#e2e8f0' }}>
                   {isEn ? 'Terminal' : '터미널'}
@@ -8543,107 +8543,107 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                  ============================================================ */
               <>
                 <div className="capture-blur-target">
-                {canvasBlocks
-                  .filter((block) => {
-                    // Do not render blocks that are attached horizontally to an argBlock (they render inside the arg slot)
-                    if (block.attachedToBlockId) {
-                      let rootHostId: string | undefined = block.attachedToBlockId;
-                      const seenH = new Set<string>();
-                      while (rootHostId && !seenH.has(rootHostId)) {
-                        seenH.add(rootHostId);
-                        const h = canvasBlocks.find((b) => b.id === rootHostId);
-                        if (!h) {
-                          rootHostId = undefined;
-                          break;
-                        }
-                        if (!h.attachedToBlockId) break;
-                        rootHostId = h.attachedToBlockId;
-                      }
-                      if (!rootHostId) return false;
-                    }
-                    return true;
-                  })
-                  .map((block) => (
-                    <CanvasBlockItem
-                      key={block.id}
-                      block={
-                        shiftedBlockIds.has(block.id)
-                          ? {
-                            ...block,
-                            y:
-                              block.y +
-                              (activeSnapTarget?.markerHeight ||
-                                (isDraggingCBlock ? cBlockTotalHeight : draggedDim.height || 34)),
+                  {canvasBlocks
+                    .filter((block) => {
+                      // Do not render blocks that are attached horizontally to an argBlock (they render inside the arg slot)
+                      if (block.attachedToBlockId) {
+                        let rootHostId: string | undefined = block.attachedToBlockId;
+                        const seenH = new Set<string>();
+                        while (rootHostId && !seenH.has(rootHostId)) {
+                          seenH.add(rootHostId);
+                          const h = canvasBlocks.find((b) => b.id === rootHostId);
+                          if (!h) {
+                            rootHostId = undefined;
+                            break;
                           }
-                          : block
-                      }
-                      isNested={false}
-                      isSlotArg={false}
-                      isDraggingCBlock={isDraggingCBlock}
-                      canvasBlocks={canvasBlocks}
-                      activeSnapTarget={activeSnapTarget}
-                      draggedChainIds={draggedChainIds}
-                      activeInputHelp={activeInputHelp}
-                      isDebugging={isDebugging}
-                      executingBlockId={executingBlockId}
-                      onBlockPointerDown={handleBlockPointerDown}
-                      onInnerBlockPointerDown={handleInnerBlockPointerDown}
-                      onArgBlockPointerDown={handleArgBlockPointerDown}
-                      onContextMenu={handleBlockContextMenu}
-                      onDragOver={handleCanvasDragOver}
-                      onDrop={handleCanvasDrop}
-                      onContentChange={(val, blockId) => {
-                        handleBlockInputChange(blockId, val);
-                      }}
-                      onVarNameChange={(val, blockId) => {
-                        handleLoopInnerVarNameChange(blockId, val);
-                      }}
-                      onAssignOpChange={handleAssignOpChange}
-                      onBranchConditionChange={handleBranchConditionChange}
-                      onAddBranch={(blockId, kind) => {
-                        const blk = findBlockInTree(canvasBlocks, blockId);
-                        if (blk?.type === 'try') {
-                          if (kind === 'except') handleAddTryBranch(blockId, 'except');
-                          else if (kind === 'finally') handleAddTryBranch(blockId, 'finally');
-                          else handleAddTryBranch(blockId, 'else');
-                        } else if (kind === 'elif') {
-                          handleAddElifBranch(blockId);
-                        } else {
-                          handleAddElseBranch(blockId);
+                          if (!h.attachedToBlockId) break;
+                          rootHostId = h.attachedToBlockId;
                         }
-                      }}
-                      onRemoveBranch={handleRemoveBranch}
-                      onPrintOptionChange={handlePrintOptionChange}
-                      onRemoveInnerBlock={(parentBlockId, cIdx, branchId) => {
-                        if (branchId) {
-                          handleRemoveInnerBlockFromBranch(parentBlockId, branchId, cIdx);
-                        } else {
-                          handleRemoveInnerBlockFromLoop(parentBlockId, cIdx);
-                        }
-                      }}
-                      onMethodNameChange={handleMethodNameChange}
-                      onBlockTypeChange={handleBlockTypeChange}
-                      onAddItem={handleAddItemToBlock}
-                      onRemoveItem={handleRemoveItem}
-                      onItemChange={handleItemChange}
-                      onAddDictPair={handleAddDictPair}
-                      onRemoveDictPair={handleRemoveDictPair}
-                      onDictKeyChange={handleDictKeyChange}
-                      onDictValChange={handleDictValueChange}
-                      methodCategories={METHOD_CATEGORIES}
-                      getMethodSelectWidth={getMethodSelectWidth}
-                      renderSpeechBubble={(blockId, funcType) =>
-                        activeInputHelp?.blockId === blockId && activeInputHelp.funcType === funcType ? (
-                          <FunctionParamSpeechBubble
-                            funcType={funcType}
-                            onApplyOption={(opt) => handleBlockInputChange(blockId, opt)}
-                          />
-                        ) : null
+                        if (!rootHostId) return false;
                       }
-                      handleInputFocusSelect={handleInputFocusSelect}
-                      handleInputClickSelect={handleInputClickSelect}
-                    />
-                  ))}
+                      return true;
+                    })
+                    .map((block) => (
+                      <CanvasBlockItem
+                        key={block.id}
+                        block={
+                          shiftedBlockIds.has(block.id)
+                            ? {
+                              ...block,
+                              y:
+                                block.y +
+                                (activeSnapTarget?.markerHeight ||
+                                  (isDraggingCBlock ? cBlockTotalHeight : draggedDim.height || 34)),
+                            }
+                            : block
+                        }
+                        isNested={false}
+                        isSlotArg={false}
+                        isDraggingCBlock={isDraggingCBlock}
+                        canvasBlocks={canvasBlocks}
+                        activeSnapTarget={activeSnapTarget}
+                        draggedChainIds={draggedChainIds}
+                        activeInputHelp={activeInputHelp}
+                        isDebugging={isDebugging}
+                        executingBlockId={executingBlockId}
+                        onBlockPointerDown={handleBlockPointerDown}
+                        onInnerBlockPointerDown={handleInnerBlockPointerDown}
+                        onArgBlockPointerDown={handleArgBlockPointerDown}
+                        onContextMenu={handleBlockContextMenu}
+                        onDragOver={handleCanvasDragOver}
+                        onDrop={handleCanvasDrop}
+                        onContentChange={(val, blockId) => {
+                          handleBlockInputChange(blockId, val);
+                        }}
+                        onVarNameChange={(val, blockId) => {
+                          handleLoopInnerVarNameChange(blockId, val);
+                        }}
+                        onAssignOpChange={handleAssignOpChange}
+                        onBranchConditionChange={handleBranchConditionChange}
+                        onAddBranch={(blockId, kind) => {
+                          const blk = findBlockInTree(canvasBlocks, blockId);
+                          if (blk?.type === 'try') {
+                            if (kind === 'except') handleAddTryBranch(blockId, 'except');
+                            else if (kind === 'finally') handleAddTryBranch(blockId, 'finally');
+                            else handleAddTryBranch(blockId, 'else');
+                          } else if (kind === 'elif') {
+                            handleAddElifBranch(blockId);
+                          } else {
+                            handleAddElseBranch(blockId);
+                          }
+                        }}
+                        onRemoveBranch={handleRemoveBranch}
+                        onPrintOptionChange={handlePrintOptionChange}
+                        onRemoveInnerBlock={(parentBlockId, cIdx, branchId) => {
+                          if (branchId) {
+                            handleRemoveInnerBlockFromBranch(parentBlockId, branchId, cIdx);
+                          } else {
+                            handleRemoveInnerBlockFromLoop(parentBlockId, cIdx);
+                          }
+                        }}
+                        onMethodNameChange={handleMethodNameChange}
+                        onBlockTypeChange={handleBlockTypeChange}
+                        onAddItem={handleAddItemToBlock}
+                        onRemoveItem={handleRemoveItem}
+                        onItemChange={handleItemChange}
+                        onAddDictPair={handleAddDictPair}
+                        onRemoveDictPair={handleRemoveDictPair}
+                        onDictKeyChange={handleDictKeyChange}
+                        onDictValChange={handleDictValueChange}
+                        methodCategories={METHOD_CATEGORIES}
+                        getMethodSelectWidth={getMethodSelectWidth}
+                        renderSpeechBubble={(blockId, funcType) =>
+                          activeInputHelp?.blockId === blockId && activeInputHelp.funcType === funcType ? (
+                            <FunctionParamSpeechBubble
+                              funcType={funcType}
+                              onApplyOption={(opt) => handleBlockInputChange(blockId, opt)}
+                            />
+                          ) : null
+                        }
+                        handleInputFocusSelect={handleInputFocusSelect}
+                        handleInputClickSelect={handleInputClickSelect}
+                      />
+                    ))}
                 </div>
 
 

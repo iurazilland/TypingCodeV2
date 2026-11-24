@@ -89,7 +89,7 @@ export const PYTHON_LEVEL_46: PracticeRound = {
       step: 4,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 각 가격에 배송비 100원을 더한 값들을 새 리스트에 모으기 위해 첫 줄의 초기화를 완성해보세요.',
+      prompt_ko: '[빈칸 채우기] 각 가격에 배송비 100원을 더한 값들을 새 리스트에 모으기 위해 둘째 줄의 빈 리스트([]) 초기화를 완성해보세요.',
       prompt_en: '[Fill Blank] Initialize taxed as an empty list on line 2 so the updated prices can be collected.',
       hint_ko: '요소를 하나씩 담기 전 비어 있는 리스트를 나타내는 기호를 적으세요.',
       hint_en: 'Write the literal for an empty list.',

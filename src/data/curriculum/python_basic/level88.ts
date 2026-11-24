@@ -266,7 +266,7 @@ export const PYTHON_LEVEL_88: PracticeRound = {
       "step": 13,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 집합 keys에서 원소 \"temp\"를 에러 없이 안전하게 삭제하는 한 줄을 작성해보세요.",
+      "prompt_ko": "[한 줄 완성] 집합 keys에서 .discard(\"temp\")로 원소 \"temp\"를 에러 없이 안전하게 삭제하는 한 줄을 작성해보세요.",
       "prompt_en": "[Complete Line] Write the line that safely removes \"temp\" from the set keys.",
       "hint_ko": "keys 변수에서 집합 안전 삭제 메서드를 호출하고 \"temp\"를 인자로 넣으세요.",
       "hint_en": "Call keys.discard(\"temp\").",

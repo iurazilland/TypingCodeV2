@@ -136,7 +136,7 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "step": 6,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 두 정수 24와 36의 최대공약수(12)를 출력하도록 math 모듈의 함수를 채워보세요.",
+      "prompt_ko": "[빈칸 채우기] 두 정수 24와 36의 최대공약수(12)를 구하는 math 모듈의 gcd 함수를 빈칸에 채워보세요.",
       "prompt_en": "[Fill Blank] Fill in the math function that computes the greatest common divisor of 24 and 36.",
       "hint_ko": "'Greatest Common Divisor'의 약자인 함수를 math. 뒤에 적으세요.",
       "hint_en": "Type the abbreviation for Greatest Common Divisor.",

@@ -135,7 +135,7 @@ export const PYTHON_LEVEL_14: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] tag에 += "Lv."를 붙이고 n(50)에 //= 8을 적용해 Lv.6을 공백 없이 출력해보세요.',
+      prompt_ko: '[블록 조립] tag("#")에 += "Lv."를 붙이고 n(50)에 //= 8을 적용해 #Lv.6을 공백 없이 출력해보세요.',
       prompt_en: '[Block] Append "Lv." to tag, apply //= 8 to n = 50, and print Lv.6 with sep="".',
       hint_ko: '문자열 복합 대입과 정수 몫 복합 대입을 각각 수행한 뒤 sep=""로 붙여 출력합니다.',
       hint_en: 'Update the string and integer variables with compound operators, then join them using sep="".',

@@ -132,7 +132,7 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "step": 7,
       "type": "typing",
       "kind": "one_line",
-      "prompt_ko": "[한 줄 완성] 절댓값 리스트 vals의 평균을 소수 둘째 자리까지 반올림해 반환하는 return 문을 작성해보세요.",
+      "prompt_ko": "[한 줄 완성] 절댓값 리스트 vals의 평균(sum(vals) / len(vals))을 round(..., 2)로 반올림해 반환하는 return 문을 작성해보세요.",
       "prompt_en": "[Complete Line] Write return round(sum(vals) / len(vals), 2) inside avg_abs.",
       "hint_ko": "들여쓰기 4칸 뒤에 return round(sum(vals) / len(vals), 2)를 작성하세요.",
       "hint_en": "Write return round(sum(vals) / len(vals), 2) inside the function.",

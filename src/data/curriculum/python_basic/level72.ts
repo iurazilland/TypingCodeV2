@@ -188,7 +188,7 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 9,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 빈칸 2곳을 채워 배지(Badge) 클래스를 선언하고 마지막 줄에서 인스턴스 메서드를 호출해보세요.",
+      "prompt_ko": "[빈칸 채우기] 빈칸 2곳에 class 키워드와 display() 메서드 호출을 채워 배지 제목을 출력해보세요.",
       "prompt_en": "[Fill Blank] Complete the blueprint declaration, the instance attribute access in display(), and the method call.",
       "hint_ko": "클래스 선언 키워드(class)와 인스턴스 메서드 호출식(display())을 차례로 채우세요.",
       "hint_en": "Check the blueprint definition keyword, the instance self-reference inside the method, and the method call on the instance.",

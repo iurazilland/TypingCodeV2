@@ -132,7 +132,7 @@ export const PYTHON_LEVEL_64: PracticeRound = {
       step: 7,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 딕셔너리 stock의 키와 값을 k, v로 동시에 꺼내 순회하는 for문 첫 줄을 작성해보세요.',
+      prompt_ko: '[한 줄 완성] 딕셔너리 stock.items()의 키와 값을 k, v로 동시에 꺼내 순회하는 for문 헤더 한 줄을 셋째 줄에 작성해보세요.',
       prompt_en: '[Complete Line] Write the for loop header that unpacks key-value pairs of stock into k and v.',
       hint_ko: 'for k, v in 뒤에 stock의 쌍 반환 메서드를 호출하고 콜론(:)을 붙이세요.',
       hint_en: 'Write the for header iterating over stock.items() with k and v.',

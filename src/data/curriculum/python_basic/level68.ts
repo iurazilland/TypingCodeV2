@@ -244,7 +244,7 @@ export const PYTHON_LEVEL_68: PracticeRound = {
       step: 12,
       type: 'typing',
       kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 리스트 arr의 최솟값과 최댓값을 동시에 반환하는 함수 내부 한 줄을 작성해보세요.',
+      prompt_ko: '[한 줄 완성] 리스트 arr의 최솟값(min(arr))과 최댓값(max(arr))을 동시에 반환하는 return 문 한 줄을 작성해보세요.',
       prompt_en: '[Complete Line] Write the indented line that returns both min(arr) and max(arr).',
       hint_ko: '반환 키워드 뒤에 최솟값 함수와 최댓값 함수를 쉼표로 나란히 적으세요.',
       hint_en: 'Write return min(arr), max(arr) inside the function.',

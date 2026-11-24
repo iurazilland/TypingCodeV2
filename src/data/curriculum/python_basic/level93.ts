@@ -171,7 +171,7 @@ export const PYTHON_LEVEL_93: PracticeRound = {
       "step": 8,
       "type": "typing",
       "kind": "fill_blank",
-      "prompt_ko": "[빈칸 채우기] 리스트 컴프리헨션으로 각 영문 이름의 단어 첫 글자마다 대문자로 바꾼 리스트를 출력해보세요.",
+      "prompt_ko": "[빈칸 채우기] 단어마다 첫 글자를 대문자로 바꾸는 title 메서드를 빈칸에 채워 변환된 이름 리스트를 출력해보세요.",
       "prompt_en": "[Fill Blank] Use a list comprehension to convert each name so every word starts with an uppercase letter.",
       "hint_ko": "단어마다 첫 글자를 대문자로 바꾸는 메서드를 컴프리헨션 식에 채워보세요.",
       "hint_en": "Fill in the method that capitalizes the first letter of each word.",

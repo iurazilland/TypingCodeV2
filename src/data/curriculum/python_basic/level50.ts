@@ -52,7 +52,7 @@ export const PYTHON_LEVEL_50: PracticeRound = {
       step: 2,
       type: 'typing',
       kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 단어 word에서 맨 앞 첫 글자와 세 번째 글자를 꺼내 나란히 출력해보세요.',
+      prompt_ko: '[빈칸 채우기] 첫 글자를 가리키는 인덱스(0)를 빈칸에 채워 단어 word의 첫 글자와 세 번째 글자를 나란히 출력해보세요.',
       prompt_en: '[Fill Blank] Access the first character and third character of word and print them.',
       hint_ko: '첫 번째 글자를 가리키는 양수 인덱스 번호를 대괄호 안에 적으세요.',
       hint_en: 'Write the index number for the first character inside the brackets.',

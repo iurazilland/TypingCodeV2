@@ -129,7 +129,7 @@ export const PYTHON_LEVEL_6: PracticeRound = {
       step: 7,
       type: 'block',
       kind: 'standard',
-      prompt_ko: '[블록 조립] 라벨과 수식을 번갈아 나열해 Q: 6 R: 1을 한 줄에 출력해보세요.',
+      prompt_ko: '[블록 조립] "Q:", 25 // 4, "R:", 25 % 4를 차례로 나열해 Q: 6 R: 1을 한 줄에 출력해보세요.',
       prompt_en: '[Block] Alternate labels and expressions inside print() to output Q: 6 R: 1 on one line.',
       hint_ko: '"Q:", 25 // 4, "R:", 25 % 4 네 항목을 쉼표로 구분하면 공백을 두고 차례대로 출력됩니다.',
       hint_en: 'Separating the four items with commas prints them in order with spaces in between.',
