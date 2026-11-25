@@ -440,7 +440,7 @@ function RankingPageContent() {
             boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <UserAvatar
               avatarUrl={profile.avatar_url}
               avatarPreset={profile.avatar_preset}
@@ -450,6 +450,27 @@ function RankingPageContent() {
             <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#0f172a' }}>
               {profile.display_name}
             </span>
+            {(() => {
+              const myBadge = getRepresentativeBadge(profile, isKo);
+              return (
+                <Link
+                  href="/profile#achievements-section"
+                  title={isKo ? '클릭하여 대표 업적(뱃지) 변경' : 'Click to change representative badge'}
+                  style={{
+                    fontSize: '0.74rem',
+                    fontWeight: 800,
+                    padding: '2px 9px',
+                    borderRadius: '999px',
+                    background: `${myBadge.color}14`,
+                    border: `1px solid ${myBadge.color}40`,
+                    color: myBadge.color,
+                    textDecoration: 'none',
+                  }}
+                >
+                  {myBadge.label}
+                </Link>
+              );
+            })()}
             <span
               style={{
                 fontSize: '0.75rem',
@@ -486,83 +507,248 @@ function RankingPageContent() {
         </div>
       )}
 
-      {/* Top 3 Podium */}
+      {/* Top 3 Compact Podium (2 - 1 - 3 Order) */}
       {!isLoading && displayList.length > 0 && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '20px',
-            marginBottom: '26px',
-          }}
-        >
-          {[
-            { entry: secondPlace, medal: '🥈', rank: 2, border: '#38bdf8', accent: '#0284c7', bg: '#ffffff', order: 1 },
-            { entry: firstPlace, medal: '👑', rank: 1, border: '#f59e0b', accent: '#d97706', bg: '#fffdf5', order: 0 },
-            { entry: thirdPlace, medal: '🥉', rank: 3, border: '#fb923c', accent: '#ea580c', bg: '#ffffff', order: 2 },
-          ]
-            .filter((p) => p.entry !== null)
-            .map((podium) => {
-              const u = podium.entry!;
+        <div style={{ maxWidth: '1000px', margin: '0 auto 24px' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1.14fr 1fr',
+              alignItems: 'end',
+              gap: '14px',
+            }}
+          >
+            {[
+              {
+                entry: secondPlace,
+                medal: '🥈',
+                rank: 2,
+                stepHeight: '96px',
+                border: '#0ea5e9',
+                accent: '#0369a1',
+                bg: 'linear-gradient(180deg, #f0f9ff 0%, #bae6fd 100%)',
+                rankBg: 'rgba(3, 105, 161, 0.14)',
+              },
+              {
+                entry: firstPlace,
+                medal: '👑',
+                rank: 1,
+                stepHeight: '118px',
+                border: '#eab308',
+                accent: '#a16207',
+                bg: 'linear-gradient(180deg, #fefce8 0%, #fef08a 100%)',
+                rankBg: 'rgba(202, 138, 4, 0.18)',
+              },
+              {
+                entry: thirdPlace,
+                medal: '🥉',
+                rank: 3,
+                stepHeight: '80px',
+                border: '#f43f5e',
+                accent: '#be123c',
+                bg: 'linear-gradient(180deg, #fff1f2 0%, #fecdd3 100%)',
+                rankBg: 'rgba(190, 18, 60, 0.14)',
+              },
+            ].map((podium) => {
+              const u = podium.entry;
+              if (!u) {
+                return (
+                  <div
+                    key={`empty-rank-${podium.rank}`}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '100%',
+                        height: podium.stepHeight,
+                        background: '#f8fafc',
+                        border: '1.5px dashed #cbd5e1',
+                        borderBottom: '2px solid #cbd5e1',
+                        borderRadius: '16px 16px 4px 4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#94a3b8',
+                        fontSize: '0.88rem',
+                        fontWeight: 800,
+                      }}
+                    >
+                      {podium.medal} {isKo ? `${podium.rank}위` : `#${podium.rank}`}
+                    </div>
+                  </div>
+                );
+              }
+
               const repBadge = getRepresentativeBadge(u, isKo);
               const speedEntry = u as SpeedLeaderEntry;
               return (
                 <div
-                  key={`${u.id}-${speedLangFilter}`}
+                  key={`${u.id}-${podium.rank}-${speedLangFilter}`}
                   style={{
-                    background: podium.bg,
-                    border: `2px solid ${podium.border}`,
-                    borderRadius: '22px',
-                    padding: podium.rank === 1 ? '26px 22px' : '24px 20px',
-                    textAlign: 'center',
-                    boxShadow: '0 8px 26px -4px rgba(15, 23, 42, 0.08)',
-                    order: podium.order,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    minWidth: 0,
                   }}
                 >
-                  <div style={{ fontSize: '1.9rem', marginBottom: '8px' }}>{podium.medal}</div>
-                  <UserAvatar
-                    avatarUrl={u.avatar_url}
-                    avatarPreset={u.avatar_preset}
-                    size={podium.rank === 1 ? 62 : 56}
-                    borderColor={podium.border}
-                    alt={u.display_name}
-                  />
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '10px 0 3px', color: '#0f172a' }}>
-                    {u.display_name}
-                  </h3>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: repBadge.color, marginBottom: '10px' }}>
-                    {repBadge.label}
+                  {/* Player Info Standing Above Podium Step */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '10px',
+                      marginBottom: '10px',
+                      maxWidth: '100%',
+                      padding: '0 6px',
+                    }}
+                  >
+                    <UserAvatar
+                      avatarUrl={u.avatar_url}
+                      avatarPreset={u.avatar_preset}
+                      size={podium.rank === 1 ? 50 : 44}
+                      borderColor={podium.border}
+                      alt={u.display_name}
+                    />
+                    <div style={{ minWidth: 0, textAlign: 'left' }}>
+                      <div
+                        style={{
+                          fontSize: podium.rank === 1 ? '1.05rem' : '0.96rem',
+                          fontWeight: 800,
+                          color: '#0f172a',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          lineHeight: 1.25,
+                        }}
+                      >
+                        {u.display_name}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.76rem',
+                          fontWeight: 800,
+                          color: repBadge.color,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          lineHeight: 1.25,
+                          marginTop: '2px',
+                        }}
+                      >
+                        {repBadge.label}
+                      </div>
+                    </div>
                   </div>
 
-                  {activeTab === 'learning' ? (
-                    <>
-                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: podium.accent }}>
-                        {u.activity_score.toLocaleString()}{' '}
-                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>PT</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '4px', fontWeight: 600 }}>
-                        {isKo
+                  {/* Stepped Podium Block (단상) */}
+                  <div
+                    style={{
+                      width: '100%',
+                      height: podium.stepHeight,
+                      background: podium.bg,
+                      border: `2px solid ${podium.border}`,
+                      borderTop: `5px solid ${podium.border}`,
+                      borderRadius: '16px 16px 4px 4px',
+                      padding: '8px 14px',
+                      boxShadow:
+                        podium.rank === 1
+                          ? '0 8px 22px -4px rgba(245, 158, 11, 0.25)'
+                          : '0 6px 16px -4px rgba(15, 23, 42, 0.09)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '5px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: podium.rank === 1 ? '0.84rem' : '0.78rem',
+                          fontWeight: 900,
+                          padding: '2px 9px',
+                          borderRadius: '999px',
+                          background: podium.rankBg,
+                          color: podium.accent,
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        {podium.medal} {isKo ? `${podium.rank}위` : `#${podium.rank}`}
+                      </span>
+                      {activeTab === 'learning' ? (
+                        <span
+                          style={{
+                            fontSize: podium.rank === 1 ? '1.42rem' : '1.22rem',
+                            fontWeight: 900,
+                            color: podium.accent,
+                            fontFamily: 'var(--font-mono)',
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          {u.activity_score.toLocaleString()}{' '}
+                          <span style={{ fontSize: '0.78rem', color: '#64748b' }}>PT</span>
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            fontSize: podium.rank === 1 ? '1.42rem' : '1.22rem',
+                            fontWeight: 900,
+                            color: podium.accent,
+                            fontFamily: 'var(--font-mono)',
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          {speedEntry.display_cpm}{' '}
+                          <span style={{ fontSize: '0.78rem', color: '#64748b' }}>CPM</span>
+                        </span>
+                      )}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: '0.78rem',
+                        color: '#475569',
+                        fontWeight: 700,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: '100%',
+                        lineHeight: 1.25,
+                      }}
+                    >
+                      {activeTab === 'learning'
+                        ? isKo
                           ? `${u.cleared_levels_count}레벨 · 🔥 ${u.current_streak}일 · ${u.solved_problems_count}문제`
-                          : `${u.cleared_levels_count} lvls · 🔥 ${u.current_streak}d · ${u.solved_problems_count} probs`}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: podium.accent }}>
-                        {speedEntry.display_cpm}{' '}
-                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>CPM</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '4px', fontWeight: 600 }}>
-                        {`${Number(speedEntry.display_accuracy || 0).toFixed(1)}% · ${speedEntry.display_language}`}
-                      </div>
-                    </>
-                  )}
+                          : `${u.cleared_levels_count} lvls · 🔥 ${u.current_streak}d · ${u.solved_problems_count} probs`
+                        : `${Number(speedEntry.display_accuracy || 0).toFixed(1)}% · ${speedEntry.display_language}`}
+                    </div>
+                  </div>
                 </div>
               );
             })}
+          </div>
+          {/* Shared Podium Base Floor */}
+          <div
+            style={{
+              height: '7px',
+              borderRadius: '999px',
+              background: 'linear-gradient(90deg, #cbd5e1 0%, #94a3b8 50%, #cbd5e1 100%)',
+              marginTop: '-1px',
+            }}
+          />
         </div>
       )}
 

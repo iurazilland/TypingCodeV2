@@ -121,6 +121,36 @@ export const AVATAR_PRESETS: AvatarPresetItem[] = [
 
 export function getAvatarPreset(presetId?: string | null): AvatarPresetItem {
   if (!presetId) return AVATAR_PRESETS[0];
-  return AVATAR_PRESETS.find((p) => p.id === presetId) || AVATAR_PRESETS[0];
+  const cleanId = presetId.split(':')[0].trim();
+  return AVATAR_PRESETS.find((p) => p.id === cleanId) || AVATAR_PRESETS[0];
+}
+
+export function encodeAvatarPresetWithBadge(
+  presetId: string | null | undefined,
+  badgeId: string | null | undefined
+): string {
+  const cleanPreset = getAvatarPreset(presetId).id;
+  const cleanBadge = badgeId ? badgeId.trim() : '';
+  if (!cleanBadge || cleanBadge === 'auto') {
+    return cleanPreset;
+  }
+  const combined = `${cleanPreset}:${cleanBadge}`;
+  return combined.length <= 24 ? combined : cleanPreset;
+}
+
+export function decodeAvatarPresetAndBadge(rawPreset?: string | null): {
+  avatarPreset: string;
+  selectedBadge: string | null;
+} {
+  if (!rawPreset || typeof rawPreset !== 'string') {
+    return { avatarPreset: 'fox', selectedBadge: null };
+  }
+  const [presetPart, badgePart] = rawPreset.trim().split(':');
+  const validPreset = getAvatarPreset(presetPart).id;
+  const cleanBadge = badgePart && badgePart.trim() ? badgePart.trim() : null;
+  return {
+    avatarPreset: validPreset,
+    selectedBadge: cleanBadge,
+  };
 }
 

@@ -15,18 +15,27 @@ import {
   Save,
   Trophy,
   User,
+  X,
   Zap,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { createClient } from '@/lib/supabase/client';
-import { AVATAR_PRESETS } from '@/lib/avatarPresets';
+import {
+  AVATAR_PRESETS,
+  encodeAvatarPresetWithBadge,
+} from '@/lib/avatarPresets';
 import UserAvatar from '@/components/UserAvatar';
 import {
   deleteUploadedAvatar,
   uploadCompressedAvatar,
 } from '@/lib/avatarCompression';
-import { evaluateUserBadges } from '@/lib/badges';
+import {
+  BADGE_CATEGORY_TABS,
+  type BadgeCategory,
+  evaluateUserBadges,
+  getRepresentativeBadge,
+} from '@/lib/badges';
 import { CURRICULUM_TRACKS } from '@/lib/curriculum';
 import { getClearedLevelsLocal } from '@/lib/progressSync';
 
@@ -50,6 +59,9 @@ export default function ProfilePage() {
   const [displayName, setDisplayName] = useState('');
   const [primaryLanguage, setPrimaryLanguage] = useState('Python');
   const [selectedPreset, setSelectedPreset] = useState('fox');
+  const [selectedBadge, setSelectedBadge] = useState<string>('auto');
+  const [badgeCategoryFilter, setBadgeCategoryFilter] = useState<'all' | BadgeCategory>('all');
+  const [isEquippingBadge, setIsEquippingBadge] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   // One-time Login ID setup for OAuth / V1 legacy accounts without a username
@@ -60,6 +72,8 @@ export default function ProfilePage() {
 
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordModalError, setPasswordModalError] = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -78,6 +92,7 @@ export default function ProfilePage() {
     setDisplayName(profile.display_name || '');
     setPrimaryLanguage(profile.primary_language || 'Python');
     setSelectedPreset(profile.avatar_preset || 'fox');
+    setSelectedBadge(profile.selected_badge || 'auto');
     setAvatarUrl(profile.avatar_url || null);
   }, [profile]);
 
@@ -219,7 +234,7 @@ export default function ProfilePage() {
 
     const updatePayload: Record<string, unknown> = {
       display_name: cleanName,
-      avatar_preset: selectedPreset,
+      avatar_preset: encodeAvatarPresetWithBadge(selectedPreset, selectedBadge),
       avatar_url: avatarUrl,
       primary_language: primaryLanguage,
     };
@@ -284,37 +299,34 @@ export default function ProfilePage() {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.email) return;
+    setPasswordModalError(null);
     setStatusBanner(null);
 
     if (!isOAuthOnlyUser && !currentPassword) {
-      setStatusBanner({
-        type: 'error',
-        text: isKo ? '현재 비밀번호를 입력해 주세요.' : 'Please enter your current password.',
-      });
+      setPasswordModalError(
+        isKo ? '현재 비밀번호를 입력해 주세요.' : 'Please enter your current password.'
+      );
       return;
     }
 
     if (newPassword.length < 6) {
-      setStatusBanner({
-        type: 'error',
-        text: isKo ? '새 비밀번호는 6자 이상으로 입력해 주세요.' : 'New password must be at least 6 characters.',
-      });
+      setPasswordModalError(
+        isKo ? '새 비밀번호는 6자 이상으로 입력해 주세요.' : 'New password must be at least 6 characters.'
+      );
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      setStatusBanner({
-        type: 'error',
-        text: isKo ? '새 비밀번호와 비밀번호 확인이 일치하지 않습니다.' : 'New passwords do not match.',
-      });
+      setPasswordModalError(
+        isKo ? '새 비밀번호와 비밀번호 확인이 일치하지 않습니다.' : 'New passwords do not match.'
+      );
       return;
     }
 
     if (!isOAuthOnlyUser && currentPassword === newPassword) {
-      setStatusBanner({
-        type: 'error',
-        text: isKo ? '기존 비밀번호와 다른 새 비밀번호를 입력해 주세요.' : 'Please choose a password different from your current one.',
-      });
+      setPasswordModalError(
+        isKo ? '기존 비밀번호와 다른 새 비밀번호를 입력해 주세요.' : 'Please choose a password different from your current one.'
+      );
       return;
     }
 
@@ -328,10 +340,9 @@ export default function ProfilePage() {
           password: currentPassword,
         });
         if (verifyErr) {
-          setStatusBanner({
-            type: 'error',
-            text: isKo ? '현재 비밀번호가 일치하지 않습니다.' : 'Current password is incorrect.',
-          });
+          setPasswordModalError(
+            isKo ? '현재 비밀번호가 일치하지 않습니다.' : 'Current password is incorrect.'
+          );
           return;
         }
       }
@@ -347,9 +358,73 @@ export default function ProfilePage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
+      setPasswordModalError(null);
+      setIsPasswordModalOpen(false);
       setStatusBanner({
         type: 'success',
         text: isKo ? '비밀번호가 안전하게 변경되었습니다!' : 'Your password has been updated!',
+      });
+    } catch (err) {
+      setPasswordModalError(
+        err instanceof Error
+          ? err.message
+          : isKo
+          ? '비밀번호 변경 중 오류가 발생했습니다.'
+          : 'Failed to update password.'
+      );
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const badges = evaluateUserBadges(profile);
+  const unlockedBadgesCount = badges.filter((b) => b.unlocked).length;
+  const activeRepBadge = getRepresentativeBadge(
+    profile
+      ? {
+          ...profile,
+          selected_badge: selectedBadge === 'auto' ? null : selectedBadge,
+        }
+      : null,
+    isKo
+  );
+
+  const handleEquipBadge = async (targetBadgeId: string) => {
+    setSelectedBadge(targetBadgeId);
+    if (!user) return;
+    setStatusBanner(null);
+    setIsEquippingBadge(true);
+    try {
+      const supabase = createClient();
+      const encodedPreset = encodeAvatarPresetWithBadge(
+        selectedPreset,
+        targetBadgeId
+      );
+      const { error } = await supabase
+        .from('profiles')
+        .update({ avatar_preset: encodedPreset })
+        .eq('id', user.id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      await refreshProfile();
+      const chosenObj =
+        targetBadgeId === 'auto'
+          ? null
+          : badges.find((b) => b.id === targetBadgeId);
+      const chosenLabel = chosenObj
+        ? `${chosenObj.icon} ${isKo ? chosenObj.titleKo : chosenObj.titleEn}`
+        : isKo
+        ? '최고 업적 자동 장착'
+        : 'Auto-equip Best';
+
+      setStatusBanner({
+        type: 'success',
+        text: isKo
+          ? `대표 업적(뱃지)이 '${chosenLabel}'(으)로 설정되었습니다!`
+          : `Representative achievement badge set to '${chosenLabel}'!`,
       });
     } catch (err) {
       setStatusBanner({
@@ -358,11 +433,11 @@ export default function ProfilePage() {
           err instanceof Error
             ? err.message
             : isKo
-            ? '비밀번호 변경 중 오류가 발생했습니다.'
-            : 'Failed to update password.',
+            ? '대표 업적(뱃지) 변경 중 오류가 발생했습니다.'
+            : 'Failed to update achievement badge.',
       });
     } finally {
-      setIsChangingPassword(false);
+      setIsEquippingBadge(false);
     }
   };
 
@@ -373,9 +448,6 @@ export default function ProfilePage() {
       </div>
     );
   }
-
-  const badges = evaluateUserBadges(profile);
-  const unlockedBadgesCount = badges.filter((b) => b.unlocked).length;
 
   return (
     <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '28px 24px 90px', color: '#0f172a' }}>
@@ -847,189 +919,321 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSaving}
-            className="tactile-btn tactile-btn-primary"
+          <div
             style={{
-              width: '100%',
-              padding: '13px 20px',
-              fontSize: '0.94rem',
-              fontWeight: 800,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              cursor: isSaving ? 'not-allowed' : 'pointer',
-              opacity: isSaving ? 0.7 : 1,
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '10px',
             }}
           >
-            <Save size={16} />
-            <span>
-              {isSaving
-                ? isKo
-                  ? '저장 중...'
-                  : 'Saving...'
-                : isKo
-                ? '저장'
-                : 'Save'}
-            </span>
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                setPasswordModalError(null);
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmNewPassword('');
+                setIsPasswordModalOpen(true);
+              }}
+              style={{
+                width: '100%',
+                padding: '13px 16px',
+                fontSize: '0.92rem',
+                fontWeight: 800,
+                borderRadius: '14px',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                color: '#334155',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '7px',
+                cursor: 'pointer',
+                transition: 'background-color 0.15s ease, border-color 0.15s ease',
+              }}
+            >
+              <Lock size={15} style={{ color: '#0891b2' }} />
+              <span>{isKo ? '비밀번호 변경' : 'Change Password'}</span>
+            </button>
+
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="tactile-btn tactile-btn-primary"
+              style={{
+                width: '100%',
+                padding: '13px 16px',
+                fontSize: '0.92rem',
+                fontWeight: 800,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '7px',
+                cursor: isSaving ? 'not-allowed' : 'pointer',
+                opacity: isSaving ? 0.7 : 1,
+              }}
+            >
+              <Save size={16} />
+              <span>
+                {isSaving
+                  ? isKo
+                    ? '저장 중...'
+                    : 'Saving...'
+                  : isKo
+                  ? '저장'
+                  : 'Save'}
+              </span>
+            </button>
+          </div>
         </div>
       </form>
 
-      {/* Password Change Section */}
-      <form
-        onSubmit={handleChangePassword}
-        style={{
-          background: '#ffffff',
-          border: '1.5px solid #cbd5e1',
-          borderRadius: '22px',
-          padding: '24px',
-          marginBottom: '28px',
-          boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Lock size={18} style={{ color: '#0891b2' }} />
-            <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-              {isKo ? '비밀번호 변경' : 'Change Password'}
-            </h2>
-          </div>
-          {isOAuthOnlyUser && (
-            <span style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 600 }}>
-              {isKo
-                ? '소셜 로그인 계정에 비밀번호를 새로 설정할 수 있습니다.'
-                : 'You can set a password for your social-login account.'}
-            </span>
-          )}
-        </div>
-
+      {/* Password Change Modal */}
+      {isPasswordModalOpen && (
         <div
+          onClick={() => {
+            if (!isChangingPassword) {
+              setIsPasswordModalOpen(false);
+            }
+          }}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '14px',
-            alignItems: 'end',
+            position: 'fixed',
+            inset: 0,
+            zIndex: 2000,
+            background: 'rgba(15, 23, 42, 0.45)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
           }}
         >
-          {!isOAuthOnlyUser && (
-            <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                {isKo ? '현재 비밀번호' : 'Current Password'}
-              </label>
-              <div style={{ position: 'relative' }}>
-                <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
-                <input
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  placeholder={isKo ? '현재 비밀번호' : 'Current password'}
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '11px 14px 11px 38px',
-                    borderRadius: '12px',
-                    background: '#f8fafc',
-                    border: '1.5px solid #cbd5e1',
-                    color: '#0f172a',
-                    fontSize: '0.88rem',
-                    outline: 'none',
-                  }}
-                />
-              </div>
-            </div>
-          )}
-
-          <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-              {isKo ? '새 비밀번호' : 'New Password'}
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
-              <input
-                type="password"
-                required
-                minLength={6}
-                autoComplete="new-password"
-                placeholder={isKo ? '6자 이상 입력' : '6+ characters'}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '11px 14px 11px 38px',
-                  borderRadius: '12px',
-                  background: '#f8fafc',
-                  border: '1.5px solid #cbd5e1',
-                  color: '#0f172a',
-                  fontSize: '0.88rem',
-                  outline: 'none',
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-              {isKo ? '새 비밀번호 확인' : 'Confirm New Password'}
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
-              <input
-                type="password"
-                required
-                minLength={6}
-                autoComplete="new-password"
-                placeholder={isKo ? '새 비밀번호 다시 입력' : 'Re-enter new password'}
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '11px 14px 11px 38px',
-                  borderRadius: '12px',
-                  background: '#f8fafc',
-                  border: '1.5px solid #cbd5e1',
-                  color: '#0f172a',
-                  fontSize: '0.88rem',
-                  outline: 'none',
-                }}
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isChangingPassword}
-            className="tactile-btn tactile-btn-primary"
+          <div
+            onClick={(e) => e.stopPropagation()}
             style={{
-              height: '42px',
-              padding: '0 20px',
-              fontSize: '0.88rem',
-              fontWeight: 800,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '7px',
-              cursor: isChangingPassword ? 'not-allowed' : 'pointer',
-              opacity: isChangingPassword ? 0.7 : 1,
-              whiteSpace: 'nowrap',
+              width: '100%',
+              maxWidth: '420px',
+              background: '#ffffff',
+              border: '1.5px solid #cbd5e1',
+              borderRadius: '22px',
+              padding: '24px',
+              boxShadow: '0 24px 48px -12px rgba(15, 23, 42, 0.22)',
             }}
           >
-            <Lock size={15} />
-            <span>
-              {isChangingPassword
-                ? isKo
-                  ? '변경 중...'
-                  : 'Updating...'
-                : isKo
-                ? '비밀번호 변경'
-                : 'Update Password'}
-            </span>
-          </button>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Lock size={18} style={{ color: '#0891b2' }} />
+                <h2 style={{ fontSize: '1.12rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                  {isKo ? '비밀번호 변경' : 'Change Password'}
+                </h2>
+              </div>
+              <button
+                type="button"
+                disabled={isChangingPassword}
+                onClick={() => setIsPasswordModalOpen(false)}
+                aria-label={isKo ? '닫기' : 'Close'}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '10px',
+                  border: '1px solid #e2e8f0',
+                  background: '#f8fafc',
+                  color: '#64748b',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: isChangingPassword ? 'not-allowed' : 'pointer',
+                }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {isOAuthOnlyUser && (
+              <p style={{ margin: '0 0 14px', fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
+                {isKo
+                  ? '소셜 로그인 계정에 비밀번호를 새로 설정할 수 있습니다.'
+                  : 'You can set a password for your social-login account.'}
+              </p>
+            )}
+
+            {passwordModalError && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 12px',
+                  borderRadius: '12px',
+                  marginBottom: '14px',
+                  background: '#fef2f2',
+                  border: '1.5px solid #fecaca',
+                  color: '#b91c1c',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                }}
+              >
+                <AlertCircle size={15} style={{ color: '#dc2626', flexShrink: 0 }} />
+                <span>{passwordModalError}</span>
+              </div>
+            )}
+
+            <form
+              onSubmit={handleChangePassword}
+              style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
+            >
+              {!isOAuthOnlyUser && (
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                    {isKo ? '현재 비밀번호' : 'Current Password'}
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
+                    <input
+                      type="password"
+                      required
+                      autoComplete="current-password"
+                      placeholder={isKo ? '현재 비밀번호' : 'Current password'}
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '11px 14px 11px 38px',
+                        borderRadius: '12px',
+                        background: '#f8fafc',
+                        border: '1.5px solid #cbd5e1',
+                        color: '#0f172a',
+                        fontSize: '0.88rem',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                  {isKo ? '새 비밀번호' : 'New Password'}
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    placeholder={isKo ? '6자 이상 입력' : '6+ characters'}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '11px 14px 11px 38px',
+                      borderRadius: '12px',
+                      background: '#f8fafc',
+                      border: '1.5px solid #cbd5e1',
+                      color: '#0f172a',
+                      fontSize: '0.88rem',
+                      outline: 'none',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                  {isKo ? '새 비밀번호 확인' : 'Confirm New Password'}
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <Lock size={15} style={{ position: 'absolute', left: '13px', top: '13px', color: '#64748b' }} />
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    placeholder={isKo ? '새 비밀번호 다시 입력' : 'Re-enter new password'}
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '11px 14px 11px 38px',
+                      borderRadius: '12px',
+                      background: '#f8fafc',
+                      border: '1.5px solid #cbd5e1',
+                      color: '#0f172a',
+                      fontSize: '0.88rem',
+                      outline: 'none',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '10px',
+                  marginTop: '6px',
+                }}
+              >
+                <button
+                  type="button"
+                  disabled={isChangingPassword}
+                  onClick={() => setIsPasswordModalOpen(false)}
+                  style={{
+                    height: '44px',
+                    borderRadius: '12px',
+                    border: '1.5px solid #cbd5e1',
+                    background: '#f8fafc',
+                    color: '#475569',
+                    fontSize: '0.88rem',
+                    fontWeight: 800,
+                    cursor: isChangingPassword ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {isKo ? '취소' : 'Cancel'}
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isChangingPassword}
+                  className="tactile-btn tactile-btn-primary"
+                  style={{
+                    height: '44px',
+                    padding: '0 16px',
+                    fontSize: '0.88rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '7px',
+                    cursor: isChangingPassword ? 'not-allowed' : 'pointer',
+                    opacity: isChangingPassword ? 0.7 : 1,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <Lock size={15} />
+                  <span>
+                    {isChangingPassword
+                      ? isKo
+                        ? '변경 중...'
+                        : 'Updating...'
+                      : isKo
+                      ? '변경하기'
+                      : 'Update'}
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      )}
 
       {/* Course Progress Summary (if any started) */}
       {courseSummaries.length > 0 && (
@@ -1081,8 +1285,9 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Achievement Badges Grid */}
+      {/* Achievement Badges Grid (업적 = 뱃지) */}
       <div
+        id="achievements-section"
         style={{
           background: '#ffffff',
           border: '1.5px solid #cbd5e1',
@@ -1096,83 +1301,243 @@ export default function ProfilePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '16px',
+            marginBottom: '8px',
             flexWrap: 'wrap',
             gap: '10px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <Award size={19} style={{ color: '#d97706' }} />
             <h2 style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-              {isKo ? '뱃지' : 'Badges'}
+              {isKo ? '업적 (뱃지)' : 'Achievements (Badges)'}
             </h2>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 10px',
+                borderRadius: '999px',
+                background: `${activeRepBadge.color}14`,
+                border: `1.5px solid ${activeRepBadge.color}4d`,
+                color: activeRepBadge.color,
+                fontSize: '0.76rem',
+                fontWeight: 800,
+              }}
+            >
+              {isKo ? `현재 대표 업적: ${activeRepBadge.label}` : `Equipped: ${activeRepBadge.label}`}
+            </span>
           </div>
-          <span
-            style={{
-              padding: '4px 10px',
-              borderRadius: '10px',
-              background: '#fffbeb',
-              border: '1px solid #fcd34d',
-              color: '#d97706',
-              fontSize: '0.78rem',
-              fontWeight: 800,
-            }}
-          >
-            {unlockedBadgesCount} / {badges.length}
-          </span>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              disabled={isEquippingBadge}
+              onClick={() => void handleEquipBadge('auto')}
+              style={{
+                padding: '5px 11px',
+                borderRadius: '10px',
+                border:
+                  selectedBadge === 'auto'
+                    ? '1.5px solid #0891b2'
+                    : '1.5px solid #cbd5e1',
+                background:
+                  selectedBadge === 'auto'
+                    ? 'rgba(8, 145, 178, 0.12)'
+                    : '#f8fafc',
+                color: selectedBadge === 'auto' ? '#0891b2' : '#475569',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                cursor: isEquippingBadge ? 'wait' : 'pointer',
+              }}
+            >
+              {isKo ? '✨ 최고 업적 자동 장착' : '✨ Auto-equip Best'}
+            </button>
+            <span
+              style={{
+                padding: '4px 10px',
+                borderRadius: '10px',
+                background: '#fffbeb',
+                border: '1px solid #fcd34d',
+                color: '#d97706',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+              }}
+            >
+              {unlockedBadgesCount} / {badges.length}
+            </span>
+          </div>
+        </div>
+
+        <p style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
+          {isKo
+            ? '획득한 업적(뱃지) 카드를 클릭하면 리더보드와 내 프로필에 표시되는 대표 업적으로 즉시 장착됩니다.'
+            : 'Click any unlocked achievement badge card below to equip it as your representative title on the leaderboard.'}
+        </p>
+
+        {/* Category Filter Tabs */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            flexWrap: 'wrap',
+            marginBottom: '16px',
+          }}
+        >
+          {BADGE_CATEGORY_TABS.map((tab) => {
+            const isTabActive = badgeCategoryFilter === tab.id;
+            const catBadges =
+              tab.id === 'all'
+                ? badges
+                : badges.filter((b) => b.category === tab.id);
+            const catUnlocked = catBadges.filter((b) => b.unlocked).length;
+
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setBadgeCategoryFilter(tab.id)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 12px',
+                  borderRadius: '10px',
+                  border: isTabActive
+                    ? '1.5px solid #0891b2'
+                    : '1.5px solid #cbd5e1',
+                  background: isTabActive
+                    ? 'rgba(8, 145, 178, 0.12)'
+                    : '#f8fafc',
+                  color: isTabActive ? '#0891b2' : '#475569',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                }}
+              >
+                <span>{isKo ? tab.labelKo : tab.labelEn}</span>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    padding: '1px 6px',
+                    borderRadius: '999px',
+                    background: isTabActive
+                      ? 'rgba(8, 145, 178, 0.16)'
+                      : '#e2e8f0',
+                    color: isTabActive ? '#0891b2' : '#64748b',
+                  }}
+                >
+                  {catUnlocked}/{catBadges.length}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))',
             gap: '12px',
           }}
         >
-          {badges.map((badge) => (
-            <div
-              key={badge.id}
-              style={{
-                padding: '14px',
-                borderRadius: '16px',
-                boxSizing: 'border-box',
-                userSelect: 'none',
-                background: badge.unlocked
-                  ? '#ffffff'
-                  : '#f8fafc',
-                border: badge.unlocked
-                  ? `2px solid ${badge.color}66`
-                  : '2px solid #e2e8f0',
-                opacity: badge.unlocked ? 1 : 0.65,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '5px',
-                boxShadow: badge.unlocked ? '0 2px 10px rgba(15, 23, 42, 0.04)' : 'none',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '1.5rem' }}>{badge.icon}</span>
-                <span
-                  style={{
-                    fontSize: '0.7rem',
-                    fontWeight: 800,
-                    padding: '2px 7px',
-                    borderRadius: '7px',
-                    background: badge.unlocked ? `${badge.color}18` : '#e2e8f0',
-                    color: badge.unlocked ? badge.color : '#64748b',
-                  }}
-                >
-                  {badge.unlocked ? (isKo ? '획득' : 'Done') : badge.progressText}
-                </span>
-              </div>
-              <div style={{ fontWeight: 800, fontSize: '0.88rem', color: '#0f172a' }}>
-                {isKo ? badge.titleKo : badge.titleEn}
-              </div>
-              <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.35, fontWeight: 600 }}>
-                {isKo ? badge.descKo : badge.descEn}
-              </div>
-            </div>
-          ))}
+          {badges
+            .filter(
+              (b) =>
+                badgeCategoryFilter === 'all' ||
+                b.category === badgeCategoryFilter
+            )
+            .map((badge) => {
+            const isEquipped = activeRepBadge.id === badge.id;
+            const isManuallySelected = selectedBadge === badge.id;
+            return (
+              <button
+                key={badge.id}
+                type="button"
+                disabled={!badge.unlocked || isEquippingBadge}
+                onClick={() => {
+                  if (badge.unlocked) {
+                    void handleEquipBadge(badge.id);
+                  }
+                }}
+                style={{
+                  padding: '14px',
+                  borderRadius: '16px',
+                  boxSizing: 'border-box',
+                  textAlign: 'left',
+                  userSelect: 'none',
+                  cursor: badge.unlocked
+                    ? isEquippingBadge
+                      ? 'wait'
+                      : 'pointer'
+                    : 'not-allowed',
+                  background: isEquipped
+                    ? `${badge.color}10`
+                    : badge.unlocked
+                    ? '#ffffff'
+                    : '#f8fafc',
+                  border: isEquipped
+                    ? `2px solid ${badge.color}`
+                    : badge.unlocked
+                    ? `2px solid ${badge.color}55`
+                    : '2px solid #e2e8f0',
+                  opacity: badge.unlocked ? 1 : 0.6,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '6px',
+                  boxShadow: isEquipped
+                    ? `0 6px 18px -4px ${badge.color}33`
+                    : badge.unlocked
+                    ? '0 2px 10px rgba(15, 23, 42, 0.04)'
+                    : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>{badge.icon}</span>
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 800,
+                      padding: '2px 8px',
+                      borderRadius: '999px',
+                      background: isEquipped
+                        ? badge.color
+                        : badge.unlocked
+                        ? `${badge.color}18`
+                        : '#e2e8f0',
+                      color: isEquipped
+                        ? '#ffffff'
+                        : badge.unlocked
+                        ? badge.color
+                        : '#64748b',
+                    }}
+                  >
+                    {isEquipped
+                      ? isManuallySelected
+                        ? isKo
+                          ? '✓ 대표 장착중'
+                          : '✓ Equipped'
+                        : isKo
+                        ? '✓ 자동 장착중'
+                        : '✓ Auto'
+                      : badge.unlocked
+                      ? isKo
+                        ? '클릭하여 장착'
+                        : 'Click to equip'
+                      : `🔒 ${badge.progressText}`}
+                  </span>
+                </div>
+                <div style={{ fontWeight: 800, fontSize: '0.88rem', color: '#0f172a', lineHeight: 1.3 }}>
+                  {isKo ? badge.titleKo : badge.titleEn}
+                </div>
+                <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.35, fontWeight: 600 }}>
+                  {isKo ? badge.descKo : badge.descEn}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

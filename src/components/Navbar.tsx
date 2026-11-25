@@ -23,6 +23,7 @@ import {
 import { useLanguage } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { isAdminUser } from '@/lib/admin';
+import { getRepresentativeBadge } from '@/lib/badges';
 import UserAvatar from '@/components/UserAvatar';
 
 export default function Navbar() {
@@ -410,6 +411,27 @@ export default function Navbar() {
                       >
                         {profile?.username ? `@${profile.username}` : user.email}
                       </div>
+                      {(() => {
+                        const repBadge = getRepresentativeBadge(
+                          profile,
+                          language === 'ko'
+                        );
+                        return (
+                          <div
+                            style={{
+                              fontSize: '0.72rem',
+                              fontWeight: 800,
+                              color: repBadge.color,
+                              marginTop: '2px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {repBadge.label}
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
 

@@ -11,6 +11,7 @@ export interface UserProfile {
   display_name: string;
   role: UserRole;
   avatar_preset: string;
+  selected_badge?: string | null;
   avatar_url: string | null;
   primary_language: string;
   active_curriculum_type: ActiveCurriculumType;

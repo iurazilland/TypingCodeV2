@@ -1,6 +1,7 @@
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
+import { decodeAvatarPresetAndBadge } from '@/lib/avatarPresets';
 import type {
   ActiveCurriculumType,
   AdminSectionFeedbackRow,
@@ -241,6 +242,14 @@ export function normalizeProfileRow(
     ? ['py-basic']
     : [];
 
+  const decodedAvatar = decodeAvatarPresetAndBadge(
+    typeof raw.avatar_preset === 'string' ? raw.avatar_preset : 'fox'
+  );
+  const selectedBadge =
+    typeof raw.selected_badge === 'string' && raw.selected_badge.trim()
+      ? raw.selected_badge.trim()
+      : decodedAvatar.selectedBadge;
+
   return {
     id: String(raw.id || fallbackUser?.id || ''),
     email: normalizedEmail,
@@ -252,10 +261,8 @@ export function normalizeProfileRow(
         ? deriveDisplayName(fallbackUser)
         : 'Coder',
     role,
-    avatar_preset:
-      typeof raw.avatar_preset === 'string' && raw.avatar_preset.trim()
-        ? raw.avatar_preset
-        : 'fox',
+    avatar_preset: decodedAvatar.avatarPreset,
+    selected_badge: selectedBadge,
     avatar_url: typeof raw.avatar_url === 'string' ? raw.avatar_url : null,
     primary_language:
       typeof raw.primary_language === 'string' && raw.primary_language.trim()
