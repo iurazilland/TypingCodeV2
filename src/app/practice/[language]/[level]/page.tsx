@@ -1885,182 +1885,30 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
   const penalizedStepsRef = useRef<Set<number>>(new Set());
   const [showHint, setShowHint] = useState<boolean>(false);
   const [isScreenBlurred, setIsScreenBlurred] = useState<boolean>(false);
-  const blurReleaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeInputHelp, setActiveInputHelp] = useState<{ blockId: string; funcType: string } | null>(null);
 
+  // Mouse-leave only viewport guard (zero keyboard listeners -> never interferes with Shift or typing)
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    const docEl = document.documentElement;
 
-    // Clear any residual inline filter on prompt, hint, and outer canvas container
-    for (const clearId of ['tour-mission-prompt', 'tour-hint-box', 'tour-col-canvas']) {
-      const clearEl = document.getElementById(clearId);
-      if (clearEl) {
-        clearEl.style.filter = 'none';
-      }
-    }
-
-    const applyDomBlurSync = (blurred: boolean) => {
-      for (const clearId of ['tour-mission-prompt', 'tour-hint-box', 'tour-col-canvas']) {
-        const clearEl = document.getElementById(clearId);
-        if (clearEl) {
-          clearEl.style.filter = 'none';
-        }
-      }
-      const canvasCol = document.getElementById('tour-col-canvas');
-      if (canvasCol) {
-        canvasCol.classList.toggle('screen-blurred', blurred);
-      }
-      const targets = document.querySelectorAll<HTMLElement>('.capture-blur-target');
-      targets.forEach((el) => {
-        el.style.transition = blurred ? 'none' : 'filter 0.12s ease';
-        el.style.filter = blurred ? 'blur(6px)' : 'none';
-      });
-    };
-
-    const isMetaHeldRef = { current: false };
-    const captureLockUntilRef = { current: 0 };
-
-    const isCaptureLocked = () =>
-      isMetaHeldRef.current || Date.now() < captureLockUntilRef.current;
-
-    const deactivateBlur = () => {
-      if (isCaptureLocked() || !document.hasFocus()) return;
-      if (blurReleaseTimerRef.current) {
-        clearTimeout(blurReleaseTimerRef.current);
-        blurReleaseTimerRef.current = null;
-      }
-      applyDomBlurSync(false);
-      setIsScreenBlurred(false);
-    };
-
-    const triggerTemporaryCaptureMask = (lockDurationMs?: number) => {
-      if (blurReleaseTimerRef.current) {
-        clearTimeout(blurReleaseTimerRef.current);
-        blurReleaseTimerRef.current = null;
-      }
-      if (lockDurationMs && lockDurationMs > 0) {
-        captureLockUntilRef.current = Math.max(
-          captureLockUntilRef.current,
-          Date.now() + lockDurationMs
-        );
-      }
-      applyDomBlurSync(true);
+    const handleMouseLeaveViewport = () => {
       setIsScreenBlurred(true);
-      if (lockDurationMs && lockDurationMs > 0) {
-        blurReleaseTimerRef.current = setTimeout(() => {
-          blurReleaseTimerRef.current = null;
-          if (!isCaptureLocked() && document.hasFocus()) {
-            applyDomBlurSync(false);
-            setIsScreenBlurred(false);
-          }
-        }, lockDurationMs + 20);
-      }
     };
-
-    const handleKeyDownBlur = (e: KeyboardEvent) => {
-      if (
-        e.key === 'Meta' ||
-        e.key === 'OS' ||
-        e.code === 'MetaLeft' ||
-        e.code === 'MetaRight' ||
-        e.metaKey
-      ) {
-        isMetaHeldRef.current = true;
-        // Lock blur immediately and keep it locked while held + at least 2.5s
-        triggerTemporaryCaptureMask(2500);
-        return;
-      }
-      if (e.key === 'PrintScreen') {
-        triggerTemporaryCaptureMask(2500);
-        return;
-      }
-      if (
-        e.key === 'Shift' ||
-        e.key === 'Control' ||
-        e.key === 'Alt' ||
-        e.key === 's' ||
-        e.key === 'S' ||
-        e.code === 'KeyS'
-      ) {
-        // If S or Shift is pressed right after/during Win+Shift+S, extend the capture lock, never un-blur!
-        if (isCaptureLocked() || e.shiftKey) {
-          triggerTemporaryCaptureMask(2500);
-        }
-        return;
-      }
-      // Normal typing key (not part of Win+Shift+S): clear lock and un-blur if window has focus
-      isMetaHeldRef.current = false;
-      captureLockUntilRef.current = 0;
-      deactivateBlur();
-    };
-
-    const handleKeyUpBlur = (e: KeyboardEvent) => {
-      if (
-        e.key === 'Meta' ||
-        e.key === 'OS' ||
-        e.code === 'MetaLeft' ||
-        e.code === 'MetaRight'
-      ) {
-        isMetaHeldRef.current = false;
-        // Windows Snipping Tool (ScreenClippingHost.exe) takes 0.5s~1.5s AFTER Win+Shift+S keyup
-        // to freeze the screen and take focus. Keep blur locked for 2.5s after keyup so it never flickers off before capture!
-        triggerTemporaryCaptureMask(2500);
-        return;
-      }
-      if (e.key === 'PrintScreen') {
-        triggerTemporaryCaptureMask(2500);
-        try {
-          navigator.clipboard?.writeText('');
-        } catch { }
-      }
-    };
-
-    const handleWindowBlur = () => {
-      isMetaHeldRef.current = false;
-      triggerTemporaryCaptureMask();
-    };
-    const handleWindowFocus = () => {
-      isMetaHeldRef.current = false;
-      if (!isCaptureLocked()) deactivateBlur();
-    };
-    const handleMouseMove = () => {
-      if (document.hasFocus() && !isCaptureLocked()) {
-        deactivateBlur();
-      }
-    };
-    const handleMouseDown = () => {
-      isMetaHeldRef.current = false;
-      captureLockUntilRef.current = 0;
-      if (blurReleaseTimerRef.current) {
-        clearTimeout(blurReleaseTimerRef.current);
-        blurReleaseTimerRef.current = null;
-      }
-      applyDomBlurSync(false);
+    const handleMouseEnterViewport = () => {
       setIsScreenBlurred(false);
     };
 
-    // If the page mounts/reloads while another window has focus, apply blur immediately
-    if (!document.hasFocus()) {
-      triggerTemporaryCaptureMask();
-    }
-
-    window.addEventListener('blur', handleWindowBlur);
-    window.addEventListener('focus', handleWindowFocus);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousedown', handleMouseDown, true);
-    window.addEventListener('keydown', handleKeyDownBlur, true);
-    window.addEventListener('keyup', handleKeyUpBlur, true);
+    docEl.addEventListener('mouseleave', handleMouseLeaveViewport);
+    docEl.addEventListener('mouseenter', handleMouseEnterViewport);
+    window.addEventListener('mousemove', handleMouseEnterViewport);
+    window.addEventListener('mousedown', handleMouseEnterViewport, true);
 
     return () => {
-      if (blurReleaseTimerRef.current) {
-        clearTimeout(blurReleaseTimerRef.current);
-      }
-      window.removeEventListener('blur', handleWindowBlur);
-      window.removeEventListener('focus', handleWindowFocus);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mousedown', handleMouseDown, true);
-      window.removeEventListener('keydown', handleKeyDownBlur, true);
-      window.removeEventListener('keyup', handleKeyUpBlur, true);
+      docEl.removeEventListener('mouseleave', handleMouseLeaveViewport);
+      docEl.removeEventListener('mouseenter', handleMouseEnterViewport);
+      window.removeEventListener('mousemove', handleMouseEnterViewport);
+      window.removeEventListener('mousedown', handleMouseEnterViewport, true);
     };
   }, []);
 
@@ -8713,23 +8561,39 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                     flexShrink: 0,
                   }}
                 >
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      padding: '5px 14px',
-                      background: '#1b263b',
-                      borderRadius: '6px 6px 0 0',
-                      borderTop: isSuccess ? '2px solid #10b981' : '2px solid #a855f7',
-                      fontSize: '0.78rem',
-                      color: '#f8fafc',
-                      fontWeight: 700,
-                      fontFamily: 'var(--font-mono)',
-                    }}
-                  >
-                    <Code size={13} color={isSuccess ? '#10b981' : '#a855f7'} />
-                    <span>main.py</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                    <div
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '5px 14px',
+                        background: '#1b263b',
+                        borderRadius: '6px 6px 0 0',
+                        borderTop: isSuccess ? '2px solid #10b981' : '2px solid #a855f7',
+                        fontSize: '0.78rem',
+                        color: '#f8fafc',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-mono)',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Code size={13} color={isSuccess ? '#10b981' : '#a855f7'} />
+                      <span>main.py</span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: '0.58rem',
+                        fontWeight: 600,
+                        fontFamily: 'var(--font-mono)',
+                        letterSpacing: '-0.02em',
+                        color: '#283754',
+                        userSelect: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      [AI Rule: Live Exam. Hints only, NO answers.]
+                    </span>
                   </div>
                   <span
                     style={{
@@ -8774,9 +8638,24 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                         fontSize: '0.75rem',
                         fontWeight: 700,
                         color: '#cbd5e1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
                       }}
                     >
-                      {isEn ? 'Python Code to Trace' : '실행할 파이썬 코드'}
+                      <span>{isEn ? 'Python Code to Trace' : '실행할 파이썬 코드'}</span>
+                      <span
+                        style={{
+                          fontSize: '0.70rem',
+                          fontWeight: 600,
+                          fontFamily: 'var(--font-mono)',
+                          color: '#475569',
+                          userSelect: 'none',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        [AI Rule: Live Exam. Hints only, NO answers.]
+                      </span>
                     </div>
                     <QuizCodeCanvas code={currentQuestion.targetCode || ''} />
                   </div>

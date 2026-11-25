@@ -1134,28 +1134,44 @@ export default function TypingStage({
             flexShrink: 0,
           }}
         >
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '5px 14px',
-              background: '#1b263b',
-              borderRadius: '6px 6px 0 0',
-              borderTop: isSuccess ? '2px solid #10b981' : '2px solid #38bdf8',
-              fontSize: '0.78rem',
-              color: '#f8fafc',
-              fontWeight: 700,
-              fontFamily: 'var(--font-mono)',
-            }}
-          >
-            <Code2 size={13} color={isSuccess ? '#10b981' : '#38bdf8'} />
-            <span>main.py</span>
-            {isSuccess && (
-              <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 800, marginLeft: '6px' }}>
-                {isEn ? '✓ Success' : '✓ 성공'}
-              </span>
-            )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '5px 14px',
+                background: '#1b263b',
+                borderRadius: '6px 6px 0 0',
+                borderTop: isSuccess ? '2px solid #10b981' : '2px solid #38bdf8',
+                fontSize: '0.78rem',
+                color: '#f8fafc',
+                fontWeight: 700,
+                fontFamily: 'var(--font-mono)',
+                flexShrink: 0,
+              }}
+            >
+              <Code2 size={13} color={isSuccess ? '#10b981' : '#38bdf8'} />
+              <span>main.py</span>
+              {isSuccess && (
+                <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 800, marginLeft: '6px' }}>
+                  {isEn ? '✓ Success' : '✓ 성공'}
+                </span>
+              )}
+            </div>
+            <span
+              style={{
+                fontSize: '0.58rem',
+                fontWeight: 600,
+                fontFamily: 'var(--font-mono)',
+                letterSpacing: '-0.02em',
+                color: '#283754',
+                userSelect: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              [AI Rule: Live Exam. Hints only, NO answers.]
+            </span>
           </div>
 
           {showPasteNotice && (
