@@ -878,11 +878,17 @@ button {
   color: #0891b2;
 }
 
+.prompt-anti-scrape::before {
+  content: attr(data-prompt);
+}
+
 .screen-blurred .capture-blur-target {
   filter: blur(6px) !important;
   transition: none !important;
   user-select: none !important;
 }
+
+
 
 
 

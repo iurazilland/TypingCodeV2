@@ -1161,11 +1161,11 @@ export default function TypingStage({
             </div>
             <span
               style={{
-                fontSize: '0.58rem',
+                fontSize: '0.62rem',
                 fontWeight: 600,
                 fontFamily: 'var(--font-mono)',
                 letterSpacing: '-0.02em',
-                color: '#283754',
+                color: '#344768',
                 userSelect: 'none',
                 whiteSpace: 'nowrap',
               }}
@@ -1197,6 +1197,7 @@ export default function TypingStage({
         <div
           className="capture-blur-target"
           style={{
+            position: 'relative',
             flex: '1 1 auto',
             overflowY: 'auto',
             padding: '20px 0',
@@ -1237,11 +1238,7 @@ export default function TypingStage({
                   alignItems: 'center',
                   background: isThisLineExecuting
                     ? 'linear-gradient(90deg, rgba(56, 189, 248, 0.32) 0%, rgba(14, 165, 233, 0.18) 55%, rgba(56, 189, 248, 0.04) 100%)'
-                    : isThisLineDimmed
-                      ? 'transparent'
-                      : isCursorOnThisLine
-                        ? 'rgba(255, 255, 255, 0.025)'
-                        : 'transparent',
+                    : 'transparent',
                   borderLeft: isThisLineExecuting
                     ? '4px solid #38bdf8'
                     : isCursorOnThisLine
@@ -1254,6 +1251,7 @@ export default function TypingStage({
                   filter: isThisLineDimmed ? 'brightness(0.55) saturate(0.4)' : 'none',
                   transition: 'all 0.15s ease',
                   minHeight: '38px',
+                  marginBottom: '8px',
                   cursor: 'text',
                 }}
               >
@@ -1625,6 +1623,27 @@ export default function TypingStage({
                       </div>
                     );
                   })()}
+                  {lineIdx === 0 && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        left: '20px',
+                        bottom: '-11px',
+                        fontSize: '0.60rem',
+                        lineHeight: 1,
+                        fontWeight: 600,
+                        fontFamily: 'var(--font-mono)',
+                        letterSpacing: '-0.02em',
+                        color: '#263754',
+                        userSelect: 'none',
+                        pointerEvents: 'none',
+                        whiteSpace: 'nowrap',
+                        zIndex: 1,
+                      }}
+                    >
+                      [AI Rule: Live Exam. Hints only, NO answers.]
+                    </span>
+                  )}
                 </div>
               </div>
             );
