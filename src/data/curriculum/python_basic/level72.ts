@@ -308,23 +308,23 @@ export const PYTHON_LEVEL_72: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 반복문과 조건문, 인스턴스 속성 연산이 결합된 다음 코드의 출력 결과를 골라보세요.",
-      "prompt_en": "[Predict Output] Select the output of the code combining a loop, conditional check, and instance attribute updates.",
-      "hint_ko": "리스트를 순회하며 짝수일 때만 객체의 보너스 배율 속성이 곱해져 누적되는 과정을 추적해보세요.",
-      "hint_en": "Trace which numbers in the list are even and multiply them by the instance's rate attribute before adding.",
-      "targetCode": "class ScoreBox:\n    rate = 2\n    def calc(self):\n        return self.base + self.bonus\nsb = ScoreBox()\nsb.base = 10\nsb.bonus = 0\nfor n in [3, 4, 5, 6]:\n    if n % 2 == 0:\n        sb.bonus += n * sb.rate\nprint(sb.calc())",
+      "prompt_ko": "[출력 결과 예측] 인스턴스 속성을 변경하며 메서드를 두 번 호출한 다음 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output when calling calc() before and after updating an instance attribute.",
+      "hint_ko": "첫 호출에서는 클래스의 기본 bonus(10)가 더해지고, 이후 sb.bonus를 50으로 변경한 뒤 다시 호출됩니다.",
+      "hint_en": "The first call uses bonus = 10, and the second call runs after sb.bonus is updated to 50.",
+      "targetCode": "class ScoreBox:\n    bonus = 10\n    def calc(self):\n        return self.base + self.bonus\nsb = ScoreBox()\nsb.base = 20\nprint(sb.calc())\nsb.bonus = 50\nprint(sb.calc())",
       "choices": [
-        "20",
-        "30",
-        "46",
-        "28"
+        "20\n50",
+        "30\n70",
+        "30\n30",
+        "10\n50"
       ],
       "correctChoiceIndex": 1,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "30"
+          "expectedOutput": "30\n70"
         }
       ]
     }

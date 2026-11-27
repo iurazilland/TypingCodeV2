@@ -285,21 +285,21 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] 기본값 매개변수와 키워드 인자를 활용해 생성한 두 객체의 출력 결과를 골라보세요.",
       "prompt_en": "[Predict Output] Select the output when two instances are initialized using default and positional arguments.",
-      "hint_ko": "인자를 하나만 넘긴 객체는 기본값을 사용하고, 두 개를 넘긴 객체는 전달한 값으로 기본값을 덮어씁니다.",
-      "hint_en": "The first object uses the default bonus, while the second overrides it with the passed argument.",
-      "targetCode": "class Coupon:\n    def __init__(self, code, off=10, min_pay=100):\n        self.code = code\n        self.saved = min_pay * off // 100\na = Coupon(\"WELCOME\")\nb = Coupon(\"VIP\", 25, 200)\nprint(a.code, a.saved)\nprint(b.code, b.saved)",
+      "hint_ko": "인자를 하나만 넘긴 객체 a는 기본값 off=10을 사용하고, 두 개를 넘긴 객체 b는 전달한 30을 사용합니다.",
+      "hint_en": "Instance a uses the default off=10, while instance b overrides off with 30.",
+      "targetCode": "class Coupon:\n    def __init__(self, code, off=10):\n        self.code = code\n        self.off = off\na = Coupon(\"WELCOME\")\nb = Coupon(\"VIP\", 30)\nprint(a.code, a.off)\nprint(b.code, b.off)",
       "choices": [
-        "WELCOME 10\nVIP 50",
-        "WELCOME 10\nVIP 25",
-        "WELCOME 100\nVIP 50",
-        "WELCOME 10\nVIP 200"
+        "WELCOME 10\nVIP 30",
+        "WELCOME 10\nVIP 10",
+        "WELCOME 30\nVIP 30",
+        "WELCOME 0\nVIP 30"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "WELCOME 10\nVIP 50"
+          "expectedOutput": "WELCOME 10\nVIP 30"
         }
       ]
     },
@@ -308,23 +308,23 @@ export const PYTHON_LEVEL_73: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 생성자 내부의 조건 분기와 산술 연산이 결합된 다음 코드의 출력 결과를 골라보세요.",
+      "prompt_ko": "[출력 결과 예측] 생성자 내부의 조건 분기로 초기 속성을 설정하는 다음 코드의 출력 결과를 골라보세요.",
       "prompt_en": "[Predict Output] Select the output of the code where __init__ branches on a condition to set attributes.",
-      "hint_ko": "생성자 안에서도 if-else 조건문으로 전달받은 값에 따라 초기 속성값을 다르게 계산해 저장할 수 있습니다.",
-      "hint_en": "Trace the if-else branch inside __init__ for each instance's initial argument.",
-      "targetCode": "class Parcel:\n    def __init__(self, kg):\n        self.kg = kg\n        if kg >= 5:\n            self.fee = 3000 + (kg - 5) * 500\n        else:\n            self.fee = 2500\np1 = Parcel(3)\np2 = Parcel(8)\nprint(p1.fee, p2.fee, p1.fee + p2.fee)",
+      "hint_ko": "생성자 안의 if-else 조건에 따라 kg가 5 이상이면 fee가 30, 미만이면 10으로 설정됩니다.",
+      "hint_en": "Inside __init__, kg >= 5 sets fee to 30, otherwise fee is set to 10.",
+      "targetCode": "class Parcel:\n    def __init__(self, kg):\n        self.kg = kg\n        if kg >= 5:\n            self.fee = 30\n        else:\n            self.fee = 10\np1 = Parcel(3)\np2 = Parcel(8)\nprint(p1.fee, p2.fee)",
       "choices": [
-        "2500 4000 6500",
-        "2500 4500 7000",
-        "3000 4500 7500",
-        "2500 3500 6000"
+        "10 10",
+        "10 30",
+        "30 30",
+        "3 8"
       ],
       "correctChoiceIndex": 1,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "2500 4500 7000"
+          "expectedOutput": "10 30"
         }
       ]
     }

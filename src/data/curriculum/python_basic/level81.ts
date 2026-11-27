@@ -311,21 +311,21 @@ export const PYTHON_LEVEL_81: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] 딕셔너리 속성과 예외 처리를 결합한 장바구니 클래스의 실행 결과를 골라보세요.",
       "prompt_en": "[Predict Output] Select the output of the Cart class combining dictionary lookup, ValueError, and KeyError.",
-      "hint_ko": "\"pen\"(200 * 3 = 600), \"none\"(없는 키 -> 0), \"book\"(\"two\" 변환 실패 -> 0) 세 호출 결과를 합산해보세요.",
-      "hint_en": "Trace the three order() calls for valid inputs, a missing key, and a non-numeric quantity string.",
-      "targetCode": "class Shop:\n    def __init__(self):\n        self.menu = {\"pen\": 200, \"book\": 500}\n    def order(self, item, qty_str):\n        try:\n            return self.menu[item] * int(qty_str)\n        except KeyError:\n            return 0\n        except ValueError:\n            return -10\ns = Shop()\ntotal = s.order(\"pen\", \"3\") + s.order(\"bag\", \"2\") + s.order(\"book\", \"two\")\nprint(total)",
+      "hint_ko": "\"pen\"은 정상 계산(10 * 2 = 20), \"bag\"은 없는 키(KeyError -> 0), \"two\"는 변환 실패(ValueError -> -1)를 반환합니다.",
+      "hint_en": "\"pen\" returns 20, missing key \"bag\" returns 0 via KeyError, and \"two\" returns -1 via ValueError.",
+      "targetCode": "class Shop:\n    def __init__(self):\n        self.menu = {\"pen\": 10, \"book\": 20}\n    def order(self, item, qty_str):\n        try:\n            return self.menu[item] * int(qty_str)\n        except KeyError:\n            return 0\n        except ValueError:\n            return -1\ns = Shop()\nprint(s.order(\"pen\", \"2\"), s.order(\"bag\", \"2\"), s.order(\"book\", \"two\"))",
       "choices": [
-        "590",
-        "600",
-        "1590",
-        "580"
+        "20 0 -1",
+        "20 -1 0",
+        "20 0 0",
+        "10 0 -1"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "590"
+          "expectedOutput": "20 0 -1"
         }
       ]
     }

@@ -310,23 +310,23 @@ export const PYTHON_LEVEL_98: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 리스트 컴프리헨션, 회문 판별, 문자 코드 차이를 결합한 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the code filtering palindromes and summing character offsets.",
-      "hint_ko": "소문자로 바꿨을 때 회문인 단어만 골라 첫 글자와 \"a\"의 코드 번호 차이를 합산합니다.",
-      "hint_en": "Keep words that are palindromes when lowercased, then sum ord(w[0]) - ord(\"a\") for those words.",
-      "targetCode": "words = [\"Level\", \"Py\", \"Civic\", \" Noon \"]\npals = [w.strip().lower() for w in words if w.strip().lower() == w.strip().lower()[::-1]]\ndiff = sum([ord(p[0]) - ord(\"a\") for p in pals])\nprint(len(pals), pals[1], diff)",
+      "prompt_ko": "[출력 결과 예측] 리스트 컴프리헨션, 회문 판별, 아스키 문자 이동을 결합한 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the code filtering palindromes and shifting a character code.",
+      "hint_ko": "공백 제거 및 소문자 변환 후 회문인 단어는 \"level\", \"civic\", \"noon\" 3개이며, \"A\"에서 3칸 뒤 알파벳은 \"D\"입니다.",
+      "hint_en": "There are 3 palindromes (\"level\", \"civic\", \"noon\"), and shifting \"A\" by 3 yields \"D\".",
+      "targetCode": "words = [\"Level\", \"Py\", \"Civic\", \" Noon \"]\npals = [w.strip().lower() for w in words if w.strip().lower() == w.strip().lower()[::-1]]\ncode = chr(ord(\"A\") + len(pals))\nprint(len(pals), pals[1], code)",
       "choices": [
-        "3 civic 26",
-        "3 py 26",
-        "2 civic 13",
-        "3 civic 29"
+        "3 civic D",
+        "3 py D",
+        "2 civic C",
+        "3 civic C"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "3 civic 26"
+          "expectedOutput": "3 civic D"
         }
       ]
     }

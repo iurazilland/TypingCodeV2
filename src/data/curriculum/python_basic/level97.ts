@@ -312,21 +312,21 @@ export const PYTHON_LEVEL_97: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] 딕셔너리 값 집계와 f-string 복합 서식이 결합된 코드의 출력 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of the code combining dictionary values and f-string formatting.",
-      "hint_ko": "세 금액의 합계(4,500)와 평균(1,500.0)에 천 단위 콤마 및 소수 첫째 자리 서식이 어떻게 적용되는지 확인하세요.",
-      "hint_en": "Compute the sum (4500) and average (1500.0), then apply :, and :,.1f formatting.",
-      "targetCode": "cart = {\"pen\": 1200, \"note\": 1800, \"eraser\": 1500}\nvals = list(cart.values())\ns = sum(vals)\navg = s / len(vals)\nprint(f\"{len(vals):02d}:{s:,}/{avg:,.1f}\")",
+      "hint_ko": "항목 개수 2는 :02d로 \"02\"가 되고, 합계 3000은 :,로 \"3,000\", 절반인 1500.0은 :,.1f로 \"1,500.0\"이 됩니다.",
+      "hint_en": "Count 2 formats as 02, sum 3000 formats as 3,000, and 1500.0 formats as 1,500.0.",
+      "targetCode": "cart = {\"pen\": 1000, \"note\": 2000}\nvals = list(cart.values())\ns = sum(vals)\nprint(f\"{len(vals):02d}:{s:,}/{s / 2:,.1f}\")",
       "choices": [
-        "03:4,500/1,500.0",
-        "3:4,500/1500.0",
-        "03:4,500/1,500.00",
-        "03:4500/1,500.0"
+        "02:3,000/1,500.0",
+        "2:3,000/1500.0",
+        "02:3,000/1,500.00",
+        "02:3000/1,500.0"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "03:4,500/1,500.0"
+          "expectedOutput": "02:3,000/1,500.0"
         }
       ]
     }

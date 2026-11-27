@@ -1,300 +1,312 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_9: PracticeRound = {
-  id: 'py-basic-r9',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 9,
-  title_ko: 'print()의 구분자(sep)와 줄 끝(end) 옵션',
-  title_en: 'print() Separator (sep) & Line End (end) Options',
-  description_ko: '쉼표 출력 값들 사이의 구분자를 바꾸는 sep 옵션과 줄 끝 문자를 바꾸는 end 옵션을 익힙니다.',
-  description_en: 'Learn the sep option to customize value separators and the end option to control line endings in print().',
-  totalQuestions: 15,
-  unlockedBlocks: ['print'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 구분자 옵션을 지정해 세 숫자를 하이픈으로 연결하여 출력해보세요.',
-      prompt_en: '[Block] Use the separator option to join the three numbers with hyphens.',
-      hint_ko: 'sep="-"를 추가하면 쉼표로 나열된 값들 사이에 기본 공백 대신 하이픈(-)이 들어갑니다.',
-      hint_en: 'Adding sep="-" replaces the default space between comma-separated values with a hyphen.',
-      targetCode: 'print(2026, 11, 17, sep="-")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '2026-11-17',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 구분자 옵션 이름을 채워 세 숫자를 콜론으로 연결해 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the separator option name to join the three numbers with colons.',
-      hint_ko: '구분자(separator)를 지정하는 sep 옵션 이름을 등호 앞에 작성합니다.',
-      hint_en: 'Write the option name derived from "separate" before the equals sign.',
-      templateCode: 'print(10, 20, 30, §§§§=":")',
-      targetCode: 'print(10, 20, 30, sep=":")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '10:20:30',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 빈 문자열 구분자와 줄바꿈 구분자 옵션을 각각 활용한 두 줄의 출력문을 조립해보세요.',
-      prompt_en: '[Block] Assemble the two print statements using empty-string and newline separator options.',
-      hint_ko: 'sep=""는 문자열과 숫자를 빈틈없이 붙이고, sep="\\n"은 각 값 사이를 줄바꿈으로 구분합니다.',
-      hint_en: 'sep="" joins values without spaces, while sep="\\n" places a newline between each item.',
-      targetCode: 'print("Lv.", 9, sep="")\nprint("A", "B", sep="\\n")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Lv.9\nA\nB',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 빈 문자열 구분자 옵션을 채워 문자열과 숫자를 공백 없이 붙여 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the empty-string separator option so the label and number print without a space.',
-      hint_ko: '구분자 옵션 이름 뒤에 등호(=)와 빈 큰따옴표("")를 이어 적습니다.',
-      hint_en: 'Write the separator option name followed by = and an empty double-quoted string.',
-      templateCode: 'print("No.", 1, §§§§§§§)',
-      targetCode: 'print("No.", 1, sep="")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'No.1',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 줄 끝 옵션을 사용해 두 줄의 출력문이 공백 한 칸을 사이에 두고 한 줄로 이어지게 해보세요.',
-      prompt_en: '[Block] Use the line-ending option so the two print statements join on a single line with a space.',
-      hint_ko: 'end=" "를 지정하면 출력 끝에 줄바꿈 대신 공백 한 칸이 들어가 다음 출력이 옆에 이어집니다.',
-      hint_en: 'Setting end=" " replaces the trailing newline with a space so the next print() stays on the same line.',
-      targetCode: 'print("Hello", end=" ")\nprint("Python")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Hello Python',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 줄 끝 옵션 이름을 채워 두 줄의 출력문이 느낌표를 사이에 두고 한 줄로 이어지게 해보세요.',
-      prompt_en: '[Fill Blank] Fill in the line-ending option name so the two print calls join on one line with an exclamation mark.',
-      hint_ko: '줄 끝 문자를 지정하는 end 옵션 이름을 등호 앞에 적습니다.',
-      hint_en: 'Write the English word for "end" before the equals sign.',
-      templateCode: 'print("Ready", §§§§="!")\nprint("Go")',
-      targetCode: 'print("Ready", end="!")\nprint("Go")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Ready!Go',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 구분자 옵션과 줄 끝 옵션을 함께 사용해 두 줄의 출력문이 한 줄로 이어지도록 조립해보세요.',
-      prompt_en: '[Block] Combine separator and line-ending options so the two print calls join on a single line.',
-      hint_ko: 'sep은 값들 사이를 콜론(:)으로 묶고, end는 줄 끝에 화살표를 붙여 다음 출력을 이어줍니다.',
-      hint_en: 'sep joins the items with a colon, while end appends the arrow without breaking the line.',
-      targetCode: 'print("A", "B", sep=":", end="->")\nprint(10 + 5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'A:B->15',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 등호 문자열을 지정한 줄 끝 옵션을 채워 두 줄의 출력문을 한 줄로 이어보세요.',
-      prompt_en: '[Fill Blank] Fill in the line-ending option with "=" so the first print connects to the next line.',
-      hint_ko: '줄 끝을 등호 문자열로 마무리하도록 옵션 이름과 ="="를 함께 작성합니다.',
-      hint_en: 'Set the line-ending option to "=" so the next print() outputs immediately after the equals sign.',
-      templateCode: 'print(20, 3, sep="//", §§§§§§§§)\nprint(20 // 3)',
-      targetCode: 'print(20, 3, sep="//", end="=")\nprint(20 // 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '20//3=6',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 빈칸에 줄 끝 옵션 이름을 채워 두 줄의 출력문이 화살표로 이어지게 해보세요.',
-      prompt_en: '[Fill Blank] Fill in the line-ending option name on line 1 so the two lines connect with an arrow.',
-      hint_ko: '줄바꿈 대신 화살표("->")로 다음 줄 출력을 이어주는 줄 끝 옵션 이름(end)을 채웁니다.',
-      hint_en: 'Enter the line-end option name before ="->" on line 1.',
-      templateCode: 'print("Lv", 1 + 2, sep="", §§§§="->")\nprint(10 ** 2)',
-      targetCode: 'print("Lv", 1 + 2, sep="", end="->")\nprint(10 ** 2)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Lv3->100',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 구분자 옵션을 지정하는 문법 오류를 고쳐 날짜가 슬래시로 구분되어 출력되게 해보세요.',
-      prompt_en: '[Fix Bug] Fix the syntax error in the separator option so the date prints separated by slashes.',
-      hint_ko: 'print()의 옵션에 값을 지정할 때는 콜론(:)이 아니라 등호(=)를 사용해야 합니다.',
-      hint_en: 'Keyword options in print() must be assigned with an equals sign (=) rather than a colon (:).',
-      templateCode: 'print(2026, 11, 17, sep:"/")',
-      targetCode: 'print(2026, 11, 17, sep="/")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '2026/11/17',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 두 줄의 출력문이 한 줄로 이어지도록 첫째 줄의 잘못된 옵션 이름을 고쳐보세요.',
-      prompt_en: '[Fix Bug] Fix the option name on line 1 so the two print calls join on a single line.',
-      hint_ko: '첫째 줄에는 값이 한 개뿐이므로 구분자 옵션이 아니라 줄 끝 옵션을 써야 다음 줄과 이어집니다.',
-      hint_en: 'Replace the separator option on line 1 with the line-end option to prevent a line break.',
-      templateCode: 'print("Ready", sep="...")\nprint("Go!")',
-      targetCode: 'print("Ready", end="...")\nprint("Go!")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Ready...Go!',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 첫째 줄 출력 뒤에 이어지도록 둘째 줄에 10과 20을 하이픈 구분자 옵션으로 출력해보세요.',
-      prompt_en: '[Complete Line] Write line 2 to print 10 and 20 with a hyphen separator option.',
-      hint_ko: 'print() 안에서 10, 20과 하이픈 구분자 옵션을 쉼표로 나열해 작성합니다.',
-      hint_en: 'Pass 10, 20, and the hyphen separator option to print() on line 2.',
-      templateCode: 'print("Start", end="->")\n§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("Start", end="->")\nprint(10, 20, sep="-")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Start->10-20',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 둘째 줄 출력과 한 줄로 이어지도록 첫째 줄에 "Step"과 1을 구분자·줄 끝 옵션과 함께 출력해보세요.',
-      prompt_en: '[Complete Line] Write line 1 to print "Step" and 1 with separator and line-ending options to match the output example.',
-      hint_ko: '문자열 "Step", 숫자 1, 빈 구분자 옵션, 콜론 줄 끝 옵션을 한 print() 안에 차례로 적습니다.',
-      hint_en: 'Combine "Step", 1, sep="", and end=":" inside print() on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint("Pass")',
-      targetCode: 'print("Step", 1, sep="", end=":")\nprint("Pass")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Step1:Pass',
-        },
-      ],
-    },
-    {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '첫째 줄의 값들은 하이픈(-)으로 연결되고, 줄 끝의 슬래시(/) 뒤에 둘째 줄의 덧셈 결과가 이어집니다.',
-      hint_en: 'Items on line 1 are joined with "-", followed by "/" at the end before line 2 prints 30.',
-      targetCode: 'print(10, 20, sep="-", end="/")\nprint(15 + 15)',
-      choices: ['10-20\n30', '10-20/30', '10/20-30', '10 20/30'],
-      correctChoiceIndex: 1,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '10-20/30',
-        },
-      ],
-    },
-    {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '문자열 반복과 sep="" 결합, end="->" 연결, 그리고 몫과 나머지 계산 결과를 차례대로 추적해보세요.',
-      hint_en: 'Trace the string repetition, empty separator, arrow ending, and the quotient and remainder.',
-      targetCode: 'print("*" * 2, 1, sep="", end="->")\nprint(17 // 5, 17 % 5, sep=":")',
-      choices: ['**1->3:2', '** 1 -> 3:2', '**1\n3:2', '*21 -> 3:2'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '**1->3:2',
-        },
-      ],
-    },
+  "id": "py-basic-r9",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 9,
+  "title_ko": "print()의 구분자(sep)와 줄 끝(end) 옵션",
+  "title_en": "print() Separator (sep) & Line End (end) Options",
+  "description_ko": "쉼표 출력 값들 사이의 구분자를 바꾸는 sep 옵션과 줄 끝 문자를 바꾸는 end 옵션을 익힙니다.",
+  "description_en": "Learn the sep option to customize value separators and the end option to control line endings in print().",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "print"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 구분자 옵션을 지정해 세 숫자를 하이픈으로 연결하여 출력해보세요.",
+      "prompt_en": "[Block] Use the separator option to join the three numbers with hyphens.",
+      "hint_ko": "sep=\"-\"를 추가하면 쉼표로 나열된 값들 사이에 기본 공백 대신 하이픈(-)이 들어갑니다.",
+      "hint_en": "Adding sep=\"-\" replaces the default space between comma-separated values with a hyphen.",
+      "targetCode": "print(2026, 11, 17, sep=\"-\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2026-11-17"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 빈칸에 구분자 옵션 이름을 채워 세 숫자를 콜론으로 연결해 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the separator option name to join the three numbers with colons.",
+      "hint_ko": "구분자(separator)를 지정하는 sep 옵션 이름을 등호 앞에 작성합니다.",
+      "hint_en": "Write the option name derived from \"separate\" before the equals sign.",
+      "templateCode": "print(10, 20, 30, §§§§=\":\")",
+      "targetCode": "print(10, 20, 30, sep=\":\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10:20:30"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 빈 문자열 구분자와 줄바꿈 구분자 옵션을 각각 활용한 두 줄의 출력문을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the two print statements using empty-string and newline separator options.",
+      "hint_ko": "sep=\"\"는 문자열과 숫자를 빈틈없이 붙이고, sep=\"\\n\"은 각 값 사이를 줄바꿈으로 구분합니다.",
+      "hint_en": "sep=\"\" joins values without spaces, while sep=\"\\n\" places a newline between each item.",
+      "targetCode": "print(\"Lv.\", 9, sep=\"\")\nprint(\"A\", \"B\", sep=\"\\n\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Lv.9\nA\nB"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 빈칸에 빈 문자열 구분자 옵션을 채워 문자열과 숫자를 공백 없이 붙여 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the empty-string separator option so the label and number print without a space.",
+      "hint_ko": "구분자 옵션 이름 뒤에 등호(=)와 빈 큰따옴표(\"\")를 이어 적습니다.",
+      "hint_en": "Write the separator option name followed by = and an empty double-quoted string.",
+      "templateCode": "print(\"No.\", 1, §§§§§§§)",
+      "targetCode": "print(\"No.\", 1, sep=\"\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "No.1"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 줄 끝 옵션을 사용해 두 줄의 출력문이 공백 한 칸을 사이에 두고 한 줄로 이어지게 해보세요.",
+      "prompt_en": "[Block] Use the line-ending option so the two print statements join on a single line with a space.",
+      "hint_ko": "end=\" \"를 지정하면 출력 끝에 줄바꿈 대신 공백 한 칸이 들어가 다음 출력이 옆에 이어집니다.",
+      "hint_en": "Setting end=\" \" replaces the trailing newline with a space so the next print() stays on the same line.",
+      "targetCode": "print(\"Hello\", end=\" \")\nprint(\"Python\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Hello Python"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 빈칸에 줄 끝 옵션 이름을 채워 두 줄의 출력문이 느낌표를 사이에 두고 한 줄로 이어지게 해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the line-ending option name so the two print calls join on one line with an exclamation mark.",
+      "hint_ko": "줄 끝 문자를 지정하는 end 옵션 이름을 등호 앞에 적습니다.",
+      "hint_en": "Write the English word for \"end\" before the equals sign.",
+      "templateCode": "print(\"Ready\", §§§§=\"!\")\nprint(\"Go\")",
+      "targetCode": "print(\"Ready\", end=\"!\")\nprint(\"Go\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Ready!Go"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 구분자 옵션과 줄 끝 옵션을 함께 사용해 두 줄의 출력문이 한 줄로 이어지도록 조립해보세요.",
+      "prompt_en": "[Block] Combine separator and line-ending options so the two print calls join on a single line.",
+      "hint_ko": "sep은 값들 사이를 콜론(:)으로 묶고, end는 줄 끝에 화살표를 붙여 다음 출력을 이어줍니다.",
+      "hint_en": "sep joins the items with a colon, while end appends the arrow without breaking the line.",
+      "targetCode": "print(\"A\", \"B\", sep=\":\", end=\"->\")\nprint(10 + 5)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "A:B->15"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 빈칸에 등호 문자열을 지정한 줄 끝 옵션을 채워 두 줄의 출력문을 한 줄로 이어보세요.",
+      "prompt_en": "[Fill Blank] Fill in the line-ending option with \"=\" so the first print connects to the next line.",
+      "hint_ko": "줄 끝을 등호 문자열로 마무리하도록 옵션 이름과 =\"=\"를 함께 작성합니다.",
+      "hint_en": "Set the line-ending option to \"=\" so the next print() outputs immediately after the equals sign.",
+      "templateCode": "print(20, 3, sep=\"//\", §§§§§§§§)\nprint(20 // 3)",
+      "targetCode": "print(20, 3, sep=\"//\", end=\"=\")\nprint(20 // 3)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "20//3=6"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 빈칸에 줄 끝 옵션 이름을 채워 두 줄의 출력문이 화살표로 이어지게 해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the line-ending option name on line 1 so the two lines connect with an arrow.",
+      "hint_ko": "줄바꿈 대신 화살표(\"->\")로 다음 줄 출력을 이어주는 줄 끝 옵션 이름(end)을 채웁니다.",
+      "hint_en": "Enter the line-end option name before =\"->\" on line 1.",
+      "templateCode": "print(\"Lv\", 1 + 2, sep=\"\", §§§§=\"->\")\nprint(10 ** 2)",
+      "targetCode": "print(\"Lv\", 1 + 2, sep=\"\", end=\"->\")\nprint(10 ** 2)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Lv3->100"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 구분자 옵션을 지정하는 문법 오류를 고쳐 날짜가 슬래시로 구분되어 출력되게 해보세요.",
+      "prompt_en": "[Fix Bug] Fix the syntax error in the separator option so the date prints separated by slashes.",
+      "hint_ko": "print()의 옵션에 값을 지정할 때는 콜론(:)이 아니라 등호(=)를 사용해야 합니다.",
+      "hint_en": "Keyword options in print() must be assigned with an equals sign (=) rather than a colon (:).",
+      "templateCode": "print(2026, 11, 17, sep:\"/\")",
+      "targetCode": "print(2026, 11, 17, sep=\"/\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2026/11/17"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 두 줄의 출력문이 한 줄로 이어지도록 첫째 줄의 잘못된 옵션 이름을 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the option name on line 1 so the two print calls join on a single line.",
+      "hint_ko": "첫째 줄에는 값이 한 개뿐이므로 구분자 옵션이 아니라 줄 끝 옵션을 써야 다음 줄과 이어집니다.",
+      "hint_en": "Replace the separator option on line 1 with the line-end option to prevent a line break.",
+      "templateCode": "print(\"Ready\", sep=\"...\")\nprint(\"Go!\")",
+      "targetCode": "print(\"Ready\", end=\"...\")\nprint(\"Go!\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Ready...Go!"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 첫째 줄 출력 뒤에 이어지도록 둘째 줄에 10과 20을 하이픈 구분자 옵션으로 출력해보세요.",
+      "prompt_en": "[Complete Line] Write line 2 to print 10 and 20 with a hyphen separator option.",
+      "hint_ko": "print() 안에서 10, 20과 하이픈 구분자 옵션을 쉼표로 나열해 작성합니다.",
+      "hint_en": "Pass 10, 20, and the hyphen separator option to print() on line 2.",
+      "templateCode": "print(\"Start\", end=\"->\")\n§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "print(\"Start\", end=\"->\")\nprint(10, 20, sep=\"-\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Start->10-20"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 둘째 줄 출력과 한 줄로 이어지도록 첫째 줄에 \"Step\"과 1을 구분자·줄 끝 옵션과 함께 출력해보세요.",
+      "prompt_en": "[Complete Line] Write line 1 to print \"Step\" and 1 with separator and line-ending options to match the output example.",
+      "hint_ko": "문자열 \"Step\", 숫자 1, 빈 구분자 옵션, 콜론 줄 끝 옵션을 한 print() 안에 차례로 적습니다.",
+      "hint_en": "Combine \"Step\", 1, sep=\"\", and end=\":\" inside print() on line 1.",
+      "templateCode": "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(\"Pass\")",
+      "targetCode": "print(\"Step\", 1, sep=\"\", end=\":\")\nprint(\"Pass\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Step1:Pass"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "첫째 줄의 값들은 하이픈(-)으로 연결되고, 줄 끝의 슬래시(/) 뒤에 둘째 줄의 덧셈 결과가 이어집니다.",
+      "hint_en": "Items on line 1 are joined with \"-\", followed by \"/\" at the end before line 2 prints 30.",
+      "targetCode": "print(10, 20, sep=\"-\", end=\"/\")\nprint(15 + 15)",
+      "choices": [
+        "10-20\n30",
+        "10-20/30",
+        "10/20-30",
+        "10 20/30"
+      ],
+      "correctChoiceIndex": 1,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10-20/30"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "sep=\"\"는 공백 없이 값을 붙이고, end=\"->\"는 줄바꿈 대신 화살표를 남긴 뒤 다음 출력을 이어 붙입니다.",
+      "hint_en": "sep=\"\" joins items without spaces, and end=\"->\" appends the next print() on the same line.",
+      "targetCode": "print(\"A\", \"B\", sep=\"\", end=\"->\")\nprint(10, 20, sep=\":\")",
+      "choices": [
+        "AB->10:20",
+        "A B -> 10:20",
+        "AB\n10:20",
+        "A:B->10 20"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "AB->10:20"
+        }
+      ]
+    }
+  ]
 };

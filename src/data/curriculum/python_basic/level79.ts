@@ -309,23 +309,23 @@ export const PYTHON_LEVEL_79: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 문자열 리스트를 순회하며 다중 except 분기로 점수를 누적하는 코드의 출력 결과를 골라보세요.",
-      "prompt_en": "[Predict Output] Select the final total after handling both conversion and division-by-zero errors in a loop.",
-      "hint_ko": "\"5\"는 정상 나눗셈(20 // 5 = 4), \"0\"은 ZeroDivisionError(+1), \"x\"는 ValueError(-2)로 처리됩니다.",
-      "hint_en": "Trace each element: \"5\" gives 20 // 5, \"0\" triggers the zero-division branch, and \"x\" triggers the value-error branch.",
-      "targetCode": "data = [\"5\", \"0\", \"x\", \"4\"]\ntotal = 0\nfor s in data:\n    try:\n        total += 20 // int(s)\n    except ValueError:\n        total -= 2\n    except ZeroDivisionError:\n        total += 1\nprint(total)",
+      "prompt_ko": "[출력 결과 예측] 문자열 리스트를 순회하며 다중 except 분기로 결과를 기록하는 코드의 출력 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output list after handling both conversion and division-by-zero errors in a loop.",
+      "hint_ko": "\"10\"은 정상 나눗셈(10 // 10 = 1), \"0\"은 ZeroDivisionError(\"Z\"), \"x\"는 ValueError(\"V\")로 처리됩니다.",
+      "hint_en": "\"10\" evaluates 10 // 10 = 1, \"0\" triggers ZeroDivisionError (\"Z\"), and \"x\" triggers ValueError (\"V\").",
+      "targetCode": "data = [\"10\", \"0\", \"x\"]\nlog = []\nfor s in data:\n    try:\n        log.append(10 // int(s))\n    except ValueError:\n        log.append(\"V\")\n    except ZeroDivisionError:\n        log.append(\"Z\")\nprint(log)",
       "choices": [
-        "8",
-        "9",
-        "10",
-        "7"
+        "[1, 'Z', 'V']",
+        "[1, 'V', 'Z']",
+        "[10, 'Z', 'V']",
+        "[1, 0, 'V']"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "8"
+          "expectedOutput": "[1, 'Z', 'V']"
         }
       ]
     }

@@ -1,219 +1,219 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_48: PracticeRound = {
-  id: 'py-basic-r48',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 48,
-  title_ko: '리스트 필수 기초 종합 문제풀이',
-  title_en: 'Section 5 Comprehensive Review',
-  description_ko: '리스트 생성·인덱싱·수정·del·슬라이싱·연결, .append()/.pop()/.sort(), sum/max/min/len과 반복·조건문을 종합해 문제를 해결합니다.',
-  description_en: 'Synthesize list indexing, mutation, del, slicing, .append()/.pop()/.sort(), aggregations, conditionals, and loops.',
-  totalQuestions: 10,
-  unlockedBlocks: [],
-  questions: [
+  "id": "py-basic-r48",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 48,
+  "title_ko": "리스트 필수 기초 종합 문제풀이",
+  "title_en": "Section 5 Comprehensive Review",
+  "description_ko": "리스트 생성·인덱싱·수정·del·슬라이싱·연결, .append()/.pop()/.sort(), sum/max/min/len과 반복·조건문을 종합해 문제를 해결합니다.",
+  "description_en": "Synthesize list indexing, mutation, del, slicing, .append()/.pop()/.sort(), aggregations, conditionals, and loops.",
+  "totalQuestions": 10,
+  "unlockedBlocks": [],
+  "questions": [
     {
-      id: 1,
-      step: 1,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트의 첫 요소를 삭제하고 마지막 요소를 수정한 뒤 앞 두 요소의 합과 전체 길이를 출력하도록 코드를 완성해보세요.',
-      prompt_en: '[Fill Blank] Complete the code to delete the first item, update the last item, and print the sum of the first two items with the total length.',
-      hint_ko: '삭제 키워드, 마지막 음수 인덱스, 앞 두 요소를 자르는 슬라이싱을 차례로 채우세요.',
-      hint_en: 'Fill in the deletion keyword, negative last index, and 2-element prefix slice.',
-      templateCode: 'nums = [99, 10, 20, 30]\n§§§§ nums[0]\nnums[§§§] = 50\nprint(sum(nums[§§§]), len(nums))',
-      targetCode: 'nums = [99, 10, 20, 30]\ndel nums[0]\nnums[-1] = 50\nprint(sum(nums[:2]), len(nums))',
-      testCases: [
+      "id": 1,
+      "step": 1,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 리스트의 첫 요소를 삭제하고 마지막 요소를 수정한 뒤 앞 두 요소의 합과 전체 길이를 출력하도록 코드를 완성해보세요.",
+      "prompt_en": "[Fill Blank] Complete the code to delete the first item, update the last item, and print the sum of the first two items with the total length.",
+      "hint_ko": "삭제 키워드, 마지막 음수 인덱스, 앞 두 요소를 자르는 슬라이싱을 차례로 채우세요.",
+      "hint_en": "Fill in the deletion keyword, negative last index, and 2-element prefix slice.",
+      "templateCode": "nums = [99, 10, 20, 30]\n§§§§ nums[0]\nnums[§§§] = 50\nprint(sum(nums[§§§]), len(nums))",
+      "targetCode": "nums = [99, 10, 20, 30]\ndel nums[0]\nnums[-1] = 50\nprint(sum(nums[:2]), len(nums))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '30 3',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "30 3"
+        }
+      ]
     },
     {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 4개의 입력 정수 중 50 이상인 점수만 모아 최고점과 총합을 출력하도록 코드를 완성해보세요.',
-      prompt_en: '[Fill Blank] Complete the code to collect input scores of 50 or above and print their maximum and total sum.',
-      hint_ko: '빈 리스트 기호, 리스트 추가 메서드, 최댓값 함수를 순서대로 입력하세요.',
-      hint_en: 'Fill in the empty list literal, append method, and max function in order.',
-      templateCode: 'valid = §§§\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.§§§§§§§(n)\nif len(valid) > 0:\n    print(§§§§(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
-      targetCode: 'valid = []\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.append(n)\nif len(valid) > 0:\n    print(max(valid), sum(valid), sep=":")\nelse:\n    print("Empty")',
-      testCases: [
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 4개의 입력 정수 중 50 이상인 점수만 모아 최고점과 총합을 출력하도록 코드를 완성해보세요.",
+      "prompt_en": "[Fill Blank] Complete the code to collect input scores of 50 or above and print their maximum and total sum.",
+      "hint_ko": "빈 리스트 기호, 리스트 추가 메서드, 최댓값 함수를 순서대로 입력하세요.",
+      "hint_en": "Fill in the empty list literal, append method, and max function in order.",
+      "templateCode": "valid = §§§\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.§§§§§§§(n)\nif len(valid) > 0:\n    print(§§§§(valid), sum(valid), sep=\":\")\nelse:\n    print(\"Empty\")",
+      "targetCode": "valid = []\nfor i in range(4):\n    n = int(input())\n    if n >= 50:\n        valid.append(n)\nif len(valid) > 0:\n    print(max(valid), sum(valid), sep=\":\")\nelse:\n    print(\"Empty\")",
+      "testCases": [
         {
-          id: 1,
-          input: '30\n60\n80\n40',
-          expectedOutput: '80:140',
-        },
-      ],
+          "id": 1,
+          "input": "30\n60\n80\n40",
+          "expectedOutput": "80:140"
+        }
+      ]
     },
     {
-      id: 3,
-      step: 3,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 리스트에서 가장 큰 두 수를 차례로 꺼내어 모은 리스트 뒤에 0을 이어붙여 출력하도록 코드를 완성해보세요.',
-      prompt_en: '[Fill Blank] Complete the code to extract the two largest numbers from nums and concatenate them with a single-zero list.',
-      hint_ko: '원본 정렬 메서드, 맨 앞 요소를 꺼내는 호출식, 리스트 연결 연산자를 차례로 채우세요.',
-      hint_en: 'Supply the sort method, front pop call, and list concatenation operator.',
-      templateCode: 'nums = [15, 40, 25, 30]\nnums.§§§§§(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.§§§§§§§)\nprint(picked §§ [0])',
-      targetCode: 'nums = [15, 40, 25, 30]\nnums.sort(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.pop(0))\nprint(picked + [0])',
-      testCases: [
+      "id": 3,
+      "step": 3,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 리스트에서 가장 큰 두 수를 차례로 꺼내어 모은 리스트 뒤에 0을 이어붙여 출력하도록 코드를 완성해보세요.",
+      "prompt_en": "[Fill Blank] Complete the code to extract the two largest numbers from nums and concatenate them with a single-zero list.",
+      "hint_ko": "원본 정렬 메서드, 맨 앞 요소를 꺼내는 호출식, 리스트 연결 연산자를 차례로 채우세요.",
+      "hint_en": "Supply the sort method, front pop call, and list concatenation operator.",
+      "templateCode": "nums = [15, 40, 25, 30]\nnums.§§§§§(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.§§§§§§§)\nprint(picked §§ [0])",
+      "targetCode": "nums = [15, 40, 25, 30]\nnums.sort(reverse=True)\npicked = []\nwhile len(picked) < 2:\n    picked.append(nums.pop(0))\nprint(picked + [0])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '[40, 30, 0]',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "[40, 30, 0]"
+        }
+      ]
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 3개의 입력 정수 중 첫 번째와 마지막 숫자의 산술 합을 출력하도록 코드의 버그를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the bug so the arithmetic sum of the first and last input numbers is printed.',
-      hint_ko: '산술 덧셈이 이루어지도록 입력값을 문자열이 아닌 정수로 변환해 리스트에 담으세요.',
-      hint_en: 'Convert each input line to an integer instead of a string before appending.',
-      templateCode: 'nums = []\nfor i in range(3):\n    nums.append(str(input()))\nprint("Ends:", nums[0] + nums[-1])',
-      targetCode: 'nums = []\nfor i in range(3):\n    nums.append(int(input()))\nprint("Ends:", nums[0] + nums[-1])',
-      testCases: [
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 3개의 입력 정수 중 첫 번째와 마지막 숫자의 산술 합을 출력하도록 코드의 버그를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the bug so the arithmetic sum of the first and last input numbers is printed.",
+      "hint_ko": "산술 덧셈이 이루어지도록 입력값을 문자열이 아닌 정수로 변환해 리스트에 담으세요.",
+      "hint_en": "Convert each input line to an integer instead of a string before appending.",
+      "templateCode": "nums = []\nfor i in range(3):\n    nums.append(str(input()))\nprint(\"Ends:\", nums[0] + nums[-1])",
+      "targetCode": "nums = []\nfor i in range(3):\n    nums.append(int(input()))\nprint(\"Ends:\", nums[0] + nums[-1])",
+      "testCases": [
         {
-          id: 1,
-          input: '10\n20\n30',
-          expectedOutput: 'Ends: 40',
-        },
-      ],
+          "id": 1,
+          "input": "10\n20\n30",
+          "expectedOutput": "Ends: 40"
+        }
+      ]
     },
     {
-      id: 5,
-      step: 5,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 가장 낮은 점수 하나를 제거한 뒤 남은 점수들의 최솟값과 총합을 출력하도록 버그를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the bug so the lowest score is removed and the new minimum and total sum are printed.',
-      hint_ko: '오름차순 정렬 후 최솟값은 맨 앞(0번)에 위치합니다.',
-      hint_en: 'After ascending sort, the minimum value is at index 0.',
-      templateCode: 'scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(1)\nprint(scores[0], sum(scores))',
-      targetCode: 'scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(0)\nprint(scores[0], sum(scores))',
-      testCases: [
+      "id": 5,
+      "step": 5,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 가장 낮은 점수 하나를 제거한 뒤 남은 점수들의 최솟값과 총합을 출력하도록 버그를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the bug so the lowest score is removed and the new minimum and total sum are printed.",
+      "hint_ko": "오름차순 정렬 후 최솟값은 맨 앞(0번)에 위치합니다.",
+      "hint_en": "After ascending sort, the minimum value is at index 0.",
+      "templateCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(1)\nprint(scores[0], sum(scores))",
+      "targetCode": "scores = [50, 90, 70, 80, 60]\nscores.sort()\nscores.pop(0)\nprint(scores[0], sum(scores))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '60 300',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "60 300"
+        }
+      ]
     },
     {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 금지어를 제외한 정상 단어들만 결과 리스트에 모아 출력하도록 코드의 버그를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the bug so allowed words are collected into keep and printed.',
-      hint_ko: '조건을 통과한 단어는 금지 목록이 아니라 결과 리스트에 추가해야 합니다.',
-      hint_en: 'Append allowed words to keep rather than bans.',
-      templateCode: 'words = ["ok", "err", "run", "skip"]\nbans = ["err", "skip"]\nkeep = []\nfor w in words:\n    if w not in bans:\n        bans.append(w)\nprint(keep)',
-      targetCode: 'words = ["ok", "err", "run", "skip"]\nbans = ["err", "skip"]\nkeep = []\nfor w in words:\n    if w not in bans:\n        keep.append(w)\nprint(keep)',
-      testCases: [
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 금지어를 제외한 정상 단어들만 결과 리스트에 모아 출력하도록 코드의 버그를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the bug so allowed words are collected into keep and printed.",
+      "hint_ko": "조건을 통과한 단어는 금지 목록이 아니라 결과 리스트에 추가해야 합니다.",
+      "hint_en": "Append allowed words to keep rather than bans.",
+      "templateCode": "words = [\"ok\", \"err\", \"run\", \"skip\"]\nbans = [\"err\", \"skip\"]\nkeep = []\nfor w in words:\n    if w not in bans:\n        bans.append(w)\nprint(keep)",
+      "targetCode": "words = [\"ok\", \"err\", \"run\", \"skip\"]\nbans = [\"err\", \"skip\"]\nkeep = []\nfor w in words:\n    if w not in bans:\n        keep.append(w)\nprint(keep)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: "['ok', 'run']",
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "['ok', 'run']"
+        }
+      ]
     },
     {
-      id: 7,
-      step: 7,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 리스트 stack의 마지막 요소를 꺼내어 removed 리스트에 바로 추가하는 한 줄을 완성해보세요.',
-      prompt_en: '[Complete Line] Complete the indented line that removes the last item from stack and adds it to removed.',
-      hint_ko: 'removed의 추가 메서드 괄호 안에 stack의 끝 요소 꺼내기 호출식을 넣으세요.',
-      hint_en: 'Pass stack.pop() inside removed.append() inside the while loop.',
-      templateCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(stack), sum(removed))',
-      targetCode: 'stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    removed.append(stack.pop())\nprint(sum(stack), sum(removed))',
-      testCases: [
+      "id": 7,
+      "step": 7,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 리스트 stack의 마지막 요소를 꺼내어 removed 리스트에 바로 추가하는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Complete the indented line that removes the last item from stack and adds it to removed.",
+      "hint_ko": "removed의 추가 메서드 괄호 안에 stack의 끝 요소 꺼내기 호출식을 넣으세요.",
+      "hint_en": "Pass stack.pop() inside removed.append() inside the while loop.",
+      "templateCode": "stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(sum(stack), sum(removed))",
+      "targetCode": "stack = [10, 20, 30, 40]\nremoved = []\nwhile len(stack) > 2:\n    removed.append(stack.pop())\nprint(sum(stack), sum(removed))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '30 70',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "30 70"
+        }
+      ]
     },
     {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 리스트의 앞 2개 요소와 뒤 2개 요소를 잘라내어 하나로 이어붙여 ends에 저장하는 한 줄을 완성해보세요.',
-      prompt_en: '[Complete Line] Complete the line that combines the first two and last two elements of nums into ends.',
-      hint_ko: '앞 2개 슬라이싱과 뒤 2개 음수 슬라이싱을 +로 이어 ends에 대입하세요.',
-      hint_en: 'Assign the sum of the first-two slice and last-two slice of nums to ends.',
-      templateCode: 'nums = [10, 20, 30, 40, 50]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ends, sum(ends))',
-      targetCode: 'nums = [10, 20, 30, 40, 50]\nends = nums[:2] + nums[-2:]\nprint(ends, sum(ends))',
-      testCases: [
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 리스트의 앞 2개 요소와 뒤 2개 요소를 잘라내어 하나로 이어붙여 ends에 저장하는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Complete the line that combines the first two and last two elements of nums into ends.",
+      "hint_ko": "앞 2개 슬라이싱과 뒤 2개 음수 슬라이싱을 +로 이어 ends에 대입하세요.",
+      "hint_en": "Assign the sum of the first-two slice and last-two slice of nums to ends.",
+      "templateCode": "nums = [10, 20, 30, 40, 50]\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(ends, sum(ends))",
+      "targetCode": "nums = [10, 20, 30, 40, 50]\nends = nums[:2] + nums[-2:]\nprint(ends, sum(ends))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '[10, 20, 40, 50] 120',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "[10, 20, 40, 50] 120"
+        }
+      ]
     },
     {
-      id: 9,
-      step: 9,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 리스트 순회 필터링과 오름차순 정렬 코드의 실행 결과를 예측해보세요.',
-      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
-      hint_ko: '음수는 건너뛰고 0에서 멈춘 뒤 모인 숫자들이 오름차순 정렬된 결과와 합계를 계산해보세요.',
-      hint_en: 'Trace which numbers are collected before 0 stops the loop, then check the sorted list and sum.',
-      targetCode: 'raw = [30, -5, 10, 0, 20]\nnums = []\nfor n in raw:\n    if n < 0:\n        continue\n    if n == 0:\n        break\n    nums.append(n)\nnums.sort()\nprint(nums, sum(nums))',
-      choices: [
-        '[10, 30] 40',
-        '[10, 20, 30] 60',
-        '[30, 10] 40',
-        '[-5, 10, 30] 35',
+      "id": 9,
+      "step": 9,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 리스트 순회 필터링과 오름차순 정렬 코드의 실행 결과를 예측해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
+      "hint_ko": "음수는 건너뛰고 0에서 멈춘 뒤 모인 숫자들이 오름차순 정렬된 결과와 합계를 계산해보세요.",
+      "hint_en": "Trace which numbers are collected before 0 stops the loop, then check the sorted list and sum.",
+      "targetCode": "raw = [30, -5, 10, 0, 20]\nnums = []\nfor n in raw:\n    if n < 0:\n        continue\n    if n == 0:\n        break\n    nums.append(n)\nnums.sort()\nprint(nums, sum(nums))",
+      "choices": [
+        "[10, 30] 40",
+        "[10, 20, 30] 60",
+        "[30, 10] 40",
+        "[-5, 10, 30] 35"
       ],
-      correctChoiceIndex: 0,
-      testCases: [
+      "correctChoiceIndex": 0,
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '[10, 30] 40',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "[10, 30] 40"
+        }
+      ]
     },
     {
-      id: 10,
-      step: 10,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 내림차순 정렬과 양끝 요소 추출, 리스트 연결 및 집계 코드의 실행 결과를 예측해보세요.',
-      prompt_en: '[Predict Output] Select the exact output printed when the following Python code runs.',
-      hint_ko: '내림차순 정렬 후 맨 앞(최댓값)과 맨 뒤(최솟값)를 꺼내고, 그 차이를 남은 리스트에 이어붙였을 때의 최댓값과 실수 평균을 구해보세요.',
-      hint_en: 'Pop the front and back items after descending sort, append their difference, and find max and float average.',
-      targetCode: 'q = [10, 50, 20, 30]\nq.sort(reverse=True)\nfirst = q.pop(0)\nlast = q.pop()\nres = q + [first - last]\nprint(max(res), sum(res) / len(res))',
-      choices: [
-        '40 30.0',
-        '50 30.0',
-        '40 30',
-        '30 25.0',
+      "id": 10,
+      "step": 10,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 내림차순 정렬과 양끝 요소 추출 코드의 실행 결과를 예측해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output printed when the following Python code runs.",
+      "hint_ko": "내림차순 정렬([40, 30, 20, 10]) 후 맨 앞 요소(pop(0))와 맨 끝 요소(pop())를 꺼낸 뒤 남은 리스트를 확인하세요.",
+      "hint_en": "After descending sort, pop(0) removes the first element and pop() removes the last element.",
+      "targetCode": "q = [10, 40, 20, 30]\nq.sort(reverse=True)\nfirst = q.pop(0)\nlast = q.pop()\nprint(first, last, q)",
+      "choices": [
+        "40 10 [30, 20]",
+        "10 40 [20, 30]",
+        "40 30 [20, 10]",
+        "40 10 [20, 30]"
       ],
-      correctChoiceIndex: 0,
-      testCases: [
+      "correctChoiceIndex": 0,
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '40 30.0',
-        },
-      ],
-    },
-  ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "40 10 [30, 20]"
+        }
+      ]
+    }
+  ]
 };

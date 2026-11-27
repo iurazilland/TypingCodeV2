@@ -285,23 +285,23 @@ export const PYTHON_LEVEL_89: PracticeRound = {
       "step": 14,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 수식 안에 포함된 삼항 조건 표현식 두 개의 계산 결과를 골라보세요.",
-      "prompt_en": "[Predict Output] Select the output of the arithmetic expressions containing inline conditionals.",
-      "hint_ko": "x = 10일 때 첫 식은 10 > 5가 참이므로 100 + 20이 되고, 둘째 식은 10 % 3 == 0이 거짓이므로 5가 선택됩니다.",
-      "hint_en": "Evaluate the ternary part first in each line: 20 is chosen on line 2, and 5 is chosen on line 3.",
-      "targetCode": "x = 10\na = 100 + (20 if x > 5 else 0)\nb = 2 * (10 if x % 3 == 0 else 5)\nprint(a, b)",
+      "prompt_ko": "[출력 결과 예측] 다음 두 줄의 삼항 조건 표현식 코드의 실행 결과를 골라보세요.",
+      "prompt_en": "[Predict Output] Select the output of the following inline conditional expressions.",
+      "hint_ko": "x = 10일 때 첫 식은 x > 5가 참이므로 20이 되고, 둘째 식은 x < 5가 거짓이므로 100 + 5가 됩니다.",
+      "hint_en": "With x = 10, the first ternary evaluates to 20 and the second evaluates to 100 + 5.",
+      "targetCode": "x = 10\na = 20 if x > 5 else 0\nb = 100 + (10 if x < 5 else 5)\nprint(a, b)",
       "choices": [
-        "120 10",
-        "120 20",
-        "100 10",
-        "20 10"
+        "20 105",
+        "20 110",
+        "0 105",
+        "20 5"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "120 10"
+          "expectedOutput": "20 105"
         }
       ]
     },

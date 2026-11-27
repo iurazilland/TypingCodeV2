@@ -312,23 +312,23 @@ export const PYTHON_LEVEL_102: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] map(), enumerate(), 복합 대입이 결합된 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_ko": "[출력 결과 예측] map(), enumerate(..., 1) 순회가 결합된 다음 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of the code combining map() and enumerate(..., 1).",
-      "hint_ko": "1번부터 시작하는 번호 i와 각 숫자 v를 곱한 값(1*2 + 2*4 + 3*6)이 누적됩니다.",
-      "hint_en": "Multiply each number by its 1-based position (1*2 + 2*4 + 3*6) and sum them.",
-      "targetCode": "nums = list(map(int, \"2 4 6\".split()))\nres = 0\nfor i, v in enumerate(nums, 1):\n    res += i * v\nprint(res)",
+      "hint_ko": "1번부터 시작하는 번호 i(1, 2)와 각 숫자 v(10, 20)를 더한 값이 리스트에 차례대로 담깁니다.",
+      "hint_en": "Add each 1-based index i (1, 2) to its corresponding value v (10, 20).",
+      "targetCode": "nums = list(map(int, \"10 20\".split()))\nout = []\nfor i, v in enumerate(nums, 1):\n    out.append(i + v)\nprint(out)",
       "choices": [
-        "28",
-        "16",
-        "12",
-        "24"
+        "[11, 22]",
+        "[10, 21]",
+        "[10, 40]",
+        "[1, 2]"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "28"
+          "expectedOutput": "[11, 22]"
         }
       ]
     }

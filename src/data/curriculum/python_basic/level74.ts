@@ -310,21 +310,21 @@ export const PYTHON_LEVEL_74: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] 문자열 명령 리스트를 순회하며 객체의 상태를 바꾸는 다음 코드의 출력 결과를 골라보세요.",
       "prompt_en": "[Predict Output] Select the final output when iterating over command strings to mutate a Robot instance.",
-      "hint_ko": "각 명령 문자열에 따라 좌표 x와 에너지 속성이 어떻게 바뀌는지 순서대로 계산해보세요.",
-      "hint_en": "Follow each command in cmds to track both r.x and r.energy step by step.",
-      "targetCode": "class Robot:\n    def __init__(self):\n        self.x = 0\n        self.energy = 10\n    def act(self, cmd):\n        if cmd == \"GO\" and self.energy >= 4:\n            self.x += 3\n            self.energy -= 4\n        elif cmd == \"REST\":\n            self.energy += 2\nr = Robot()\nfor c in [\"GO\", \"GO\", \"GO\", \"REST\", \"GO\"]:\n    r.act(c)\nprint(f\"{r.x}:{r.energy}\")",
+      "hint_ko": "\"GO\"가 두 번 실행되어 20이 된 뒤 \"BACK\"으로 5가 줄어드는 과정을 확인하세요.",
+      "hint_en": "Two \"GO\" commands add 20 in total, and one \"BACK\" command subtracts 5.",
+      "targetCode": "class Robot:\n    def __init__(self):\n        self.x = 0\n    def act(self, cmd):\n        if cmd == \"GO\":\n            self.x += 10\n        elif cmd == \"BACK\":\n            self.x -= 5\nr = Robot()\nfor c in [\"GO\", \"GO\", \"BACK\"]:\n    r.act(c)\nprint(r.x)",
       "choices": [
-        "9:0",
-        "12:0",
-        "6:4",
-        "9:2"
+        "15",
+        "20",
+        "25",
+        "10"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "9:0"
+          "expectedOutput": "15"
         }
       ]
     }

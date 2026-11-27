@@ -1,317 +1,327 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_57: PracticeRound = {
-  id: 'py-basic-r57',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 57,
-  title_ko: '57레벨: 튜플(tuple) 생성, 인덱싱과 튜플 언패킹',
-  title_en: 'Level 57: Tuple Creation, Indexing & Tuple Unpacking',
-  description_ko: '소괄호(())를 이용한 튜플 생성, 단일 요소 튜플((x,)), 인덱싱·슬라이싱과 변수 언패킹을 익힙니다.',
-  description_en: 'Learn tuple creation with parentheses, single-element tuples ((x,)), indexing, slicing, and tuple unpacking.',
-  totalQuestions: 15,
-  unlockedBlocks: [
-    'comment',
-    'print',
-    'variable',
-    'input',
-    'type',
-    'if',
-    'for_range',
-    'range',
-    'for_in',
-    'while',
-    'break',
-    'continue',
-    'list',
-    'tuple',
-    'iter',
-    'method',
+  "id": "py-basic-r57",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 57,
+  "title_ko": "57레벨: 튜플(tuple) 생성, 인덱싱과 튜플 언패킹",
+  "title_en": "Level 57: Tuple Creation, Indexing & Tuple Unpacking",
+  "description_ko": "소괄호(())를 이용한 튜플 생성, 단일 요소 튜플((x,)), 인덱싱·슬라이싱과 변수 언패킹을 익힙니다.",
+  "description_en": "Learn tuple creation with parentheses, single-element tuples ((x,)), indexing, slicing, and tuple unpacking.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable",
+    "input",
+    "type",
+    "if",
+    "for_range",
+    "range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "iter",
+    "method"
   ],
-  questions: [
+  "questions": [
     {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 두 정수가 담긴 튜플을 생성하고 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that creates a tuple of two integers and prints it.',
-      hint_ko: '튜플은 대괄호 대신 소괄호 안에 값들을 쉼표로 나열해 만듭니다.',
-      hint_en: 'Tuples are created by placing comma-separated values inside parentheses.',
-      targetCode: 'pt = (10, 20)\nprint(pt)',
-      testCases: [
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 두 정수가 담긴 튜플을 생성하고 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that creates a tuple of two integers and prints it.",
+      "hint_ko": "튜플은 대괄호 대신 소괄호 안에 값들을 쉼표로 나열해 만듭니다.",
+      "hint_en": "Tuples are created by placing comma-separated values inside parentheses.",
+      "targetCode": "pt = (10, 20)\nprint(pt)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '(10, 20)',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "(10, 20)"
+        }
+      ]
     },
     {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 단일 요소 튜플을 만들어 그 값과 길이를 출력해보세요.',
-      prompt_en: '[Fill Blank] Create a single-element tuple and print it along with its length.',
-      hint_ko: '요소가 하나뿐인 튜플은 소괄호 안의 값 바로 뒤에 쉼표를 꼭 붙여야 합니다.',
-      hint_en: 'A single-element tuple requires a trailing comma right after the value inside parentheses.',
-      templateCode: 'one = §§§§§§\nprint(one, len(one))',
-      targetCode: 'one = (10,)\nprint(one, len(one))',
-      testCases: [
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 단일 요소 튜플을 만들어 그 값과 길이를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Create a single-element tuple and print it along with its length.",
+      "hint_ko": "요소가 하나뿐인 튜플은 소괄호 안의 값 바로 뒤에 쉼표를 꼭 붙여야 합니다.",
+      "hint_en": "A single-element tuple requires a trailing comma right after the value inside parentheses.",
+      "templateCode": "one = §§§§§§\nprint(one, len(one))",
+      "targetCode": "one = (10,)\nprint(one, len(one))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '(10,) 1',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "(10,) 1"
+        }
+      ]
     },
     {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 튜플의 첫 요소, 마지막 요소, 전체 길이를 나란히 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that prints the first element, last element, and length of tuple pt.',
-      hint_ko: '튜플도 리스트처럼 0번 인덱스, -1번 음수 인덱스, len() 함수를 동일하게 사용합니다.',
-      hint_en: 'Tuples support [0], [-1] indexing, and len() just like lists.',
-      targetCode: 'pt = (10, 20, 30)\nprint(pt[0], pt[-1], len(pt))',
-      testCases: [
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 튜플의 첫 요소, 마지막 요소, 전체 길이를 나란히 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that prints the first element, last element, and length of tuple pt.",
+      "hint_ko": "튜플도 리스트처럼 0번 인덱스, -1번 음수 인덱스, len() 함수를 동일하게 사용합니다.",
+      "hint_en": "Tuples support [0], [-1] indexing, and len() just like lists.",
+      "targetCode": "pt = (10, 20, 30)\nprint(pt[0], pt[-1], len(pt))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '10 30 3',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10 30 3"
+        }
+      ]
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 튜플 pt의 앞쪽 2개 요소만 잘라내어 출력해보세요.',
-      prompt_en: '[Fill Blank] Complete the slice to print the first two elements of tuple pt.',
-      hint_ko: '처음부터 2번 인덱스 직전까지 잘라내는 슬라이싱 구간을 대괄호 안에 적으세요.',
-      hint_en: 'Specify the slice from the start up to index 2 inside the square brackets.',
-      templateCode: 'pt = (10, 20, 30, 40)\nprint(pt[§§§])',
-      targetCode: 'pt = (10, 20, 30, 40)\nprint(pt[:2])',
-      testCases: [
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 튜플 pt의 앞쪽 2개 요소만 잘라내어 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete the slice to print the first two elements of tuple pt.",
+      "hint_ko": "처음부터 2번 인덱스 직전까지 잘라내는 슬라이싱 구간을 대괄호 안에 적으세요.",
+      "hint_en": "Specify the slice from the start up to index 2 inside the square brackets.",
+      "templateCode": "pt = (10, 20, 30, 40)\nprint(pt[§§§])",
+      "targetCode": "pt = (10, 20, 30, 40)\nprint(pt[:2])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '(10, 20)',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "(10, 20)"
+        }
+      ]
     },
     {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 튜플의 두 요소를 두 변수에 나누어 담고 포맷 문자열로 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that unpacks tuple pt into two variables and prints them.',
-      hint_ko: '등호 왼쪽에 두 변수를 쉼표로 나란히 적으면 튜플의 요소가 순서대로 나뉘어 대입됩니다.',
-      hint_en: 'Listing two comma-separated variables on the left unpacks the tuple elements in order.',
-      targetCode: 'pt = (30, 70)\nx, y = pt\nprint(f"x={x}/y={y}")',
-      testCases: [
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 튜플의 두 요소를 두 변수에 나누어 담고 포맷 문자열로 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that unpacks tuple pt into two variables and prints them.",
+      "hint_ko": "등호 왼쪽에 두 변수를 쉼표로 나란히 적으면 튜플의 요소가 순서대로 나뉘어 대입됩니다.",
+      "hint_en": "Listing two comma-separated variables on the left unpacks the tuple elements in order.",
+      "targetCode": "pt = (30, 70)\nx, y = pt\nprint(f\"x={x}/y={y}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'x=30/y=70',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "x=30/y=70"
+        }
+      ]
     },
     {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 튜플 info의 두 값을 출력문에서 사용하는 두 변수에 나누어 담아 출력해보세요.',
-      prompt_en: '[Fill Blank] Unpack the two elements of info into the variables referenced in the print statement.',
-      hint_ko: '마지막 줄 중괄호 안에서 참조하는 이름과 점수 변수 두 개를 쉼표와 공백으로 구분해 적으세요.',
-      hint_en: 'Write the two variable names used in the f-string separated by a comma and space.',
-      templateCode: 'info = ("Ace", 95)\n§§§§§§§§§§§§ = info\nprint(f"{name}:{score}")',
-      targetCode: 'info = ("Ace", 95)\nname, score = info\nprint(f"{name}:{score}")',
-      testCases: [
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 튜플 info의 두 값을 출력문에서 사용하는 두 변수에 나누어 담아 출력해보세요.",
+      "prompt_en": "[Fill Blank] Unpack the two elements of info into the variables referenced in the print statement.",
+      "hint_ko": "마지막 줄 중괄호 안에서 참조하는 이름과 점수 변수 두 개를 쉼표와 공백으로 구분해 적으세요.",
+      "hint_en": "Write the two variable names used in the f-string separated by a comma and space.",
+      "templateCode": "info = (\"Ace\", 95)\n§§§§§§§§§§§§ = info\nprint(f\"{name}:{score}\")",
+      "targetCode": "info = (\"Ace\", 95)\nname, score = info\nprint(f\"{name}:{score}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Ace:95',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Ace:95"
+        }
+      ]
     },
     {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 좌표 튜플 리스트를 순회하며 모든 좌표값의 총합을 구해 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that iterates over points and computes the total sum of all coordinates.',
-      hint_ko: 'for 반복문 변수 자리에 x, y를 적으면 매 반복마다 꺼낸 튜플이 두 변수로 바로 언패킹됩니다.',
-      hint_en: 'Placing x, y in the for header unpacks each tuple automatically on every iteration.',
-      targetCode: 'points = [(1, 2), (3, 4)]\ntotal = 0\nfor x, y in points:\n    total += x + y\nprint(total)',
-      testCases: [
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 좌표 튜플 리스트를 순회하며 모든 좌표값의 총합을 구해 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that iterates over points and computes the total sum of all coordinates.",
+      "hint_ko": "for 반복문 변수 자리에 x, y를 적으면 매 반복마다 꺼낸 튜플이 두 변수로 바로 언패킹됩니다.",
+      "hint_en": "Placing x, y in the for header unpacks each tuple automatically on every iteration.",
+      "targetCode": "points = [(1, 2), (3, 4)]\ntotal = 0\nfor x, y in points:\n    total += x + y\nprint(total)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '10',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10"
+        }
+      ]
     },
     {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 튜플 리스트를 순회하며 각 튜플의 두 요소를 두 변수로 받아 출력해보세요.',
-      prompt_en: '[Fill Blank] Unpack each tuple directly in the loop header so its pair of values is printed.',
-      hint_ko: '출력문에서 사용하고 있는 두 개의 변수명을 쉼표와 공백으로 나란히 적어보세요.',
-      hint_en: 'Write the two single-letter variable names used in the print statement separated by a comma and space.',
-      templateCode: 'pairs = [("HP", 100), ("MP", 50)]\nfor §§§§§ in pairs:\n    print(f"{k}={v}")',
-      targetCode: 'pairs = [("HP", 100), ("MP", 50)]\nfor k, v in pairs:\n    print(f"{k}={v}")',
-      testCases: [
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 튜플 리스트를 순회하며 각 튜플의 두 요소를 두 변수로 받아 출력해보세요.",
+      "prompt_en": "[Fill Blank] Unpack each tuple directly in the loop header so its pair of values is printed.",
+      "hint_ko": "출력문에서 사용하고 있는 두 개의 변수명을 쉼표와 공백으로 나란히 적어보세요.",
+      "hint_en": "Write the two single-letter variable names used in the print statement separated by a comma and space.",
+      "templateCode": "pairs = [(\"HP\", 100), (\"MP\", 50)]\nfor §§§§§ in pairs:\n    print(f\"{k}={v}\")",
+      "targetCode": "pairs = [(\"HP\", 100), (\"MP\", 50)]\nfor k, v in pairs:\n    print(f\"{k}={v}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'HP=100\nMP=50',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "HP=100\nMP=50"
+        }
+      ]
     },
     {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 정수 5 하나가 담긴 단일 요소 튜플을 만들고 각 좌표 합에 그 값을 곱해 누적 합계를 출력해보세요.',
-      prompt_en: '[Fill Blank] Complete the single-element tuple containing 5 and the loop variables to accumulate the scaled coordinate sums.',
-      hint_ko: '단일 요소 튜플 표기((5,))와 반복문에서 언패킹할 두 좌표 변수(x, y)를 순서대로 채우세요.',
-      hint_en: 'Fill in the 1-element tuple with 5, the two loop variables, and the compound addition operator.',
-      templateCode: 'scale = §§§§§\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor §§§§§ in pts:\n    total += (x + y) * scale[0]\nprint(f"Sum:{total}")',
-      targetCode: 'scale = (5,)\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor x, y in pts:\n    total += (x + y) * scale[0]\nprint(f"Sum:{total}")',
-      testCases: [
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 정수 5 하나가 담긴 단일 요소 튜플을 만들고 각 좌표 합에 그 값을 곱해 누적 합계를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete the single-element tuple containing 5 and the loop variables to accumulate the scaled coordinate sums.",
+      "hint_ko": "단일 요소 튜플 표기((5,))와 반복문에서 언패킹할 두 좌표 변수(x, y)를 순서대로 채우세요.",
+      "hint_en": "Fill in the 1-element tuple with 5, the two loop variables, and the compound addition operator.",
+      "templateCode": "scale = §§§§§\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor §§§§§ in pts:\n    total += (x + y) * scale[0]\nprint(f\"Sum:{total}\")",
+      "targetCode": "scale = (5,)\npts = [(2, 3), (4, 1)]\ntotal = 0\nfor x, y in pts:\n    total += (x + y) * scale[0]\nprint(f\"Sum:{total}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Sum:50',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Sum:50"
+        }
+      ]
     },
     {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 단일 요소 튜플 one을 올바르게 생성해 길이와 첫 요소를 출력하도록 문법 오류를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix line 1 so one becomes a single-element tuple and its length and element are printed.',
-      hint_ko: '소괄호 안에 값이 하나뿐일 때는 값 뒤에 쉼표(,)가 있어야 단일 요소 튜플로 인식됩니다.',
-      hint_en: 'Add a trailing comma after the value inside the parentheses so Python creates a tuple.',
-      templateCode: 'one = (5.)\nprint(len(one), one[0])',
-      targetCode: 'one = (5,)\nprint(len(one), one[0])',
-      testCases: [
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 단일 요소 튜플 one을 올바르게 생성해 길이와 첫 요소를 출력하도록 문법 오류를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix line 1 so one becomes a single-element tuple and its length and element are printed.",
+      "hint_ko": "소괄호 안에 값이 하나뿐일 때는 값 뒤에 쉼표(,)가 있어야 단일 요소 튜플로 인식됩니다.",
+      "hint_en": "Add a trailing comma after the value inside the parentheses so Python creates a tuple.",
+      "templateCode": "one = (5.)\nprint(len(one), one[0])",
+      "targetCode": "one = (5,)\nprint(len(one), one[0])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '1 5',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1 5"
+        }
+      ]
     },
     {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 첫 번째 요소가 90으로 바뀐 새 튜플을 재할당해 두 요소의 합을 출력하도록 수정해보세요.',
-      prompt_en: '[Fix Bug] Update the reassigned tuple on line 2 so the first element is 90 and the sum is printed.',
-      hint_ko: '변수 pt에 새 튜플 (90, 20)을 대입하면 언패킹된 x와 y의 합이 110이 됩니다.',
-      hint_en: 'Since tuples cannot be modified in place, reassign variable pt to the new tuple (90, 20).',
-      templateCode: 'pt = (10, 20)\npt = (10, 20)\nx, y = pt\nprint(f"{x + y}")',
-      targetCode: 'pt = (10, 20)\npt = (90, 20)\nx, y = pt\nprint(f"{x + y}")',
-      testCases: [
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 첫 번째 요소가 90으로 바뀐 새 튜플을 재할당해 두 요소의 합을 출력하도록 수정해보세요.",
+      "prompt_en": "[Fix Bug] Update the reassigned tuple on line 2 so the first element is 90 and the sum is printed.",
+      "hint_ko": "변수 pt에 새 튜플 (90, 20)을 대입하면 언패킹된 x와 y의 합이 110이 됩니다.",
+      "hint_en": "Since tuples cannot be modified in place, reassign variable pt to the new tuple (90, 20).",
+      "templateCode": "pt = (10, 20)\npt = (10, 20)\nx, y = pt\nprint(f\"{x + y}\")",
+      "targetCode": "pt = (10, 20)\npt = (90, 20)\nx, y = pt\nprint(f\"{x + y}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '110',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "110"
+        }
+      ]
     },
     {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 튜플 box의 두 요소를 출력문에서 사용하는 두 변수에 나누어 담는 한 줄을 완성해보세요.',
-      prompt_en: '[Complete Line] Complete the line that unpacks tuple box into the two variables used in the print statement.',
-      hint_ko: '출력문 중괄호 안의 두 변수 이름을 쉼표로 나열하고 등호 오른쪽에 튜플 변수를 적으세요.',
-      hint_en: 'Place the two variable names from the f-string on the left of = and box on the right.',
-      templateCode: 'box = ("Gold", 250)\n§§§§§§§§§§§§§§§§§§§\nprint(f"{item}:{amount}")',
-      targetCode: 'box = ("Gold", 250)\nitem, amount = box\nprint(f"{item}:{amount}")',
-      testCases: [
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 튜플 box의 두 요소를 출력문에서 사용하는 두 변수에 나누어 담는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Complete the line that unpacks tuple box into the two variables used in the print statement.",
+      "hint_ko": "출력문 중괄호 안의 두 변수 이름을 쉼표로 나열하고 등호 오른쪽에 튜플 변수를 적으세요.",
+      "hint_en": "Place the two variable names from the f-string on the left of = and box on the right.",
+      "templateCode": "box = (\"Gold\", 250)\n§§§§§§§§§§§§§§§§§§§\nprint(f\"{item}:{amount}\")",
+      "targetCode": "box = (\"Gold\", 250)\nitem, amount = box\nprint(f\"{item}:{amount}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Gold:250',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Gold:250"
+        }
+      ]
     },
     {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 튜플 리스트의 각 요소를 본문에서 사용하는 두 변수로 받으며 순회하는 반복문 헤더 한 줄을 완성해보세요.',
-      prompt_en: '[Complete Line] Complete the loop header that iterates over pts and unpacks each pair into the two variables.',
-      hint_ko: '반복문 헤더에서 두 변수 이름을 쉼표로 나란히 적어 리스트를 순회하세요.',
-      hint_en: 'Write the for loop header unpacking x and y from pts, ending with a colon.',
-      templateCode: 'pts = [(2, 5), (3, 4)]\ntotal = 0\n§§§§§§§§§§§§§§§§§\n    total += x * y\nprint(total)',
-      targetCode: 'pts = [(2, 5), (3, 4)]\ntotal = 0\nfor x, y in pts:\n    total += x * y\nprint(total)',
-      testCases: [
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 튜플 리스트의 각 요소를 본문에서 사용하는 두 변수로 받으며 순회하는 반복문 헤더 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Complete the loop header that iterates over pts and unpacks each pair into the two variables.",
+      "hint_ko": "반복문 헤더에서 두 변수 이름을 쉼표로 나란히 적어 리스트를 순회하세요.",
+      "hint_en": "Write the for loop header unpacking x and y from pts, ending with a colon.",
+      "templateCode": "pts = [(2, 5), (3, 4)]\ntotal = 0\n§§§§§§§§§§§§§§§§§\n    total += x * y\nprint(total)",
+      "targetCode": "pts = [(2, 5), (3, 4)]\ntotal = 0\nfor x, y in pts:\n    total += x * y\nprint(total)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '22',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "22"
+        }
+      ]
     },
     {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 쉼표가 없는 소괄호와 쉼표가 있는 단일 요소 튜플을 비교하는 다음 코드의 출력 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when comparing parentheses without a comma to a 1-element tuple.',
-      hint_ko: '변수 a는 일반 정수 10이고, 변수 b는 요소가 1개인 튜플이라는 점에 주목해 계산해보세요.',
-      hint_en: 'Note that a is the integer 10 whereas b is a 1-element tuple.',
-      targetCode: 'a = (10)\nb = (10,)\nprint(a * 2, len(b), b[0])',
-      choices: ['20 1 10', '(10, 10) 1 10', '20 2 10', '(10, 10) 2 10'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '20 1 10',
-        },
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 쉼표가 없는 소괄호와 쉼표가 있는 단일 요소 튜플을 비교하는 다음 코드의 출력 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when comparing parentheses without a comma to a 1-element tuple.",
+      "hint_ko": "변수 a는 일반 정수 10이고, 변수 b는 요소가 1개인 튜플이라는 점에 주목해 계산해보세요.",
+      "hint_en": "Note that a is the integer 10 whereas b is a 1-element tuple.",
+      "targetCode": "a = (10)\nb = (10,)\nprint(a * 2, len(b), b[0])",
+      "choices": [
+        "20 1 10",
+        "(10, 10) 1 10",
+        "20 2 10",
+        "(10, 10) 2 10"
       ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "20 1 10"
+        }
+      ]
     },
     {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 슬라이싱과 튜플 언패킹 순회가 결합된 다음 코드의 실행 결과를 예측해보세요.',
-      prompt_en: '[Predict Output] Predict the output of the following code combining slicing and tuple unpacking.',
-      hint_ko: '슬라이싱 범위에 포함되는 앞쪽 두 튜플에 대해서만 두 수의 곱이 누적됩니다.',
-      hint_en: 'Only the first two tuples from the slice are unpacked and multiplied into total.',
-      targetCode: 'pts = [(2, 3), (4, 5), (6, 7)]\ntotal = 0\nfor x, y in pts[:2]:\n    total += x * y\nprint(f"Ans:{total}")',
-      choices: ['Ans:26', 'Ans:68', 'Ans:14', 'Ans:27'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Ans:26',
-        },
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 슬라이싱과 튜플 언패킹 순회가 결합된 다음 코드의 실행 결과를 예측해보세요.",
+      "prompt_en": "[Predict Output] Predict the output of the following code combining slicing and tuple unpacking.",
+      "hint_ko": "슬라이싱 pts[:2]로 앞쪽 두 튜플 (1, 2)와 (3, 4)만 언패킹되어 합산됩니다.",
+      "hint_en": "Only the first two tuples from pts[:2] are unpacked and added into total.",
+      "targetCode": "pts = [(1, 2), (3, 4), (10, 20)]\ntotal = 0\nfor x, y in pts[:2]:\n    total += x + y\nprint(f\"Ans:{total}\")",
+      "choices": [
+        "Ans:10",
+        "Ans:40",
+        "Ans:3",
+        "Ans:7"
       ],
-    },
-  ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Ans:10"
+        }
+      ]
+    }
+  ]
 };

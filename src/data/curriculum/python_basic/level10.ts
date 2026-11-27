@@ -1,209 +1,219 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_10: PracticeRound = {
-  id: 'py-basic-r10',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 10,
-  title_ko: '기초 출력과 연산 종합 문제풀이',
-  title_en: 'Section 1 Comprehensive Review',
-  description_ko: '섹션 1에서 배운 print() 옵션, 사칙연산·몫·나머지·거듭제곱, 문자열 연산과 이스케이프를 종합 점검합니다.',
-  description_en: 'Comprehensive review of Section 1: print() options, arithmetic/modulo/power, string ops, and escapes.',
-  totalQuestions: 10,
-  unlockedBlocks: [],
-  questions: [
+  "id": "py-basic-r10",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 10,
+  "title_ko": "기초 출력과 연산 종합 문제풀이",
+  "title_en": "Section 1 Comprehensive Review",
+  "description_ko": "섹션 1에서 배운 print() 옵션, 사칙연산·몫·나머지·거듭제곱, 문자열 연산과 이스케이프를 종합 점검합니다.",
+  "description_en": "Comprehensive review of Section 1: print() options, arithmetic/modulo/power, string ops, and escapes.",
+  "totalQuestions": 10,
+  "unlockedBlocks": [],
+  "questions": [
     {
-      id: 1,
-      step: 1,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 10과 5의 합에 2를 곱한 값과 25를 4로 나눈 정수 몫·나머지가 두 줄로 출력되도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks to print twice the sum of 10 and 5 on line 1, and the integer quotient and remainder of 25 by 4 on line 2.',
-      hint_ko: '소괄호 덧셈식과 정수 몫 연산자, 나머지 연산자를 순서에 맞게 채워보세요.',
-      hint_en: 'Complete the parenthesized addition on line 1, then the floor division and modulo operators on line 2.',
-      templateCode: 'print(§§§§§§§§§ * 2)\nprint(25 §§§ 4, 25 §§ 4)',
-      targetCode: 'print((10 + 5) * 2)\nprint(25 // 4, 25 % 4)',
-      testCases: [
+      "id": 1,
+      "step": 1,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 10과 5의 합에 2를 곱한 값과 25를 4로 나눈 정수 몫·나머지가 두 줄로 출력되도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks to print twice the sum of 10 and 5 on line 1, and the integer quotient and remainder of 25 by 4 on line 2.",
+      "hint_ko": "소괄호 덧셈식과 정수 몫 연산자, 나머지 연산자를 순서에 맞게 채워보세요.",
+      "hint_en": "Complete the parenthesized addition on line 1, then the floor division and modulo operators on line 2.",
+      "templateCode": "print(§§§§§§§§§ * 2)\nprint(25 §§§ 4, 25 §§ 4)",
+      "targetCode": "print((10 + 5) * 2)\nprint(25 // 4, 25 % 4)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '30\n6 1',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "30\n6 1"
+        }
+      ]
     },
     {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 출력 예제와 같이 등호가 이어진 헤더와 탭 간격이 적용된 번호가 출력되도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks so the header and tab-aligned number match the output example.',
-      hint_ko: '문자열 결합과 반복 연산자로 첫 줄 헤더를 완성하고, 둘째 줄에는 탭 이스케이프 문자를 넣습니다.',
-      hint_en: 'Use string concatenation and repetition on line 1, and the tab escape sequence on line 2.',
-      templateCode: 'print("Lv" §§ "=" §§ 4)\nprint("No§§§", 2 ** 3)',
-      targetCode: 'print("Lv" + "=" * 4)\nprint("No\\t", 2 ** 3)',
-      testCases: [
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 출력 예제와 같이 등호가 이어진 헤더와 탭 간격이 적용된 번호가 출력되도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks so the header and tab-aligned number match the output example.",
+      "hint_ko": "문자열 결합과 반복 연산자로 첫 줄 헤더를 완성하고, 둘째 줄에는 탭 이스케이프 문자를 넣습니다.",
+      "hint_en": "Use string concatenation and repetition on line 1, and the tab escape sequence on line 2.",
+      "templateCode": "print(\"Lv\" §§ \"=\" §§ 4)\nprint(\"No§§§\", 2 ** 3)",
+      "targetCode": "print(\"Lv\" + \"=\" * 4)\nprint(\"No\\t\", 2 ** 3)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Lv====\nNo\t 8',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Lv====\nNo\t 8"
+        }
+      ]
     },
     {
-      id: 3,
-      step: 3,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 출력 예제와 같이 날짜와 실수 나눗셈 결과가 한 줄로 이어져 출력되도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks so the date and float division result print on a single line as shown in the output example.',
-      hint_ko: '구분자 옵션과 줄 끝 옵션 이름을 첫째 줄에 채우고, 둘째 줄에는 실수 나눗셈 연산자를 넣습니다.',
-      hint_en: 'Fill in the separator and line-end option names on line 1, and the float division operator on line 2.',
-      templateCode: 'print(2026, 11, 17, §§§§="-", §§§§="->")\nprint(15 §§ 3)',
-      targetCode: 'print(2026, 11, 17, sep="-", end="->")\nprint(15 / 3)',
-      testCases: [
+      "id": 3,
+      "step": 3,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 출력 예제와 같이 날짜와 실수 나눗셈 결과가 한 줄로 이어져 출력되도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks so the date and float division result print on a single line as shown in the output example.",
+      "hint_ko": "구분자 옵션과 줄 끝 옵션 이름을 첫째 줄에 채우고, 둘째 줄에는 실수 나눗셈 연산자를 넣습니다.",
+      "hint_en": "Fill in the separator and line-end option names on line 1, and the float division operator on line 2.",
+      "templateCode": "print(2026, 11, 17, §§§§=\"-\", §§§§=\"->\")\nprint(15 §§ 3)",
+      "targetCode": "print(2026, 11, 17, sep=\"-\", end=\"->\")\nprint(15 / 3)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '2026-11-17->5.0',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2026-11-17->5.0"
+        }
+      ]
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 출력 예제의 문장과 계산 결과가 에러 없이 출력되도록 코드의 오류를 모두 찾아 고쳐보세요.',
-      prompt_en: '[Fix Bug] Find and fix the errors in the code so the sentence and addition result match the output example.',
-      hint_ko: '작은따옴표가 들어간 첫 문자열은 큰따옴표로 감싸고, 마지막 덧셈 수식은 따옴표를 벗겨 3 + 4로 적어야 계산됩니다.',
-      hint_en: 'Wrap the first string in double quotes and remove quotes from the final addition expression.',
-      templateCode: "print('It's', \"3 + 4 =\", \"3+4\")",
-      targetCode: 'print("It\'s", "3 + 4 =", 3 + 4)',
-      testCases: [
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 출력 예제의 문장과 계산 결과가 에러 없이 출력되도록 코드의 오류를 모두 찾아 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Find and fix the errors in the code so the sentence and addition result match the output example.",
+      "hint_ko": "작은따옴표가 들어간 첫 문자열은 큰따옴표로 감싸고, 마지막 덧셈 수식은 따옴표를 벗겨 3 + 4로 적어야 계산됩니다.",
+      "hint_en": "Wrap the first string in double quotes and remove quotes from the final addition expression.",
+      "templateCode": "print('It's', \"3 + 4 =\", \"3+4\")",
+      "targetCode": "print(\"It's\", \"3 + 4 =\", 3 + 4)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: "It's 3 + 4 = 7",
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "It's 3 + 4 = 7"
+        }
+      ]
     },
     {
-      id: 5,
-      step: 5,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 탭 간격이 적용된 헤더와 하이픈 10개 구분선이 출력되도록 코드의 오류를 모두 찾아 고쳐보세요.',
-      prompt_en: '[Fix Bug] Find and fix the errors in the code so the tab-spaced header and 10-hyphen divider line print properly.',
-      hint_ko: '첫째 줄의 슬래시 방향을 역슬래시로 고치고, 둘째 줄의 문자열 반복에는 곱셈 기호를 사용합니다.',
-      hint_en: 'Use a backslash for the tab escape on line 1 and the multiplication operator to repeat "-" on line 2.',
-      templateCode: 'print("Item/tCost")\nprint("-" + 10)',
-      targetCode: 'print("Item\\tCost")\nprint("-" * 10)',
-      testCases: [
+      "id": 5,
+      "step": 5,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 탭 간격이 적용된 헤더와 하이픈 10개 구분선이 출력되도록 코드의 오류를 모두 찾아 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Find and fix the errors in the code so the tab-spaced header and 10-hyphen divider line print properly.",
+      "hint_ko": "첫째 줄의 슬래시 방향을 역슬래시로 고치고, 둘째 줄의 문자열 반복에는 곱셈 기호를 사용합니다.",
+      "hint_en": "Use a backslash for the tab escape on line 1 and the multiplication operator to repeat \"-\" on line 2.",
+      "templateCode": "print(\"Item/tCost\")\nprint(\"-\" + 10)",
+      "targetCode": "print(\"Item\\tCost\")\nprint(\"-\" * 10)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Item\tCost\n----------',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Item\tCost\n----------"
+        }
+      ]
     },
     {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 두 줄의 출력문이 한 줄로 이어져 정수 몫과 나머지를 출력하도록 코드의 오류를 모두 찾아 고쳐보세요.',
-      prompt_en: '[Fix Bug] Find and fix the errors in the code so the two print statements join on one line with the integer quotient and remainder.',
-      hint_ko: '옵션 지정에는 등호(=)를 쓰고, 소수점 없는 정수 몫 4가 나오도록 정수 몫 연산자(//)를 사용합니다.',
-      hint_en: 'Use = for the end option on line 1 and the floor division operator on line 2.',
-      templateCode: 'print("Q", "R", sep=":", end:"->")\nprint(14 ** 3, 14 % 3, sep=":")',
-      targetCode: 'print("Q", "R", sep=":", end="->")\nprint(14 // 3, 14 % 3, sep=":")',
-      testCases: [
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 두 줄의 출력문이 한 줄로 이어져 정수 몫과 나머지를 출력하도록 코드의 오류를 모두 찾아 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Find and fix the errors in the code so the two print statements join on one line with the integer quotient and remainder.",
+      "hint_ko": "옵션 지정에는 등호(=)를 쓰고, 소수점 없는 정수 몫 4가 나오도록 정수 몫 연산자(//)를 사용합니다.",
+      "hint_en": "Use = for the end option on line 1 and the floor division operator on line 2.",
+      "templateCode": "print(\"Q\", \"R\", sep=\":\", end:\"->\")\nprint(14 ** 3, 14 % 3, sep=\":\")",
+      "targetCode": "print(\"Q\", \"R\", sep=\":\", end=\"->\")\nprint(14 // 3, 14 % 3, sep=\":\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Q:R->4:2',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Q:R->4:2"
+        }
+      ]
     },
     {
-      id: 7,
-      step: 7,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 첫째 줄의 출력 형식에 맞춰 둘째 줄에 3의 3제곱 수식 라벨과 계산 결과를 나란히 출력해보세요.',
-      prompt_en: '[Complete Line] Following the format on line 1, write line 2 to print the formula label and evaluated result for 3 cubed.',
-      hint_ko: '첫째 줄의 출력 형식을 그대로 따라 밑과 지수를 3으로 바꾼 한 줄을 작성해보세요.',
-      hint_en: 'Follow the pattern on line 1 using base 3 and exponent 3 inside print().',
-      templateCode: 'print("2 ** 3 =", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("2 ** 3 =", 2 ** 3)\nprint("3 ** 3 =", 3 ** 3)',
-      testCases: [
+      "id": 7,
+      "step": 7,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 첫째 줄의 출력 형식에 맞춰 둘째 줄에 3의 3제곱 수식 라벨과 계산 결과를 나란히 출력해보세요.",
+      "prompt_en": "[Complete Line] Following the format on line 1, write line 2 to print the formula label and evaluated result for 3 cubed.",
+      "hint_ko": "첫째 줄의 출력 형식을 그대로 따라 밑과 지수를 3으로 바꾼 한 줄을 작성해보세요.",
+      "hint_en": "Follow the pattern on line 1 using base 3 and exponent 3 inside print().",
+      "templateCode": "print(\"2 ** 3 =\", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "print(\"2 ** 3 =\", 2 ** 3)\nprint(\"3 ** 3 =\", 3 ** 3)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '2 ** 3 = 8\n3 ** 3 = 27',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2 ** 3 = 8\n3 ** 3 = 27"
+        }
+      ]
     },
     {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 첫째 줄 출력 뒤에 이어지도록 둘째 줄에 100을 30으로 나눈 정수 몫과 나머지를 슬래시 구분자 옵션으로 출력해보세요.',
-      prompt_en: '[Complete Line] Write line 2 to print the integer quotient and remainder of 100 divided by 30 with a slash separator option.',
-      hint_ko: '정수 몫 수식, 나머지 수식, 그리고 슬래시 구분자 옵션을 쉼표로 나열해 작성합니다.',
-      hint_en: 'Pass 100 // 30, 100 % 30, and sep="/" to print() on line 2.',
-      templateCode: 'print("Ans", end=":")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("Ans", end=":")\nprint(100 // 30, 100 % 30, sep="/")',
-      testCases: [
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 첫째 줄 출력 뒤에 이어지도록 둘째 줄에 100을 30으로 나눈 정수 몫과 나머지를 슬래시 구분자 옵션으로 출력해보세요.",
+      "prompt_en": "[Complete Line] Write line 2 to print the integer quotient and remainder of 100 divided by 30 with a slash separator option.",
+      "hint_ko": "정수 몫 수식, 나머지 수식, 그리고 슬래시 구분자 옵션을 쉼표로 나열해 작성합니다.",
+      "hint_en": "Pass 100 // 30, 100 % 30, and sep=\"/\" to print() on line 2.",
+      "templateCode": "print(\"Ans\", end=\":\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "print(\"Ans\", end=\":\")\nprint(100 // 30, 100 % 30, sep=\"/\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Ans:3/10',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Ans:3/10"
+        }
+      ]
     },
     {
-      id: 9,
-      step: 9,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '문자열 결합·반복과 숫자 연산 우선순위(소괄호 ➔ 거듭제곱 ➔ 몫·나머지 ➔ 덧셈)를 비교해보세요.',
-      hint_en: 'Compare string repetition/concatenation on line 1 with numeric operator precedence on line 2.',
-      targetCode: 'print("2" + "3" * 2)\nprint((1 + 2) ** 2 + 17 % 5)',
-      choices: ['2323\n11', '233\n11', '233\n8', '26\n11'],
-      correctChoiceIndex: 1,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '233\n11',
-        },
+      "id": 9,
+      "step": 9,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "첫째 줄은 문자열 반복 후 이어붙이기이고, 둘째 줄은 소괄호 덧셈 후 곱셈입니다.",
+      "hint_en": "Line 1 repeats string \"3\" twice before concatenating, and line 2 evaluates parentheses first.",
+      "targetCode": "print(\"2\" + \"3\" * 2)\nprint((2 + 3) * 2)",
+      "choices": [
+        "2323\n10",
+        "233\n10",
+        "233\n8",
+        "8\n10"
       ],
+      "correctChoiceIndex": 1,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "233\n10"
+        }
+      ]
     },
     {
-      id: 10,
-      step: 10,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '첫째 줄의 sep과 end가 둘째 줄과 어떻게 이어지는지, 그리고 \\n에서 어디서 줄이 바뀌는지 확인해보세요.',
-      hint_en: 'Trace how sep and end connect line 1 to line 2, and where \\n creates a line break.',
-      targetCode: 'print("A", "B", sep="-", end=":")\nprint("C\\nD", 10 / 2)',
-      choices: ['A-B:C\nD 5.0', 'A-B:C\nD 5', 'A-B\nC\nD 5.0', 'A B:C\nD 5.0'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'A-B:C\nD 5.0',
-        },
+      "id": 10,
+      "step": 10,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "첫째 줄의 sep과 end가 둘째 줄과 어떻게 이어지는지, 그리고 \\n에서 어디서 줄이 바뀌는지 확인해보세요.",
+      "hint_en": "Trace how sep and end connect line 1 to line 2, and where \\n creates a line break.",
+      "targetCode": "print(\"A\", \"B\", sep=\"-\", end=\":\")\nprint(\"C\\nD\", 10 / 2)",
+      "choices": [
+        "A-B:C\nD 5.0",
+        "A-B:C\nD 5",
+        "A-B\nC\nD 5.0",
+        "A B:C\nD 5.0"
       ],
-    },
-  ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "A-B:C\nD 5.0"
+        }
+      ]
+    }
+  ]
 };

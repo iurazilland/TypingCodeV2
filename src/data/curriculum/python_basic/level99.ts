@@ -197,21 +197,21 @@ export const PYTHON_LEVEL_99: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] .find(), .count(), ord/chr 문자 이동과 f-string 복합 서식이 결합된 함수의 출력 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of decode(\"B-2001\") combining .find(), .count(), ord/chr, and f-string formatting.",
-      "hint_ko": "첫 글자 \"B\"에서 \"0\"의 개수(2개)만큼 뒤로 이동한 알파벳과, 하이픈 뒤 정수 2001을 2로 나눈 :,.2f 서식을 확인하세요.",
-      "hint_en": "Shift \"B\" forward by the count of \"0\" (2), and format 2001 / 2 with thousands commas and 2 decimal places.",
-      "targetCode": "def decode(tag):\n    p = tag.find(\"-\")\n    ch = chr(ord(tag[0]) + tag.count(\"0\"))\n    num = int(tag[p + 1:]) / 2\n    return f\"{ch}:{num:,.2f}\"\n\nprint(decode(\"B-2001\"))",
+      "hint_ko": "첫 글자 \"B\"에서 \"0\"의 개수(3개)만큼 뒤로 이동한 알파벳(\"E\")과 하이픈 뒤 정수 1000의 천 단위 콤마 서식을 확인하세요.",
+      "hint_en": "Shift \"B\" forward by the count of \"0\" (3 -> \"E\"), and format 1000 with a thousands comma.",
+      "targetCode": "def decode(tag):\n    p = tag.find(\"-\")\n    ch = chr(ord(tag[0]) + tag.count(\"0\"))\n    num = int(tag[p + 1:])\n    return f\"{ch}:{num:,}\"\n\nprint(decode(\"B-1000\"))",
       "choices": [
-        "D:1,000.50",
-        "E:1,000.50",
-        "D:1000.50",
-        "C:1,000.50"
+        "E:1,000",
+        "D:1,000",
+        "E:1000",
+        "C:1,000"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "D:1,000.50"
+          "expectedOutput": "E:1,000"
         }
       ]
     }

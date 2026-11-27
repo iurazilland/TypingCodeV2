@@ -312,23 +312,23 @@ export const PYTHON_LEVEL_106: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] 피타고라스 빗변 길이(sqrt)와 최대공약수(gcd), 팩토리얼이 결합된 코드의 결과를 선택해보세요.",
+      "prompt_ko": "[출력 결과 예측] math 모듈의 sqrt(), gcd(), factorial()을 함께 사용한 다음 코드의 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of the code using sqrt, gcd, and factorial.",
-      "hint_ko": "3^2 + 4^2 = 25의 제곱근은 5이고, 15와 20의 최대공약수는 5이며, 4!은 24입니다.",
-      "hint_en": "sqrt(9 + 16) is 5.0 (int 5), gcd(15, 20) is 5, and factorial(4) is 24.",
-      "targetCode": "from math import sqrt, gcd, factorial\nhyp = int(sqrt(3 ** 2 + 4 ** 2))\ng = gcd(15, 20)\nprint(hyp + g, factorial(4))",
+      "hint_ko": "16의 제곱근 정수는 4, 6과 9의 최대공약수는 3, 3! (1*2*3)은 6입니다.",
+      "hint_en": "int(sqrt(16)) is 4, gcd(6, 9) is 3, and factorial(3) is 6.",
+      "targetCode": "from math import sqrt, gcd, factorial\nprint(int(sqrt(16)), gcd(6, 9), factorial(3))",
       "choices": [
-        "10 24",
-        "5 24",
-        "10 12",
-        "15 24"
+        "4 3 6",
+        "4 3 3",
+        "8 3 6",
+        "4 1 6"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "10 24"
+          "expectedOutput": "4 3 6"
         }
       ]
     }

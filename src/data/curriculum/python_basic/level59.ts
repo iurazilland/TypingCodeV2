@@ -1,318 +1,328 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_59: PracticeRound = {
-  id: 'py-basic-r59',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 59,
-  title_ko: '59레벨: 딕셔너리(dict) 생성과 키(d[key])로 값 조회하기',
-  title_en: 'Level 59: Dictionary Creation & Key Lookup (d[key])',
-  description_ko: '중괄호({키: 값})로 딕셔너리를 생성하고 키 이름을 이용해 원하는 값을 즉시 꺼내 활용하는 법을 익힙니다.',
-  description_en: 'Create key-value dictionaries with curly braces ({key: value}) and look up values by key.',
-  totalQuestions: 15,
-  unlockedBlocks: [
-    'comment',
-    'print',
-    'variable',
-    'input',
-    'type',
-    'if',
-    'for_range',
-    'range',
-    'for_in',
-    'while',
-    'break',
-    'continue',
-    'list',
-    'tuple',
-    'dict',
-    'iter',
-    'method',
+  "id": "py-basic-r59",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 59,
+  "title_ko": "59레벨: 딕셔너리(dict) 생성과 키(d[key])로 값 조회하기",
+  "title_en": "Level 59: Dictionary Creation & Key Lookup (d[key])",
+  "description_ko": "중괄호({키: 값})로 딕셔너리를 생성하고 키 이름을 이용해 원하는 값을 즉시 꺼내 활용하는 법을 익힙니다.",
+  "description_en": "Create key-value dictionaries with curly braces ({key: value}) and look up values by key.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable",
+    "input",
+    "type",
+    "if",
+    "for_range",
+    "range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "iter",
+    "method"
   ],
-  questions: [
+  "questions": [
     {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 두 과일의 가격이 담긴 딕셔너리를 만들고 전체 항목 개수를 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that creates dictionary menu with fruit prices and prints the entry count.',
-      hint_ko: '딕셔너리는 중괄호 안에 키와 값을 콜론(:)으로 짝지어 만들며, len()은 쌍의 개수를 반환합니다.',
-      hint_en: 'Dictionaries pair keys and values with colons inside curly braces, and len() counts the pairs.',
-      targetCode: 'menu = {"apple": 1000, "banana": 2000}\nprint(len(menu))',
-      testCases: [
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 두 과일의 가격이 담긴 딕셔너리를 만들고 전체 항목 개수를 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that creates dictionary menu with fruit prices and prints the entry count.",
+      "hint_ko": "딕셔너리는 중괄호 안에 키와 값을 콜론(:)으로 짝지어 만들며, len()은 쌍의 개수를 반환합니다.",
+      "hint_en": "Dictionaries pair keys and values with colons inside curly braces, and len() counts the pairs.",
+      "targetCode": "menu = {\"apple\": 1000, \"banana\": 2000}\nprint(len(menu))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '2',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2"
+        }
+      ]
     },
     {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 체력과 마나 수치를 키와 값으로 짝지은 딕셔너리를 완성해 항목 개수를 출력해보세요.',
-      prompt_en: '[Fill Blank] Complete the key-value separator in dictionary stat and print the number of entries.',
-      hint_ko: '딕셔너리에서 키와 값을 연결하는 구분 기호를 채우세요.',
-      hint_en: 'Fill in the colon that pairs the key with its value.',
-      templateCode: 'stat = {"hp"§§ 100, "mp": 50}\nprint(len(stat))',
-      targetCode: 'stat = {"hp": 100, "mp": 50}\nprint(len(stat))',
-      testCases: [
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 체력과 마나 수치를 키와 값으로 짝지은 딕셔너리를 완성해 항목 개수를 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete the key-value separator in dictionary stat and print the number of entries.",
+      "hint_ko": "딕셔너리에서 키와 값을 연결하는 구분 기호를 채우세요.",
+      "hint_en": "Fill in the colon that pairs the key with its value.",
+      "templateCode": "stat = {\"hp\"§§ 100, \"mp\": 50}\nprint(len(stat))",
+      "targetCode": "stat = {\"hp\": 100, \"mp\": 50}\nprint(len(stat))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '2',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2"
+        }
+      ]
     },
     {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 딕셔너리에서 사과의 가격을 키로 조회해 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that looks up and prints the price of apple from menu.',
-      hint_ko: '딕셔너리는 인덱스 번호 대신 대괄호 안에 키 이름을 넣어 값을 조회합니다.',
-      hint_en: 'Place the key name inside square brackets to retrieve its corresponding value.',
-      targetCode: 'menu = {"apple": 1000, "banana": 2000}\nprint(menu["apple"])',
-      testCases: [
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 딕셔너리에서 사과의 가격을 키로 조회해 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that looks up and prints the price of apple from menu.",
+      "hint_ko": "딕셔너리는 인덱스 번호 대신 대괄호 안에 키 이름을 넣어 값을 조회합니다.",
+      "hint_en": "Place the key name inside square brackets to retrieve its corresponding value.",
+      "targetCode": "menu = {\"apple\": 1000, \"banana\": 2000}\nprint(menu[\"apple\"])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '1000',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1000"
+        }
+      ]
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 딕셔너리 user에서 사용자 이름을 조회해 출력해보세요.',
-      prompt_en: '[Fill Blank] Look up and print the user name from dictionary user.',
-      hint_ko: '대괄호 안에 조회할 문자열 키를 큰따옴표와 함께 적으세요.',
-      hint_en: 'Write the double-quoted key name inside the square brackets.',
-      templateCode: 'user = {"name": "Mina", "lv": 5}\nprint(user[§§§§§§§])',
-      targetCode: 'user = {"name": "Mina", "lv": 5}\nprint(user["name"])',
-      testCases: [
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 딕셔너리 user에서 사용자 이름을 조회해 출력해보세요.",
+      "prompt_en": "[Fill Blank] Look up and print the user name from dictionary user.",
+      "hint_ko": "대괄호 안에 조회할 문자열 키를 큰따옴표와 함께 적으세요.",
+      "hint_en": "Write the double-quoted key name inside the square brackets.",
+      "templateCode": "user = {\"name\": \"Mina\", \"lv\": 5}\nprint(user[§§§§§§§])",
+      "targetCode": "user = {\"name\": \"Mina\", \"lv\": 5}\nprint(user[\"name\"])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Mina',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Mina"
+        }
+      ]
     },
     {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 딕셔너리에서 두 과목의 점수를 각각 조회해 더한 총점을 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that looks up two subject scores from d, adds them, and prints the total.',
-      hint_ko: '각 키로 조회한 정수 값을 덧셈 연산자로 바로 더할 수 있습니다.',
-      hint_en: 'Values retrieved by key can be added directly in an arithmetic expression.',
-      targetCode: 'd = {"kor": 90, "math": 80}\ntotal = d["kor"] + d["math"]\nprint(f"Total:{total}")',
-      testCases: [
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 딕셔너리에서 두 과목의 점수를 각각 조회해 더한 총점을 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that looks up two subject scores from d, adds them, and prints the total.",
+      "hint_ko": "각 키로 조회한 정수 값을 덧셈 연산자로 바로 더할 수 있습니다.",
+      "hint_en": "Values retrieved by key can be added directly in an arithmetic expression.",
+      "targetCode": "d = {\"kor\": 90, \"math\": 80}\ntotal = d[\"kor\"] + d[\"math\"]\nprint(f\"Total:{total}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Total:170',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Total:170"
+        }
+      ]
     },
     {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 펜 2개 가격에 공책 1개 가격을 더한 총비용을 계산해 출력해보세요.',
-      prompt_en: '[Fill Blank] Complete the lookup expression to add the price of a notebook to the price of two pens.',
-      hint_ko: '딕셔너리 변수 이름 뒤 대괄호에 두 번째 품목의 문자열 키를 넣어 조회하세요.',
-      hint_en: 'Access the second item from shop using square brackets and its quoted key.',
-      templateCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + §§§§§§§§§§§§§\nprint(f"Cost:{cost}")',
-      targetCode: 'shop = {"pen": 500, "note": 1200}\ncost = shop["pen"] * 2 + shop["note"]\nprint(f"Cost:{cost}")',
-      testCases: [
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 펜 2개 가격에 공책 1개 가격을 더한 총비용을 계산해 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete the lookup expression to add the price of a notebook to the price of two pens.",
+      "hint_ko": "딕셔너리 변수 이름 뒤 대괄호에 두 번째 품목의 문자열 키를 넣어 조회하세요.",
+      "hint_en": "Access the second item from shop using square brackets and its quoted key.",
+      "templateCode": "shop = {\"pen\": 500, \"note\": 1200}\ncost = shop[\"pen\"] * 2 + §§§§§§§§§§§§§\nprint(f\"Cost:{cost}\")",
+      "targetCode": "shop = {\"pen\": 500, \"note\": 1200}\ncost = shop[\"pen\"] * 2 + shop[\"note\"]\nprint(f\"Cost:{cost}\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Cost:2200',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Cost:2200"
+        }
+      ]
     },
     {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 조회할 등급을 입력받아 딕셔너리에서 해당 점수를 꺼내 출력하는 블록을 조립해보세요.',
-      prompt_en: '[Block] Assemble the code that reads a grade key from input and prints its score from grades.',
-      hint_ko: '대괄호 안에 따옴표 없이 변수 이름을 넣으면 그 변수에 담긴 문자열 키로 값을 찾습니다.',
-      hint_en: 'Putting an unquoted variable inside brackets looks up the key stored in that variable.',
-      targetCode: 'grades = {"A": 100, "B": 80}\nkey = input()\nprint(grades[key])',
-      testCases: [
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 조회할 등급을 입력받아 딕셔너리에서 해당 점수를 꺼내 출력하는 블록을 조립해보세요.",
+      "prompt_en": "[Block] Assemble the code that reads a grade key from input and prints its score from grades.",
+      "hint_ko": "대괄호 안에 따옴표 없이 변수 이름을 넣으면 그 변수에 담긴 문자열 키로 값을 찾습니다.",
+      "hint_en": "Putting an unquoted variable inside brackets looks up the key stored in that variable.",
+      "targetCode": "grades = {\"A\": 100, \"B\": 80}\nkey = input()\nprint(grades[key])",
+      "testCases": [
         {
-          id: 1,
-          input: 'A',
-          expectedOutput: '100',
-        },
-      ],
+          "id": 1,
+          "input": "A",
+          "expectedOutput": "100"
+        }
+      ]
     },
     {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 입력받은 품목의 가격을 딕셔너리에서 조회해 품목명과 함께 출력해보세요.',
-      prompt_en: '[Fill Blank] Complete the lookup expression to print the input item and its price from prices.',
-      hint_ko: '딕셔너리 이름 뒤 대괄호 안에 입력받은 변수명을 따옴표 없이 넣으세요.',
-      hint_en: 'Index into prices using the unquoted variable item inside brackets.',
-      templateCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}:{§§§§§§§§§§§§§}")',
-      targetCode: 'prices = {"tea": 3000, "pie": 4500}\nitem = input()\nprint(f"{item}:{prices[item]}")',
-      testCases: [
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 입력받은 품목의 가격을 딕셔너리에서 조회해 품목명과 함께 출력해보세요.",
+      "prompt_en": "[Fill Blank] Complete the lookup expression to print the input item and its price from prices.",
+      "hint_ko": "딕셔너리 이름 뒤 대괄호 안에 입력받은 변수명을 따옴표 없이 넣으세요.",
+      "hint_en": "Index into prices using the unquoted variable item inside brackets.",
+      "templateCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nitem = input()\nprint(f\"{item}:{§§§§§§§§§§§§§}\")",
+      "targetCode": "prices = {\"tea\": 3000, \"pie\": 4500}\nitem = input()\nprint(f\"{item}:{prices[item]}\")",
+      "testCases": [
         {
-          id: 1,
-          input: 'tea',
-          expectedOutput: 'tea:3000',
-        },
-      ],
+          "id": 1,
+          "input": "tea",
+          "expectedOutput": "tea:3000"
+        }
+      ]
     },
     {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 딕셔너리를 완성하고 입력받은 품목의 보유 수량을 조회해 출력하도록 코드를 완성해보세요.',
-      prompt_en: '[Fill Blank] Complete the dictionary declaration and key lookup to print the quantity of the input item.',
-      hint_ko: '키와 값을 잇는 콜론(:)과 대괄호 안에 넣을 조회 키 변수(k)를 차례로 적으세요.',
-      hint_en: 'Fill in the key-value separator, the key variable inside brackets, and the result variable in braces.',
-      templateCode: 'bag = {"gold"§§ 500, "gem": 3}\nk = input()\nval = bag[§§]\nprint(f"{k}={val}")',
-      targetCode: 'bag = {"gold": 500, "gem": 3}\nk = input()\nval = bag[k]\nprint(f"{k}={val}")',
-      testCases: [
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 딕셔너리를 완성하고 입력받은 품목의 보유 수량을 조회해 출력하도록 코드를 완성해보세요.",
+      "prompt_en": "[Fill Blank] Complete the dictionary declaration and key lookup to print the quantity of the input item.",
+      "hint_ko": "키와 값을 잇는 콜론(:)과 대괄호 안에 넣을 조회 키 변수(k)를 차례로 적으세요.",
+      "hint_en": "Fill in the key-value separator, the key variable inside brackets, and the result variable in braces.",
+      "templateCode": "bag = {\"gold\"§§ 500, \"gem\": 3}\nk = input()\nval = bag[§§]\nprint(f\"{k}={val}\")",
+      "targetCode": "bag = {\"gold\": 500, \"gem\": 3}\nk = input()\nval = bag[k]\nprint(f\"{k}={val}\")",
+      "testCases": [
         {
-          id: 1,
-          input: 'gold',
-          expectedOutput: 'gold=500',
-        },
-      ],
+          "id": 1,
+          "input": "gold",
+          "expectedOutput": "gold=500"
+        }
+      ]
     },
     {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 딕셔너리 menu의 두 품목 가격의 합이 출력되도록 딕셔너리 선언의 문법 오류를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the dictionary syntax error on line 1 so the sum of the two prices is printed.',
-      hint_ko: '중괄호 안에서 키와 값을 연결할 때는 세미콜론(;)이 아닌 콜론(:)을 사용해야 합니다.',
-      hint_en: 'Separate each key and value inside the dictionary with a colon rather than an equals sign.',
-      templateCode: 'menu = {"tea"; 2500, "cake"; 4000}\nprint(menu["tea"] + menu["cake"])',
-      targetCode: 'menu = {"tea": 2500, "cake": 4000}\nprint(menu["tea"] + menu["cake"])',
-      testCases: [
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리 menu의 두 품목 가격의 합이 출력되도록 딕셔너리 선언의 문법 오류를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the dictionary syntax error on line 1 so the sum of the two prices is printed.",
+      "hint_ko": "중괄호 안에서 키와 값을 연결할 때는 세미콜론(;)이 아닌 콜론(:)을 사용해야 합니다.",
+      "hint_en": "Separate each key and value inside the dictionary with a colon rather than an equals sign.",
+      "templateCode": "menu = {\"tea\"; 2500, \"cake\"; 4000}\nprint(menu[\"tea\"] + menu[\"cake\"])",
+      "targetCode": "menu = {\"tea\": 2500, \"cake\": 4000}\nprint(menu[\"tea\"] + menu[\"cake\"])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '6500',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "6500"
+        }
+      ]
     },
     {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 딕셔너리 d에서 사과 가격을 조회해 출력하도록 괄호 문법 오류를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the lookup syntax on line 2 so the price of apple is printed.',
-      hint_ko: '딕셔너리에서 키로 값을 꺼낼 때는 소괄호가 아니라 대괄호 []를 사용해야 합니다.',
-      hint_en: 'Wrap the literal key name inside the square brackets in double quotes.',
-      templateCode: 'd = {"apple": 1500}\nprint(d("apple"))',
-      targetCode: 'd = {"apple": 1500}\nprint(d["apple"])',
-      testCases: [
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 딕셔너리 d에서 사과 가격을 조회해 출력하도록 괄호 문법 오류를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the lookup syntax on line 2 so the price of apple is printed.",
+      "hint_ko": "딕셔너리에서 키로 값을 꺼낼 때는 소괄호가 아니라 대괄호 []를 사용해야 합니다.",
+      "hint_en": "Wrap the literal key name inside the square brackets in double quotes.",
+      "templateCode": "d = {\"apple\": 1500}\nprint(d(\"apple\"))",
+      "targetCode": "d = {\"apple\": 1500}\nprint(d[\"apple\"])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '1500',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1500"
+        }
+      ]
     },
     {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 딕셔너리 info에서 도시 이름을 조회해 출력하는 한 줄을 완성해보세요.',
-      prompt_en: '[Complete Line] Complete the line that looks up and prints the city name from dictionary info.',
-      hint_ko: 'print() 안에 딕셔너리 변수와 대괄호 키 조회식을 넣어 작성하세요.',
-      hint_en: 'Pass the dictionary key lookup expression for "city" inside print().',
-      templateCode: 'info = {"city": "Seoul", "pop": 950}\n§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'info = {"city": "Seoul", "pop": 950}\nprint(info["city"])',
-      testCases: [
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 딕셔너리 info에서 도시 이름을 조회해 출력하는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Complete the line that looks up and prints the city name from dictionary info.",
+      "hint_ko": "print() 안에 딕셔너리 변수와 대괄호 키 조회식을 넣어 작성하세요.",
+      "hint_en": "Pass the dictionary key lookup expression for \"city\" inside print().",
+      "templateCode": "info = {\"city\": \"Seoul\", \"pop\": 950}\n§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "info = {\"city\": \"Seoul\", \"pop\": 950}\nprint(info[\"city\"])",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Seoul',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Seoul"
+        }
+      ]
     },
     {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 딕셔너리 cart의 단가와 수량을 각각 조회해 곱한 값을 total에 저장하는 한 줄을 완성해보세요.',
-      prompt_en: '[Complete Line] Complete the line that multiplies the price and quantity from cart and stores the result in total.',
-      hint_ko: '두 키를 각각 대괄호로 조회한 뒤 곱셈 연산자로 연결해 total에 대입하세요.',
-      hint_en: 'Assign the product of the two dictionary lookups to variable total.',
-      templateCode: 'cart = {"price": 1200, "qty": 4}\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)',
-      targetCode: 'cart = {"price": 1200, "qty": 4}\ntotal = cart["price"] * cart["qty"]\nprint(total)',
-      testCases: [
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 딕셔너리 cart의 단가와 수량을 각각 조회해 곱한 값을 total에 저장하는 한 줄을 완성해보세요.",
+      "prompt_en": "[Complete Line] Complete the line that multiplies the price and quantity from cart and stores the result in total.",
+      "hint_ko": "두 키를 각각 대괄호로 조회한 뒤 곱셈 연산자로 연결해 total에 대입하세요.",
+      "hint_en": "Assign the product of the two dictionary lookups to variable total.",
+      "templateCode": "cart = {\"price\": 1200, \"qty\": 4}\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\nprint(total)",
+      "targetCode": "cart = {\"price\": 1200, \"qty\": 4}\ntotal = cart[\"price\"] * cart[\"qty\"]\nprint(total)",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '4800',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "4800"
+        }
+      ]
     },
     {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 딕셔너리의 값으로 리스트가 들어 있을 때 다음 코드의 출력 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the output when indexing into a list stored inside a dictionary.',
-      hint_ko: 'd["scores"]로 꺼낸 리스트의 첫 번째 요소와 마지막 요소가 무엇인지 확인해보세요.',
-      hint_en: 'Identify the first and last elements of the list retrieved by d["scores"].',
-      targetCode: 'd = {"name": "Leo", "scores": [70, 85, 95]}\nfirst = d["scores"][0]\nlast = d["scores"][-1]\nprint(d["name"], first + last)',
-      choices: ['Leo 165', 'Leo 155', 'Leo 180', 'Leo 250'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Leo 165',
-        },
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 딕셔너리의 값으로 리스트가 들어 있을 때 다음 코드의 출력 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the output when indexing into a list stored inside a dictionary.",
+      "hint_ko": "d[\"scores\"] 리스트의 첫 번째 요소(10)와 마지막 요소(30)의 합을 확인해보세요.",
+      "hint_en": "Check the first element (10) and last element (30) of the list d[\"scores\"].",
+      "targetCode": "d = {\"name\": \"Leo\", \"scores\": [10, 20, 30]}\nfirst = d[\"scores\"][0]\nlast = d[\"scores\"][-1]\nprint(d[\"name\"], first + last)",
+      "choices": [
+        "Leo 40",
+        "Leo 30",
+        "Leo 50",
+        "Leo 60"
       ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Leo 40"
+        }
+      ]
     },
     {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 튜플 언패킹과 딕셔너리 조회가 결합된 다음 코드의 실행 결과를 예측해보세요.',
-      prompt_en: '[Predict Output] Predict the output of the code combining tuple unpacking and dictionary lookup.',
-      hint_ko: '딕셔너리에서 꺼낸 좌표 튜플을 언패킹한 뒤 배율(scale)을 곱한 값을 계산해보세요.',
-      hint_en: 'Unpack the tuple stored under "pos" and multiply the sum of its coordinates by "scale".',
-      targetCode: 'cfg = {"pos": (3, 7), "scale": 4, "tag": "P"}\nx, y = cfg["pos"]\nans = (x + y) * cfg["scale"]\nprint(f"{cfg[\'tag\']}:{ans},{len(cfg)}")',
-      choices: ['P:40,3', 'P:40,4', 'P:31,3', 'P:14,3'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'P:40,3',
-        },
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 튜플 언패킹과 딕셔너리 조회가 결합된 다음 코드의 실행 결과를 예측해보세요.",
+      "prompt_en": "[Predict Output] Predict the output of the code combining tuple unpacking and dictionary lookup.",
+      "hint_ko": "딕셔너리에서 꺼낸 좌표 튜플 (10, 20)을 언패킹하여 더한 값과 딕셔너리의 키 개수를 확인하세요.",
+      "hint_en": "Unpack the tuple (10, 20) from \"pos\", add x and y, and check len(cfg).",
+      "targetCode": "cfg = {\"pos\": (10, 20), \"tag\": \"P\"}\nx, y = cfg[\"pos\"]\nprint(f\"{cfg['tag']}:{x + y},{len(cfg)}\")",
+      "choices": [
+        "P:30,2",
+        "P:30,3",
+        "P:10,2",
+        "P:20,2"
       ],
-    },
-  ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "P:30,2"
+        }
+      ]
+    }
+  ]
 };

@@ -1,211 +1,227 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_20: PracticeRound = {
-  id: 'py-basic-r20',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 20,
-  title_ko: '변수·자료형·입력 종합 문제풀이',
-  title_en: 'Section 2 Comprehensive Review',
-  description_ko: '섹션 1~2에서 배운 출력·산술 연산과 주석·변수·복합 대입·사용자 입력·형변환을 종합 점검합니다.',
-  description_en: 'Comprehensive review of Sections 1 & 2: variables, compound ops, input(), type casting, and split().',
-  totalQuestions: 10,
-  unlockedBlocks: [],
-  questions: [
+  "id": "py-basic-r20",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 20,
+  "title_ko": "변수·자료형·입력 종합 문제풀이",
+  "title_en": "Section 2 Comprehensive Review",
+  "description_ko": "섹션 1~2에서 배운 출력·산술 연산과 주석·변수·복합 대입·사용자 입력·형변환을 종합 점검합니다.",
+  "description_en": "Comprehensive review of Sections 1 & 2: variables, compound ops, input(), type casting, and split().",
+  "totalQuestions": 10,
+  "unlockedBlocks": [],
+  "questions": [
     {
-      id: 1,
-      step: 1,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 정수로 입력받은 레벨을 5만큼 높인 뒤 라벨 문자열과 이어붙여 출력하도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks to increase the input integer level by 5 and concatenate it with the label string.',
-      hint_ko: '정수 변환 함수, 누적 덧셈 복합 대입 연산자, 문자열 변환 함수를 차례로 채웁니다.',
-      hint_en: 'Fill in the integer conversion function, += operator, and string conversion function in order.',
-      templateCode: 'lv = §§§§(input("Lv:"))\nlv §§§ 5\nprint("Lv." + §§§§(lv))',
-      targetCode: 'lv = int(input("Lv:"))\nlv += 5\nprint("Lv." + str(lv))',
-      testCases: [
+      "id": 1,
+      "step": 1,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 정수로 입력받은 레벨을 5만큼 높인 뒤 라벨 문자열과 이어붙여 출력하도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks to increase the input integer level by 5 and concatenate it with the label string.",
+      "hint_ko": "정수 변환 함수, 누적 덧셈 복합 대입 연산자, 문자열 변환 함수를 차례로 채웁니다.",
+      "hint_en": "Fill in the integer conversion function, += operator, and string conversion function in order.",
+      "templateCode": "lv = §§§§(input(\"Lv:\"))\nlv §§§ 5\nprint(\"Lv.\" + §§§§(lv))",
+      "targetCode": "lv = int(input(\"Lv:\"))\nlv += 5\nprint(\"Lv.\" + str(lv))",
+      "testCases": [
         {
-          id: 1,
-          input: '10',
-          expectedOutput: 'Lv:Lv.15',
-        },
-      ],
+          "id": 1,
+          "input": "10",
+          "expectedOutput": "Lv:Lv.15"
+        }
+      ]
     },
     {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 공백으로 입력된 두 정수의 몫과 나머지를 콜론으로 구분해 출력하도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks to print the integer quotient and remainder of the two space-separated inputs separated by a colon.',
-      hint_ko: '공백 분리 메서드 이름, 정수 몫 연산자, 구분자 옵션 이름을 순서대로 채워 넣습니다.',
-      hint_en: 'Enter the split method name, floor division operator, and sep option name in order.',
-      templateCode: 'a, b = input().§§§§§§()\nx, y = int(a), int(b)\nprint(x §§§ y, x % y, §§§§=":")',
-      targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x // y, x % y, sep=":")',
-      testCases: [
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 공백으로 입력된 두 정수의 몫과 나머지를 콜론으로 구분해 출력하도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks to print the integer quotient and remainder of the two space-separated inputs separated by a colon.",
+      "hint_ko": "공백 분리 메서드 이름, 정수 몫 연산자, 구분자 옵션 이름을 순서대로 채워 넣습니다.",
+      "hint_en": "Enter the split method name, floor division operator, and sep option name in order.",
+      "templateCode": "a, b = input().§§§§§§()\nx, y = int(a), int(b)\nprint(x §§§ y, x % y, §§§§=\":\")",
+      "targetCode": "a, b = input().split()\nx, y = int(a), int(b)\nprint(x // y, x % y, sep=\":\")",
+      "testCases": [
         {
-          id: 1,
-          input: '29 6',
-          expectedOutput: '4:5',
-        },
-      ],
+          "id": 1,
+          "input": "29 6",
+          "expectedOutput": "4:5"
+        }
+      ]
     },
     {
-      id: 3,
-      step: 3,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 두 변수의 값을 서로 맞바꾼 뒤 첫 번째 변수를 제곱해 출력하도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks to swap the two variables, square the first variable in place, and print both.',
-      hint_ko: '주석 기호, 값을 맞바꾸는 반대 순서의 변수 나열, 거듭제곱 복합 대입 연산자를 차례로 채웁니다.',
-      hint_en: 'Enter the comment symbol, the reversed variables b, a, and the **= operator in order.',
-      templateCode: '§§ Swap and square\na, b = 2, 5\na, b = §§§§§\na §§§§ 2\nprint(a, b)',
-      targetCode: '# Swap and square\na, b = 2, 5\na, b = b, a\na **= 2\nprint(a, b)',
-      expectedVariables: { a: 25, b: 2 },
-      testCases: [
+      "id": 3,
+      "step": 3,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 두 변수의 값을 서로 맞바꾼 뒤 첫 번째 변수를 제곱해 출력하도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks to swap the two variables, square the first variable in place, and print both.",
+      "hint_ko": "주석 기호, 값을 맞바꾸는 반대 순서의 변수 나열, 거듭제곱 복합 대입 연산자를 차례로 채웁니다.",
+      "hint_en": "Enter the comment symbol, the reversed variables b, a, and the **= operator in order.",
+      "templateCode": "§§ Swap and square\na, b = 2, 5\na, b = §§§§§\na §§§§ 2\nprint(a, b)",
+      "targetCode": "# Swap and square\na, b = 2, 5\na, b = b, a\na **= 2\nprint(a, b)",
+      "expectedVariables": {
+        "a": 25,
+        "b": 2
+      },
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '25 2',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "25 2"
+        }
+      ]
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 입력된 금액에 500원을 더한 뒤 앞뒤 문자열과 이어붙여 출력하도록 잘못된 형변환 함수를 모두 고쳐보세요.',
-      prompt_en: '[Fix Bug] Find and fix the wrong type conversion functions so 500 is added to the input price and printed with the labels.',
-      hint_ko: '첫째 줄의 input()은 int()로 감싸 숫자로 계산하고, 셋째 줄의 price는 str()로 감싸 문자열과 합칩니다.',
-      hint_en: 'Wrap input() in int() on line 1 for addition, and wrap price in str() on line 3 for concatenation.',
-      templateCode: 'price = str(input())\nprice += 500\nprint("Total:" + int(price) + "won")',
-      targetCode: 'price = int(input())\nprice += 500\nprint("Total:" + str(price) + "won")',
-      testCases: [
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 입력된 금액에 500원을 더한 뒤 앞뒤 문자열과 이어붙여 출력하도록 잘못된 형변환 함수를 모두 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Find and fix the wrong type conversion functions so 500 is added to the input price and printed with the labels.",
+      "hint_ko": "첫째 줄의 input()은 int()로 감싸 숫자로 계산하고, 셋째 줄의 price는 str()로 감싸 문자열과 합칩니다.",
+      "hint_en": "Wrap input() in int() on line 1 for addition, and wrap price in str() on line 3 for concatenation.",
+      "templateCode": "price = str(input())\nprice += 500\nprint(\"Total:\" + int(price) + \"won\")",
+      "targetCode": "price = int(input())\nprice += 500\nprint(\"Total:\" + str(price) + \"won\")",
+      "testCases": [
         {
-          id: 1,
-          input: '2000',
-          expectedOutput: 'Total:2500won',
-        },
-      ],
+          "id": 1,
+          "input": "2000",
+          "expectedOutput": "Total:2500won"
+        }
+      ]
     },
     {
-      id: 5,
-      step: 5,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 공백으로 입력된 두 점수의 평균이 올바르게 계산되어 출력되도록 코드의 오류를 모두 고쳐보세요.',
-      prompt_en: '[Fix Bug] Find and fix the errors in the code so the average of the two space-separated inputs is calculated properly.',
-      hint_ko: 'split 뒤에 ()를 붙이고, 나눗셈 전에 두 정수의 합 (int(a) + int(b))가 먼저 계산되도록 소괄호로 묶어줍니다.',
-      hint_en: 'Add () to call split on line 1 and wrap int(a) + int(b) in parentheses on line 2.',
-      templateCode: 'a, b = input().split[]\navg = int(a) + (int(b) / 2)\nprint("Avg:", avg)',
-      targetCode: 'a, b = input().split()\navg = (int(a) + int(b)) / 2\nprint("Avg:", avg)',
-      testCases: [
+      "id": 5,
+      "step": 5,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 공백으로 입력된 두 점수의 평균이 올바르게 계산되어 출력되도록 코드의 오류를 모두 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Find and fix the errors in the code so the average of the two space-separated inputs is calculated properly.",
+      "hint_ko": "split 뒤에 ()를 붙이고, 나눗셈 전에 두 정수의 합 (int(a) + int(b))가 먼저 계산되도록 소괄호로 묶어줍니다.",
+      "hint_en": "Add () to call split on line 1 and wrap int(a) + int(b) in parentheses on line 2.",
+      "templateCode": "a, b = input().split[]\navg = int(a) + (int(b) / 2)\nprint(\"Avg:\", avg)",
+      "targetCode": "a, b = input().split()\navg = (int(a) + int(b)) / 2\nprint(\"Avg:\", avg)",
+      "testCases": [
         {
-          id: 1,
-          input: '70 90',
-          expectedOutput: 'Avg: 80.0',
-        },
-      ],
+          "id": 1,
+          "input": "70 90",
+          "expectedOutput": "Avg: 80.0"
+        }
+      ]
     },
     {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 출력 예제와 같은 결과가 나오도록 잘못 쓰인 복합 대입 연산자들을 모두 고쳐보세요.',
-      prompt_en: '[Fix Bug] Fix the wrong compound assignment operators so the result matches the output example.',
-      hint_ko: '정수 몫 갱신에는 //=를 사용하고, 문자열 이어붙이기에는 +=를 사용해야 합니다.',
-      hint_en: 'Use //= for integer floor division on n and += for string concatenation on s.',
-      templateCode: 'n = 17\nn **= 5\ns = "Py"\ns -= "!"\nprint(s, n)',
-      targetCode: 'n = 17\nn //= 5\ns = "Py"\ns += "!"\nprint(s, n)',
-      expectedVariables: { n: 3, s: 'Py!' },
-      testCases: [
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 출력 예제와 같은 결과가 나오도록 잘못 쓰인 복합 대입 연산자들을 모두 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the wrong compound assignment operators so the result matches the output example.",
+      "hint_ko": "정수 몫 갱신에는 //=를 사용하고, 문자열 이어붙이기에는 +=를 사용해야 합니다.",
+      "hint_en": "Use //= for integer floor division on n and += for string concatenation on s.",
+      "templateCode": "n = 17\nn **= 5\ns = \"Py\"\ns -= \"!\"\nprint(s, n)",
+      "targetCode": "n = 17\nn //= 5\ns = \"Py\"\ns += \"!\"\nprint(s, n)",
+      "expectedVariables": {
+        "n": 3,
+        "s": "Py!"
+      },
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Py! 3',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Py! 3"
+        }
+      ]
     },
     {
-      id: 7,
-      step: 7,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 공백으로 구분된 두 입력을 받아 아래 줄에서 사용하는 두 변수에 나누어 저장해보세요.',
-      prompt_en: '[Complete Line] Write line 1 to read two space-separated inputs into the two variables used on line 2.',
-      hint_ko: '다중 할당 변수 x, y에 input().split()의 결과를 대입하는 한 줄을 작성합니다.',
-      hint_en: 'Write x, y = input().split() on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§§§\nx, y = y, x\nprint(x, y, sep="->")',
-      targetCode: 'x, y = input().split()\nx, y = y, x\nprint(x, y, sep="->")',
-      testCases: [
+      "id": 7,
+      "step": 7,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 공백으로 구분된 두 입력을 받아 아래 줄에서 사용하는 두 변수에 나누어 저장해보세요.",
+      "prompt_en": "[Complete Line] Write line 1 to read two space-separated inputs into the two variables used on line 2.",
+      "hint_ko": "다중 할당 변수 x, y에 input().split()의 결과를 대입하는 한 줄을 작성합니다.",
+      "hint_en": "Write x, y = input().split() on line 1.",
+      "templateCode": "§§§§§§§§§§§§§§§§§§§§§§§\nx, y = y, x\nprint(x, y, sep=\"->\")",
+      "targetCode": "x, y = input().split()\nx, y = y, x\nprint(x, y, sep=\"->\")",
+      "testCases": [
         {
-          id: 1,
-          input: 'Bronze Silver',
-          expectedOutput: 'Silver->Bronze',
-        },
-      ],
+          "id": 1,
+          "input": "Bronze Silver",
+          "expectedOutput": "Silver->Bronze"
+        }
+      ]
     },
     {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 문자열 "Ans:" 뒤에 위에서 구한 나머지 변수를 문자열로 변환해 공백 없이 이어붙여 출력해보세요.',
-      prompt_en: '[Complete Line] Write line 3 to concatenate "Ans:" with the remainder variable converted to a string and print it.',
-      hint_ko: 'print() 안에서 "Ans:" 뒤에 + 연산자로 str(n)을 연결해 작성합니다.',
-      hint_en: 'Write print("Ans:" + str(n)) on line 3.',
-      templateCode: 'n = int(input())\nn %= 7\n§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'n = int(input())\nn %= 7\nprint("Ans:" + str(n))',
-      testCases: [
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 문자열 \"Ans:\" 뒤에 위에서 구한 나머지 변수를 문자열로 변환해 공백 없이 이어붙여 출력해보세요.",
+      "prompt_en": "[Complete Line] Write line 3 to concatenate \"Ans:\" with the remainder variable converted to a string and print it.",
+      "hint_ko": "print() 안에서 \"Ans:\" 뒤에 + 연산자로 str(n)을 연결해 작성합니다.",
+      "hint_en": "Write print(\"Ans:\" + str(n)) on line 3.",
+      "templateCode": "n = int(input())\nn %= 7\n§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "n = int(input())\nn %= 7\nprint(\"Ans:\" + str(n))",
+      "testCases": [
         {
-          id: 1,
-          input: '25',
-          expectedOutput: 'Ans:4',
-        },
-      ],
+          "id": 1,
+          "input": "25",
+          "expectedOutput": "Ans:4"
+        }
+      ]
     },
     {
-      id: 9,
-      step: 9,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '스왑(a, b = b, a) 이후 바뀐 a와 b에 각각 복합 대입 연산을 적용하고 str() 반복 결과를 확인해보세요.',
-      hint_en: 'Swap a and b first, apply //= and += to the swapped values, and repeat str(a) twice.',
-      targetCode: 'a, b = 4, 15\na, b = b, a\na //= 4\nb += 2\nprint(str(a) * 2, b, sep=":")',
-      choices: ['6:6', '33:6', '33:17', '11:17'],
-      correctChoiceIndex: 1,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '33:6',
-        },
+      "id": 9,
+      "step": 9,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "스왑(a, b = b, a)으로 두 변수의 값이 바뀐 뒤 a에 5가 더해지고 b는 문자열로 2번 반복됩니다.",
+      "hint_en": "After swapping a and b, a increases by 5 and str(b) repeats twice.",
+      "targetCode": "a, b = 3, 10\na, b = b, a\na += 5\nprint(a, str(b) * 2, sep=\":\")",
+      "choices": [
+        "8:1010",
+        "15:33",
+        "15:6",
+        "10:33"
       ],
+      "correctChoiceIndex": 1,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "15:33"
+        }
+      ]
     },
     {
-      id: 10,
-      step: 10,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '주석 줄을 건너뛰고 int(2.9)의 소수점 버림 결과와 거듭제곱, end="->" 연결을 차례로 추적해보세요.',
-      hint_en: 'Skip the comment, truncate 2.9 with int(), compute the power, and join the two print() calls via end="->".',
-      targetCode: 'x = int("10")\ny = int(2.9)\n# y = 3\nx -= y ** 2\nprint("Result", end="->")\nprint(x, type(x))',
-      choices: ["Result->6 <class 'int'>", "Result -> 1 <class 'int'>", "Result -> 6.0 <class 'float'>", "Result\n6 <class 'int'>"],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: "Result->6 <class 'int'>",
-        },
+      "id": 10,
+      "step": 10,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "주석 줄은 무시되며 int(2.9)는 소수점을 버린 정수 2가 됩니다.",
+      "hint_en": "The comment line is ignored, and int(2.9) truncates the decimal part to become 2.",
+      "targetCode": "x = int(\"10\")\ny = int(2.9)\n# y = 3\nprint(\"Result\", end=\"->\")\nprint(x + y, type(x))",
+      "choices": [
+        "Result->12 <class 'int'>",
+        "Result->13 <class 'int'>",
+        "Result->12.9 <class 'float'>",
+        "Result\n12 <class 'int'>"
       ],
-    },
-  ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Result->12 <class 'int'>"
+        }
+      ]
+    }
+  ]
 };

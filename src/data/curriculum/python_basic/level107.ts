@@ -170,23 +170,23 @@ export const PYTHON_LEVEL_107: PracticeRound = {
       "step": 9,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] zip(), reversed(), abs(), enumerate()가 결합된 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the code combining zip(), reversed(), abs(), and enumerate().",
-      "hint_ko": "b를 역순(18, 25, 4)으로 a와 짝지어 구한 거리 [8, 5, 26]에 1부터 시작하는 번호를 각각 곱합니다.",
-      "hint_en": "Pair a with reversed(b) ([18, 25, 4]) to get gaps [8, 5, 26], then multiply by 1-based indices 1, 2, 3.",
-      "targetCode": "a = [10, 20, 30]\nb = [4, 25, 18]\ngaps = [abs(x - y) for x, y in zip(a, reversed(b))]\nres = [i * g for i, g in enumerate(gaps, 1)]\nprint(res)",
+      "prompt_ko": "[출력 결과 예측] zip(), reversed(), abs()가 결합된 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the code combining zip(), reversed(), and abs().",
+      "hint_ko": "b를 역순([25, 20, 5])으로 뒤집어 a([10, 20, 30])와 나란히 짝지은 뒤 두 수의 차이(절댓값)를 구합니다.",
+      "hint_en": "Pair a ([10, 20, 30]) with reversed(b) ([25, 20, 5]) and compute abs(x - y) for each pair.",
+      "targetCode": "a = [10, 20, 30]\nb = [5, 20, 25]\ngaps = [abs(x - y) for x, y in zip(a, reversed(b))]\nprint(gaps)",
       "choices": [
-        "[8, 10, 78]",
-        "[6, 10, 36]",
-        "[8, 5, 26]",
-        "[0, 5, 52]"
+        "[15, 0, 25]",
+        "[5, 0, 5]",
+        "[-15, 0, 25]",
+        "[15, 20, 25]"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[8, 10, 78]"
+          "expectedOutput": "[15, 0, 25]"
         }
       ]
     },

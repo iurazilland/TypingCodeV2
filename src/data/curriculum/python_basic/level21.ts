@@ -1,300 +1,316 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_21: PracticeRound = {
-  id: 'py-basic-r21',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 21,
-  title_ko: '불리언(True, False)과 같음·다름 비교 연산자 (==, !=)',
-  title_en: 'Booleans (True, False) & Equality Operators (==, !=)',
-  description_ko: '참(True)과 거짓(False) 불리언 자료형과 같음(==)·다름(!=) 비교 연산자를 익힙니다.',
-  description_en: 'Learn boolean values (True, False) and the equality (==) and inequality (!=) operators.',
-  totalQuestions: 15,
-  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 참을 뜻하는 불리언 값을 변수 is_ready에 저장하고 값과 자료형을 차례로 출력해보세요.',
-      prompt_en: '[Block] Store the boolean value for true in is_ready and print its value and data type.',
-      hint_ko: '따옴표 없이 첫 글자만 대문자인 True를 저장하면 bool 자료형이 됩니다.',
-      hint_en: 'Storing capitalized True without quotes creates a bool value.',
-      targetCode: 'is_ready = True\nprint(is_ready)\nprint(type(is_ready))',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: "True\n<class 'bool'>",
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 거짓을 뜻하는 불리언 상수를 변수 is_open에 저장하도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the boolean constant for false to store it in is_open.',
-      hint_ko: '영어로 거짓을 뜻하는 단어를 따옴표 없이 첫 글자만 대문자로 작성합니다.',
-      hint_en: 'Write the English word for false without quotes, capitalizing only the first letter.',
-      templateCode: 'is_open = §§§§§§\nprint(is_open)',
-      targetCode: 'is_open = False\nprint(is_open)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'False',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 두 변수 a와 b에 저장된 값이 서로 같은지 비교한 결과를 출력해보세요.',
-      prompt_en: '[Block] Compare whether variables a and b have equal values and print the result.',
-      hint_ko: '등호 한 개(=)는 변수 대입에 쓰고, 두 값이 같은지 비교할 때는 등호 두 개(==)를 사용합니다.',
-      hint_en: 'A single = assigns a value, while double equals (==) checks whether two values are equal.',
-      targetCode: 'a = 25\nb = 25\nprint(a == b)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 비밀번호 문자열이 "1234"와 일치하는지 비교하도록 연산자 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the comparison operator to check whether pw matches "1234".',
-      hint_ko: '양쪽 값이 서로 같은지 비교할 때는 등호 두 개를 빈틈없이 나란히 붙여 씁니다.',
-      hint_en: 'Place two equals signs side by side with no space to test equality.',
-      templateCode: 'pw = "1234"\nprint(pw §§§ "1234")',
-      targetCode: 'pw = "1234"\nprint(pw == "1234")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 입력받은 문자열 mode가 "off"와 다른지 비교하여 출력해보세요.',
-      prompt_en: '[Block] Check whether the input string mode differs from "off" and print the result.',
-      hint_ko: '느낌표와 등호를 합친 != 연산자는 두 값이 서로 다를 때 True를 반환합니다.',
-      hint_en: 'The != operator returns True when the two values differ.',
-      targetCode: 'mode = input("Mode:")\nprint(mode != "off")',
-      testCases: [
-        {
-          id: 1,
-          input: 'on',
-          expectedOutput: 'Mode:True',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 입력된 코드가 "ERR"과 다른지 비교하도록 연산자 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the comparison operator to check whether code differs from "ERR".',
-      hint_ko: '서로 다름을 뜻할 때는 느낌표 뒤에 등호를 바로 붙여서 표기합니다.',
-      hint_en: 'Write an exclamation mark followed immediately by an equals sign to test inequality.',
-      templateCode: 'code = input()\nprint(code §§§ "ERR")',
-      targetCode: 'code = input()\nprint(code != "ERR")',
-      testCases: [
-        {
-          id: 1,
-          input: 'OK',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 정수 n을 2로 나눈 나머지가 0과 같은지 비교해 짝수 여부를 판별해보세요.',
-      prompt_en: '[Block] Check whether n divided by 2 leaves a remainder of 0 to determine if n is even.',
-      hint_ko: '나머지 연산(n % 2)이 먼저 수행된 뒤 그 결과가 0과 같은지(== 0) 비교됩니다.',
-      hint_en: 'The modulo operation (n % 2) runs first, and its result is then compared with 0.',
-      targetCode: 'n = int(input())\nprint(n % 2 == 0)',
-      testCases: [
-        {
-          id: 1,
-          input: '14',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 숫자 10과 문자열 "10"이 서로 같은지 비교하도록 연산자 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the comparison operator to test whether integer 10 and string "10" are equal.',
-      hint_ko: '모양이 같아 보여도 숫자와 문자열은 자료형이 다르므로 같음 비교에서 거짓으로 판정됩니다.',
-      hint_en: 'Even with matching digits, an integer and a string have different types and compare as unequal.',
-      templateCode: 'num = 10\ntxt = "10"\nprint(num §§§ txt)',
-      targetCode: 'num = 10\ntxt = "10"\nprint(num == txt)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'False',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 5를 더한 n이 3의 배수인지 판별하도록 비교 연산자 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the comparison operator to check whether updated n is a multiple of 3.',
-      hint_ko: '3으로 나눈 나머지가 0과 같은지 비교하는 연산자(==)를 채웁니다.',
-      hint_en: 'Use compound addition first, then the equality operator for remainder 0, and the inequality operator for non-zero.',
-      templateCode: 'n = int(input())\nn += 5\nprint(n % 3 §§§ 0, n != 0)',
-      targetCode: 'n = int(input())\nn += 5\nprint(n % 3 == 0, n != 0)',
-      testCases: [
-        {
-          id: 1,
-          input: '7',
-          expectedOutput: 'True True',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 변수 flag에 참을 뜻하는 불리언 상수가 저장되도록 대소문자 오류를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the boolean literal so flag stores the boolean value for true.',
-      hint_ko: '파이썬의 불리언 상수는 반드시 첫 글자를 대문자로 적어야 예약어로 인식됩니다.',
-      hint_en: 'Python boolean literals must start with an uppercase letter to be recognized.',
-      templateCode: 'flag = true\nprint("Status", flag, sep=":")',
-      targetCode: 'flag = True\nprint("Status", flag, sep=":")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Status:True',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 입력받은 두 정수 x와 y가 서로 같은지 비교하도록 잘못된 연산자를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the comparison operator so it checks whether x and y are equal.',
-      hint_ko: '다름 비교 연산자(!=) 대신 양쪽 값이 같은지 확인하는 같음 비교 연산자(==)를 써야 합니다.',
-      hint_en: 'Replace the single assignment sign inside print() with the two-character equality operator.',
-      templateCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x != y)',
-      targetCode: 'a, b = input().split()\nx, y = int(a), int(b)\nprint(x == y)',
-      testCases: [
-        {
-          id: 1,
-          input: '15 15',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 정수 n을 3으로 나눈 나머지가 0과 같은지 비교한 결과를 변수 is_mul에 저장하는 한 줄을 작성해보세요.',
-      prompt_en: '[Complete Line] Write the line that stores whether n is divisible by 3 in variable is_mul.',
-      hint_ko: '변수 is_mul에 나머지 연산과 같음 비교식을 결합한 결과를 대입해보세요.',
-      hint_en: 'Assign the result of checking whether n % 3 equals 0 to the variable is_mul.',
-      templateCode: 'n = int(input())\n§§§§§§§§§§§§§§§§§§§§\nprint(is_mul)',
-      targetCode: 'n = int(input())\nis_mul = n % 3 == 0\nprint(is_mul)',
-      testCases: [
-        {
-          id: 1,
-          input: '12',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 정수 n을 문자열로 변환한 값이 입력 문자열 s와 서로 다른지 비교해 출력하는 한 줄을 작성해보세요.',
-      prompt_en: '[Complete Line] Write the line that converts integer n to a string and prints whether it differs from s.',
-      hint_ko: 'print() 함수 안에서 str(n)과 s를 다름 비교 연산자로 비교해보세요.',
-      hint_en: 'Compare str(n) and s with the inequality operator inside print().',
-      templateCode: 'n = 100\ns = input()\n§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'n = 100\ns = input()\nprint(str(n) != s)',
-      testCases: [
-        {
-          id: 1,
-          input: '200',
-          expectedOutput: 'True',
-        },
-      ],
-    },
-    {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
-      hint_ko: '정수로 변환한 값과 문자열의 비교 결과, 그리고 문자열로 변환한 값과 문자열의 비교 결과를 차례로 생각해보세요.',
-      hint_en: 'Compare an integer against a string on line 3, and compare two strings with identical characters on line 4.',
-      targetCode: 's = "10"\nx = int(s)\nprint(x == s)\nprint(str(x) == s)',
-      choices: ['True\nTrue', 'False\nTrue', 'False\nFalse', 'True\nFalse'],
-      correctChoiceIndex: 1,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'False\nTrue',
-        },
-      ],
-    },
-    {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
-      hint_ko: '복합 대입 연산 후 바뀐 x의 값으로 y와의 같음 비교 및 4로 나눈 나머지 다름 비교를 수행하고 구분자 옵션을 적용해보세요.',
-      hint_en: 'Update x with += first, evaluate both equality and inequality expressions, and join them with the sep string.',
-      targetCode: 'x = 12\ny = 15\nx += 3\nprint(x == y, x % 4 != 3, sep="/")',
-      choices: ['True/False', 'True/True', 'False/False', 'False/True'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'True/False',
-        },
-      ],
-    },
+  "id": "py-basic-r21",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 21,
+  "title_ko": "불리언(True, False)과 같음·다름 비교 연산자 (==, !=)",
+  "title_en": "Booleans (True, False) & Equality Operators (==, !=)",
+  "description_ko": "참(True)과 거짓(False) 불리언 자료형과 같음(==)·다름(!=) 비교 연산자를 익힙니다.",
+  "description_en": "Learn boolean values (True, False) and the equality (==) and inequality (!=) operators.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable",
+    "input",
+    "type"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 참을 뜻하는 불리언 값을 변수 is_ready에 저장하고 값과 자료형을 차례로 출력해보세요.",
+      "prompt_en": "[Block] Store the boolean value for true in is_ready and print its value and data type.",
+      "hint_ko": "따옴표 없이 첫 글자만 대문자인 True를 저장하면 bool 자료형이 됩니다.",
+      "hint_en": "Storing capitalized True without quotes creates a bool value.",
+      "targetCode": "is_ready = True\nprint(is_ready)\nprint(type(is_ready))",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True\n<class 'bool'>"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 거짓을 뜻하는 불리언 상수를 변수 is_open에 저장하도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the boolean constant for false to store it in is_open.",
+      "hint_ko": "영어로 거짓을 뜻하는 단어를 따옴표 없이 첫 글자만 대문자로 작성합니다.",
+      "hint_en": "Write the English word for false without quotes, capitalizing only the first letter.",
+      "templateCode": "is_open = §§§§§§\nprint(is_open)",
+      "targetCode": "is_open = False\nprint(is_open)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 두 변수 a와 b에 저장된 값이 서로 같은지 비교한 결과를 출력해보세요.",
+      "prompt_en": "[Block] Compare whether variables a and b have equal values and print the result.",
+      "hint_ko": "등호 한 개(=)는 변수 대입에 쓰고, 두 값이 같은지 비교할 때는 등호 두 개(==)를 사용합니다.",
+      "hint_en": "A single = assigns a value, while double equals (==) checks whether two values are equal.",
+      "targetCode": "a = 25\nb = 25\nprint(a == b)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 비밀번호 문자열이 \"1234\"와 일치하는지 비교하도록 연산자 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the comparison operator to check whether pw matches \"1234\".",
+      "hint_ko": "양쪽 값이 서로 같은지 비교할 때는 등호 두 개를 빈틈없이 나란히 붙여 씁니다.",
+      "hint_en": "Place two equals signs side by side with no space to test equality.",
+      "templateCode": "pw = \"1234\"\nprint(pw §§§ \"1234\")",
+      "targetCode": "pw = \"1234\"\nprint(pw == \"1234\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 입력받은 문자열 mode가 \"off\"와 다른지 비교하여 출력해보세요.",
+      "prompt_en": "[Block] Check whether the input string mode differs from \"off\" and print the result.",
+      "hint_ko": "느낌표와 등호를 합친 != 연산자는 두 값이 서로 다를 때 True를 반환합니다.",
+      "hint_en": "The != operator returns True when the two values differ.",
+      "targetCode": "mode = input(\"Mode:\")\nprint(mode != \"off\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "on",
+          "expectedOutput": "Mode:True"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 입력된 코드가 \"ERR\"과 다른지 비교하도록 연산자 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the comparison operator to check whether code differs from \"ERR\".",
+      "hint_ko": "서로 다름을 뜻할 때는 느낌표 뒤에 등호를 바로 붙여서 표기합니다.",
+      "hint_en": "Write an exclamation mark followed immediately by an equals sign to test inequality.",
+      "templateCode": "code = input()\nprint(code §§§ \"ERR\")",
+      "targetCode": "code = input()\nprint(code != \"ERR\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "OK",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 정수 n을 2로 나눈 나머지가 0과 같은지 비교해 짝수 여부를 판별해보세요.",
+      "prompt_en": "[Block] Check whether n divided by 2 leaves a remainder of 0 to determine if n is even.",
+      "hint_ko": "나머지 연산(n % 2)이 먼저 수행된 뒤 그 결과가 0과 같은지(== 0) 비교됩니다.",
+      "hint_en": "The modulo operation (n % 2) runs first, and its result is then compared with 0.",
+      "targetCode": "n = int(input())\nprint(n % 2 == 0)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "14",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 숫자 10과 문자열 \"10\"이 서로 같은지 비교하도록 연산자 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the comparison operator to test whether integer 10 and string \"10\" are equal.",
+      "hint_ko": "모양이 같아 보여도 숫자와 문자열은 자료형이 다르므로 같음 비교에서 거짓으로 판정됩니다.",
+      "hint_en": "Even with matching digits, an integer and a string have different types and compare as unequal.",
+      "templateCode": "num = 10\ntxt = \"10\"\nprint(num §§§ txt)",
+      "targetCode": "num = 10\ntxt = \"10\"\nprint(num == txt)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 5를 더한 n이 3의 배수인지 판별하도록 비교 연산자 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the comparison operator to check whether updated n is a multiple of 3.",
+      "hint_ko": "3으로 나눈 나머지가 0과 같은지 비교하는 연산자(==)를 채웁니다.",
+      "hint_en": "Use compound addition first, then the equality operator for remainder 0, and the inequality operator for non-zero.",
+      "templateCode": "n = int(input())\nn += 5\nprint(n % 3 §§§ 0, n != 0)",
+      "targetCode": "n = int(input())\nn += 5\nprint(n % 3 == 0, n != 0)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "7",
+          "expectedOutput": "True True"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 변수 flag에 참을 뜻하는 불리언 상수가 저장되도록 대소문자 오류를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the boolean literal so flag stores the boolean value for true.",
+      "hint_ko": "파이썬의 불리언 상수는 반드시 첫 글자를 대문자로 적어야 예약어로 인식됩니다.",
+      "hint_en": "Python boolean literals must start with an uppercase letter to be recognized.",
+      "templateCode": "flag = true\nprint(\"Status\", flag, sep=\":\")",
+      "targetCode": "flag = True\nprint(\"Status\", flag, sep=\":\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Status:True"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 입력받은 두 정수 x와 y가 서로 같은지 비교하도록 잘못된 연산자를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the comparison operator so it checks whether x and y are equal.",
+      "hint_ko": "다름 비교 연산자(!=) 대신 양쪽 값이 같은지 확인하는 같음 비교 연산자(==)를 써야 합니다.",
+      "hint_en": "Replace the single assignment sign inside print() with the two-character equality operator.",
+      "templateCode": "a, b = input().split()\nx, y = int(a), int(b)\nprint(x != y)",
+      "targetCode": "a, b = input().split()\nx, y = int(a), int(b)\nprint(x == y)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "15 15",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 정수 n을 3으로 나눈 나머지가 0과 같은지 비교한 결과를 변수 is_mul에 저장하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that stores whether n is divisible by 3 in variable is_mul.",
+      "hint_ko": "변수 is_mul에 나머지 연산과 같음 비교식을 결합한 결과를 대입해보세요.",
+      "hint_en": "Assign the result of checking whether n % 3 equals 0 to the variable is_mul.",
+      "templateCode": "n = int(input())\n§§§§§§§§§§§§§§§§§§§§\nprint(is_mul)",
+      "targetCode": "n = int(input())\nis_mul = n % 3 == 0\nprint(is_mul)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "12",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 정수 n을 문자열로 변환한 값이 입력 문자열 s와 서로 다른지 비교해 출력하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the line that converts integer n to a string and prints whether it differs from s.",
+      "hint_ko": "print() 함수 안에서 str(n)과 s를 다름 비교 연산자로 비교해보세요.",
+      "hint_en": "Compare str(n) and s with the inequality operator inside print().",
+      "templateCode": "n = 100\ns = input()\n§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "n = 100\ns = input()\nprint(str(n) != s)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "200",
+          "expectedOutput": "True"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
+      "hint_ko": "정수로 변환한 값과 문자열의 비교 결과, 그리고 문자열로 변환한 값과 문자열의 비교 결과를 차례로 생각해보세요.",
+      "hint_en": "Compare an integer against a string on line 3, and compare two strings with identical characters on line 4.",
+      "targetCode": "s = \"10\"\nx = int(s)\nprint(x == s)\nprint(str(x) == s)",
+      "choices": [
+        "True\nTrue",
+        "False\nTrue",
+        "False\nFalse",
+        "True\nFalse"
+      ],
+      "correctChoiceIndex": 1,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "False\nTrue"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
+      "hint_ko": "x += 3으로 x가 15가 된 뒤, 같음(==)과 다름(!=) 비교 결과를 확인해보세요.",
+      "hint_en": "After x += 3 makes x equal to 15, evaluate x == y and x != 15.",
+      "targetCode": "x = 12\ny = 15\nx += 3\nprint(x == y, x != 15, sep=\"/\")",
+      "choices": [
+        "True/False",
+        "True/True",
+        "False/False",
+        "False/True"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "True/False"
+        }
+      ]
+    }
+  ]
 };

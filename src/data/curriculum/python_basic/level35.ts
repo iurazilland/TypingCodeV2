@@ -1,300 +1,319 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_35: PracticeRound = {
-  id: 'py-basic-r35',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 35,
-  title_ko: '반복문 안의 if 조건 판별과 개수 세기(count += 1)',
-  title_en: 'Conditional Filtering & Counting (count += 1) in Loops',
-  description_ko: 'for 반복문 안에 if 조건문을 중첩하여 원하는 값만 출력하거나 개수(count += 1)와 합계를 구합니다.',
-  description_en: 'Nest if statements inside for loops to filter values, count matches (count += 1), and accumulate selectively.',
-  totalQuestions: 15,
-  unlockedBlocks: ['comment', 'print', 'variable', 'input', 'type', 'if', 'for_range', 'range'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 1부터 9까지 반복하며 조건문을 사용해 3의 배수만 골라 출력해보세요.',
-      prompt_en: '[Block] Filter and print only multiples of 3 from 1 through 9.',
-      hint_ko: 'for 블록 안의 if 헤더는 4칸, 조건이 참일 때 실행할 print(i)는 8칸 들여쓰기합니다.',
-      hint_en: 'Indent the if header 4 spaces and the inner print(i) 8 spaces.',
-      targetCode: 'for i in range(1, 10):\n    if i % 3 == 0:\n        print(i)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '3\n6\n9',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 1부터 n까지의 자연수 중 n의 약수만 골라 출력하도록 비교 연산자 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the comparison operator to filter and print every divisor of n.',
-      hint_ko: 'n을 i로 나눈 나머지가 0과 일치할 때 약수가 됩니다.',
-      hint_en: 'Use the double-equals operator to check if the remainder is 0.',
-      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if n % i §§§ 0:\n        print(i, end=" ")',
-      targetCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if n % i == 0:\n        print(i, end=" ")',
-      testCases: [
-        {
-          id: 1,
-          input: '6',
-          expectedOutput: '1 2 3 6',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 1부터 n까지 반복하며 3의 배수를 만날 때마다 변수 count를 1씩 증가시켜 총 개수를 출력해보세요.',
-      prompt_en: '[Block] Count how many multiples of 3 exist from 1 through n in variable count and print it.',
-      hint_ko: '개수를 셀 때는 i를 더하는 것이 아니라 조건이 참일 때마다 1씩(count += 1) 증가시킵니다.',
-      hint_en: 'When counting matches, add 1 (count += 1) each time the condition holds.',
-      targetCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        count += 1\nprint(count)',
-      testCases: [
-        {
-          id: 1,
-          input: '10',
-          expectedOutput: '3',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 정수 n의 약수가 총 몇 개인지 세도록 개수 증가값 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the increment amount to count the total number of divisors of n.',
-      hint_ko: '약수를 하나 찾을 때마다 개수가 한 개씩 늘어나도록 숫자 1을 입력합니다.',
-      hint_en: 'Increment count by 1 each time a divisor is found.',
-      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += §§\nprint(count)',
-      targetCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += 1\nprint(count)',
-      testCases: [
-        {
-          id: 1,
-          input: '6',
-          expectedOutput: '4',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 1부터 n까지의 정수 중 짝수만 골라 변수 total에 누적해 더한 합계를 출력해보세요.',
-      prompt_en: '[Block] Filter for even numbers from 1 through n, accumulate their sum into total, and print total.',
-      hint_ko: '개수 세기(+= 1)와 달리 합계를 구할 때는 조건을 만족하는 숫자 i 자체를 total에 더합니다.',
-      hint_en: 'Unlike counting (+= 1), summing adds the matching number i itself onto total.',
-      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '6',
-          expectedOutput: '12',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 1부터 n까지 중 3의 배수이거나 5의 배수인 수들의 총합을 구하도록 논리 연산자 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the logical keyword to sum numbers in 1..n divisible by 3 or 5.',
-      hint_ko: '둘 중 하나만 만족해도 합계에 포함되도록 논리 키워드를 넣습니다.',
-      hint_en: 'Join the two divisibility conditions with the disjunction keyword.',
-      templateCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 §§§ i % 5 == 0:\n        total += i\nprint(total)',
-      targetCode: 'n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 or i % 5 == 0:\n        total += i\nprint(total)',
-      testCases: [
-        {
-          id: 1,
-          input: '10',
-          expectedOutput: '33',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 1부터 n까지 반복하며 짝수이면 score에 i를 더하고, 홀수이면 score에서 i를 빼서 최종 score를 출력해보세요.',
-      prompt_en: '[Block] Iterate from 1 through n, adding even numbers to score and subtracting odd numbers, then print score.',
-      hint_ko: 'for 블록 안에 if - else를 넣어 짝수일 때와 홀수일 때 서로 다른 복합 대입 연산을 수행합니다.',
-      hint_en: 'Nest an if-else inside the loop to add even i and subtract odd i.',
-      targetCode: 'n = int(input())\nscore = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        score += i\n    else:\n        score -= i\nprint(score)',
-      testCases: [
-        {
-          id: 1,
-          input: '4',
-          expectedOutput: '2',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 1부터 n까지의 짝수 개수와 홀수 개수를 각각 집계하도록 분기 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the fallback branch keyword to count both evens and odds.',
-      hint_ko: '짝수 조건이 거짓인 모든 경우(홀수)를 처리하는 분기 키워드를 입력합니다.',
-      hint_en: 'Use the fallback keyword aligned with the inner if.',
-      templateCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    §§§§§:\n        od += 1\nprint(ev, od)',
-      targetCode: 'n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    else:\n        od += 1\nprint(ev, od)',
-      testCases: [
-        {
-          id: 1,
-          input: '5',
-          expectedOutput: '2 3',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 1부터 n까지 중 4의 배수의 개수와 총합을 함께 구하도록 조건문과 누적 연산 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks to count and sum all multiples of 4 from 1 through n.',
-      hint_ko: '4의 배수인지 판별하는 나머지 연산자(%)와 개수를 1씩 늘리는 복합 대입 연산자(+=)를 채웁니다.',
-      hint_en: 'Enter the loop keyword, modulo operator, and plus-equals operator in order.',
-      templateCode: 'n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i §§ 4 == 0:\n        count §§§ 1\n        total += i\nprint(count, total)',
-      targetCode: 'n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 4 == 0:\n        count += 1\n        total += i\nprint(count, total)',
-      testCases: [
-        {
-          id: 1,
-          input: '12',
-          expectedOutput: '3 24',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 1부터 n까지 중 5의 배수의 개수를 세도록 count 증가식을 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the increment statement so count records how many multiples of 5 exist.',
-      hint_ko: '개수를 셀 때는 반복 변수 i가 아니라 숫자 1을 더해야 합니다.',
-      hint_en: 'Add 1 instead of i when counting matches.',
-      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % 5 == 0:\n        count += i\nprint(count)',
-      targetCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % 5 == 0:\n        count += 1\nprint(count)',
-      testCases: [
-        {
-          id: 1,
-          input: '15',
-          expectedOutput: '3',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 1부터 n까지 중 2와 3의 공배수만 골라내도록 잘못된 비교 연산자를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the comparison operator so only numbers divisible by both 2 and 3 match.',
-      hint_ko: '오른쪽 조건이 3의 배수가 아닌 경우(!= 0)로 되어 있습니다. 3의 배수가 되도록 고쳐보세요.',
-      hint_en: 'Change != 0 to == 0 in the second condition so multiples of 3 match.',
-      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 3 != 0:\n        print(i)',
-      targetCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 3 == 0:\n        print(i)',
-      testCases: [
-        {
-          id: 1,
-          input: '15',
-          expectedOutput: '6\n12',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 반복 변수 i가 홀수이면서 동시에 3의 배수인지 검사하는 조건문 헤더를 작성해보세요.',
-      prompt_en: '[Complete Line] Write the 4-space indented conditional header checking whether i is both odd and a multiple of 3.',
-      hint_ko: '4칸 들여쓰기 뒤에 if i % 2 == 1 and i % 3 == 0:을 작성해보세요.',
-      hint_en: 'Keep the 4-space indentation and write if i % 2 == 1 and i % 3 == 0:.',
-      templateCode: 'n = int(input())\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        print(i)',
-      targetCode: 'n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 1 and i % 3 == 0:\n        print(i)',
-      testCases: [
-        {
-          id: 1,
-          input: '10',
-          expectedOutput: '3\n9',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 약수 조건이 참일 때 8칸 들여쓰기된 블록 안에서 count를 1 증가시키는 한 줄을 작성해보세요.',
-      prompt_en: '[Complete Line] Write the 8-space indented line incrementing count by 1.',
-      hint_ko: '8칸 들여쓰기 뒤에 count += 1을 작성해보세요.',
-      hint_en: 'Keep the 8-space indentation and write count += 1.',
-      templateCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        §§§§§§§§§§§\nprint(count)',
-      targetCode: 'n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += 1\nprint(count)',
-      testCases: [
-        {
-          id: 1,
-          input: '6',
-          expectedOutput: '4',
-        },
-      ],
-    },
-    {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
-      hint_ko: '1부터 5까지 각 숫자가 짝수인지 홀수인지에 따라 ans가 어떻게 변하는지 순서대로 추적해보세요.',
-      hint_en: 'Step through i from 1 to 5, adding even i and subtracting odd i.',
-      targetCode: 'ans = 10\nfor i in range(1, 6):\n    if i % 2 == 0:\n        ans += i\n    else:\n        ans -= i\nprint(ans)',
-      choices: ['7', '13', '10', '5'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '7',
-        },
-      ],
-    },
-    {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output of the following Python code.',
-      hint_ko: '1부터 5까지 각 숫자가 세 갈래 분기 중 어디에 먼저 해당되는지 대입하며 score 변화를 누적해보세요.',
-      hint_en: 'Match each i in 1..5 against the three branches in order and track score.',
-      targetCode: 'score = 10\nfor i in range(1, 6):\n    if i % 2 == 0 and i > 2:\n        score += 5\n    elif i % 2 == 1:\n        score -= 2\n    else:\n        score += 1\nprint(score)',
-      choices: ['10', '14', '9', '15'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '10',
-        },
-      ],
-    },
+  "id": "py-basic-r35",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 35,
+  "title_ko": "반복문 안의 if 조건 판별과 개수 세기(count += 1)",
+  "title_en": "Conditional Filtering & Counting (count += 1) in Loops",
+  "description_ko": "for 반복문 안에 if 조건문을 중첩하여 원하는 값만 출력하거나 개수(count += 1)와 합계를 구합니다.",
+  "description_en": "Nest if statements inside for loops to filter values, count matches (count += 1), and accumulate selectively.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable",
+    "input",
+    "type",
+    "if",
+    "for_range",
+    "range"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 1부터 9까지 반복하며 조건문을 사용해 3의 배수만 골라 출력해보세요.",
+      "prompt_en": "[Block] Filter and print only multiples of 3 from 1 through 9.",
+      "hint_ko": "for 블록 안의 if 헤더는 4칸, 조건이 참일 때 실행할 print(i)는 8칸 들여쓰기합니다.",
+      "hint_en": "Indent the if header 4 spaces and the inner print(i) 8 spaces.",
+      "targetCode": "for i in range(1, 10):\n    if i % 3 == 0:\n        print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "3\n6\n9"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 1부터 n까지의 자연수 중 n의 약수만 골라 출력하도록 비교 연산자 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the comparison operator to filter and print every divisor of n.",
+      "hint_ko": "n을 i로 나눈 나머지가 0과 일치할 때 약수가 됩니다.",
+      "hint_en": "Use the double-equals operator to check if the remainder is 0.",
+      "templateCode": "n = int(input())\nfor i in range(1, n + 1):\n    if n % i §§§ 0:\n        print(i, end=\" \")",
+      "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if n % i == 0:\n        print(i, end=\" \")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "6",
+          "expectedOutput": "1 2 3 6"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 1부터 n까지 반복하며 3의 배수를 만날 때마다 변수 count를 1씩 증가시켜 총 개수를 출력해보세요.",
+      "prompt_en": "[Block] Count how many multiples of 3 exist from 1 through n in variable count and print it.",
+      "hint_ko": "개수를 셀 때는 i를 더하는 것이 아니라 조건이 참일 때마다 1씩(count += 1) 증가시킵니다.",
+      "hint_en": "When counting matches, add 1 (count += 1) each time the condition holds.",
+      "targetCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        count += 1\nprint(count)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "10",
+          "expectedOutput": "3"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 정수 n의 약수가 총 몇 개인지 세도록 개수 증가값 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the increment amount to count the total number of divisors of n.",
+      "hint_ko": "약수를 하나 찾을 때마다 개수가 한 개씩 늘어나도록 숫자 1을 입력합니다.",
+      "hint_en": "Increment count by 1 each time a divisor is found.",
+      "templateCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += §§\nprint(count)",
+      "targetCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += 1\nprint(count)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "6",
+          "expectedOutput": "4"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 1부터 n까지의 정수 중 짝수만 골라 변수 total에 누적해 더한 합계를 출력해보세요.",
+      "prompt_en": "[Block] Filter for even numbers from 1 through n, accumulate their sum into total, and print total.",
+      "hint_ko": "개수 세기(+= 1)와 달리 합계를 구할 때는 조건을 만족하는 숫자 i 자체를 total에 더합니다.",
+      "hint_en": "Unlike counting (+= 1), summing adds the matching number i itself onto total.",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        total += i\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "6",
+          "expectedOutput": "12"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 1부터 n까지 중 3의 배수이거나 5의 배수인 수들의 총합을 구하도록 논리 연산자 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the logical keyword to sum numbers in 1..n divisible by 3 or 5.",
+      "hint_ko": "둘 중 하나만 만족해도 합계에 포함되도록 논리 키워드를 넣습니다.",
+      "hint_en": "Join the two divisibility conditions with the disjunction keyword.",
+      "templateCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 §§§ i % 5 == 0:\n        total += i\nprint(total)",
+      "targetCode": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0 or i % 5 == 0:\n        total += i\nprint(total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "10",
+          "expectedOutput": "33"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 1부터 n까지 반복하며 짝수이면 score에 i를 더하고, 홀수이면 score에서 i를 빼서 최종 score를 출력해보세요.",
+      "prompt_en": "[Block] Iterate from 1 through n, adding even numbers to score and subtracting odd numbers, then print score.",
+      "hint_ko": "for 블록 안에 if - else를 넣어 짝수일 때와 홀수일 때 서로 다른 복합 대입 연산을 수행합니다.",
+      "hint_en": "Nest an if-else inside the loop to add even i and subtract odd i.",
+      "targetCode": "n = int(input())\nscore = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        score += i\n    else:\n        score -= i\nprint(score)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "4",
+          "expectedOutput": "2"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 1부터 n까지의 짝수 개수와 홀수 개수를 각각 집계하도록 분기 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the fallback branch keyword to count both evens and odds.",
+      "hint_ko": "짝수 조건이 거짓인 모든 경우(홀수)를 처리하는 분기 키워드를 입력합니다.",
+      "hint_en": "Use the fallback keyword aligned with the inner if.",
+      "templateCode": "n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    §§§§§:\n        od += 1\nprint(ev, od)",
+      "targetCode": "n = int(input())\nev = 0\nod = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        ev += 1\n    else:\n        od += 1\nprint(ev, od)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "5",
+          "expectedOutput": "2 3"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 1부터 n까지 중 4의 배수의 개수와 총합을 함께 구하도록 조건문과 누적 연산 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks to count and sum all multiples of 4 from 1 through n.",
+      "hint_ko": "4의 배수인지 판별하는 나머지 연산자(%)와 개수를 1씩 늘리는 복합 대입 연산자(+=)를 채웁니다.",
+      "hint_en": "Enter the loop keyword, modulo operator, and plus-equals operator in order.",
+      "templateCode": "n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i §§ 4 == 0:\n        count §§§ 1\n        total += i\nprint(count, total)",
+      "targetCode": "n = int(input())\ncount = 0\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 4 == 0:\n        count += 1\n        total += i\nprint(count, total)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "12",
+          "expectedOutput": "3 24"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 1부터 n까지 중 5의 배수의 개수를 세도록 count 증가식을 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the increment statement so count records how many multiples of 5 exist.",
+      "hint_ko": "개수를 셀 때는 반복 변수 i가 아니라 숫자 1을 더해야 합니다.",
+      "hint_en": "Add 1 instead of i when counting matches.",
+      "templateCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % 5 == 0:\n        count += i\nprint(count)",
+      "targetCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % 5 == 0:\n        count += 1\nprint(count)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "15",
+          "expectedOutput": "3"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 1부터 n까지 중 2와 3의 공배수만 골라내도록 잘못된 비교 연산자를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the comparison operator so only numbers divisible by both 2 and 3 match.",
+      "hint_ko": "오른쪽 조건이 3의 배수가 아닌 경우(!= 0)로 되어 있습니다. 3의 배수가 되도록 고쳐보세요.",
+      "hint_en": "Change != 0 to == 0 in the second condition so multiples of 3 match.",
+      "templateCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 3 != 0:\n        print(i)",
+      "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0 and i % 3 == 0:\n        print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "15",
+          "expectedOutput": "6\n12"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 반복 변수 i가 홀수이면서 동시에 3의 배수인지 검사하는 조건문 헤더를 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the 4-space indented conditional header checking whether i is both odd and a multiple of 3.",
+      "hint_ko": "4칸 들여쓰기 뒤에 if i % 2 == 1 and i % 3 == 0:을 작성해보세요.",
+      "hint_en": "Keep the 4-space indentation and write if i % 2 == 1 and i % 3 == 0:.",
+      "templateCode": "n = int(input())\nfor i in range(1, n + 1):\n    §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n        print(i)",
+      "targetCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 1 and i % 3 == 0:\n        print(i)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "10",
+          "expectedOutput": "3\n9"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 약수 조건이 참일 때 8칸 들여쓰기된 블록 안에서 count를 1 증가시키는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the 8-space indented line incrementing count by 1.",
+      "hint_ko": "8칸 들여쓰기 뒤에 count += 1을 작성해보세요.",
+      "hint_en": "Keep the 8-space indentation and write count += 1.",
+      "templateCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        §§§§§§§§§§§\nprint(count)",
+      "targetCode": "n = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if n % i == 0:\n        count += 1\nprint(count)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "6",
+          "expectedOutput": "4"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
+      "hint_ko": "1부터 5까지의 정수 중 짝수(2, 4)일 때만 cnt가 1씩 증가합니다.",
+      "hint_en": "Among 1 through 5, cnt increments by 1 only for even numbers (2 and 4).",
+      "targetCode": "cnt = 0\nfor i in range(1, 6):\n    if i % 2 == 0:\n        cnt += 1\nprint(cnt)",
+      "choices": [
+        "2",
+        "3",
+        "5",
+        "6"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the following Python code.",
+      "hint_ko": "range(1, 5)는 1, 2, 3, 4를 생성하며, 그중 3 이상인 숫자의 개수와 합계를 구합니다.",
+      "hint_en": "range(1, 5) yields 1, 2, 3, 4; count and sum the numbers that are 3 or greater.",
+      "targetCode": "cnt = 0\ntotal = 0\nfor i in range(1, 5):\n    if i >= 3:\n        cnt += 1\n        total += i\nprint(cnt, total)",
+      "choices": [
+        "2 7",
+        "3 12",
+        "2 3",
+        "4 10"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2 7"
+        }
+      ]
+    }
+  ]
 };

@@ -310,21 +310,21 @@ export const PYTHON_LEVEL_76: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] 딕셔너리 속성과 items() 순회, 조건 필터링이 결합된 클래스 코드의 출력 결과를 골라보세요.",
       "prompt_en": "[Predict Output] Select the output of the code iterating over a dictionary attribute with .items().",
-      "hint_ko": "딕셔너리에 같은 키로 다시 저장하면 값이 갱신되며, 80점 이상인 과목만 합산되는 과정을 추적해보세요.",
-      "hint_en": "Note that saving \"Kor\" a second time overwrites 70 with 85 before filtering scores >= 80.",
-      "targetCode": "class GradeBook:\n    def __init__(self):\n        self.table = {}\n    def set_score(self, sub, pt):\n        self.table[sub] = pt\n    def high_sum(self):\n        total = 0\n        for k, v in self.table.items():\n            if v >= 80:\n                total += v\n        return total\ngb = GradeBook()\ngb.set_score(\"Kor\", 70)\ngb.set_score(\"Math\", 90)\ngb.set_score(\"Kor\", 85)\nprint(len(gb.table), gb.high_sum())",
+      "hint_ko": "딕셔너리에 같은 키(\"Kor\")로 다시 저장하면 값이 10에서 20으로 덮어써지며, 20 이상인 과목만 합산됩니다.",
+      "hint_en": "Saving \"Kor\" a second time overwrites 10 with 20, so both \"Math\" (30) and \"Kor\" (20) are summed.",
+      "targetCode": "class GradeBook:\n    def __init__(self):\n        self.table = {}\n    def set_score(self, sub, pt):\n        self.table[sub] = pt\n    def high_sum(self):\n        total = 0\n        for k, v in self.table.items():\n            if v >= 20:\n                total += v\n        return total\ngb = GradeBook()\ngb.set_score(\"Kor\", 10)\ngb.set_score(\"Math\", 30)\ngb.set_score(\"Kor\", 20)\nprint(len(gb.table), gb.high_sum())",
       "choices": [
-        "2 175",
-        "3 245",
-        "2 90",
-        "3 175"
+        "2 50",
+        "3 60",
+        "2 30",
+        "3 50"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "2 175"
+          "expectedOutput": "2 50"
         }
       ]
     }

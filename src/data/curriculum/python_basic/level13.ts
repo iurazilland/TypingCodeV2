@@ -1,313 +1,355 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_13: PracticeRound = {
-  id: 'py-basic-r13',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 13,
-  title_ko: '누적 덧셈·뺄셈·곱셈 복합 대입 연산자 (+=, -=, *=)',
-  title_en: 'Compound Assignment Operators (+=, -=, *=)',
-  description_ko: '변수 자신의 값에 덧셈·뺄셈·곱셈을 간편하게 누적하는 복합 대입 연산자(+=, -=, *=)를 익힙니다.',
-  description_en: 'Learn the compound assignment operators (+=, -=, *=) to update variables in place.',
-  totalQuestions: 15,
-  unlockedBlocks: ['comment', 'print', 'variable'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 복합 대입 연산자로 변수 score에 50을 누적해 더하고 출력해보세요.',
-      prompt_en: '[Block] Use a compound assignment operator to add 50 to score in place and print it.',
-      hint_ko: 'score += 50은 score = score + 50을 짧게 줄여 쓴 복합 대입 연산입니다.',
-      hint_en: 'score += 50 is shorthand for score = score + 50.',
-      targetCode: 'score = 100\nscore += 50\nprint(score)',
-      expectedVariables: { score: 150 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '150',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 변수에 20을 누적해 더하도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the compound assignment operator to add 20 to the variable in place.',
-      hint_ko: '더하기 기호 바로 뒤에 등호를 빈틈없이 붙여 작성합니다.',
-      hint_en: 'Write the plus sign immediately followed by the equals sign.',
-      templateCode: 'point = 80\npoint §§§ 20\nprint(point)',
-      targetCode: 'point = 80\npoint += 20\nprint(point)',
-      expectedVariables: { point: 100 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '100',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 복합 대입 연산자로 변수 hp에서 30을 차감하고 출력해보세요.',
-      prompt_en: '[Block] Use a compound assignment operator to subtract 30 from hp in place and print it.',
-      hint_ko: 'hp -= 30은 현재 hp 값에서 30을 뺀 결과를 다시 hp에 저장합니다.',
-      hint_en: 'hp -= 30 subtracts 30 from the current value of hp and stores it back in hp.',
-      targetCode: 'hp = 100\nhp -= 30\nprint(hp)',
-      expectedVariables: { hp: 70 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '70',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 변수에서 25를 차감하도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the compound assignment operator to subtract 25 from the variable.',
-      hint_ko: '빼기 기호 바로 뒤에 등호를 붙여 변수의 값을 줄입니다.',
-      hint_en: 'Combine the minus sign and equals sign with no space between them.',
-      templateCode: 'fuel = 80\nfuel §§§ 25\nprint(fuel)',
-      targetCode: 'fuel = 80\nfuel -= 25\nprint(fuel)',
-      expectedVariables: { fuel: 55 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '55',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 복합 대입 연산자로 변수 gold를 3배로 불리고 출력해보세요.',
-      prompt_en: '[Block] Use a compound assignment operator to multiply gold by 3 in place and print it.',
-      hint_ko: 'gold *= 3은 기존 gold 값에 3을 곱해 다시 gold에 저장합니다.',
-      hint_en: 'gold *= 3 multiplies the current value of gold by 3 and updates gold.',
-      targetCode: 'gold = 200\ngold *= 3\nprint(gold)',
-      expectedVariables: { gold: 600 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '600',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 변수의 값을 4배로 갱신하도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the compound assignment operator to multiply the variable by 4 in place.',
-      hint_ko: '별표 곱셈 기호 바로 뒤에 등호를 붙여 작성합니다.',
-      hint_en: 'Write the asterisk immediately followed by the equals sign.',
-      templateCode: 'power = 12\npower §§§ 4\nprint(power)',
-      targetCode: 'power = 12\npower *= 4\nprint(power)',
-      expectedVariables: { power: 48 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '48',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 복합 대입으로 변수 n에 5를 더한 뒤 2배로 불리고 등호 구분자 옵션으로 출력해보세요.',
-      prompt_en: '[Block] Use compound assignments on n to add 5 and then double it, and print it with an equals separator option.',
-      hint_ko: '10에 5가 더해져 15가 된 다음 2가 곱해지므로 최종 값은 30이 됩니다.',
-      hint_en: 'Adding 5 makes n equal to 15, and multiplying by 2 updates n to 30.',
-      targetCode: 'n = 10\nn += 5\nn *= 2\nprint("n", n, sep="=")',
-      expectedVariables: { n: 30 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'n=30',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 출력 예제와 같은 결과가 나오도록 넷째 줄 빈칸에 알맞은 복합 대입 연산자를 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the compound assignment operator on line 4 to match the output example.',
-      hint_ko: '10을 3배로 만든 30에서 5를 차감하도록 빼기 복합 대입 기호를 넣습니다.',
-      hint_en: 'Use the compound subtraction operator to subtract 5 from 30.',
-      templateCode: '# Score calc\ns = 10\ns *= 3\ns §§§ 5\nprint("Total", s, sep="->")',
-      targetCode: '# Score calc\ns = 10\ns *= 3\ns -= 5\nprint("Total", s, sep="->")',
-      expectedVariables: { s: 25 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Total->25',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 출력 예제와 같은 최종 계산 결과가 나오도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks with compound assignment operators so the final value matches the output example.',
-      hint_ko: '누적 덧셈(+=)과 누적 곱셈(*=) 복합 대입 연산자를 위에서부터 순서대로 입력합니다.',
-      hint_en: 'Enter compound addition on line 2 and compound multiplication on line 3.',
-      templateCode: 'val = 20\nval §§§ 10\nval §§§ 2\nval -= 15\nprint(val)',
-      targetCode: 'val = 20\nval += 10\nval *= 2\nval -= 15\nprint(val)',
-      expectedVariables: { val: 45 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '45',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 기호 순서가 거꾸로 적힌 복합 대입 연산자를 고쳐 누적 합계가 출력되게 해보세요.',
-      prompt_en: '[Fix Bug] Fix the reversed compound operator on line 2 so the accumulated sum is printed.',
-      hint_ko: '복합 대입 연산자는 항상 산술 연산 기호를 등호보다 앞에 적어야 합니다.',
-      hint_en: 'In compound assignment operators, the arithmetic symbol must always come before the equals sign.',
-      templateCode: 'pt = 50\npt =+ 20\nprint(pt)',
-      targetCode: 'pt = 50\npt += 20\nprint(pt)',
-      expectedVariables: { pt: 70 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '70',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 체력에서 피해량만큼 차감되도록 잘못된 복합 대입 연산자를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the wrong compound operator so the damage is subtracted from health.',
-      hint_ko: '체력을 깎아야 하므로 셋째 줄의 누적 덧셈을 차감 연산자로 고쳐야 합니다.',
-      hint_en: 'Change the compound addition on line 3 to compound subtraction.',
-      templateCode: 'hp = 100\ndmg = 15 * 2\nhp += dmg\nprint("HP:", hp)',
-      targetCode: 'hp = 100\ndmg = 15 * 2\nhp -= dmg\nprint("HP:", hp)',
-      expectedVariables: { hp: 70, dmg: 30 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'HP: 70',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 복합 대입 연산자를 사용해 변수의 값을 3배로 갱신하는 한 줄을 작성해보세요.',
-      prompt_en: '[Complete Line] Use a compound assignment operator on line 2 to triple the variable\'s value.',
-      hint_ko: '변수 atk 뒤에 곱셈 복합 대입 연산자와 숫자 3을 이어 작성합니다.',
-      hint_en: 'Use the *= operator on variable atk with the number 3.',
-      templateCode: 'atk = 15\n§§§§§§§§§\nprint(atk)',
-      targetCode: 'atk = 15\natk *= 3\nprint(atk)',
-      expectedVariables: { atk: 45 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '45',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 복합 대입 연산자를 사용해 총합 변수에 보너스 변수의 값을 누적해 더하는 한 줄을 작성해보세요.',
-      prompt_en: '[Complete Line] Use a compound assignment operator on line 3 to add the bonus variable into the total variable.',
-      hint_ko: '변수 total에 누적 덧셈 복합 대입 연산자로 변수 bonus를 더합니다.',
-      hint_en: 'Apply the += operator to add variable bonus into total.',
-      templateCode: 'total = 100\nbonus = 25\n§§§§§§§§§§§§§§§\nprint("Sum:", total)',
-      targetCode: 'total = 100\nbonus = 25\ntotal += bonus\nprint("Sum:", total)',
-      expectedVariables: { total: 125, bonus: 25 },
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Sum: 125',
-        },
-      ],
-    },
-    {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '주석 줄은 건너뛰고 x에 대한 +=, *=, -= 연산을 위에서 아래로 차례대로 계산해보세요.',
-      hint_en: 'Skip the comment line and apply +=, *=, and -= to x from top to bottom.',
-      targetCode: 'x = 5\nx += 3\n# x *= 10\nx *= 2\nx -= 4\nprint(x)',
-      choices: ['12', '76', '7', '16'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '12',
-        },
-      ],
-    },
-    {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: 'a와 b를 각각 복합 대입으로 갱신한 뒤, a를 b로 나눈 정수 몫과 나머지를 구해보세요.',
-      hint_en: 'Update both a and b first, then find the floor quotient and remainder of a divided by b.',
-      targetCode: 'a = 10\nb = 2\na += 7\nb *= 2\nprint(a // b, a % b, sep=":")',
-      choices: ['4:1', '4:2', '8:1', '4.25:1'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '4:1',
-        },
-      ],
-    },
+  "id": "py-basic-r13",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 13,
+  "title_ko": "누적 덧셈·뺄셈·곱셈 복합 대입 연산자 (+=, -=, *=)",
+  "title_en": "Compound Assignment Operators (+=, -=, *=)",
+  "description_ko": "변수 자신의 값에 덧셈·뺄셈·곱셈을 간편하게 누적하는 복합 대입 연산자(+=, -=, *=)를 익힙니다.",
+  "description_en": "Learn the compound assignment operators (+=, -=, *=) to update variables in place.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 복합 대입 연산자로 변수 score에 50을 누적해 더하고 출력해보세요.",
+      "prompt_en": "[Block] Use a compound assignment operator to add 50 to score in place and print it.",
+      "hint_ko": "score += 50은 score = score + 50을 짧게 줄여 쓴 복합 대입 연산입니다.",
+      "hint_en": "score += 50 is shorthand for score = score + 50.",
+      "targetCode": "score = 100\nscore += 50\nprint(score)",
+      "expectedVariables": {
+        "score": 150
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "150"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 변수에 20을 누적해 더하도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the compound assignment operator to add 20 to the variable in place.",
+      "hint_ko": "더하기 기호 바로 뒤에 등호를 빈틈없이 붙여 작성합니다.",
+      "hint_en": "Write the plus sign immediately followed by the equals sign.",
+      "templateCode": "point = 80\npoint §§§ 20\nprint(point)",
+      "targetCode": "point = 80\npoint += 20\nprint(point)",
+      "expectedVariables": {
+        "point": 100
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "100"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 복합 대입 연산자로 변수 hp에서 30을 차감하고 출력해보세요.",
+      "prompt_en": "[Block] Use a compound assignment operator to subtract 30 from hp in place and print it.",
+      "hint_ko": "hp -= 30은 현재 hp 값에서 30을 뺀 결과를 다시 hp에 저장합니다.",
+      "hint_en": "hp -= 30 subtracts 30 from the current value of hp and stores it back in hp.",
+      "targetCode": "hp = 100\nhp -= 30\nprint(hp)",
+      "expectedVariables": {
+        "hp": 70
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "70"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 변수에서 25를 차감하도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the compound assignment operator to subtract 25 from the variable.",
+      "hint_ko": "빼기 기호 바로 뒤에 등호를 붙여 변수의 값을 줄입니다.",
+      "hint_en": "Combine the minus sign and equals sign with no space between them.",
+      "templateCode": "fuel = 80\nfuel §§§ 25\nprint(fuel)",
+      "targetCode": "fuel = 80\nfuel -= 25\nprint(fuel)",
+      "expectedVariables": {
+        "fuel": 55
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "55"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 복합 대입 연산자로 변수 gold를 3배로 불리고 출력해보세요.",
+      "prompt_en": "[Block] Use a compound assignment operator to multiply gold by 3 in place and print it.",
+      "hint_ko": "gold *= 3은 기존 gold 값에 3을 곱해 다시 gold에 저장합니다.",
+      "hint_en": "gold *= 3 multiplies the current value of gold by 3 and updates gold.",
+      "targetCode": "gold = 200\ngold *= 3\nprint(gold)",
+      "expectedVariables": {
+        "gold": 600
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "600"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 변수의 값을 4배로 갱신하도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the compound assignment operator to multiply the variable by 4 in place.",
+      "hint_ko": "별표 곱셈 기호 바로 뒤에 등호를 붙여 작성합니다.",
+      "hint_en": "Write the asterisk immediately followed by the equals sign.",
+      "templateCode": "power = 12\npower §§§ 4\nprint(power)",
+      "targetCode": "power = 12\npower *= 4\nprint(power)",
+      "expectedVariables": {
+        "power": 48
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "48"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 복합 대입으로 변수 n에 5를 더한 뒤 2배로 불리고 등호 구분자 옵션으로 출력해보세요.",
+      "prompt_en": "[Block] Use compound assignments on n to add 5 and then double it, and print it with an equals separator option.",
+      "hint_ko": "10에 5가 더해져 15가 된 다음 2가 곱해지므로 최종 값은 30이 됩니다.",
+      "hint_en": "Adding 5 makes n equal to 15, and multiplying by 2 updates n to 30.",
+      "targetCode": "n = 10\nn += 5\nn *= 2\nprint(\"n\", n, sep=\"=\")",
+      "expectedVariables": {
+        "n": 30
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "n=30"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 출력 예제와 같은 결과가 나오도록 넷째 줄 빈칸에 알맞은 복합 대입 연산자를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the compound assignment operator on line 4 to match the output example.",
+      "hint_ko": "10을 3배로 만든 30에서 5를 차감하도록 빼기 복합 대입 기호를 넣습니다.",
+      "hint_en": "Use the compound subtraction operator to subtract 5 from 30.",
+      "templateCode": "# Score calc\ns = 10\ns *= 3\ns §§§ 5\nprint(\"Total\", s, sep=\"->\")",
+      "targetCode": "# Score calc\ns = 10\ns *= 3\ns -= 5\nprint(\"Total\", s, sep=\"->\")",
+      "expectedVariables": {
+        "s": 25
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Total->25"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 출력 예제와 같은 최종 계산 결과가 나오도록 빈칸에 알맞은 복합 대입 연산자를 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks with compound assignment operators so the final value matches the output example.",
+      "hint_ko": "누적 덧셈(+=)과 누적 곱셈(*=) 복합 대입 연산자를 위에서부터 순서대로 입력합니다.",
+      "hint_en": "Enter compound addition on line 2 and compound multiplication on line 3.",
+      "templateCode": "val = 20\nval §§§ 10\nval §§§ 2\nval -= 15\nprint(val)",
+      "targetCode": "val = 20\nval += 10\nval *= 2\nval -= 15\nprint(val)",
+      "expectedVariables": {
+        "val": 45
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "45"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 기호 순서가 거꾸로 적힌 복합 대입 연산자를 고쳐 누적 합계가 출력되게 해보세요.",
+      "prompt_en": "[Fix Bug] Fix the reversed compound operator on line 2 so the accumulated sum is printed.",
+      "hint_ko": "복합 대입 연산자는 항상 산술 연산 기호를 등호보다 앞에 적어야 합니다.",
+      "hint_en": "In compound assignment operators, the arithmetic symbol must always come before the equals sign.",
+      "templateCode": "pt = 50\npt =+ 20\nprint(pt)",
+      "targetCode": "pt = 50\npt += 20\nprint(pt)",
+      "expectedVariables": {
+        "pt": 70
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "70"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 체력에서 피해량만큼 차감되도록 잘못된 복합 대입 연산자를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the wrong compound operator so the damage is subtracted from health.",
+      "hint_ko": "체력을 깎아야 하므로 셋째 줄의 누적 덧셈을 차감 연산자로 고쳐야 합니다.",
+      "hint_en": "Change the compound addition on line 3 to compound subtraction.",
+      "templateCode": "hp = 100\ndmg = 15 * 2\nhp += dmg\nprint(\"HP:\", hp)",
+      "targetCode": "hp = 100\ndmg = 15 * 2\nhp -= dmg\nprint(\"HP:\", hp)",
+      "expectedVariables": {
+        "hp": 70,
+        "dmg": 30
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "HP: 70"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 복합 대입 연산자를 사용해 변수의 값을 3배로 갱신하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Use a compound assignment operator on line 2 to triple the variable's value.",
+      "hint_ko": "변수 atk 뒤에 곱셈 복합 대입 연산자와 숫자 3을 이어 작성합니다.",
+      "hint_en": "Use the *= operator on variable atk with the number 3.",
+      "templateCode": "atk = 15\n§§§§§§§§§\nprint(atk)",
+      "targetCode": "atk = 15\natk *= 3\nprint(atk)",
+      "expectedVariables": {
+        "atk": 45
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "45"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 복합 대입 연산자를 사용해 총합 변수에 보너스 변수의 값을 누적해 더하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Use a compound assignment operator on line 3 to add the bonus variable into the total variable.",
+      "hint_ko": "변수 total에 누적 덧셈 복합 대입 연산자로 변수 bonus를 더합니다.",
+      "hint_en": "Apply the += operator to add variable bonus into total.",
+      "templateCode": "total = 100\nbonus = 25\n§§§§§§§§§§§§§§§\nprint(\"Sum:\", total)",
+      "targetCode": "total = 100\nbonus = 25\ntotal += bonus\nprint(\"Sum:\", total)",
+      "expectedVariables": {
+        "total": 125,
+        "bonus": 25
+      },
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Sum: 125"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "주석 줄은 건너뛰고 x에 대한 +=, *=, -= 연산을 위에서 아래로 차례대로 계산해보세요.",
+      "hint_en": "Skip the comment line and apply +=, *=, and -= to x from top to bottom.",
+      "targetCode": "x = 5\nx += 3\n# x *= 10\nx *= 2\nx -= 4\nprint(x)",
+      "choices": [
+        "12",
+        "76",
+        "7",
+        "16"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "12"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "a에는 5가 더해지고, b에는 2가 곱해진 뒤 콜론 구분자로 출력됩니다.",
+      "hint_en": "Add 5 to a, multiply b by 2, and print them separated by a colon.",
+      "targetCode": "a = 10\nb = 3\na += 5\nb *= 2\nprint(a, b, sep=\":\")",
+      "choices": [
+        "15:6",
+        "15:5",
+        "50:6",
+        "10:3"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "15:6"
+        }
+      ]
+    }
+  ]
 };

@@ -314,21 +314,21 @@ export const PYTHON_LEVEL_101: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] 사용자 정의 함수와 map(abs, ...)를 중첩 적용한 코드의 출력 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of the code applying map() with abs and a custom function.",
-      "hint_ko": "먼저 모든 숫자의 절댓값을 구한 뒤 각각을 3으로 나눈 나머지를 구해 합산합니다.",
-      "hint_en": "Take the absolute values [7, 4, 9] first, compute each remainder modulo 3 ([1, 1, 0]), and sum them.",
-      "targetCode": "def mod3(n):\n    return n % 3\n\nnums = [-7, 4, -9]\nmags = list(map(abs, nums))\nrems = list(map(mod3, mags))\nprint(rems, sum(rems))",
+      "hint_ko": "먼저 map(abs, nums)로 절댓값 [1, 2, 3]을 만든 뒤, 각 원소에 10을 더하는 함수를 일괄 적용합니다.",
+      "hint_en": "map(abs, nums) produces [1, 2, 3], and map(add10, ...) adds 10 to each element.",
+      "targetCode": "def add10(n):\n    return n + 10\n\nnums = [-1, 2, -3]\nmags = list(map(abs, nums))\nres = list(map(add10, mags))\nprint(res)",
       "choices": [
-        "[1, 1, 0] 2",
-        "[2, 1, 0] 3",
-        "[1, 1, 3] 5",
-        "[-1, 1, 0] 0"
+        "[11, 12, 13]",
+        "[9, 12, 7]",
+        "[1, 2, 3]",
+        "[10, 20, 30]"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "[1, 1, 0] 2"
+          "expectedOutput": "[11, 12, 13]"
         }
       ]
     }

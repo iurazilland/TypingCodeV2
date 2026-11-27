@@ -1,300 +1,312 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_6: PracticeRound = {
-  id: 'py-basic-r6',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 6,
-  title_ko: '따옴표 수식("3 + 5")과 계산 결과(3 + 5) 나란히 출력하기',
-  title_en: 'Printing Formula Strings ("3 + 5") with Computed Results',
-  description_ko: '따옴표로 감싼 수식 문자열과 실제 계산된 결과값을 쉼표로 나란히 출력하는 방법을 익힙니다.',
-  description_en: 'Learn to print quoted formula strings alongside their evaluated numeric results using commas.',
-  totalQuestions: 15,
-  unlockedBlocks: ['print'],
-  questions: [
-    {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 따옴표로 감싼 수식을 조립해 계산 결과 대신 글자 그대로 출력해보세요.',
-      prompt_en: '[Block] Assemble the quoted expression so it prints literally as text.',
-      hint_ko: '수식을 따옴표로 감싸면 파이썬은 이를 계산하지 않고 적힌 글자 그대로 출력합니다.',
-      hint_en: 'Wrapping an expression in quotes tells Python to print the literal characters without calculating.',
-      targetCode: 'print("3 + 5")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '3 + 5',
-        },
-      ],
-    },
-    {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 출력 예제의 수식 문장이 그대로 출력되도록 빈칸에 큰따옴표로 감싼 문자열을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the double-quoted formula string matching the output example.',
-      hint_ko: '등호(=)가 포함된 수식 문장 전체를 큰따옴표로 감싸서 작성합니다.',
-      hint_en: 'Enclose the entire formula text including the equals sign in double quotes.',
-      templateCode: 'print(§§§§§§§§§§§§§)',
-      targetCode: 'print("10 - 4 = 6")',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '10 - 4 = 6',
-        },
-      ],
-    },
-    {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 덧셈 수식 문자열과 실제 덧셈 계산식을 한 줄에 나란히 출력해보세요.',
-      prompt_en: '[Block] Combine the formula string and the addition expression to print them side by side.',
-      hint_ko: '쉼표 앞의 따옴표 수식은 글자로 출력되고, 쉼표 뒤의 따옴표 없는 수식은 8로 계산되어 출력됩니다.',
-      hint_en: 'The quoted formula before the comma prints as text, while the unquoted expression after it evaluates to 8.',
-      targetCode: 'print("3 + 5 =", 3 + 5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '3 + 5 = 8',
-        },
-      ],
-    },
-    {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 앞의 문자열 라벨에 맞는 덧셈 계산식을 빈칸에 채워 계산 결과를 함께 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the addition expression matching the label so its result is printed alongside it.',
-      hint_ko: '파이썬이 직접 계산한 결과를 출력하도록 따옴표 없이 두 수의 덧셈식을 적습니다.',
-      hint_en: 'Write the addition of 7 and 8 without quotes so Python evaluates it.',
-      templateCode: 'print("7 + 8 =", §§§§§§)',
-      targetCode: 'print("7 + 8 =", 7 + 8)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '7 + 8 = 15',
-        },
-      ],
-    },
-    {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 소괄호 수식 라벨과 실제 계산식을 한 줄에 나란히 출력해보세요.',
-      prompt_en: '[Block] Print the parenthesized formula label alongside its evaluated expression.',
-      hint_ko: '쉼표 뒤의 소괄호 덧셈이 먼저 계산된 후 3이 곱해져 36이 나란히 출력됩니다.',
-      hint_en: 'After the comma, the parenthesized addition evaluates first and multiplies by 3 to output 36.',
-      targetCode: 'print("(10 + 2) * 3 =", (10 + 2) * 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '(10 + 2) * 3 = 36',
-        },
-      ],
-    },
-    {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 앞의 문자열 라벨에 맞는 나눗셈 계산식을 빈칸에 채워 계산 결과를 함께 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the division expression matching the label so its result is printed alongside it.',
-      hint_ko: '쉼표 뒤에 따옴표 없이 20을 4로 나누는 실수 나눗셈 수식을 작성합니다.',
-      hint_en: 'Write the unquoted float division of 20 by 4 after the comma.',
-      templateCode: 'print("20 / 4 =", §§§§§§§)',
-      targetCode: 'print("20 / 4 =", 20 / 4)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '20 / 4 = 5.0',
-        },
-      ],
-    },
-    {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 25를 4로 나눈 정수 몫과 나머지를 각 라벨과 함께 한 줄에 나란히 출력해보세요.',
-      prompt_en: '[Block] Assemble the labels and the floor division and modulo expressions of 25 by 4 on one line.',
-      hint_ko: '"Q:", 25 // 4, "R:", 25 % 4 네 항목을 쉼표로 구분하면 공백을 두고 차례대로 출력됩니다.',
-      hint_en: 'Separating the four items with commas prints them in order with spaces in between.',
-      targetCode: 'print("Q:", 25 // 4, "R:", 25 % 4)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Q: 6 R: 1',
-        },
-      ],
-    },
-    {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 14를 3으로 나눈 나머지를 구하는 수식을 빈칸에 채워 몫과 나머지를 나란히 출력해보세요.',
-      prompt_en: '[Fill Blank] Fill in the expression for the remainder of 14 divided by 3.',
-      hint_ko: '14를 3으로 나눈 나머지를 구하는 수식을 따옴표 없이 마지막 자리에 작성합니다.',
-      hint_en: 'Write the unquoted modulo expression of 14 divided by 3 as the final argument.',
-      templateCode: 'print("Q:", 14 // 3, "R:", §§§§§§§)',
-      targetCode: 'print("Q:", 14 // 3, "R:", 14 % 3)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: 'Q: 4 R: 2',
-        },
-      ],
-    },
-    {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 출력 예제와 같이 두 줄의 수식 라벨과 계산 결과가 출력되도록 빈칸을 채워보세요.',
-      prompt_en: '[Fill Blank] Fill in the blanks so the formula labels and results match the output example.',
-      hint_ko: '첫째 줄에는 큰따옴표 수식 문자열을, 둘째 줄에는 나머지 연산자(%)를 채웁니다.',
-      hint_en: 'Fill in the double-quoted formula string on line 1 and the modulo operator on line 2.',
-      templateCode: 'print(§§§§§§§§§§§, 2 ** 4)\nprint("17 % 5 =", 17 §§ 5)',
-      targetCode: 'print("2 ** 4 =", 2 ** 4)\nprint("17 % 5 =", 17 % 5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '2 ** 4 = 16\n17 % 5 = 2',
-        },
-      ],
-    },
-    {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 쉼표 뒤의 수식이 글자 그대로 출력되지 않고 곱셈 결과로 계산되어 출력되도록 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the code so the expression after the comma is evaluated instead of printing as literal text.',
-      hint_ko: '실제 계산이 필요한 쉼표 뒤 수식에서는 따옴표를 제거하고 6 * 7로 작성해야 합니다.',
-      hint_en: 'Remove the quotes around the expression after the comma so Python calculates its value.',
-      templateCode: 'print("6 * 7 =", "6*7")',
-      targetCode: 'print("6 * 7 =", 6 * 7)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '6 * 7 = 42',
-        },
-      ],
-    },
-    {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 앞의 수식 라벨과 일치하는 계산 결과가 출력되도록 쉼표 뒤 계산식의 소괄호 위치를 고쳐보세요.',
-      prompt_en: '[Fix Bug] Fix the parentheses in the expression after the comma so it matches the formula label.',
-      hint_ko: '쉼표 뒤 계산식에서도 덧셈이 곱셈보다 먼저 수행되도록 (8 + 2)를 소괄호로 묶어주어야 합니다.',
-      hint_en: 'Add parentheses around the addition after the comma so it runs before the multiplication.',
-      templateCode: 'print("(8 + 2) * 5 =", 8 + (2 * 5))',
-      targetCode: 'print("(8 + 2) * 5 =", (8 + 2) * 5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '(8 + 2) * 5 = 50',
-        },
-      ],
-    },
-    {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 첫째 줄의 출력 형식에 맞춰 둘째 줄에 2의 4제곱 수식 라벨과 계산 결과를 나란히 출력해보세요.',
-      prompt_en: '[Complete Line] Following line 1, write line 2 to print the formula label and evaluated result for 2 to the power of 4.',
-      hint_ko: '수식 문자열 "2 ** 4 ="와 실제 수식 2 ** 4를 쉼표로 나열해 작성합니다.',
-      hint_en: 'Separate the string "2 ** 4 =" and the expression 2 ** 4 with a comma inside print().',
-      templateCode: 'print("2 ** 3 =", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("2 ** 3 =", 2 ** 3)\nprint("2 ** 4 =", 2 ** 4)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '2 ** 3 = 8\n2 ** 4 = 16',
-        },
-      ],
-    },
-    {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 첫째 줄의 출력 형식에 맞춰 둘째 줄에 19를 5로 나눈 정수 몫의 수식 라벨과 계산 결과를 출력해보세요.',
-      prompt_en: '[Complete Line] Following line 1, write line 2 to print the formula label and evaluated integer quotient of 19 divided by 5.',
-      hint_ko: '따옴표로 감싼 "19 // 5 =" 뒤에 쉼표를 찍고 정수 몫 수식 19 // 5를 이어 적습니다.',
-      hint_en: 'Write "19 // 5 =" followed by a comma and the expression 19 // 5 inside print().',
-      templateCode: 'print("19 % 5 =", 19 % 5)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'print("19 % 5 =", 19 % 5)\nprint("19 // 5 =", 19 // 5)',
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '19 % 5 = 4\n19 // 5 = 3',
-        },
-      ],
-    },
-    {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '따옴표 안의 수식은 글자 그대로 남고, 따옴표 밖의 수식만 계산된 숫자로 출력됩니다.',
-      hint_en: 'Quoted expressions remain literal text, while unquoted expressions evaluate to numbers.',
-      targetCode: 'print("10 + 20", 10 + 20)\nprint("7 * 3 =", 7 * 3)',
-      choices: ['30 30\n7 * 3 = 21', '10 + 20 30\n7 * 3 = 21', '10 + 20 30\n21 = 21', '10 + 20 = 30\n7 * 3 = 21'],
-      correctChoiceIndex: 1,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '10 + 20 30\n7 * 3 = 21',
-        },
-      ],
-    },
-    {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the exact output when the following Python code runs.',
-      hint_ko: '첫째 줄의 소괄호 거듭제곱 계산값과 둘째 줄의 정수 몫·나머지 계산값을 차례대로 구해보세요.',
-      hint_en: 'Calculate the parenthesized power on line 1 and the quotient and remainder on line 2.',
-      targetCode: 'print("(1 + 2) ** 2 =", (1 + 2) ** 2)\nprint("Q:", 17 // 5, "R:", 17 % 5)',
-      choices: ['(1 + 2) ** 2 = 9\nQ: 3 R: 2', '(1 + 2) ** 2 = 5\nQ: 3 R: 2', '(1 + 2) ** 2 = 9\nQ: 3.4 R: 2', '9 = 9\nQ: 3 R: 2'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '(1 + 2) ** 2 = 9\nQ: 3 R: 2',
-        },
-      ],
-    },
+  "id": "py-basic-r6",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 6,
+  "title_ko": "따옴표 수식(\"3 + 5\")과 계산 결과(3 + 5) 나란히 출력하기",
+  "title_en": "Printing Formula Strings (\"3 + 5\") with Computed Results",
+  "description_ko": "따옴표로 감싼 수식 문자열과 실제 계산된 결과값을 쉼표로 나란히 출력하는 방법을 익힙니다.",
+  "description_en": "Learn to print quoted formula strings alongside their evaluated numeric results using commas.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "print"
   ],
+  "questions": [
+    {
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 따옴표로 감싼 수식을 조립해 계산 결과 대신 글자 그대로 출력해보세요.",
+      "prompt_en": "[Block] Assemble the quoted expression so it prints literally as text.",
+      "hint_ko": "수식을 따옴표로 감싸면 파이썬은 이를 계산하지 않고 적힌 글자 그대로 출력합니다.",
+      "hint_en": "Wrapping an expression in quotes tells Python to print the literal characters without calculating.",
+      "targetCode": "print(\"3 + 5\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "3 + 5"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 출력 예제의 수식 문장이 그대로 출력되도록 빈칸에 큰따옴표로 감싼 문자열을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the double-quoted formula string matching the output example.",
+      "hint_ko": "등호(=)가 포함된 수식 문장 전체를 큰따옴표로 감싸서 작성합니다.",
+      "hint_en": "Enclose the entire formula text including the equals sign in double quotes.",
+      "templateCode": "print(§§§§§§§§§§§§§)",
+      "targetCode": "print(\"10 - 4 = 6\")",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10 - 4 = 6"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 덧셈 수식 문자열과 실제 덧셈 계산식을 한 줄에 나란히 출력해보세요.",
+      "prompt_en": "[Block] Combine the formula string and the addition expression to print them side by side.",
+      "hint_ko": "쉼표 앞의 따옴표 수식은 글자로 출력되고, 쉼표 뒤의 따옴표 없는 수식은 8로 계산되어 출력됩니다.",
+      "hint_en": "The quoted formula before the comma prints as text, while the unquoted expression after it evaluates to 8.",
+      "targetCode": "print(\"3 + 5 =\", 3 + 5)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "3 + 5 = 8"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 앞의 문자열 라벨에 맞는 덧셈 계산식을 빈칸에 채워 계산 결과를 함께 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the addition expression matching the label so its result is printed alongside it.",
+      "hint_ko": "파이썬이 직접 계산한 결과를 출력하도록 따옴표 없이 두 수의 덧셈식을 적습니다.",
+      "hint_en": "Write the addition of 7 and 8 without quotes so Python evaluates it.",
+      "templateCode": "print(\"7 + 8 =\", §§§§§§)",
+      "targetCode": "print(\"7 + 8 =\", 7 + 8)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "7 + 8 = 15"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 소괄호 수식 라벨과 실제 계산식을 한 줄에 나란히 출력해보세요.",
+      "prompt_en": "[Block] Print the parenthesized formula label alongside its evaluated expression.",
+      "hint_ko": "쉼표 뒤의 소괄호 덧셈이 먼저 계산된 후 3이 곱해져 36이 나란히 출력됩니다.",
+      "hint_en": "After the comma, the parenthesized addition evaluates first and multiplies by 3 to output 36.",
+      "targetCode": "print(\"(10 + 2) * 3 =\", (10 + 2) * 3)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "(10 + 2) * 3 = 36"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 앞의 문자열 라벨에 맞는 나눗셈 계산식을 빈칸에 채워 계산 결과를 함께 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the division expression matching the label so its result is printed alongside it.",
+      "hint_ko": "쉼표 뒤에 따옴표 없이 20을 4로 나누는 실수 나눗셈 수식을 작성합니다.",
+      "hint_en": "Write the unquoted float division of 20 by 4 after the comma.",
+      "templateCode": "print(\"20 / 4 =\", §§§§§§§)",
+      "targetCode": "print(\"20 / 4 =\", 20 / 4)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "20 / 4 = 5.0"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 25를 4로 나눈 정수 몫과 나머지를 각 라벨과 함께 한 줄에 나란히 출력해보세요.",
+      "prompt_en": "[Block] Assemble the labels and the floor division and modulo expressions of 25 by 4 on one line.",
+      "hint_ko": "\"Q:\", 25 // 4, \"R:\", 25 % 4 네 항목을 쉼표로 구분하면 공백을 두고 차례대로 출력됩니다.",
+      "hint_en": "Separating the four items with commas prints them in order with spaces in between.",
+      "targetCode": "print(\"Q:\", 25 // 4, \"R:\", 25 % 4)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Q: 6 R: 1"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 14를 3으로 나눈 나머지를 구하는 수식을 빈칸에 채워 몫과 나머지를 나란히 출력해보세요.",
+      "prompt_en": "[Fill Blank] Fill in the expression for the remainder of 14 divided by 3.",
+      "hint_ko": "14를 3으로 나눈 나머지를 구하는 수식을 따옴표 없이 마지막 자리에 작성합니다.",
+      "hint_en": "Write the unquoted modulo expression of 14 divided by 3 as the final argument.",
+      "templateCode": "print(\"Q:\", 14 // 3, \"R:\", §§§§§§§)",
+      "targetCode": "print(\"Q:\", 14 // 3, \"R:\", 14 % 3)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Q: 4 R: 2"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 출력 예제와 같이 두 줄의 수식 라벨과 계산 결과가 출력되도록 빈칸을 채워보세요.",
+      "prompt_en": "[Fill Blank] Fill in the blanks so the formula labels and results match the output example.",
+      "hint_ko": "첫째 줄에는 큰따옴표 수식 문자열을, 둘째 줄에는 나머지 연산자(%)를 채웁니다.",
+      "hint_en": "Fill in the double-quoted formula string on line 1 and the modulo operator on line 2.",
+      "templateCode": "print(§§§§§§§§§§§, 2 ** 4)\nprint(\"17 % 5 =\", 17 §§ 5)",
+      "targetCode": "print(\"2 ** 4 =\", 2 ** 4)\nprint(\"17 % 5 =\", 17 % 5)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2 ** 4 = 16\n17 % 5 = 2"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 쉼표 뒤의 수식이 글자 그대로 출력되지 않고 곱셈 결과로 계산되어 출력되도록 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the code so the expression after the comma is evaluated instead of printing as literal text.",
+      "hint_ko": "실제 계산이 필요한 쉼표 뒤 수식에서는 따옴표를 제거하고 6 * 7로 작성해야 합니다.",
+      "hint_en": "Remove the quotes around the expression after the comma so Python calculates its value.",
+      "templateCode": "print(\"6 * 7 =\", \"6*7\")",
+      "targetCode": "print(\"6 * 7 =\", 6 * 7)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "6 * 7 = 42"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 앞의 수식 라벨과 일치하는 계산 결과가 출력되도록 쉼표 뒤 계산식의 소괄호 위치를 고쳐보세요.",
+      "prompt_en": "[Fix Bug] Fix the parentheses in the expression after the comma so it matches the formula label.",
+      "hint_ko": "쉼표 뒤 계산식에서도 덧셈이 곱셈보다 먼저 수행되도록 (8 + 2)를 소괄호로 묶어주어야 합니다.",
+      "hint_en": "Add parentheses around the addition after the comma so it runs before the multiplication.",
+      "templateCode": "print(\"(8 + 2) * 5 =\", 8 + (2 * 5))",
+      "targetCode": "print(\"(8 + 2) * 5 =\", (8 + 2) * 5)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "(8 + 2) * 5 = 50"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 첫째 줄의 출력 형식에 맞춰 둘째 줄에 2의 4제곱 수식 라벨과 계산 결과를 나란히 출력해보세요.",
+      "prompt_en": "[Complete Line] Following line 1, write line 2 to print the formula label and evaluated result for 2 to the power of 4.",
+      "hint_ko": "수식 문자열 \"2 ** 4 =\"와 실제 수식 2 ** 4를 쉼표로 나열해 작성합니다.",
+      "hint_en": "Separate the string \"2 ** 4 =\" and the expression 2 ** 4 with a comma inside print().",
+      "templateCode": "print(\"2 ** 3 =\", 2 ** 3)\n§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "print(\"2 ** 3 =\", 2 ** 3)\nprint(\"2 ** 4 =\", 2 ** 4)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "2 ** 3 = 8\n2 ** 4 = 16"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 첫째 줄의 출력 형식에 맞춰 둘째 줄에 19를 5로 나눈 정수 몫의 수식 라벨과 계산 결과를 출력해보세요.",
+      "prompt_en": "[Complete Line] Following line 1, write line 2 to print the formula label and evaluated integer quotient of 19 divided by 5.",
+      "hint_ko": "따옴표로 감싼 \"19 // 5 =\" 뒤에 쉼표를 찍고 정수 몫 수식 19 // 5를 이어 적습니다.",
+      "hint_en": "Write \"19 // 5 =\" followed by a comma and the expression 19 // 5 inside print().",
+      "templateCode": "print(\"19 % 5 =\", 19 % 5)\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "print(\"19 % 5 =\", 19 % 5)\nprint(\"19 // 5 =\", 19 // 5)",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "19 % 5 = 4\n19 // 5 = 3"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "따옴표 안의 수식은 글자 그대로 남고, 따옴표 밖의 수식만 계산된 숫자로 출력됩니다.",
+      "hint_en": "Quoted expressions remain literal text, while unquoted expressions evaluate to numbers.",
+      "targetCode": "print(\"10 + 20\", 10 + 20)\nprint(\"7 * 3 =\", 7 * 3)",
+      "choices": [
+        "30 30\n7 * 3 = 21",
+        "10 + 20 30\n7 * 3 = 21",
+        "10 + 20 30\n21 = 21",
+        "10 + 20 = 30\n7 * 3 = 21"
+      ],
+      "correctChoiceIndex": 1,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10 + 20 30\n7 * 3 = 21"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 다음 파이썬 코드를 실행했을 때 출력될 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output when the following Python code runs.",
+      "hint_ko": "따옴표로 감싼 수식은 글자 그대로 출력되고, 따옴표 밖의 수식만 계산 결과로 출력됩니다.",
+      "hint_en": "Quoted expressions print literally, while unquoted expressions evaluate to their numeric result.",
+      "targetCode": "print(\"10 - 3 =\", 10 - 3)\nprint(\"2 + 5\", \"=\", 2 + 5)",
+      "choices": [
+        "10 - 3 = 7\n2 + 5 = 7",
+        "7 = 7\n7 = 7",
+        "10 - 3 = 10 - 3\n2 + 5 = 7",
+        "10 - 3 = 7\n2 + 5 7"
+      ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "10 - 3 = 7\n2 + 5 = 7"
+        }
+      ]
+    }
+  ]
 };

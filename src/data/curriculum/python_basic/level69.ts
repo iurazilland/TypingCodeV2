@@ -1,321 +1,331 @@
 import { PracticeRound } from '@/lib/practiceTypes';
 
 export const PYTHON_LEVEL_69: PracticeRound = {
-  id: 'py-basic-r69',
-  language: 'python',
-  trackId: 'python',
-  moduleId: 'py-basic',
-  roundNumber: 69,
-  title_ko: '69레벨: 기본값 매개변수(b=1)와 키워드 인자 호출(fn(a=1, b=2))',
-  title_en: 'Level 69: Default Parameters (b=1) & Keyword Arguments',
-  description_ko: '인자를 생략했을 때 자동으로 쓰이는 기본값 매개변수(b=1) 선언 규칙과, 이름을 지정해 전달하는 키워드 인자 호출을 익힙니다.',
-  description_en: 'Learn to define default parameter values (b=1) and call functions with keyword arguments regardless of order.',
-  totalQuestions: 15,
-  unlockedBlocks: [
-    'comment',
-    'print',
-    'variable',
-    'input',
-    'type',
-    'if',
-    'for_range',
-    'range',
-    'for_in',
-    'while',
-    'break',
-    'continue',
-    'list',
-    'tuple',
-    'dict',
-    'set',
-    'iter',
-    'method',
-    'def',
-    'return',
+  "id": "py-basic-r69",
+  "language": "python",
+  "trackId": "python",
+  "moduleId": "py-basic",
+  "roundNumber": 69,
+  "title_ko": "69레벨: 기본값 매개변수(b=1)와 키워드 인자 호출(fn(a=1, b=2))",
+  "title_en": "Level 69: Default Parameters (b=1) & Keyword Arguments",
+  "description_ko": "인자를 생략했을 때 자동으로 쓰이는 기본값 매개변수(b=1) 선언 규칙과, 이름을 지정해 전달하는 키워드 인자 호출을 익힙니다.",
+  "description_en": "Learn to define default parameter values (b=1) and call functions with keyword arguments regardless of order.",
+  "totalQuestions": 15,
+  "unlockedBlocks": [
+    "comment",
+    "print",
+    "variable",
+    "input",
+    "type",
+    "if",
+    "for_range",
+    "range",
+    "for_in",
+    "while",
+    "break",
+    "continue",
+    "list",
+    "tuple",
+    "dict",
+    "set",
+    "iter",
+    "method",
+    "def",
+    "return"
   ],
-  questions: [
+  "questions": [
     {
-      id: 1,
-      step: 1,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 지수 매개변수에 기본값 2를 지정한 거듭제곱 함수를 정의하고 인자 1개와 2개로 각각 호출해보세요.',
-      prompt_en: '[Block] Define a power function with a default exponent of 2 and call it with one and two arguments.',
-      hint_ko: '기본값이 있는 매개변수는 호출할 때 생략하면 기본값이 쓰이고, 값을 넣으면 새 값으로 덮어써집니다.',
-      hint_en: 'Omitting an argument with a default uses the default value; passing an argument overrides it.',
-      targetCode: 'def power(x, n=2):\n    return x ** n\nprint(power(5), power(5, 3))',
-      testCases: [
+      "id": 1,
+      "step": 1,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 지수 매개변수에 기본값 2를 지정한 거듭제곱 함수를 정의하고 인자 1개와 2개로 각각 호출해보세요.",
+      "prompt_en": "[Block] Define a power function with a default exponent of 2 and call it with one and two arguments.",
+      "hint_ko": "기본값이 있는 매개변수는 호출할 때 생략하면 기본값이 쓰이고, 값을 넣으면 새 값으로 덮어써집니다.",
+      "hint_en": "Omitting an argument with a default uses the default value; passing an argument overrides it.",
+      "targetCode": "def power(x, n=2):\n    return x ** n\nprint(power(5), power(5, 3))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '25 125',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "25 125"
+        }
+      ]
     },
     {
-      id: 2,
-      step: 2,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 문자 반복 횟수 매개변수의 기본값을 3으로 선언해보세요.',
-      prompt_en: '[Fill Blank] Declare the second parameter used in the body with a default value of 3.',
-      hint_ko: '매개변수 이름 뒤에 공백 없이 등호와 기본 숫자 3을 붙여 적으세요.',
-      hint_en: 'Write the parameter name cnt followed by =3.',
-      templateCode: 'def repeat(ch, §§§§§§):\n    return ch * cnt\nprint(repeat("*"), repeat("*", 5))',
-      targetCode: 'def repeat(ch, cnt=3):\n    return ch * cnt\nprint(repeat("*"), repeat("*", 5))',
-      testCases: [
+      "id": 2,
+      "step": 2,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 문자 반복 횟수 매개변수의 기본값을 3으로 선언해보세요.",
+      "prompt_en": "[Fill Blank] Declare the second parameter used in the body with a default value of 3.",
+      "hint_ko": "매개변수 이름 뒤에 공백 없이 등호와 기본 숫자 3을 붙여 적으세요.",
+      "hint_en": "Write the parameter name cnt followed by =3.",
+      "templateCode": "def repeat(ch, §§§§§§):\n    return ch * cnt\nprint(repeat(\"*\"), repeat(\"*\", 5))",
+      "targetCode": "def repeat(ch, cnt=3):\n    return ch * cnt\nprint(repeat(\"*\"), repeat(\"*\", 5))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '*** *****',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "*** *****"
+        }
+      ]
     },
     {
-      id: 3,
-      step: 3,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 필수 가격 매개변수 뒤에 세금 기본값 매개변수를 둔 계산 함수를 만들고 호출해보세요.',
-      prompt_en: '[Block] Define a calculation function with a default tax parameter placed after the required price parameter.',
-      hint_ko: '기본값이 있는 매개변수는 항상 기본값이 없는 일반 매개변수보다 뒤쪽에 적어야 합니다.',
-      hint_en: 'Parameters with default values must always come after required parameters.',
-      targetCode: 'def calc(price, tax=100):\n    return price + tax\nprint(calc(1000), calc(1000, 200))',
-      testCases: [
+      "id": 3,
+      "step": 3,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 필수 가격 매개변수 뒤에 세금 기본값 매개변수를 둔 계산 함수를 만들고 호출해보세요.",
+      "prompt_en": "[Block] Define a calculation function with a default tax parameter placed after the required price parameter.",
+      "hint_ko": "기본값이 있는 매개변수는 항상 기본값이 없는 일반 매개변수보다 뒤쪽에 적어야 합니다.",
+      "hint_en": "Parameters with default values must always come after required parameters.",
+      "targetCode": "def calc(price, tax=100):\n    return price + tax\nprint(calc(1000), calc(1000, 200))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '1100 1200',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1100 1200"
+        }
+      ]
     },
     {
-      id: 4,
-      step: 4,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 이름 앞에 붙는 역할 매개변수의 기본값을 문자열 "User"로 선언해보세요.',
-      prompt_en: '[Fill Blank] Declare the role parameter with the default string "User".',
-      hint_ko: '매개변수 이름 role 뒤에 등호와 큰따옴표 문자열 "User"를 이어 적으세요.',
-      hint_en: 'Write role="User" as the second parameter in the header.',
-      templateCode: 'def tag(name, §§§§§§§§§§§§):\n    return f"{role}:{name}"\nprint(tag("Kim"), tag("Lee", "VIP"))',
-      targetCode: 'def tag(name, role="User"):\n    return f"{role}:{name}"\nprint(tag("Kim"), tag("Lee", "VIP"))',
-      testCases: [
+      "id": 4,
+      "step": 4,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 이름 앞에 붙는 역할 매개변수의 기본값을 문자열 \"User\"로 선언해보세요.",
+      "prompt_en": "[Fill Blank] Declare the role parameter with the default string \"User\".",
+      "hint_ko": "매개변수 이름 role 뒤에 등호와 큰따옴표 문자열 \"User\"를 이어 적으세요.",
+      "hint_en": "Write role=\"User\" as the second parameter in the header.",
+      "templateCode": "def tag(name, §§§§§§§§§§§§):\n    return f\"{role}:{name}\"\nprint(tag(\"Kim\"), tag(\"Lee\", \"VIP\"))",
+      "targetCode": "def tag(name, role=\"User\"):\n    return f\"{role}:{name}\"\nprint(tag(\"Kim\"), tag(\"Lee\", \"VIP\"))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'User:Kim VIP:Lee',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "User:Kim VIP:Lee"
+        }
+      ]
     },
     {
-      id: 5,
-      step: 5,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 호출할 때 매개변수 이름을 직접 지정하는 키워드 인자 방식으로 인사 함수를 호출해보세요.',
-      prompt_en: '[Block] Call the greeting function using keyword arguments to specify the message and name.',
-      hint_ko: '키워드 인자로 이름을 지정해 전달하면 선언 순서와 달라도 정확한 매개변수에 값이 들어갑니다.',
-      hint_en: 'Keyword arguments match parameters by name, regardless of their position.',
-      targetCode: 'def greet(name, msg):\n    print(f"{msg}:{name}!")\ngreet(msg="Hi", name="Kim")',
-      testCases: [
+      "id": 5,
+      "step": 5,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 호출할 때 매개변수 이름을 직접 지정하는 키워드 인자 방식으로 인사 함수를 호출해보세요.",
+      "prompt_en": "[Block] Call the greeting function using keyword arguments to specify the message and name.",
+      "hint_ko": "키워드 인자로 이름을 지정해 전달하면 선언 순서와 달라도 정확한 매개변수에 값이 들어갑니다.",
+      "hint_en": "Keyword arguments match parameters by name, regardless of their position.",
+      "targetCode": "def greet(name, msg):\n    print(f\"{msg}:{name}!\")\ngreet(msg=\"Hi\", name=\"Kim\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Hi:Kim!',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Hi:Kim!"
+        }
+      ]
     },
     {
-      id: 6,
-      step: 6,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 키워드 인자를 사용해 두 번째 매개변수에 3을 먼저, 첫 번째 매개변수에 10을 다음에 지정해 호출해보세요.',
-      prompt_en: '[Fill Blank] Use keyword arguments to pass 3 to the second parameter first and 10 to the first parameter second.',
-      hint_ko: '매개변수 이름과 값을 등호로 묶어 b가 앞, a가 뒤가 되도록 쉼표로 나열하세요.',
-      hint_en: 'Write the two keyword arguments for b and a separated by a comma and space.',
-      templateCode: 'def sub(a, b):\n    return a - b\nprint(sub(§§§§§§§§§§))',
-      targetCode: 'def sub(a, b):\n    return a - b\nprint(sub(b=3, a=10))',
-      testCases: [
+      "id": 6,
+      "step": 6,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 키워드 인자를 사용해 두 번째 매개변수에 3을 먼저, 첫 번째 매개변수에 10을 다음에 지정해 호출해보세요.",
+      "prompt_en": "[Fill Blank] Use keyword arguments to pass 3 to the second parameter first and 10 to the first parameter second.",
+      "hint_ko": "매개변수 이름과 값을 등호로 묶어 b가 앞, a가 뒤가 되도록 쉼표로 나열하세요.",
+      "hint_en": "Write the two keyword arguments for b and a separated by a comma and space.",
+      "templateCode": "def sub(a, b):\n    return a - b\nprint(sub(§§§§§§§§§§))",
+      "targetCode": "def sub(a, b):\n    return a - b\nprint(sub(b=3, a=10))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '7',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "7"
+        }
+      ]
     },
     {
-      id: 7,
-      step: 7,
-      type: 'block',
-      kind: 'standard',
-      prompt_ko: '[블록 조립] 숫자 리스트와 기본값이 0인 시작값 매개변수를 받아 총합을 반환하는 함수를 만들고 두 방식으로 호출해보세요.',
-      prompt_en: '[Block] Define a function taking a list and a starting value with a default of 0, and call it with 1 and 2 arguments.',
-      hint_ko: '두 번째 인자를 생략하면 base는 0이 되고, 100을 전달하면 100에 리스트 합계가 더해집니다.',
-      hint_en: 'When base is omitted it defaults to 0; when 100 is passed it starts from 100.',
-      targetCode: 'def sum_from(nums, base=0):\n    return base + sum(nums)\nprint(sum_from([10, 20]), sum_from([10, 20], 100))',
-      testCases: [
+      "id": 7,
+      "step": 7,
+      "type": "block",
+      "kind": "standard",
+      "prompt_ko": "[블록 조립] 숫자 리스트와 기본값이 0인 시작값 매개변수를 받아 총합을 반환하는 함수를 만들고 두 방식으로 호출해보세요.",
+      "prompt_en": "[Block] Define a function taking a list and a starting value with a default of 0, and call it with 1 and 2 arguments.",
+      "hint_ko": "두 번째 인자를 생략하면 base는 0이 되고, 100을 전달하면 100에 리스트 합계가 더해집니다.",
+      "hint_en": "When base is omitted it defaults to 0; when 100 is passed it starts from 100.",
+      "targetCode": "def sum_from(nums, base=0):\n    return base + sum(nums)\nprint(sum_from([10, 20]), sum_from([10, 20], 100))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '30 130',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "30 130"
+        }
+      ]
     },
     {
-      id: 8,
-      step: 8,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 키워드 인자로 구분자 매개변수에 콜론 문자열을 지정해 호출해보세요.',
-      prompt_en: '[Fill Blank] Pass ":" to the separator parameter as a keyword argument in the call.',
-      hint_ko: 'print()의 sep 옵션처럼 매개변수 이름 뒤에 등호와 문자열 ":"을 붙여 전달하세요.',
-      hint_en: 'Specify the keyword argument assigning ":" to sep.',
-      templateCode: 'def join_pair(words, sep="-"):\n    return f"{words[0]}{sep}{words[1]}"\nprint(join_pair(["A", "B"], §§§§§§§§))',
-      targetCode: 'def join_pair(words, sep="-"):\n    return f"{words[0]}{sep}{words[1]}"\nprint(join_pair(["A", "B"], sep=":"))',
-      testCases: [
+      "id": 8,
+      "step": 8,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 키워드 인자로 구분자 매개변수에 콜론 문자열을 지정해 호출해보세요.",
+      "prompt_en": "[Fill Blank] Pass \":\" to the separator parameter as a keyword argument in the call.",
+      "hint_ko": "print()의 sep 옵션처럼 매개변수 이름 뒤에 등호와 문자열 \":\"을 붙여 전달하세요.",
+      "hint_en": "Specify the keyword argument assigning \":\" to sep.",
+      "templateCode": "def join_pair(words, sep=\"-\"):\n    return f\"{words[0]}{sep}{words[1]}\"\nprint(join_pair([\"A\", \"B\"], §§§§§§§§))",
+      "targetCode": "def join_pair(words, sep=\"-\"):\n    return f\"{words[0]}{sep}{words[1]}\"\nprint(join_pair([\"A\", \"B\"], sep=\":\"))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'A:B',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "A:B"
+        }
+      ]
     },
     {
-      id: 9,
-      step: 9,
-      type: 'typing',
-      kind: 'fill_blank',
-      prompt_ko: '[빈칸 채우기] 기본 할인 금액이 0원인 결제 함수를 완성하고 두 번째 호출에 키워드 인자로 200원 할인을 적용해보세요.',
-      prompt_en: '[Fill Blank] Complete the payment function with a default discount of 0 and apply a keyword discount of 200 on the second call.',
-      hint_ko: '첫째 줄의 할인 기본값 선언(disc=0)과 셋째 줄의 키워드 인자 지정(disc=200)을 차례로 채우세요.',
-      hint_en: 'Complete the two default parameters in the header and the keyword argument for disc in the second call.',
-      templateCode: 'def pay(price, qty=1, §§§§§§§):\n    return price * qty - disc\nprint(pay(1000), pay(1000, §§§§§§§§§))',
-      targetCode: 'def pay(price, qty=1, disc=0):\n    return price * qty - disc\nprint(pay(1000), pay(1000, disc=200))',
-      testCases: [
+      "id": 9,
+      "step": 9,
+      "type": "typing",
+      "kind": "fill_blank",
+      "prompt_ko": "[빈칸 채우기] 기본 할인 금액이 0원인 결제 함수를 완성하고 두 번째 호출에 키워드 인자로 200원 할인을 적용해보세요.",
+      "prompt_en": "[Fill Blank] Complete the payment function with a default discount of 0 and apply a keyword discount of 200 on the second call.",
+      "hint_ko": "첫째 줄의 할인 기본값 선언(disc=0)과 셋째 줄의 키워드 인자 지정(disc=200)을 차례로 채우세요.",
+      "hint_en": "Complete the two default parameters in the header and the keyword argument for disc in the second call.",
+      "templateCode": "def pay(price, qty=1, §§§§§§§):\n    return price * qty - disc\nprint(pay(1000), pay(1000, §§§§§§§§§))",
+      "targetCode": "def pay(price, qty=1, disc=0):\n    return price * qty - disc\nprint(pay(1000), pay(1000, disc=200))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '1000 800',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1000 800"
+        }
+      ]
     },
     {
-      id: 10,
-      step: 10,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 기본값 매개변수가 일반 매개변수보다 앞에 위치해 발생한 문법 오류를 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the syntax error caused by placing a default parameter before a required parameter.',
-      hint_ko: '일반 매개변수 price를 앞쪽에, 기본값이 있는 tax=100을 뒤쪽에 배치하세요.',
-      hint_en: 'Put the required parameter price first and the default parameter tax=100 second.',
-      templateCode: 'def calc(tax=100, price):\n    return price + tax\nprint(calc(1000))',
-      targetCode: 'def calc(price, tax=100):\n    return price + tax\nprint(calc(1000))',
-      testCases: [
+      "id": 10,
+      "step": 10,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 기본값 매개변수가 일반 매개변수보다 앞에 위치해 발생한 문법 오류를 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the syntax error caused by placing a default parameter before a required parameter.",
+      "hint_ko": "일반 매개변수 price를 앞쪽에, 기본값이 있는 tax=100을 뒤쪽에 배치하세요.",
+      "hint_en": "Put the required parameter price first and the default parameter tax=100 second.",
+      "templateCode": "def calc(tax=100, price):\n    return price + tax\nprint(calc(1000))",
+      "targetCode": "def calc(price, tax=100):\n    return price + tax\nprint(calc(1000))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '1100',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "1100"
+        }
+      ]
     },
     {
-      id: 11,
-      step: 11,
-      type: 'typing',
-      kind: 'fix_bug',
-      prompt_ko: '[틀린 곳 수정] 10을 2로 나눈 몫을 구하도록 호출문의 키워드 인자 이름을 수정해보세요.',
-      prompt_en: '[Fix Bug] Fix the keyword argument names in the call so it divides 10 by 2.',
-      hint_ko: 'a에 10, b에 2가 전달되어야 a // b가 5가 되므로 div(b=2, a=10)으로 고치세요.',
-      hint_en: 'Label the two arguments explicitly as b=2, a=10 in the call.',
-      templateCode: 'def div(a, b):\n    return a // b\nprint(div(a=2, b=10))',
-      targetCode: 'def div(a, b):\n    return a // b\nprint(div(b=2, a=10))',
-      testCases: [
+      "id": 11,
+      "step": 11,
+      "type": "typing",
+      "kind": "fix_bug",
+      "prompt_ko": "[틀린 곳 수정] 10을 2로 나눈 몫을 구하도록 호출문의 키워드 인자 이름을 수정해보세요.",
+      "prompt_en": "[Fix Bug] Fix the keyword argument names in the call so it divides 10 by 2.",
+      "hint_ko": "a에 10, b에 2가 전달되어야 a // b가 5가 되므로 div(b=2, a=10)으로 고치세요.",
+      "hint_en": "Label the two arguments explicitly as b=2, a=10 in the call.",
+      "templateCode": "def div(a, b):\n    return a // b\nprint(div(a=2, b=10))",
+      "targetCode": "def div(a, b):\n    return a // b\nprint(div(b=2, a=10))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '5',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "5"
+        }
+      ]
     },
     {
-      id: 12,
-      step: 12,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 현재 위치와 기본값이 1인 이동 간격 매개변수를 받는 함수의 첫째 줄 헤더를 작성해보세요.',
-      prompt_en: '[Complete Line] Write the function header on line 1 taking the position parameter and the step parameter with a default of 1.',
-      hint_ko: 'def move(x, step=1): 형태로 일반 매개변수 뒤에 기본값 매개변수를 적어 완성하세요.',
-      hint_en: 'Write def move(x, step=1): on line 1.',
-      templateCode: '§§§§§§§§§§§§§§§§§§§§§\n    return x + step\nprint(move(10), move(10, 5))',
-      targetCode: 'def move(x, step=1):\n    return x + step\nprint(move(10), move(10, 5))',
-      testCases: [
+      "id": 12,
+      "step": 12,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 현재 위치와 기본값이 1인 이동 간격 매개변수를 받는 함수의 첫째 줄 헤더를 작성해보세요.",
+      "prompt_en": "[Complete Line] Write the function header on line 1 taking the position parameter and the step parameter with a default of 1.",
+      "hint_ko": "def move(x, step=1): 형태로 일반 매개변수 뒤에 기본값 매개변수를 적어 완성하세요.",
+      "hint_en": "Write def move(x, step=1): on line 1.",
+      "templateCode": "§§§§§§§§§§§§§§§§§§§§§\n    return x + step\nprint(move(10), move(10, 5))",
+      "targetCode": "def move(x, step=1):\n    return x + step\nprint(move(10), move(10, 5))",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: '11 15',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "11 15"
+        }
+      ]
     },
     {
-      id: 13,
-      step: 13,
-      type: 'typing',
-      kind: 'one_line',
-      prompt_ko: '[한 줄 완성] 키워드 인자를 사용해 레벨 매개변수에 9를 먼저, 이름 매개변수에 "Ace"를 다음에 지정해 위 함수를 호출하는 한 줄을 작성해보세요.',
-      prompt_en: '[Complete Line] Call the function above using keyword arguments passing 9 to the level parameter first and "Ace" to the name parameter second.',
-      hint_ko: '함수 이름 뒤 괄호 안에 lv=9, name="Ace"를 정확히 적어 호출하세요.',
-      hint_en: 'Write show_info(lv=9, name="Ace") on line 3.',
-      templateCode: 'def show_info(name, lv):\n    print(f"{name}:{lv}")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§',
-      targetCode: 'def show_info(name, lv):\n    print(f"{name}:{lv}")\nshow_info(lv=9, name="Ace")',
-      testCases: [
+      "id": 13,
+      "step": 13,
+      "type": "typing",
+      "kind": "one_line",
+      "prompt_ko": "[한 줄 완성] 키워드 인자를 사용해 레벨 매개변수에 9를 먼저, 이름 매개변수에 \"Ace\"를 다음에 지정해 위 함수를 호출하는 한 줄을 작성해보세요.",
+      "prompt_en": "[Complete Line] Call the function above using keyword arguments passing 9 to the level parameter first and \"Ace\" to the name parameter second.",
+      "hint_ko": "함수 이름 뒤 괄호 안에 lv=9, name=\"Ace\"를 정확히 적어 호출하세요.",
+      "hint_en": "Write show_info(lv=9, name=\"Ace\") on line 3.",
+      "templateCode": "def show_info(name, lv):\n    print(f\"{name}:{lv}\")\n§§§§§§§§§§§§§§§§§§§§§§§§§§§§",
+      "targetCode": "def show_info(name, lv):\n    print(f\"{name}:{lv}\")\nshow_info(lv=9, name=\"Ace\")",
+      "testCases": [
         {
-          id: 1,
-          input: '',
-          expectedOutput: 'Ace:9',
-        },
-      ],
+          "id": 1,
+          "input": "",
+          "expectedOutput": "Ace:9"
+        }
+      ]
     },
     {
-      id: 14,
-      step: 14,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 기본값 매개변수가 있는 add_tax 함수를 인자 1개와 2개로 각각 호출한 합계를 선택해보세요.',
-      prompt_en: '[Predict Output] Select the sum of calling add_tax with one argument and with two arguments.',
-      hint_ko: '첫 호출은 기본값 100이 더해지고, 두 번째 호출은 전달된 300이 더해집니다.',
-      hint_en: 'Evaluate 500 + 100 for a and 500 + 300 for b, then sum them.',
-      targetCode: 'def add_tax(p, fee=100):\n    return p + fee\na = add_tax(500)\nb = add_tax(500, 300)\nprint(a + b)',
-      choices: ['1400', '1200', '1600', '1300'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '1400',
-        },
+      "id": 14,
+      "step": 14,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 기본값 매개변수가 있는 add_tax 함수를 인자 1개와 2개로 각각 호출한 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the output of calling add_tax with one argument and with two arguments.",
+      "hint_ko": "첫 호출은 기본값 10이 더해지고, 두 번째 호출은 전달된 30이 더해집니다.",
+      "hint_en": "The first call uses the default fee=10, while the second call overrides fee with 30.",
+      "targetCode": "def add_tax(p, fee=10):\n    return p + fee\na = add_tax(100)\nb = add_tax(100, 30)\nprint(a, b)",
+      "choices": [
+        "110 130",
+        "110 110",
+        "100 130",
+        "130 130"
       ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "110 130"
+        }
+      ]
     },
     {
-      id: 15,
-      step: 15,
-      type: 'quiz',
-      kind: 'predict_output',
-      prompt_ko: '[출력 결과 예측] 두 개의 기본값 매개변수와 키워드 인자 호출이 결합된 다음 코드의 결과를 예측해보세요.',
-      prompt_en: '[Predict Output] Predict the output when calling calc(3) and calc(3, c=1).',
-      hint_ko: '두 번째 호출에서는 b는 기본값 2를 그대로 쓰고 c만 1로 변경된다는 점에 유의해 계산해보세요.',
-      hint_en: 'In calc(3, c=1), parameter b keeps its default value 2 while c becomes 1.',
-      targetCode: 'def calc(a, b=2, c=10):\n    return a * b + c\nx = calc(3)\ny = calc(3, c=1)\nprint(x, y)',
-      choices: ['16 7', '16 13', '32 7', '15 6'],
-      correctChoiceIndex: 0,
-      testCases: [
-        {
-          id: 1,
-          input: '',
-          expectedOutput: '16 7',
-        },
+      "id": 15,
+      "step": 15,
+      "type": "quiz",
+      "kind": "predict_output",
+      "prompt_ko": "[출력 결과 예측] 두 개의 기본값 매개변수와 키워드 인자 호출이 결합된 다음 코드의 결과를 예측해보세요.",
+      "prompt_en": "[Predict Output] Predict the output when calling calc(3) and calc(3, c=1).",
+      "hint_ko": "두 번째 호출 calc(5, c=20)에서는 b는 기본값 10을 유지하고 c만 20으로 변경됩니다.",
+      "hint_en": "In calc(5, c=20), parameter b keeps its default value 10 while c is overridden with 20.",
+      "targetCode": "def calc(a, b=10, c=100):\n    return a + b + c\nx = calc(5)\ny = calc(5, c=20)\nprint(x, y)",
+      "choices": [
+        "115 35",
+        "115 125",
+        "15 35",
+        "115 25"
       ],
-    },
-  ],
+      "correctChoiceIndex": 0,
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expectedOutput": "115 35"
+        }
+      ]
+    }
+  ]
 };

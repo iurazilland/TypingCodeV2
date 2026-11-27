@@ -288,21 +288,21 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "kind": "predict_output",
       "prompt_ko": "[출력 결과 예측] abs(), divmod(), round()가 결합된 다음 코드의 실행 결과를 선택해보세요.",
       "prompt_en": "[Predict Output] Select the exact output of the following code combining abs(), divmod(), and round().",
-      "hint_ko": "|-23| = 23을 5로 나눈 몫(4)과 나머지(3), 그리고 23 / 5 = 4.6을 정수 반올림한 값을 차례로 확인하세요.",
-      "hint_en": "Find divmod(23, 5) for q and r, and round(4.6) for the nearest integer.",
-      "targetCode": "n = abs(-23)\nq, r = divmod(n, 5)\nprint(q, r, round(n / 5))",
+      "hint_ko": "|-17| = 17을 5로 나눈 몫(3)과 나머지(2), 그리고 3.6을 반올림한 정수(4)를 차례로 확인하세요.",
+      "hint_en": "divmod(17, 5) returns quotient 3 and remainder 2, and round(3.6) evaluates to 4.",
+      "targetCode": "n = abs(-17)\nq, r = divmod(n, 5)\nprint(q, r, round(3.6))",
       "choices": [
-        "4 3 5",
-        "4 3 4",
-        "3 4 5",
-        "-4 2 5"
+        "3 2 4",
+        "3 2 3",
+        "2 3 4",
+        "-3 2 4"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "4 3 5"
+          "expectedOutput": "3 2 4"
         }
       ]
     },
@@ -311,23 +311,23 @@ export const PYTHON_LEVEL_100: PracticeRound = {
       "step": 15,
       "type": "quiz",
       "kind": "predict_output",
-      "prompt_ko": "[출력 결과 예측] while 반복문과 복합 대입, abs(), round()를 결합한 다음 코드의 실행 결과를 선택해보세요.",
-      "prompt_en": "[Predict Output] Select the exact output of the while loop with abs() and round().",
-      "hint_ko": "x가 0 이상이 될 때까지 5.1이 총 3번 더해져 1.62가 되고, 이를 소수 첫째 자리로 반올림한 값을 확인하세요.",
-      "hint_en": "Add 5.1 three times until x >= 0 (reaching 1.62), then round its absolute value to 1 decimal place.",
-      "targetCode": "x = -13.68\nstep = 0\nwhile x < 0:\n    x += 5.1\n    step += 1\nprint(step, round(abs(x), 1))",
+      "prompt_ko": "[출력 결과 예측] 리스트 컴프리헨션과 abs(), round()를 결합한 다음 코드의 실행 결과를 선택해보세요.",
+      "prompt_en": "[Predict Output] Select the exact output of the code combining abs() and round().",
+      "hint_ko": "[-3, 1, -2]의 절댓값 합계(3 + 1 + 2 = 6)와 2.56을 소수 첫째 자리로 반올림한 값(2.6)을 확인하세요.",
+      "hint_en": "Sum the absolute values [3, 1, 2] to get 6, and round 2.56 to 1 decimal place (2.6).",
+      "targetCode": "nums = [-3, 1, -2]\ntotal = sum([abs(x) for x in nums])\nprint(total, round(2.56, 1))",
       "choices": [
-        "3 1.6",
-        "2 3.5",
-        "3 -1.6",
-        "4 6.7"
+        "6 2.6",
+        "-4 2.6",
+        "6 2.5",
+        "6 3.0"
       ],
       "correctChoiceIndex": 0,
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expectedOutput": "3 1.6"
+          "expectedOutput": "6 2.6"
         }
       ]
     }
