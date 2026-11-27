@@ -7394,8 +7394,56 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
               </div>
 
               {(() => {
+                const isPredictQuiz =
+                  currentQuestion.type === 'quiz' ||
+                  currentQuestion.kind === 'predict_output';
+                const expectedPreview = !isPredictQuiz
+                  ? currentQuestion.testCases?.[0]?.expectedOutput ?? ''
+                  : '';
+
                 if (!isWaitingForInput) {
-                  return terminalOutput ? (
+                  if (!terminalOutput) {
+                    return expectedPreview ? (
+                      <div
+                        style={{
+                          margin: '10px 0 0 0',
+                          padding: '8px 11px',
+                          borderRadius: '8px',
+                          border: '1px dashed rgba(148, 163, 184, 0.26)',
+                          background: 'rgba(15, 23, 42, 0.35)',
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: '0.68rem',
+                            fontWeight: 800,
+                            color: 'rgba(148, 163, 184, 0.68)',
+                            marginBottom: '4px',
+                            letterSpacing: '0.02em',
+                            userSelect: 'none',
+                          }}
+                        >
+                          {isEn ? 'Expected Output' : '출력 예제'}
+                        </div>
+                        <pre
+                          style={{
+                            margin: 0,
+                            padding: 0,
+                            fontFamily: 'inherit',
+                            fontSize: '0.86rem',
+                            color: 'rgba(226, 232, 240, 0.5)',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                            lineHeight: 1.55,
+                          }}
+                        >
+                          {expectedPreview}
+                        </pre>
+                      </div>
+                    ) : null;
+                  }
+
+                  return (
                     <div style={{ margin: '8px 0 0 0' }}>
                       <pre
                         style={{
@@ -7411,8 +7459,45 @@ function PracticePageInner({ params, searchParams }: PracticePageProps) {
                       >
                         {terminalOutput}
                       </pre>
+                      {isErrorShown && expectedPreview && (
+                        <div
+                          style={{
+                            marginTop: '10px',
+                            padding: '7px 11px',
+                            borderRadius: '8px',
+                            border: '1px dashed rgba(148, 163, 184, 0.28)',
+                            background: 'rgba(15, 23, 42, 0.4)',
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: '0.68rem',
+                              fontWeight: 800,
+                              color: '#94a3b8',
+                              marginBottom: '3px',
+                              userSelect: 'none',
+                            }}
+                          >
+                            {isEn ? 'Expected Output' : '출력 예제'}
+                          </div>
+                          <pre
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              fontFamily: 'inherit',
+                              fontSize: '0.84rem',
+                              color: 'rgba(226, 232, 240, 0.62)',
+                              whiteSpace: 'pre-wrap',
+                              wordBreak: 'break-word',
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {expectedPreview}
+                          </pre>
+                        </div>
+                      )}
                     </div>
-                  ) : null;
+                  );
                 }
 
                 const normalizedOut = (terminalOutput || '').replace(/\r\n/g, '\n');
